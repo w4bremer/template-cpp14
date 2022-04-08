@@ -59,12 +59,14 @@ jobs:
         run: |
           git config --global user.email "ci@apigear.io"
           git config --global user.name "@$GITHUB_ACTOR"
-      - name: Dry run lerna version
+      - name: Dry run yarn version
         if: ${{ github.event.inputs.dryRun == 'true' }}
         run: |
-          yarn run lerna version --yes ${{ github.event.inputs.lernaVersionIncrement }} --no-push
+          yarn version --${{ github.event.inputs.lernaVersionIncrement }}
       - name: Publish packages
         if: ${{ github.event.inputs.dryRun != 'true' }}
         run: |
-          yarn run lerna version --yes ${{ github.event.inputs.lernaVersionIncrement }}
-          yarn run lerna publish --conventional-commits
+          yarn version --${{ github.event.inputs.lernaVersionIncrement }}
+          git push
+          git push --tags
+          yarn publish
