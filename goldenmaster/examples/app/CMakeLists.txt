@@ -19,3 +19,6 @@ target_link_libraries(app
     org_objectapi_testbed::implementation
     org_objectapi_testbed::monitor
 )
+
+install(TARGETS app
+        RUNTIME DESTINATION bin COMPONENT Runtime)

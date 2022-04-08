@@ -20,3 +20,6 @@ target_link_libraries(OLinkClient
     org_objectapi_testbed::monitor
     org_objectapi_testbed::olink
 )
+
+install(TARGETS OLinkClient
+        RUNTIME DESTINATION bin COMPONENT Runtime)

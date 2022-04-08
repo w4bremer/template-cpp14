@@ -28,3 +28,15 @@ add_library(apigear-poco-olink SHARED ${SOURCES})
 add_library(apigear::poco-olink ALIAS apigear-poco-olink)
 target_include_directories(apigear-poco-olink PUBLIC ${CMAKE_CURRENT_SOURCE_DIR} ${objectlink-core-cpp_SOURCE_DIR}/src)
 target_link_libraries(apigear-poco-olink Poco::Net Poco::Util olink_core)
+
+# install binary files
+install(TARGETS apigear-poco-olink
+        RUNTIME DESTINATION bin           COMPONENT Runtime
+        LIBRARY DESTINATION lib           COMPONENT Runtime
+        ARCHIVE DESTINATION lib/apigear   COMPONENT Development)
+# install includes
+FILE(GLOB APIGEAR_INCLUDES *.h)
+install(FILES ${APIGEAR_INCLUDES} ${OLINK_INCLUDES}
+        DESTINATION include)
+# install olink depedency headers
+install(DIRECTORY ${objectlink-core-cpp_SOURCE_DIR}/src/ DESTINATION include FILES_MATCHING PATTERN "*.h")

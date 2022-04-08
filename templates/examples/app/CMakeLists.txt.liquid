@@ -24,3 +24,6 @@ target_link_libraries(app
     {{module.name|identifier}}::monitor
 {% endfor %}
 )
+
+install(TARGETS app
+        RUNTIME DESTINATION bin COMPONENT Runtime)

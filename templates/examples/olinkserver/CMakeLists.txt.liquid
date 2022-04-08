@@ -24,3 +24,6 @@ target_link_libraries(OLinkServer
     {{module.name|identifier}}::olink
 {% endfor %}
 )
+
+install(TARGETS OLinkServer
+        RUNTIME DESTINATION bin COMPONENT Runtime)

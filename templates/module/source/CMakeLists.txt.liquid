@@ -45,3 +45,10 @@ target_include_directories(test_{{module_id}} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR
 add_test(test_{{module_id}} test_{{module_id}})
 add_dependencies(check test_{{module_id}})
 endif(BUILD_TESTING)
+
+install(TARGETS {{module_id}}-implementation
+        RUNTIME DESTINATION bin                 COMPONENT Runtime
+        LIBRARY DESTINATION lib                 COMPONENT Runtime
+        ARCHIVE DESTINATION lib/{{module_id}}   COMPONENT Development)
+# install includes
+install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} DESTINATION include FILES_MATCHING PATTERN "*.h")

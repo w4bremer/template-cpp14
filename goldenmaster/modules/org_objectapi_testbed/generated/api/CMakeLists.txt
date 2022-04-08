@@ -19,3 +19,11 @@ if(NOT MSVC)
 else()
   target_compile_options(org_objectapi_testbed-api PRIVATE /W4 /WX /wd4251)
 endif()
+
+# install binary files
+install(TARGETS org_objectapi_testbed-api
+        RUNTIME DESTINATION bin                 COMPONENT Runtime
+        LIBRARY DESTINATION lib                 COMPONENT Runtime
+        ARCHIVE DESTINATION lib/org_objectapi_testbed   COMPONENT Development)
+# install includes
+install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} DESTINATION include FILES_MATCHING PATTERN "*.h")

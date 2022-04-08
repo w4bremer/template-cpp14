@@ -25,3 +25,6 @@ target_link_libraries(OLinkClient
     {{module.name|identifier}}::olink
 {% endfor %}
 )
+
+install(TARGETS OLinkClient
+        RUNTIME DESTINATION bin COMPONENT Runtime)

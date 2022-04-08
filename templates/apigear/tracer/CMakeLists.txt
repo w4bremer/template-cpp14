@@ -39,3 +39,13 @@ target_link_libraries(test_tracer apigear::poco-tracer Poco::Net Poco::Util Catc
 add_test(test_tracer test_tracer)
 add_dependencies(check test_tracer)
 endif(BUILD_TESTING)
+
+# install binary files
+install(TARGETS apigear-poco-tracer
+        RUNTIME DESTINATION bin           COMPONENT Runtime
+        LIBRARY DESTINATION lib           COMPONENT Runtime
+        ARCHIVE DESTINATION lib/apigear   COMPONENT Development)
+# install includes
+FILE(GLOB APIGEAR_INCLUDES *.h)
+install(FILES ${APIGEAR_INCLUDES}
+        DESTINATION include)

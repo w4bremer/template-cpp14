@@ -22,3 +22,11 @@ if(NOT MSVC)
 else()
   target_compile_options({{module_id}}-api PRIVATE /W4 /WX /wd4251)
 endif()
+
+# install binary files
+install(TARGETS {{module_id}}-api
+        RUNTIME DESTINATION bin                 COMPONENT Runtime
+        LIBRARY DESTINATION lib                 COMPONENT Runtime
+        ARCHIVE DESTINATION lib/{{module_id}}   COMPONENT Development)
+# install includes
+install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} DESTINATION include FILES_MATCHING PATTERN "*.h")
