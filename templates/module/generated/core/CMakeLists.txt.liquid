@@ -1,0 +1,26 @@
+{% assign module_id = module.name|identifier %}
+{% assign module_path = module.name|path -%}
+set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+
+set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+find_package(nlohmann_json REQUIRED)
+
+set (SOURCES_CORE_SUPPORT
+    {{module_id}}.json.adapter.cpp
+{% for interface in module.interfaces %}
+    {{module.name|identifier}}_{{interface.name|lower}}.decorator.cpp
+    {{module.name|identifier}}_{{interface.name|lower}}.publisher.cpp
+{% endfor %}
+)
+add_library({{module_id}}-core STATIC ${SOURCES_CORE_SUPPORT})
+add_library({{module_id}}::core ALIAS {{module_id}}-core)
+target_include_directories({{module_id}}-core PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/../../ ${CMAKE_CURRENT_SOURCE_DIR}/)
+target_link_libraries({{module_id}}-core PUBLIC {{module_id}}::api nlohmann_json::nlohmann_json)
+# ensure maximum compiler support
+if(NOT MSVC)
+  target_compile_options({{module_id}}-core PRIVATE -Wall -Wextra -Wpedantic -Werror -fvisibility=hidden)
+else()
+  target_compile_options({{module_id}}-core PRIVATE /W4 /WX /wd4251)
+endif()

@@ -1,0 +1,19 @@
+{% comment %} // Copyright (c) ApiGear UG 2020 {% endcomment -%}
+#pragma once
+
+#ifndef JSON_USE_IMPLICIT_CONVERSIONS
+#define JSON_USE_IMPLICIT_CONVERSIONS 0
+#endif
+#include <nlohmann/json.hpp>
+#include "{{module.name|identifier}}_datastructs.api.h"
+#include "generated/api/{{module.name|identifier}}_common.h"
+
+namespace {{ system.name | capital }} {
+namespace {{ module.name | capital }} {
+{% for struct in module.structs %}
+{% assign class = struct.name %}
+void {{ system.name | constant }}_{{ module.name | constant }}_EXPORT from_json(const nlohmann::json& j, {{class}}& p);
+void {{ system.name | constant }}_{{ module.name | constant }}_EXPORT to_json(nlohmann::json& j, const {{class}}& p);
+{% endfor %}
+} // namespace {{ module.name | capital }}
+} // namespace {{ system.name | capital }}

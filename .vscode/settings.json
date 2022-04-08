@@ -1,0 +1,10 @@
+{
+    "cmake.configureOnOpen": false,
+    "files.associations": {
+        "iosfwd": "cpp",
+        "fstream": "cpp"
+    },
+    "conventionalCommits.scopes": [
+        "cpp14"
+    ]
+}

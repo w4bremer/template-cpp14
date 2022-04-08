@@ -1,0 +1,26 @@
+project(App)
+cmake_minimum_required(VERSION 3.1)
+
+# append local binary directory for conan packages to be found
+set(CMAKE_MODULE_PATH ${CMAKE_BINARY_DIR} ${CMAKE_MODULE_PATH})
+
+set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+set (SOURCES
+    main.cpp
+)
+add_executable(app
+    ${SOURCES}
+)
+
+{% for module in system.modules %}
+find_package({{module.name|identifier}} OPTIONAL_COMPONENTS core implementation monitor)
+{% endfor %}
+target_link_libraries(app
+{% for module in system.modules %}
+    {{module.name|identifier}}::core
+    {{module.name|identifier}}::implementation
+    {{module.name|identifier}}::monitor
+{% endfor %}
+)

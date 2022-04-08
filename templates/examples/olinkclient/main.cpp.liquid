@@ -1,0 +1,43 @@
+#include <iostream>
+{%- for module in system.modules -%}
+{% for interface in module.interfaces %}
+#include "generated/olink/{{module.name|identifier}}_{{interface.name|lower}}interface.h"
+#include "generated/monitor/{{module.name|identifier}}_{{interface.name|lower}}.trace.h"
+{% endfor %}
+{% endfor %}
+#include "olinkclient.h"
+#include "tracer.h"
+
+using namespace {{ system.name | capital }};
+
+int main(){
+    ApiGear::PocoImpl::Tracer tracer;
+    tracer.connect("http://localhost:5555", "testExampleOLinkApp");
+    ApiGear::ObjectLink::ClientRegistry registry;
+    ApiGear::PocoImpl::OLinkClient testClient(registry);
+    {% for module in system.modules %}
+    {% for interface in module.interfaces %}
+    {% assign class = interface.name | capital %}
+    {% assign decorator_class = "I" | append: class | append: "Decorator" %}
+    {% assign tracer_class = class | append: "TracerDecorator" %}
+    std::unique_ptr<{{ module.name | capital }}::I{{class}}> test{{module.name | capital}}{{class}} = std::make_unique<{{ module.name | capital }}::OLink{{interface.name}}>(registry, testClient);
+    std::unique_ptr<{{ module.name | capital }}::{{decorator_class}}> test{{ module.name | capital }}{{tracer_class}}({{ module.name | capital }}::{{tracer_class}}::connect(test{{ module.name | capital }}{{class}}.get(), &tracer));
+    {% endfor %}
+    {% endfor %}
+    
+    testClient.connectToHost(Poco::URI("ws://localhost:8000"));
+
+    bool keepRunning = true;
+    std::string cmd;
+    do {
+        std::cout << "Enter command:" << std::endl;
+        getline (std::cin, cmd);
+
+        if(cmd == "quit"){
+            keepRunning = false;
+            testClient.disconnect();
+        }
+    } while(keepRunning);
+
+    return 0;
+}

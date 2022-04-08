@@ -1,0 +1,39 @@
+{% comment %} // Copyright (c) ApiGear UG 2020 {% endcomment -%}
+{{ module | licGPLcpp -}}
+{% assign class = interface.name | capital -%}
+{% assign interface_class = "I" | append: interface.name | capital %}
+{% assign sub_class = "I" | append: interface.name | capital | append: "Subscriber" %}
+{% assign pub_interface = "I" | append: interface.name | capital | append: "Publisher"%}
+#pragma once
+#include <memory>
+#include "generated/api/{{module.name|identifier}}.h"
+#include "generated/api/{{module.name|identifier}}_common.h"
+
+namespace {{ system.name | capital }} {
+namespace {{ module.name | capital }} {
+
+class {{ system.name | constant }}_{{ module.name | constant }}_EXPORT {{class}} : public {{interface_class}}
+{
+public:
+    explicit {{class}}();
+    ~{{class}}();
+public:
+{% for property in interface.properties %}
+    // property {{property.name}}
+    void set{{property.name|capitalize}}({{ property|cpp14Param }}) override;
+    {{property|cpp14Return: true}} {{property.name}}() const override;
+    {{nl}}    
+{% endfor %}
+    // operations
+{% for operation in interface.operations %}
+    {{operation|cpp14Return}} {{operation.name}}({{operation|cpp14Params}}) override;
+    std::future<{{operation|cpp14Return}}> {{operation.name}}Async({{operation|cpp14Params}}) override;
+{% endfor %}
+
+    {{pub_interface}}* _getPublisher() const override;
+private:
+    struct {{interface.name | capital}}Data;
+    std::unique_ptr<{{interface.name | capital}}Data> d_ptr;
+};
+} // namespace {{ module.name | capital }}
+} // namespace {{ system.name | capital }}

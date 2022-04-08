@@ -1,0 +1,163 @@
+features:
+  api:
+    module:
+      documents:
+        - source: "module/CMakeLists.txt.liquid"
+          target: "modules/{{module.name|identifier}}/CMakeLists.txt"
+        - source: "module/generated/api/CMakeLists.txt.liquid"
+          target: "modules/{{module.name|identifier}}/generated/api/CMakeLists.txt"
+        - source: "module/generated/api/module.h.liquid"
+          target: "modules/{{module.name|identifier}}/generated/api/{{module.name|identifier}}.h"
+        - source: "module/generated/api/module_common.h.liquid"
+          target: "modules/{{module.name|identifier}}/generated/api/{{module.name|identifier}}_common.h"
+        - source: "module/generated/api/datastructs.api.h.liquid"
+          target: "modules/{{module.name|identifier}}/generated/api/{{module.name|identifier}}_datastructs.api.h"
+        - source: "module/generated/api/datastructs.api.cpp.liquid"
+          target: "modules/{{module.name|identifier}}/generated/api/{{module.name|identifier}}_datastructs.api.cpp"
+    interface:
+      documents:
+        - source: "module/generated/api/interface.api.h.liquid"
+          target: "modules/{{module.name|identifier}}/generated/api/{{module.name|identifier}}_{{interface.name|lower}}.api.h"
+  core:
+    module:
+      documents:
+        - source: "module/generated/core/CMakeLists.txt.liquid"
+          target: "modules/{{module.name|identifier}}/generated/core/CMakeLists.txt"
+        - source: "module/generated/core/main_test.cpp"
+          target: "modules/{{module.name|identifier}}/generated/core/{{module.name|identifier}}.test.cpp"
+        - source: "module/generated/core/json.adapter.h.liquid"
+          target: "modules/{{module.name|identifier}}/generated/core/{{module.name|identifier}}.json.adapter.h"
+        - source: "module/generated/core/json.adapter.cpp.liquid"
+          target: "modules/{{module.name|identifier}}/generated/core/{{module.name|identifier}}.json.adapter.cpp"
+    interface:
+      documents:
+        - source: "module/generated/core/interface.publisher.h.liquid"
+          target: "modules/{{module.name|identifier}}/generated/core/{{module.name|identifier}}_{{interface.name|lower}}.publisher.h"
+        - source: "module/generated/core/interface.publisher.cpp.liquid"
+          target: "modules/{{module.name|identifier}}/generated/core/{{module.name|identifier}}_{{interface.name|lower}}.publisher.cpp"
+        - source: "module/generated/core/interface.decorator.h.liquid"
+          target: "modules/{{module.name|identifier}}/generated/core/{{module.name|identifier}}_{{interface.name|lower}}.decorator.h"
+        - source: "module/generated/core/interface.decorator.cpp.liquid"
+          target: "modules/{{module.name|identifier}}/generated/core/{{module.name|identifier}}_{{interface.name|lower}}.decorator.cpp"
+  scaffold:
+    module:
+      documents:
+        - source: "README.md"
+          raw: true
+        - source: CMakeLists.txt.liquid
+          target: CMakeLists.txt
+          overwrite: false
+        - source: "module/source/CMakeLists.txt.liquid"
+          target: "modules/{{module.name|identifier}}/implementation/CMakeLists.txt"
+          overwrite: false
+    interface:
+      documents:
+        - source: "module/source/implementation.h.liquid"
+          target: "modules/{{module.name|identifier}}/implementation/{{module.name|identifier}}_{{interface.name|lower}}.h"
+          overwrite: false
+        - source: "module/source/implementation.cpp.liquid"
+          target: "modules/{{module.name|identifier}}/implementation/{{module.name|identifier}}_{{interface.name|lower}}.cpp"
+          overwrite: false
+        - source: "module/source/implementation_test.cpp.liquid"
+          target: "modules/{{module.name|identifier}}/implementation/{{interface.name|lower}}.test.cpp"
+          overwrite: false
+  monitor:
+    module:
+      documents:
+        - source: "module/generated/monitor/CMakeLists.txt.liquid"
+          target: "modules/{{module.name|identifier}}/generated/monitor/CMakeLists.txt"
+        - source: "module/generated/monitor/trace.h.liquid"
+          target: "modules/{{module.name|identifier}}/generated/monitor/{{module.name|identifier}}.trace.h"
+        - source: "module/generated/monitor/trace.cpp.liquid"
+          target: "modules/{{module.name|identifier}}/generated/monitor/{{module.name|identifier}}.trace.cpp"
+    interface:
+      documents:
+        - source: "module/generated/monitor/interface.trace.h.liquid"
+          target: "modules/{{module.name|identifier}}/generated/monitor/{{module.name|identifier}}_{{interface.name|lower}}.trace.h"
+        - source: "module/generated/monitor/interface.trace.cpp.liquid"
+          target: "modules/{{module.name|identifier}}/generated/monitor/{{module.name|identifier}}_{{interface.name|lower}}.trace.cpp"
+  olink:
+    interface:
+      documents:
+        - source: "module/generated/olink/CMakeLists.txt.liquid"
+          target: "modules/{{module.name|identifier}}/generated/olink/CMakeLists.txt"
+        - source: "module/generated/olink/olinkadapter.h.liquid"
+          target: "modules/{{module.name|identifier}}/generated/olink/{{module.name|identifier}}_{{interface.name|lower}}adapter.h"
+        - source: "module/generated/olink/olinkadapter.cpp.liquid"
+          target: "modules/{{module.name|identifier}}/generated/olink/{{module.name|identifier}}_{{interface.name|lower}}adapter.cpp"
+        - source: "module/generated/olink/olinkinterface.h.liquid"
+          target: "modules/{{module.name|identifier}}/generated/olink/{{module.name|identifier}}_{{interface.name|lower}}interface.h"
+        - source: "module/generated/olink/olinkinterface.cpp.liquid"
+          target: "modules/{{module.name|identifier}}/generated/olink/{{module.name|identifier}}_{{interface.name|lower}}interface.cpp"
+  apigear:
+    # when:
+      # - monitor
+      # - olink
+    system:
+      documents:
+        - source: "apigear/apigear.test.cpp"
+          raw: true
+        - source: "apigear/tracer/tracer.h"
+          raw: true
+        - source: "apigear/tracer/tracer.cpp"
+          raw: true
+        - source: "apigear/tracer/tracer.test.cpp"
+          raw: true
+        - source: "apigear/tracer/CMakeLists.txt"
+          raw: true
+        - source: "apigear/CMakeLists.txt"
+          raw: true
+        - source: "apigear/conanfile.py"
+          raw: true
+        - source: "apigear/olink/CMakeLists.txt"
+          raw: true
+        - source: "apigear/olink/olinkhost.cpp"
+          raw: true
+        - source: "apigear/olink/olinkhost.h"
+          raw: true
+        - source: "apigear/olink/olinkclient.cpp"
+          raw: true
+        - source: "apigear/olink/olinkclient.h"
+          raw: true
+  examples:
+    system:
+      documents:
+        - source: examples/app/CMakeLists.txt.liquid
+          target: examples/app/CMakeLists.txt
+        - source: examples/app/conanfile.txt.liquid
+          target: examples/app/conanfile.txt
+        - source: examples/app/main.cpp.liquid
+          target: examples/app/main.cpp
+        - source: examples/olinkserver/CMakeLists.txt.liquid
+          target: examples/olinkserver/CMakeLists.txt
+        - source: examples/olinkserver/conanfile.txt.liquid
+          target: examples/olinkserver/conanfile.txt
+        - source: examples/olinkserver/main.cpp.liquid
+          target: examples/olinkserver/main.cpp
+        - source: examples/olinkclient/CMakeLists.txt.liquid
+          target: examples/olinkclient/CMakeLists.txt
+        - source: examples/olinkclient/conanfile.txt.liquid
+          target: examples/olinkclient/conanfile.txt
+        - source: examples/olinkclient/main.cpp.liquid
+          target: examples/olinkclient/main.cpp
+  conan:
+    system:
+      documents:
+        - source: test_conan.sh
+          overwrite: false
+        - source: test_conan.bat
+          overwrite: false
+    module:
+      documents:
+        - source: module/conanfile.py.liquid
+          target: "modules/{{module.name|identifier}}/conanfile.py"
+          overwrite: false
+        - source: module/test_package/CMakeLists.txt.liquid
+          target: "modules/{{module.name|identifier}}/test_package/CMakeLists.txt"
+          overwrite: false
+        - source: module/test_package/conanfile.py.liquid
+          target: "modules/{{module.name|identifier}}/test_package/conanfile.py"
+          overwrite: false
+        - source: module/test_package/main.cpp.liquid
+          target: "modules/{{module.name|identifier}}/test_package/main.cpp"
+          overwrite: false

@@ -1,0 +1,39 @@
+#include <iostream>
+{%- for module in system.modules -%}
+{% for interface in module.interfaces %}
+#include "{{module.name|identifier}}_{{interface.name|lower }}.h"
+#include "generated/olink/{{module.name|identifier}}_{{interface.name|lower}}adapter.h"
+{% endfor %}
+{% endfor %}
+#include "olinkhost.h"
+
+using namespace {{ system.name | capital }};
+
+int main(){
+    ApiGear::ObjectLink::RemoteRegistry registry;
+    ApiGear::PocoImpl::OLinkHost testserver(registry);
+
+    {% for module in system.modules %}
+    {% for interface in module.interfaces %}
+    {% assign class = interface.name | capital %}
+    std::unique_ptr<{{ module.name | capital }}::I{{class}}> test{{module.name | capital}}{{class}} = std::make_unique<{{ module.name | capital }}::{{class}}>();
+    {{ module.name | capital }}::OLink{{interface.name}}Adapter test{{module.name|capital}}{{interface.name|capital}}Adapter(test{{module.name|capital}}{{interface.name|capital}}.get(), registry);
+    {% endfor %}
+    {% endfor %}
+
+    testserver.listen(8000);
+
+    bool keepRunning = true;
+    std::string cmd;
+    do {
+        std::cout << "Enter command:" << std::endl;
+        getline (std::cin, cmd);
+
+        if(cmd == "quit"){
+            testserver.close();
+            keepRunning = false;
+        }
+    } while(keepRunning);
+
+    return 0;
+}

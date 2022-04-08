@@ -1,0 +1,9 @@
+{% comment %} // Copyright (c) ApiGear UG 2020 {% endcomment -%}
+{{ module | licGPLcpp -}}
+#pragma once
+
+#include "{{module.name|identifier}}_datastructs.api.h"
+
+{% for interface in module.interfaces %}
+#include "{{module.name|identifier}}_{{interface.name|lower}}.api.h"
+{% endfor %}

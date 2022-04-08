@@ -1,0 +1,55 @@
+{% comment %} // Copyright (c) ApiGear UG 2020 {% endcomment -%}
+{{ module | licGPLcpp -}}
+{% assign class = interface.name |prepend:"OLink"-%}
+{% assign interface_class = "I" | append: interface.name | capital -%}
+{% assign sub_class = "I" | append: interface.name | capital | append: "Subscriber" %}
+{% assign pub_class = "Abstract" | append: interface.name | capital | append: "Publisher" -%}
+{% assign pub_interface = "I" | append: interface.name | capital | append: "Publisher"%}
+#pragma once
+
+#include <future>
+#include "generated/api/{{module.name|identifier}}.h"
+#include "generated/api/{{module.name|identifier}}_common.h"
+#include "generated/core/{{module.name|identifier}}_{{interface.name|lower}}.publisher.h"
+#include "olink/clientnode.h"
+#include "olinkclient.h"
+
+namespace {{ system.name | capital }} {
+namespace {{ module.name | capital }} {
+class {{ system.name | constant }}_{{ module.name | constant }}_EXPORT {{class}} : public {{interface_class}}, public ApiGear::ObjectLink::IObjectSink
+{
+public:
+    explicit {{class}}(ApiGear::ObjectLink::ClientRegistry& registry, ApiGear::PocoImpl::OLinkClient& client);
+    virtual ~{{class}}() override;
+
+    void applyState(const nlohmann::json& fields);
+
+{% for property in interface.properties %}
+    {{property|cpp14Return: true}} {{property.name}}() const override;
+    void set{{property.name|capitalize}}({{property|cpp14Param}}) override;
+    void set{{property.name|capitalize}}Local({{property|cpp14Param}});
+{% endfor %}
+
+{% for operation in interface.operations %}
+    {{operation|cpp14Return}} {{operation.name}}({{operation|cpp14Params}}) override;
+    std::future<{{operation|cpp14Return}}> {{operation.name}}Async({{operation|cpp14Params}}) override;
+{% endfor %}
+    bool isReady() const;
+    {{pub_interface}}* _getPublisher() const override;
+public:
+    std::string olinkObjectName() override;
+    void olinkOnSignal(std::string name, nlohmann::json args) override;
+    void olinkOnPropertyChanged(std::string name, nlohmann::json value) override;
+    void olinkOnInit(std::string name, nlohmann::json props, ApiGear::ObjectLink::IClientNode *node) override;
+    void olinkOnRelease() override;
+private:
+    bool m_isReady;
+{% for property in interface.properties %}
+    {{property|cpp14Return}} m_{{property.name}};
+{% endfor %}
+    ApiGear::ObjectLink::IClientNode *m_node;
+    ApiGear::ObjectLink::ClientRegistry* m_registry;
+    {{pub_interface}}* m_publisher;
+};
+} // namespace {{ module.name | capital }}
+} // namespace {{ system.name | capital }}

@@ -1,0 +1,248 @@
+{% capture nl %}
+{% endcapture -%}
+{% comment %} // Copyright (c) ApiGear UG 2020 {% endcomment -%}
+{{ module | licGPLcpp -}}
+#pragma once
+
+#include <future>
+#include "{{module.name|identifier}}_common.h"
+#include "{{module.name|identifier}}_datastructs.api.h"
+
+{% assign class = "I" | append: interface.name | capital %}
+
+namespace {{ system.name | capital }} {
+namespace {{ module.name | capital }} {
+
+{% assign sub_class = class | append: "Subscriber" %}
+{% assign pub_class =  class | append: "Publisher" %}
+/**
+ * Interface {{sub_class}}
+ *
+ * The subscriber is the counter part for the {{pub_class}}.
+ */
+class {{ system.name | constant }}_{{ module.name | constant }}_EXPORT {{sub_class}}
+{
+public:
+{% for signal in interface.signals %}
+    /**
+    * This function is called when the {{signal.name}} signal is triggered.
+    *
+    * @warning the subscribed function shall not be blocking and must return immediately!
+    *
+    {% for param in signal.params %}
+    * @param {{param.name}} {{signal.description}}
+    {% endfor %}
+    */
+    virtual void On{{signal.name | capital}}(
+        {%- for param in signal.params -%}
+          {{param|cpp14Param}}{% unless forloop.last %},{% endunless -%}
+        {%- endfor -%}
+        ) = 0;
+{% endfor %}
+{% for property in interface.properties %}
+    /**
+    * This function is called when the {{property.name}} value has changed.
+    *
+    * @warning the subscribed function shall not be blocking and must return immediately!
+    {% unless property.description == blank %}
+    *
+    * @param {{property.name}} {{property.description}}
+    {% endunless %}
+    */
+    virtual void On{{property.name|capital}}Changed({{property|cpp14Return: true}} {{property.name}}) = 0;
+{% endfor %}
+};
+{{nl}}
+{% for property in interface.properties %}
+/** callback for changes of {{property.name}} */
+typedef std::function<void({{property|cpp14Param: true}})> {{interface.name | capital}}{{property.name | capital}}PropertyCb;
+{% endfor %}
+{% for signal in interface.signals %}
+/** callback for {{signal.name}} signal triggers */
+typedef std::function<void({%- for param in signal.params -%}
+        {{param|cpp14Param: true}}{% unless forloop.last %},{% endunless -%}
+    {%- endfor -%})> {{interface.name | capital}}{{signal.name | capital}}SignalCb;
+{% endfor %}
+/**
+ * Interface {{pub_class}}
+ *
+ * The publisher contains the signal interface for the {{sub_class}}
+ * and direct signal function subscribtion.
+ */
+class {{ system.name | constant }}_{{ module.name | constant }}_EXPORT {{pub_class}}
+{
+public:
+    virtual ~{{pub_class}}() = default;
+
+    /**
+    * Use this function to subscribe for any changes of the {{interface.name}} changes.
+    * This subscription will trigger calls for any property changes or signal events.
+    *
+    * @param subscriber reference to the {{sub_class}} implementation
+    */
+    virtual void subscribeTo{{interface.name | capital}}Interface({{sub_class}}& subscriber) = 0;
+    /**
+    * Use this function to unsubscribe from all changes of the {{interface.name}} changes.
+    *
+    * @param subscriber reference to the {{sub_class}} implementation
+    */
+    virtual void unsubscribeFrom{{interface.name | capital}}Interface({{sub_class}}& subscriber) = 0;
+{{nl}}
+{% for property in interface.properties %}
+    /**
+    * Use this function to subscribe for {{property.name}} value changes.
+    *
+    * @warning the subscribed function shall not be blocking and must return immediately!
+    *
+    * @param callback any of type {{interface.name | capital}}{{property.name | capital}}PropertyCb
+    * @return unique identifier for this subscription, needed for removal
+    */
+    virtual long subscribeTo{{property.name|capital}}Changed({{interface.name | capital}}{{property.name | capital}}PropertyCb callback) = 0;
+    /**
+    * Use this function to unsubscribe from {{property.name}} property changes.
+    *
+    * @param handleId identifier returned by the original subscription call
+    */
+    virtual void unsubscribeFrom{{property.name | capital}}Changed(long handleId) = 0;
+{{nl}}
+{% endfor %}
+{% for signal in interface.signals %}
+    /**
+    * Use this function to subscribe for {{signal.name}} signal changes.
+    *
+    * @param callback any of type {{interface.name | capital}}{{signal.name | capital}}SignalCb
+    * @return unique identifier for this subscription, needed for removal
+    */
+    virtual long subscribeTo{{signal.name | capital}}({{interface.name | capital}}{{signal.name | capital}}SignalCb callback) = 0;
+    /**
+    * Use this function to unsubscribe from {{signal.name}} signal changes.
+    *
+    * @param handleId identifier returned by the original subscription call
+    */
+    virtual void unsubscribeFrom{{signal.name | capital}}(long handleId) = 0;
+{{nl}}
+{% endfor %}
+
+{% for property in interface.properties %}
+    /**
+    * This function is called by the implementation for {{property.name}} value changes.
+    {% unless property.description == blank %}
+    *
+    * @param {{property.name}} {{property.description}}
+    {% endunless %}
+    */
+    virtual void publish{{property.name|capital}}Changed({{property|cpp14Param: true}}) const = 0;
+{% endfor %}
+{% for signal in interface.signals %}
+    /**
+    * This function is called by the implementation when the {{signal.name}} signal is triggered.
+    *
+    {% for param in signal.params %}
+    * @param {{param.name}} {{signal.description}}
+    {% endfor %}
+    */
+    virtual void publish{{signal.name|capital}}(
+        {%- for param in signal.params -%}
+            {{param|cpp14Param: true}}{% unless forloop.last %},{% endunless -%}
+        {%- endfor -%}
+    ) const = 0;
+{% endfor %}
+};
+{{nl}}
+/**
+ * Interface {{class}}
+{% unless interface.description == blank %}
+ *
+ * {{interface.description}}
+{% endunless %}
+ */
+class {{ system.name | constant }}_{{ module.name | constant }}_EXPORT {{class}}
+{
+public:
+    virtual ~{{class}}() = default;
+{{nl}}
+{% unless interface.operations == empty %}
+    // methods
+{% for operation in interface.operations %}
+{% unless operation.description == blank %}
+    /**
+    * {{operation.description}}
+    *
+{%- for param in operation.params %}
+{% unless param.description == blank %}
+    * @param {{param}} {{param.description}}
+{% endunless %}
+{% endfor %}
+    */
+{% endunless %}
+    virtual {{operation|cpp14Return}} {{operation.name}}({{operation|cpp14Params}}) = 0;
+    /**
+    * Asynchronous function call for {{operation.name}}({{operation|cpp14Params}})
+    *
+{% unless operation.description == blank %}
+    * {{operation.description}}
+    *
+{% endunless %}
+{%- for param in operation.params %}
+{% unless param.description == blank %}
+    * @param {{param}} {{param.description}}
+{% endunless %}
+{% endfor %}
+    * @return Promise of type {{operation|cpp14Return}} which is set once the function has completed
+    */
+    virtual std::future<{{operation|cpp14Return}}> {{operation.name}}Async({{operation|cpp14Params}}) = 0;
+{{nl}}
+{% endfor %}
+{% endunless %}
+
+{% unless interface.properties == empty %}
+    // property methods
+{% for property in interface.properties %}
+    /**
+    * Sets the value of property {{property.name}}
+    {% unless property.description == blank %}
+    *
+    * @param {{property.name}} {{property.description}}
+    {% endunless %}
+    */
+    virtual void set{{property.name|capitalize}}({{ property|cpp14Param }}) = 0;
+    /**
+    * Gets the value of property {{property.name}}
+    {% unless property.description == blank %}
+    *
+    * @return {{property.description}}
+    {% endunless %}
+    */
+    virtual {{property|cpp14Return: true}} {{property.name}}() const = 0;
+{{nl}}
+{% endfor %}
+{% endunless %}
+    /**
+    * @return a pointer to the used {{pub_class}} for publish/subscribe events
+    */
+    virtual {{pub_class}}* _getPublisher() const = 0;
+};
+{{nl}}
+/**
+ * Interface {{class}}Decorator
+ *
+ * Decorator interface helper for inheritance
+ */
+class {{ system.name | constant }}_{{ module.name | constant }}_EXPORT {{class}}Decorator: public virtual {{class}}, public virtual {{sub_class}} {
+public:
+    /**
+    * Swap the used implementation
+    *
+    * @param impl pointer to new implementation to be used
+    * @return pointer to the original implementation
+    */
+    virtual {{class}}* swapUnderlyingImplementation({{class}}* impl) = 0;
+    /**
+    * Disconnect the decorator from the originally used implementation
+    *
+    * @return pointer to the original implementation
+    */
+    virtual {{class}}* disconnectFromUnderlyingImplementation() = 0;
+};
+} // namespace {{ module.name | capital }}
+} // namespace {{ system.name | capital }}

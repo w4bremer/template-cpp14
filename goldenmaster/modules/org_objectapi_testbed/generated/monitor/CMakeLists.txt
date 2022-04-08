@@ -1,0 +1,22 @@
+set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+find_package(apigear OPTIONAL_COMPONENTS poco-tracer)
+set (SOURCES_MONITOR
+    org_objectapi_testbed.trace.cpp
+    org_objectapi_testbed_interface1.trace.cpp
+    org_objectapi_testbed_interface2.trace.cpp
+)
+add_library(org_objectapi_testbed-monitor SHARED ${SOURCES_MONITOR})
+add_library(org_objectapi_testbed::monitor ALIAS org_objectapi_testbed-monitor)
+target_include_directories(org_objectapi_testbed-monitor PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+target_link_libraries(org_objectapi_testbed-monitor PUBLIC
+    org_objectapi_testbed::core
+    apigear::poco-tracer
+)
+# ensure maximum compiler support
+if(NOT MSVC)
+  target_compile_options(org_objectapi_testbed-monitor PRIVATE -Wall -Wextra -Wpedantic -Werror -fvisibility=hidden)
+else()
+  target_compile_options(org_objectapi_testbed-monitor PRIVATE /W4 /WX /wd4251)
+endif()

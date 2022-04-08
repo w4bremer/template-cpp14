@@ -1,0 +1,4 @@
+[submodule "packages/qtcpp/templates/thirdparty/objectlink"]
+	path = packages/qtcpp/templates/thirdparty/objectlink
+	url = git@github.com:apigear-io/objectlink-core-cpp.git
+	branch = refs/tags/v0.1.0

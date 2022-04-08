@@ -1,0 +1,27 @@
+{% assign module_id = module.name|identifier %}
+{% assign module_path = module.name|path %}
+{% assign SOURCES = module_id | append: "_SOURCES" -%}
+
+set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+find_package(apigear OPTIONAL_COMPONENTS poco-tracer)
+set (SOURCES_MONITOR
+    {{module_id}}.trace.cpp
+{% for interface in module.interfaces %}
+    {{module.name|identifier}}_{{interface.name|lower}}.trace.cpp
+{% endfor %}
+)
+add_library({{module_id}}-monitor SHARED ${SOURCES_MONITOR})
+add_library({{module_id}}::monitor ALIAS {{module_id}}-monitor)
+target_include_directories({{module_id}}-monitor PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+target_link_libraries({{module_id}}-monitor PUBLIC
+    {{module_id}}::core
+    apigear::poco-tracer
+)
+# ensure maximum compiler support
+if(NOT MSVC)
+  target_compile_options({{module_id}}-monitor PRIVATE -Wall -Wextra -Wpedantic -Werror -fvisibility=hidden)
+else()
+  target_compile_options({{module_id}}-monitor PRIVATE /W4 /WX /wd4251)
+endif()
