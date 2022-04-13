@@ -26,4 +26,4 @@ install(TARGETS org_objectapi_testbed-api
         LIBRARY DESTINATION lib                 COMPONENT Runtime
         ARCHIVE DESTINATION lib/org_objectapi_testbed   COMPONENT Development)
 # install includes
-install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} DESTINATION include FILES_MATCHING PATTERN "*.h")
+install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} DESTINATION include/org_objectapi_testbed/generated FILES_MATCHING PATTERN "*.h")

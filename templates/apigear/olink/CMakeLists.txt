@@ -37,6 +37,6 @@ install(TARGETS apigear-poco-olink
 # install includes
 FILE(GLOB APIGEAR_INCLUDES *.h)
 install(FILES ${APIGEAR_INCLUDES} ${OLINK_INCLUDES}
-        DESTINATION include)
+        DESTINATION include/apigear)
 # install olink depedency headers
-install(DIRECTORY ${objectlink-core-cpp_SOURCE_DIR}/src/ DESTINATION include FILES_MATCHING PATTERN "*.h")
+install(DIRECTORY ${objectlink-core-cpp_SOURCE_DIR}/src/ DESTINATION include/apigear FILES_MATCHING PATTERN "*.h")

@@ -48,4 +48,4 @@ install(TARGETS apigear-poco-tracer
 # install includes
 FILE(GLOB APIGEAR_INCLUDES *.h)
 install(FILES ${APIGEAR_INCLUDES}
-        DESTINATION include)
+        DESTINATION include/apigear)
