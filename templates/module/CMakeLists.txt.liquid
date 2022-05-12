@@ -24,3 +24,19 @@ ENDIF()
 IF( IS_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/generated/olink" )
 add_subdirectory(generated/olink)
 ENDIF()
+
+set(INCLUDE_INSTALL_DIR include/{{module_id}}/ CACHE FILEPATH "")
+set(LIB_INSTALL_DIR lib/ CACHE FILEPATH "")
+
+include(CMakePackageConfigHelpers)
+configure_package_config_file({{module.name|identifier|capitalize}}Config.cmake.in
+  ${CMAKE_CURRENT_BINARY_DIR}/{{module.name|identifier|capitalize}}Config.cmake
+  INSTALL_DESTINATION ${LIB_INSTALL_DIR}/{{module.name|identifier}}/cmake
+  PATH_VARS INCLUDE_INSTALL_DIR SYSCONFIG_INSTALL_DIR)
+write_basic_package_version_file(
+  ${CMAKE_CURRENT_BINARY_DIR}/{{module.name|identifier|capitalize}}ConfigVersion.cmake
+  VERSION {{module.version}}
+  COMPATIBILITY SameMinorVersion )
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/{{module.name|identifier|capitalize}}Config.cmake
+              ${CMAKE_CURRENT_BINARY_DIR}/{{module.name|identifier|capitalize}}ConfigVersion.cmake
+        DESTINATION ${LIB_INSTALL_DIR}/{{module.name|identifier}}/cmake )

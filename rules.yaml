@@ -4,6 +4,8 @@ features:
       documents:
         - source: "module/CMakeLists.txt.liquid"
           target: "modules/{{module.name|identifier}}/CMakeLists.txt"
+        - source: "module/ModuleConfig.cmake.in.liquid"
+          target: "modules/{{module.name|identifier}}/{{module.name|identifier|capitalize}}Config.cmake.in"
         - source: "module/generated/api/CMakeLists.txt.liquid"
           target: "modules/{{module.name|identifier}}/generated/api/CMakeLists.txt"
         - source: "module/generated/api/module.h.liquid"
@@ -106,6 +108,8 @@ features:
         - source: "apigear/tracer/CMakeLists.txt"
           raw: true
         - source: "apigear/CMakeLists.txt"
+          raw: true
+        - source: "apigear/ApigearConfig.cmake.in"
           raw: true
         - source: "apigear/conanfile.py"
           raw: true
