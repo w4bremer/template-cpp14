@@ -3,7 +3,7 @@
 #include "generated/monitor/org_objectapi_testbed_interface1.trace.h"
 #include "org_objectapi_testbed_interface2.h"
 #include "generated/monitor/org_objectapi_testbed_interface2.trace.h"
-#include "tracer.h"
+#include "apigear/tracer/tracer.h"
 
 using namespace Test;
 

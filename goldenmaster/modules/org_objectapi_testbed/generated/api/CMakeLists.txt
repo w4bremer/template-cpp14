@@ -10,8 +10,12 @@ set (SOURCES
     org_objectapi_testbed_datastructs.api.cpp
 )
 add_library(org_objectapi_testbed-api STATIC ${SOURCES})
-add_library(org_objectapi_testbed::api ALIAS org_objectapi_testbed-api)
-target_include_directories(org_objectapi_testbed-api PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+add_library(org_objectapi_testbed::org_objectapi_testbed-api ALIAS org_objectapi_testbed-api)
+target_include_directories(org_objectapi_testbed-api
+    PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
+    $<INSTALL_INTERFACE:include/org_objectapi_testbed>
+)
 target_link_libraries(org_objectapi_testbed-api PUBLIC Threads::Threads)
 # ensure maximum compiler support
 if(NOT MSVC)
@@ -22,8 +26,19 @@ endif()
 
 # install binary files
 install(TARGETS org_objectapi_testbed-api
+        EXPORT Org_objectapi_testbedApiTargets
         RUNTIME DESTINATION bin                 COMPONENT Runtime
         LIBRARY DESTINATION lib                 COMPONENT Runtime
         ARCHIVE DESTINATION lib/org_objectapi_testbed   COMPONENT Development)
 # install includes
 install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} DESTINATION include/org_objectapi_testbed/generated FILES_MATCHING PATTERN "*.h")
+
+export(EXPORT Org_objectapi_testbedApiTargets
+  NAMESPACE org_objectapi_testbed::
+)
+
+install(EXPORT Org_objectapi_testbedApiTargets
+  FILE Org_objectapi_testbedApiTargets.cmake
+  DESTINATION ${InstallDir}
+  NAMESPACE org_objectapi_testbed::
+)

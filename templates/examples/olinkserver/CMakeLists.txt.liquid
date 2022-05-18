@@ -15,13 +15,13 @@ add_executable(OLinkServer
 )
 
 {% for module in system.modules %}
-find_package({{module.name|identifier}} OPTIONAL_COMPONENTS core implementation olink)
+find_package({{module.name|identifier}} QUIET COMPONENTS {{module.name|identifier}}-core {{module.name|identifier}}-implementation {{module.name|identifier}}-olink)
 {% endfor %}
 target_link_libraries(OLinkServer
 {% for module in system.modules %}
-    {{module.name|identifier}}::core
-    {{module.name|identifier}}::implementation
-    {{module.name|identifier}}::olink
+    {{module.name|identifier}}::{{module.name|identifier}}-core
+    {{module.name|identifier}}::{{module.name|identifier}}-implementation
+    {{module.name|identifier}}::{{module.name|identifier}}-olink
 {% endfor %}
 )
 

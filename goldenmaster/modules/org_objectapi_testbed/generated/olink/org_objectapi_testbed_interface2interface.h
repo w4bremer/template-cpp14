@@ -23,7 +23,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "generated/api/org_objectapi_testbed_common.h"
 #include "generated/core/org_objectapi_testbed_interface2.publisher.h"
 #include "olink/clientnode.h"
-#include "olinkclient.h"
+#include "apigear/olink/olinkclient.h"
 
 namespace Test {
 namespace OrgObjectapiTestbed {

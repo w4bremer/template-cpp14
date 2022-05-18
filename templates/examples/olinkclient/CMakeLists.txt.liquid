@@ -15,14 +15,14 @@ add_executable(OLinkClient
 )
 
 {% for module in system.modules %}
-find_package({{module.name|identifier}} OPTIONAL_COMPONENTS core implementation monitor olink)
+find_package({{module.name|identifier}} QUIET COMPONENTS {{module.name|identifier}}-core {{module.name|identifier}}-implementation {{module.name|identifier}}-monitor {{module.name|identifier}}-olink)
 {% endfor %}
 target_link_libraries(OLinkClient
 {% for module in system.modules %}
-    {{module.name|identifier}}::core
-    {{module.name|identifier}}::implementation
-    {{module.name|identifier}}::monitor
-    {{module.name|identifier}}::olink
+    {{module.name|identifier}}::{{module.name|identifier}}-core
+    {{module.name|identifier}}::{{module.name|identifier}}-implementation
+    {{module.name|identifier}}::{{module.name|identifier}}-monitor
+    {{module.name|identifier}}::{{module.name|identifier}}-olink
 {% endfor %}
 )
 

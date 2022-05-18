@@ -13,8 +13,12 @@ set (SOURCES
     {{module_id}}_datastructs.api.cpp
 )
 add_library({{module_id}}-api STATIC ${SOURCES})
-add_library({{module_id}}::api ALIAS {{module_id}}-api)
-target_include_directories({{module_id}}-api PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+add_library({{module_id}}::{{module_id}}-api ALIAS {{module_id}}-api)
+target_include_directories({{module_id}}-api
+    PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
+    $<INSTALL_INTERFACE:include/{{module_id}}>
+)
 target_link_libraries({{module_id}}-api PUBLIC Threads::Threads)
 # ensure maximum compiler support
 if(NOT MSVC)
@@ -25,8 +29,19 @@ endif()
 
 # install binary files
 install(TARGETS {{module_id}}-api
+        EXPORT {{module.name|identifier|capitalize}}ApiTargets
         RUNTIME DESTINATION bin                 COMPONENT Runtime
         LIBRARY DESTINATION lib                 COMPONENT Runtime
         ARCHIVE DESTINATION lib/{{module_id}}   COMPONENT Development)
 # install includes
 install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} DESTINATION include/{{module_id}}/generated FILES_MATCHING PATTERN "*.h")
+
+export(EXPORT {{module.name|identifier|capitalize}}ApiTargets
+  NAMESPACE {{module.name|identifier}}::
+)
+
+install(EXPORT {{module.name|identifier|capitalize}}ApiTargets
+  FILE {{module.name|identifier|capitalize}}ApiTargets.cmake
+  DESTINATION ${InstallDir}
+  NAMESPACE {{module.name|identifier}}::
+)

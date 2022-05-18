@@ -13,11 +13,11 @@ set (SOURCES
 add_executable(app
     ${SOURCES}
 )
-find_package(org_objectapi_testbed OPTIONAL_COMPONENTS core implementation monitor)
+find_package(org_objectapi_testbed QUIET COMPONENTS org_objectapi_testbed-core org_objectapi_testbed-implementation org_objectapi_testbed-monitor)
 target_link_libraries(app
-    org_objectapi_testbed::core
-    org_objectapi_testbed::implementation
-    org_objectapi_testbed::monitor
+    org_objectapi_testbed::org_objectapi_testbed-core
+    org_objectapi_testbed::org_objectapi_testbed-implementation
+    org_objectapi_testbed::org_objectapi_testbed-monitor
 )
 
 install(TARGETS app

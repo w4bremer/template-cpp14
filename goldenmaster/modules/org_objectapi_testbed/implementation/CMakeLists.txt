@@ -8,9 +8,13 @@ set (SOURCES_CORE_IMPL
     org_objectapi_testbed_interface2.cpp
 )
 add_library(org_objectapi_testbed-implementation STATIC ${SOURCES_CORE_IMPL})
-add_library(org_objectapi_testbed::implementation ALIAS org_objectapi_testbed-implementation)
-target_include_directories(org_objectapi_testbed-implementation PUBLIC ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/../)
-target_link_libraries(org_objectapi_testbed-implementation PUBLIC org_objectapi_testbed::api org_objectapi_testbed::core)
+add_library(org_objectapi_testbed::org_objectapi_testbed-implementation ALIAS org_objectapi_testbed-implementation)
+target_include_directories(org_objectapi_testbed-implementation
+    PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
+    $<INSTALL_INTERFACE:include/org_objectapi_testbed>
+)
+target_link_libraries(org_objectapi_testbed-implementation PUBLIC org_objectapi_testbed::org_objectapi_testbed-api org_objectapi_testbed::org_objectapi_testbed-core)
 # ensure maximum compiler support
 if(NOT MSVC)
   target_compile_options(org_objectapi_testbed-implementation PRIVATE -Wall -Wextra -Wpedantic -Werror -fvisibility=hidden)
@@ -35,16 +39,30 @@ set (SOURCES_TEST
 add_executable(test_org_objectapi_testbed EXCLUDE_FROM_ALL
     ${SOURCES_TEST}
 )
-target_link_libraries(test_org_objectapi_testbed org_objectapi_testbed::implementation Catch2::Catch2)
+target_link_libraries(test_org_objectapi_testbed org_objectapi_testbed::org_objectapi_testbed-implementation Catch2::Catch2)
 target_include_directories(test_org_objectapi_testbed PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
+
 
 add_test(test_org_objectapi_testbed test_org_objectapi_testbed)
 add_dependencies(check test_org_objectapi_testbed)
 endif(BUILD_TESTING)
 
 install(TARGETS org_objectapi_testbed-implementation
+        EXPORT Org_objectapi_testbedImplementationTargets
         RUNTIME DESTINATION bin                 COMPONENT Runtime
         LIBRARY DESTINATION lib                 COMPONENT Runtime
         ARCHIVE DESTINATION lib/org_objectapi_testbed   COMPONENT Development)
 # install includes
-install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} DESTINATION include/org_objectapi_testbed FILES_MATCHING PATTERN "*.h")
+FILE(GLOB Org_objectapi_testbed_INCLUDES *.h)
+install(FILES ${Org_objectapi_testbed_INCLUDES}
+        DESTINATION include/org_objectapi_testbed)
+
+export(EXPORT Org_objectapi_testbedImplementationTargets
+  NAMESPACE org_objectapi_testbed::
+)
+
+install(EXPORT Org_objectapi_testbedImplementationTargets
+  FILE Org_objectapi_testbedImplementationTargets.cmake
+  DESTINATION ${InstallDir}
+  NAMESPACE org_objectapi_testbed::
+)

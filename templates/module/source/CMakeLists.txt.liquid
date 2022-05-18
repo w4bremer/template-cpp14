@@ -11,9 +11,13 @@ set (SOURCES_CORE_IMPL
 {% endfor %}
 )
 add_library({{module_id}}-implementation STATIC ${SOURCES_CORE_IMPL})
-add_library({{module_id}}::implementation ALIAS {{module_id}}-implementation)
-target_include_directories({{module_id}}-implementation PUBLIC ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/../)
-target_link_libraries({{module_id}}-implementation PUBLIC {{module_id}}::api {{module_id}}::core)
+add_library({{module_id}}::{{module_id}}-implementation ALIAS {{module_id}}-implementation)
+target_include_directories({{module_id}}-implementation
+    PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
+    $<INSTALL_INTERFACE:include/{{module_id}}>
+)
+target_link_libraries({{module_id}}-implementation PUBLIC {{module_id}}::{{module_id}}-api {{module_id}}::{{module_id}}-core)
 # ensure maximum compiler support
 if(NOT MSVC)
   target_compile_options({{module_id}}-implementation PRIVATE -Wall -Wextra -Wpedantic -Werror -fvisibility=hidden)
@@ -39,16 +43,30 @@ set (SOURCES_TEST
 add_executable(test_{{module_id}} EXCLUDE_FROM_ALL
     ${SOURCES_TEST}
 )
-target_link_libraries(test_{{module_id}} {{module_id}}::implementation Catch2::Catch2)
+target_link_libraries(test_{{module_id}} {{module_id}}::{{module_id}}-implementation Catch2::Catch2)
 target_include_directories(test_{{module_id}} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
+
 
 add_test(test_{{module_id}} test_{{module_id}})
 add_dependencies(check test_{{module_id}})
 endif(BUILD_TESTING)
 
 install(TARGETS {{module_id}}-implementation
+        EXPORT {{module.name|identifier|capitalize}}ImplementationTargets
         RUNTIME DESTINATION bin                 COMPONENT Runtime
         LIBRARY DESTINATION lib                 COMPONENT Runtime
         ARCHIVE DESTINATION lib/{{module_id}}   COMPONENT Development)
 # install includes
-install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} DESTINATION include/{{module_id}} FILES_MATCHING PATTERN "*.h")
+FILE(GLOB {{module.name|identifier|capitalize}}_INCLUDES *.h)
+install(FILES {{ '${' }}{{ module.name|identifier|capitalize | append: "_INCLUDES}"}}
+        DESTINATION include/{{module_id}})
+
+export(EXPORT {{module.name|identifier|capitalize}}ImplementationTargets
+  NAMESPACE {{module.name|identifier}}::
+)
+
+install(EXPORT {{module.name|identifier|capitalize}}ImplementationTargets
+  FILE {{module.name|identifier|capitalize}}ImplementationTargets.cmake
+  DESTINATION ${InstallDir}
+  NAMESPACE {{module.name|identifier}}::
+)

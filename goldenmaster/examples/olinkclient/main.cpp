@@ -3,8 +3,8 @@
 #include "generated/monitor/org_objectapi_testbed_interface1.trace.h"
 #include "generated/olink/org_objectapi_testbed_interface2interface.h"
 #include "generated/monitor/org_objectapi_testbed_interface2.trace.h"
-#include "olinkclient.h"
-#include "tracer.h"
+#include "apigear/olink/olinkclient.h"
+#include "apigear/tracer/tracer.h"
 
 using namespace Test;
 

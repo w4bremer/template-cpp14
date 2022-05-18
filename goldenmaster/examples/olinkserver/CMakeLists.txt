@@ -13,11 +13,11 @@ set (SOURCES
 add_executable(OLinkServer
     ${SOURCES}
 )
-find_package(org_objectapi_testbed OPTIONAL_COMPONENTS core implementation olink)
+find_package(org_objectapi_testbed QUIET COMPONENTS org_objectapi_testbed-core org_objectapi_testbed-implementation org_objectapi_testbed-olink)
 target_link_libraries(OLinkServer
-    org_objectapi_testbed::core
-    org_objectapi_testbed::implementation
-    org_objectapi_testbed::olink
+    org_objectapi_testbed::org_objectapi_testbed-core
+    org_objectapi_testbed::org_objectapi_testbed-implementation
+    org_objectapi_testbed::org_objectapi_testbed-olink
 )
 
 install(TARGETS OLinkServer

@@ -16,10 +16,28 @@ endif(BUILD_TESTING)
 
 # checks are workaround until generator support feature check properly
 IF( IS_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/apigear" )
-add_subdirectory(apigear)
+find_package(apigear QUIET)
+if(NOT apigear_FOUND)
+  # pull apigear as dependency
+  message(STATUS "apigear NOT FOUND, building from source folder")
+  include(FetchContent)
+  FetchContent_Declare(apigear
+    SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/apigear"
+  )
+  FetchContent_MakeAvailable(apigear)
+endif()
 ENDIF()
 {% for module in system.modules %}
-add_subdirectory(modules/{{module.name|identifier}})
+find_package({{module.name|identifier}} QUIET)
+if(NOT {{module.name|identifier}}_FOUND)
+  # pull {{module.name|identifier}} as dependency
+  message(STATUS "{{module.name|identifier}} NOT FOUND, building from source folder")
+  include(FetchContent)
+  FetchContent_Declare({{module.name|identifier}}
+    SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/modules/{{module.name|identifier}}"
+  )
+  FetchContent_MakeAvailable({{module.name|identifier}})
+endif()
 {% endfor %}
 IF( IS_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/examples" )
 add_subdirectory(examples/app)

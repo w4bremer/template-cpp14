@@ -5,7 +5,7 @@
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(apigear OPTIONAL_COMPONENTS poco-tracer)
+find_package(apigear QUIET COMPONENTS poco-tracer)
 set (SOURCES_MONITOR
     {{module_id}}.trace.cpp
 {% for interface in module.interfaces %}
@@ -13,10 +13,14 @@ set (SOURCES_MONITOR
 {% endfor %}
 )
 add_library({{module_id}}-monitor SHARED ${SOURCES_MONITOR})
-add_library({{module_id}}::monitor ALIAS {{module_id}}-monitor)
-target_include_directories({{module_id}}-monitor PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+add_library({{module_id}}::{{module_id}}-monitor ALIAS {{module_id}}-monitor)
+target_include_directories({{module_id}}-monitor
+    INTERFACE
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
+    $<INSTALL_INTERFACE:include/{{module_id}}>
+)
 target_link_libraries({{module_id}}-monitor PUBLIC
-    {{module_id}}::core
+    {{module_id}}::{{module_id}}-core
     apigear::poco-tracer
 )
 # ensure maximum compiler support
@@ -27,8 +31,19 @@ else()
 endif()
 
 install(TARGETS {{module_id}}-monitor
+        EXPORT {{module.name|identifier|capitalize}}MonitorTargets
         RUNTIME DESTINATION bin                 COMPONENT Runtime
         LIBRARY DESTINATION lib                 COMPONENT Runtime
         ARCHIVE DESTINATION lib/{{module_id}}   COMPONENT Development)
 # install includes
 install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} DESTINATION include/{{module_id}}/generated FILES_MATCHING PATTERN "*.h")
+
+export(EXPORT {{module.name|identifier|capitalize}}MonitorTargets
+  NAMESPACE {{module.name|identifier}}::
+)
+
+install(EXPORT {{module.name|identifier|capitalize}}MonitorTargets
+  FILE {{module.name|identifier|capitalize}}MonitorTargets.cmake
+  DESTINATION ${InstallDir}
+  NAMESPACE {{module.name|identifier}}::
+)

@@ -16,7 +16,7 @@ set (SOURCES_TEST
 add_executable(test_org_objectapi_testbed #EXCLUDE_FROM_ALL
     ${SOURCES_TEST}
 )
-target_link_libraries(test_org_objectapi_testbed org_objectapi_testbed::implementation)
+target_link_libraries(test_org_objectapi_testbed org_objectapi_testbed::org_objectapi_testbed-implementation)
 add_test(test_org_objectapi_testbed test_org_objectapi_testbed)
 add_dependencies(check test_org_objectapi_testbed)
 # ensure maximum compiler support

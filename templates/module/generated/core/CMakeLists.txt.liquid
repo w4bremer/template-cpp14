@@ -15,9 +15,14 @@ set (SOURCES_CORE_SUPPORT
 {% endfor %}
 )
 add_library({{module_id}}-core STATIC ${SOURCES_CORE_SUPPORT})
-add_library({{module_id}}::core ALIAS {{module_id}}-core)
-target_include_directories({{module_id}}-core PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/../../ ${CMAKE_CURRENT_SOURCE_DIR}/)
-target_link_libraries({{module_id}}-core PUBLIC {{module_id}}::api nlohmann_json::nlohmann_json)
+add_library({{module_id}}::{{module_id}}-core ALIAS {{module_id}}-core)
+target_include_directories({{module_id}}-core
+    PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../../>
+    $<INSTALL_INTERFACE:include/{{module_id}}>
+)
+target_link_libraries({{module_id}}-core PUBLIC {{module_id}}::{{module_id}}-api nlohmann_json::nlohmann_json)
 # ensure maximum compiler support
 if(NOT MSVC)
   target_compile_options({{module_id}}-core PRIVATE -Wall -Wextra -Wpedantic -Werror -fvisibility=hidden)
@@ -26,8 +31,19 @@ else()
 endif()
 
 install(TARGETS {{module_id}}-core
+        EXPORT {{module.name|identifier|capitalize}}CoreTargets
         RUNTIME DESTINATION bin                 COMPONENT Runtime
         LIBRARY DESTINATION lib                 COMPONENT Runtime
         ARCHIVE DESTINATION lib/{{module_id}}   COMPONENT Development)
 # install includes
 install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} DESTINATION include/{{module_id}}/generated FILES_MATCHING PATTERN "*.h")
+
+export(EXPORT {{module.name|identifier|capitalize}}CoreTargets
+  NAMESPACE {{module.name|identifier}}::
+)
+
+install(EXPORT {{module.name|identifier|capitalize}}CoreTargets
+  FILE {{module.name|identifier|capitalize}}CoreTargets.cmake
+  DESTINATION ${InstallDir}
+  NAMESPACE {{module.name|identifier}}::
+)

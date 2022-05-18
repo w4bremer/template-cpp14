@@ -17,7 +17,7 @@ set (SOURCES_TEST
 add_executable(test_{{module_id}} #EXCLUDE_FROM_ALL
     ${SOURCES_TEST}
 )
-target_link_libraries(test_{{module_id}} {{module_id}}::implementation)
+target_link_libraries(test_{{module_id}} {{module_id}}::{{module_id}}-implementation)
 add_test(test_{{module_id}} test_{{module_id}})
 add_dependencies(check test_{{module_id}})
 # ensure maximum compiler support

@@ -3,7 +3,7 @@
 #include "generated/olink/org_objectapi_testbed_interface1adapter.h"
 #include "org_objectapi_testbed_interface2.h"
 #include "generated/olink/org_objectapi_testbed_interface2adapter.h"
-#include "olinkhost.h"
+#include "apigear/olink/olinkhost.h"
 
 using namespace Test;
 

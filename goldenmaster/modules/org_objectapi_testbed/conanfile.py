@@ -29,12 +29,12 @@ class org_objectapi_testbedConan(ConanFile):
 
     def package_info(self):
         self.env_info.path.append(os.path.join(self.package_folder, "bin"))
-        self.cpp_info.components["api"].libs = ["org_objectapi_testbed-api"]
-        self.cpp_info.components["core"].libs = ["org_objectapi_testbed-core"]
-        self.cpp_info.components["core"].requires = ["api", "catch2::catch2", "nlohmann_json::nlohmann_json"]
-        self.cpp_info.components["implementation"].libs = ["org_objectapi_testbed-implementation"]
-        self.cpp_info.components["implementation"].requires = ["core", "catch2::catch2", "nlohmann_json::nlohmann_json"]
-        self.cpp_info.components["monitor"].libs = ["org_objectapi_testbed-monitor"]
-        self.cpp_info.components["monitor"].requires = ["core", "nlohmann_json::nlohmann_json", "apigear::poco-tracer"]
-        self.cpp_info.components["olink"].libs = ["org_objectapi_testbed-olink"]
-        self.cpp_info.components["olink"].requires = ["core", "nlohmann_json::nlohmann_json", "apigear::poco-olink"]
+        self.cpp_info.components["org_objectapi_testbed-api"].libs = ["org_objectapi_testbed-api"]
+        self.cpp_info.components["org_objectapi_testbed-core"].libs = ["org_objectapi_testbed-core"]
+        self.cpp_info.components["org_objectapi_testbed-core"].requires = ["org_objectapi_testbed-api", "catch2::catch2", "nlohmann_json::nlohmann_json"]
+        self.cpp_info.components["org_objectapi_testbed-implementation"].libs = ["org_objectapi_testbed-implementation"]
+        self.cpp_info.components["org_objectapi_testbed-implementation"].requires = ["org_objectapi_testbed-core", "catch2::catch2", "nlohmann_json::nlohmann_json"]
+        self.cpp_info.components["org_objectapi_testbed-monitor"].libs = ["org_objectapi_testbed-monitor"]
+        self.cpp_info.components["org_objectapi_testbed-monitor"].requires = ["org_objectapi_testbed-core", "nlohmann_json::nlohmann_json", "apigear::poco-tracer"]
+        self.cpp_info.components["org_objectapi_testbed-olink"].libs = ["org_objectapi_testbed-olink"]
+        self.cpp_info.components["org_objectapi_testbed-olink"].requires = ["org_objectapi_testbed-core", "nlohmann_json::nlohmann_json", "apigear::poco-olink"]

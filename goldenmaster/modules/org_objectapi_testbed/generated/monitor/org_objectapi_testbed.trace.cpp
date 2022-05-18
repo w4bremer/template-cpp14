@@ -1,4 +1,4 @@
-#include "tracer.h"
+#include "apigear/tracer/tracer.h"
 #include "org_objectapi_testbed.trace.h"
 #include "generated/core/org_objectapi_testbed.json.adapter.h"
 

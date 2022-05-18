@@ -1,6 +1,13 @@
 set(APIGEAR_VERSION 1.0)
 @PACKAGE_INIT@
+INCLUDE("${CMAKE_CURRENT_LIST_DIR}/ApiGearPocoOlinkTargets.cmake")
+INCLUDE("${CMAKE_CURRENT_LIST_DIR}/ApiGearPocoTracerTargets.cmake")
 set_and_check(APIGEAR_INCLUDE_DIR "@PACKAGE_INCLUDE_INSTALL_DIR@")
-set_and_check(APIGEAR_SYSCONFIG_DIR "@PACKAGE_SYSCONFIG_INSTALL_DIR@")
 
-check_required_components(apigear)
+# make sure we have all needed dependencies
+include(CMakeFindDependencyMacro)
+find_dependency(Poco COMPONENTS Foundation Net Util REQUIRED)
+find_dependency(nlohmann_json REQUIRED)
+find_dependency(objectlink-core-cpp REQUIRED)
+
+check_required_components(poco-olink poco-tracer)

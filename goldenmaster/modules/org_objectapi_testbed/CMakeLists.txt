@@ -6,6 +6,10 @@ include(CTest)
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+set(INCLUDE_INSTALL_DIR include/org_objectapi_testbed/ CACHE FILEPATH "")
+set(LIB_INSTALL_DIR lib/ CACHE FILEPATH "")
+set(InstallDir ${LIB_INSTALL_DIR}/cmake/org_objectapi_testbed)
+
 # checks are workaround until generator support feature check properly
 IF( IS_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/generated/api" )
 add_subdirectory(generated/api)
@@ -22,18 +26,15 @@ IF( IS_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/generated/olink" )
 add_subdirectory(generated/olink)
 ENDIF()
 
-set(INCLUDE_INSTALL_DIR include/org_objectapi_testbed/ CACHE FILEPATH "")
-set(LIB_INSTALL_DIR lib/ CACHE FILEPATH "")
-
 include(CMakePackageConfigHelpers)
 configure_package_config_file(Org_objectapi_testbedConfig.cmake.in
-  ${CMAKE_CURRENT_BINARY_DIR}/Org_objectapi_testbedConfig.cmake
-  INSTALL_DESTINATION ${LIB_INSTALL_DIR}/org_objectapi_testbed/cmake
-  PATH_VARS INCLUDE_INSTALL_DIR SYSCONFIG_INSTALL_DIR)
+  ${CMAKE_CURRENT_BINARY_DIR}/org_objectapi_testbedConfig.cmake
+  INSTALL_DESTINATION ${InstallDir}
+  PATH_VARS INCLUDE_INSTALL_DIR LIB_INSTALL_DIR)
 write_basic_package_version_file(
-  ${CMAKE_CURRENT_BINARY_DIR}/Org_objectapi_testbedConfigVersion.cmake
+  ${CMAKE_CURRENT_BINARY_DIR}/org_objectapi_testbedConfigVersion.cmake
   VERSION 1.0
   COMPATIBILITY SameMinorVersion )
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/Org_objectapi_testbedConfig.cmake
-              ${CMAKE_CURRENT_BINARY_DIR}/Org_objectapi_testbedConfigVersion.cmake
-        DESTINATION ${LIB_INSTALL_DIR}/org_objectapi_testbed/cmake )
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/org_objectapi_testbedConfig.cmake
+              ${CMAKE_CURRENT_BINARY_DIR}/org_objectapi_testbedConfigVersion.cmake
+        DESTINATION ${InstallDir} )

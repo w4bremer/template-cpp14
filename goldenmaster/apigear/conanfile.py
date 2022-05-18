@@ -52,8 +52,7 @@ class apigearConan(ConanFile):
 
     def package(self):
         packages = ["tracer", "olink"]
-        for header in packages:
-            self.copy(pattern="*.h", dst="include", src="%s" % header)
+        self.copy("**/*.h", dst="include/apigear", src=".")
         self.copy("*.lib", dst="lib", keep_path=False)
         self.copy("*.dll", dst="bin", keep_path=False)
         self.copy("*.dylib*", dst="lib", keep_path=False)
@@ -64,7 +63,7 @@ class apigearConan(ConanFile):
 
     def package_info(self):
         self.env_info.path.append(os.path.join(self.package_folder, "bin"))
-        self.cpp_info.components["poco-tracer"].libs = ["apigear-poco-tracer"]
+        self.cpp_info.components["poco-tracer"].libs = ["poco-tracer"]
         self.cpp_info.components["poco-tracer"].requires = ["catch2::catch2", "poco::poco", "nlohmann_json::nlohmann_json"]
-        self.cpp_info.components["poco-olink"].libs = ["apigear-poco-olink"]
+        self.cpp_info.components["poco-olink"].libs = ["poco-olink"]
         self.cpp_info.components["poco-olink"].requires = ["poco::poco", "nlohmann_json::nlohmann_json"]

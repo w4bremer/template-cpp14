@@ -5,7 +5,7 @@
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(apigear OPTIONAL_COMPONENTS poco-olink)
+find_package(apigear QUIET COMPONENTS poco-olink)
 set (SOURCES_OLINK
 {% for interface in module.interfaces %}
     {{module.name|identifier}}_{{interface.name|lower}}adapter.cpp
@@ -13,13 +13,17 @@ set (SOURCES_OLINK
 {% endfor %}
 )
 add_library({{module_id}}-olink SHARED ${SOURCES_OLINK})
-add_library({{module_id}}::olink ALIAS {{module_id}}-olink)
-target_include_directories({{module_id}}-olink PUBLIC ${CMAKE_CURRENT_SOURCE_DIR} ${INCLUDES_OLINK})
-target_link_libraries({{module_id}}-olink 
-    {{module_id}}::core
-    apigear::poco-olink
-    olink_core
+add_library({{module_id}}::{{module_id}}-olink ALIAS {{module_id}}-olink)
+target_include_directories({{module_id}}-olink
+    PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
+    $<INSTALL_INTERFACE:include/{{module_id}}>
 )
+target_link_libraries({{module_id}}-olink 
+    {{module_id}}::{{module_id}}-core
+    apigear::poco-olink
+)
+
 # ensure maximum compiler support
 if(NOT MSVC)
   target_compile_options({{module_id}}-olink PRIVATE -Wall -Wextra -Wpedantic -Werror -fvisibility=hidden)
@@ -28,8 +32,19 @@ else()
 endif()
 
 install(TARGETS {{module_id}}-olink
+        EXPORT {{module.name|identifier|capitalize}}OLinkTargets
         RUNTIME DESTINATION bin                 COMPONENT Runtime
         LIBRARY DESTINATION lib                 COMPONENT Runtime
         ARCHIVE DESTINATION lib/{{module_id}}   COMPONENT Development)
 # install includes
 install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} DESTINATION include/{{module_id}}/generated FILES_MATCHING PATTERN "*.h")
+
+export(EXPORT {{module.name|identifier|capitalize}}OLinkTargets
+  NAMESPACE {{module.name|identifier}}::
+)
+
+install(EXPORT {{module.name|identifier|capitalize}}OLinkTargets
+  FILE {{module.name|identifier|capitalize}}OLinkTargets.cmake
+  DESTINATION ${InstallDir}
+  NAMESPACE {{module.name|identifier}}::
+)

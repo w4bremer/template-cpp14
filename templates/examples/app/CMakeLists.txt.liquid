@@ -15,13 +15,13 @@ add_executable(app
 )
 
 {% for module in system.modules %}
-find_package({{module.name|identifier}} OPTIONAL_COMPONENTS core implementation monitor)
+find_package({{module.name|identifier}} QUIET COMPONENTS {{module.name|identifier}}-core {{module.name|identifier}}-implementation {{module.name|identifier}}-monitor)
 {% endfor %}
 target_link_libraries(app
 {% for module in system.modules %}
-    {{module.name|identifier}}::core
-    {{module.name|identifier}}::implementation
-    {{module.name|identifier}}::monitor
+    {{module.name|identifier}}::{{module.name|identifier}}-core
+    {{module.name|identifier}}::{{module.name|identifier}}-implementation
+    {{module.name|identifier}}::{{module.name|identifier}}-monitor
 {% endfor %}
 )
 
