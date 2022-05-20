@@ -1,6 +1,6 @@
 {
   "name": "@apigear-io-templates/cpp14-blueprint",
-  "version": "2.0.0",
+  "version": "2.1.0-0",
   "description": "A pure C++ 14 code generator",
   "keywords": [
     "objectapi",
