@@ -4,9 +4,7 @@
   "description": "A pure C++ 14 code generator",
   "keywords": [
     "objectapi",
-    "go",
     "library",
-    "http",
     "client"
   ],
   "devDependencies": {
