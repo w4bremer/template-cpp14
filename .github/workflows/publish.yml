@@ -69,4 +69,4 @@ jobs:
           yarn version --${{ github.event.inputs.lernaVersionIncrement }}
           git push
           git push --tags
-          yarn publish
+          yarn publish --access restricted
