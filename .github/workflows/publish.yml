@@ -16,7 +16,7 @@ on:
         default: 'minor'
 
 jobs:
-  build:
+  publish:
     runs-on: ubuntu-latest
     env:
       GITHUB_AUTH_TOKEN: ${{ secrets.WOLFGANG_REPO_PACKAGE_READ }}
@@ -27,9 +27,14 @@ jobs:
         node-version: [16.x]
 
     steps:
+      - name: Configure Git User
+        run: |
+          git config --global user.email "ci@apigear.io"
+          git config --global user.name "@$GITHUB_ACTOR"
       - name: Git checkout
         uses: actions/checkout@v3
         with:
+          token: ${{ secrets.WOLFGANG_REPO_PACKAGE_READ }}
           submodules: recursive
         # pulls all tags (needed for lerna / semantic release to correctly version)
       - run: git fetch --prune --unshallow --tags
@@ -55,18 +60,24 @@ jobs:
       # see https://classic.yarnpkg.com/en/docs/cli/install
       - run: yarn install --frozen-lockfile --link-duplicates
       - run: yarn run test:goldenmaster
-      - name: Configure Git User
-        run: |
-          git config --global user.email "ci@apigear.io"
-          git config --global user.name "@$GITHUB_ACTOR"
       - name: Dry run yarn version
         if: ${{ github.event.inputs.dryRun == 'true' }}
         run: |
           yarn version --${{ github.event.inputs.lernaVersionIncrement }}
-      - name: Publish packages
+      - name: Version package
         if: ${{ github.event.inputs.dryRun != 'true' }}
         run: |
           yarn version --${{ github.event.inputs.lernaVersionIncrement }}
-          git push
-          git push --tags
-          yarn publish --access restricted
+      - name: Test registry login
+        if: ${{ github.event.inputs.dryRun != 'true' }}
+        run: |
+          npm whoami --registry=https://europe-west3-npm.pkg.dev/apigear/technology-templates/
+      - name: Publish git changes to repository
+        if: ${{ github.event.inputs.dryRun != 'true' }}
+        run: |
+          git push && git push --tags
+      - name: Publish package
+        if: ${{ github.event.inputs.dryRun != 'true' }}
+        run: |
+          yarn publish
+        # npm publish --access restricted --@apigear-io-templates:registry=https://europe-west3-npm.pkg.dev/apigear/technology-templates/
