@@ -60,14 +60,9 @@ jobs:
       # see https://classic.yarnpkg.com/en/docs/cli/install
       - run: yarn install --frozen-lockfile --link-duplicates
       - run: yarn run test:goldenmaster
-      - name: Dry run yarn version
-        if: ${{ github.event.inputs.dryRun == 'true' }}
-        run: |
-          yarn version --${{ github.event.inputs.lernaVersionIncrement }}
       - name: Version package
-        if: ${{ github.event.inputs.dryRun != 'true' }}
         run: |
-          yarn version --${{ github.event.inputs.lernaVersionIncrement }}
+          npm version ${{ github.event.inputs.lernaVersionIncrement }}
       - name: Test registry login
         if: ${{ github.event.inputs.dryRun != 'true' }}
         run: |
@@ -79,5 +74,8 @@ jobs:
       - name: Publish package
         if: ${{ github.event.inputs.dryRun != 'true' }}
         run: |
-          yarn publish
-        # npm publish --access restricted --@apigear-io-templates:registry=https://europe-west3-npm.pkg.dev/apigear/technology-templates/
+         npm publish --access restricted --@apigear-io-templates:registry=https://europe-west3-npm.pkg.dev/apigear/technology-templates/
+      - name: Publish package dry-run
+        if: ${{ github.event.inputs.dryRun == 'true' }}
+        run: |
+         npm publish --dry-run --access restricted --@apigear-io-templates:registry=https://europe-west3-npm.pkg.dev/apigear/technology-templates/
