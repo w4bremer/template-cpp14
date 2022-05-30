@@ -120,4 +120,4 @@ jobs:
         run: git clone --branch v2.13.8 --depth 1 https://github.com/catchorg/Catch2.git && cd Catch2 && cmake -Bbuild -H. -DBUILD_TESTING=OFF && sudo cmake --build build/ --target install
       - name: Run cmake
         working-directory: goldenmaster
-        run: cmake -Bbuild -H. -DCMAKE_INSTALL_PREFIX=tmp && cmake --build build/ --target install
+        run: cmake -Bbuild -H. -DCMAKE_INSTALL_PREFIX=tmp && cmake --build build/ --target check && cmake --build build/ --target install
