@@ -90,6 +90,11 @@ jobs:
       - name: Run conan build
         working-directory: goldenmaster
         run: chmod +x ./test_conan.sh && ./test_conan.sh
+        if: ${{ matrix.config.os == 'macos-latest'}}
+      - name: Run conan build
+        working-directory: goldenmaster
+        run: cmd.exe /c 'test_conan.bat'
+        if: ${{ matrix.config.os == 'windows-latest'}}
 
   cmake_build:
     needs: generate
