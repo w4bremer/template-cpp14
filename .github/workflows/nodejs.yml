@@ -45,7 +45,7 @@ jobs:
       - run: yarn run test:goldenmaster
 
   conan_build:
-    # needs: generate
+    needs: generate
     name: ${{ matrix.config.name }}
     runs-on: ${{ matrix.config.os }}
     strategy:
@@ -63,11 +63,11 @@ jobs:
         #     os: windows-latest,
         #     build_type: "Release", cc: "gcc", cxx: "g++"
         #   }
-        - {
-            name: "Ubuntu Latest GCC", artifact: "Linux.tar.xz",
-            os: ubuntu-latest,
-            build_type: "Release", cc: "gcc", cxx: "g++"
-          }
+        # - {
+        #     name: "Ubuntu Latest GCC", artifact: "Linux.tar.xz",
+        #     os: ubuntu-latest,
+        #     build_type: "Release", cc: "gcc", cxx: "g++"
+        #   }
         - {
             name: "macOS Latest Clang", artifact: "macOS.tar.xz",
             os: macos-latest,
@@ -94,7 +94,7 @@ jobs:
         run: chmod +x ./test_conan.sh && ./test_conan.sh
 
   cmake_build:
-    needs: conan_build
+    needs: generate
     name: ${{ matrix.config.name }}
     runs-on: ${{ matrix.config.os }}
     strategy:
@@ -114,20 +114,8 @@ jobs:
         uses: actions/setup-python@v3
         with:
           python-version: 3.9
-      - name: Install Conan
-        run: pip install conan pytest && conan --version
-      - name: Create default conan profile
-        run: conan profile new default --detect
-      - name: Update conan to c++11
-        run: conan profile update settings.compiler.libcxx=libstdc++11 default
-      - name: Install CMake
-        run: conan install cmake/3.22.2@ -g=virtualrunenv
-      - name: Install environment
-        working-directory: goldenmaster
-        run: conan install --build missing apigear -g=virtualenv
-      - name: Source environment
-        working-directory: goldenmaster
-        run: chmod +x ./activate.sh && ./activate.sh
+      - name: Install dependencies
+        run: sudo apt-get install -y cmake libpoco-dev nlohmann-json-dev
       - name: Run cmake
         working-directory: goldenmaster
-        run: cmake -Bbuild -H. -DCMAKE_INSTALL_PREFIX=tmp -DCMAKE_MODULE_PATH=`pwd` && cmake --build build/ --target install
+        run: cmake -Bbuild -H. -DCMAKE_INSTALL_PREFIX=tmp && cmake --build build/ --target install
