@@ -13,11 +13,31 @@ set (SOURCES
 add_executable(app
     ${SOURCES}
 )
-find_package(org_objectapi_testbed QUIET COMPONENTS org_objectapi_testbed-core org_objectapi_testbed-implementation org_objectapi_testbed-monitor)
+find_package(testbed2 QUIET COMPONENTS testbed2-core testbed2-implementation testbed2-monitor)
+find_package(tb_enum QUIET COMPONENTS tb_enum-core tb_enum-implementation tb_enum-monitor)
+find_package(tb_same1 QUIET COMPONENTS tb_same1-core tb_same1-implementation tb_same1-monitor)
+find_package(tb_same2 QUIET COMPONENTS tb_same2-core tb_same2-implementation tb_same2-monitor)
+find_package(tb_simple QUIET COMPONENTS tb_simple-core tb_simple-implementation tb_simple-monitor)
+find_package(testbed1 QUIET COMPONENTS testbed1-core testbed1-implementation testbed1-monitor)
 target_link_libraries(app
-    org_objectapi_testbed::org_objectapi_testbed-core
-    org_objectapi_testbed::org_objectapi_testbed-implementation
-    org_objectapi_testbed::org_objectapi_testbed-monitor
+    testbed2::testbed2-core
+    testbed2::testbed2-implementation
+    testbed2::testbed2-monitor
+    tb_enum::tb_enum-core
+    tb_enum::tb_enum-implementation
+    tb_enum::tb_enum-monitor
+    tb_same1::tb_same1-core
+    tb_same1::tb_same1-implementation
+    tb_same1::tb_same1-monitor
+    tb_same2::tb_same2-core
+    tb_same2::tb_same2-implementation
+    tb_same2::tb_same2-monitor
+    tb_simple::tb_simple-core
+    tb_simple::tb_simple-implementation
+    tb_simple::tb_simple-monitor
+    testbed1::testbed1-core
+    testbed1::testbed1-implementation
+    testbed1::testbed1-monitor
 )
 
 install(TARGETS app

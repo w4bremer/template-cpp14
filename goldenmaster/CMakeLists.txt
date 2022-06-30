@@ -27,15 +27,65 @@ if(NOT apigear_FOUND)
   FetchContent_MakeAvailable(apigear)
 endif()
 ENDIF()
-find_package(org_objectapi_testbed QUIET)
-if(NOT org_objectapi_testbed_FOUND)
-  # pull org_objectapi_testbed as dependency
-  message(STATUS "org_objectapi_testbed NOT FOUND, building from source folder")
+find_package(testbed2 QUIET)
+if(NOT testbed2_FOUND)
+  # pull testbed2 as dependency
+  message(STATUS "testbed2 NOT FOUND, building from source folder")
   include(FetchContent)
-  FetchContent_Declare(org_objectapi_testbed
-    SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/modules/org_objectapi_testbed"
+  FetchContent_Declare(testbed2
+    SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/modules/testbed2"
   )
-  FetchContent_MakeAvailable(org_objectapi_testbed)
+  FetchContent_MakeAvailable(testbed2)
+endif()
+find_package(tb_enum QUIET)
+if(NOT tb_enum_FOUND)
+  # pull tb_enum as dependency
+  message(STATUS "tb_enum NOT FOUND, building from source folder")
+  include(FetchContent)
+  FetchContent_Declare(tb_enum
+    SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/modules/tb_enum"
+  )
+  FetchContent_MakeAvailable(tb_enum)
+endif()
+find_package(tb_same1 QUIET)
+if(NOT tb_same1_FOUND)
+  # pull tb_same1 as dependency
+  message(STATUS "tb_same1 NOT FOUND, building from source folder")
+  include(FetchContent)
+  FetchContent_Declare(tb_same1
+    SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/modules/tb_same1"
+  )
+  FetchContent_MakeAvailable(tb_same1)
+endif()
+find_package(tb_same2 QUIET)
+if(NOT tb_same2_FOUND)
+  # pull tb_same2 as dependency
+  message(STATUS "tb_same2 NOT FOUND, building from source folder")
+  include(FetchContent)
+  FetchContent_Declare(tb_same2
+    SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/modules/tb_same2"
+  )
+  FetchContent_MakeAvailable(tb_same2)
+endif()
+find_package(tb_simple QUIET)
+if(NOT tb_simple_FOUND)
+  # pull tb_simple as dependency
+  message(STATUS "tb_simple NOT FOUND, building from source folder")
+  include(FetchContent)
+  FetchContent_Declare(tb_simple
+    SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/modules/tb_simple"
+  )
+  FetchContent_MakeAvailable(tb_simple)
+endif()
+find_package(testbed1 QUIET)
+if(NOT testbed1_FOUND)
+  # pull testbed1 as dependency
+  message(STATUS "testbed1 NOT FOUND, building from source folder")
+  include(FetchContent)
+  FetchContent_Declare(testbed1
+    SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/modules/testbed1"
+  )
+  FetchContent_MakeAvailable(testbed1)
 endif()
 IF( IS_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/examples" )
 add_subdirectory(examples/app)

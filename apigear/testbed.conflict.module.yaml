@@ -1,0 +1,54 @@
+schema: apigear.module/1.0
+name: tb.conflict
+version: "1.0"
+
+# All conflicts should be picked up by the validator
+# Conflicts
+# 1: property name same as operation name
+# 2: property name same as signal name
+# 3: operation name same as signal name
+# 4: same parameter names
+# 5: interface name same as struct name
+# 6: interface name same as enum name
+# 7: struct name same as enum name
+# 8: lowercase interface name
+# 9: lowercase struct name
+# 10: lowercase enum name
+
+interfaces:
+  - name: Conflict1
+    properties:
+      - { name: sameName, type: int }
+    operations:
+      - name: sameName
+  - name: Conflict2
+    properties:
+      - { name: sameName, type: int }
+    signals:
+      - name: sameName
+  - name: Conflict3
+    operations:
+      - name: sameName
+    signals:
+      - name: sameName
+  - name: Conflict4
+    operations:
+      - name: sameName
+        params:
+          - { name: sameValue, type: int, name: sameValue, type: int }
+  - name: Conflict5
+  - name: Conflict6
+  - name: Conflict7
+  - name: conflict8
+
+structs:
+  - name: Conflict5
+  - name: Conflict7
+  - name: conflict9
+
+enums:
+  - name: Conflict6
+  - name: Conflict7
+  - name: conflict10
+
+

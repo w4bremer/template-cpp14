@@ -1,0 +1,15 @@
+set(TB_ENUM_VERSION 1.0)
+@PACKAGE_INIT@
+INCLUDE("${CMAKE_CURRENT_LIST_DIR}/Tb_enumApiTargets.cmake")
+INCLUDE("${CMAKE_CURRENT_LIST_DIR}/Tb_enumCoreTargets.cmake")
+INCLUDE("${CMAKE_CURRENT_LIST_DIR}/Tb_enumMonitorTargets.cmake")
+INCLUDE("${CMAKE_CURRENT_LIST_DIR}/Tb_enumOLinkTargets.cmake")
+INCLUDE("${CMAKE_CURRENT_LIST_DIR}/Tb_enumImplementationTargets.cmake")
+set_and_check(TB_ENUM_INCLUDE_DIR "@PACKAGE_INCLUDE_INSTALL_DIR@")
+
+# make sure we have all needed dependencies
+include(CMakeFindDependencyMacro)
+find_dependency(Threads REQUIRED)
+find_dependency(apigear COMPONENTS poco-tracer poco-olink REQUIRED)
+
+check_required_components(TbEnum-api TbEnum-core TbEnum-monitor TbEnum-olink TbEnum-implementation)

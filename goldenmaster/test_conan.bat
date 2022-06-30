@@ -35,20 +35,20 @@ if %ERRORLEVEL% GEQ 1 goto :EOF
 conan create ../../apigear
 if %ERRORLEVEL% GEQ 1 goto :EOF
 popd
-@REM Building and testing org_objectapi_testbed module
-conan remove "org_objectapi_testbed" -b -f
+@REM Building and testing testbed2 module
+conan remove "testbed2" -b -f
 if %ERRORLEVEL% GEQ 1 goto :EOF
-if not exist modules\org_objectapi_testbed mkdir modules\org_objectapi_testbed
+if not exist modules\testbed2 mkdir modules\testbed2
 if %ERRORLEVEL% GEQ 1 goto :EOF
-pushd modules\org_objectapi_testbed
+pushd modules\testbed2
 if %ERRORLEVEL% GEQ 1 goto :EOF
-conan source ../../../modules/org_objectapi_testbed
+conan source ../../../modules/testbed2
 if %ERRORLEVEL% GEQ 1 goto :EOF
-conan install --build missing ../../../modules/org_objectapi_testbed -g=virtualenv
+conan install --build missing ../../../modules/testbed2 -g=virtualenv
 if %ERRORLEVEL% GEQ 1 goto :EOF
-conan build ../../../modules/org_objectapi_testbed
+conan build ../../../modules/testbed2
 if %ERRORLEVEL% GEQ 1 goto :EOF
-cmake ../../../modules/org_objectapi_testbed
+cmake ../../../modules/testbed2
 if %ERRORLEVEL% GEQ 1 goto :EOF
 cmake --build .
 if %ERRORLEVEL% GEQ 1 goto :EOF
@@ -58,9 +58,144 @@ cmake --build . --target check
 if %ERRORLEVEL% GEQ 1 goto :EOF
 CALL deactivate.bat
 if %ERRORLEVEL% GEQ 1 goto :EOF
-conan install --build missing ../../../modules/org_objectapi_testbed
+conan install --build missing ../../../modules/testbed2
 if %ERRORLEVEL% GEQ 1 goto :EOF
-conan create ../../../modules/org_objectapi_testbed
+conan create ../../../modules/testbed2
+popd
+@REM Building and testing tb_enum module
+conan remove "tb_enum" -b -f
+if %ERRORLEVEL% GEQ 1 goto :EOF
+if not exist modules\tb_enum mkdir modules\tb_enum
+if %ERRORLEVEL% GEQ 1 goto :EOF
+pushd modules\tb_enum
+if %ERRORLEVEL% GEQ 1 goto :EOF
+conan source ../../../modules/tb_enum
+if %ERRORLEVEL% GEQ 1 goto :EOF
+conan install --build missing ../../../modules/tb_enum -g=virtualenv
+if %ERRORLEVEL% GEQ 1 goto :EOF
+conan build ../../../modules/tb_enum
+if %ERRORLEVEL% GEQ 1 goto :EOF
+cmake ../../../modules/tb_enum
+if %ERRORLEVEL% GEQ 1 goto :EOF
+cmake --build .
+if %ERRORLEVEL% GEQ 1 goto :EOF
+CALL activate.bat
+if %ERRORLEVEL% GEQ 1 goto :EOF
+cmake --build . --target check
+if %ERRORLEVEL% GEQ 1 goto :EOF
+CALL deactivate.bat
+if %ERRORLEVEL% GEQ 1 goto :EOF
+conan install --build missing ../../../modules/tb_enum
+if %ERRORLEVEL% GEQ 1 goto :EOF
+conan create ../../../modules/tb_enum
+popd
+@REM Building and testing tb_same1 module
+conan remove "tb_same1" -b -f
+if %ERRORLEVEL% GEQ 1 goto :EOF
+if not exist modules\tb_same1 mkdir modules\tb_same1
+if %ERRORLEVEL% GEQ 1 goto :EOF
+pushd modules\tb_same1
+if %ERRORLEVEL% GEQ 1 goto :EOF
+conan source ../../../modules/tb_same1
+if %ERRORLEVEL% GEQ 1 goto :EOF
+conan install --build missing ../../../modules/tb_same1 -g=virtualenv
+if %ERRORLEVEL% GEQ 1 goto :EOF
+conan build ../../../modules/tb_same1
+if %ERRORLEVEL% GEQ 1 goto :EOF
+cmake ../../../modules/tb_same1
+if %ERRORLEVEL% GEQ 1 goto :EOF
+cmake --build .
+if %ERRORLEVEL% GEQ 1 goto :EOF
+CALL activate.bat
+if %ERRORLEVEL% GEQ 1 goto :EOF
+cmake --build . --target check
+if %ERRORLEVEL% GEQ 1 goto :EOF
+CALL deactivate.bat
+if %ERRORLEVEL% GEQ 1 goto :EOF
+conan install --build missing ../../../modules/tb_same1
+if %ERRORLEVEL% GEQ 1 goto :EOF
+conan create ../../../modules/tb_same1
+popd
+@REM Building and testing tb_same2 module
+conan remove "tb_same2" -b -f
+if %ERRORLEVEL% GEQ 1 goto :EOF
+if not exist modules\tb_same2 mkdir modules\tb_same2
+if %ERRORLEVEL% GEQ 1 goto :EOF
+pushd modules\tb_same2
+if %ERRORLEVEL% GEQ 1 goto :EOF
+conan source ../../../modules/tb_same2
+if %ERRORLEVEL% GEQ 1 goto :EOF
+conan install --build missing ../../../modules/tb_same2 -g=virtualenv
+if %ERRORLEVEL% GEQ 1 goto :EOF
+conan build ../../../modules/tb_same2
+if %ERRORLEVEL% GEQ 1 goto :EOF
+cmake ../../../modules/tb_same2
+if %ERRORLEVEL% GEQ 1 goto :EOF
+cmake --build .
+if %ERRORLEVEL% GEQ 1 goto :EOF
+CALL activate.bat
+if %ERRORLEVEL% GEQ 1 goto :EOF
+cmake --build . --target check
+if %ERRORLEVEL% GEQ 1 goto :EOF
+CALL deactivate.bat
+if %ERRORLEVEL% GEQ 1 goto :EOF
+conan install --build missing ../../../modules/tb_same2
+if %ERRORLEVEL% GEQ 1 goto :EOF
+conan create ../../../modules/tb_same2
+popd
+@REM Building and testing tb_simple module
+conan remove "tb_simple" -b -f
+if %ERRORLEVEL% GEQ 1 goto :EOF
+if not exist modules\tb_simple mkdir modules\tb_simple
+if %ERRORLEVEL% GEQ 1 goto :EOF
+pushd modules\tb_simple
+if %ERRORLEVEL% GEQ 1 goto :EOF
+conan source ../../../modules/tb_simple
+if %ERRORLEVEL% GEQ 1 goto :EOF
+conan install --build missing ../../../modules/tb_simple -g=virtualenv
+if %ERRORLEVEL% GEQ 1 goto :EOF
+conan build ../../../modules/tb_simple
+if %ERRORLEVEL% GEQ 1 goto :EOF
+cmake ../../../modules/tb_simple
+if %ERRORLEVEL% GEQ 1 goto :EOF
+cmake --build .
+if %ERRORLEVEL% GEQ 1 goto :EOF
+CALL activate.bat
+if %ERRORLEVEL% GEQ 1 goto :EOF
+cmake --build . --target check
+if %ERRORLEVEL% GEQ 1 goto :EOF
+CALL deactivate.bat
+if %ERRORLEVEL% GEQ 1 goto :EOF
+conan install --build missing ../../../modules/tb_simple
+if %ERRORLEVEL% GEQ 1 goto :EOF
+conan create ../../../modules/tb_simple
+popd
+@REM Building and testing testbed1 module
+conan remove "testbed1" -b -f
+if %ERRORLEVEL% GEQ 1 goto :EOF
+if not exist modules\testbed1 mkdir modules\testbed1
+if %ERRORLEVEL% GEQ 1 goto :EOF
+pushd modules\testbed1
+if %ERRORLEVEL% GEQ 1 goto :EOF
+conan source ../../../modules/testbed1
+if %ERRORLEVEL% GEQ 1 goto :EOF
+conan install --build missing ../../../modules/testbed1 -g=virtualenv
+if %ERRORLEVEL% GEQ 1 goto :EOF
+conan build ../../../modules/testbed1
+if %ERRORLEVEL% GEQ 1 goto :EOF
+cmake ../../../modules/testbed1
+if %ERRORLEVEL% GEQ 1 goto :EOF
+cmake --build .
+if %ERRORLEVEL% GEQ 1 goto :EOF
+CALL activate.bat
+if %ERRORLEVEL% GEQ 1 goto :EOF
+cmake --build . --target check
+if %ERRORLEVEL% GEQ 1 goto :EOF
+CALL deactivate.bat
+if %ERRORLEVEL% GEQ 1 goto :EOF
+conan install --build missing ../../../modules/testbed1
+if %ERRORLEVEL% GEQ 1 goto :EOF
+conan create ../../../modules/testbed1
 popd
 @REM Building examples app
 if not exist examples\app mkdir examples\app
