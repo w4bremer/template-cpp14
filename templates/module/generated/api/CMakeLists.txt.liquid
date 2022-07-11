@@ -1,10 +1,12 @@
 {% assign module_id = module.name|identifier %}
 {% assign module_path = module.name|path %}
+{% assign isApiHeaderOnly = module.structs.size == 0 and module.enums.size == 0 %}
 {% assign SOURCES = module_id | append: "_SOURCES" -%}
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+{% if isApiHeaderOnly == false %}
 
 set (SOURCES
     {{module_id}}_datastructs.api.cpp
@@ -22,6 +24,16 @@ if(NOT MSVC)
 else()
   target_compile_options({{module_id}}-api PRIVATE /W4 /WX /wd4251)
 endif()
+{% else %}
+
+add_library({{module_id}}-api INTERFACE)
+add_library({{module_id}}::{{module_id}}-api ALIAS {{module_id}}-api)
+target_include_directories({{module_id}}-api
+    INTERFACE
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
+    $<INSTALL_INTERFACE:include/{{module_id}}>
+)
+{% endif %}
 
 # install binary files
 install(TARGETS {{module_id}}-api

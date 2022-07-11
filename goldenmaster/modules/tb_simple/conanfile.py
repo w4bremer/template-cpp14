@@ -41,9 +41,8 @@ class tb_simpleConan(ConanFile):
 
     def package_info(self):
         self.env_info.path.append(os.path.join(self.package_folder, "bin"))
-        self.cpp_info.components["tb_simple-api"].libs = ["tb_simple-api"]
         self.cpp_info.components["tb_simple-core"].libs = ["tb_simple-core"]
-        self.cpp_info.components["tb_simple-core"].requires = ["tb_simple-api", "catch2::catch2", "nlohmann_json::nlohmann_json"]
+        self.cpp_info.components["tb_simple-core"].requires = ["catch2::catch2", "nlohmann_json::nlohmann_json"]
         self.cpp_info.components["tb_simple-implementation"].libs = ["tb_simple-implementation"]
         self.cpp_info.components["tb_simple-implementation"].requires = ["tb_simple-core", "catch2::catch2", "nlohmann_json::nlohmann_json"]
         self.cpp_info.components["tb_simple-monitor"].libs = ["tb_simple-monitor"]

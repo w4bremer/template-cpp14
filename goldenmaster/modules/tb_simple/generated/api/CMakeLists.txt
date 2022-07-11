@@ -3,22 +3,13 @@ set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-set (SOURCES
-    tb_simple_datastructs.api.cpp
-)
-add_library(tb_simple-api SHARED ${SOURCES})
+add_library(tb_simple-api INTERFACE)
 add_library(tb_simple::tb_simple-api ALIAS tb_simple-api)
 target_include_directories(tb_simple-api
-    PUBLIC
+    INTERFACE
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
     $<INSTALL_INTERFACE:include/tb_simple>
 )
-# ensure maximum compiler support
-if(NOT MSVC)
-  target_compile_options(tb_simple-api PRIVATE -Wall -Wextra -Wpedantic -Werror -fvisibility=hidden)
-else()
-  target_compile_options(tb_simple-api PRIVATE /W4 /WX /wd4251)
-endif()
 
 # install binary files
 install(TARGETS tb_simple-api
