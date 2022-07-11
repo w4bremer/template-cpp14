@@ -20,18 +20,6 @@ conan install --build missing ../../apigear -g=virtualenv
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
 conan build ../../apigear
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
-cmake ../../apigear
-if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
-cmake --build . 
-if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
-CALL activate.bat
-if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
-cmake --build . --target check
-if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
-CALL deactivate.bat
-if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
-conan install --build missing ../../apigear
-if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
 conan create ../../apigear
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
 popd
@@ -49,19 +37,8 @@ conan install --build missing ../../../modules/{{module.name|identifier}} -g=vir
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
 conan build ../../../modules/{{module.name|identifier}}
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
-cmake ../../../modules/{{module.name|identifier}}
-if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
-cmake --build .
-if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
-CALL activate.bat
-if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
-cmake --build . --target check
-if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
-CALL deactivate.bat
-if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
-conan install --build missing ../../../modules/{{module.name|identifier}}
-if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
 conan create ../../../modules/{{module.name|identifier}}
+if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
 popd
 {% endfor %}
 @REM Building examples app

@@ -20,18 +20,6 @@ conan install --build missing ../../apigear -g=virtualenv
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
 conan build ../../apigear
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
-cmake ../../apigear
-if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
-cmake --build . 
-if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
-CALL activate.bat
-if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
-cmake --build . --target check
-if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
-CALL deactivate.bat
-if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
-conan install --build missing ../../apigear
-if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
 conan create ../../apigear
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
 popd
@@ -48,19 +36,8 @@ conan install --build missing ../../../modules/testbed2 -g=virtualenv
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
 conan build ../../../modules/testbed2
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
-cmake ../../../modules/testbed2
-if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
-cmake --build .
-if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
-CALL activate.bat
-if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
-cmake --build . --target check
-if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
-CALL deactivate.bat
-if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
-conan install --build missing ../../../modules/testbed2
-if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
 conan create ../../../modules/testbed2
+if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
 popd
 @REM Building and testing tb_enum module
 conan remove "tb_enum" -b -f
@@ -75,19 +52,8 @@ conan install --build missing ../../../modules/tb_enum -g=virtualenv
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
 conan build ../../../modules/tb_enum
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
-cmake ../../../modules/tb_enum
-if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
-cmake --build .
-if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
-CALL activate.bat
-if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
-cmake --build . --target check
-if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
-CALL deactivate.bat
-if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
-conan install --build missing ../../../modules/tb_enum
-if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
 conan create ../../../modules/tb_enum
+if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
 popd
 @REM Building and testing tb_same1 module
 conan remove "tb_same1" -b -f
@@ -102,19 +68,8 @@ conan install --build missing ../../../modules/tb_same1 -g=virtualenv
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
 conan build ../../../modules/tb_same1
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
-cmake ../../../modules/tb_same1
-if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
-cmake --build .
-if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
-CALL activate.bat
-if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
-cmake --build . --target check
-if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
-CALL deactivate.bat
-if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
-conan install --build missing ../../../modules/tb_same1
-if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
 conan create ../../../modules/tb_same1
+if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
 popd
 @REM Building and testing tb_same2 module
 conan remove "tb_same2" -b -f
@@ -129,19 +84,8 @@ conan install --build missing ../../../modules/tb_same2 -g=virtualenv
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
 conan build ../../../modules/tb_same2
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
-cmake ../../../modules/tb_same2
-if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
-cmake --build .
-if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
-CALL activate.bat
-if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
-cmake --build . --target check
-if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
-CALL deactivate.bat
-if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
-conan install --build missing ../../../modules/tb_same2
-if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
 conan create ../../../modules/tb_same2
+if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
 popd
 @REM Building and testing tb_simple module
 conan remove "tb_simple" -b -f
@@ -156,19 +100,8 @@ conan install --build missing ../../../modules/tb_simple -g=virtualenv
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
 conan build ../../../modules/tb_simple
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
-cmake ../../../modules/tb_simple
-if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
-cmake --build .
-if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
-CALL activate.bat
-if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
-cmake --build . --target check
-if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
-CALL deactivate.bat
-if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
-conan install --build missing ../../../modules/tb_simple
-if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
 conan create ../../../modules/tb_simple
+if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
 popd
 @REM Building and testing testbed1 module
 conan remove "testbed1" -b -f
@@ -183,19 +116,8 @@ conan install --build missing ../../../modules/testbed1 -g=virtualenv
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
 conan build ../../../modules/testbed1
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
-cmake ../../../modules/testbed1
-if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
-cmake --build .
-if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
-CALL activate.bat
-if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
-cmake --build . --target check
-if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
-CALL deactivate.bat
-if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
-conan install --build missing ../../../modules/testbed1
-if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
 conan create ../../../modules/testbed1
+if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
 popd
 @REM Building examples app
 if not exist examples\app mkdir examples\app

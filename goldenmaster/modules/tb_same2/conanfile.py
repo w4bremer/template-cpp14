@@ -11,11 +11,23 @@ class tb_same2Conan(ConanFile):
     requires = "catch2/2.13.7", "nlohmann_json/3.9.1", "apigear/0.1.0"
     generators = "cmake_find_package"
     exports_sources = "*"
+    options = {"build_testing": [True, False]}
+    default_options = {"build_testing": True}
 
     def build(self):
         cmake = CMake(self)
+        if not tools.cross_building(self):
+            cmake.definitions['BUILD_TESTING'] = self.options.build_testing
         cmake.configure(source_folder=".")
         cmake.build()
+        if not tools.cross_building(self):
+            build_type = self.settings.get_safe("build_type", default="Release")
+            # workaround - we need to add the api.dll and the core.dll to the windows PATH to be found for the test
+            local_libs = { "PATH" : []}
+            local_libs["PATH"].append(os.path.sep.join([self.build_folder, "generated", "api", build_type]))
+            local_libs["PATH"].append(os.path.sep.join([self.build_folder, "generated", "core", build_type]))
+            with tools.environment_append(local_libs):
+                cmake.test()
 
     def package(self):
         packages = ["api", "core", "monitor", "olink"]
