@@ -6,7 +6,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set (SOURCES
     testbed2_datastructs.api.cpp
 )
-add_library(testbed2-api STATIC ${SOURCES})
+add_library(testbed2-api SHARED ${SOURCES})
 add_library(testbed2::testbed2-api ALIAS testbed2-api)
 target_include_directories(testbed2-api
     PUBLIC

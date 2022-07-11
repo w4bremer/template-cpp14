@@ -9,7 +9,7 @@ find_package(Threads REQUIRED)
 set (SOURCES_CORE_IMPL
     tb_enum_enuminterface.cpp
 )
-add_library(tb_enum-implementation STATIC ${SOURCES_CORE_IMPL})
+add_library(tb_enum-implementation SHARED ${SOURCES_CORE_IMPL})
 add_library(tb_enum::tb_enum-implementation ALIAS tb_enum-implementation)
 target_include_directories(tb_enum-implementation
     PUBLIC

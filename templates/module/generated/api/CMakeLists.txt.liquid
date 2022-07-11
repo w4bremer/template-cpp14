@@ -9,7 +9,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set (SOURCES
     {{module_id}}_datastructs.api.cpp
 )
-add_library({{module_id}}-api STATIC ${SOURCES})
+add_library({{module_id}}-api SHARED ${SOURCES})
 add_library({{module_id}}::{{module_id}}-api ALIAS {{module_id}}-api)
 target_include_directories({{module_id}}-api
     PUBLIC

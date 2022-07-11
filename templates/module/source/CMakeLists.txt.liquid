@@ -13,7 +13,7 @@ set (SOURCES_CORE_IMPL
     {{module.name|identifier}}_{{interface.name|lower}}.cpp
 {% endfor %}
 )
-add_library({{module_id}}-implementation STATIC ${SOURCES_CORE_IMPL})
+add_library({{module_id}}-implementation SHARED ${SOURCES_CORE_IMPL})
 add_library({{module_id}}::{{module_id}}-implementation ALIAS {{module_id}}-implementation)
 target_include_directories({{module_id}}-implementation
     PUBLIC

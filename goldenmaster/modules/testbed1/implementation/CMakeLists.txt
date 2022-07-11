@@ -10,7 +10,7 @@ set (SOURCES_CORE_IMPL
     testbed1_structinterface.cpp
     testbed1_structarrayinterface.cpp
 )
-add_library(testbed1-implementation STATIC ${SOURCES_CORE_IMPL})
+add_library(testbed1-implementation SHARED ${SOURCES_CORE_IMPL})
 add_library(testbed1::testbed1-implementation ALIAS testbed1-implementation)
 target_include_directories(testbed1-implementation
     PUBLIC

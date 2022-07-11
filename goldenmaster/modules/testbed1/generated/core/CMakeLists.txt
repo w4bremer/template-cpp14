@@ -12,7 +12,7 @@ set (SOURCES_CORE_SUPPORT
     testbed1_structarrayinterface.decorator.cpp
     testbed1_structarrayinterface.publisher.cpp
 )
-add_library(testbed1-core STATIC ${SOURCES_CORE_SUPPORT})
+add_library(testbed1-core SHARED ${SOURCES_CORE_SUPPORT})
 add_library(testbed1::testbed1-core ALIAS testbed1-core)
 target_include_directories(testbed1-core
     PUBLIC

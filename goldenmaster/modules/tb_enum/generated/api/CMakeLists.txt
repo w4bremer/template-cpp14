@@ -6,7 +6,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set (SOURCES
     tb_enum_datastructs.api.cpp
 )
-add_library(tb_enum-api STATIC ${SOURCES})
+add_library(tb_enum-api SHARED ${SOURCES})
 add_library(tb_enum::tb_enum-api ALIAS tb_enum-api)
 target_include_directories(tb_enum-api
     PUBLIC

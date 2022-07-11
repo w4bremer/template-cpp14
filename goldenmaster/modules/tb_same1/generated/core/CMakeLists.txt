@@ -16,7 +16,7 @@ set (SOURCES_CORE_SUPPORT
     tb_same1_sameenum2interface.decorator.cpp
     tb_same1_sameenum2interface.publisher.cpp
 )
-add_library(tb_same1-core STATIC ${SOURCES_CORE_SUPPORT})
+add_library(tb_same1-core SHARED ${SOURCES_CORE_SUPPORT})
 add_library(tb_same1::tb_same1-core ALIAS tb_same1-core)
 target_include_directories(tb_same1-core
     PUBLIC

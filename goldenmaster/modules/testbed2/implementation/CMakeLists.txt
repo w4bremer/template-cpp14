@@ -12,7 +12,7 @@ set (SOURCES_CORE_IMPL
     testbed2_nestedstruct2interface.cpp
     testbed2_nestedstruct3interface.cpp
 )
-add_library(testbed2-implementation STATIC ${SOURCES_CORE_IMPL})
+add_library(testbed2-implementation SHARED ${SOURCES_CORE_IMPL})
 add_library(testbed2::testbed2-implementation ALIAS testbed2-implementation)
 target_include_directories(testbed2-implementation
     PUBLIC

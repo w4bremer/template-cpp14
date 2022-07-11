@@ -12,7 +12,7 @@ set (SOURCES_CORE_IMPL
     tb_same2_sameenum1interface.cpp
     tb_same2_sameenum2interface.cpp
 )
-add_library(tb_same2-implementation STATIC ${SOURCES_CORE_IMPL})
+add_library(tb_same2-implementation SHARED ${SOURCES_CORE_IMPL})
 add_library(tb_same2::tb_same2-implementation ALIAS tb_same2-implementation)
 target_include_directories(tb_same2-implementation
     PUBLIC

@@ -10,7 +10,7 @@ set (SOURCES_CORE_IMPL
     tb_simple_simpleinterface.cpp
     tb_simple_simplearrayinterface.cpp
 )
-add_library(tb_simple-implementation STATIC ${SOURCES_CORE_IMPL})
+add_library(tb_simple-implementation SHARED ${SOURCES_CORE_IMPL})
 add_library(tb_simple::tb_simple-implementation ALIAS tb_simple-implementation)
 target_include_directories(tb_simple-implementation
     PUBLIC

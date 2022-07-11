@@ -6,7 +6,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set (SOURCES
     tb_same1_datastructs.api.cpp
 )
-add_library(tb_same1-api STATIC ${SOURCES})
+add_library(tb_same1-api SHARED ${SOURCES})
 add_library(tb_same1::tb_same1-api ALIAS tb_same1-api)
 target_include_directories(tb_same1-api
     PUBLIC

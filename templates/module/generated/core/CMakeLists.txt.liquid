@@ -14,7 +14,7 @@ set (SOURCES_CORE_SUPPORT
     {{module.name|identifier}}_{{interface.name|lower}}.publisher.cpp
 {% endfor %}
 )
-add_library({{module_id}}-core STATIC ${SOURCES_CORE_SUPPORT})
+add_library({{module_id}}-core SHARED ${SOURCES_CORE_SUPPORT})
 add_library({{module_id}}::{{module_id}}-core ALIAS {{module_id}}-core)
 target_include_directories({{module_id}}-core
     PUBLIC

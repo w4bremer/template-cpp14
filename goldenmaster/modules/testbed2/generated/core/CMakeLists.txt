@@ -16,7 +16,7 @@ set (SOURCES_CORE_SUPPORT
     testbed2_nestedstruct3interface.decorator.cpp
     testbed2_nestedstruct3interface.publisher.cpp
 )
-add_library(testbed2-core STATIC ${SOURCES_CORE_SUPPORT})
+add_library(testbed2-core SHARED ${SOURCES_CORE_SUPPORT})
 add_library(testbed2::testbed2-core ALIAS testbed2-core)
 target_include_directories(testbed2-core
     PUBLIC

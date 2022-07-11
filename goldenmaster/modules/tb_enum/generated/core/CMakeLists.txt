@@ -10,7 +10,7 @@ set (SOURCES_CORE_SUPPORT
     tb_enum_enuminterface.decorator.cpp
     tb_enum_enuminterface.publisher.cpp
 )
-add_library(tb_enum-core STATIC ${SOURCES_CORE_SUPPORT})
+add_library(tb_enum-core SHARED ${SOURCES_CORE_SUPPORT})
 add_library(tb_enum::tb_enum-core ALIAS tb_enum-core)
 target_include_directories(tb_enum-core
     PUBLIC

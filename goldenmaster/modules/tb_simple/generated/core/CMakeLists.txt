@@ -12,7 +12,7 @@ set (SOURCES_CORE_SUPPORT
     tb_simple_simplearrayinterface.decorator.cpp
     tb_simple_simplearrayinterface.publisher.cpp
 )
-add_library(tb_simple-core STATIC ${SOURCES_CORE_SUPPORT})
+add_library(tb_simple-core SHARED ${SOURCES_CORE_SUPPORT})
 add_library(tb_simple::tb_simple-core ALIAS tb_simple-core)
 target_include_directories(tb_simple-core
     PUBLIC
