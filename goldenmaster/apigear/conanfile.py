@@ -8,12 +8,12 @@ class apigearConan(ConanFile):
     author = "ApiGear UG"
     #url = "<Package recipe repository url here, for issues about the package>"
     settings = "os", "compiler", "build_type", "arch"
-    requires = "catch2/2.13.7", "poco/1.11.1", "nlohmann_json/3.9.1"
+    requires = "catch2/2.13.7", "poco/1.11.3@#2f5e663a2d744e2d86962bfff2b2345e", "nlohmann_json/3.9.1"
     generators = "cmake_find_package", "virtualenv"
     default_options = {"poco:shared": False,
                        "poco:enable_data_mysql": False,
                        "openssl:shared": False,
-                       "poco:enable_active_record": False,
+                       "poco:enable_activerecord": False,
                        "poco:enable_apacheconnector": False,
                        "poco:enable_cppparser": False,
                        "poco:enable_crypto": True,
