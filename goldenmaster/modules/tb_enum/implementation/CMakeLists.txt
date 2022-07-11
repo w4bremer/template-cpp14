@@ -37,7 +37,7 @@ set (SOURCES_TEST
     ${CMAKE_CURRENT_SOURCE_DIR}/../generated/core/tb_enum.test.cpp
     enuminterface.test.cpp
 )
-add_executable(test_tb_enum EXCLUDE_FROM_ALL
+add_executable(test_tb_enum
     ${SOURCES_TEST}
 )
 target_link_libraries(test_tb_enum tb_enum::tb_enum-implementation Catch2::Catch2)

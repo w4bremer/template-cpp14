@@ -39,7 +39,7 @@ set (SOURCES_TEST
     structinterface.test.cpp
     structarrayinterface.test.cpp
 )
-add_executable(test_testbed1 EXCLUDE_FROM_ALL
+add_executable(test_testbed1
     ${SOURCES_TEST}
 )
 target_link_libraries(test_testbed1 testbed1::testbed1-implementation Catch2::Catch2)

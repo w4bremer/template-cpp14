@@ -43,7 +43,7 @@ set (SOURCES_TEST
     {{interface.name|lower}}.test.cpp
 {% endfor %}
 )
-add_executable(test_{{module_id}} EXCLUDE_FROM_ALL
+add_executable(test_{{module_id}}
     ${SOURCES_TEST}
 )
 target_link_libraries(test_{{module_id}} {{module_id}}::{{module_id}}-implementation Catch2::Catch2)

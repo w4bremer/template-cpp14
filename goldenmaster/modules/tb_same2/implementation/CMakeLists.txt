@@ -43,7 +43,7 @@ set (SOURCES_TEST
     sameenum1interface.test.cpp
     sameenum2interface.test.cpp
 )
-add_executable(test_tb_same2 EXCLUDE_FROM_ALL
+add_executable(test_tb_same2
     ${SOURCES_TEST}
 )
 target_link_libraries(test_tb_same2 tb_same2::tb_same2-implementation Catch2::Catch2)

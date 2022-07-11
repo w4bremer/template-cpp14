@@ -39,7 +39,7 @@ set (SOURCES_TEST
     simpleinterface.test.cpp
     simplearrayinterface.test.cpp
 )
-add_executable(test_tb_simple EXCLUDE_FROM_ALL
+add_executable(test_tb_simple
     ${SOURCES_TEST}
 )
 target_link_libraries(test_tb_simple tb_simple::tb_simple-implementation Catch2::Catch2)

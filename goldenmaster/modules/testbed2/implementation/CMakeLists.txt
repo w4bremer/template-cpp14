@@ -43,7 +43,7 @@ set (SOURCES_TEST
     nestedstruct2interface.test.cpp
     nestedstruct3interface.test.cpp
 )
-add_executable(test_testbed2 EXCLUDE_FROM_ALL
+add_executable(test_testbed2
     ${SOURCES_TEST}
 )
 target_link_libraries(test_testbed2 testbed2::testbed2-implementation Catch2::Catch2)
