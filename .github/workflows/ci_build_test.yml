@@ -52,8 +52,13 @@ jobs:
       - name: Create default profile
         run: conan profile new default --detect
       - name: Set C++11 on Linux
-        run: conan profile update settings.compiler.libcxx=libstdc++11 default
         if: ${{ matrix.config.os == 'ubuntu-latest'}}
+        run: conan profile update settings.compiler.libcxx=libstdc++11 default
+      - name: Set Debug and runtime on Windows
+        if: ${{ matrix.config.os == 'windows-latest'}}
+        run: |
+          conan profile update settings.compiler.runtime=MDd default
+          conan profile update settings.build_type=Debug default
       - name: Install CMake
         run: conan install cmake/3.22.2@ -g=virtualrunenv
       - name: Run conan build Linux/macOS
