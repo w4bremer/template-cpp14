@@ -11,11 +11,6 @@ if(NOT nlohmann_json_FOUND)
 endif()
 
 find_package(Poco REQUIRED Foundation Net Util)
-# workaround for broken poco conan package
-# can hopefully be removed with later verions than 1.11.1
-IF (TARGET PCRE::PCRE)
-  add_library(Pcre::Pcre ALIAS PCRE::PCRE)
-ENDIF()
 
 set (SOURCES
     tracer.cpp
