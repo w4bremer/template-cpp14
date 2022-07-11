@@ -56,14 +56,14 @@ jobs:
         if: ${{ matrix.config.os == 'ubuntu-latest'}}
       - name: Install CMake
         run: conan install cmake/3.22.2@ -g=virtualrunenv
-      - name: Run conan build
+      - name: Run conan build Linux/macOS
+        if: ${{ matrix.config.os != 'windows-latest'}}
         working-directory: goldenmaster
         run: chmod +x ./test_conan.sh && ./test_conan.sh
-        if: ${{ matrix.config.os != 'windows-latest'}}
-      - name: Run conan build
+      - name: Run conan build Windows
+        if: ${{ matrix.config.os == 'windows-latest'}}
         working-directory: goldenmaster
         run: cmd.exe /c 'test_conan.bat'
-        if: ${{ matrix.config.os == 'windows-latest'}}
 
   cmake_build:
     name: ${{ matrix.config.name }}
