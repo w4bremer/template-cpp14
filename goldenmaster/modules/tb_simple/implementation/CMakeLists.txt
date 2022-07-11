@@ -3,6 +3,9 @@ set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+set(THREADS_PREFER_PTHREAD_FLAG ON)
+find_package(Threads REQUIRED)
+
 set (SOURCES_CORE_IMPL
     tb_simple_simpleinterface.cpp
     tb_simple_simplearrayinterface.cpp
@@ -14,7 +17,7 @@ target_include_directories(tb_simple-implementation
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
     $<INSTALL_INTERFACE:include/tb_simple>
 )
-target_link_libraries(tb_simple-implementation PUBLIC tb_simple::tb_simple-api tb_simple::tb_simple-core)
+target_link_libraries(tb_simple-implementation PUBLIC tb_simple::tb_simple-api tb_simple::tb_simple-core Threads::Threads)
 # ensure maximum compiler support
 if(NOT MSVC)
   target_compile_options(tb_simple-implementation PRIVATE -Wall -Wextra -Wpedantic -Werror -fvisibility=hidden)

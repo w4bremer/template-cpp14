@@ -3,6 +3,9 @@ set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+set(THREADS_PREFER_PTHREAD_FLAG ON)
+find_package(Threads REQUIRED)
+
 set (SOURCES_CORE_IMPL
     tb_enum_enuminterface.cpp
 )
@@ -13,7 +16,7 @@ target_include_directories(tb_enum-implementation
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
     $<INSTALL_INTERFACE:include/tb_enum>
 )
-target_link_libraries(tb_enum-implementation PUBLIC tb_enum::tb_enum-api tb_enum::tb_enum-core)
+target_link_libraries(tb_enum-implementation PUBLIC tb_enum::tb_enum-api tb_enum::tb_enum-core Threads::Threads)
 # ensure maximum compiler support
 if(NOT MSVC)
   target_compile_options(tb_enum-implementation PRIVATE -Wall -Wextra -Wpedantic -Werror -fvisibility=hidden)

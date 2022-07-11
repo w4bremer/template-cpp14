@@ -6,9 +6,6 @@ set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-set(THREADS_PREFER_PTHREAD_FLAG ON)
-find_package(Threads REQUIRED)
-
 set (SOURCES
     {{module_id}}_datastructs.api.cpp
 )
@@ -19,7 +16,6 @@ target_include_directories({{module_id}}-api
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
     $<INSTALL_INTERFACE:include/{{module_id}}>
 )
-target_link_libraries({{module_id}}-api PUBLIC Threads::Threads)
 # ensure maximum compiler support
 if(NOT MSVC)
   target_compile_options({{module_id}}-api PRIVATE -Wall -Wextra -Wpedantic -Werror -fvisibility=hidden)

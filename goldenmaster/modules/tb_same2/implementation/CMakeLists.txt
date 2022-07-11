@@ -3,6 +3,9 @@ set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+set(THREADS_PREFER_PTHREAD_FLAG ON)
+find_package(Threads REQUIRED)
+
 set (SOURCES_CORE_IMPL
     tb_same2_samestruct1interface.cpp
     tb_same2_samestruct2interface.cpp
@@ -16,7 +19,7 @@ target_include_directories(tb_same2-implementation
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
     $<INSTALL_INTERFACE:include/tb_same2>
 )
-target_link_libraries(tb_same2-implementation PUBLIC tb_same2::tb_same2-api tb_same2::tb_same2-core)
+target_link_libraries(tb_same2-implementation PUBLIC tb_same2::tb_same2-api tb_same2::tb_same2-core Threads::Threads)
 # ensure maximum compiler support
 if(NOT MSVC)
   target_compile_options(tb_same2-implementation PRIVATE -Wall -Wextra -Wpedantic -Werror -fvisibility=hidden)

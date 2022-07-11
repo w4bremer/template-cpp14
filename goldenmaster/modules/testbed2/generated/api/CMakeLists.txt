@@ -3,9 +3,6 @@ set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-set(THREADS_PREFER_PTHREAD_FLAG ON)
-find_package(Threads REQUIRED)
-
 set (SOURCES
     testbed2_datastructs.api.cpp
 )
@@ -16,7 +13,6 @@ target_include_directories(testbed2-api
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
     $<INSTALL_INTERFACE:include/testbed2>
 )
-target_link_libraries(testbed2-api PUBLIC Threads::Threads)
 # ensure maximum compiler support
 if(NOT MSVC)
   target_compile_options(testbed2-api PRIVATE -Wall -Wextra -Wpedantic -Werror -fvisibility=hidden)

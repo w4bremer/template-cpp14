@@ -5,6 +5,9 @@ set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+set(THREADS_PREFER_PTHREAD_FLAG ON)
+find_package(Threads REQUIRED)
+
 set (SOURCES_CORE_IMPL
 {% for interface in module.interfaces %}
     {{module.name|identifier}}_{{interface.name|lower}}.cpp
@@ -17,7 +20,7 @@ target_include_directories({{module_id}}-implementation
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
     $<INSTALL_INTERFACE:include/{{module_id}}>
 )
-target_link_libraries({{module_id}}-implementation PUBLIC {{module_id}}::{{module_id}}-api {{module_id}}::{{module_id}}-core)
+target_link_libraries({{module_id}}-implementation PUBLIC {{module_id}}::{{module_id}}-api {{module_id}}::{{module_id}}-core Threads::Threads)
 # ensure maximum compiler support
 if(NOT MSVC)
   target_compile_options({{module_id}}-implementation PRIVATE -Wall -Wextra -Wpedantic -Werror -fvisibility=hidden)

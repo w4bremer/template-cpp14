@@ -3,6 +3,9 @@ set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+set(THREADS_PREFER_PTHREAD_FLAG ON)
+find_package(Threads REQUIRED)
+
 set (SOURCES_CORE_IMPL
     testbed2_manyparaminterface.cpp
     testbed2_nestedstruct1interface.cpp
@@ -16,7 +19,7 @@ target_include_directories(testbed2-implementation
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
     $<INSTALL_INTERFACE:include/testbed2>
 )
-target_link_libraries(testbed2-implementation PUBLIC testbed2::testbed2-api testbed2::testbed2-core)
+target_link_libraries(testbed2-implementation PUBLIC testbed2::testbed2-api testbed2::testbed2-core Threads::Threads)
 # ensure maximum compiler support
 if(NOT MSVC)
   target_compile_options(testbed2-implementation PRIVATE -Wall -Wextra -Wpedantic -Werror -fvisibility=hidden)
