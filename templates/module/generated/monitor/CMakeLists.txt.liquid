@@ -7,16 +7,18 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(apigear QUIET COMPONENTS poco-tracer)
 set (SOURCES_MONITOR
-    {{module_id}}.trace.cpp
 {% for interface in module.interfaces %}
-    {{module.name|identifier}}_{{interface.name|lower}}.trace.cpp
+    {{interface.name|lower}}.trace.cpp
+
+    {{interface.name|lower}}.tracer.cpp
 {% endfor %}
 )
 add_library({{module_id}}-monitor SHARED ${SOURCES_MONITOR})
 add_library({{module_id}}::{{module_id}}-monitor ALIAS {{module_id}}-monitor)
 target_include_directories({{module_id}}-monitor
-    INTERFACE
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
+    PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../../../>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../../../../modules>
     $<INSTALL_INTERFACE:include/{{module_id}}>
 )
 target_link_libraries({{module_id}}-monitor PUBLIC

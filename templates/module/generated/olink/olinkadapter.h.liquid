@@ -3,8 +3,8 @@
 {% capture class%}OLink{{interface.name}}Adapter{% endcapture %}
 #pragma once
 
-#include "generated/api/{{module.name|identifier}}.h"
-#include "generated/api/{{module.name|identifier}}_common.h"
+#include "{{module.name|identifier}}/generated/api/{{module.name|identifier}}.h"
+#include "{{module.name|identifier}}/generated/api/common.h"
 #include "olink/remotenode.h"
 
 // using namespace ApiGear;

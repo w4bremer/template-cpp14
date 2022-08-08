@@ -34,7 +34,7 @@ if(NOT {{module.name|identifier}}_FOUND)
   message(STATUS "{{module.name|identifier}} NOT FOUND, building from source folder")
   include(FetchContent)
   FetchContent_Declare({{module.name|identifier}}
-    SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/modules/{{module.name|identifier}}"
+    SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/modules/{{module.name|identifier}}_module/{{module.name|identifier}}"
   )
   FetchContent_MakeAvailable({{module.name|identifier}})
 endif()

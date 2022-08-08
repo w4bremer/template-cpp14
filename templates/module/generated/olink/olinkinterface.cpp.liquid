@@ -6,9 +6,9 @@
 {% assign identifiername = module.name | append: "." | append: interface.name %}
 
 
-#include "{{module.name|identifier}}_{{interface.name|lower}}interface.h"
+#include "{{module.name|identifier}}/generated/olink/{{interface.name|lower}}interface.h"
 
-#include "generated/core/{{module.name|identifier}}.json.adapter.h"
+#include "{{module.name|identifier}}/generated/core/{{module.name|identifier}}.json.adapter.h"
 
 using namespace {{ system.name | capital }}::{{ module.name | capital }};
 

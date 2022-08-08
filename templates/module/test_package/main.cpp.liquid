@@ -1,5 +1,6 @@
+{% assign module_id = module.name|identifier -%}
 {% for interface in module.interfaces %}
-#include "{{module.name|identifier}}_{{interface.name|lower }}.h"
+#include "{{module_id}}/implementation/{{interface.name|lower }}.h"
 {% endfor %}
 
 using namespace {{ system.name | capital }}::{{ module.name | capital }};

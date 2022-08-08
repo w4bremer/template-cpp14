@@ -3,10 +3,10 @@
 {% capture class%}OLink{{interface.name}}Adapter{% endcapture %}
 
 #include <iostream>
-#include "{{module.name|identifier}}_{{interface.name|lower}}adapter.h"
+#include "{{module.name|identifier}}/generated/olink/{{interface.name|lower}}adapter.h"
 
 //#include "../api/agent.h"
-#include "generated/core/{{module.name|identifier}}.json.adapter.h"
+#include "{{module.name|identifier}}/generated/core/{{module.name|identifier}}.json.adapter.h"
 
 using namespace {{ system.name | capital }}::{{ module.name | capital }};
 

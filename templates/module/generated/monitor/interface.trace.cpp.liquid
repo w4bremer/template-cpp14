@@ -6,8 +6,8 @@
 {% assign sub_class = "I" | append: interface.name | capital | append: "Subscriber" %}
 {% assign pub_class = interface.name | capital | append: "Publisher"%}
 
-#include "{{module.name|identifier}}_{{interface.name|lower}}.trace.h"
-#include "{{module.name|identifier}}.trace.h"
+#include "{{module.name|identifier}}/generated/monitor/{{interface.name|lower}}.trace.h"
+#include "{{module.name|identifier}}/generated/monitor/{{interface.name|lower}}.tracer.h"
 
 using namespace {{ system.name | capital }}::{{ module.name | capital }};
 {{class}}::{{class}}({{interface_class}}* impl, ApiGear::PocoImpl::Tracer* tracer)

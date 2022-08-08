@@ -6,8 +6,8 @@
 {% assign pub_interface = "I" | append: interface.name | capital | append: "Publisher"%}
 #pragma once
 #include <memory>
-#include "generated/api/{{module.name|identifier}}.h"
-#include "generated/api/{{module.name|identifier}}_common.h"
+#include "{{module.name|identifier}}/generated/api/{{module.name|identifier}}.h"
+#include "{{module.name|identifier}}/generated/api/common.h"
 
 namespace {{ system.name | capital }} {
 namespace {{ module.name | capital }} {

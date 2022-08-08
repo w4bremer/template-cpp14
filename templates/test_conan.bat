@@ -27,17 +27,17 @@ popd
 @REM Building and testing {{module.name|identifier}} module
 conan remove "{{module.name|identifier}}" -b -f
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
-if not exist modules\{{module.name|identifier}} mkdir modules\{{module.name|identifier}}
+if not exist modules\{{module.name|identifier}}_module mkdir modules\{{module.name|identifier}}_module
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
-pushd modules\{{module.name|identifier}}
+pushd modules\{{module.name|identifier}}_module
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
-conan source ../../../modules/{{module.name|identifier}}
+conan source ../../../modules/{{module.name|identifier}}_module
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
-conan install --build missing ../../../modules/{{module.name|identifier}} -g=virtualenv
+conan install --build missing ../../../modules/{{module.name|identifier}}_module -g=virtualenv
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
-conan build ../../../modules/{{module.name|identifier}}
+conan build ../../../modules/{{module.name|identifier}}_module
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
-conan create ../../../modules/{{module.name|identifier}}
+conan create ../../../modules/{{module.name|identifier}}_module
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
 popd
 {% endfor %}

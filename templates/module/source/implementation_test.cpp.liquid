@@ -2,7 +2,7 @@
 {{ module | licGPLcpp -}}
 #include <memory>
 #include "catch2/catch.hpp"
-#include "{{module.name|identifier}}_{{interface.name|lower }}.h"
+#include "{{module.name|identifier}}/implementation/{{interface.name|lower }}.h"
 
 {% assign class = interface.name %}
 

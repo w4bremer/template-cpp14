@@ -6,9 +6,9 @@
 {% assign sub_class = "I" | append: interface.name | capital | append: "Subscriber" %}
 {% assign pub_class = interface.name | capital | append: "Publisher"%}
 #pragma once
-#include "generated/api/{{module.name|identifier}}.h"
-#include "generated/api/{{module.name|identifier}}_common.h"
-#include "generated/core/{{module.name|identifier}}_{{interface.name|lower}}.decorator.h"
+#include "{{module.name|identifier}}/generated/api/{{module.name|identifier}}.h"
+#include "{{module.name|identifier}}/generated/api/common.h"
+#include "{{module.name|identifier}}/generated/core/{{interface.name|lower}}.decorator.h"
 
 namespace ApiGear { namespace PocoImpl { class Tracer; } }
 

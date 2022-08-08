@@ -3,9 +3,9 @@
 #pragma once
 
 #include <memory>
-#include "generated/api/{{module.name|identifier}}_datastructs.api.h"
-#include "generated/api/{{module.name|identifier}}_{{interface.name|lower}}.api.h"
-#include "generated/api/{{module.name|identifier}}_common.h"
+#include "{{module.name|identifier}}/generated/api/datastructs.api.h"
+#include "{{module.name|identifier}}/generated/api/{{interface.name|lower}}.api.h"
+#include "{{module.name|identifier}}/generated/api/common.h"
 
 {% assign class = "I" | append: interface.name | capital %}
 

@@ -3,44 +3,44 @@ features:
     module:
       documents:
         - source: "module/CMakeLists.txt.liquid"
-          target: "modules/{{module.name|identifier}}/CMakeLists.txt"
+          target: "modules/{{module.name|identifier}}_module/{{module.name|identifier}}/CMakeLists.txt"
         - source: "module/ModuleConfig.cmake.in.liquid"
-          target: "modules/{{module.name|identifier}}/{{module.name|identifier|capitalize}}Config.cmake.in"
+          target: "modules/{{module.name|identifier}}_module/{{module.name|identifier}}/{{module.name|identifier|capitalize}}Config.cmake.in"
         - source: "module/generated/api/CMakeLists.txt.liquid"
-          target: "modules/{{module.name|identifier}}/generated/api/CMakeLists.txt"
+          target: "modules/{{module.name|identifier}}_module/{{module.name|identifier}}/generated/api/CMakeLists.txt"
         - source: "module/generated/api/module.h.liquid"
-          target: "modules/{{module.name|identifier}}/generated/api/{{module.name|identifier}}.h"
+          target: "modules/{{module.name|identifier}}_module/{{module.name|identifier}}/generated/api/{{module.name|identifier}}.h"
         - source: "module/generated/api/module_common.h.liquid"
-          target: "modules/{{module.name|identifier}}/generated/api/{{module.name|identifier}}_common.h"
+          target: "modules/{{module.name|identifier}}_module/{{module.name|identifier}}/generated/api/common.h"
         - source: "module/generated/api/datastructs.api.h.liquid"
-          target: "modules/{{module.name|identifier}}/generated/api/{{module.name|identifier}}_datastructs.api.h"
+          target: "modules/{{module.name|identifier}}_module/{{module.name|identifier}}/generated/api/datastructs.api.h"
         - source: "module/generated/api/datastructs.api.cpp.liquid"
-          target: "modules/{{module.name|identifier}}/generated/api/{{module.name|identifier}}_datastructs.api.cpp"
+          target: "modules/{{module.name|identifier}}_module/{{module.name|identifier}}/generated/api/datastructs.api.cpp"
     interface:
       documents:
         - source: "module/generated/api/interface.api.h.liquid"
-          target: "modules/{{module.name|identifier}}/generated/api/{{module.name|identifier}}_{{interface.name|lower}}.api.h"
+          target: "modules/{{module.name|identifier}}_module/{{module.name|identifier}}/generated/api/{{interface.name|lower}}.api.h"
   core:
     module:
       documents:
         - source: "module/generated/core/CMakeLists.txt.liquid"
-          target: "modules/{{module.name|identifier}}/generated/core/CMakeLists.txt"
+          target: "modules/{{module.name|identifier}}_module/{{module.name|identifier}}/generated/core/CMakeLists.txt"
         - source: "module/generated/core/main_test.cpp"
-          target: "modules/{{module.name|identifier}}/generated/core/{{module.name|identifier}}.test.cpp"
+          target: "modules/{{module.name|identifier}}_module/{{module.name|identifier}}/generated/core/{{module.name|identifier}}.test.cpp"
         - source: "module/generated/core/json.adapter.h.liquid"
-          target: "modules/{{module.name|identifier}}/generated/core/{{module.name|identifier}}.json.adapter.h"
+          target: "modules/{{module.name|identifier}}_module/{{module.name|identifier}}/generated/core/{{module.name|identifier}}.json.adapter.h"
         - source: "module/generated/core/json.adapter.cpp.liquid"
-          target: "modules/{{module.name|identifier}}/generated/core/{{module.name|identifier}}.json.adapter.cpp"
+          target: "modules/{{module.name|identifier}}_module/{{module.name|identifier}}/generated/core/{{module.name|identifier}}.json.adapter.cpp"
     interface:
       documents:
         - source: "module/generated/core/interface.publisher.h.liquid"
-          target: "modules/{{module.name|identifier}}/generated/core/{{module.name|identifier}}_{{interface.name|lower}}.publisher.h"
+          target: "modules/{{module.name|identifier}}_module/{{module.name|identifier}}/generated/core/{{interface.name|lower}}.publisher.h"
         - source: "module/generated/core/interface.publisher.cpp.liquid"
-          target: "modules/{{module.name|identifier}}/generated/core/{{module.name|identifier}}_{{interface.name|lower}}.publisher.cpp"
+          target: "modules/{{module.name|identifier}}_module/{{module.name|identifier}}/generated/core/{{interface.name|lower}}.publisher.cpp"
         - source: "module/generated/core/interface.decorator.h.liquid"
-          target: "modules/{{module.name|identifier}}/generated/core/{{module.name|identifier}}_{{interface.name|lower}}.decorator.h"
+          target: "modules/{{module.name|identifier}}_module/{{module.name|identifier}}/generated/core/{{interface.name|lower}}.decorator.h"
         - source: "module/generated/core/interface.decorator.cpp.liquid"
-          target: "modules/{{module.name|identifier}}/generated/core/{{module.name|identifier}}_{{interface.name|lower}}.decorator.cpp"
+          target: "modules/{{module.name|identifier}}_module/{{module.name|identifier}}/generated/core/{{interface.name|lower}}.decorator.cpp"
   scaffold:
     module:
       documents:
@@ -50,47 +50,47 @@ features:
           target: CMakeLists.txt
           overwrite: false
         - source: "module/source/CMakeLists.txt.liquid"
-          target: "modules/{{module.name|identifier}}/implementation/CMakeLists.txt"
+          target: "modules/{{module.name|identifier}}_module/{{module.name|identifier}}/implementation/CMakeLists.txt"
           overwrite: false
     interface:
       documents:
         - source: "module/source/implementation.h.liquid"
-          target: "modules/{{module.name|identifier}}/implementation/{{module.name|identifier}}_{{interface.name|lower}}.h"
+          target: "modules/{{module.name|identifier}}_module/{{module.name|identifier}}/implementation/{{interface.name|lower}}.h"
           overwrite: false
         - source: "module/source/implementation.cpp.liquid"
-          target: "modules/{{module.name|identifier}}/implementation/{{module.name|identifier}}_{{interface.name|lower}}.cpp"
+          target: "modules/{{module.name|identifier}}_module/{{module.name|identifier}}/implementation/{{interface.name|lower}}.cpp"
           overwrite: false
         - source: "module/source/implementation_test.cpp.liquid"
-          target: "modules/{{module.name|identifier}}/implementation/{{interface.name|lower}}.test.cpp"
+          target: "modules/{{module.name|identifier}}_module/{{module.name|identifier}}/implementation/{{interface.name|lower}}.test.cpp"
           overwrite: false
   monitor:
     module:
       documents:
         - source: "module/generated/monitor/CMakeLists.txt.liquid"
-          target: "modules/{{module.name|identifier}}/generated/monitor/CMakeLists.txt"
-        - source: "module/generated/monitor/trace.h.liquid"
-          target: "modules/{{module.name|identifier}}/generated/monitor/{{module.name|identifier}}.trace.h"
-        - source: "module/generated/monitor/trace.cpp.liquid"
-          target: "modules/{{module.name|identifier}}/generated/monitor/{{module.name|identifier}}.trace.cpp"
+          target: "modules/{{module.name|identifier}}_module/{{module.name|identifier}}/generated/monitor/CMakeLists.txt"
     interface:
       documents:
         - source: "module/generated/monitor/interface.trace.h.liquid"
-          target: "modules/{{module.name|identifier}}/generated/monitor/{{module.name|identifier}}_{{interface.name|lower}}.trace.h"
+          target: "modules/{{module.name|identifier}}_module/{{module.name|identifier}}/generated/monitor/{{interface.name|lower}}.trace.h"
         - source: "module/generated/monitor/interface.trace.cpp.liquid"
-          target: "modules/{{module.name|identifier}}/generated/monitor/{{module.name|identifier}}_{{interface.name|lower}}.trace.cpp"
+          target: "modules/{{module.name|identifier}}_module/{{module.name|identifier}}/generated/monitor/{{interface.name|lower}}.trace.cpp"
+        - source: "module/generated/monitor/interface.tracer.h.liquid"
+          target: "modules/{{module.name|identifier}}_module/{{module.name|identifier}}/generated/monitor/{{interface.name|lower}}.tracer.h"
+        - source: "module/generated/monitor/interface.tracer.cpp.liquid"
+          target: "modules/{{module.name|identifier}}_module/{{module.name|identifier}}/generated/monitor/{{interface.name|lower}}.tracer.cpp"
   olink:
     interface:
       documents:
         - source: "module/generated/olink/CMakeLists.txt.liquid"
-          target: "modules/{{module.name|identifier}}/generated/olink/CMakeLists.txt"
+          target: "modules/{{module.name|identifier}}_module/{{module.name|identifier}}/generated/olink/CMakeLists.txt"
         - source: "module/generated/olink/olinkadapter.h.liquid"
-          target: "modules/{{module.name|identifier}}/generated/olink/{{module.name|identifier}}_{{interface.name|lower}}adapter.h"
+          target: "modules/{{module.name|identifier}}_module/{{module.name|identifier}}/generated/olink/{{interface.name|lower}}adapter.h"
         - source: "module/generated/olink/olinkadapter.cpp.liquid"
-          target: "modules/{{module.name|identifier}}/generated/olink/{{module.name|identifier}}_{{interface.name|lower}}adapter.cpp"
+          target: "modules/{{module.name|identifier}}_module/{{module.name|identifier}}/generated/olink/{{interface.name|lower}}adapter.cpp"
         - source: "module/generated/olink/olinkinterface.h.liquid"
-          target: "modules/{{module.name|identifier}}/generated/olink/{{module.name|identifier}}_{{interface.name|lower}}interface.h"
+          target: "modules/{{module.name|identifier}}_module/{{module.name|identifier}}/generated/olink/{{interface.name|lower}}interface.h"
         - source: "module/generated/olink/olinkinterface.cpp.liquid"
-          target: "modules/{{module.name|identifier}}/generated/olink/{{module.name|identifier}}_{{interface.name|lower}}interface.cpp"
+          target: "modules/{{module.name|identifier}}_module/{{module.name|identifier}}/generated/olink/{{interface.name|lower}}interface.cpp"
   apigear:
     # when:
       # - monitor
@@ -154,14 +154,14 @@ features:
     module:
       documents:
         - source: module/conanfile.py.liquid
-          target: "modules/{{module.name|identifier}}/conanfile.py"
+          target: "modules//{{module.name|identifier}}_module//conanfile.py"
           overwrite: false
         - source: module/test_package/CMakeLists.txt.liquid
-          target: "modules/{{module.name|identifier}}/test_package/CMakeLists.txt"
+          target: "modules//{{module.name|identifier}}_module//test_package/CMakeLists.txt"
           overwrite: false
         - source: module/test_package/conanfile.py.liquid
-          target: "modules/{{module.name|identifier}}/test_package/conanfile.py"
+          target: "modules/{{module.name|identifier}}_module//test_package/conanfile.py"
           overwrite: false
         - source: module/test_package/main.cpp.liquid
-          target: "modules/{{module.name|identifier}}/test_package/main.cpp"
+          target: "modules//{{module.name|identifier}}_module//test_package/main.cpp"
           overwrite: false

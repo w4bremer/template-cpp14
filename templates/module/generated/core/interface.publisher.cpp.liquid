@@ -2,7 +2,7 @@
 {{ module | licGPLcpp -}}
 #include <set>
 #include <map>
-#include "{{module.name|identifier}}_{{interface.name|lower}}.publisher.h"
+#include "{{module.name|identifier}}/generated/core/{{interface.name|lower}}.publisher.h"
 
 {% assign class = "I" | append: interface.name | capital %}
 {% assign sub_class = "I" | append: interface.name | capital | append: "Subscriber" %}

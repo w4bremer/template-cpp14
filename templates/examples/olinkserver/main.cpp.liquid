@@ -1,8 +1,8 @@
 #include <iostream>
 {%- for module in system.modules -%}
 {% for interface in module.interfaces %}
-#include "{{module.name|identifier}}_{{interface.name|lower }}.h"
-#include "generated/olink/{{module.name|identifier}}_{{interface.name|lower}}adapter.h"
+#include "{{module.name|identifier}}/implementation/{{interface.name|lower}}.h"
+#include "{{module.name|identifier}}/generated/olink/{{interface.name|lower}}adapter.h"
 {% endfor %}
 {% endfor %}
 #include "apigear/olink/olinkhost.h"

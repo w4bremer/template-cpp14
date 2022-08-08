@@ -1,8 +1,8 @@
 #include <iostream>
 {%- for module in system.modules -%}
 {% for interface in module.interfaces %}
-#include "generated/olink/{{module.name|identifier}}_{{interface.name|lower}}interface.h"
-#include "generated/monitor/{{module.name|identifier}}_{{interface.name|lower}}.trace.h"
+#include "{{module.name|identifier}}/generated/olink/{{interface.name|lower}}interface.h"
+#include "{{module.name|identifier}}/generated/monitor/{{interface.name|lower}}.trace.h"
 {% endfor %}
 {% endfor %}
 #include "apigear/olink/olinkclient.h"

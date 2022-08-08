@@ -9,13 +9,14 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 {% if isApiHeaderOnly == false %}
 
 set (SOURCES
-    {{module_id}}_datastructs.api.cpp
+    datastructs.api.cpp
 )
 add_library({{module_id}}-api SHARED ${SOURCES})
 add_library({{module_id}}::{{module_id}}-api ALIAS {{module_id}}-api)
 target_include_directories({{module_id}}-api
     PUBLIC
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../../../>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../../../../modules>
     $<INSTALL_INTERFACE:include/{{module_id}}>
 )
 # ensure maximum compiler support
@@ -25,12 +26,12 @@ else()
   target_compile_options({{module_id}}-api PRIVATE /W4 /WX /wd4251)
 endif()
 {% else %}
-
 add_library({{module_id}}-api INTERFACE)
 add_library({{module_id}}::{{module_id}}-api ALIAS {{module_id}}-api)
 target_include_directories({{module_id}}-api
     INTERFACE
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../../../>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../../../../modules>
     $<INSTALL_INTERFACE:include/{{module_id}}>
 )
 {% endif %}

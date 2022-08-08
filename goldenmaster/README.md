@@ -46,26 +46,25 @@ outputfolder
 │   │   ...
 │   
 └───modules
-    └───modulename1
-        |   CMakeLists.txt
-        │   conanfile.py
-        │   ...
-        └───generated
-        |   └───api
-        |   |    | ...
-        |   |
-        |   └───core
-        |   |    | ...
-        |   |
-        |   └───monitor
-        |   |    | ...
-        |   |
-        |   └───olink
-        |        | ...
-        └───implementation
-        |        | ...
-        └───test_package
-                 | ...
+    └───modulename1_module
+        └─── conanfile.py
+        └─── test_package
+		└─── modulename1
+				|  CMakeLists.txt
+				|   modulename.cmake.in
+				└───generated
+				|   └───api
+				|   |    | ...
+				|   |
+				|   └───core
+				|   |    | ...
+				|   |
+				|   └───monitor
+				|   |    | ...
+				|   |
+				|   └───olink
+				|        | ...
+				└───implementation
 ```
 ## Build
 

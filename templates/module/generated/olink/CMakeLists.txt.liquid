@@ -8,15 +8,16 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 find_package(apigear QUIET COMPONENTS poco-olink)
 set (SOURCES_OLINK
 {% for interface in module.interfaces %}
-    {{module.name|identifier}}_{{interface.name|lower}}adapter.cpp
-    {{module.name|identifier}}_{{interface.name|lower}}interface.cpp
+    {{interface.name|lower}}adapter.cpp
+    {{interface.name|lower}}interface.cpp
 {% endfor %}
 )
 add_library({{module_id}}-olink SHARED ${SOURCES_OLINK})
 add_library({{module_id}}::{{module_id}}-olink ALIAS {{module_id}}-olink)
 target_include_directories({{module_id}}-olink
     PUBLIC
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../../../>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../../../../modules>
     $<INSTALL_INTERFACE:include/{{module_id}}>
 )
 target_link_libraries({{module_id}}-olink 

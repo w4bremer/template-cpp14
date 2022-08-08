@@ -12,10 +12,18 @@ if [ $? -ne 0 ]; then exit 1; fi;
 popd
 {% for module in system.modules %}
 conan remove "{{module.name|identifier}}" -b -f
-mkdir -p modules/{{module.name|identifier}};
-pushd modules/{{module.name|identifier}};
-conan source ../../../modules/{{module.name|identifier}} && conan install --build missing ../../../modules/{{module.name|identifier}} -g=virtualenv && conan build ../../../modules/{{module.name|identifier}} && cmake ../../../modules/{{module.name|identifier}} && cmake --build . && source activate.sh && cmake --build . --target check && source deactivate.sh &&\
-conan install --build missing ../../../modules/{{module.name|identifier}} && conan create ../../../modules/{{module.name|identifier}}
+mkdir -p modules/{{module.name|identifier}}_module;
+pushd modules/{{module.name|identifier}}_module;
+conan source ../../../modules/{{module.name|identifier}}_module &&\
+conan install --build missing ../../../modules/{{module.name|identifier}}_module -g=virtualenv &&\
+conan build ../../../modules/{{module.name|identifier}}_module &&\
+cmake ../../../modules/{{module.name|identifier}}_module/{{module.name|identifier}} &&\
+cmake --build . &&\
+source activate.sh &&\
+cmake --build . --target check &&\
+source deactivate.sh &&\
+conan install --build missing ../../../modules/{{module.name|identifier}}_module &&\
+conan create ../../../modules/{{module.name|identifier}}_module
 if [ $? -ne 0 ]; then exit 1; fi;
 popd
 {% endfor %}

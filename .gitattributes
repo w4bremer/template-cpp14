@@ -1,2 +1,4 @@
-# doe not export source code on release
+# does not export source code on release
 **/* export-ignore
+
+* text=auto

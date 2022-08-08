@@ -5,9 +5,9 @@
 {% assign sub_class = "I" | append: interface.name | capital | append: "Subscriber" %}
 {% assign pub_interface = "I" | append: interface.name | capital | append: "Publisher"%}
 #pragma once
-#include "generated/api/{{module.name|identifier}}.h"
-#include "generated/api/{{module.name|identifier}}_common.h"
-#include "generated/core/{{module.name|identifier}}_{{interface.name|lower}}.publisher.h"
+#include "{{module.name|identifier}}/generated/api/{{module.name|identifier}}.h"
+#include "{{module.name|identifier}}/generated/api/common.h"
+#include "{{module.name|identifier}}/generated/core/{{interface.name|lower}}.publisher.h"
 
 namespace {{ system.name | capital }} {
 namespace {{ module.name | capital }} {

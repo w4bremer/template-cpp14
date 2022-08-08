@@ -9,6 +9,10 @@ coverage/
 tsconfig.tsbuildinfo
 demo/
 
+goldenmaster/build/*
+.vs/*
+
+
 # do not add temporary test folder
 test/
 

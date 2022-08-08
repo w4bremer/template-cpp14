@@ -33,7 +33,7 @@ if(NOT testbed2_FOUND)
   message(STATUS "testbed2 NOT FOUND, building from source folder")
   include(FetchContent)
   FetchContent_Declare(testbed2
-    SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/modules/testbed2"
+    SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/modules/testbed2_module/testbed2"
   )
   FetchContent_MakeAvailable(testbed2)
 endif()
@@ -43,7 +43,7 @@ if(NOT tb_enum_FOUND)
   message(STATUS "tb_enum NOT FOUND, building from source folder")
   include(FetchContent)
   FetchContent_Declare(tb_enum
-    SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/modules/tb_enum"
+    SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/modules/tb_enum_module/tb_enum"
   )
   FetchContent_MakeAvailable(tb_enum)
 endif()
@@ -53,7 +53,7 @@ if(NOT tb_same1_FOUND)
   message(STATUS "tb_same1 NOT FOUND, building from source folder")
   include(FetchContent)
   FetchContent_Declare(tb_same1
-    SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/modules/tb_same1"
+    SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/modules/tb_same1_module/tb_same1"
   )
   FetchContent_MakeAvailable(tb_same1)
 endif()
@@ -63,7 +63,7 @@ if(NOT tb_same2_FOUND)
   message(STATUS "tb_same2 NOT FOUND, building from source folder")
   include(FetchContent)
   FetchContent_Declare(tb_same2
-    SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/modules/tb_same2"
+    SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/modules/tb_same2_module/tb_same2"
   )
   FetchContent_MakeAvailable(tb_same2)
 endif()
@@ -73,7 +73,7 @@ if(NOT tb_simple_FOUND)
   message(STATUS "tb_simple NOT FOUND, building from source folder")
   include(FetchContent)
   FetchContent_Declare(tb_simple
-    SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/modules/tb_simple"
+    SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/modules/tb_simple_module/tb_simple"
   )
   FetchContent_MakeAvailable(tb_simple)
 endif()
@@ -83,7 +83,7 @@ if(NOT testbed1_FOUND)
   message(STATUS "testbed1 NOT FOUND, building from source folder")
   include(FetchContent)
   FetchContent_Declare(testbed1
-    SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/modules/testbed1"
+    SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/modules/testbed1_module/testbed1"
   )
   FetchContent_MakeAvailable(testbed1)
 endif()

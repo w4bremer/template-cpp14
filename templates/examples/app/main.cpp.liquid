@@ -1,7 +1,7 @@
 {%- for module in system.modules -%}
 {% for interface in module.interfaces %}
-#include "{{module.name|identifier}}_{{interface.name|lower }}.h"
-#include "generated/monitor/{{module.name|identifier}}_{{interface.name|lower}}.trace.h"
+#include "{{module.name|identifier}}/implementation/{{interface.name|lower }}.h"
+#include "{{module.name|identifier}}/generated/monitor/{{interface.name|lower}}.trace.h"
 {% endfor %}
 {% endfor %}
 #include "apigear/tracer/tracer.h"
