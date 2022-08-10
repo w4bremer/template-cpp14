@@ -31,9 +31,9 @@ class ManyParamInterfaceTracer;
 class TEST_TESTBED2_EXPORT ManyParamInterfaceTracerDecorator : public AbstractManyParamInterfaceDecorator
 {
 protected:
-    explicit ManyParamInterfaceTracerDecorator(IManyParamInterface* impl, ApiGear::PocoImpl::Tracer* tracer);
+    explicit ManyParamInterfaceTracerDecorator(IManyParamInterface* impl, ApiGear::PocoImpl::Tracer& tracer);
 public:
-    static ManyParamInterfaceTracerDecorator* connect(IManyParamInterface* impl, ApiGear::PocoImpl::Tracer* tracer);
+    static ManyParamInterfaceTracerDecorator* connect(IManyParamInterface* impl, ApiGear::PocoImpl::Tracer& tracer);
     virtual ~ManyParamInterfaceTracerDecorator();
 
     // operations
@@ -46,14 +46,14 @@ public:
     int func4(int param1, int param2, int param3, int param4) override;
     std::future<int> func4Async(int param1, int param2, int param3, int param4) override;
 public: // IManyParamInterfaceSubscriber interface
-    void OnSig1(int param1) override;
-    void OnSig2(int param1,int param2) override;
-    void OnSig3(int param1,int param2,int param3) override;
-    void OnSig4(int param1,int param2,int param3,int param4) override;
-    void OnProp1Changed(int Value) override;
-    void OnProp2Changed(int Value) override;
-    void OnProp3Changed(int Value) override;
-    void OnProp4Changed(int Value) override;
+    void onSig1(int param1) override;
+    void onSig2(int param1,int param2) override;
+    void onSig3(int param1,int param2,int param3) override;
+    void onSig4(int param1,int param2,int param3,int param4) override;
+    void onProp1Changed(int Value) override;
+    void onProp2Changed(int Value) override;
+    void onProp3Changed(int Value) override;
+    void onProp4Changed(int Value) override;
 private:
     std::unique_ptr<ManyParamInterfaceTracer> m_tracer;
 };

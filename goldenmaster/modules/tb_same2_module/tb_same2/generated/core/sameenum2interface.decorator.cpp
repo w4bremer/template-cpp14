@@ -18,6 +18,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 
 #include "tb_same2/generated/core/sameenum2interface.decorator.h"
+#include "tb_same2/generated/core/sameenum2interface.publisher.h"
 
 using namespace Test::TbSame2;
 /**
@@ -26,17 +27,17 @@ using namespace Test::TbSame2;
 AbstractSameEnum2InterfaceDecorator::AbstractSameEnum2InterfaceDecorator(ISameEnum2Interface* impl)
     : m_impl(impl)
 {
-    m_impl->_getPublisher()->subscribeToSameEnum2InterfaceInterface(*this);
+    m_impl->_getPublisher().subscribeToAllChanges(*this);
 }
 ISameEnum2Interface* AbstractSameEnum2InterfaceDecorator::swapUnderlyingImplementation(ISameEnum2Interface* impl)
 {
     ISameEnum2Interface* retVal = m_impl;
     if (m_impl != nullptr) {
-        m_impl->_getPublisher()->unsubscribeFromSameEnum2InterfaceInterface(*this);
+        m_impl->_getPublisher().unsubscribeFromAllChanges(*this);
     }
     m_impl = impl;
     if (m_impl != nullptr) {
-        m_impl->_getPublisher()->subscribeToSameEnum2InterfaceInterface(*this);
+        m_impl->_getPublisher().subscribeToAllChanges(*this);
     }
     return retVal;
 }
@@ -44,7 +45,7 @@ ISameEnum2Interface* AbstractSameEnum2InterfaceDecorator::disconnectFromUnderlyi
 {
     ISameEnum2Interface* retVal = m_impl;
     if (m_impl != nullptr) {
-        m_impl->_getPublisher()->unsubscribeFromSameEnum2InterfaceInterface(*this);
+        m_impl->_getPublisher().unsubscribeFromAllChanges(*this);
         m_impl = nullptr;
     }
     return retVal;
@@ -53,7 +54,7 @@ AbstractSameEnum2InterfaceDecorator::~AbstractSameEnum2InterfaceDecorator()
 {
     if (m_impl != nullptr)
     {
-        m_impl->_getPublisher()->unsubscribeFromSameEnum2InterfaceInterface(*this);
+        m_impl->_getPublisher().unsubscribeFromAllChanges(*this);
     }
 }
 void AbstractSameEnum2InterfaceDecorator::setProp1(const Enum1Enum& prop1)
@@ -97,7 +98,7 @@ std::future<Enum1Enum> AbstractSameEnum2InterfaceDecorator::func2Async(const Enu
     return m_impl->func2Async(param1,param2);
 }
 
-ISameEnum2InterfacePublisher* AbstractSameEnum2InterfaceDecorator::_getPublisher() const
+ISameEnum2InterfacePublisher& AbstractSameEnum2InterfaceDecorator::_getPublisher() const
 {
     return m_impl->_getPublisher();
 }

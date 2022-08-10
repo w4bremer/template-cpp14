@@ -31,17 +31,17 @@ class SameEnum1InterfaceTracer;
 class TEST_TB_SAME2_EXPORT SameEnum1InterfaceTracerDecorator : public AbstractSameEnum1InterfaceDecorator
 {
 protected:
-    explicit SameEnum1InterfaceTracerDecorator(ISameEnum1Interface* impl, ApiGear::PocoImpl::Tracer* tracer);
+    explicit SameEnum1InterfaceTracerDecorator(ISameEnum1Interface* impl, ApiGear::PocoImpl::Tracer& tracer);
 public:
-    static SameEnum1InterfaceTracerDecorator* connect(ISameEnum1Interface* impl, ApiGear::PocoImpl::Tracer* tracer);
+    static SameEnum1InterfaceTracerDecorator* connect(ISameEnum1Interface* impl, ApiGear::PocoImpl::Tracer& tracer);
     virtual ~SameEnum1InterfaceTracerDecorator();
 
     // operations
     Enum1Enum func1(const Enum1Enum& param1) override;
     std::future<Enum1Enum> func1Async(const Enum1Enum& param1) override;
 public: // ISameEnum1InterfaceSubscriber interface
-    void OnSig1(const Enum1Enum& param1) override;
-    void OnProp1Changed(const Enum1Enum& Value) override;
+    void onSig1(const Enum1Enum& param1) override;
+    void onProp1Changed(const Enum1Enum& Value) override;
 private:
     std::unique_ptr<SameEnum1InterfaceTracer> m_tracer;
 };

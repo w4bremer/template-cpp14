@@ -33,6 +33,8 @@ features:
           target: "modules/{{module.name|identifier}}_module/{{module.name|identifier}}/generated/core/{{module.name|identifier}}.json.adapter.cpp"
     interface:
       documents:
+        - source: "module/generated/core/interface.data.h.liquid"
+          target: "modules/{{module.name|identifier}}_module/{{module.name|identifier}}/generated/core/{{interface.name|lower}}.data.h"
         - source: "module/generated/core/interface.publisher.h.liquid"
           target: "modules/{{module.name|identifier}}_module/{{module.name|identifier}}/generated/core/{{interface.name|lower}}.publisher.h"
         - source: "module/generated/core/interface.publisher.cpp.liquid"
@@ -83,14 +85,14 @@ features:
       documents:
         - source: "module/generated/olink/CMakeLists.txt.liquid"
           target: "modules/{{module.name|identifier}}_module/{{module.name|identifier}}/generated/olink/CMakeLists.txt"
-        - source: "module/generated/olink/olinkadapter.h.liquid"
-          target: "modules/{{module.name|identifier}}_module/{{module.name|identifier}}/generated/olink/{{interface.name|lower}}adapter.h"
-        - source: "module/generated/olink/olinkadapter.cpp.liquid"
-          target: "modules/{{module.name|identifier}}_module/{{module.name|identifier}}/generated/olink/{{interface.name|lower}}adapter.cpp"
-        - source: "module/generated/olink/olinkinterface.h.liquid"
-          target: "modules/{{module.name|identifier}}_module/{{module.name|identifier}}/generated/olink/{{interface.name|lower}}interface.h"
-        - source: "module/generated/olink/olinkinterface.cpp.liquid"
-          target: "modules/{{module.name|identifier}}_module/{{module.name|identifier}}/generated/olink/{{interface.name|lower}}interface.cpp"
+        - source: "module/generated/olink/interfaceserviceadapter.h.liquid"
+          target: "modules/{{module.name|identifier}}_module/{{module.name|identifier}}/generated/olink/{{interface.name|lower}}service.adapter.h"
+        - source: "module/generated/olink/interfaceserviceadapter.cpp.liquid"
+          target: "modules/{{module.name|identifier}}_module/{{module.name|identifier}}/generated/olink/{{interface.name|lower}}service.adapter.cpp"
+        - source: "module/generated/olink/remoteinterface.h.liquid"
+          target: "modules/{{module.name|identifier}}_module/{{module.name|identifier}}/generated/olink/remote{{interface.name|lower}}.h"
+        - source: "module/generated/olink/remoteinterface.cpp.liquid"
+          target: "modules/{{module.name|identifier}}_module/{{module.name|identifier}}/generated/olink/remote{{interface.name|lower}}.cpp"
   apigear:
     # when:
       # - monitor

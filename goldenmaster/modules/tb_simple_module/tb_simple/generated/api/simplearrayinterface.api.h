@@ -23,93 +23,197 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace Test {
 namespace TbSimple {
+
+class ISimpleArrayInterfaceSubscriber;
+class ISimpleArrayInterfacePublisher;
+
 /**
- * Interface ISimpleArrayInterfaceSubscriber
- *
- * The subscriber is the counter part for the ISimpleArrayInterfacePublisher.
+*
+* ISimpleArrayInterface provides an interface for
+ *  - methods defined for your SimpleArrayInterface 
+ *  - proeperty setters and getters for defined properties
+ * The ISimpleArrayInterface also providess an interface to access a publisher ISimpleArrayInterfacePublisher, a class used by ISimpleArrayInterfaceSubscriber clients.
+ * The implementation should notify the publisher ISimpleArrayInterfacePublisher about emited signals or state changed. 
+ * The publisher responsibility is to keep its clients informed about requested changes.
+ * See also ISimpleArrayInterfaceSubscriber, ISimpleArrayInterfacePublisher
+ * and the exmaple implementation SimpleArrayInterface  or the
+ */
+class TEST_TB_SIMPLE_EXPORT ISimpleArrayInterface
+{
+public:
+    virtual ~ISimpleArrayInterface() = default;
+
+
+    virtual std::list<bool> funcBool(const std::list<bool>& paramBool) = 0;
+    /**
+    * Asynchronous version of funcBool(const std::list<bool>& paramBool)
+    * @return Promise of type std::list<bool> which is set once the function has completed
+    */
+    virtual std::future<std::list<bool>> funcBoolAsync(const std::list<bool>& paramBool) = 0;
+
+
+    virtual std::list<int> funcInt(const std::list<int>& paramInt) = 0;
+    /**
+    * Asynchronous version of funcInt(const std::list<int>& paramInt)
+    * @return Promise of type std::list<int> which is set once the function has completed
+    */
+    virtual std::future<std::list<int>> funcIntAsync(const std::list<int>& paramInt) = 0;
+
+
+    virtual std::list<float> funcFloat(const std::list<float>& paramFloat) = 0;
+    /**
+    * Asynchronous version of funcFloat(const std::list<float>& paramFloat)
+    * @return Promise of type std::list<float> which is set once the function has completed
+    */
+    virtual std::future<std::list<float>> funcFloatAsync(const std::list<float>& paramFloat) = 0;
+
+
+    virtual std::list<std::string> funcString(const std::list<std::string>& paramString) = 0;
+    /**
+    * Asynchronous version of funcString(const std::list<std::string>& paramString)
+    * @return Promise of type std::list<std::string> which is set once the function has completed
+    */
+    virtual std::future<std::list<std::string>> funcStringAsync(const std::list<std::string>& paramString) = 0;
+
+    /**
+    * Sets the value of the propBool property.
+    */
+    virtual void setPropBool(const std::list<bool>& propBool) = 0;
+    /**
+    * Gets the value of the propBool property.
+    */
+    virtual const std::list<bool>& propBool() const = 0;
+
+    /**
+    * Sets the value of the propInt property.
+    */
+    virtual void setPropInt(const std::list<int>& propInt) = 0;
+    /**
+    * Gets the value of the propInt property.
+    */
+    virtual const std::list<int>& propInt() const = 0;
+
+    /**
+    * Sets the value of the propFloat property.
+    */
+    virtual void setPropFloat(const std::list<float>& propFloat) = 0;
+    /**
+    * Gets the value of the propFloat property.
+    */
+    virtual const std::list<float>& propFloat() const = 0;
+
+    /**
+    * Sets the value of the propString property.
+    */
+    virtual void setPropString(const std::list<std::string>& propString) = 0;
+    /**
+    * Gets the value of the propString property.
+    */
+    virtual const std::list<std::string>& propString() const = 0;
+
+
+    /**
+    * Access to a publisher, use it to subscribe for SimpleArrayInterface changes and signal emission.
+    * This function name doesn't follow the convention, because it is added to user defined interface,
+    * to avoid potentially name clashes, it has the trailing underscore in the name.
+    * @return The publisher for SimpleArrayInterface.
+    */
+    virtual ISimpleArrayInterfacePublisher& _getPublisher() const = 0;
+};
+
+
+/**
+ * The ISimpleArrayInterfaceSubscriber contains functions to allow informing about singals or property changes of the ISimpleArrayInterface implementation.
+ * The implementation for ISimpleArrayInterface should provide mechanism for subscibtion of the ISimpleArrayInterfaceSubscriber clients.
+ * See ISimpleArrayInterfacePublisher, which provides facititation for this purpose.
+ * The implementation for ISimpleArrayInterface should call the ISimpleArrayInterfaceSubscriber interface functions on either singal emit or property change.
+ * You can use ISimpleArrayInterfaceSubscriber class to implement clients of the ISimpleArrayInterface or the network adapter - see Olink Server and Client example.
  */
 class TEST_TB_SIMPLE_EXPORT ISimpleArrayInterfaceSubscriber
 {
 public:
+    virtual ~ISimpleArrayInterfaceSubscriber() = default;
     /**
-    * This function is called when the sigBool signal is triggered.
-    *
-    * @warning the subscribed function shall not be blocking and must return immediately!
-    *
+    * Called by the ISimpleArrayInterfacePublisher when the SimpleArrayInterface emits sigBool, if subscribed for the sigBool.
     * @param paramBool 
-    */
-    virtual void OnSigBool(const std::list<bool>& paramBool) = 0;
-    /**
-    * This function is called when the sigInt signal is triggered.
     *
     * @warning the subscribed function shall not be blocking and must return immediately!
-    *
+    */
+    virtual void onSigBool(const std::list<bool>& paramBool) = 0;
+    /**
+    * Called by the ISimpleArrayInterfacePublisher when the SimpleArrayInterface emits sigInt, if subscribed for the sigInt.
     * @param paramInt 
-    */
-    virtual void OnSigInt(const std::list<int>& paramInt) = 0;
-    /**
-    * This function is called when the sigFloat signal is triggered.
     *
     * @warning the subscribed function shall not be blocking and must return immediately!
-    *
+    */
+    virtual void onSigInt(const std::list<int>& paramInt) = 0;
+    /**
+    * Called by the ISimpleArrayInterfacePublisher when the SimpleArrayInterface emits sigFloat, if subscribed for the sigFloat.
     * @param paramFloat 
-    */
-    virtual void OnSigFloat(const std::list<float>& paramFloat) = 0;
-    /**
-    * This function is called when the sigString signal is triggered.
     *
     * @warning the subscribed function shall not be blocking and must return immediately!
-    *
+    */
+    virtual void onSigFloat(const std::list<float>& paramFloat) = 0;
+    /**
+    * Called by the ISimpleArrayInterfacePublisher when the SimpleArrayInterface emits sigString, if subscribed for the sigString.
     * @param paramString 
-    */
-    virtual void OnSigString(const std::list<std::string>& paramString) = 0;
-    /**
-    * This function is called when the propBool value has changed.
     *
     * @warning the subscribed function shall not be blocking and must return immediately!
     */
-    virtual void OnPropBoolChanged(const std::list<bool>& propBool) = 0;
+    virtual void onSigString(const std::list<std::string>& paramString) = 0;
     /**
-    * This function is called when the propInt value has changed.
+    * Called by the ISimpleArrayInterfacePublisher when propBool value has changed if subscribed for the propBool change.
     *
     * @warning the subscribed function shall not be blocking and must return immediately!
     */
-    virtual void OnPropIntChanged(const std::list<int>& propInt) = 0;
+    virtual void onPropBoolChanged(const std::list<bool>& propBool) = 0;
     /**
-    * This function is called when the propFloat value has changed.
+    * Called by the ISimpleArrayInterfacePublisher when propInt value has changed if subscribed for the propInt change.
     *
     * @warning the subscribed function shall not be blocking and must return immediately!
     */
-    virtual void OnPropFloatChanged(const std::list<float>& propFloat) = 0;
+    virtual void onPropIntChanged(const std::list<int>& propInt) = 0;
     /**
-    * This function is called when the propString value has changed.
+    * Called by the ISimpleArrayInterfacePublisher when propFloat value has changed if subscribed for the propFloat change.
     *
     * @warning the subscribed function shall not be blocking and must return immediately!
     */
-    virtual void OnPropStringChanged(const std::list<std::string>& propString) = 0;
+    virtual void onPropFloatChanged(const std::list<float>& propFloat) = 0;
+    /**
+    * Called by the ISimpleArrayInterfacePublisher when propString value has changed if subscribed for the propString change.
+    *
+    * @warning the subscribed function shall not be blocking and must return immediately!
+    */
+    virtual void onPropStringChanged(const std::list<std::string>& propString) = 0;
 };
 
-/** callback for changes of propBool */
-typedef std::function<void(const std::list<bool>& propBool)> SimpleArrayInterfacePropBoolPropertyCb;
-/** callback for changes of propInt */
-typedef std::function<void(const std::list<int>& propInt)> SimpleArrayInterfacePropIntPropertyCb;
-/** callback for changes of propFloat */
-typedef std::function<void(const std::list<float>& propFloat)> SimpleArrayInterfacePropFloatPropertyCb;
-/** callback for changes of propString */
-typedef std::function<void(const std::list<std::string>& propString)> SimpleArrayInterfacePropStringPropertyCb;
-/** callback for sigBool signal triggers */
-typedef std::function<void(const std::list<bool>& paramBool)> SimpleArrayInterfaceSigBoolSignalCb;
-/** callback for sigInt signal triggers */
-typedef std::function<void(const std::list<int>& paramInt)> SimpleArrayInterfaceSigIntSignalCb;
-/** callback for sigFloat signal triggers */
-typedef std::function<void(const std::list<float>& paramFloat)> SimpleArrayInterfaceSigFloatSignalCb;
-/** callback for sigString signal triggers */
-typedef std::function<void(const std::list<std::string>& paramString)> SimpleArrayInterfaceSigStringSignalCb;
+/** Callback for changes of propBool */
+using SimpleArrayInterfacePropBoolPropertyCb = std::function<void(const std::list<bool>& propBool)>;
+/** Callback for changes of propInt */
+using SimpleArrayInterfacePropIntPropertyCb = std::function<void(const std::list<int>& propInt)>;
+/** Callback for changes of propFloat */
+using SimpleArrayInterfacePropFloatPropertyCb = std::function<void(const std::list<float>& propFloat)>;
+/** Callback for changes of propString */
+using SimpleArrayInterfacePropStringPropertyCb = std::function<void(const std::list<std::string>& propString)>;
+/** Callback for sigBool signal triggers */
+using SimpleArrayInterfaceSigBoolSignalCb = std::function<void(const std::list<bool>& paramBool)> ;
+/** Callback for sigInt signal triggers */
+using SimpleArrayInterfaceSigIntSignalCb = std::function<void(const std::list<int>& paramInt)> ;
+/** Callback for sigFloat signal triggers */
+using SimpleArrayInterfaceSigFloatSignalCb = std::function<void(const std::list<float>& paramFloat)> ;
+/** Callback for sigString signal triggers */
+using SimpleArrayInterfaceSigStringSignalCb = std::function<void(const std::list<std::string>& paramString)> ;
+
+
 /**
- * Interface ISimpleArrayInterfacePublisher
- *
- * The publisher contains the signal interface for the ISimpleArrayInterfaceSubscriber
- * and direct signal function subscribtion.
+ * The ISimpleArrayInterfacePublisher provides an api for clients to subscribe to or unsubscribe from a signal emission 
+ * or a property change.
+ * Implement this interface to keep track of clients of your ISimpleArrayInterface implementation.
+ * The publisher provides two independent methods of subscription
+ *  - subscribing with a ITunerSubscriber objects - for all of the changes
+ *  - subscribing any object for signle type of change property or a signal
+ * The publish functions needs to be called by implementation of the ITuner on each state changed or signal emited
+ * to notify all the subscribers about this change.
  */
 class TEST_TB_SIMPLE_EXPORT ISimpleArrayInterfacePublisher
 {
@@ -117,285 +221,203 @@ public:
     virtual ~ISimpleArrayInterfacePublisher() = default;
 
     /**
-    * Use this function to subscribe for any changes of the SimpleArrayInterface changes.
-    * This subscription will trigger calls for any property changes or signal events.
-    *
-    * @param subscriber reference to the ISimpleArrayInterfaceSubscriber implementation
+    * Use this function to subscribe for any change of the SimpleArrayInterface.
+    * Subscriber will be informed of any emited signal and any property changes.
+    * This is parallel notification system to single subscription. If you will subscribe also for a single change
+    * your subscriber will be informed twice about that change, one for each subscription mechanism.
+    * @param ISimpleArrayInterfaceSubscriber which is subscribed in this function to any change of the SimpleArrayInterface.
     */
-    virtual void subscribeToSimpleArrayInterfaceInterface(ISimpleArrayInterfaceSubscriber& subscriber) = 0;
+    virtual void subscribeToAllChanges(ISimpleArrayInterfaceSubscriber& subscriber) = 0;
     /**
-    * Use this function to unsubscribe from all changes of the SimpleArrayInterface changes.
-    *
-    * @param subscriber reference to the ISimpleArrayInterfaceSubscriber implementation
+    * Use this function to remove subscription to all of the changes of the SimpleArrayInterface.
+    * Not all subscriptions will be removed, the ones made separately for single singal or property change stay intact.
+    * Make sure to remove them.
+    * @param ISimpleArrayInterfaceSubscriber which subscription for any change of the SimpleArrayInterface is removed.
     */
-    virtual void unsubscribeFromSimpleArrayInterfaceInterface(ISimpleArrayInterfaceSubscriber& subscriber) = 0;
+    virtual void unsubscribeFromAllChanges(ISimpleArrayInterfaceSubscriber& subscriber) = 0;
 
     /**
     * Use this function to subscribe for propBool value changes.
+    * If your subscriber uses subsrciption with ISimpleArrayInterfaceSubscriber interface, you will get two notifications, one for each subscription mechanism.
+    * @param SimpleArrayInterfacePropBoolPropertyCb callback that will be executed on each change of the property.
+    * Make sure to remove subscription before the callback becomes invalid.
+    * @return subscription token for the subscription removal.
     *
     * @warning the subscribed function shall not be blocking and must return immediately!
-    *
-    * @param callback any of type SimpleArrayInterfacePropBoolPropertyCb
-    * @return unique identifier for this subscription, needed for removal
     */
     virtual long subscribeToPropBoolChanged(SimpleArrayInterfacePropBoolPropertyCb callback) = 0;
     /**
     * Use this function to unsubscribe from propBool property changes.
-    *
-    * @param handleId identifier returned by the original subscription call
+    * If your subscriber uses subsrciption with ISimpleArrayInterfaceSubscriber interface, you will be still informed about this change,
+    * as those are two independent subscription mechanisms.
+    * @param subscription token received on subscription.
     */
     virtual void unsubscribeFromPropBoolChanged(long handleId) = 0;
 
     /**
     * Use this function to subscribe for propInt value changes.
+    * If your subscriber uses subsrciption with ISimpleArrayInterfaceSubscriber interface, you will get two notifications, one for each subscription mechanism.
+    * @param SimpleArrayInterfacePropIntPropertyCb callback that will be executed on each change of the property.
+    * Make sure to remove subscription before the callback becomes invalid.
+    * @return subscription token for the subscription removal.
     *
     * @warning the subscribed function shall not be blocking and must return immediately!
-    *
-    * @param callback any of type SimpleArrayInterfacePropIntPropertyCb
-    * @return unique identifier for this subscription, needed for removal
     */
     virtual long subscribeToPropIntChanged(SimpleArrayInterfacePropIntPropertyCb callback) = 0;
     /**
     * Use this function to unsubscribe from propInt property changes.
-    *
-    * @param handleId identifier returned by the original subscription call
+    * If your subscriber uses subsrciption with ISimpleArrayInterfaceSubscriber interface, you will be still informed about this change,
+    * as those are two independent subscription mechanisms.
+    * @param subscription token received on subscription.
     */
     virtual void unsubscribeFromPropIntChanged(long handleId) = 0;
 
     /**
     * Use this function to subscribe for propFloat value changes.
+    * If your subscriber uses subsrciption with ISimpleArrayInterfaceSubscriber interface, you will get two notifications, one for each subscription mechanism.
+    * @param SimpleArrayInterfacePropFloatPropertyCb callback that will be executed on each change of the property.
+    * Make sure to remove subscription before the callback becomes invalid.
+    * @return subscription token for the subscription removal.
     *
     * @warning the subscribed function shall not be blocking and must return immediately!
-    *
-    * @param callback any of type SimpleArrayInterfacePropFloatPropertyCb
-    * @return unique identifier for this subscription, needed for removal
     */
     virtual long subscribeToPropFloatChanged(SimpleArrayInterfacePropFloatPropertyCb callback) = 0;
     /**
     * Use this function to unsubscribe from propFloat property changes.
-    *
-    * @param handleId identifier returned by the original subscription call
+    * If your subscriber uses subsrciption with ISimpleArrayInterfaceSubscriber interface, you will be still informed about this change,
+    * as those are two independent subscription mechanisms.
+    * @param subscription token received on subscription.
     */
     virtual void unsubscribeFromPropFloatChanged(long handleId) = 0;
 
     /**
     * Use this function to subscribe for propString value changes.
+    * If your subscriber uses subsrciption with ISimpleArrayInterfaceSubscriber interface, you will get two notifications, one for each subscription mechanism.
+    * @param SimpleArrayInterfacePropStringPropertyCb callback that will be executed on each change of the property.
+    * Make sure to remove subscription before the callback becomes invalid.
+    * @return subscription token for the subscription removal.
     *
     * @warning the subscribed function shall not be blocking and must return immediately!
-    *
-    * @param callback any of type SimpleArrayInterfacePropStringPropertyCb
-    * @return unique identifier for this subscription, needed for removal
     */
     virtual long subscribeToPropStringChanged(SimpleArrayInterfacePropStringPropertyCb callback) = 0;
     /**
     * Use this function to unsubscribe from propString property changes.
-    *
-    * @param handleId identifier returned by the original subscription call
+    * If your subscriber uses subsrciption with ISimpleArrayInterfaceSubscriber interface, you will be still informed about this change,
+    * as those are two independent subscription mechanisms.
+    * @param subscription token received on subscription.
     */
     virtual void unsubscribeFromPropStringChanged(long handleId) = 0;
 
     /**
     * Use this function to subscribe for sigBool signal changes.
+    * @param SimpleArrayInterfaceSigBoolSignalCb callback that will be executed on each signal emission.
+    * Make sure to remove subscription before the callback becomes invalid.
+    * @return subscription token for the subscription removal.
     *
-    * @param callback any of type SimpleArrayInterfaceSigBoolSignalCb
-    * @return unique identifier for this subscription, needed for removal
+    * @warning the subscribed function shall not be blocking and must return immediately!
     */
     virtual long subscribeToSigBool(SimpleArrayInterfaceSigBoolSignalCb callback) = 0;
     /**
     * Use this function to unsubscribe from sigBool signal changes.
-    *
-    * @param handleId identifier returned by the original subscription call
+    * @param subscription token received on subscription.
     */
     virtual void unsubscribeFromSigBool(long handleId) = 0;
 
     /**
     * Use this function to subscribe for sigInt signal changes.
+    * @param SimpleArrayInterfaceSigIntSignalCb callback that will be executed on each signal emission.
+    * Make sure to remove subscription before the callback becomes invalid.
+    * @return subscription token for the subscription removal.
     *
-    * @param callback any of type SimpleArrayInterfaceSigIntSignalCb
-    * @return unique identifier for this subscription, needed for removal
+    * @warning the subscribed function shall not be blocking and must return immediately!
     */
     virtual long subscribeToSigInt(SimpleArrayInterfaceSigIntSignalCb callback) = 0;
     /**
     * Use this function to unsubscribe from sigInt signal changes.
-    *
-    * @param handleId identifier returned by the original subscription call
+    * @param subscription token received on subscription.
     */
     virtual void unsubscribeFromSigInt(long handleId) = 0;
 
     /**
     * Use this function to subscribe for sigFloat signal changes.
+    * @param SimpleArrayInterfaceSigFloatSignalCb callback that will be executed on each signal emission.
+    * Make sure to remove subscription before the callback becomes invalid.
+    * @return subscription token for the subscription removal.
     *
-    * @param callback any of type SimpleArrayInterfaceSigFloatSignalCb
-    * @return unique identifier for this subscription, needed for removal
+    * @warning the subscribed function shall not be blocking and must return immediately!
     */
     virtual long subscribeToSigFloat(SimpleArrayInterfaceSigFloatSignalCb callback) = 0;
     /**
     * Use this function to unsubscribe from sigFloat signal changes.
-    *
-    * @param handleId identifier returned by the original subscription call
+    * @param subscription token received on subscription.
     */
     virtual void unsubscribeFromSigFloat(long handleId) = 0;
 
     /**
     * Use this function to subscribe for sigString signal changes.
+    * @param SimpleArrayInterfaceSigStringSignalCb callback that will be executed on each signal emission.
+    * Make sure to remove subscription before the callback becomes invalid.
+    * @return subscription token for the subscription removal.
     *
-    * @param callback any of type SimpleArrayInterfaceSigStringSignalCb
-    * @return unique identifier for this subscription, needed for removal
+    * @warning the subscribed function shall not be blocking and must return immediately!
     */
     virtual long subscribeToSigString(SimpleArrayInterfaceSigStringSignalCb callback) = 0;
     /**
     * Use this function to unsubscribe from sigString signal changes.
-    *
-    * @param handleId identifier returned by the original subscription call
+    * @param subscription token received on subscription.
     */
     virtual void unsubscribeFromSigString(long handleId) = 0;
 
     /**
-    * This function is called by the implementation for propBool value changes.
+    * Publishes the property changed to all subscribed clients.
+    * Needs to be invoked by the SimpleArrayInterface implementation when property propBool changes.
+    * @param The new value of propBool.
     */
     virtual void publishPropBoolChanged(const std::list<bool>& propBool) const = 0;
     /**
-    * This function is called by the implementation for propInt value changes.
+    * Publishes the property changed to all subscribed clients.
+    * Needs to be invoked by the SimpleArrayInterface implementation when property propInt changes.
+    * @param The new value of propInt.
     */
     virtual void publishPropIntChanged(const std::list<int>& propInt) const = 0;
     /**
-    * This function is called by the implementation for propFloat value changes.
+    * Publishes the property changed to all subscribed clients.
+    * Needs to be invoked by the SimpleArrayInterface implementation when property propFloat changes.
+    * @param The new value of propFloat.
     */
     virtual void publishPropFloatChanged(const std::list<float>& propFloat) const = 0;
     /**
-    * This function is called by the implementation for propString value changes.
+    * Publishes the property changed to all subscribed clients.
+    * Needs to be invoked by the SimpleArrayInterface implementation when property propString changes.
+    * @param The new value of propString.
     */
     virtual void publishPropStringChanged(const std::list<std::string>& propString) const = 0;
     /**
-    * This function is called by the implementation when the sigBool signal is triggered.
-    *
+    * Publishes the emited singal to all subscribed clients.
+    * Needs to be invoked by the SimpleArrayInterface implementation when sigBool is emited.
     * @param paramBool 
     */
     virtual void publishSigBool(const std::list<bool>& paramBool) const = 0;
     /**
-    * This function is called by the implementation when the sigInt signal is triggered.
-    *
+    * Publishes the emited singal to all subscribed clients.
+    * Needs to be invoked by the SimpleArrayInterface implementation when sigInt is emited.
     * @param paramInt 
     */
     virtual void publishSigInt(const std::list<int>& paramInt) const = 0;
     /**
-    * This function is called by the implementation when the sigFloat signal is triggered.
-    *
+    * Publishes the emited singal to all subscribed clients.
+    * Needs to be invoked by the SimpleArrayInterface implementation when sigFloat is emited.
     * @param paramFloat 
     */
     virtual void publishSigFloat(const std::list<float>& paramFloat) const = 0;
     /**
-    * This function is called by the implementation when the sigString signal is triggered.
-    *
+    * Publishes the emited singal to all subscribed clients.
+    * Needs to be invoked by the SimpleArrayInterface implementation when sigString is emited.
     * @param paramString 
     */
     virtual void publishSigString(const std::list<std::string>& paramString) const = 0;
 };
 
-/**
- * Interface ISimpleArrayInterface
- */
-class TEST_TB_SIMPLE_EXPORT ISimpleArrayInterface
-{
-public:
-    virtual ~ISimpleArrayInterface() = default;
 
-    // methods
-    virtual std::list<bool> funcBool(const std::list<bool>& paramBool) = 0;
-    /**
-    * Asynchronous function call for funcBool(const std::list<bool>& paramBool)
-    *
-    * @return Promise of type std::list<bool> which is set once the function has completed
-    */
-    virtual std::future<std::list<bool>> funcBoolAsync(const std::list<bool>& paramBool) = 0;
-
-    virtual std::list<int> funcInt(const std::list<int>& paramInt) = 0;
-    /**
-    * Asynchronous function call for funcInt(const std::list<int>& paramInt)
-    *
-    * @return Promise of type std::list<int> which is set once the function has completed
-    */
-    virtual std::future<std::list<int>> funcIntAsync(const std::list<int>& paramInt) = 0;
-
-    virtual std::list<float> funcFloat(const std::list<float>& paramFloat) = 0;
-    /**
-    * Asynchronous function call for funcFloat(const std::list<float>& paramFloat)
-    *
-    * @return Promise of type std::list<float> which is set once the function has completed
-    */
-    virtual std::future<std::list<float>> funcFloatAsync(const std::list<float>& paramFloat) = 0;
-
-    virtual std::list<std::string> funcString(const std::list<std::string>& paramString) = 0;
-    /**
-    * Asynchronous function call for funcString(const std::list<std::string>& paramString)
-    *
-    * @return Promise of type std::list<std::string> which is set once the function has completed
-    */
-    virtual std::future<std::list<std::string>> funcStringAsync(const std::list<std::string>& paramString) = 0;
-
-    // property methods
-    /**
-    * Sets the value of property propBool
-    */
-    virtual void setPropbool(const std::list<bool>& propBool) = 0;
-    /**
-    * Gets the value of property propBool
-    */
-    virtual const std::list<bool>& propBool() const = 0;
-
-    /**
-    * Sets the value of property propInt
-    */
-    virtual void setPropint(const std::list<int>& propInt) = 0;
-    /**
-    * Gets the value of property propInt
-    */
-    virtual const std::list<int>& propInt() const = 0;
-
-    /**
-    * Sets the value of property propFloat
-    */
-    virtual void setPropfloat(const std::list<float>& propFloat) = 0;
-    /**
-    * Gets the value of property propFloat
-    */
-    virtual const std::list<float>& propFloat() const = 0;
-
-    /**
-    * Sets the value of property propString
-    */
-    virtual void setPropstring(const std::list<std::string>& propString) = 0;
-    /**
-    * Gets the value of property propString
-    */
-    virtual const std::list<std::string>& propString() const = 0;
-
-    /**
-    * @return a pointer to the used ISimpleArrayInterfacePublisher for publish/subscribe events
-    */
-    virtual ISimpleArrayInterfacePublisher* _getPublisher() const = 0;
-};
-
-/**
- * Interface ISimpleArrayInterfaceDecorator
- *
- * Decorator interface helper for inheritance
- */
-class TEST_TB_SIMPLE_EXPORT ISimpleArrayInterfaceDecorator: public virtual ISimpleArrayInterface, public virtual ISimpleArrayInterfaceSubscriber {
-public:
-    /**
-    * Swap the used implementation
-    *
-    * @param impl pointer to new implementation to be used
-    * @return pointer to the original implementation
-    */
-    virtual ISimpleArrayInterface* swapUnderlyingImplementation(ISimpleArrayInterface* impl) = 0;
-    /**
-    * Disconnect the decorator from the originally used implementation
-    *
-    * @return pointer to the original implementation
-    */
-    virtual ISimpleArrayInterface* disconnectFromUnderlyingImplementation() = 0;
-};
 } // namespace TbSimple
 } // namespace Test

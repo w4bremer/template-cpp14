@@ -19,17 +19,15 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 #include "tb_same1/generated/api/tb_same1.h"
 #include "tb_same1/generated/api/common.h"
-#include "tb_same1/generated/core/samestruct2interface.publisher.h"
 
 namespace Test {
 namespace TbSame1 {
 
-class TEST_TB_SAME1_EXPORT AbstractSameStruct2InterfaceDecorator : public ISameStruct2InterfaceDecorator
-{
+class TEST_TB_SAME1_EXPORT AbstractSameStruct2InterfaceDecorator : public ISameStruct2Interface, public ISameStruct2InterfaceSubscriber {
 public:
     explicit AbstractSameStruct2InterfaceDecorator(ISameStruct2Interface* impl);
-    ISameStruct2Interface* swapUnderlyingImplementation(ISameStruct2Interface* impl) override;
-    ISameStruct2Interface* disconnectFromUnderlyingImplementation() override;
+    ISameStruct2Interface* swapUnderlyingImplementation(ISameStruct2Interface* impl);
+    ISameStruct2Interface* disconnectFromUnderlyingImplementation();
     virtual ~AbstractSameStruct2InterfaceDecorator();
 public:
     // property prop1
@@ -46,7 +44,7 @@ public:
     Struct1 func2(const Struct1& param1, const Struct2& param2) override;
     std::future<Struct1> func2Async(const Struct1& param1, const Struct2& param2) override;
 
-    ISameStruct2InterfacePublisher* _getPublisher() const override;
+    ISameStruct2InterfacePublisher& _getPublisher() const override;
 private:
     ISameStruct2Interface* m_impl {nullptr};
 };

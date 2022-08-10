@@ -31,9 +31,9 @@ class SameStruct2InterfaceTracer;
 class TEST_TB_SAME1_EXPORT SameStruct2InterfaceTracerDecorator : public AbstractSameStruct2InterfaceDecorator
 {
 protected:
-    explicit SameStruct2InterfaceTracerDecorator(ISameStruct2Interface* impl, ApiGear::PocoImpl::Tracer* tracer);
+    explicit SameStruct2InterfaceTracerDecorator(ISameStruct2Interface* impl, ApiGear::PocoImpl::Tracer& tracer);
 public:
-    static SameStruct2InterfaceTracerDecorator* connect(ISameStruct2Interface* impl, ApiGear::PocoImpl::Tracer* tracer);
+    static SameStruct2InterfaceTracerDecorator* connect(ISameStruct2Interface* impl, ApiGear::PocoImpl::Tracer& tracer);
     virtual ~SameStruct2InterfaceTracerDecorator();
 
     // operations
@@ -42,10 +42,10 @@ public:
     Struct1 func2(const Struct1& param1, const Struct2& param2) override;
     std::future<Struct1> func2Async(const Struct1& param1, const Struct2& param2) override;
 public: // ISameStruct2InterfaceSubscriber interface
-    void OnSig1(const Struct1& param1) override;
-    void OnSig2(const Struct1& param1,const Struct2& param2) override;
-    void OnProp1Changed(const Struct2& Value) override;
-    void OnProp2Changed(const Struct2& Value) override;
+    void onSig1(const Struct1& param1) override;
+    void onSig2(const Struct1& param1,const Struct2& param2) override;
+    void onProp1Changed(const Struct2& Value) override;
+    void onProp2Changed(const Struct2& Value) override;
 private:
     std::unique_ptr<SameStruct2InterfaceTracer> m_tracer;
 };

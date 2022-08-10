@@ -5,13 +5,20 @@
 {% assign sub_class = "I" | append: interface.name | capital | append: "Subscriber" %}
 {% assign pub_interface = "I" | append: interface.name | capital | append: "Publisher"%}
 #pragma once
-#include <memory>
 #include "{{module.name|identifier}}/generated/api/{{module.name|identifier}}.h"
 #include "{{module.name|identifier}}/generated/api/common.h"
+#include "{{module.name|identifier}}/generated/core/{{interface.name|lower}}.data.h"
+#include <memory>
 
 namespace {{ system.name | capital }} {
 namespace {{ module.name | capital }} {
 
+/**
+* The {{interface.name}} implementation. 
+{% if interface.description != undefined %}
+*{{interface.description}}
+{% endif %}
+*/
 class {{ system.name | constant }}_{{ module.name | constant }}_EXPORT {{class}} : public {{interface_class}}
 {
 public:
@@ -19,21 +26,36 @@ public:
     ~{{class}}();
 public:
 {% for property in interface.properties %}
-    // property {{property.name}}
-    void set{{property.name|capitalize}}({{ property|cpp14Param }}) override;
+    {% if property.description != undefined %}
+    /**
+    * {{property.name}} {{property.description}}
+    */
+{% endif %}
+    void set{{property.name|capital}}({{ property|cpp14Param }}) override;
     {{property|cpp14Return: true}} {{property.name}}() const override;
     {{nl}}    
 {% endfor %}
-    // operations
+
 {% for operation in interface.operations %}
+{% if operation.description != undefined %}
+    /**
+    * {{operation.description}}
+    */
+{% endif %}
     {{operation|cpp14Return}} {{operation.name}}({{operation|cpp14Params}}) override;
     std::future<{{operation|cpp14Return}}> {{operation.name}}Async({{operation|cpp14Params}}) override;
+        {{nl}} 
 {% endfor %}
-
-    {{pub_interface}}* _getPublisher() const override;
+    /**
+    * Access to a publisher, use it to subscribe for {{interface.name}} changes and signal emission.
+    * @return The publisher for {{interface.name}}.
+    */
+    {{pub_interface}}& _getPublisher() const override;
 private:
-    struct {{interface.name | capital}}Data;
-    std::unique_ptr<{{interface.name | capital}}Data> d_ptr;
+    /** The publisher for the {{interface.name}}. */
+    std::unique_ptr<{{pub_interface}}> m_publisher;
+    /** The helper structure to store all the properties for {{interface.name}}. */
+    {{interface.name | capital}}Data m_data;
 };
 } // namespace {{ module.name | capital }}
 } // namespace {{ system.name | capital }}

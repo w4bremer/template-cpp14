@@ -18,6 +18,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 
 #include "tb_simple/generated/core/simpleinterface.decorator.h"
+#include "tb_simple/generated/core/simpleinterface.publisher.h"
 
 using namespace Test::TbSimple;
 /**
@@ -26,17 +27,17 @@ using namespace Test::TbSimple;
 AbstractSimpleInterfaceDecorator::AbstractSimpleInterfaceDecorator(ISimpleInterface* impl)
     : m_impl(impl)
 {
-    m_impl->_getPublisher()->subscribeToSimpleInterfaceInterface(*this);
+    m_impl->_getPublisher().subscribeToAllChanges(*this);
 }
 ISimpleInterface* AbstractSimpleInterfaceDecorator::swapUnderlyingImplementation(ISimpleInterface* impl)
 {
     ISimpleInterface* retVal = m_impl;
     if (m_impl != nullptr) {
-        m_impl->_getPublisher()->unsubscribeFromSimpleInterfaceInterface(*this);
+        m_impl->_getPublisher().unsubscribeFromAllChanges(*this);
     }
     m_impl = impl;
     if (m_impl != nullptr) {
-        m_impl->_getPublisher()->subscribeToSimpleInterfaceInterface(*this);
+        m_impl->_getPublisher().subscribeToAllChanges(*this);
     }
     return retVal;
 }
@@ -44,7 +45,7 @@ ISimpleInterface* AbstractSimpleInterfaceDecorator::disconnectFromUnderlyingImpl
 {
     ISimpleInterface* retVal = m_impl;
     if (m_impl != nullptr) {
-        m_impl->_getPublisher()->unsubscribeFromSimpleInterfaceInterface(*this);
+        m_impl->_getPublisher().unsubscribeFromAllChanges(*this);
         m_impl = nullptr;
     }
     return retVal;
@@ -53,39 +54,39 @@ AbstractSimpleInterfaceDecorator::~AbstractSimpleInterfaceDecorator()
 {
     if (m_impl != nullptr)
     {
-        m_impl->_getPublisher()->unsubscribeFromSimpleInterfaceInterface(*this);
+        m_impl->_getPublisher().unsubscribeFromAllChanges(*this);
     }
 }
-void AbstractSimpleInterfaceDecorator::setPropbool(bool propBool)
+void AbstractSimpleInterfaceDecorator::setPropBool(bool propBool)
 {
-    m_impl->setPropbool(propBool);
+    m_impl->setPropBool(propBool);
 }
 
 bool AbstractSimpleInterfaceDecorator::propBool() const
 {
     return m_impl->propBool();
 }
-void AbstractSimpleInterfaceDecorator::setPropint(int propInt)
+void AbstractSimpleInterfaceDecorator::setPropInt(int propInt)
 {
-    m_impl->setPropint(propInt);
+    m_impl->setPropInt(propInt);
 }
 
 int AbstractSimpleInterfaceDecorator::propInt() const
 {
     return m_impl->propInt();
 }
-void AbstractSimpleInterfaceDecorator::setPropfloat(float propFloat)
+void AbstractSimpleInterfaceDecorator::setPropFloat(float propFloat)
 {
-    m_impl->setPropfloat(propFloat);
+    m_impl->setPropFloat(propFloat);
 }
 
 float AbstractSimpleInterfaceDecorator::propFloat() const
 {
     return m_impl->propFloat();
 }
-void AbstractSimpleInterfaceDecorator::setPropstring(const std::string& propString)
+void AbstractSimpleInterfaceDecorator::setPropString(const std::string& propString)
 {
-    m_impl->setPropstring(propString);
+    m_impl->setPropString(propString);
 }
 
 std::string AbstractSimpleInterfaceDecorator::propString() const
@@ -137,7 +138,7 @@ std::future<std::string> AbstractSimpleInterfaceDecorator::funcStringAsync(const
     return m_impl->funcStringAsync(paramString);
 }
 
-ISimpleInterfacePublisher* AbstractSimpleInterfaceDecorator::_getPublisher() const
+ISimpleInterfacePublisher& AbstractSimpleInterfaceDecorator::_getPublisher() const
 {
     return m_impl->_getPublisher();
 }

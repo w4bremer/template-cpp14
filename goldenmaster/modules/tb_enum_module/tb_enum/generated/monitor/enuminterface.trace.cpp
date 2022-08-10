@@ -21,13 +21,13 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "tb_enum/generated/monitor/enuminterface.tracer.h"
 
 using namespace Test::TbEnum;
-EnumInterfaceTracerDecorator::EnumInterfaceTracerDecorator(IEnumInterface* impl, ApiGear::PocoImpl::Tracer* tracer)
+EnumInterfaceTracerDecorator::EnumInterfaceTracerDecorator(IEnumInterface* impl, ApiGear::PocoImpl::Tracer& tracer)
     : AbstractEnumInterfaceDecorator(impl)
     , m_tracer(std::make_unique<EnumInterfaceTracer>(tracer))
 {
 }
 EnumInterfaceTracerDecorator::~EnumInterfaceTracerDecorator() = default;
-EnumInterfaceTracerDecorator* EnumInterfaceTracerDecorator::connect(IEnumInterface* impl, ApiGear::PocoImpl::Tracer* tracer)
+EnumInterfaceTracerDecorator* EnumInterfaceTracerDecorator::connect(IEnumInterface* impl, ApiGear::PocoImpl::Tracer& tracer)
 {
     return new EnumInterfaceTracerDecorator(impl, tracer);
 }
@@ -83,39 +83,39 @@ std::future<Enum3Enum> EnumInterfaceTracerDecorator::func3Async(const Enum3Enum&
     m_tracer->trace_func3(param3);
     return AbstractEnumInterfaceDecorator::func3Async(param3);
 }
-void EnumInterfaceTracerDecorator::OnSig0(const Enum0Enum& param0)
+void EnumInterfaceTracerDecorator::onSig0(const Enum0Enum& param0)
 {
     (void) param0;
     //m_tracer->trace_Sig0(param0);
 }
-void EnumInterfaceTracerDecorator::OnSig1(const Enum1Enum& param1)
+void EnumInterfaceTracerDecorator::onSig1(const Enum1Enum& param1)
 {
     (void) param1;
     //m_tracer->trace_Sig1(param1);
 }
-void EnumInterfaceTracerDecorator::OnSig2(const Enum2Enum& param2)
+void EnumInterfaceTracerDecorator::onSig2(const Enum2Enum& param2)
 {
     (void) param2;
     //m_tracer->trace_Sig2(param2);
 }
-void EnumInterfaceTracerDecorator::OnSig3(const Enum3Enum& param3)
+void EnumInterfaceTracerDecorator::onSig3(const Enum3Enum& param3)
 {
     (void) param3;
     //m_tracer->trace_Sig3(param3);
 }
-void EnumInterfaceTracerDecorator::OnProp0Changed(const Enum0Enum&)
+void EnumInterfaceTracerDecorator::onProp0Changed(const Enum0Enum&)
 {
     m_tracer->capture_state(this);
 }
-void EnumInterfaceTracerDecorator::OnProp1Changed(const Enum1Enum&)
+void EnumInterfaceTracerDecorator::onProp1Changed(const Enum1Enum&)
 {
     m_tracer->capture_state(this);
 }
-void EnumInterfaceTracerDecorator::OnProp2Changed(const Enum2Enum&)
+void EnumInterfaceTracerDecorator::onProp2Changed(const Enum2Enum&)
 {
     m_tracer->capture_state(this);
 }
-void EnumInterfaceTracerDecorator::OnProp3Changed(const Enum3Enum&)
+void EnumInterfaceTracerDecorator::onProp3Changed(const Enum3Enum&)
 {
     m_tracer->capture_state(this);
 }

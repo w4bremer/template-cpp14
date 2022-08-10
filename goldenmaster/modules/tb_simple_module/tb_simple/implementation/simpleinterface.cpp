@@ -19,93 +19,75 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "tb_simple/implementation/simpleinterface.h"
 #include "tb_simple/generated/core/simpleinterface.publisher.h"
+#include "tb_simple/generated/core/simpleinterface.data.h"
 
 using namespace Test::TbSimple;
 
-struct SimpleInterface::SimpleInterfaceData
-{
-    SimpleInterfaceData()
-    : _publisher(std::make_unique<SimpleInterfacePublisher>())
-    , m_propBool(false)
-    , m_propInt(0)
-    , m_propFloat(0.0f)
-    , m_propString(std::string())
-    {
-    }
-    std::unique_ptr<ISimpleInterfacePublisher> _publisher;
-    bool m_propBool;
-    int m_propInt;
-    float m_propFloat;
-    std::string m_propString;
-
-    ~SimpleInterfaceData() = default;
-};
-/**
-   \brief 
-*/
 SimpleInterface::SimpleInterface()
-    : d_ptr(std::make_unique<SimpleInterface::SimpleInterfaceData>())
+    : m_publisher(std::make_unique<SimpleInterfacePublisher>()) 
 {
 }
 SimpleInterface::~SimpleInterface()
 {
 }
-void SimpleInterface::setPropbool(bool propBool)
+
+void SimpleInterface::setPropBool(bool propBool)
 {
-    if (d_ptr->m_propBool != propBool) {
-        d_ptr->m_propBool = propBool;
-        d_ptr->_publisher->publishPropBoolChanged(propBool);
+    if (m_data.m_propBool != propBool) {
+        m_data.m_propBool = propBool;
+        m_publisher->publishPropBoolChanged(propBool);
     }
 }
 
 bool SimpleInterface::propBool() const
 {
-    return d_ptr->m_propBool;
+    return m_data.m_propBool;
 }
-void SimpleInterface::setPropint(int propInt)
+
+void SimpleInterface::setPropInt(int propInt)
 {
-    if (d_ptr->m_propInt != propInt) {
-        d_ptr->m_propInt = propInt;
-        d_ptr->_publisher->publishPropIntChanged(propInt);
+    if (m_data.m_propInt != propInt) {
+        m_data.m_propInt = propInt;
+        m_publisher->publishPropIntChanged(propInt);
     }
 }
 
 int SimpleInterface::propInt() const
 {
-    return d_ptr->m_propInt;
+    return m_data.m_propInt;
 }
-void SimpleInterface::setPropfloat(float propFloat)
+
+void SimpleInterface::setPropFloat(float propFloat)
 {
-    if (d_ptr->m_propFloat != propFloat) {
-        d_ptr->m_propFloat = propFloat;
-        d_ptr->_publisher->publishPropFloatChanged(propFloat);
+    if (m_data.m_propFloat != propFloat) {
+        m_data.m_propFloat = propFloat;
+        m_publisher->publishPropFloatChanged(propFloat);
     }
 }
 
 float SimpleInterface::propFloat() const
 {
-    return d_ptr->m_propFloat;
+    return m_data.m_propFloat;
 }
-void SimpleInterface::setPropstring(const std::string& propString)
+
+void SimpleInterface::setPropString(const std::string& propString)
 {
-    if (d_ptr->m_propString != propString) {
-        d_ptr->m_propString = propString;
-        d_ptr->_publisher->publishPropStringChanged(propString);
+    if (m_data.m_propString != propString) {
+        m_data.m_propString = propString;
+        m_publisher->publishPropStringChanged(propString);
     }
 }
 
 std::string SimpleInterface::propString() const
 {
-    return d_ptr->m_propString;
+    return m_data.m_propString;
 }
-/**
-   \brief 
-*/
+
 bool SimpleInterface::funcBool(bool paramBool)
 {
-    (void) paramBool;
+    (void) paramBool; //suppress the 'Unreferenced Formal Parameter' warning.
     // do business logic here
-    return false;
+    return {};
 }
 
 std::future<bool> SimpleInterface::funcBoolAsync(bool paramBool)
@@ -117,14 +99,12 @@ std::future<bool> SimpleInterface::funcBoolAsync(bool paramBool)
         }
     );
 }
-/**
-   \brief 
-*/
+
 int SimpleInterface::funcInt(int paramInt)
 {
-    (void) paramInt;
+    (void) paramInt; //suppress the 'Unreferenced Formal Parameter' warning.
     // do business logic here
-    return 0;
+    return {};
 }
 
 std::future<int> SimpleInterface::funcIntAsync(int paramInt)
@@ -136,14 +116,12 @@ std::future<int> SimpleInterface::funcIntAsync(int paramInt)
         }
     );
 }
-/**
-   \brief 
-*/
+
 float SimpleInterface::funcFloat(float paramFloat)
 {
-    (void) paramFloat;
+    (void) paramFloat; //suppress the 'Unreferenced Formal Parameter' warning.
     // do business logic here
-    return 0.0f;
+    return {};
 }
 
 std::future<float> SimpleInterface::funcFloatAsync(float paramFloat)
@@ -155,14 +133,12 @@ std::future<float> SimpleInterface::funcFloatAsync(float paramFloat)
         }
     );
 }
-/**
-   \brief 
-*/
+
 std::string SimpleInterface::funcString(const std::string& paramString)
 {
-    (void) paramString;
+    (void) paramString; //suppress the 'Unreferenced Formal Parameter' warning.
     // do business logic here
-    return std::string();
+    return {};
 }
 
 std::future<std::string> SimpleInterface::funcStringAsync(const std::string& paramString)
@@ -175,7 +151,7 @@ std::future<std::string> SimpleInterface::funcStringAsync(const std::string& par
     );
 }
 
-ISimpleInterfacePublisher* SimpleInterface::_getPublisher() const
+ISimpleInterfacePublisher& SimpleInterface::_getPublisher() const
 {
-    return d_ptr->_publisher.get();
+    return *m_publisher;
 }

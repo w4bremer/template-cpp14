@@ -19,33 +19,31 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 #include "testbed1/generated/api/testbed1.h"
 #include "testbed1/generated/api/common.h"
-#include "testbed1/generated/core/structinterface.publisher.h"
 
 namespace Test {
 namespace Testbed1 {
 
-class TEST_TESTBED1_EXPORT AbstractStructInterfaceDecorator : public IStructInterfaceDecorator
-{
+class TEST_TESTBED1_EXPORT AbstractStructInterfaceDecorator : public IStructInterface, public IStructInterfaceSubscriber {
 public:
     explicit AbstractStructInterfaceDecorator(IStructInterface* impl);
-    IStructInterface* swapUnderlyingImplementation(IStructInterface* impl) override;
-    IStructInterface* disconnectFromUnderlyingImplementation() override;
+    IStructInterface* swapUnderlyingImplementation(IStructInterface* impl);
+    IStructInterface* disconnectFromUnderlyingImplementation();
     virtual ~AbstractStructInterfaceDecorator();
 public:
     // property propBool
-    void setPropbool(const StructBool& propBool) override;
+    void setPropBool(const StructBool& propBool) override;
     const StructBool& propBool() const override;
     
     // property propInt
-    void setPropint(const StructInt& propInt) override;
+    void setPropInt(const StructInt& propInt) override;
     const StructInt& propInt() const override;
     
     // property propFloat
-    void setPropfloat(const StructFloat& propFloat) override;
+    void setPropFloat(const StructFloat& propFloat) override;
     const StructFloat& propFloat() const override;
     
     // property propString
-    void setPropstring(const StructString& propString) override;
+    void setPropString(const StructString& propString) override;
     const StructString& propString() const override;
     
     // operations
@@ -58,7 +56,7 @@ public:
     StructString funcString(const StructString& paramString) override;
     std::future<StructString> funcStringAsync(const StructString& paramString) override;
 
-    IStructInterfacePublisher* _getPublisher() const override;
+    IStructInterfacePublisher& _getPublisher() const override;
 private:
     IStructInterface* m_impl {nullptr};
 };

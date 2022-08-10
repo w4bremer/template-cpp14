@@ -18,6 +18,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 
 #include "testbed1/generated/core/structarrayinterface.decorator.h"
+#include "testbed1/generated/core/structarrayinterface.publisher.h"
 
 using namespace Test::Testbed1;
 /**
@@ -26,17 +27,17 @@ using namespace Test::Testbed1;
 AbstractStructArrayInterfaceDecorator::AbstractStructArrayInterfaceDecorator(IStructArrayInterface* impl)
     : m_impl(impl)
 {
-    m_impl->_getPublisher()->subscribeToStructArrayInterfaceInterface(*this);
+    m_impl->_getPublisher().subscribeToAllChanges(*this);
 }
 IStructArrayInterface* AbstractStructArrayInterfaceDecorator::swapUnderlyingImplementation(IStructArrayInterface* impl)
 {
     IStructArrayInterface* retVal = m_impl;
     if (m_impl != nullptr) {
-        m_impl->_getPublisher()->unsubscribeFromStructArrayInterfaceInterface(*this);
+        m_impl->_getPublisher().unsubscribeFromAllChanges(*this);
     }
     m_impl = impl;
     if (m_impl != nullptr) {
-        m_impl->_getPublisher()->subscribeToStructArrayInterfaceInterface(*this);
+        m_impl->_getPublisher().subscribeToAllChanges(*this);
     }
     return retVal;
 }
@@ -44,7 +45,7 @@ IStructArrayInterface* AbstractStructArrayInterfaceDecorator::disconnectFromUnde
 {
     IStructArrayInterface* retVal = m_impl;
     if (m_impl != nullptr) {
-        m_impl->_getPublisher()->unsubscribeFromStructArrayInterfaceInterface(*this);
+        m_impl->_getPublisher().unsubscribeFromAllChanges(*this);
         m_impl = nullptr;
     }
     return retVal;
@@ -53,39 +54,39 @@ AbstractStructArrayInterfaceDecorator::~AbstractStructArrayInterfaceDecorator()
 {
     if (m_impl != nullptr)
     {
-        m_impl->_getPublisher()->unsubscribeFromStructArrayInterfaceInterface(*this);
+        m_impl->_getPublisher().unsubscribeFromAllChanges(*this);
     }
 }
-void AbstractStructArrayInterfaceDecorator::setPropbool(const std::list<StructBool>& propBool)
+void AbstractStructArrayInterfaceDecorator::setPropBool(const std::list<StructBool>& propBool)
 {
-    m_impl->setPropbool(propBool);
+    m_impl->setPropBool(propBool);
 }
 
 const std::list<StructBool>& AbstractStructArrayInterfaceDecorator::propBool() const
 {
     return m_impl->propBool();
 }
-void AbstractStructArrayInterfaceDecorator::setPropint(const std::list<StructInt>& propInt)
+void AbstractStructArrayInterfaceDecorator::setPropInt(const std::list<StructInt>& propInt)
 {
-    m_impl->setPropint(propInt);
+    m_impl->setPropInt(propInt);
 }
 
 const std::list<StructInt>& AbstractStructArrayInterfaceDecorator::propInt() const
 {
     return m_impl->propInt();
 }
-void AbstractStructArrayInterfaceDecorator::setPropfloat(const std::list<StructFloat>& propFloat)
+void AbstractStructArrayInterfaceDecorator::setPropFloat(const std::list<StructFloat>& propFloat)
 {
-    m_impl->setPropfloat(propFloat);
+    m_impl->setPropFloat(propFloat);
 }
 
 const std::list<StructFloat>& AbstractStructArrayInterfaceDecorator::propFloat() const
 {
     return m_impl->propFloat();
 }
-void AbstractStructArrayInterfaceDecorator::setPropstring(const std::list<StructString>& propString)
+void AbstractStructArrayInterfaceDecorator::setPropString(const std::list<StructString>& propString)
 {
-    m_impl->setPropstring(propString);
+    m_impl->setPropString(propString);
 }
 
 const std::list<StructString>& AbstractStructArrayInterfaceDecorator::propString() const
@@ -137,7 +138,7 @@ std::future<StructBool> AbstractStructArrayInterfaceDecorator::funcStringAsync(c
     return m_impl->funcStringAsync(paramString);
 }
 
-IStructArrayInterfacePublisher* AbstractStructArrayInterfaceDecorator::_getPublisher() const
+IStructArrayInterfacePublisher& AbstractStructArrayInterfaceDecorator::_getPublisher() const
 {
     return m_impl->_getPublisher();
 }

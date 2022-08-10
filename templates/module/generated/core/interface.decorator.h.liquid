@@ -7,22 +7,20 @@
 #pragma once
 #include "{{module.name|identifier}}/generated/api/{{module.name|identifier}}.h"
 #include "{{module.name|identifier}}/generated/api/common.h"
-#include "{{module.name|identifier}}/generated/core/{{interface.name|lower}}.publisher.h"
 
 namespace {{ system.name | capital }} {
 namespace {{ module.name | capital }} {
 
-class {{ system.name | constant }}_{{ module.name | constant }}_EXPORT {{class}} : public {{interface_class}}Decorator
-{
+class {{ system.name | constant }}_{{ module.name | constant }}_EXPORT {{class}} : public {{interface_class}}, public {{sub_class}} {
 public:
     explicit {{class}}({{interface_class}}* impl);
-    {{interface_class}}* swapUnderlyingImplementation({{interface_class}}* impl) override;
-    {{interface_class}}* disconnectFromUnderlyingImplementation() override;
+    {{interface_class}}* swapUnderlyingImplementation({{interface_class}}* impl);
+    {{interface_class}}* disconnectFromUnderlyingImplementation();
     virtual ~{{class}}();
 public:
 {% for property in interface.properties %}
     // property {{property.name}}
-    void set{{property.name|capitalize}}({{ property|cpp14Param }}) override;
+    void set{{property.name|capital}}({{ property|cpp14Param }}) override;
     {{property|cpp14Return: true}} {{property.name}}() const override;
     {{nl}}    
 {% endfor %}
@@ -32,7 +30,7 @@ public:
     std::future<{{operation|cpp14Return}}> {{operation.name}}Async({{operation|cpp14Params}}) override;
 {% endfor %}
 
-    {{pub_interface}}* _getPublisher() const override;
+    {{pub_interface}}& _getPublisher() const override;
 private:
     {{interface_class}}* m_impl {nullptr};
 };

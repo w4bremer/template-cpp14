@@ -18,6 +18,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 
 #include "tb_same1/generated/core/samestruct1interface.decorator.h"
+#include "tb_same1/generated/core/samestruct1interface.publisher.h"
 
 using namespace Test::TbSame1;
 /**
@@ -26,17 +27,17 @@ using namespace Test::TbSame1;
 AbstractSameStruct1InterfaceDecorator::AbstractSameStruct1InterfaceDecorator(ISameStruct1Interface* impl)
     : m_impl(impl)
 {
-    m_impl->_getPublisher()->subscribeToSameStruct1InterfaceInterface(*this);
+    m_impl->_getPublisher().subscribeToAllChanges(*this);
 }
 ISameStruct1Interface* AbstractSameStruct1InterfaceDecorator::swapUnderlyingImplementation(ISameStruct1Interface* impl)
 {
     ISameStruct1Interface* retVal = m_impl;
     if (m_impl != nullptr) {
-        m_impl->_getPublisher()->unsubscribeFromSameStruct1InterfaceInterface(*this);
+        m_impl->_getPublisher().unsubscribeFromAllChanges(*this);
     }
     m_impl = impl;
     if (m_impl != nullptr) {
-        m_impl->_getPublisher()->subscribeToSameStruct1InterfaceInterface(*this);
+        m_impl->_getPublisher().subscribeToAllChanges(*this);
     }
     return retVal;
 }
@@ -44,7 +45,7 @@ ISameStruct1Interface* AbstractSameStruct1InterfaceDecorator::disconnectFromUnde
 {
     ISameStruct1Interface* retVal = m_impl;
     if (m_impl != nullptr) {
-        m_impl->_getPublisher()->unsubscribeFromSameStruct1InterfaceInterface(*this);
+        m_impl->_getPublisher().unsubscribeFromAllChanges(*this);
         m_impl = nullptr;
     }
     return retVal;
@@ -53,7 +54,7 @@ AbstractSameStruct1InterfaceDecorator::~AbstractSameStruct1InterfaceDecorator()
 {
     if (m_impl != nullptr)
     {
-        m_impl->_getPublisher()->unsubscribeFromSameStruct1InterfaceInterface(*this);
+        m_impl->_getPublisher().unsubscribeFromAllChanges(*this);
     }
 }
 void AbstractSameStruct1InterfaceDecorator::setProp1(const Struct1& prop1)
@@ -77,7 +78,7 @@ std::future<Struct1> AbstractSameStruct1InterfaceDecorator::func1Async(const Str
     return m_impl->func1Async(param1);
 }
 
-ISameStruct1InterfacePublisher* AbstractSameStruct1InterfaceDecorator::_getPublisher() const
+ISameStruct1InterfacePublisher& AbstractSameStruct1InterfaceDecorator::_getPublisher() const
 {
     return m_impl->_getPublisher();
 }

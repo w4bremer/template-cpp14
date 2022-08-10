@@ -31,9 +31,9 @@ class NestedStruct3InterfaceTracer;
 class TEST_TESTBED2_EXPORT NestedStruct3InterfaceTracerDecorator : public AbstractNestedStruct3InterfaceDecorator
 {
 protected:
-    explicit NestedStruct3InterfaceTracerDecorator(INestedStruct3Interface* impl, ApiGear::PocoImpl::Tracer* tracer);
+    explicit NestedStruct3InterfaceTracerDecorator(INestedStruct3Interface* impl, ApiGear::PocoImpl::Tracer& tracer);
 public:
-    static NestedStruct3InterfaceTracerDecorator* connect(INestedStruct3Interface* impl, ApiGear::PocoImpl::Tracer* tracer);
+    static NestedStruct3InterfaceTracerDecorator* connect(INestedStruct3Interface* impl, ApiGear::PocoImpl::Tracer& tracer);
     virtual ~NestedStruct3InterfaceTracerDecorator();
 
     // operations
@@ -44,12 +44,12 @@ public:
     NestedStruct1 func3(const NestedStruct1& param1, const NestedStruct2& param2, const NestedStruct3& param3) override;
     std::future<NestedStruct1> func3Async(const NestedStruct1& param1, const NestedStruct2& param2, const NestedStruct3& param3) override;
 public: // INestedStruct3InterfaceSubscriber interface
-    void OnSig1(const NestedStruct1& param1) override;
-    void OnSig2(const NestedStruct1& param1,const NestedStruct2& param2) override;
-    void OnSig3(const NestedStruct1& param1,const NestedStruct2& param2,const NestedStruct3& param3) override;
-    void OnProp1Changed(const NestedStruct1& Value) override;
-    void OnProp2Changed(const NestedStruct2& Value) override;
-    void OnProp3Changed(const NestedStruct3& Value) override;
+    void onSig1(const NestedStruct1& param1) override;
+    void onSig2(const NestedStruct1& param1,const NestedStruct2& param2) override;
+    void onSig3(const NestedStruct1& param1,const NestedStruct2& param2,const NestedStruct3& param3) override;
+    void onProp1Changed(const NestedStruct1& Value) override;
+    void onProp2Changed(const NestedStruct2& Value) override;
+    void onProp3Changed(const NestedStruct3& Value) override;
 private:
     std::unique_ptr<NestedStruct3InterfaceTracer> m_tracer;
 };

@@ -18,6 +18,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 
 #include "tb_simple/generated/core/simplearrayinterface.decorator.h"
+#include "tb_simple/generated/core/simplearrayinterface.publisher.h"
 
 using namespace Test::TbSimple;
 /**
@@ -26,17 +27,17 @@ using namespace Test::TbSimple;
 AbstractSimpleArrayInterfaceDecorator::AbstractSimpleArrayInterfaceDecorator(ISimpleArrayInterface* impl)
     : m_impl(impl)
 {
-    m_impl->_getPublisher()->subscribeToSimpleArrayInterfaceInterface(*this);
+    m_impl->_getPublisher().subscribeToAllChanges(*this);
 }
 ISimpleArrayInterface* AbstractSimpleArrayInterfaceDecorator::swapUnderlyingImplementation(ISimpleArrayInterface* impl)
 {
     ISimpleArrayInterface* retVal = m_impl;
     if (m_impl != nullptr) {
-        m_impl->_getPublisher()->unsubscribeFromSimpleArrayInterfaceInterface(*this);
+        m_impl->_getPublisher().unsubscribeFromAllChanges(*this);
     }
     m_impl = impl;
     if (m_impl != nullptr) {
-        m_impl->_getPublisher()->subscribeToSimpleArrayInterfaceInterface(*this);
+        m_impl->_getPublisher().subscribeToAllChanges(*this);
     }
     return retVal;
 }
@@ -44,7 +45,7 @@ ISimpleArrayInterface* AbstractSimpleArrayInterfaceDecorator::disconnectFromUnde
 {
     ISimpleArrayInterface* retVal = m_impl;
     if (m_impl != nullptr) {
-        m_impl->_getPublisher()->unsubscribeFromSimpleArrayInterfaceInterface(*this);
+        m_impl->_getPublisher().unsubscribeFromAllChanges(*this);
         m_impl = nullptr;
     }
     return retVal;
@@ -53,39 +54,39 @@ AbstractSimpleArrayInterfaceDecorator::~AbstractSimpleArrayInterfaceDecorator()
 {
     if (m_impl != nullptr)
     {
-        m_impl->_getPublisher()->unsubscribeFromSimpleArrayInterfaceInterface(*this);
+        m_impl->_getPublisher().unsubscribeFromAllChanges(*this);
     }
 }
-void AbstractSimpleArrayInterfaceDecorator::setPropbool(const std::list<bool>& propBool)
+void AbstractSimpleArrayInterfaceDecorator::setPropBool(const std::list<bool>& propBool)
 {
-    m_impl->setPropbool(propBool);
+    m_impl->setPropBool(propBool);
 }
 
 const std::list<bool>& AbstractSimpleArrayInterfaceDecorator::propBool() const
 {
     return m_impl->propBool();
 }
-void AbstractSimpleArrayInterfaceDecorator::setPropint(const std::list<int>& propInt)
+void AbstractSimpleArrayInterfaceDecorator::setPropInt(const std::list<int>& propInt)
 {
-    m_impl->setPropint(propInt);
+    m_impl->setPropInt(propInt);
 }
 
 const std::list<int>& AbstractSimpleArrayInterfaceDecorator::propInt() const
 {
     return m_impl->propInt();
 }
-void AbstractSimpleArrayInterfaceDecorator::setPropfloat(const std::list<float>& propFloat)
+void AbstractSimpleArrayInterfaceDecorator::setPropFloat(const std::list<float>& propFloat)
 {
-    m_impl->setPropfloat(propFloat);
+    m_impl->setPropFloat(propFloat);
 }
 
 const std::list<float>& AbstractSimpleArrayInterfaceDecorator::propFloat() const
 {
     return m_impl->propFloat();
 }
-void AbstractSimpleArrayInterfaceDecorator::setPropstring(const std::list<std::string>& propString)
+void AbstractSimpleArrayInterfaceDecorator::setPropString(const std::list<std::string>& propString)
 {
-    m_impl->setPropstring(propString);
+    m_impl->setPropString(propString);
 }
 
 const std::list<std::string>& AbstractSimpleArrayInterfaceDecorator::propString() const
@@ -137,7 +138,7 @@ std::future<std::list<std::string>> AbstractSimpleArrayInterfaceDecorator::funcS
     return m_impl->funcStringAsync(paramString);
 }
 
-ISimpleArrayInterfacePublisher* AbstractSimpleArrayInterfaceDecorator::_getPublisher() const
+ISimpleArrayInterfacePublisher& AbstractSimpleArrayInterfaceDecorator::_getPublisher() const
 {
     return m_impl->_getPublisher();
 }

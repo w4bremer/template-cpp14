@@ -19,93 +19,75 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "tb_enum/implementation/enuminterface.h"
 #include "tb_enum/generated/core/enuminterface.publisher.h"
+#include "tb_enum/generated/core/enuminterface.data.h"
 
 using namespace Test::TbEnum;
 
-struct EnumInterface::EnumInterfaceData
-{
-    EnumInterfaceData()
-    : _publisher(std::make_unique<EnumInterfacePublisher>())
-    , m_prop0(Enum0Enum::value0)
-    , m_prop1(Enum1Enum::value1)
-    , m_prop2(Enum2Enum::value2)
-    , m_prop3(Enum3Enum::value3)
-    {
-    }
-    std::unique_ptr<IEnumInterfacePublisher> _publisher;
-    Enum0Enum m_prop0;
-    Enum1Enum m_prop1;
-    Enum2Enum m_prop2;
-    Enum3Enum m_prop3;
-
-    ~EnumInterfaceData() = default;
-};
-/**
-   \brief 
-*/
 EnumInterface::EnumInterface()
-    : d_ptr(std::make_unique<EnumInterface::EnumInterfaceData>())
+    : m_publisher(std::make_unique<EnumInterfacePublisher>()) 
 {
 }
 EnumInterface::~EnumInterface()
 {
 }
+
 void EnumInterface::setProp0(const Enum0Enum& prop0)
 {
-    if (d_ptr->m_prop0 != prop0) {
-        d_ptr->m_prop0 = prop0;
-        d_ptr->_publisher->publishProp0Changed(prop0);
+    if (m_data.m_prop0 != prop0) {
+        m_data.m_prop0 = prop0;
+        m_publisher->publishProp0Changed(prop0);
     }
 }
 
 const Enum0Enum& EnumInterface::prop0() const
 {
-    return d_ptr->m_prop0;
+    return m_data.m_prop0;
 }
+
 void EnumInterface::setProp1(const Enum1Enum& prop1)
 {
-    if (d_ptr->m_prop1 != prop1) {
-        d_ptr->m_prop1 = prop1;
-        d_ptr->_publisher->publishProp1Changed(prop1);
+    if (m_data.m_prop1 != prop1) {
+        m_data.m_prop1 = prop1;
+        m_publisher->publishProp1Changed(prop1);
     }
 }
 
 const Enum1Enum& EnumInterface::prop1() const
 {
-    return d_ptr->m_prop1;
+    return m_data.m_prop1;
 }
+
 void EnumInterface::setProp2(const Enum2Enum& prop2)
 {
-    if (d_ptr->m_prop2 != prop2) {
-        d_ptr->m_prop2 = prop2;
-        d_ptr->_publisher->publishProp2Changed(prop2);
+    if (m_data.m_prop2 != prop2) {
+        m_data.m_prop2 = prop2;
+        m_publisher->publishProp2Changed(prop2);
     }
 }
 
 const Enum2Enum& EnumInterface::prop2() const
 {
-    return d_ptr->m_prop2;
+    return m_data.m_prop2;
 }
+
 void EnumInterface::setProp3(const Enum3Enum& prop3)
 {
-    if (d_ptr->m_prop3 != prop3) {
-        d_ptr->m_prop3 = prop3;
-        d_ptr->_publisher->publishProp3Changed(prop3);
+    if (m_data.m_prop3 != prop3) {
+        m_data.m_prop3 = prop3;
+        m_publisher->publishProp3Changed(prop3);
     }
 }
 
 const Enum3Enum& EnumInterface::prop3() const
 {
-    return d_ptr->m_prop3;
+    return m_data.m_prop3;
 }
-/**
-   \brief 
-*/
+
 Enum0Enum EnumInterface::func0(const Enum0Enum& param0)
 {
-    (void) param0;
+    (void) param0; //suppress the 'Unreferenced Formal Parameter' warning.
     // do business logic here
-    return Enum0Enum::value0;
+    return {};
 }
 
 std::future<Enum0Enum> EnumInterface::func0Async(const Enum0Enum& param0)
@@ -117,14 +99,12 @@ std::future<Enum0Enum> EnumInterface::func0Async(const Enum0Enum& param0)
         }
     );
 }
-/**
-   \brief 
-*/
+
 Enum1Enum EnumInterface::func1(const Enum1Enum& param1)
 {
-    (void) param1;
+    (void) param1; //suppress the 'Unreferenced Formal Parameter' warning.
     // do business logic here
-    return Enum1Enum::value1;
+    return {};
 }
 
 std::future<Enum1Enum> EnumInterface::func1Async(const Enum1Enum& param1)
@@ -136,14 +116,12 @@ std::future<Enum1Enum> EnumInterface::func1Async(const Enum1Enum& param1)
         }
     );
 }
-/**
-   \brief 
-*/
+
 Enum2Enum EnumInterface::func2(const Enum2Enum& param2)
 {
-    (void) param2;
+    (void) param2; //suppress the 'Unreferenced Formal Parameter' warning.
     // do business logic here
-    return Enum2Enum::value2;
+    return {};
 }
 
 std::future<Enum2Enum> EnumInterface::func2Async(const Enum2Enum& param2)
@@ -155,14 +133,12 @@ std::future<Enum2Enum> EnumInterface::func2Async(const Enum2Enum& param2)
         }
     );
 }
-/**
-   \brief 
-*/
+
 Enum3Enum EnumInterface::func3(const Enum3Enum& param3)
 {
-    (void) param3;
+    (void) param3; //suppress the 'Unreferenced Formal Parameter' warning.
     // do business logic here
-    return Enum3Enum::value3;
+    return {};
 }
 
 std::future<Enum3Enum> EnumInterface::func3Async(const Enum3Enum& param3)
@@ -175,7 +151,7 @@ std::future<Enum3Enum> EnumInterface::func3Async(const Enum3Enum& param3)
     );
 }
 
-IEnumInterfacePublisher* EnumInterface::_getPublisher() const
+IEnumInterfacePublisher& EnumInterface::_getPublisher() const
 {
-    return d_ptr->_publisher.get();
+    return *m_publisher;
 }

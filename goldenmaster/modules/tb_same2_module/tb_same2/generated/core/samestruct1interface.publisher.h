@@ -17,43 +17,71 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
 
-#include <memory>
 #include "tb_same2/generated/api/datastructs.api.h"
 #include "tb_same2/generated/api/samestruct1interface.api.h"
 #include "tb_same2/generated/api/common.h"
 
+#include <vector>
+#include <map>
+#include <functional>
+
 namespace Test {
 namespace TbSame2 {
+
 /**
- * Implementation SameStruct1InterfacePublisher
+ * The implementation of a SameStruct1InterfacePublisher.
+ * Use this class to store clients of the SameStruct1Interface and inform them about the change
+ * on call of the appropriate publish function.
  */
-class TEST_TB_SAME2_EXPORT SameStruct1InterfacePublisher: public ISameStruct1InterfacePublisher
+class TEST_TB_SAME2_EXPORT SameStruct1InterfacePublisher : public ISameStruct1InterfacePublisher
 {
 public:
-    explicit SameStruct1InterfacePublisher();
-    virtual ~SameStruct1InterfacePublisher();
+    /**
+    * Implementation of ISameStruct1InterfacePublisher::subscribeToAllChanges
+    */
+    void subscribeToAllChanges(ISameStruct1InterfaceSubscriber& subscriber) override;
+    /**
+    * Implementation of ISameStruct1InterfacePublisher::unsubscribeFromAllChanges
+    */
+    void unsubscribeFromAllChanges(ISameStruct1InterfaceSubscriber& subscriber) override;
 
-    // SameStruct1InterfacePublisher is not copyable
-    SameStruct1InterfacePublisher(const SameStruct1InterfacePublisher& a) = delete;
-    SameStruct1InterfacePublisher& operator=(const SameStruct1InterfacePublisher& a) = delete;
-    // SameStruct1InterfacePublisher is not movable
-    SameStruct1InterfacePublisher(SameStruct1InterfacePublisher&& a) = delete;
-    SameStruct1InterfacePublisher& operator=(SameStruct1InterfacePublisher&& a) = delete;
-
-    void subscribeToSameStruct1InterfaceInterface(ISameStruct1InterfaceSubscriber& subscriber) override;
-    void unsubscribeFromSameStruct1InterfaceInterface(ISameStruct1InterfaceSubscriber& subscriber) override;
-
+    /**
+    * Implementation of ISameStruct1InterfacePublisher::subscribeToProp1Changed
+    */
     long subscribeToProp1Changed(SameStruct1InterfaceProp1PropertyCb callback) override;
+    /**
+    * Implementation of ISameStruct1InterfacePublisher::subscribeToProp1Changed
+    */
     void unsubscribeFromProp1Changed(long handleId) override;
 
+    /**
+    * Implementation of ISameStruct1InterfacePublisher::subscribeToSig1
+    */
     long subscribeToSig1(SameStruct1InterfaceSig1SignalCb callback) override;
+    /**
+    * Implementation of ISameStruct1InterfacePublisher::unsubscribeFromSig1
+    */
     void unsubscribeFromSig1(long handleId) override;
 
-    void publishSig1(const Struct1& param1) const override;
-protected:
+    /**
+    * Implementation of ISameStruct1InterfacePublisher::publishProp1Changed
+    */
     void publishProp1Changed(const Struct1& prop1) const override;
+    /**
+    * Implementation of ISameStruct1InterfacePublisher::publishSig1
+    */
+    void publishSig1(const Struct1& param1) const override;
 private:
-    std::shared_ptr<ISameStruct1InterfacePublisher> m_impl;
+    // Subscribers informed about any property change or singal emited in SameStruct1Interface
+    std::vector<std::reference_wrapper<ISameStruct1InterfaceSubscriber>> m_allChangesSubscribers;
+    // Next free unique identifier to subscribe for the Prop1 change.
+    long m_prop1ChangedCallbackNextId = 0;
+    // Subscribed callbacks for the Prop1 change.
+    std::map<long, SameStruct1InterfaceProp1PropertyCb> m_prop1Callbacks;
+    // Next free unique identifier to subscribe for the Sig1 emission.
+    long m_sig1SignalCallbackNextId = 0;
+    // Subscribed callbacks for the Sig1 emission.
+    std::map<long, SameStruct1InterfaceSig1SignalCb > m_sig1Callbacks;
 };
 
 } // namespace TbSame2

@@ -21,13 +21,13 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "testbed2/generated/monitor/nestedstruct3interface.tracer.h"
 
 using namespace Test::Testbed2;
-NestedStruct3InterfaceTracerDecorator::NestedStruct3InterfaceTracerDecorator(INestedStruct3Interface* impl, ApiGear::PocoImpl::Tracer* tracer)
+NestedStruct3InterfaceTracerDecorator::NestedStruct3InterfaceTracerDecorator(INestedStruct3Interface* impl, ApiGear::PocoImpl::Tracer& tracer)
     : AbstractNestedStruct3InterfaceDecorator(impl)
     , m_tracer(std::make_unique<NestedStruct3InterfaceTracer>(tracer))
 {
 }
 NestedStruct3InterfaceTracerDecorator::~NestedStruct3InterfaceTracerDecorator() = default;
-NestedStruct3InterfaceTracerDecorator* NestedStruct3InterfaceTracerDecorator::connect(INestedStruct3Interface* impl, ApiGear::PocoImpl::Tracer* tracer)
+NestedStruct3InterfaceTracerDecorator* NestedStruct3InterfaceTracerDecorator::connect(INestedStruct3Interface* impl, ApiGear::PocoImpl::Tracer& tracer)
 {
     return new NestedStruct3InterfaceTracerDecorator(impl, tracer);
 }
@@ -70,33 +70,33 @@ std::future<NestedStruct1> NestedStruct3InterfaceTracerDecorator::func3Async(con
     m_tracer->trace_func3(param1,param2,param3);
     return AbstractNestedStruct3InterfaceDecorator::func3Async(param1,param2,param3);
 }
-void NestedStruct3InterfaceTracerDecorator::OnSig1(const NestedStruct1& param1)
+void NestedStruct3InterfaceTracerDecorator::onSig1(const NestedStruct1& param1)
 {
     (void) param1;
     //m_tracer->trace_Sig1(param1);
 }
-void NestedStruct3InterfaceTracerDecorator::OnSig2(const NestedStruct1& param1,const NestedStruct2& param2)
+void NestedStruct3InterfaceTracerDecorator::onSig2(const NestedStruct1& param1,const NestedStruct2& param2)
 {
     (void) param1;
     (void) param2;
     //m_tracer->trace_Sig2(param1,param2);
 }
-void NestedStruct3InterfaceTracerDecorator::OnSig3(const NestedStruct1& param1,const NestedStruct2& param2,const NestedStruct3& param3)
+void NestedStruct3InterfaceTracerDecorator::onSig3(const NestedStruct1& param1,const NestedStruct2& param2,const NestedStruct3& param3)
 {
     (void) param1;
     (void) param2;
     (void) param3;
     //m_tracer->trace_Sig3(param1,param2,param3);
 }
-void NestedStruct3InterfaceTracerDecorator::OnProp1Changed(const NestedStruct1&)
+void NestedStruct3InterfaceTracerDecorator::onProp1Changed(const NestedStruct1&)
 {
     m_tracer->capture_state(this);
 }
-void NestedStruct3InterfaceTracerDecorator::OnProp2Changed(const NestedStruct2&)
+void NestedStruct3InterfaceTracerDecorator::onProp2Changed(const NestedStruct2&)
 {
     m_tracer->capture_state(this);
 }
-void NestedStruct3InterfaceTracerDecorator::OnProp3Changed(const NestedStruct3&)
+void NestedStruct3InterfaceTracerDecorator::onProp3Changed(const NestedStruct3&)
 {
     m_tracer->capture_state(this);
 }

@@ -18,6 +18,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 
 #include "testbed2/generated/core/nestedstruct2interface.decorator.h"
+#include "testbed2/generated/core/nestedstruct2interface.publisher.h"
 
 using namespace Test::Testbed2;
 /**
@@ -26,17 +27,17 @@ using namespace Test::Testbed2;
 AbstractNestedStruct2InterfaceDecorator::AbstractNestedStruct2InterfaceDecorator(INestedStruct2Interface* impl)
     : m_impl(impl)
 {
-    m_impl->_getPublisher()->subscribeToNestedStruct2InterfaceInterface(*this);
+    m_impl->_getPublisher().subscribeToAllChanges(*this);
 }
 INestedStruct2Interface* AbstractNestedStruct2InterfaceDecorator::swapUnderlyingImplementation(INestedStruct2Interface* impl)
 {
     INestedStruct2Interface* retVal = m_impl;
     if (m_impl != nullptr) {
-        m_impl->_getPublisher()->unsubscribeFromNestedStruct2InterfaceInterface(*this);
+        m_impl->_getPublisher().unsubscribeFromAllChanges(*this);
     }
     m_impl = impl;
     if (m_impl != nullptr) {
-        m_impl->_getPublisher()->subscribeToNestedStruct2InterfaceInterface(*this);
+        m_impl->_getPublisher().subscribeToAllChanges(*this);
     }
     return retVal;
 }
@@ -44,7 +45,7 @@ INestedStruct2Interface* AbstractNestedStruct2InterfaceDecorator::disconnectFrom
 {
     INestedStruct2Interface* retVal = m_impl;
     if (m_impl != nullptr) {
-        m_impl->_getPublisher()->unsubscribeFromNestedStruct2InterfaceInterface(*this);
+        m_impl->_getPublisher().unsubscribeFromAllChanges(*this);
         m_impl = nullptr;
     }
     return retVal;
@@ -53,7 +54,7 @@ AbstractNestedStruct2InterfaceDecorator::~AbstractNestedStruct2InterfaceDecorato
 {
     if (m_impl != nullptr)
     {
-        m_impl->_getPublisher()->unsubscribeFromNestedStruct2InterfaceInterface(*this);
+        m_impl->_getPublisher().unsubscribeFromAllChanges(*this);
     }
 }
 void AbstractNestedStruct2InterfaceDecorator::setProp1(const NestedStruct1& prop1)
@@ -97,7 +98,7 @@ std::future<NestedStruct1> AbstractNestedStruct2InterfaceDecorator::func2Async(c
     return m_impl->func2Async(param1,param2);
 }
 
-INestedStruct2InterfacePublisher* AbstractNestedStruct2InterfaceDecorator::_getPublisher() const
+INestedStruct2InterfacePublisher& AbstractNestedStruct2InterfaceDecorator::_getPublisher() const
 {
     return m_impl->_getPublisher();
 }

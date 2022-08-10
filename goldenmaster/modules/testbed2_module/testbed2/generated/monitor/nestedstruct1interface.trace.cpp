@@ -21,13 +21,13 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "testbed2/generated/monitor/nestedstruct1interface.tracer.h"
 
 using namespace Test::Testbed2;
-NestedStruct1InterfaceTracerDecorator::NestedStruct1InterfaceTracerDecorator(INestedStruct1Interface* impl, ApiGear::PocoImpl::Tracer* tracer)
+NestedStruct1InterfaceTracerDecorator::NestedStruct1InterfaceTracerDecorator(INestedStruct1Interface* impl, ApiGear::PocoImpl::Tracer& tracer)
     : AbstractNestedStruct1InterfaceDecorator(impl)
     , m_tracer(std::make_unique<NestedStruct1InterfaceTracer>(tracer))
 {
 }
 NestedStruct1InterfaceTracerDecorator::~NestedStruct1InterfaceTracerDecorator() = default;
-NestedStruct1InterfaceTracerDecorator* NestedStruct1InterfaceTracerDecorator::connect(INestedStruct1Interface* impl, ApiGear::PocoImpl::Tracer* tracer)
+NestedStruct1InterfaceTracerDecorator* NestedStruct1InterfaceTracerDecorator::connect(INestedStruct1Interface* impl, ApiGear::PocoImpl::Tracer& tracer)
 {
     return new NestedStruct1InterfaceTracerDecorator(impl, tracer);
 }
@@ -44,12 +44,12 @@ std::future<NestedStruct1> NestedStruct1InterfaceTracerDecorator::func1Async(con
     m_tracer->trace_func1(param1);
     return AbstractNestedStruct1InterfaceDecorator::func1Async(param1);
 }
-void NestedStruct1InterfaceTracerDecorator::OnSig1(const NestedStruct1& param1)
+void NestedStruct1InterfaceTracerDecorator::onSig1(const NestedStruct1& param1)
 {
     (void) param1;
     //m_tracer->trace_Sig1(param1);
 }
-void NestedStruct1InterfaceTracerDecorator::OnProp1Changed(const NestedStruct1&)
+void NestedStruct1InterfaceTracerDecorator::onProp1Changed(const NestedStruct1&)
 {
     m_tracer->capture_state(this);
 }

@@ -19,51 +19,36 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "tb_same2/implementation/sameenum1interface.h"
 #include "tb_same2/generated/core/sameenum1interface.publisher.h"
+#include "tb_same2/generated/core/sameenum1interface.data.h"
 
 using namespace Test::TbSame2;
 
-struct SameEnum1Interface::SameEnum1InterfaceData
-{
-    SameEnum1InterfaceData()
-    : _publisher(std::make_unique<SameEnum1InterfacePublisher>())
-    , m_prop1(Enum1Enum::value1)
-    {
-    }
-    std::unique_ptr<ISameEnum1InterfacePublisher> _publisher;
-    Enum1Enum m_prop1;
-
-    ~SameEnum1InterfaceData() = default;
-};
-/**
-   \brief 
-*/
 SameEnum1Interface::SameEnum1Interface()
-    : d_ptr(std::make_unique<SameEnum1Interface::SameEnum1InterfaceData>())
+    : m_publisher(std::make_unique<SameEnum1InterfacePublisher>()) 
 {
 }
 SameEnum1Interface::~SameEnum1Interface()
 {
 }
+
 void SameEnum1Interface::setProp1(const Enum1Enum& prop1)
 {
-    if (d_ptr->m_prop1 != prop1) {
-        d_ptr->m_prop1 = prop1;
-        d_ptr->_publisher->publishProp1Changed(prop1);
+    if (m_data.m_prop1 != prop1) {
+        m_data.m_prop1 = prop1;
+        m_publisher->publishProp1Changed(prop1);
     }
 }
 
 const Enum1Enum& SameEnum1Interface::prop1() const
 {
-    return d_ptr->m_prop1;
+    return m_data.m_prop1;
 }
-/**
-   \brief 
-*/
+
 Enum1Enum SameEnum1Interface::func1(const Enum1Enum& param1)
 {
-    (void) param1;
+    (void) param1; //suppress the 'Unreferenced Formal Parameter' warning.
     // do business logic here
-    return Enum1Enum::value1;
+    return {};
 }
 
 std::future<Enum1Enum> SameEnum1Interface::func1Async(const Enum1Enum& param1)
@@ -76,7 +61,7 @@ std::future<Enum1Enum> SameEnum1Interface::func1Async(const Enum1Enum& param1)
     );
 }
 
-ISameEnum1InterfacePublisher* SameEnum1Interface::_getPublisher() const
+ISameEnum1InterfacePublisher& SameEnum1Interface::_getPublisher() const
 {
-    return d_ptr->_publisher.get();
+    return *m_publisher;
 }

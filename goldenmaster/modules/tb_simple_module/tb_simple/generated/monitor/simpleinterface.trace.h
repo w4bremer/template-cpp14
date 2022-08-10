@@ -31,9 +31,9 @@ class SimpleInterfaceTracer;
 class TEST_TB_SIMPLE_EXPORT SimpleInterfaceTracerDecorator : public AbstractSimpleInterfaceDecorator
 {
 protected:
-    explicit SimpleInterfaceTracerDecorator(ISimpleInterface* impl, ApiGear::PocoImpl::Tracer* tracer);
+    explicit SimpleInterfaceTracerDecorator(ISimpleInterface* impl, ApiGear::PocoImpl::Tracer& tracer);
 public:
-    static SimpleInterfaceTracerDecorator* connect(ISimpleInterface* impl, ApiGear::PocoImpl::Tracer* tracer);
+    static SimpleInterfaceTracerDecorator* connect(ISimpleInterface* impl, ApiGear::PocoImpl::Tracer& tracer);
     virtual ~SimpleInterfaceTracerDecorator();
 
     // operations
@@ -46,14 +46,14 @@ public:
     std::string funcString(const std::string& paramString) override;
     std::future<std::string> funcStringAsync(const std::string& paramString) override;
 public: // ISimpleInterfaceSubscriber interface
-    void OnSigBool(bool paramBool) override;
-    void OnSigInt(int paramInt) override;
-    void OnSigFloat(float paramFloat) override;
-    void OnSigString(const std::string& paramString) override;
-    void OnPropBoolChanged(bool Value) override;
-    void OnPropIntChanged(int Value) override;
-    void OnPropFloatChanged(float Value) override;
-    void OnPropStringChanged(std::string Value) override;
+    void onSigBool(bool paramBool) override;
+    void onSigInt(int paramInt) override;
+    void onSigFloat(float paramFloat) override;
+    void onSigString(const std::string& paramString) override;
+    void onPropBoolChanged(bool Value) override;
+    void onPropIntChanged(int Value) override;
+    void onPropFloatChanged(float Value) override;
+    void onPropStringChanged(std::string Value) override;
 private:
     std::unique_ptr<SimpleInterfaceTracer> m_tracer;
 };

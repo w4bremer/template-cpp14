@@ -19,65 +19,49 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "testbed2/implementation/nestedstruct2interface.h"
 #include "testbed2/generated/core/nestedstruct2interface.publisher.h"
+#include "testbed2/generated/core/nestedstruct2interface.data.h"
 
 using namespace Test::Testbed2;
 
-struct NestedStruct2Interface::NestedStruct2InterfaceData
-{
-    NestedStruct2InterfaceData()
-    : _publisher(std::make_unique<NestedStruct2InterfacePublisher>())
-    , m_prop1(NestedStruct1())
-    , m_prop2(NestedStruct2())
-    {
-    }
-    std::unique_ptr<INestedStruct2InterfacePublisher> _publisher;
-    NestedStruct1 m_prop1;
-    NestedStruct2 m_prop2;
-
-    ~NestedStruct2InterfaceData() = default;
-};
-/**
-   \brief 
-*/
 NestedStruct2Interface::NestedStruct2Interface()
-    : d_ptr(std::make_unique<NestedStruct2Interface::NestedStruct2InterfaceData>())
+    : m_publisher(std::make_unique<NestedStruct2InterfacePublisher>()) 
 {
 }
 NestedStruct2Interface::~NestedStruct2Interface()
 {
 }
+
 void NestedStruct2Interface::setProp1(const NestedStruct1& prop1)
 {
-    if (d_ptr->m_prop1 != prop1) {
-        d_ptr->m_prop1 = prop1;
-        d_ptr->_publisher->publishProp1Changed(prop1);
+    if (m_data.m_prop1 != prop1) {
+        m_data.m_prop1 = prop1;
+        m_publisher->publishProp1Changed(prop1);
     }
 }
 
 const NestedStruct1& NestedStruct2Interface::prop1() const
 {
-    return d_ptr->m_prop1;
+    return m_data.m_prop1;
 }
+
 void NestedStruct2Interface::setProp2(const NestedStruct2& prop2)
 {
-    if (d_ptr->m_prop2 != prop2) {
-        d_ptr->m_prop2 = prop2;
-        d_ptr->_publisher->publishProp2Changed(prop2);
+    if (m_data.m_prop2 != prop2) {
+        m_data.m_prop2 = prop2;
+        m_publisher->publishProp2Changed(prop2);
     }
 }
 
 const NestedStruct2& NestedStruct2Interface::prop2() const
 {
-    return d_ptr->m_prop2;
+    return m_data.m_prop2;
 }
-/**
-   \brief 
-*/
+
 NestedStruct1 NestedStruct2Interface::func1(const NestedStruct1& param1)
 {
-    (void) param1;
+    (void) param1; //suppress the 'Unreferenced Formal Parameter' warning.
     // do business logic here
-    return NestedStruct1();
+    return {};
 }
 
 std::future<NestedStruct1> NestedStruct2Interface::func1Async(const NestedStruct1& param1)
@@ -89,15 +73,13 @@ std::future<NestedStruct1> NestedStruct2Interface::func1Async(const NestedStruct
         }
     );
 }
-/**
-   \brief 
-*/
+
 NestedStruct1 NestedStruct2Interface::func2(const NestedStruct1& param1, const NestedStruct2& param2)
 {
-    (void) param1;
-    (void) param2;
+    (void) param1; //suppress the 'Unreferenced Formal Parameter' warning.
+    (void) param2; //suppress the 'Unreferenced Formal Parameter' warning.
     // do business logic here
-    return NestedStruct1();
+    return {};
 }
 
 std::future<NestedStruct1> NestedStruct2Interface::func2Async(const NestedStruct1& param1, const NestedStruct2& param2)
@@ -111,7 +93,7 @@ std::future<NestedStruct1> NestedStruct2Interface::func2Async(const NestedStruct
     );
 }
 
-INestedStruct2InterfacePublisher* NestedStruct2Interface::_getPublisher() const
+INestedStruct2InterfacePublisher& NestedStruct2Interface::_getPublisher() const
 {
-    return d_ptr->_publisher.get();
+    return *m_publisher;
 }

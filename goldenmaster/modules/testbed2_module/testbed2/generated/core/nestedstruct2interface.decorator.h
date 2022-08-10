@@ -19,17 +19,15 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 #include "testbed2/generated/api/testbed2.h"
 #include "testbed2/generated/api/common.h"
-#include "testbed2/generated/core/nestedstruct2interface.publisher.h"
 
 namespace Test {
 namespace Testbed2 {
 
-class TEST_TESTBED2_EXPORT AbstractNestedStruct2InterfaceDecorator : public INestedStruct2InterfaceDecorator
-{
+class TEST_TESTBED2_EXPORT AbstractNestedStruct2InterfaceDecorator : public INestedStruct2Interface, public INestedStruct2InterfaceSubscriber {
 public:
     explicit AbstractNestedStruct2InterfaceDecorator(INestedStruct2Interface* impl);
-    INestedStruct2Interface* swapUnderlyingImplementation(INestedStruct2Interface* impl) override;
-    INestedStruct2Interface* disconnectFromUnderlyingImplementation() override;
+    INestedStruct2Interface* swapUnderlyingImplementation(INestedStruct2Interface* impl);
+    INestedStruct2Interface* disconnectFromUnderlyingImplementation();
     virtual ~AbstractNestedStruct2InterfaceDecorator();
 public:
     // property prop1
@@ -46,7 +44,7 @@ public:
     NestedStruct1 func2(const NestedStruct1& param1, const NestedStruct2& param2) override;
     std::future<NestedStruct1> func2Async(const NestedStruct1& param1, const NestedStruct2& param2) override;
 
-    INestedStruct2InterfacePublisher* _getPublisher() const override;
+    INestedStruct2InterfacePublisher& _getPublisher() const override;
 private:
     INestedStruct2Interface* m_impl {nullptr};
 };

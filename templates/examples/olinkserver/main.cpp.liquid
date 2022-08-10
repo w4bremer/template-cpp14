@@ -2,7 +2,7 @@
 {%- for module in system.modules -%}
 {% for interface in module.interfaces %}
 #include "{{module.name|identifier}}/implementation/{{interface.name|lower}}.h"
-#include "{{module.name|identifier}}/generated/olink/{{interface.name|lower}}adapter.h"
+#include "{{module.name|identifier}}/generated/olink/{{interface.name|lower}}service.adapter.h"
 {% endfor %}
 {% endfor %}
 #include "apigear/olink/olinkhost.h"
@@ -17,7 +17,7 @@ int main(){
     {% for interface in module.interfaces %}
     {% assign class = interface.name | capital %}
     std::unique_ptr<{{ module.name | capital }}::I{{class}}> test{{module.name | capital}}{{class}} = std::make_unique<{{ module.name | capital }}::{{class}}>();
-    {{ module.name | capital }}::OLink{{interface.name}}Adapter test{{module.name|capital}}{{interface.name|capital}}Adapter(test{{module.name|capital}}{{interface.name|capital}}.get(), registry);
+    {{ module.name | capital }}::olink::{{interface.name}}ServiceAdapter test{{module.name|capital}}{{interface.name|capital}}ServiceAdapter(*test{{module.name|capital}}{{interface.name|capital}}, registry);
     {% endfor %}
     {% endfor %}
 

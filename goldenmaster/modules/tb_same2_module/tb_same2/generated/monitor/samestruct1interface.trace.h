@@ -31,17 +31,17 @@ class SameStruct1InterfaceTracer;
 class TEST_TB_SAME2_EXPORT SameStruct1InterfaceTracerDecorator : public AbstractSameStruct1InterfaceDecorator
 {
 protected:
-    explicit SameStruct1InterfaceTracerDecorator(ISameStruct1Interface* impl, ApiGear::PocoImpl::Tracer* tracer);
+    explicit SameStruct1InterfaceTracerDecorator(ISameStruct1Interface* impl, ApiGear::PocoImpl::Tracer& tracer);
 public:
-    static SameStruct1InterfaceTracerDecorator* connect(ISameStruct1Interface* impl, ApiGear::PocoImpl::Tracer* tracer);
+    static SameStruct1InterfaceTracerDecorator* connect(ISameStruct1Interface* impl, ApiGear::PocoImpl::Tracer& tracer);
     virtual ~SameStruct1InterfaceTracerDecorator();
 
     // operations
     Struct1 func1(const Struct1& param1) override;
     std::future<Struct1> func1Async(const Struct1& param1) override;
 public: // ISameStruct1InterfaceSubscriber interface
-    void OnSig1(const Struct1& param1) override;
-    void OnProp1Changed(const Struct1& Value) override;
+    void onSig1(const Struct1& param1) override;
+    void onProp1Changed(const Struct1& Value) override;
 private:
     std::unique_ptr<SameStruct1InterfaceTracer> m_tracer;
 };

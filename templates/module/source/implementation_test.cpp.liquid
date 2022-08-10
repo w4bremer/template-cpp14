@@ -27,7 +27,7 @@ TEST_CASE("Testing {{class}}", "[{{class}}]"){
 {% for property in interface.properties %}
     SECTION("Test property {{property.name}}") {
         // Do implement test here
-        test{{class}}->set{{property.name|capitalize}}({{property|cpp14Default}});
+        test{{class}}->set{{property.name|capital}}({{property|cpp14Default}});
         REQUIRE( test{{class}}->{{property.name}}() == {% if property.type == 'float'%} Approx({% endif %} {{property|cpp14Default}}{% if property.type == 'float'%} ){% endif %} );
     }
 {% endfor %}

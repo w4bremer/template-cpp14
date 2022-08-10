@@ -19,17 +19,15 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 #include "tb_same1/generated/api/tb_same1.h"
 #include "tb_same1/generated/api/common.h"
-#include "tb_same1/generated/core/samestruct1interface.publisher.h"
 
 namespace Test {
 namespace TbSame1 {
 
-class TEST_TB_SAME1_EXPORT AbstractSameStruct1InterfaceDecorator : public ISameStruct1InterfaceDecorator
-{
+class TEST_TB_SAME1_EXPORT AbstractSameStruct1InterfaceDecorator : public ISameStruct1Interface, public ISameStruct1InterfaceSubscriber {
 public:
     explicit AbstractSameStruct1InterfaceDecorator(ISameStruct1Interface* impl);
-    ISameStruct1Interface* swapUnderlyingImplementation(ISameStruct1Interface* impl) override;
-    ISameStruct1Interface* disconnectFromUnderlyingImplementation() override;
+    ISameStruct1Interface* swapUnderlyingImplementation(ISameStruct1Interface* impl);
+    ISameStruct1Interface* disconnectFromUnderlyingImplementation();
     virtual ~AbstractSameStruct1InterfaceDecorator();
 public:
     // property prop1
@@ -40,7 +38,7 @@ public:
     Struct1 func1(const Struct1& param1) override;
     std::future<Struct1> func1Async(const Struct1& param1) override;
 
-    ISameStruct1InterfacePublisher* _getPublisher() const override;
+    ISameStruct1InterfacePublisher& _getPublisher() const override;
 private:
     ISameStruct1Interface* m_impl {nullptr};
 };

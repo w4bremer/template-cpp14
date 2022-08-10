@@ -31,9 +31,9 @@ class SimpleArrayInterfaceTracer;
 class TEST_TB_SIMPLE_EXPORT SimpleArrayInterfaceTracerDecorator : public AbstractSimpleArrayInterfaceDecorator
 {
 protected:
-    explicit SimpleArrayInterfaceTracerDecorator(ISimpleArrayInterface* impl, ApiGear::PocoImpl::Tracer* tracer);
+    explicit SimpleArrayInterfaceTracerDecorator(ISimpleArrayInterface* impl, ApiGear::PocoImpl::Tracer& tracer);
 public:
-    static SimpleArrayInterfaceTracerDecorator* connect(ISimpleArrayInterface* impl, ApiGear::PocoImpl::Tracer* tracer);
+    static SimpleArrayInterfaceTracerDecorator* connect(ISimpleArrayInterface* impl, ApiGear::PocoImpl::Tracer& tracer);
     virtual ~SimpleArrayInterfaceTracerDecorator();
 
     // operations
@@ -46,14 +46,14 @@ public:
     std::list<std::string> funcString(const std::list<std::string>& paramString) override;
     std::future<std::list<std::string>> funcStringAsync(const std::list<std::string>& paramString) override;
 public: // ISimpleArrayInterfaceSubscriber interface
-    void OnSigBool(const std::list<bool>& paramBool) override;
-    void OnSigInt(const std::list<int>& paramInt) override;
-    void OnSigFloat(const std::list<float>& paramFloat) override;
-    void OnSigString(const std::list<std::string>& paramString) override;
-    void OnPropBoolChanged(const std::list<bool>& Value) override;
-    void OnPropIntChanged(const std::list<int>& Value) override;
-    void OnPropFloatChanged(const std::list<float>& Value) override;
-    void OnPropStringChanged(const std::list<std::string>& Value) override;
+    void onSigBool(const std::list<bool>& paramBool) override;
+    void onSigInt(const std::list<int>& paramInt) override;
+    void onSigFloat(const std::list<float>& paramFloat) override;
+    void onSigString(const std::list<std::string>& paramString) override;
+    void onPropBoolChanged(const std::list<bool>& Value) override;
+    void onPropIntChanged(const std::list<int>& Value) override;
+    void onPropFloatChanged(const std::list<float>& Value) override;
+    void onPropStringChanged(const std::list<std::string>& Value) override;
 private:
     std::unique_ptr<SimpleArrayInterfaceTracer> m_tracer;
 };

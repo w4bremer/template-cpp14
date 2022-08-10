@@ -31,9 +31,9 @@ class EnumInterfaceTracer;
 class TEST_TB_ENUM_EXPORT EnumInterfaceTracerDecorator : public AbstractEnumInterfaceDecorator
 {
 protected:
-    explicit EnumInterfaceTracerDecorator(IEnumInterface* impl, ApiGear::PocoImpl::Tracer* tracer);
+    explicit EnumInterfaceTracerDecorator(IEnumInterface* impl, ApiGear::PocoImpl::Tracer& tracer);
 public:
-    static EnumInterfaceTracerDecorator* connect(IEnumInterface* impl, ApiGear::PocoImpl::Tracer* tracer);
+    static EnumInterfaceTracerDecorator* connect(IEnumInterface* impl, ApiGear::PocoImpl::Tracer& tracer);
     virtual ~EnumInterfaceTracerDecorator();
 
     // operations
@@ -46,14 +46,14 @@ public:
     Enum3Enum func3(const Enum3Enum& param3) override;
     std::future<Enum3Enum> func3Async(const Enum3Enum& param3) override;
 public: // IEnumInterfaceSubscriber interface
-    void OnSig0(const Enum0Enum& param0) override;
-    void OnSig1(const Enum1Enum& param1) override;
-    void OnSig2(const Enum2Enum& param2) override;
-    void OnSig3(const Enum3Enum& param3) override;
-    void OnProp0Changed(const Enum0Enum& Value) override;
-    void OnProp1Changed(const Enum1Enum& Value) override;
-    void OnProp2Changed(const Enum2Enum& Value) override;
-    void OnProp3Changed(const Enum3Enum& Value) override;
+    void onSig0(const Enum0Enum& param0) override;
+    void onSig1(const Enum1Enum& param1) override;
+    void onSig2(const Enum2Enum& param2) override;
+    void onSig3(const Enum3Enum& param3) override;
+    void onProp0Changed(const Enum0Enum& Value) override;
+    void onProp1Changed(const Enum1Enum& Value) override;
+    void onProp2Changed(const Enum2Enum& Value) override;
+    void onProp3Changed(const Enum3Enum& Value) override;
 private:
     std::unique_ptr<EnumInterfaceTracer> m_tracer;
 };

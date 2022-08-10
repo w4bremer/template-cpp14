@@ -7,73 +7,42 @@
 
 #include "{{module.name|identifier}}/implementation/{{class|lower}}.h"
 #include "{{module.name|identifier}}/generated/core/{{interface.name|lower}}.publisher.h"
+#include "{{module.name|identifier}}/generated/core/{{interface.name|lower}}.data.h"
 
 using namespace {{ system.name | capital }}::{{ module.name | capital }};
 
-struct {{class}}::{{class}}Data
-{
-    {{class}}Data()
-    : _publisher(std::make_unique<{{pub_class}}>())
-    {% for property in interface.properties %}
-    {{nl}}, m_{{property.name}}({{property|cpp14Default}})
-    {% endfor %}
-    {
-    }
-    std::unique_ptr<{{pub_interface}}> _publisher;
-{% for property in interface.properties %}
-    {{property|cpp14Return}} m_{{property.name}};
-{% endfor %}
-
-    ~{{class}}Data() = default;
-};
-
-{% if interface.description != "" %}
-/**
-   \brief {{interface.description}}
-*/
-{% endif %}
 {{class}}::{{class}}()
-    : d_ptr(std::make_unique<{{class}}::{{interface.name | capital}}Data>())
+    : m_publisher(std::make_unique<{{pub_class}}>()) 
 {
 }
 {{class}}::~{{class}}()
 {
 }
 {% for property in interface.properties %}
-{% if property.description != undefined %}
-/**
-   \brief property {{property.description}}
-*/
-{% endif %}
-void {{class}}::set{{property.name|capitalize}}({{ property|cpp14Param }})
+
+void {{class}}::set{{property.name|capital}}({{ property|cpp14Param }})
 {
-    if (d_ptr->m_{{property.name}} != {{property.name}}) {
-        d_ptr->m_{{property.name}} = {{property.name}};
-        d_ptr->_publisher->publish{{property.name|capital}}Changed({{property.name}});
+    if (m_data.m_{{property.name}} != {{property.name}}) {
+        m_data.m_{{property.name}} = {{property.name}};
+        m_publisher->publish{{property.name|capital}}Changed({{property.name}});
     }
 }
 
 {{property|cpp14Return: true}} {{class}}::{{property.name}}() const
 {
-    return d_ptr->m_{{property.name}};
+    return m_data.m_{{property.name}};
 }
 {% endfor %}
 
 {% for operation in interface.operations %}
 
-
-{% if operation.description != "" %}
-/**
-   \brief {{operation.description}}
-*/
-{% endif %}
 {{operation|cpp14Return}} {{class}}::{{operation.name}}({{operation|cpp14Params}})
 {
     {% for parameter in operation.params %}
-    (void) {{parameter.name}};
+    (void) {{parameter.name}}; //suppress the 'Unreferenced Formal Parameter' warning.
     {% endfor %}
     // do business logic here
-    return {{operation|cpp14Default}};
+    return {};
 }
 
 {% capture returnType %}{{operation|cpp14Return}}{% endcapture %}
@@ -92,7 +61,7 @@ std::future<{{returnType}}> {{class}}::{{operation.name}}Async({{operation|cpp14
 }
 {% endfor %}
 
-{{pub_interface}}* {{class}}::_getPublisher() const
+{{pub_interface}}& {{class}}::_getPublisher() const
 {
-    return d_ptr->_publisher.get();
+    return *m_publisher;
 }

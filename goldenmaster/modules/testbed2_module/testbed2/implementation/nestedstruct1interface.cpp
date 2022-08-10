@@ -19,51 +19,36 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "testbed2/implementation/nestedstruct1interface.h"
 #include "testbed2/generated/core/nestedstruct1interface.publisher.h"
+#include "testbed2/generated/core/nestedstruct1interface.data.h"
 
 using namespace Test::Testbed2;
 
-struct NestedStruct1Interface::NestedStruct1InterfaceData
-{
-    NestedStruct1InterfaceData()
-    : _publisher(std::make_unique<NestedStruct1InterfacePublisher>())
-    , m_prop1(NestedStruct1())
-    {
-    }
-    std::unique_ptr<INestedStruct1InterfacePublisher> _publisher;
-    NestedStruct1 m_prop1;
-
-    ~NestedStruct1InterfaceData() = default;
-};
-/**
-   \brief 
-*/
 NestedStruct1Interface::NestedStruct1Interface()
-    : d_ptr(std::make_unique<NestedStruct1Interface::NestedStruct1InterfaceData>())
+    : m_publisher(std::make_unique<NestedStruct1InterfacePublisher>()) 
 {
 }
 NestedStruct1Interface::~NestedStruct1Interface()
 {
 }
+
 void NestedStruct1Interface::setProp1(const NestedStruct1& prop1)
 {
-    if (d_ptr->m_prop1 != prop1) {
-        d_ptr->m_prop1 = prop1;
-        d_ptr->_publisher->publishProp1Changed(prop1);
+    if (m_data.m_prop1 != prop1) {
+        m_data.m_prop1 = prop1;
+        m_publisher->publishProp1Changed(prop1);
     }
 }
 
 const NestedStruct1& NestedStruct1Interface::prop1() const
 {
-    return d_ptr->m_prop1;
+    return m_data.m_prop1;
 }
-/**
-   \brief 
-*/
+
 NestedStruct1 NestedStruct1Interface::func1(const NestedStruct1& param1)
 {
-    (void) param1;
+    (void) param1; //suppress the 'Unreferenced Formal Parameter' warning.
     // do business logic here
-    return NestedStruct1();
+    return {};
 }
 
 std::future<NestedStruct1> NestedStruct1Interface::func1Async(const NestedStruct1& param1)
@@ -76,7 +61,7 @@ std::future<NestedStruct1> NestedStruct1Interface::func1Async(const NestedStruct
     );
 }
 
-INestedStruct1InterfacePublisher* NestedStruct1Interface::_getPublisher() const
+INestedStruct1InterfacePublisher& NestedStruct1Interface::_getPublisher() const
 {
-    return d_ptr->_publisher.get();
+    return *m_publisher;
 }

@@ -31,17 +31,17 @@ class NestedStruct1InterfaceTracer;
 class TEST_TESTBED2_EXPORT NestedStruct1InterfaceTracerDecorator : public AbstractNestedStruct1InterfaceDecorator
 {
 protected:
-    explicit NestedStruct1InterfaceTracerDecorator(INestedStruct1Interface* impl, ApiGear::PocoImpl::Tracer* tracer);
+    explicit NestedStruct1InterfaceTracerDecorator(INestedStruct1Interface* impl, ApiGear::PocoImpl::Tracer& tracer);
 public:
-    static NestedStruct1InterfaceTracerDecorator* connect(INestedStruct1Interface* impl, ApiGear::PocoImpl::Tracer* tracer);
+    static NestedStruct1InterfaceTracerDecorator* connect(INestedStruct1Interface* impl, ApiGear::PocoImpl::Tracer& tracer);
     virtual ~NestedStruct1InterfaceTracerDecorator();
 
     // operations
     NestedStruct1 func1(const NestedStruct1& param1) override;
     std::future<NestedStruct1> func1Async(const NestedStruct1& param1) override;
 public: // INestedStruct1InterfaceSubscriber interface
-    void OnSig1(const NestedStruct1& param1) override;
-    void OnProp1Changed(const NestedStruct1& Value) override;
+    void onSig1(const NestedStruct1& param1) override;
+    void onProp1Changed(const NestedStruct1& Value) override;
 private:
     std::unique_ptr<NestedStruct1InterfaceTracer> m_tracer;
 };

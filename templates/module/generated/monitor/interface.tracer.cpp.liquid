@@ -7,7 +7,7 @@ using namespace {{ system.name | capital }}::{{ module.name | capital }};
 
 {% assign class = interface.name | append: "Tracer" %}
 
-{{class}}::{{class}}(ApiGear::PocoImpl::Tracer* tracer)
+{{class}}::{{class}}(ApiGear::PocoImpl::Tracer& tracer)
     : m_tracer(tracer)
 {
 }
@@ -20,7 +20,7 @@ void {{class}}::capture_state(I{{interface.name}}* obj)
     {% else %}
     (void) obj;
     {% endfor %}
-    m_tracer->state("{{module.name}}.{{interface.name}}#_state", fields_);
+    m_tracer.state("{{module.name}}.{{interface.name}}#_state", fields_);
 }
 
 {% for operation in interface.operations %}
@@ -31,6 +31,20 @@ void {{class}}::trace_{{operation.name}}({{operation|cpp14Params}})
     {% for param in operation.params %}
     fields_["{{param.name}}"] = {{param.name}};
     {% endfor %}
-    m_tracer->call("{{module.name}}.{{interface.name}}#{{operation.name}}", fields_);
+    m_tracer.call("{{module.name}}.{{interface.name}}#{{operation.name}}", fields_);
+}
+{% endfor %}
+
+{% for signal in interface.signals %}
+void {{class}}::trace_{{signal.name}}(
+        {%- for param in signal.params -%}
+          {{param|cpp14Param}}{% unless forloop.last %},{% endunless -%}
+        {%- endfor -%})
+{
+    nlohmann::json fields_;
+    {% for param in signal.params %}
+    fields_["{{param.name}}"] = {{param.name}};
+    {% endfor %}
+    m_tracer.signal("{{module.name}}.{{interface.name}}#{{signal.name}}", fields_);
 }
 {% endfor %}

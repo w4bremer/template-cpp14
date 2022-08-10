@@ -19,33 +19,31 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 #include "tb_simple/generated/api/tb_simple.h"
 #include "tb_simple/generated/api/common.h"
-#include "tb_simple/generated/core/simpleinterface.publisher.h"
 
 namespace Test {
 namespace TbSimple {
 
-class TEST_TB_SIMPLE_EXPORT AbstractSimpleInterfaceDecorator : public ISimpleInterfaceDecorator
-{
+class TEST_TB_SIMPLE_EXPORT AbstractSimpleInterfaceDecorator : public ISimpleInterface, public ISimpleInterfaceSubscriber {
 public:
     explicit AbstractSimpleInterfaceDecorator(ISimpleInterface* impl);
-    ISimpleInterface* swapUnderlyingImplementation(ISimpleInterface* impl) override;
-    ISimpleInterface* disconnectFromUnderlyingImplementation() override;
+    ISimpleInterface* swapUnderlyingImplementation(ISimpleInterface* impl);
+    ISimpleInterface* disconnectFromUnderlyingImplementation();
     virtual ~AbstractSimpleInterfaceDecorator();
 public:
     // property propBool
-    void setPropbool(bool propBool) override;
+    void setPropBool(bool propBool) override;
     bool propBool() const override;
     
     // property propInt
-    void setPropint(int propInt) override;
+    void setPropInt(int propInt) override;
     int propInt() const override;
     
     // property propFloat
-    void setPropfloat(float propFloat) override;
+    void setPropFloat(float propFloat) override;
     float propFloat() const override;
     
     // property propString
-    void setPropstring(const std::string& propString) override;
+    void setPropString(const std::string& propString) override;
     std::string propString() const override;
     
     // operations
@@ -58,7 +56,7 @@ public:
     std::string funcString(const std::string& paramString) override;
     std::future<std::string> funcStringAsync(const std::string& paramString) override;
 
-    ISimpleInterfacePublisher* _getPublisher() const override;
+    ISimpleInterfacePublisher& _getPublisher() const override;
 private:
     ISimpleInterface* m_impl {nullptr};
 };

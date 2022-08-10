@@ -14,10 +14,9 @@ int main(){
     {% for module in system.modules %}
     {% for interface in module.interfaces %}
     {% assign class = interface.name | capital %}
-    {% assign decorator_class = "I" | append: class | append: "Decorator" %}
     {% assign tracer_class = class | append: "TracerDecorator" %}
     std::unique_ptr<{{ module.name | capital }}::I{{class}}> test{{module.name | capital}}{{class}} = std::make_unique<{{ module.name | capital }}::{{class}}>();
-    std::unique_ptr<{{ module.name | capital }}::{{decorator_class}}> test{{ module.name | capital }}{{tracer_class}}({{ module.name | capital }}::{{tracer_class}}::connect(test{{module.name | capital}}{{class}}.get(), &tracer));
+    std::unique_ptr<{{ module.name | capital }}::I{{class}}> test{{ module.name | capital }}{{tracer_class}}({{ module.name | capital }}::{{tracer_class}}::connect(test{{module.name | capital}}{{class}}.get(), tracer));
     {% endfor %}
     {% endfor %}
 

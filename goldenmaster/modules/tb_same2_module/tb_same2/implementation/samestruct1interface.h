@@ -17,31 +17,39 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 #pragma once
-#include <memory>
 #include "tb_same2/generated/api/tb_same2.h"
 #include "tb_same2/generated/api/common.h"
+#include "tb_same2/generated/core/samestruct1interface.data.h"
+#include <memory>
 
 namespace Test {
 namespace TbSame2 {
 
+/**
+* The SameStruct1Interface implementation.
+*/
 class TEST_TB_SAME2_EXPORT SameStruct1Interface : public ISameStruct1Interface
 {
 public:
     explicit SameStruct1Interface();
     ~SameStruct1Interface();
 public:
-    // property prop1
     void setProp1(const Struct1& prop1) override;
     const Struct1& prop1() const override;
     
-    // operations
     Struct1 func1(const Struct1& param1) override;
     std::future<Struct1> func1Async(const Struct1& param1) override;
-
-    ISameStruct1InterfacePublisher* _getPublisher() const override;
+        
+    /**
+    * Access to a publisher, use it to subscribe for SameStruct1Interface changes and signal emission.
+    * @return The publisher for SameStruct1Interface.
+    */
+    ISameStruct1InterfacePublisher& _getPublisher() const override;
 private:
-    struct SameStruct1InterfaceData;
-    std::unique_ptr<SameStruct1InterfaceData> d_ptr;
+    /** The publisher for the SameStruct1Interface. */
+    std::unique_ptr<ISameStruct1InterfacePublisher> m_publisher;
+    /** The helper structure to store all the properties for SameStruct1Interface. */
+    SameStruct1InterfaceData m_data;
 };
 } // namespace TbSame2
 } // namespace Test

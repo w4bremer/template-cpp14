@@ -21,13 +21,13 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "tb_same1/generated/monitor/samestruct1interface.tracer.h"
 
 using namespace Test::TbSame1;
-SameStruct1InterfaceTracerDecorator::SameStruct1InterfaceTracerDecorator(ISameStruct1Interface* impl, ApiGear::PocoImpl::Tracer* tracer)
+SameStruct1InterfaceTracerDecorator::SameStruct1InterfaceTracerDecorator(ISameStruct1Interface* impl, ApiGear::PocoImpl::Tracer& tracer)
     : AbstractSameStruct1InterfaceDecorator(impl)
     , m_tracer(std::make_unique<SameStruct1InterfaceTracer>(tracer))
 {
 }
 SameStruct1InterfaceTracerDecorator::~SameStruct1InterfaceTracerDecorator() = default;
-SameStruct1InterfaceTracerDecorator* SameStruct1InterfaceTracerDecorator::connect(ISameStruct1Interface* impl, ApiGear::PocoImpl::Tracer* tracer)
+SameStruct1InterfaceTracerDecorator* SameStruct1InterfaceTracerDecorator::connect(ISameStruct1Interface* impl, ApiGear::PocoImpl::Tracer& tracer)
 {
     return new SameStruct1InterfaceTracerDecorator(impl, tracer);
 }
@@ -44,12 +44,12 @@ std::future<Struct1> SameStruct1InterfaceTracerDecorator::func1Async(const Struc
     m_tracer->trace_func1(param1);
     return AbstractSameStruct1InterfaceDecorator::func1Async(param1);
 }
-void SameStruct1InterfaceTracerDecorator::OnSig1(const Struct1& param1)
+void SameStruct1InterfaceTracerDecorator::onSig1(const Struct1& param1)
 {
     (void) param1;
     //m_tracer->trace_Sig1(param1);
 }
-void SameStruct1InterfaceTracerDecorator::OnProp1Changed(const Struct1&)
+void SameStruct1InterfaceTracerDecorator::onProp1Changed(const Struct1&)
 {
     m_tracer->capture_state(this);
 }

@@ -19,17 +19,15 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 #include "tb_same1/generated/api/tb_same1.h"
 #include "tb_same1/generated/api/common.h"
-#include "tb_same1/generated/core/sameenum2interface.publisher.h"
 
 namespace Test {
 namespace TbSame1 {
 
-class TEST_TB_SAME1_EXPORT AbstractSameEnum2InterfaceDecorator : public ISameEnum2InterfaceDecorator
-{
+class TEST_TB_SAME1_EXPORT AbstractSameEnum2InterfaceDecorator : public ISameEnum2Interface, public ISameEnum2InterfaceSubscriber {
 public:
     explicit AbstractSameEnum2InterfaceDecorator(ISameEnum2Interface* impl);
-    ISameEnum2Interface* swapUnderlyingImplementation(ISameEnum2Interface* impl) override;
-    ISameEnum2Interface* disconnectFromUnderlyingImplementation() override;
+    ISameEnum2Interface* swapUnderlyingImplementation(ISameEnum2Interface* impl);
+    ISameEnum2Interface* disconnectFromUnderlyingImplementation();
     virtual ~AbstractSameEnum2InterfaceDecorator();
 public:
     // property prop1
@@ -46,7 +44,7 @@ public:
     Enum1Enum func2(const Enum1Enum& param1, const Enum2Enum& param2) override;
     std::future<Enum1Enum> func2Async(const Enum1Enum& param1, const Enum2Enum& param2) override;
 
-    ISameEnum2InterfacePublisher* _getPublisher() const override;
+    ISameEnum2InterfacePublisher& _getPublisher() const override;
 private:
     ISameEnum2Interface* m_impl {nullptr};
 };

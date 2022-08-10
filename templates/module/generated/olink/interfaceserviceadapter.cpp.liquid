@@ -1,0 +1,110 @@
+{% comment %} // Copyright (c) ApiGear UG 2020 {% endcomment -%}
+{{ module | licGPLcpp -}}
+{% capture class%}{{interface.name}}ServiceAdapter{% endcapture %}
+
+#include "{{module.name|identifier}}/generated/olink/{{interface.name|lower}}service.adapter.h"
+#include "{{module.name|identifier}}/generated/core/{{module.name|identifier}}.json.adapter.h"
+#include <iostream>
+
+using namespace {{ system.name | capital }}::{{ module.name | capital }};
+using namespace {{ system.name | capital }}::{{ module.name | capital }}::olink;
+
+{{class}}::{{class}}(I{{interface}}& {{interface}}, ApiGear::ObjectLink::RemoteRegistry& registry)
+    : m_{{interface}}({{interface}})
+    , m_node(nullptr)
+    , m_registry(registry)
+{
+    m_{{interface}}._getPublisher().subscribeToAllChanges(*this);
+    m_registry.addObjectSource(this);
+}
+
+{{class}}::~{{class}}()
+{
+    m_registry.removeObjectSource(this);
+    m_{{interface}}._getPublisher().unsubscribeFromAllChanges(*this);
+}
+
+std::string {{class}}::olinkObjectName() {
+    return "{{module}}.{{interface}}";
+}
+
+nlohmann::json {{class}}::olinkInvoke(std::string fcnName, nlohmann::json fcnArgs) {
+    std::clog << fcnName << std::endl;
+    std::string path = ApiGear::ObjectLink::Name::pathFromName(fcnName);
+{% for operation in interface.operations %}
+    if(path == "{{operation}}") {
+{% for param in operation.params %}
+        const {{param|cpp14Return}}& {{param}} = fcnArgs.at({{ forloop.index0 }});      
+{% endfor %}
+{% if operation.type == 'void' %}
+        m_{{interface}}.{{operation}}({{ operation.params | map: 'name' | join: ', ' }});
+        return nlohmann::json{};
+{% else %}
+        {{operation|cpp14Return}} result = m_{{interface}}.{{operation}}({{ operation.params | map: 'name' | join: ', ' }});
+        return result;
+{% endif %}
+    }
+{% else %}
+    // no operations to invoke {% comment %} we generate anyway for consistency {% endcomment %}
+    (void) fcnArgs;
+{% endfor %}
+    return nlohmann::json();
+}
+
+void {{class}}::olinkSetProperty(std::string name, nlohmann::json value) {
+    std::clog << name << std::endl;
+    std::string path = ApiGear::ObjectLink::Name::pathFromName(name);
+{% for property in interface.properties %}
+    if(path == "{{property}}") {
+        {{property|cpp14Return}} {{property}} = value.get<{{property|cpp14Return}}>();
+        m_{{interface}}.set{{property.name|capital}}({{property}});
+    }
+{% else %}
+    // no properties to set {% comment %} we generate anyway for consistency {% endcomment %}
+    (void) value;
+{% endfor %} 
+}
+
+void {{class}}::olinkLinked(std::string name, ApiGear::ObjectLink::IRemoteNode *node) {
+    std::clog << name << std::endl;
+    m_node = node;
+}
+
+void {{class}}::olinkUnlinked(std::string name)
+{
+    std::clog << name << std::endl;
+    m_node = nullptr;
+}
+
+nlohmann::json {{class}}::olinkCollectProperties()
+{
+    return nlohmann::json::object({
+{% for property in interface.properties %}
+        { "{{property.name}}", m_{{interface}}.{{property.name}}() }{% unless forloop.last %},{% endunless %}
+{% endfor %}
+    });
+}
+
+{% for signal in interface.signals %}
+void {{class}}::on{{signal.name | capital}}(
+        {%- for param in signal.params -%}
+          {{param|cpp14Param}}{% unless forloop.last %},{% endunless -%}
+        {%- endfor -%}
+        )
+{
+    if(m_node != nullptr) {
+        const nlohmann::json& args = { {{ signal.params | map: 'name' | join: ', ' }} };
+        m_node->notifySignal("{{module}}.{{interface}}/{{signal}}", args);
+    }
+}
+{% endfor %}
+
+{% for property in interface.properties %}
+void {{class}}::on{{property.name|capital}}Changed({{property|cpp14Return: true}} {{property}})
+{
+    if(m_node != nullptr) {
+        m_node->notifyPropertyChange("{{module}}.{{interface}}/{{property}}", {{property}});
+    }
+}
+{% endfor %}
+

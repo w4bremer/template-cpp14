@@ -41,22 +41,22 @@ TEST_CASE("Testing SimpleArrayInterface", "[SimpleArrayInterface]"){
     }
     SECTION("Test property propBool") {
         // Do implement test here
-        testSimpleArrayInterface->setPropbool(std::list<bool>());
+        testSimpleArrayInterface->setPropBool(std::list<bool>());
         REQUIRE( testSimpleArrayInterface->propBool() == std::list<bool>() );
     }
     SECTION("Test property propInt") {
         // Do implement test here
-        testSimpleArrayInterface->setPropint(std::list<int>());
+        testSimpleArrayInterface->setPropInt(std::list<int>());
         REQUIRE( testSimpleArrayInterface->propInt() == std::list<int>() );
     }
     SECTION("Test property propFloat") {
         // Do implement test here
-        testSimpleArrayInterface->setPropfloat(std::list<float>());
+        testSimpleArrayInterface->setPropFloat(std::list<float>());
         REQUIRE( testSimpleArrayInterface->propFloat() == std::list<float>() );
     }
     SECTION("Test property propString") {
         // Do implement test here
-        testSimpleArrayInterface->setPropstring(std::list<std::string>());
+        testSimpleArrayInterface->setPropString(std::list<std::string>());
         REQUIRE( testSimpleArrayInterface->propString() == std::list<std::string>() );
     }
 }

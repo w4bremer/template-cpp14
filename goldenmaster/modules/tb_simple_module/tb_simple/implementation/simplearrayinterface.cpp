@@ -19,93 +19,75 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "tb_simple/implementation/simplearrayinterface.h"
 #include "tb_simple/generated/core/simplearrayinterface.publisher.h"
+#include "tb_simple/generated/core/simplearrayinterface.data.h"
 
 using namespace Test::TbSimple;
 
-struct SimpleArrayInterface::SimpleArrayInterfaceData
-{
-    SimpleArrayInterfaceData()
-    : _publisher(std::make_unique<SimpleArrayInterfacePublisher>())
-    , m_propBool(std::list<bool>())
-    , m_propInt(std::list<int>())
-    , m_propFloat(std::list<float>())
-    , m_propString(std::list<std::string>())
-    {
-    }
-    std::unique_ptr<ISimpleArrayInterfacePublisher> _publisher;
-    std::list<bool> m_propBool;
-    std::list<int> m_propInt;
-    std::list<float> m_propFloat;
-    std::list<std::string> m_propString;
-
-    ~SimpleArrayInterfaceData() = default;
-};
-/**
-   \brief 
-*/
 SimpleArrayInterface::SimpleArrayInterface()
-    : d_ptr(std::make_unique<SimpleArrayInterface::SimpleArrayInterfaceData>())
+    : m_publisher(std::make_unique<SimpleArrayInterfacePublisher>()) 
 {
 }
 SimpleArrayInterface::~SimpleArrayInterface()
 {
 }
-void SimpleArrayInterface::setPropbool(const std::list<bool>& propBool)
+
+void SimpleArrayInterface::setPropBool(const std::list<bool>& propBool)
 {
-    if (d_ptr->m_propBool != propBool) {
-        d_ptr->m_propBool = propBool;
-        d_ptr->_publisher->publishPropBoolChanged(propBool);
+    if (m_data.m_propBool != propBool) {
+        m_data.m_propBool = propBool;
+        m_publisher->publishPropBoolChanged(propBool);
     }
 }
 
 const std::list<bool>& SimpleArrayInterface::propBool() const
 {
-    return d_ptr->m_propBool;
+    return m_data.m_propBool;
 }
-void SimpleArrayInterface::setPropint(const std::list<int>& propInt)
+
+void SimpleArrayInterface::setPropInt(const std::list<int>& propInt)
 {
-    if (d_ptr->m_propInt != propInt) {
-        d_ptr->m_propInt = propInt;
-        d_ptr->_publisher->publishPropIntChanged(propInt);
+    if (m_data.m_propInt != propInt) {
+        m_data.m_propInt = propInt;
+        m_publisher->publishPropIntChanged(propInt);
     }
 }
 
 const std::list<int>& SimpleArrayInterface::propInt() const
 {
-    return d_ptr->m_propInt;
+    return m_data.m_propInt;
 }
-void SimpleArrayInterface::setPropfloat(const std::list<float>& propFloat)
+
+void SimpleArrayInterface::setPropFloat(const std::list<float>& propFloat)
 {
-    if (d_ptr->m_propFloat != propFloat) {
-        d_ptr->m_propFloat = propFloat;
-        d_ptr->_publisher->publishPropFloatChanged(propFloat);
+    if (m_data.m_propFloat != propFloat) {
+        m_data.m_propFloat = propFloat;
+        m_publisher->publishPropFloatChanged(propFloat);
     }
 }
 
 const std::list<float>& SimpleArrayInterface::propFloat() const
 {
-    return d_ptr->m_propFloat;
+    return m_data.m_propFloat;
 }
-void SimpleArrayInterface::setPropstring(const std::list<std::string>& propString)
+
+void SimpleArrayInterface::setPropString(const std::list<std::string>& propString)
 {
-    if (d_ptr->m_propString != propString) {
-        d_ptr->m_propString = propString;
-        d_ptr->_publisher->publishPropStringChanged(propString);
+    if (m_data.m_propString != propString) {
+        m_data.m_propString = propString;
+        m_publisher->publishPropStringChanged(propString);
     }
 }
 
 const std::list<std::string>& SimpleArrayInterface::propString() const
 {
-    return d_ptr->m_propString;
+    return m_data.m_propString;
 }
-/**
-   \brief 
-*/
+
 std::list<bool> SimpleArrayInterface::funcBool(const std::list<bool>& paramBool)
 {
-    (void) paramBool;
+    (void) paramBool; //suppress the 'Unreferenced Formal Parameter' warning.
     // do business logic here
-    return std::list<bool>();
+    return {};
 }
 
 std::future<std::list<bool>> SimpleArrayInterface::funcBoolAsync(const std::list<bool>& paramBool)
@@ -117,14 +99,12 @@ std::future<std::list<bool>> SimpleArrayInterface::funcBoolAsync(const std::list
         }
     );
 }
-/**
-   \brief 
-*/
+
 std::list<int> SimpleArrayInterface::funcInt(const std::list<int>& paramInt)
 {
-    (void) paramInt;
+    (void) paramInt; //suppress the 'Unreferenced Formal Parameter' warning.
     // do business logic here
-    return std::list<int>();
+    return {};
 }
 
 std::future<std::list<int>> SimpleArrayInterface::funcIntAsync(const std::list<int>& paramInt)
@@ -136,14 +116,12 @@ std::future<std::list<int>> SimpleArrayInterface::funcIntAsync(const std::list<i
         }
     );
 }
-/**
-   \brief 
-*/
+
 std::list<float> SimpleArrayInterface::funcFloat(const std::list<float>& paramFloat)
 {
-    (void) paramFloat;
+    (void) paramFloat; //suppress the 'Unreferenced Formal Parameter' warning.
     // do business logic here
-    return std::list<float>();
+    return {};
 }
 
 std::future<std::list<float>> SimpleArrayInterface::funcFloatAsync(const std::list<float>& paramFloat)
@@ -155,14 +133,12 @@ std::future<std::list<float>> SimpleArrayInterface::funcFloatAsync(const std::li
         }
     );
 }
-/**
-   \brief 
-*/
+
 std::list<std::string> SimpleArrayInterface::funcString(const std::list<std::string>& paramString)
 {
-    (void) paramString;
+    (void) paramString; //suppress the 'Unreferenced Formal Parameter' warning.
     // do business logic here
-    return std::list<std::string>();
+    return {};
 }
 
 std::future<std::list<std::string>> SimpleArrayInterface::funcStringAsync(const std::list<std::string>& paramString)
@@ -175,7 +151,7 @@ std::future<std::list<std::string>> SimpleArrayInterface::funcStringAsync(const 
     );
 }
 
-ISimpleArrayInterfacePublisher* SimpleArrayInterface::_getPublisher() const
+ISimpleArrayInterfacePublisher& SimpleArrayInterface::_getPublisher() const
 {
-    return d_ptr->_publisher.get();
+    return *m_publisher;
 }

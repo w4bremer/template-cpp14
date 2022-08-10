@@ -15,101 +15,55 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
-#include <set>
-#include <map>
 #include "testbed1/generated/core/structarrayinterface.publisher.h"
 
+#include <algorithm>
 
-namespace Test {
-namespace Testbed1 {
-class StructArrayInterfacePublisherPimpl : public IStructArrayInterfacePublisher
-{
-public:
-    void subscribeToStructArrayInterfaceInterface(IStructArrayInterfaceSubscriber& subscriber) override;
-    void unsubscribeFromStructArrayInterfaceInterface(IStructArrayInterfaceSubscriber& subscriber) override;
-
-    long subscribeToPropBoolChanged(StructArrayInterfacePropBoolPropertyCb callback) override;
-    void unsubscribeFromPropBoolChanged(long handleId) override;
-
-    long subscribeToPropIntChanged(StructArrayInterfacePropIntPropertyCb callback) override;
-    void unsubscribeFromPropIntChanged(long handleId) override;
-
-    long subscribeToPropFloatChanged(StructArrayInterfacePropFloatPropertyCb callback) override;
-    void unsubscribeFromPropFloatChanged(long handleId) override;
-
-    long subscribeToPropStringChanged(StructArrayInterfacePropStringPropertyCb callback) override;
-    void unsubscribeFromPropStringChanged(long handleId) override;
-
-    long subscribeToSigBool(StructArrayInterfaceSigBoolSignalCb callback) override;
-    void unsubscribeFromSigBool(long handleId) override;
-
-    long subscribeToSigInt(StructArrayInterfaceSigIntSignalCb callback) override;
-    void unsubscribeFromSigInt(long handleId) override;
-
-    long subscribeToSigFloat(StructArrayInterfaceSigFloatSignalCb callback) override;
-    void unsubscribeFromSigFloat(long handleId) override;
-
-    long subscribeToSigString(StructArrayInterfaceSigStringSignalCb callback) override;
-    void unsubscribeFromSigString(long handleId) override;
-
-    void publishPropBoolChanged(const std::list<StructBool>& propBool) const override;
-    void publishPropIntChanged(const std::list<StructInt>& propInt) const override;
-    void publishPropFloatChanged(const std::list<StructFloat>& propFloat) const override;
-    void publishPropStringChanged(const std::list<StructString>& propString) const override;
-    void publishSigBool(const std::list<StructBool>& paramBool) const override;
-    void publishSigInt(const std::list<StructInt>& paramInt) const override;
-    void publishSigFloat(const std::list<StructFloat>& paramFloat) const override;
-    void publishSigString(const std::list<StructString>& paramString) const override;
-private:
-    std::set<IStructArrayInterfaceSubscriber*> IStructArrayInterfaceInterfaceSubscribers;
-    std::map<long, StructArrayInterfacePropBoolPropertyCb> PropBoolCallbacks;
-    std::map<long, StructArrayInterfacePropIntPropertyCb> PropIntCallbacks;
-    std::map<long, StructArrayInterfacePropFloatPropertyCb> PropFloatCallbacks;
-    std::map<long, StructArrayInterfacePropStringPropertyCb> PropStringCallbacks;
-    std::map<long, StructArrayInterfaceSigBoolSignalCb> SigBoolCallbacks;
-    std::map<long, StructArrayInterfaceSigIntSignalCb> SigIntCallbacks;
-    std::map<long, StructArrayInterfaceSigFloatSignalCb> SigFloatCallbacks;
-    std::map<long, StructArrayInterfaceSigStringSignalCb> SigStringCallbacks;
-};
-
-} // namespace Testbed1
-} // namespace Test
 
 using namespace Test::Testbed1;
 
 /**
- * Implementation StructArrayInterfacePublisherPimpl
+ * Implementation StructArrayInterfacePublisher
  */
-void StructArrayInterfacePublisherPimpl::subscribeToStructArrayInterfaceInterface(IStructArrayInterfaceSubscriber& subscriber)
+void StructArrayInterfacePublisher::subscribeToAllChanges(IStructArrayInterfaceSubscriber& subscriber)
 {
-    IStructArrayInterfaceInterfaceSubscribers.insert(&subscriber);
+    auto found = std::find_if(m_allChangesSubscribers.begin(), m_allChangesSubscribers.end(),
+                        [&subscriber](const auto element){return &(element.get()) == &subscriber;});
+    if (found == m_allChangesSubscribers.end())
+    {
+        m_allChangesSubscribers.push_back(std::reference_wrapper<IStructArrayInterfaceSubscriber>(subscriber));
+    }
 }
 
-void StructArrayInterfacePublisherPimpl::unsubscribeFromStructArrayInterfaceInterface(IStructArrayInterfaceSubscriber& subscriber)
+void StructArrayInterfacePublisher::unsubscribeFromAllChanges(IStructArrayInterfaceSubscriber& subscriber)
 {
-    IStructArrayInterfaceInterfaceSubscribers.erase(&subscriber);
+    auto found = std::find_if(m_allChangesSubscribers.begin(), m_allChangesSubscribers.end(),
+                        [&subscriber](const auto element){return &(element.get()) == &subscriber;});
+    if (found != m_allChangesSubscribers.end())
+    {
+        m_allChangesSubscribers.erase(found);
+    }
 }
 
-long StructArrayInterfacePublisherPimpl::subscribeToPropBoolChanged(StructArrayInterfacePropBoolPropertyCb callback)
+long StructArrayInterfacePublisher::subscribeToPropBoolChanged(StructArrayInterfacePropBoolPropertyCb callback)
 {
-    // this is a short term workaround - we need a better solution for unique handle identifiers
-    long handleId = static_cast<long>(PropBoolCallbacks.size());
-    PropBoolCallbacks[handleId] = callback;
+    auto handleId = m_propBoolChangedCallbackNextId++;
+    m_propBoolCallbacks[handleId] = callback;
     return handleId;
 }
 
-void StructArrayInterfacePublisherPimpl::unsubscribeFromPropBoolChanged(long handleId)
+void StructArrayInterfacePublisher::unsubscribeFromPropBoolChanged(long handleId)
 {
-    PropBoolCallbacks.erase(handleId);
+    m_propBoolCallbacks.erase(handleId);
 }
 
-void StructArrayInterfacePublisherPimpl::publishPropBoolChanged(const std::list<StructBool>& propBool) const
+void StructArrayInterfacePublisher::publishPropBoolChanged(const std::list<StructBool>& propBool) const
 {
-    for(const auto& Subscriber: IStructArrayInterfaceInterfaceSubscribers)
+    for(const auto& subscriber: m_allChangesSubscribers)
     {
-        Subscriber->OnPropBoolChanged(propBool);
+        subscriber.get().onPropBoolChanged(propBool);
     }
-    for(const auto& callbackEntry: PropBoolCallbacks)
+    for(const auto& callbackEntry: m_propBoolCallbacks)
     {
         if(callbackEntry.second)
         {
@@ -118,26 +72,25 @@ void StructArrayInterfacePublisherPimpl::publishPropBoolChanged(const std::list<
     }
 }
 
-long StructArrayInterfacePublisherPimpl::subscribeToPropIntChanged(StructArrayInterfacePropIntPropertyCb callback)
+long StructArrayInterfacePublisher::subscribeToPropIntChanged(StructArrayInterfacePropIntPropertyCb callback)
 {
-    // this is a short term workaround - we need a better solution for unique handle identifiers
-    long handleId = static_cast<long>(PropIntCallbacks.size());
-    PropIntCallbacks[handleId] = callback;
+    auto handleId = m_propIntChangedCallbackNextId++;
+    m_propIntCallbacks[handleId] = callback;
     return handleId;
 }
 
-void StructArrayInterfacePublisherPimpl::unsubscribeFromPropIntChanged(long handleId)
+void StructArrayInterfacePublisher::unsubscribeFromPropIntChanged(long handleId)
 {
-    PropIntCallbacks.erase(handleId);
+    m_propIntCallbacks.erase(handleId);
 }
 
-void StructArrayInterfacePublisherPimpl::publishPropIntChanged(const std::list<StructInt>& propInt) const
+void StructArrayInterfacePublisher::publishPropIntChanged(const std::list<StructInt>& propInt) const
 {
-    for(const auto& Subscriber: IStructArrayInterfaceInterfaceSubscribers)
+    for(const auto& subscriber: m_allChangesSubscribers)
     {
-        Subscriber->OnPropIntChanged(propInt);
+        subscriber.get().onPropIntChanged(propInt);
     }
-    for(const auto& callbackEntry: PropIntCallbacks)
+    for(const auto& callbackEntry: m_propIntCallbacks)
     {
         if(callbackEntry.second)
         {
@@ -146,26 +99,25 @@ void StructArrayInterfacePublisherPimpl::publishPropIntChanged(const std::list<S
     }
 }
 
-long StructArrayInterfacePublisherPimpl::subscribeToPropFloatChanged(StructArrayInterfacePropFloatPropertyCb callback)
+long StructArrayInterfacePublisher::subscribeToPropFloatChanged(StructArrayInterfacePropFloatPropertyCb callback)
 {
-    // this is a short term workaround - we need a better solution for unique handle identifiers
-    long handleId = static_cast<long>(PropFloatCallbacks.size());
-    PropFloatCallbacks[handleId] = callback;
+    auto handleId = m_propFloatChangedCallbackNextId++;
+    m_propFloatCallbacks[handleId] = callback;
     return handleId;
 }
 
-void StructArrayInterfacePublisherPimpl::unsubscribeFromPropFloatChanged(long handleId)
+void StructArrayInterfacePublisher::unsubscribeFromPropFloatChanged(long handleId)
 {
-    PropFloatCallbacks.erase(handleId);
+    m_propFloatCallbacks.erase(handleId);
 }
 
-void StructArrayInterfacePublisherPimpl::publishPropFloatChanged(const std::list<StructFloat>& propFloat) const
+void StructArrayInterfacePublisher::publishPropFloatChanged(const std::list<StructFloat>& propFloat) const
 {
-    for(const auto& Subscriber: IStructArrayInterfaceInterfaceSubscribers)
+    for(const auto& subscriber: m_allChangesSubscribers)
     {
-        Subscriber->OnPropFloatChanged(propFloat);
+        subscriber.get().onPropFloatChanged(propFloat);
     }
-    for(const auto& callbackEntry: PropFloatCallbacks)
+    for(const auto& callbackEntry: m_propFloatCallbacks)
     {
         if(callbackEntry.second)
         {
@@ -174,26 +126,25 @@ void StructArrayInterfacePublisherPimpl::publishPropFloatChanged(const std::list
     }
 }
 
-long StructArrayInterfacePublisherPimpl::subscribeToPropStringChanged(StructArrayInterfacePropStringPropertyCb callback)
+long StructArrayInterfacePublisher::subscribeToPropStringChanged(StructArrayInterfacePropStringPropertyCb callback)
 {
-    // this is a short term workaround - we need a better solution for unique handle identifiers
-    long handleId = static_cast<long>(PropStringCallbacks.size());
-    PropStringCallbacks[handleId] = callback;
+    auto handleId = m_propStringChangedCallbackNextId++;
+    m_propStringCallbacks[handleId] = callback;
     return handleId;
 }
 
-void StructArrayInterfacePublisherPimpl::unsubscribeFromPropStringChanged(long handleId)
+void StructArrayInterfacePublisher::unsubscribeFromPropStringChanged(long handleId)
 {
-    PropStringCallbacks.erase(handleId);
+    m_propStringCallbacks.erase(handleId);
 }
 
-void StructArrayInterfacePublisherPimpl::publishPropStringChanged(const std::list<StructString>& propString) const
+void StructArrayInterfacePublisher::publishPropStringChanged(const std::list<StructString>& propString) const
 {
-    for(const auto& Subscriber: IStructArrayInterfaceInterfaceSubscribers)
+    for(const auto& subscriber: m_allChangesSubscribers)
     {
-        Subscriber->OnPropStringChanged(propString);
+        subscriber.get().onPropStringChanged(propString);
     }
-    for(const auto& callbackEntry: PropStringCallbacks)
+    for(const auto& callbackEntry: m_propStringCallbacks)
     {
         if(callbackEntry.second)
         {
@@ -202,26 +153,26 @@ void StructArrayInterfacePublisherPimpl::publishPropStringChanged(const std::lis
     }
 }
 
-long StructArrayInterfacePublisherPimpl::subscribeToSigBool(StructArrayInterfaceSigBoolSignalCb callback)
+long StructArrayInterfacePublisher::subscribeToSigBool(StructArrayInterfaceSigBoolSignalCb callback)
 {
     // this is a short term workaround - we need a better solution for unique handle identifiers
-    long handleId = static_cast<long>(SigBoolCallbacks.size());
-    SigBoolCallbacks[handleId] = callback;
+    auto handleId = m_sigBoolSignalCallbackNextId++;
+    m_sigBoolCallbacks[handleId] = callback;
     return handleId;
 }
 
-void StructArrayInterfacePublisherPimpl::unsubscribeFromSigBool(long handleId)
+void StructArrayInterfacePublisher::unsubscribeFromSigBool(long handleId)
 {
-    SigBoolCallbacks.erase(handleId);
+    m_sigBoolCallbacks.erase(handleId);
 }
 
-void StructArrayInterfacePublisherPimpl::publishSigBool(const std::list<StructBool>& paramBool) const
+void StructArrayInterfacePublisher::publishSigBool(const std::list<StructBool>& paramBool) const
 {
-    for(const auto& Subscriber: IStructArrayInterfaceInterfaceSubscribers)
+    for(const auto& subscriber: m_allChangesSubscribers)
     {
-        Subscriber->OnSigBool(paramBool);
+        subscriber.get().onSigBool(paramBool);
     }
-    for(const auto& callbackEntry: SigBoolCallbacks)
+    for(const auto& callbackEntry: m_sigBoolCallbacks)
     {
         if(callbackEntry.second)
         {
@@ -230,26 +181,26 @@ void StructArrayInterfacePublisherPimpl::publishSigBool(const std::list<StructBo
     }
 }
 
-long StructArrayInterfacePublisherPimpl::subscribeToSigInt(StructArrayInterfaceSigIntSignalCb callback)
+long StructArrayInterfacePublisher::subscribeToSigInt(StructArrayInterfaceSigIntSignalCb callback)
 {
     // this is a short term workaround - we need a better solution for unique handle identifiers
-    long handleId = static_cast<long>(SigIntCallbacks.size());
-    SigIntCallbacks[handleId] = callback;
+    auto handleId = m_sigIntSignalCallbackNextId++;
+    m_sigIntCallbacks[handleId] = callback;
     return handleId;
 }
 
-void StructArrayInterfacePublisherPimpl::unsubscribeFromSigInt(long handleId)
+void StructArrayInterfacePublisher::unsubscribeFromSigInt(long handleId)
 {
-    SigIntCallbacks.erase(handleId);
+    m_sigIntCallbacks.erase(handleId);
 }
 
-void StructArrayInterfacePublisherPimpl::publishSigInt(const std::list<StructInt>& paramInt) const
+void StructArrayInterfacePublisher::publishSigInt(const std::list<StructInt>& paramInt) const
 {
-    for(const auto& Subscriber: IStructArrayInterfaceInterfaceSubscribers)
+    for(const auto& subscriber: m_allChangesSubscribers)
     {
-        Subscriber->OnSigInt(paramInt);
+        subscriber.get().onSigInt(paramInt);
     }
-    for(const auto& callbackEntry: SigIntCallbacks)
+    for(const auto& callbackEntry: m_sigIntCallbacks)
     {
         if(callbackEntry.second)
         {
@@ -258,26 +209,26 @@ void StructArrayInterfacePublisherPimpl::publishSigInt(const std::list<StructInt
     }
 }
 
-long StructArrayInterfacePublisherPimpl::subscribeToSigFloat(StructArrayInterfaceSigFloatSignalCb callback)
+long StructArrayInterfacePublisher::subscribeToSigFloat(StructArrayInterfaceSigFloatSignalCb callback)
 {
     // this is a short term workaround - we need a better solution for unique handle identifiers
-    long handleId = static_cast<long>(SigFloatCallbacks.size());
-    SigFloatCallbacks[handleId] = callback;
+    auto handleId = m_sigFloatSignalCallbackNextId++;
+    m_sigFloatCallbacks[handleId] = callback;
     return handleId;
 }
 
-void StructArrayInterfacePublisherPimpl::unsubscribeFromSigFloat(long handleId)
+void StructArrayInterfacePublisher::unsubscribeFromSigFloat(long handleId)
 {
-    SigFloatCallbacks.erase(handleId);
+    m_sigFloatCallbacks.erase(handleId);
 }
 
-void StructArrayInterfacePublisherPimpl::publishSigFloat(const std::list<StructFloat>& paramFloat) const
+void StructArrayInterfacePublisher::publishSigFloat(const std::list<StructFloat>& paramFloat) const
 {
-    for(const auto& Subscriber: IStructArrayInterfaceInterfaceSubscribers)
+    for(const auto& subscriber: m_allChangesSubscribers)
     {
-        Subscriber->OnSigFloat(paramFloat);
+        subscriber.get().onSigFloat(paramFloat);
     }
-    for(const auto& callbackEntry: SigFloatCallbacks)
+    for(const auto& callbackEntry: m_sigFloatCallbacks)
     {
         if(callbackEntry.second)
         {
@@ -286,26 +237,26 @@ void StructArrayInterfacePublisherPimpl::publishSigFloat(const std::list<StructF
     }
 }
 
-long StructArrayInterfacePublisherPimpl::subscribeToSigString(StructArrayInterfaceSigStringSignalCb callback)
+long StructArrayInterfacePublisher::subscribeToSigString(StructArrayInterfaceSigStringSignalCb callback)
 {
     // this is a short term workaround - we need a better solution for unique handle identifiers
-    long handleId = static_cast<long>(SigStringCallbacks.size());
-    SigStringCallbacks[handleId] = callback;
+    auto handleId = m_sigStringSignalCallbackNextId++;
+    m_sigStringCallbacks[handleId] = callback;
     return handleId;
 }
 
-void StructArrayInterfacePublisherPimpl::unsubscribeFromSigString(long handleId)
+void StructArrayInterfacePublisher::unsubscribeFromSigString(long handleId)
 {
-    SigStringCallbacks.erase(handleId);
+    m_sigStringCallbacks.erase(handleId);
 }
 
-void StructArrayInterfacePublisherPimpl::publishSigString(const std::list<StructString>& paramString) const
+void StructArrayInterfacePublisher::publishSigString(const std::list<StructString>& paramString) const
 {
-    for(const auto& Subscriber: IStructArrayInterfaceInterfaceSubscribers)
+    for(const auto& subscriber: m_allChangesSubscribers)
     {
-        Subscriber->OnSigString(paramString);
+        subscriber.get().onSigString(paramString);
     }
-    for(const auto& callbackEntry: SigStringCallbacks)
+    for(const auto& callbackEntry: m_sigStringCallbacks)
     {
         if(callbackEntry.second)
         {
@@ -314,141 +265,3 @@ void StructArrayInterfacePublisherPimpl::publishSigString(const std::list<Struct
     }
 }
 
-/**
- * Implementation StructArrayInterfacePublisher
- */
-StructArrayInterfacePublisher::StructArrayInterfacePublisher()
-    : m_impl(std::make_shared<StructArrayInterfacePublisherPimpl>())
-{
-}
-StructArrayInterfacePublisher::~StructArrayInterfacePublisher() = default;
-
-void StructArrayInterfacePublisher::subscribeToStructArrayInterfaceInterface(IStructArrayInterfaceSubscriber& subscriber)
-{
-    m_impl->subscribeToStructArrayInterfaceInterface(subscriber);
-}
-
-void StructArrayInterfacePublisher::unsubscribeFromStructArrayInterfaceInterface(IStructArrayInterfaceSubscriber& subscriber)
-{
-    m_impl->unsubscribeFromStructArrayInterfaceInterface(subscriber);
-}
-
-long StructArrayInterfacePublisher::subscribeToPropBoolChanged(StructArrayInterfacePropBoolPropertyCb callback)
-{
-    return m_impl->subscribeToPropBoolChanged(callback);
-}
-
-void StructArrayInterfacePublisher::unsubscribeFromPropBoolChanged(long handleId)
-{
-    m_impl->unsubscribeFromPropBoolChanged(handleId);
-}
-
-void StructArrayInterfacePublisher::publishPropBoolChanged(const std::list<StructBool>& propBool) const
-{
-    m_impl->publishPropBoolChanged(propBool);
-}
-
-long StructArrayInterfacePublisher::subscribeToPropIntChanged(StructArrayInterfacePropIntPropertyCb callback)
-{
-    return m_impl->subscribeToPropIntChanged(callback);
-}
-
-void StructArrayInterfacePublisher::unsubscribeFromPropIntChanged(long handleId)
-{
-    m_impl->unsubscribeFromPropIntChanged(handleId);
-}
-
-void StructArrayInterfacePublisher::publishPropIntChanged(const std::list<StructInt>& propInt) const
-{
-    m_impl->publishPropIntChanged(propInt);
-}
-
-long StructArrayInterfacePublisher::subscribeToPropFloatChanged(StructArrayInterfacePropFloatPropertyCb callback)
-{
-    return m_impl->subscribeToPropFloatChanged(callback);
-}
-
-void StructArrayInterfacePublisher::unsubscribeFromPropFloatChanged(long handleId)
-{
-    m_impl->unsubscribeFromPropFloatChanged(handleId);
-}
-
-void StructArrayInterfacePublisher::publishPropFloatChanged(const std::list<StructFloat>& propFloat) const
-{
-    m_impl->publishPropFloatChanged(propFloat);
-}
-
-long StructArrayInterfacePublisher::subscribeToPropStringChanged(StructArrayInterfacePropStringPropertyCb callback)
-{
-    return m_impl->subscribeToPropStringChanged(callback);
-}
-
-void StructArrayInterfacePublisher::unsubscribeFromPropStringChanged(long handleId)
-{
-    m_impl->unsubscribeFromPropStringChanged(handleId);
-}
-
-void StructArrayInterfacePublisher::publishPropStringChanged(const std::list<StructString>& propString) const
-{
-    m_impl->publishPropStringChanged(propString);
-}
-
-long StructArrayInterfacePublisher::subscribeToSigBool(StructArrayInterfaceSigBoolSignalCb callback)
-{
-    return m_impl->subscribeToSigBool(callback);
-}
-
-void StructArrayInterfacePublisher::unsubscribeFromSigBool(long handleId)
-{
-    m_impl->unsubscribeFromSigBool(handleId);
-}
-
-void StructArrayInterfacePublisher::publishSigBool(const std::list<StructBool>& paramBool) const
-{
-    m_impl->publishSigBool(paramBool);
-}
-
-long StructArrayInterfacePublisher::subscribeToSigInt(StructArrayInterfaceSigIntSignalCb callback)
-{
-    return m_impl->subscribeToSigInt(callback);
-}
-
-void StructArrayInterfacePublisher::unsubscribeFromSigInt(long handleId)
-{
-    m_impl->unsubscribeFromSigInt(handleId);
-}
-
-void StructArrayInterfacePublisher::publishSigInt(const std::list<StructInt>& paramInt) const
-{
-    m_impl->publishSigInt(paramInt);
-}
-
-long StructArrayInterfacePublisher::subscribeToSigFloat(StructArrayInterfaceSigFloatSignalCb callback)
-{
-    return m_impl->subscribeToSigFloat(callback);
-}
-
-void StructArrayInterfacePublisher::unsubscribeFromSigFloat(long handleId)
-{
-    m_impl->unsubscribeFromSigFloat(handleId);
-}
-
-void StructArrayInterfacePublisher::publishSigFloat(const std::list<StructFloat>& paramFloat) const
-{
-    m_impl->publishSigFloat(paramFloat);
-}
-
-long StructArrayInterfacePublisher::subscribeToSigString(StructArrayInterfaceSigStringSignalCb callback)
-{
-    return m_impl->subscribeToSigString(callback);
-}
-
-void StructArrayInterfacePublisher::unsubscribeFromSigString(long handleId)
-{
-    m_impl->unsubscribeFromSigString(handleId);
-}
-
-void StructArrayInterfacePublisher::publishSigString(const std::list<StructString>& paramString) const
-{
-    m_impl->publishSigString(paramString);
-}

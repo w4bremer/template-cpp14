@@ -21,13 +21,13 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "tb_simple/generated/monitor/simpleinterface.tracer.h"
 
 using namespace Test::TbSimple;
-SimpleInterfaceTracerDecorator::SimpleInterfaceTracerDecorator(ISimpleInterface* impl, ApiGear::PocoImpl::Tracer* tracer)
+SimpleInterfaceTracerDecorator::SimpleInterfaceTracerDecorator(ISimpleInterface* impl, ApiGear::PocoImpl::Tracer& tracer)
     : AbstractSimpleInterfaceDecorator(impl)
     , m_tracer(std::make_unique<SimpleInterfaceTracer>(tracer))
 {
 }
 SimpleInterfaceTracerDecorator::~SimpleInterfaceTracerDecorator() = default;
-SimpleInterfaceTracerDecorator* SimpleInterfaceTracerDecorator::connect(ISimpleInterface* impl, ApiGear::PocoImpl::Tracer* tracer)
+SimpleInterfaceTracerDecorator* SimpleInterfaceTracerDecorator::connect(ISimpleInterface* impl, ApiGear::PocoImpl::Tracer& tracer)
 {
     return new SimpleInterfaceTracerDecorator(impl, tracer);
 }
@@ -83,39 +83,39 @@ std::future<std::string> SimpleInterfaceTracerDecorator::funcStringAsync(const s
     m_tracer->trace_funcString(paramString);
     return AbstractSimpleInterfaceDecorator::funcStringAsync(paramString);
 }
-void SimpleInterfaceTracerDecorator::OnSigBool(bool paramBool)
+void SimpleInterfaceTracerDecorator::onSigBool(bool paramBool)
 {
     (void) paramBool;
     //m_tracer->trace_SigBool(paramBool);
 }
-void SimpleInterfaceTracerDecorator::OnSigInt(int paramInt)
+void SimpleInterfaceTracerDecorator::onSigInt(int paramInt)
 {
     (void) paramInt;
     //m_tracer->trace_SigInt(paramInt);
 }
-void SimpleInterfaceTracerDecorator::OnSigFloat(float paramFloat)
+void SimpleInterfaceTracerDecorator::onSigFloat(float paramFloat)
 {
     (void) paramFloat;
     //m_tracer->trace_SigFloat(paramFloat);
 }
-void SimpleInterfaceTracerDecorator::OnSigString(const std::string& paramString)
+void SimpleInterfaceTracerDecorator::onSigString(const std::string& paramString)
 {
     (void) paramString;
     //m_tracer->trace_SigString(paramString);
 }
-void SimpleInterfaceTracerDecorator::OnPropBoolChanged(bool)
+void SimpleInterfaceTracerDecorator::onPropBoolChanged(bool)
 {
     m_tracer->capture_state(this);
 }
-void SimpleInterfaceTracerDecorator::OnPropIntChanged(int)
+void SimpleInterfaceTracerDecorator::onPropIntChanged(int)
 {
     m_tracer->capture_state(this);
 }
-void SimpleInterfaceTracerDecorator::OnPropFloatChanged(float)
+void SimpleInterfaceTracerDecorator::onPropFloatChanged(float)
 {
     m_tracer->capture_state(this);
 }
-void SimpleInterfaceTracerDecorator::OnPropStringChanged(std::string)
+void SimpleInterfaceTracerDecorator::onPropStringChanged(std::string)
 {
     m_tracer->capture_state(this);
 }

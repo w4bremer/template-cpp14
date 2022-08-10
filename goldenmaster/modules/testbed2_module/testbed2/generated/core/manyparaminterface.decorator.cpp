@@ -18,6 +18,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 
 #include "testbed2/generated/core/manyparaminterface.decorator.h"
+#include "testbed2/generated/core/manyparaminterface.publisher.h"
 
 using namespace Test::Testbed2;
 /**
@@ -26,17 +27,17 @@ using namespace Test::Testbed2;
 AbstractManyParamInterfaceDecorator::AbstractManyParamInterfaceDecorator(IManyParamInterface* impl)
     : m_impl(impl)
 {
-    m_impl->_getPublisher()->subscribeToManyParamInterfaceInterface(*this);
+    m_impl->_getPublisher().subscribeToAllChanges(*this);
 }
 IManyParamInterface* AbstractManyParamInterfaceDecorator::swapUnderlyingImplementation(IManyParamInterface* impl)
 {
     IManyParamInterface* retVal = m_impl;
     if (m_impl != nullptr) {
-        m_impl->_getPublisher()->unsubscribeFromManyParamInterfaceInterface(*this);
+        m_impl->_getPublisher().unsubscribeFromAllChanges(*this);
     }
     m_impl = impl;
     if (m_impl != nullptr) {
-        m_impl->_getPublisher()->subscribeToManyParamInterfaceInterface(*this);
+        m_impl->_getPublisher().subscribeToAllChanges(*this);
     }
     return retVal;
 }
@@ -44,7 +45,7 @@ IManyParamInterface* AbstractManyParamInterfaceDecorator::disconnectFromUnderlyi
 {
     IManyParamInterface* retVal = m_impl;
     if (m_impl != nullptr) {
-        m_impl->_getPublisher()->unsubscribeFromManyParamInterfaceInterface(*this);
+        m_impl->_getPublisher().unsubscribeFromAllChanges(*this);
         m_impl = nullptr;
     }
     return retVal;
@@ -53,7 +54,7 @@ AbstractManyParamInterfaceDecorator::~AbstractManyParamInterfaceDecorator()
 {
     if (m_impl != nullptr)
     {
-        m_impl->_getPublisher()->unsubscribeFromManyParamInterfaceInterface(*this);
+        m_impl->_getPublisher().unsubscribeFromAllChanges(*this);
     }
 }
 void AbstractManyParamInterfaceDecorator::setProp1(int prop1)
@@ -137,7 +138,7 @@ std::future<int> AbstractManyParamInterfaceDecorator::func4Async(int param1, int
     return m_impl->func4Async(param1,param2,param3,param4);
 }
 
-IManyParamInterfacePublisher* AbstractManyParamInterfaceDecorator::_getPublisher() const
+IManyParamInterfacePublisher& AbstractManyParamInterfaceDecorator::_getPublisher() const
 {
     return m_impl->_getPublisher();
 }

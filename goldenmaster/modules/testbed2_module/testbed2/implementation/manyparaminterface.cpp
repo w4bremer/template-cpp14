@@ -19,93 +19,75 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "testbed2/implementation/manyparaminterface.h"
 #include "testbed2/generated/core/manyparaminterface.publisher.h"
+#include "testbed2/generated/core/manyparaminterface.data.h"
 
 using namespace Test::Testbed2;
 
-struct ManyParamInterface::ManyParamInterfaceData
-{
-    ManyParamInterfaceData()
-    : _publisher(std::make_unique<ManyParamInterfacePublisher>())
-    , m_prop1(0)
-    , m_prop2(0)
-    , m_prop3(0)
-    , m_prop4(0)
-    {
-    }
-    std::unique_ptr<IManyParamInterfacePublisher> _publisher;
-    int m_prop1;
-    int m_prop2;
-    int m_prop3;
-    int m_prop4;
-
-    ~ManyParamInterfaceData() = default;
-};
-/**
-   \brief 
-*/
 ManyParamInterface::ManyParamInterface()
-    : d_ptr(std::make_unique<ManyParamInterface::ManyParamInterfaceData>())
+    : m_publisher(std::make_unique<ManyParamInterfacePublisher>()) 
 {
 }
 ManyParamInterface::~ManyParamInterface()
 {
 }
+
 void ManyParamInterface::setProp1(int prop1)
 {
-    if (d_ptr->m_prop1 != prop1) {
-        d_ptr->m_prop1 = prop1;
-        d_ptr->_publisher->publishProp1Changed(prop1);
+    if (m_data.m_prop1 != prop1) {
+        m_data.m_prop1 = prop1;
+        m_publisher->publishProp1Changed(prop1);
     }
 }
 
 int ManyParamInterface::prop1() const
 {
-    return d_ptr->m_prop1;
+    return m_data.m_prop1;
 }
+
 void ManyParamInterface::setProp2(int prop2)
 {
-    if (d_ptr->m_prop2 != prop2) {
-        d_ptr->m_prop2 = prop2;
-        d_ptr->_publisher->publishProp2Changed(prop2);
+    if (m_data.m_prop2 != prop2) {
+        m_data.m_prop2 = prop2;
+        m_publisher->publishProp2Changed(prop2);
     }
 }
 
 int ManyParamInterface::prop2() const
 {
-    return d_ptr->m_prop2;
+    return m_data.m_prop2;
 }
+
 void ManyParamInterface::setProp3(int prop3)
 {
-    if (d_ptr->m_prop3 != prop3) {
-        d_ptr->m_prop3 = prop3;
-        d_ptr->_publisher->publishProp3Changed(prop3);
+    if (m_data.m_prop3 != prop3) {
+        m_data.m_prop3 = prop3;
+        m_publisher->publishProp3Changed(prop3);
     }
 }
 
 int ManyParamInterface::prop3() const
 {
-    return d_ptr->m_prop3;
+    return m_data.m_prop3;
 }
+
 void ManyParamInterface::setProp4(int prop4)
 {
-    if (d_ptr->m_prop4 != prop4) {
-        d_ptr->m_prop4 = prop4;
-        d_ptr->_publisher->publishProp4Changed(prop4);
+    if (m_data.m_prop4 != prop4) {
+        m_data.m_prop4 = prop4;
+        m_publisher->publishProp4Changed(prop4);
     }
 }
 
 int ManyParamInterface::prop4() const
 {
-    return d_ptr->m_prop4;
+    return m_data.m_prop4;
 }
-/**
-   \brief 
-*/
+
 int ManyParamInterface::func1(int param1)
 {
-    (void) param1;
+    (void) param1; //suppress the 'Unreferenced Formal Parameter' warning.
     // do business logic here
-    return 0;
+    return {};
 }
 
 std::future<int> ManyParamInterface::func1Async(int param1)
@@ -117,15 +99,13 @@ std::future<int> ManyParamInterface::func1Async(int param1)
         }
     );
 }
-/**
-   \brief 
-*/
+
 int ManyParamInterface::func2(int param1, int param2)
 {
-    (void) param1;
-    (void) param2;
+    (void) param1; //suppress the 'Unreferenced Formal Parameter' warning.
+    (void) param2; //suppress the 'Unreferenced Formal Parameter' warning.
     // do business logic here
-    return 0;
+    return {};
 }
 
 std::future<int> ManyParamInterface::func2Async(int param1, int param2)
@@ -138,16 +118,14 @@ std::future<int> ManyParamInterface::func2Async(int param1, int param2)
         }
     );
 }
-/**
-   \brief 
-*/
+
 int ManyParamInterface::func3(int param1, int param2, int param3)
 {
-    (void) param1;
-    (void) param2;
-    (void) param3;
+    (void) param1; //suppress the 'Unreferenced Formal Parameter' warning.
+    (void) param2; //suppress the 'Unreferenced Formal Parameter' warning.
+    (void) param3; //suppress the 'Unreferenced Formal Parameter' warning.
     // do business logic here
-    return 0;
+    return {};
 }
 
 std::future<int> ManyParamInterface::func3Async(int param1, int param2, int param3)
@@ -161,17 +139,15 @@ std::future<int> ManyParamInterface::func3Async(int param1, int param2, int para
         }
     );
 }
-/**
-   \brief 
-*/
+
 int ManyParamInterface::func4(int param1, int param2, int param3, int param4)
 {
-    (void) param1;
-    (void) param2;
-    (void) param3;
-    (void) param4;
+    (void) param1; //suppress the 'Unreferenced Formal Parameter' warning.
+    (void) param2; //suppress the 'Unreferenced Formal Parameter' warning.
+    (void) param3; //suppress the 'Unreferenced Formal Parameter' warning.
+    (void) param4; //suppress the 'Unreferenced Formal Parameter' warning.
     // do business logic here
-    return 0;
+    return {};
 }
 
 std::future<int> ManyParamInterface::func4Async(int param1, int param2, int param3, int param4)
@@ -187,7 +163,7 @@ std::future<int> ManyParamInterface::func4Async(int param1, int param2, int para
     );
 }
 
-IManyParamInterfacePublisher* ManyParamInterface::_getPublisher() const
+IManyParamInterfacePublisher& ManyParamInterface::_getPublisher() const
 {
-    return d_ptr->_publisher.get();
+    return *m_publisher;
 }

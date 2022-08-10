@@ -17,43 +17,51 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 #pragma once
-#include <memory>
 #include "testbed2/generated/api/testbed2.h"
 #include "testbed2/generated/api/common.h"
+#include "testbed2/generated/core/nestedstruct3interface.data.h"
+#include <memory>
 
 namespace Test {
 namespace Testbed2 {
 
+/**
+* The NestedStruct3Interface implementation.
+*/
 class TEST_TESTBED2_EXPORT NestedStruct3Interface : public INestedStruct3Interface
 {
 public:
     explicit NestedStruct3Interface();
     ~NestedStruct3Interface();
 public:
-    // property prop1
     void setProp1(const NestedStruct1& prop1) override;
     const NestedStruct1& prop1() const override;
     
-    // property prop2
     void setProp2(const NestedStruct2& prop2) override;
     const NestedStruct2& prop2() const override;
     
-    // property prop3
     void setProp3(const NestedStruct3& prop3) override;
     const NestedStruct3& prop3() const override;
     
-    // operations
     NestedStruct1 func1(const NestedStruct1& param1) override;
     std::future<NestedStruct1> func1Async(const NestedStruct1& param1) override;
+        
     NestedStruct1 func2(const NestedStruct1& param1, const NestedStruct2& param2) override;
     std::future<NestedStruct1> func2Async(const NestedStruct1& param1, const NestedStruct2& param2) override;
+        
     NestedStruct1 func3(const NestedStruct1& param1, const NestedStruct2& param2, const NestedStruct3& param3) override;
     std::future<NestedStruct1> func3Async(const NestedStruct1& param1, const NestedStruct2& param2, const NestedStruct3& param3) override;
-
-    INestedStruct3InterfacePublisher* _getPublisher() const override;
+        
+    /**
+    * Access to a publisher, use it to subscribe for NestedStruct3Interface changes and signal emission.
+    * @return The publisher for NestedStruct3Interface.
+    */
+    INestedStruct3InterfacePublisher& _getPublisher() const override;
 private:
-    struct NestedStruct3InterfaceData;
-    std::unique_ptr<NestedStruct3InterfaceData> d_ptr;
+    /** The publisher for the NestedStruct3Interface. */
+    std::unique_ptr<INestedStruct3InterfacePublisher> m_publisher;
+    /** The helper structure to store all the properties for NestedStruct3Interface. */
+    NestedStruct3InterfaceData m_data;
 };
 } // namespace Testbed2
 } // namespace Test

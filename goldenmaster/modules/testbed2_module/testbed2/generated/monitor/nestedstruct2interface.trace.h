@@ -31,9 +31,9 @@ class NestedStruct2InterfaceTracer;
 class TEST_TESTBED2_EXPORT NestedStruct2InterfaceTracerDecorator : public AbstractNestedStruct2InterfaceDecorator
 {
 protected:
-    explicit NestedStruct2InterfaceTracerDecorator(INestedStruct2Interface* impl, ApiGear::PocoImpl::Tracer* tracer);
+    explicit NestedStruct2InterfaceTracerDecorator(INestedStruct2Interface* impl, ApiGear::PocoImpl::Tracer& tracer);
 public:
-    static NestedStruct2InterfaceTracerDecorator* connect(INestedStruct2Interface* impl, ApiGear::PocoImpl::Tracer* tracer);
+    static NestedStruct2InterfaceTracerDecorator* connect(INestedStruct2Interface* impl, ApiGear::PocoImpl::Tracer& tracer);
     virtual ~NestedStruct2InterfaceTracerDecorator();
 
     // operations
@@ -42,10 +42,10 @@ public:
     NestedStruct1 func2(const NestedStruct1& param1, const NestedStruct2& param2) override;
     std::future<NestedStruct1> func2Async(const NestedStruct1& param1, const NestedStruct2& param2) override;
 public: // INestedStruct2InterfaceSubscriber interface
-    void OnSig1(const NestedStruct1& param1) override;
-    void OnSig2(const NestedStruct1& param1,const NestedStruct2& param2) override;
-    void OnProp1Changed(const NestedStruct1& Value) override;
-    void OnProp2Changed(const NestedStruct2& Value) override;
+    void onSig1(const NestedStruct1& param1) override;
+    void onSig2(const NestedStruct1& param1,const NestedStruct2& param2) override;
+    void onProp1Changed(const NestedStruct1& Value) override;
+    void onProp2Changed(const NestedStruct2& Value) override;
 private:
     std::unique_ptr<NestedStruct2InterfaceTracer> m_tracer;
 };

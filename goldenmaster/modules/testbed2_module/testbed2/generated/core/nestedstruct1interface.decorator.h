@@ -19,17 +19,15 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 #include "testbed2/generated/api/testbed2.h"
 #include "testbed2/generated/api/common.h"
-#include "testbed2/generated/core/nestedstruct1interface.publisher.h"
 
 namespace Test {
 namespace Testbed2 {
 
-class TEST_TESTBED2_EXPORT AbstractNestedStruct1InterfaceDecorator : public INestedStruct1InterfaceDecorator
-{
+class TEST_TESTBED2_EXPORT AbstractNestedStruct1InterfaceDecorator : public INestedStruct1Interface, public INestedStruct1InterfaceSubscriber {
 public:
     explicit AbstractNestedStruct1InterfaceDecorator(INestedStruct1Interface* impl);
-    INestedStruct1Interface* swapUnderlyingImplementation(INestedStruct1Interface* impl) override;
-    INestedStruct1Interface* disconnectFromUnderlyingImplementation() override;
+    INestedStruct1Interface* swapUnderlyingImplementation(INestedStruct1Interface* impl);
+    INestedStruct1Interface* disconnectFromUnderlyingImplementation();
     virtual ~AbstractNestedStruct1InterfaceDecorator();
 public:
     // property prop1
@@ -40,7 +38,7 @@ public:
     NestedStruct1 func1(const NestedStruct1& param1) override;
     std::future<NestedStruct1> func1Async(const NestedStruct1& param1) override;
 
-    INestedStruct1InterfacePublisher* _getPublisher() const override;
+    INestedStruct1InterfacePublisher& _getPublisher() const override;
 private:
     INestedStruct1Interface* m_impl {nullptr};
 };

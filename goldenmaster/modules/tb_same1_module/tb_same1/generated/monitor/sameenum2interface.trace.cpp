@@ -21,13 +21,13 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "tb_same1/generated/monitor/sameenum2interface.tracer.h"
 
 using namespace Test::TbSame1;
-SameEnum2InterfaceTracerDecorator::SameEnum2InterfaceTracerDecorator(ISameEnum2Interface* impl, ApiGear::PocoImpl::Tracer* tracer)
+SameEnum2InterfaceTracerDecorator::SameEnum2InterfaceTracerDecorator(ISameEnum2Interface* impl, ApiGear::PocoImpl::Tracer& tracer)
     : AbstractSameEnum2InterfaceDecorator(impl)
     , m_tracer(std::make_unique<SameEnum2InterfaceTracer>(tracer))
 {
 }
 SameEnum2InterfaceTracerDecorator::~SameEnum2InterfaceTracerDecorator() = default;
-SameEnum2InterfaceTracerDecorator* SameEnum2InterfaceTracerDecorator::connect(ISameEnum2Interface* impl, ApiGear::PocoImpl::Tracer* tracer)
+SameEnum2InterfaceTracerDecorator* SameEnum2InterfaceTracerDecorator::connect(ISameEnum2Interface* impl, ApiGear::PocoImpl::Tracer& tracer)
 {
     return new SameEnum2InterfaceTracerDecorator(impl, tracer);
 }
@@ -57,22 +57,22 @@ std::future<Enum1Enum> SameEnum2InterfaceTracerDecorator::func2Async(const Enum1
     m_tracer->trace_func2(param1,param2);
     return AbstractSameEnum2InterfaceDecorator::func2Async(param1,param2);
 }
-void SameEnum2InterfaceTracerDecorator::OnSig1(const Enum1Enum& param1)
+void SameEnum2InterfaceTracerDecorator::onSig1(const Enum1Enum& param1)
 {
     (void) param1;
     //m_tracer->trace_Sig1(param1);
 }
-void SameEnum2InterfaceTracerDecorator::OnSig2(const Enum1Enum& param1,const Enum2Enum& param2)
+void SameEnum2InterfaceTracerDecorator::onSig2(const Enum1Enum& param1,const Enum2Enum& param2)
 {
     (void) param1;
     (void) param2;
     //m_tracer->trace_Sig2(param1,param2);
 }
-void SameEnum2InterfaceTracerDecorator::OnProp1Changed(const Enum1Enum&)
+void SameEnum2InterfaceTracerDecorator::onProp1Changed(const Enum1Enum&)
 {
     m_tracer->capture_state(this);
 }
-void SameEnum2InterfaceTracerDecorator::OnProp2Changed(const Enum2Enum&)
+void SameEnum2InterfaceTracerDecorator::onProp2Changed(const Enum2Enum&)
 {
     m_tracer->capture_state(this);
 }

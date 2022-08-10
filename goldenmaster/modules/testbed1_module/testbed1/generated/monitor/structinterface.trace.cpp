@@ -21,13 +21,13 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "testbed1/generated/monitor/structinterface.tracer.h"
 
 using namespace Test::Testbed1;
-StructInterfaceTracerDecorator::StructInterfaceTracerDecorator(IStructInterface* impl, ApiGear::PocoImpl::Tracer* tracer)
+StructInterfaceTracerDecorator::StructInterfaceTracerDecorator(IStructInterface* impl, ApiGear::PocoImpl::Tracer& tracer)
     : AbstractStructInterfaceDecorator(impl)
     , m_tracer(std::make_unique<StructInterfaceTracer>(tracer))
 {
 }
 StructInterfaceTracerDecorator::~StructInterfaceTracerDecorator() = default;
-StructInterfaceTracerDecorator* StructInterfaceTracerDecorator::connect(IStructInterface* impl, ApiGear::PocoImpl::Tracer* tracer)
+StructInterfaceTracerDecorator* StructInterfaceTracerDecorator::connect(IStructInterface* impl, ApiGear::PocoImpl::Tracer& tracer)
 {
     return new StructInterfaceTracerDecorator(impl, tracer);
 }
@@ -83,39 +83,39 @@ std::future<StructString> StructInterfaceTracerDecorator::funcStringAsync(const 
     m_tracer->trace_funcString(paramString);
     return AbstractStructInterfaceDecorator::funcStringAsync(paramString);
 }
-void StructInterfaceTracerDecorator::OnSigBool(const StructBool& paramBool)
+void StructInterfaceTracerDecorator::onSigBool(const StructBool& paramBool)
 {
     (void) paramBool;
     //m_tracer->trace_SigBool(paramBool);
 }
-void StructInterfaceTracerDecorator::OnSigInt(const StructInt& paramInt)
+void StructInterfaceTracerDecorator::onSigInt(const StructInt& paramInt)
 {
     (void) paramInt;
     //m_tracer->trace_SigInt(paramInt);
 }
-void StructInterfaceTracerDecorator::OnSigFloat(const StructFloat& paramFloat)
+void StructInterfaceTracerDecorator::onSigFloat(const StructFloat& paramFloat)
 {
     (void) paramFloat;
     //m_tracer->trace_SigFloat(paramFloat);
 }
-void StructInterfaceTracerDecorator::OnSigString(const StructString& paramString)
+void StructInterfaceTracerDecorator::onSigString(const StructString& paramString)
 {
     (void) paramString;
     //m_tracer->trace_SigString(paramString);
 }
-void StructInterfaceTracerDecorator::OnPropBoolChanged(const StructBool&)
+void StructInterfaceTracerDecorator::onPropBoolChanged(const StructBool&)
 {
     m_tracer->capture_state(this);
 }
-void StructInterfaceTracerDecorator::OnPropIntChanged(const StructInt&)
+void StructInterfaceTracerDecorator::onPropIntChanged(const StructInt&)
 {
     m_tracer->capture_state(this);
 }
-void StructInterfaceTracerDecorator::OnPropFloatChanged(const StructFloat&)
+void StructInterfaceTracerDecorator::onPropFloatChanged(const StructFloat&)
 {
     m_tracer->capture_state(this);
 }
-void StructInterfaceTracerDecorator::OnPropStringChanged(const StructString&)
+void StructInterfaceTracerDecorator::onPropStringChanged(const StructString&)
 {
     m_tracer->capture_state(this);
 }

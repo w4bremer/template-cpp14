@@ -41,22 +41,22 @@ TEST_CASE("Testing StructInterface", "[StructInterface]"){
     }
     SECTION("Test property propBool") {
         // Do implement test here
-        testStructInterface->setPropbool(StructBool());
+        testStructInterface->setPropBool(StructBool());
         REQUIRE( testStructInterface->propBool() == StructBool() );
     }
     SECTION("Test property propInt") {
         // Do implement test here
-        testStructInterface->setPropint(StructInt());
+        testStructInterface->setPropInt(StructInt());
         REQUIRE( testStructInterface->propInt() == StructInt() );
     }
     SECTION("Test property propFloat") {
         // Do implement test here
-        testStructInterface->setPropfloat(StructFloat());
+        testStructInterface->setPropFloat(StructFloat());
         REQUIRE( testStructInterface->propFloat() == StructFloat() );
     }
     SECTION("Test property propString") {
         // Do implement test here
-        testStructInterface->setPropstring(StructString());
+        testStructInterface->setPropString(StructString());
         REQUIRE( testStructInterface->propString() == StructString() );
     }
 }

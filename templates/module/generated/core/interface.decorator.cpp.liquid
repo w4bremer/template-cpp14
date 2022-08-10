@@ -7,6 +7,7 @@
 {% assign pub_interface = "I" | append: interface.name | capital | append: "Publisher"%}
 
 #include "{{module.name|identifier}}/generated/core/{{interface.name|lower}}.decorator.h"
+#include "{{module.name|identifier}}/generated/core/{{interface.name|lower}}.publisher.h"
 
 using namespace {{ system.name | capital }}::{{ module.name | capital }};
 
@@ -18,17 +19,17 @@ using namespace {{ system.name | capital }}::{{ module.name | capital }};
 {{class}}::{{class}}({{interface_class}}* impl)
     : m_impl(impl)
 {
-    m_impl->_getPublisher()->subscribeTo{{interface.name | capital}}Interface(*this);
+    m_impl->_getPublisher().subscribeToAllChanges(*this);
 }
 {{interface_class}}* {{class}}::swapUnderlyingImplementation({{interface_class}}* impl)
 {
     {{interface_class}}* retVal = m_impl;
     if (m_impl != nullptr) {
-        m_impl->_getPublisher()->unsubscribeFrom{{interface.name | capital}}Interface(*this);
+        m_impl->_getPublisher().unsubscribeFromAllChanges(*this);
     }
     m_impl = impl;
     if (m_impl != nullptr) {
-        m_impl->_getPublisher()->subscribeTo{{interface.name | capital}}Interface(*this);
+        m_impl->_getPublisher().subscribeToAllChanges(*this);
     }
     return retVal;
 }
@@ -36,7 +37,7 @@ using namespace {{ system.name | capital }}::{{ module.name | capital }};
 {
     {{interface_class}}* retVal = m_impl;
     if (m_impl != nullptr) {
-        m_impl->_getPublisher()->unsubscribeFrom{{interface.name | capital}}Interface(*this);
+        m_impl->_getPublisher().unsubscribeFromAllChanges(*this);
         m_impl = nullptr;
     }
     return retVal;
@@ -45,7 +46,7 @@ using namespace {{ system.name | capital }}::{{ module.name | capital }};
 {
     if (m_impl != nullptr)
     {
-        m_impl->_getPublisher()->unsubscribeFrom{{interface.name | capital}}Interface(*this);
+        m_impl->_getPublisher().unsubscribeFromAllChanges(*this);
     }
 }
 {% for property in interface.properties %}
@@ -54,9 +55,9 @@ using namespace {{ system.name | capital }}::{{ module.name | capital }};
    \brief property {{property.description}}
 */
 {% endif %}
-void {{class}}::set{{property.name|capitalize}}({{ property|cpp14Param }})
+void {{class}}::set{{property.name|capital}}({{ property|cpp14Param }})
 {
-    m_impl->set{{property.name|capitalize}}({{property.name}});
+    m_impl->set{{property.name|capital}}({{property.name}});
 }
 
 {{property|cpp14Return: true}} {{class}}::{{property.name}}() const
@@ -86,7 +87,7 @@ std::future<{{returnType}}> {{class}}::{{operation.name}}Async({{operation|cpp14
 
 {% endfor %}
 
-{{pub_interface}}* {{class}}::_getPublisher() const
+{{pub_interface}}& {{class}}::_getPublisher() const
 {
     return m_impl->_getPublisher();
 }

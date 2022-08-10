@@ -15,146 +15,23 @@ namespace {{ module.name | capital }} {
 
 {% assign sub_class = class | append: "Subscriber" %}
 {% assign pub_class =  class | append: "Publisher" %}
-/**
- * Interface {{sub_class}}
- *
- * The subscriber is the counter part for the {{pub_class}}.
- */
-class {{ system.name | constant }}_{{ module.name | constant }}_EXPORT {{sub_class}}
-{
-public:
-{% for signal in interface.signals %}
-    /**
-    * This function is called when the {{signal.name}} signal is triggered.
-    *
-    * @warning the subscribed function shall not be blocking and must return immediately!
-    *
-    {% for param in signal.params %}
-    * @param {{param.name}} {{signal.description}}
-    {% endfor %}
-    */
-    virtual void On{{signal.name | capital}}(
-        {%- for param in signal.params -%}
-          {{param|cpp14Param}}{% unless forloop.last %},{% endunless -%}
-        {%- endfor -%}
-        ) = 0;
-{% endfor %}
-{% for property in interface.properties %}
-    /**
-    * This function is called when the {{property.name}} value has changed.
-    *
-    * @warning the subscribed function shall not be blocking and must return immediately!
-    {% unless property.description == blank %}
-    *
-    * @param {{property.name}} {{property.description}}
-    {% endunless %}
-    */
-    virtual void On{{property.name|capital}}Changed({{property|cpp14Return: true}} {{property.name}}) = 0;
-{% endfor %}
-};
-{{nl}}
-{% for property in interface.properties %}
-/** callback for changes of {{property.name}} */
-typedef std::function<void({{property|cpp14Param: true}})> {{interface.name | capital}}{{property.name | capital}}PropertyCb;
-{% endfor %}
-{% for signal in interface.signals %}
-/** callback for {{signal.name}} signal triggers */
-typedef std::function<void({%- for param in signal.params -%}
-        {{param|cpp14Param: true}}{% unless forloop.last %},{% endunless -%}
-    {%- endfor -%})> {{interface.name | capital}}{{signal.name | capital}}SignalCb;
-{% endfor %}
-/**
- * Interface {{pub_class}}
- *
- * The publisher contains the signal interface for the {{sub_class}}
- * and direct signal function subscribtion.
- */
-class {{ system.name | constant }}_{{ module.name | constant }}_EXPORT {{pub_class}}
-{
-public:
-    virtual ~{{pub_class}}() = default;
 
-    /**
-    * Use this function to subscribe for any changes of the {{interface.name}} changes.
-    * This subscription will trigger calls for any property changes or signal events.
-    *
-    * @param subscriber reference to the {{sub_class}} implementation
-    */
-    virtual void subscribeTo{{interface.name | capital}}Interface({{sub_class}}& subscriber) = 0;
-    /**
-    * Use this function to unsubscribe from all changes of the {{interface.name}} changes.
-    *
-    * @param subscriber reference to the {{sub_class}} implementation
-    */
-    virtual void unsubscribeFrom{{interface.name | capital}}Interface({{sub_class}}& subscriber) = 0;
-{{nl}}
-{% for property in interface.properties %}
-    /**
-    * Use this function to subscribe for {{property.name}} value changes.
-    *
-    * @warning the subscribed function shall not be blocking and must return immediately!
-    *
-    * @param callback any of type {{interface.name | capital}}{{property.name | capital}}PropertyCb
-    * @return unique identifier for this subscription, needed for removal
-    */
-    virtual long subscribeTo{{property.name|capital}}Changed({{interface.name | capital}}{{property.name | capital}}PropertyCb callback) = 0;
-    /**
-    * Use this function to unsubscribe from {{property.name}} property changes.
-    *
-    * @param handleId identifier returned by the original subscription call
-    */
-    virtual void unsubscribeFrom{{property.name | capital}}Changed(long handleId) = 0;
-{{nl}}
-{% endfor %}
-{% for signal in interface.signals %}
-    /**
-    * Use this function to subscribe for {{signal.name}} signal changes.
-    *
-    * @param callback any of type {{interface.name | capital}}{{signal.name | capital}}SignalCb
-    * @return unique identifier for this subscription, needed for removal
-    */
-    virtual long subscribeTo{{signal.name | capital}}({{interface.name | capital}}{{signal.name | capital}}SignalCb callback) = 0;
-    /**
-    * Use this function to unsubscribe from {{signal.name}} signal changes.
-    *
-    * @param handleId identifier returned by the original subscription call
-    */
-    virtual void unsubscribeFrom{{signal.name | capital}}(long handleId) = 0;
-{{nl}}
-{% endfor %}
+class {{sub_class}};
+class {{pub_class}};
 
-{% for property in interface.properties %}
-    /**
-    * This function is called by the implementation for {{property.name}} value changes.
-    {% unless property.description == blank %}
-    *
-    * @param {{property.name}} {{property.description}}
-    {% endunless %}
-    */
-    virtual void publish{{property.name|capital}}Changed({{property|cpp14Param: true}}) const = 0;
-{% endfor %}
-{% for signal in interface.signals %}
-    /**
-    * This function is called by the implementation when the {{signal.name}} signal is triggered.
-    *
-    {% for param in signal.params %}
-    * @param {{param.name}} {{signal.description}}
-    {% endfor %}
-    */
-    virtual void publish{{signal.name|capital}}(
-        {%- for param in signal.params -%}
-            {{param|cpp14Param: true}}{% unless forloop.last %},{% endunless -%}
-        {%- endfor -%}
-    ) const = 0;
-{% endfor %}
-};
-{{nl}}
 /**
- * Interface {{class}}
 {% unless interface.description == blank %}
- *
  * {{interface.description}}
 {% endunless %}
+*
+* {{class}} provides an interface for
+ *  - methods defined for your {{interface.name}} 
+ *  - proeperty setters and getters for defined properties
+ * The {{class}} also providess an interface to access a publisher {{pub_class}}, a class used by {{sub_class}} clients.
+ * The implementation should notify the publisher {{pub_class}} about emited signals or state changed. 
+ * The publisher responsibility is to keep its clients informed about requested changes.
+ * See also {{sub_class}}, {{pub_class}}
+ * and the exmaple implementation {{interface.name}}  or the
  */
 class {{ system.name | constant }}_{{ module.name | constant }}_EXPORT {{class}}
 {
@@ -162,12 +39,10 @@ public:
     virtual ~{{class}}() = default;
 {{nl}}
 {% unless interface.operations == empty %}
-    // methods
 {% for operation in interface.operations %}
 {% unless operation.description == blank %}
     /**
     * {{operation.description}}
-    *
 {%- for param in operation.params %}
 {% unless param.description == blank %}
     * @param {{param}} {{param.description}}
@@ -175,13 +50,12 @@ public:
 {% endfor %}
     */
 {% endunless %}
+
     virtual {{operation|cpp14Return}} {{operation.name}}({{operation|cpp14Params}}) = 0;
     /**
-    * Asynchronous function call for {{operation.name}}({{operation|cpp14Params}})
-    *
+    * Asynchronous version of {{operation.name}}({{operation|cpp14Params}})
 {% unless operation.description == blank %}
     * {{operation.description}}
-    *
 {% endunless %}
 {%- for param in operation.params %}
 {% unless param.description == blank %}
@@ -196,20 +70,17 @@ public:
 {% endunless %}
 
 {% unless interface.properties == empty %}
-    // property methods
 {% for property in interface.properties %}
     /**
-    * Sets the value of property {{property.name}}
+    * Sets the value of the {{property.name}} property.
     {% unless property.description == blank %}
-    *
     * @param {{property.name}} {{property.description}}
     {% endunless %}
     */
-    virtual void set{{property.name|capitalize}}({{ property|cpp14Param }}) = 0;
+    virtual void set{{property.name|capital}}({{ property|cpp14Param }}) = 0;
     /**
-    * Gets the value of property {{property.name}}
+    * Gets the value of the {{property.name}} property.
     {% unless property.description == blank %}
-    *
     * @return {{property.description}}
     {% endunless %}
     */
@@ -217,32 +88,170 @@ public:
 {{nl}}
 {% endfor %}
 {% endunless %}
+
     /**
-    * @return a pointer to the used {{pub_class}} for publish/subscribe events
+    * Access to a publisher, use it to subscribe for {{interface.name}} changes and signal emission.
+    * This function name doesn't follow the convention, because it is added to user defined interface,
+    * to avoid potentially name clashes, it has the trailing underscore in the name.
+    * @return The publisher for {{interface.name}}.
     */
-    virtual {{pub_class}}* _getPublisher() const = 0;
+    virtual {{pub_class}}& _getPublisher() const = 0;
 };
 {{nl}}
+
 /**
- * Interface {{class}}Decorator
- *
- * Decorator interface helper for inheritance
+ * The {{sub_class}} contains functions to allow informing about singals or property changes of the {{class}} implementation.
+ * The implementation for {{class}} should provide mechanism for subscibtion of the {{sub_class}} clients.
+ * See {{pub_class}}, which provides facititation for this purpose.
+ * The implementation for {{class}} should call the {{sub_class}} interface functions on either singal emit or property change.
+ * You can use {{sub_class}} class to implement clients of the {{class}} or the network adapter - see Olink Server and Client example.
  */
-class {{ system.name | constant }}_{{ module.name | constant }}_EXPORT {{class}}Decorator: public virtual {{class}}, public virtual {{sub_class}} {
+class {{ system.name | constant }}_{{ module.name | constant }}_EXPORT {{sub_class}}
+{
 public:
+    virtual ~{{sub_class}}() = default;
+{% for signal in interface.signals %}
     /**
-    * Swap the used implementation
+    * Called by the {{pub_class}} when the {{interface.name}} emits {{signal.name}}, if subscribed for the {{signal.name}}.
+    {% unless signal.description == blank %}
+    * {{signal.description}}
+    {% endunless %}
+    {% for param in signal.params %}
+    * @param {{param.name}} {{param.description}}
+    {% endfor %}
     *
-    * @param impl pointer to new implementation to be used
-    * @return pointer to the original implementation
+    * @warning the subscribed function shall not be blocking and must return immediately!
     */
-    virtual {{class}}* swapUnderlyingImplementation({{class}}* impl) = 0;
+    virtual void on{{signal.name | capital}}(
+        {%- for param in signal.params -%}
+          {{param|cpp14Param}}{% unless forloop.last %},{% endunless -%}
+        {%- endfor -%}
+        ) = 0;
+{% endfor %}
+{% for property in interface.properties %}
     /**
-    * Disconnect the decorator from the originally used implementation
+    * Called by the {{pub_class}} when {{property.name}} value has changed if subscribed for the {{property.name}} change.
+    {% unless property.description == blank %}
+    * @param {{property.name}} {{property.description}}
+    {% endunless %}
     *
-    * @return pointer to the original implementation
+    * @warning the subscribed function shall not be blocking and must return immediately!
     */
-    virtual {{class}}* disconnectFromUnderlyingImplementation() = 0;
+    virtual void on{{property.name|capital}}Changed({{property|cpp14Return: true}} {{property.name}}) = 0;
+{% endfor %}
 };
+{{nl}}
+{% for property in interface.properties %}
+/** Callback for changes of {{property.name}} */
+using {{interface.name | capital}}{{property.name | capital}}PropertyCb = std::function<void({{property|cpp14Param: true}})>;
+{% endfor %}
+{% for signal in interface.signals %}
+/** Callback for {{signal.name}} signal triggers */
+using {{interface.name | capital}}{{signal.name | capital}}SignalCb = std::function<void({%- for param in signal.params -%}
+        {{param|cpp14Param: true}}{% unless forloop.last %},{% endunless -%}
+    {%- endfor -%})> ;
+{% endfor %}
+
+
+/**
+ * The {{pub_class}} provides an api for clients to subscribe to or unsubscribe from a signal emission 
+ * or a property change.
+ * Implement this interface to keep track of clients of your {{class}} implementation.
+ * The publisher provides two independent methods of subscription
+ *  - subscribing with a ITunerSubscriber objects - for all of the changes
+ *  - subscribing any object for signle type of change property or a signal
+ * The publish functions needs to be called by implementation of the ITuner on each state changed or signal emited
+ * to notify all the subscribers about this change.
+ */
+class {{ system.name | constant }}_{{ module.name | constant }}_EXPORT {{pub_class}}
+{
+public:
+    virtual ~{{pub_class}}() = default;
+
+    /**
+    * Use this function to subscribe for any change of the {{interface.name}}.
+    * Subscriber will be informed of any emited signal and any property changes.
+    * This is parallel notification system to single subscription. If you will subscribe also for a single change
+    * your subscriber will be informed twice about that change, one for each subscription mechanism.
+    * @param {{sub_class}} which is subscribed in this function to any change of the {{interface.name}}.
+    */
+    virtual void subscribeToAllChanges({{sub_class}}& subscriber) = 0;
+    /**
+    * Use this function to remove subscription to all of the changes of the {{interface.name}}.
+    * Not all subscriptions will be removed, the ones made separately for single singal or property change stay intact.
+    * Make sure to remove them.
+    * @param {{sub_class}} which subscription for any change of the {{interface.name}} is removed.
+    */
+    virtual void unsubscribeFromAllChanges({{sub_class}}& subscriber) = 0;
+{{nl}}
+{% for property in interface.properties %}
+    /**
+    * Use this function to subscribe for {{property.name}} value changes.
+    * If your subscriber uses subsrciption with {{sub_class}} interface, you will get two notifications, one for each subscription mechanism.
+    * @param {{interface.name | capital}}{{property.name | capital}}PropertyCb callback that will be executed on each change of the property.
+    * Make sure to remove subscription before the callback becomes invalid.
+    * @return subscription token for the subscription removal.
+    *
+    * @warning the subscribed function shall not be blocking and must return immediately!
+    */
+    virtual long subscribeTo{{property.name|capital}}Changed({{interface.name | capital}}{{property.name | capital}}PropertyCb callback) = 0;
+    /**
+    * Use this function to unsubscribe from {{property.name}} property changes.
+    * If your subscriber uses subsrciption with {{sub_class}} interface, you will be still informed about this change,
+    * as those are two independent subscription mechanisms.
+    * @param subscription token received on subscription.
+    */
+    virtual void unsubscribeFrom{{property.name | capital}}Changed(long handleId) = 0;
+{{nl}}
+{% endfor %}
+{% for signal in interface.signals %}
+    /**
+    * Use this function to subscribe for {{signal.name}} signal changes.
+    * @param {{interface.name | capital}}{{signal.name | capital}}SignalCb callback that will be executed on each signal emission.
+    * Make sure to remove subscription before the callback becomes invalid.
+    * @return subscription token for the subscription removal.
+    *
+    * @warning the subscribed function shall not be blocking and must return immediately!
+    */
+    virtual long subscribeTo{{signal.name | capital}}({{interface.name | capital}}{{signal.name | capital}}SignalCb callback) = 0;
+    /**
+    * Use this function to unsubscribe from {{signal.name}} signal changes.
+    * @param subscription token received on subscription.
+    */
+    virtual void unsubscribeFrom{{signal.name | capital}}(long handleId) = 0;
+{{nl}}
+{% endfor %}
+
+{% for property in interface.properties %}
+    /**
+    * Publishes the property changed to all subscribed clients.
+    * Needs to be invoked by the {{interface.name}} implementation when property {{property.name}} changes.
+    * @param The new value of {{property.name}}.
+    {% unless property.description == blank %}
+    * {{property.description}}
+    {% endunless %}
+    */
+    virtual void publish{{property.name|capital}}Changed({{property|cpp14Param: true}}) const = 0;
+{% endfor %}
+{% for signal in interface.signals %}
+    /**
+    * Publishes the emited singal to all subscribed clients.
+    * Needs to be invoked by the {{interface.name}} implementation when {{signal.name}} is emited.
+    {% unless property.description == blank %}
+    * Signal {{signal.description}}
+    {% endunless %}
+    {% for param in signal.params %}
+    * @param {{param.name}} {{param.description}}
+    {% endfor %}
+    */
+    virtual void publish{{signal.name|capital}}(
+        {%- for param in signal.params -%}
+            {{param|cpp14Param: true}}{% unless forloop.last %},{% endunless -%}
+        {%- endfor -%}
+    ) const = 0;
+{% endfor %}
+};
+{{nl}}
+
 } // namespace {{ module.name | capital }}
 } // namespace {{ system.name | capital }}

@@ -23,93 +23,197 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace Test {
 namespace Testbed1 {
+
+class IStructInterfaceSubscriber;
+class IStructInterfacePublisher;
+
 /**
- * Interface IStructInterfaceSubscriber
- *
- * The subscriber is the counter part for the IStructInterfacePublisher.
+*
+* IStructInterface provides an interface for
+ *  - methods defined for your StructInterface 
+ *  - proeperty setters and getters for defined properties
+ * The IStructInterface also providess an interface to access a publisher IStructInterfacePublisher, a class used by IStructInterfaceSubscriber clients.
+ * The implementation should notify the publisher IStructInterfacePublisher about emited signals or state changed. 
+ * The publisher responsibility is to keep its clients informed about requested changes.
+ * See also IStructInterfaceSubscriber, IStructInterfacePublisher
+ * and the exmaple implementation StructInterface  or the
+ */
+class TEST_TESTBED1_EXPORT IStructInterface
+{
+public:
+    virtual ~IStructInterface() = default;
+
+
+    virtual StructBool funcBool(const StructBool& paramBool) = 0;
+    /**
+    * Asynchronous version of funcBool(const StructBool& paramBool)
+    * @return Promise of type StructBool which is set once the function has completed
+    */
+    virtual std::future<StructBool> funcBoolAsync(const StructBool& paramBool) = 0;
+
+
+    virtual StructBool funcInt(const StructInt& paramInt) = 0;
+    /**
+    * Asynchronous version of funcInt(const StructInt& paramInt)
+    * @return Promise of type StructBool which is set once the function has completed
+    */
+    virtual std::future<StructBool> funcIntAsync(const StructInt& paramInt) = 0;
+
+
+    virtual StructFloat funcFloat(const StructFloat& paramFloat) = 0;
+    /**
+    * Asynchronous version of funcFloat(const StructFloat& paramFloat)
+    * @return Promise of type StructFloat which is set once the function has completed
+    */
+    virtual std::future<StructFloat> funcFloatAsync(const StructFloat& paramFloat) = 0;
+
+
+    virtual StructString funcString(const StructString& paramString) = 0;
+    /**
+    * Asynchronous version of funcString(const StructString& paramString)
+    * @return Promise of type StructString which is set once the function has completed
+    */
+    virtual std::future<StructString> funcStringAsync(const StructString& paramString) = 0;
+
+    /**
+    * Sets the value of the propBool property.
+    */
+    virtual void setPropBool(const StructBool& propBool) = 0;
+    /**
+    * Gets the value of the propBool property.
+    */
+    virtual const StructBool& propBool() const = 0;
+
+    /**
+    * Sets the value of the propInt property.
+    */
+    virtual void setPropInt(const StructInt& propInt) = 0;
+    /**
+    * Gets the value of the propInt property.
+    */
+    virtual const StructInt& propInt() const = 0;
+
+    /**
+    * Sets the value of the propFloat property.
+    */
+    virtual void setPropFloat(const StructFloat& propFloat) = 0;
+    /**
+    * Gets the value of the propFloat property.
+    */
+    virtual const StructFloat& propFloat() const = 0;
+
+    /**
+    * Sets the value of the propString property.
+    */
+    virtual void setPropString(const StructString& propString) = 0;
+    /**
+    * Gets the value of the propString property.
+    */
+    virtual const StructString& propString() const = 0;
+
+
+    /**
+    * Access to a publisher, use it to subscribe for StructInterface changes and signal emission.
+    * This function name doesn't follow the convention, because it is added to user defined interface,
+    * to avoid potentially name clashes, it has the trailing underscore in the name.
+    * @return The publisher for StructInterface.
+    */
+    virtual IStructInterfacePublisher& _getPublisher() const = 0;
+};
+
+
+/**
+ * The IStructInterfaceSubscriber contains functions to allow informing about singals or property changes of the IStructInterface implementation.
+ * The implementation for IStructInterface should provide mechanism for subscibtion of the IStructInterfaceSubscriber clients.
+ * See IStructInterfacePublisher, which provides facititation for this purpose.
+ * The implementation for IStructInterface should call the IStructInterfaceSubscriber interface functions on either singal emit or property change.
+ * You can use IStructInterfaceSubscriber class to implement clients of the IStructInterface or the network adapter - see Olink Server and Client example.
  */
 class TEST_TESTBED1_EXPORT IStructInterfaceSubscriber
 {
 public:
+    virtual ~IStructInterfaceSubscriber() = default;
     /**
-    * This function is called when the sigBool signal is triggered.
-    *
-    * @warning the subscribed function shall not be blocking and must return immediately!
-    *
+    * Called by the IStructInterfacePublisher when the StructInterface emits sigBool, if subscribed for the sigBool.
     * @param paramBool 
-    */
-    virtual void OnSigBool(const StructBool& paramBool) = 0;
-    /**
-    * This function is called when the sigInt signal is triggered.
     *
     * @warning the subscribed function shall not be blocking and must return immediately!
-    *
+    */
+    virtual void onSigBool(const StructBool& paramBool) = 0;
+    /**
+    * Called by the IStructInterfacePublisher when the StructInterface emits sigInt, if subscribed for the sigInt.
     * @param paramInt 
-    */
-    virtual void OnSigInt(const StructInt& paramInt) = 0;
-    /**
-    * This function is called when the sigFloat signal is triggered.
     *
     * @warning the subscribed function shall not be blocking and must return immediately!
-    *
+    */
+    virtual void onSigInt(const StructInt& paramInt) = 0;
+    /**
+    * Called by the IStructInterfacePublisher when the StructInterface emits sigFloat, if subscribed for the sigFloat.
     * @param paramFloat 
-    */
-    virtual void OnSigFloat(const StructFloat& paramFloat) = 0;
-    /**
-    * This function is called when the sigString signal is triggered.
     *
     * @warning the subscribed function shall not be blocking and must return immediately!
-    *
+    */
+    virtual void onSigFloat(const StructFloat& paramFloat) = 0;
+    /**
+    * Called by the IStructInterfacePublisher when the StructInterface emits sigString, if subscribed for the sigString.
     * @param paramString 
-    */
-    virtual void OnSigString(const StructString& paramString) = 0;
-    /**
-    * This function is called when the propBool value has changed.
     *
     * @warning the subscribed function shall not be blocking and must return immediately!
     */
-    virtual void OnPropBoolChanged(const StructBool& propBool) = 0;
+    virtual void onSigString(const StructString& paramString) = 0;
     /**
-    * This function is called when the propInt value has changed.
+    * Called by the IStructInterfacePublisher when propBool value has changed if subscribed for the propBool change.
     *
     * @warning the subscribed function shall not be blocking and must return immediately!
     */
-    virtual void OnPropIntChanged(const StructInt& propInt) = 0;
+    virtual void onPropBoolChanged(const StructBool& propBool) = 0;
     /**
-    * This function is called when the propFloat value has changed.
+    * Called by the IStructInterfacePublisher when propInt value has changed if subscribed for the propInt change.
     *
     * @warning the subscribed function shall not be blocking and must return immediately!
     */
-    virtual void OnPropFloatChanged(const StructFloat& propFloat) = 0;
+    virtual void onPropIntChanged(const StructInt& propInt) = 0;
     /**
-    * This function is called when the propString value has changed.
+    * Called by the IStructInterfacePublisher when propFloat value has changed if subscribed for the propFloat change.
     *
     * @warning the subscribed function shall not be blocking and must return immediately!
     */
-    virtual void OnPropStringChanged(const StructString& propString) = 0;
+    virtual void onPropFloatChanged(const StructFloat& propFloat) = 0;
+    /**
+    * Called by the IStructInterfacePublisher when propString value has changed if subscribed for the propString change.
+    *
+    * @warning the subscribed function shall not be blocking and must return immediately!
+    */
+    virtual void onPropStringChanged(const StructString& propString) = 0;
 };
 
-/** callback for changes of propBool */
-typedef std::function<void(const StructBool& propBool)> StructInterfacePropBoolPropertyCb;
-/** callback for changes of propInt */
-typedef std::function<void(const StructInt& propInt)> StructInterfacePropIntPropertyCb;
-/** callback for changes of propFloat */
-typedef std::function<void(const StructFloat& propFloat)> StructInterfacePropFloatPropertyCb;
-/** callback for changes of propString */
-typedef std::function<void(const StructString& propString)> StructInterfacePropStringPropertyCb;
-/** callback for sigBool signal triggers */
-typedef std::function<void(const StructBool& paramBool)> StructInterfaceSigBoolSignalCb;
-/** callback for sigInt signal triggers */
-typedef std::function<void(const StructInt& paramInt)> StructInterfaceSigIntSignalCb;
-/** callback for sigFloat signal triggers */
-typedef std::function<void(const StructFloat& paramFloat)> StructInterfaceSigFloatSignalCb;
-/** callback for sigString signal triggers */
-typedef std::function<void(const StructString& paramString)> StructInterfaceSigStringSignalCb;
+/** Callback for changes of propBool */
+using StructInterfacePropBoolPropertyCb = std::function<void(const StructBool& propBool)>;
+/** Callback for changes of propInt */
+using StructInterfacePropIntPropertyCb = std::function<void(const StructInt& propInt)>;
+/** Callback for changes of propFloat */
+using StructInterfacePropFloatPropertyCb = std::function<void(const StructFloat& propFloat)>;
+/** Callback for changes of propString */
+using StructInterfacePropStringPropertyCb = std::function<void(const StructString& propString)>;
+/** Callback for sigBool signal triggers */
+using StructInterfaceSigBoolSignalCb = std::function<void(const StructBool& paramBool)> ;
+/** Callback for sigInt signal triggers */
+using StructInterfaceSigIntSignalCb = std::function<void(const StructInt& paramInt)> ;
+/** Callback for sigFloat signal triggers */
+using StructInterfaceSigFloatSignalCb = std::function<void(const StructFloat& paramFloat)> ;
+/** Callback for sigString signal triggers */
+using StructInterfaceSigStringSignalCb = std::function<void(const StructString& paramString)> ;
+
+
 /**
- * Interface IStructInterfacePublisher
- *
- * The publisher contains the signal interface for the IStructInterfaceSubscriber
- * and direct signal function subscribtion.
+ * The IStructInterfacePublisher provides an api for clients to subscribe to or unsubscribe from a signal emission 
+ * or a property change.
+ * Implement this interface to keep track of clients of your IStructInterface implementation.
+ * The publisher provides two independent methods of subscription
+ *  - subscribing with a ITunerSubscriber objects - for all of the changes
+ *  - subscribing any object for signle type of change property or a signal
+ * The publish functions needs to be called by implementation of the ITuner on each state changed or signal emited
+ * to notify all the subscribers about this change.
  */
 class TEST_TESTBED1_EXPORT IStructInterfacePublisher
 {
@@ -117,285 +221,203 @@ public:
     virtual ~IStructInterfacePublisher() = default;
 
     /**
-    * Use this function to subscribe for any changes of the StructInterface changes.
-    * This subscription will trigger calls for any property changes or signal events.
-    *
-    * @param subscriber reference to the IStructInterfaceSubscriber implementation
+    * Use this function to subscribe for any change of the StructInterface.
+    * Subscriber will be informed of any emited signal and any property changes.
+    * This is parallel notification system to single subscription. If you will subscribe also for a single change
+    * your subscriber will be informed twice about that change, one for each subscription mechanism.
+    * @param IStructInterfaceSubscriber which is subscribed in this function to any change of the StructInterface.
     */
-    virtual void subscribeToStructInterfaceInterface(IStructInterfaceSubscriber& subscriber) = 0;
+    virtual void subscribeToAllChanges(IStructInterfaceSubscriber& subscriber) = 0;
     /**
-    * Use this function to unsubscribe from all changes of the StructInterface changes.
-    *
-    * @param subscriber reference to the IStructInterfaceSubscriber implementation
+    * Use this function to remove subscription to all of the changes of the StructInterface.
+    * Not all subscriptions will be removed, the ones made separately for single singal or property change stay intact.
+    * Make sure to remove them.
+    * @param IStructInterfaceSubscriber which subscription for any change of the StructInterface is removed.
     */
-    virtual void unsubscribeFromStructInterfaceInterface(IStructInterfaceSubscriber& subscriber) = 0;
+    virtual void unsubscribeFromAllChanges(IStructInterfaceSubscriber& subscriber) = 0;
 
     /**
     * Use this function to subscribe for propBool value changes.
+    * If your subscriber uses subsrciption with IStructInterfaceSubscriber interface, you will get two notifications, one for each subscription mechanism.
+    * @param StructInterfacePropBoolPropertyCb callback that will be executed on each change of the property.
+    * Make sure to remove subscription before the callback becomes invalid.
+    * @return subscription token for the subscription removal.
     *
     * @warning the subscribed function shall not be blocking and must return immediately!
-    *
-    * @param callback any of type StructInterfacePropBoolPropertyCb
-    * @return unique identifier for this subscription, needed for removal
     */
     virtual long subscribeToPropBoolChanged(StructInterfacePropBoolPropertyCb callback) = 0;
     /**
     * Use this function to unsubscribe from propBool property changes.
-    *
-    * @param handleId identifier returned by the original subscription call
+    * If your subscriber uses subsrciption with IStructInterfaceSubscriber interface, you will be still informed about this change,
+    * as those are two independent subscription mechanisms.
+    * @param subscription token received on subscription.
     */
     virtual void unsubscribeFromPropBoolChanged(long handleId) = 0;
 
     /**
     * Use this function to subscribe for propInt value changes.
+    * If your subscriber uses subsrciption with IStructInterfaceSubscriber interface, you will get two notifications, one for each subscription mechanism.
+    * @param StructInterfacePropIntPropertyCb callback that will be executed on each change of the property.
+    * Make sure to remove subscription before the callback becomes invalid.
+    * @return subscription token for the subscription removal.
     *
     * @warning the subscribed function shall not be blocking and must return immediately!
-    *
-    * @param callback any of type StructInterfacePropIntPropertyCb
-    * @return unique identifier for this subscription, needed for removal
     */
     virtual long subscribeToPropIntChanged(StructInterfacePropIntPropertyCb callback) = 0;
     /**
     * Use this function to unsubscribe from propInt property changes.
-    *
-    * @param handleId identifier returned by the original subscription call
+    * If your subscriber uses subsrciption with IStructInterfaceSubscriber interface, you will be still informed about this change,
+    * as those are two independent subscription mechanisms.
+    * @param subscription token received on subscription.
     */
     virtual void unsubscribeFromPropIntChanged(long handleId) = 0;
 
     /**
     * Use this function to subscribe for propFloat value changes.
+    * If your subscriber uses subsrciption with IStructInterfaceSubscriber interface, you will get two notifications, one for each subscription mechanism.
+    * @param StructInterfacePropFloatPropertyCb callback that will be executed on each change of the property.
+    * Make sure to remove subscription before the callback becomes invalid.
+    * @return subscription token for the subscription removal.
     *
     * @warning the subscribed function shall not be blocking and must return immediately!
-    *
-    * @param callback any of type StructInterfacePropFloatPropertyCb
-    * @return unique identifier for this subscription, needed for removal
     */
     virtual long subscribeToPropFloatChanged(StructInterfacePropFloatPropertyCb callback) = 0;
     /**
     * Use this function to unsubscribe from propFloat property changes.
-    *
-    * @param handleId identifier returned by the original subscription call
+    * If your subscriber uses subsrciption with IStructInterfaceSubscriber interface, you will be still informed about this change,
+    * as those are two independent subscription mechanisms.
+    * @param subscription token received on subscription.
     */
     virtual void unsubscribeFromPropFloatChanged(long handleId) = 0;
 
     /**
     * Use this function to subscribe for propString value changes.
+    * If your subscriber uses subsrciption with IStructInterfaceSubscriber interface, you will get two notifications, one for each subscription mechanism.
+    * @param StructInterfacePropStringPropertyCb callback that will be executed on each change of the property.
+    * Make sure to remove subscription before the callback becomes invalid.
+    * @return subscription token for the subscription removal.
     *
     * @warning the subscribed function shall not be blocking and must return immediately!
-    *
-    * @param callback any of type StructInterfacePropStringPropertyCb
-    * @return unique identifier for this subscription, needed for removal
     */
     virtual long subscribeToPropStringChanged(StructInterfacePropStringPropertyCb callback) = 0;
     /**
     * Use this function to unsubscribe from propString property changes.
-    *
-    * @param handleId identifier returned by the original subscription call
+    * If your subscriber uses subsrciption with IStructInterfaceSubscriber interface, you will be still informed about this change,
+    * as those are two independent subscription mechanisms.
+    * @param subscription token received on subscription.
     */
     virtual void unsubscribeFromPropStringChanged(long handleId) = 0;
 
     /**
     * Use this function to subscribe for sigBool signal changes.
+    * @param StructInterfaceSigBoolSignalCb callback that will be executed on each signal emission.
+    * Make sure to remove subscription before the callback becomes invalid.
+    * @return subscription token for the subscription removal.
     *
-    * @param callback any of type StructInterfaceSigBoolSignalCb
-    * @return unique identifier for this subscription, needed for removal
+    * @warning the subscribed function shall not be blocking and must return immediately!
     */
     virtual long subscribeToSigBool(StructInterfaceSigBoolSignalCb callback) = 0;
     /**
     * Use this function to unsubscribe from sigBool signal changes.
-    *
-    * @param handleId identifier returned by the original subscription call
+    * @param subscription token received on subscription.
     */
     virtual void unsubscribeFromSigBool(long handleId) = 0;
 
     /**
     * Use this function to subscribe for sigInt signal changes.
+    * @param StructInterfaceSigIntSignalCb callback that will be executed on each signal emission.
+    * Make sure to remove subscription before the callback becomes invalid.
+    * @return subscription token for the subscription removal.
     *
-    * @param callback any of type StructInterfaceSigIntSignalCb
-    * @return unique identifier for this subscription, needed for removal
+    * @warning the subscribed function shall not be blocking and must return immediately!
     */
     virtual long subscribeToSigInt(StructInterfaceSigIntSignalCb callback) = 0;
     /**
     * Use this function to unsubscribe from sigInt signal changes.
-    *
-    * @param handleId identifier returned by the original subscription call
+    * @param subscription token received on subscription.
     */
     virtual void unsubscribeFromSigInt(long handleId) = 0;
 
     /**
     * Use this function to subscribe for sigFloat signal changes.
+    * @param StructInterfaceSigFloatSignalCb callback that will be executed on each signal emission.
+    * Make sure to remove subscription before the callback becomes invalid.
+    * @return subscription token for the subscription removal.
     *
-    * @param callback any of type StructInterfaceSigFloatSignalCb
-    * @return unique identifier for this subscription, needed for removal
+    * @warning the subscribed function shall not be blocking and must return immediately!
     */
     virtual long subscribeToSigFloat(StructInterfaceSigFloatSignalCb callback) = 0;
     /**
     * Use this function to unsubscribe from sigFloat signal changes.
-    *
-    * @param handleId identifier returned by the original subscription call
+    * @param subscription token received on subscription.
     */
     virtual void unsubscribeFromSigFloat(long handleId) = 0;
 
     /**
     * Use this function to subscribe for sigString signal changes.
+    * @param StructInterfaceSigStringSignalCb callback that will be executed on each signal emission.
+    * Make sure to remove subscription before the callback becomes invalid.
+    * @return subscription token for the subscription removal.
     *
-    * @param callback any of type StructInterfaceSigStringSignalCb
-    * @return unique identifier for this subscription, needed for removal
+    * @warning the subscribed function shall not be blocking and must return immediately!
     */
     virtual long subscribeToSigString(StructInterfaceSigStringSignalCb callback) = 0;
     /**
     * Use this function to unsubscribe from sigString signal changes.
-    *
-    * @param handleId identifier returned by the original subscription call
+    * @param subscription token received on subscription.
     */
     virtual void unsubscribeFromSigString(long handleId) = 0;
 
     /**
-    * This function is called by the implementation for propBool value changes.
+    * Publishes the property changed to all subscribed clients.
+    * Needs to be invoked by the StructInterface implementation when property propBool changes.
+    * @param The new value of propBool.
     */
     virtual void publishPropBoolChanged(const StructBool& propBool) const = 0;
     /**
-    * This function is called by the implementation for propInt value changes.
+    * Publishes the property changed to all subscribed clients.
+    * Needs to be invoked by the StructInterface implementation when property propInt changes.
+    * @param The new value of propInt.
     */
     virtual void publishPropIntChanged(const StructInt& propInt) const = 0;
     /**
-    * This function is called by the implementation for propFloat value changes.
+    * Publishes the property changed to all subscribed clients.
+    * Needs to be invoked by the StructInterface implementation when property propFloat changes.
+    * @param The new value of propFloat.
     */
     virtual void publishPropFloatChanged(const StructFloat& propFloat) const = 0;
     /**
-    * This function is called by the implementation for propString value changes.
+    * Publishes the property changed to all subscribed clients.
+    * Needs to be invoked by the StructInterface implementation when property propString changes.
+    * @param The new value of propString.
     */
     virtual void publishPropStringChanged(const StructString& propString) const = 0;
     /**
-    * This function is called by the implementation when the sigBool signal is triggered.
-    *
+    * Publishes the emited singal to all subscribed clients.
+    * Needs to be invoked by the StructInterface implementation when sigBool is emited.
     * @param paramBool 
     */
     virtual void publishSigBool(const StructBool& paramBool) const = 0;
     /**
-    * This function is called by the implementation when the sigInt signal is triggered.
-    *
+    * Publishes the emited singal to all subscribed clients.
+    * Needs to be invoked by the StructInterface implementation when sigInt is emited.
     * @param paramInt 
     */
     virtual void publishSigInt(const StructInt& paramInt) const = 0;
     /**
-    * This function is called by the implementation when the sigFloat signal is triggered.
-    *
+    * Publishes the emited singal to all subscribed clients.
+    * Needs to be invoked by the StructInterface implementation when sigFloat is emited.
     * @param paramFloat 
     */
     virtual void publishSigFloat(const StructFloat& paramFloat) const = 0;
     /**
-    * This function is called by the implementation when the sigString signal is triggered.
-    *
+    * Publishes the emited singal to all subscribed clients.
+    * Needs to be invoked by the StructInterface implementation when sigString is emited.
     * @param paramString 
     */
     virtual void publishSigString(const StructString& paramString) const = 0;
 };
 
-/**
- * Interface IStructInterface
- */
-class TEST_TESTBED1_EXPORT IStructInterface
-{
-public:
-    virtual ~IStructInterface() = default;
 
-    // methods
-    virtual StructBool funcBool(const StructBool& paramBool) = 0;
-    /**
-    * Asynchronous function call for funcBool(const StructBool& paramBool)
-    *
-    * @return Promise of type StructBool which is set once the function has completed
-    */
-    virtual std::future<StructBool> funcBoolAsync(const StructBool& paramBool) = 0;
-
-    virtual StructBool funcInt(const StructInt& paramInt) = 0;
-    /**
-    * Asynchronous function call for funcInt(const StructInt& paramInt)
-    *
-    * @return Promise of type StructBool which is set once the function has completed
-    */
-    virtual std::future<StructBool> funcIntAsync(const StructInt& paramInt) = 0;
-
-    virtual StructFloat funcFloat(const StructFloat& paramFloat) = 0;
-    /**
-    * Asynchronous function call for funcFloat(const StructFloat& paramFloat)
-    *
-    * @return Promise of type StructFloat which is set once the function has completed
-    */
-    virtual std::future<StructFloat> funcFloatAsync(const StructFloat& paramFloat) = 0;
-
-    virtual StructString funcString(const StructString& paramString) = 0;
-    /**
-    * Asynchronous function call for funcString(const StructString& paramString)
-    *
-    * @return Promise of type StructString which is set once the function has completed
-    */
-    virtual std::future<StructString> funcStringAsync(const StructString& paramString) = 0;
-
-    // property methods
-    /**
-    * Sets the value of property propBool
-    */
-    virtual void setPropbool(const StructBool& propBool) = 0;
-    /**
-    * Gets the value of property propBool
-    */
-    virtual const StructBool& propBool() const = 0;
-
-    /**
-    * Sets the value of property propInt
-    */
-    virtual void setPropint(const StructInt& propInt) = 0;
-    /**
-    * Gets the value of property propInt
-    */
-    virtual const StructInt& propInt() const = 0;
-
-    /**
-    * Sets the value of property propFloat
-    */
-    virtual void setPropfloat(const StructFloat& propFloat) = 0;
-    /**
-    * Gets the value of property propFloat
-    */
-    virtual const StructFloat& propFloat() const = 0;
-
-    /**
-    * Sets the value of property propString
-    */
-    virtual void setPropstring(const StructString& propString) = 0;
-    /**
-    * Gets the value of property propString
-    */
-    virtual const StructString& propString() const = 0;
-
-    /**
-    * @return a pointer to the used IStructInterfacePublisher for publish/subscribe events
-    */
-    virtual IStructInterfacePublisher* _getPublisher() const = 0;
-};
-
-/**
- * Interface IStructInterfaceDecorator
- *
- * Decorator interface helper for inheritance
- */
-class TEST_TESTBED1_EXPORT IStructInterfaceDecorator: public virtual IStructInterface, public virtual IStructInterfaceSubscriber {
-public:
-    /**
-    * Swap the used implementation
-    *
-    * @param impl pointer to new implementation to be used
-    * @return pointer to the original implementation
-    */
-    virtual IStructInterface* swapUnderlyingImplementation(IStructInterface* impl) = 0;
-    /**
-    * Disconnect the decorator from the originally used implementation
-    *
-    * @return pointer to the original implementation
-    */
-    virtual IStructInterface* disconnectFromUnderlyingImplementation() = 0;
-};
 } // namespace Testbed1
 } // namespace Test

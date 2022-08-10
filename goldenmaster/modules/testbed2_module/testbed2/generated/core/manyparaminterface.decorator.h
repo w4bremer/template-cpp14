@@ -19,17 +19,15 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 #include "testbed2/generated/api/testbed2.h"
 #include "testbed2/generated/api/common.h"
-#include "testbed2/generated/core/manyparaminterface.publisher.h"
 
 namespace Test {
 namespace Testbed2 {
 
-class TEST_TESTBED2_EXPORT AbstractManyParamInterfaceDecorator : public IManyParamInterfaceDecorator
-{
+class TEST_TESTBED2_EXPORT AbstractManyParamInterfaceDecorator : public IManyParamInterface, public IManyParamInterfaceSubscriber {
 public:
     explicit AbstractManyParamInterfaceDecorator(IManyParamInterface* impl);
-    IManyParamInterface* swapUnderlyingImplementation(IManyParamInterface* impl) override;
-    IManyParamInterface* disconnectFromUnderlyingImplementation() override;
+    IManyParamInterface* swapUnderlyingImplementation(IManyParamInterface* impl);
+    IManyParamInterface* disconnectFromUnderlyingImplementation();
     virtual ~AbstractManyParamInterfaceDecorator();
 public:
     // property prop1
@@ -58,7 +56,7 @@ public:
     int func4(int param1, int param2, int param3, int param4) override;
     std::future<int> func4Async(int param1, int param2, int param3, int param4) override;
 
-    IManyParamInterfacePublisher* _getPublisher() const override;
+    IManyParamInterfacePublisher& _getPublisher() const override;
 private:
     IManyParamInterface* m_impl {nullptr};
 };

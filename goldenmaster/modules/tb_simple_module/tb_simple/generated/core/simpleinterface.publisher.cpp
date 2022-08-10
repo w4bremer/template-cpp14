@@ -15,101 +15,55 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
-#include <set>
-#include <map>
 #include "tb_simple/generated/core/simpleinterface.publisher.h"
 
+#include <algorithm>
 
-namespace Test {
-namespace TbSimple {
-class SimpleInterfacePublisherPimpl : public ISimpleInterfacePublisher
-{
-public:
-    void subscribeToSimpleInterfaceInterface(ISimpleInterfaceSubscriber& subscriber) override;
-    void unsubscribeFromSimpleInterfaceInterface(ISimpleInterfaceSubscriber& subscriber) override;
-
-    long subscribeToPropBoolChanged(SimpleInterfacePropBoolPropertyCb callback) override;
-    void unsubscribeFromPropBoolChanged(long handleId) override;
-
-    long subscribeToPropIntChanged(SimpleInterfacePropIntPropertyCb callback) override;
-    void unsubscribeFromPropIntChanged(long handleId) override;
-
-    long subscribeToPropFloatChanged(SimpleInterfacePropFloatPropertyCb callback) override;
-    void unsubscribeFromPropFloatChanged(long handleId) override;
-
-    long subscribeToPropStringChanged(SimpleInterfacePropStringPropertyCb callback) override;
-    void unsubscribeFromPropStringChanged(long handleId) override;
-
-    long subscribeToSigBool(SimpleInterfaceSigBoolSignalCb callback) override;
-    void unsubscribeFromSigBool(long handleId) override;
-
-    long subscribeToSigInt(SimpleInterfaceSigIntSignalCb callback) override;
-    void unsubscribeFromSigInt(long handleId) override;
-
-    long subscribeToSigFloat(SimpleInterfaceSigFloatSignalCb callback) override;
-    void unsubscribeFromSigFloat(long handleId) override;
-
-    long subscribeToSigString(SimpleInterfaceSigStringSignalCb callback) override;
-    void unsubscribeFromSigString(long handleId) override;
-
-    void publishPropBoolChanged(bool propBool) const override;
-    void publishPropIntChanged(int propInt) const override;
-    void publishPropFloatChanged(float propFloat) const override;
-    void publishPropStringChanged(const std::string& propString) const override;
-    void publishSigBool(bool paramBool) const override;
-    void publishSigInt(int paramInt) const override;
-    void publishSigFloat(float paramFloat) const override;
-    void publishSigString(const std::string& paramString) const override;
-private:
-    std::set<ISimpleInterfaceSubscriber*> ISimpleInterfaceInterfaceSubscribers;
-    std::map<long, SimpleInterfacePropBoolPropertyCb> PropBoolCallbacks;
-    std::map<long, SimpleInterfacePropIntPropertyCb> PropIntCallbacks;
-    std::map<long, SimpleInterfacePropFloatPropertyCb> PropFloatCallbacks;
-    std::map<long, SimpleInterfacePropStringPropertyCb> PropStringCallbacks;
-    std::map<long, SimpleInterfaceSigBoolSignalCb> SigBoolCallbacks;
-    std::map<long, SimpleInterfaceSigIntSignalCb> SigIntCallbacks;
-    std::map<long, SimpleInterfaceSigFloatSignalCb> SigFloatCallbacks;
-    std::map<long, SimpleInterfaceSigStringSignalCb> SigStringCallbacks;
-};
-
-} // namespace TbSimple
-} // namespace Test
 
 using namespace Test::TbSimple;
 
 /**
- * Implementation SimpleInterfacePublisherPimpl
+ * Implementation SimpleInterfacePublisher
  */
-void SimpleInterfacePublisherPimpl::subscribeToSimpleInterfaceInterface(ISimpleInterfaceSubscriber& subscriber)
+void SimpleInterfacePublisher::subscribeToAllChanges(ISimpleInterfaceSubscriber& subscriber)
 {
-    ISimpleInterfaceInterfaceSubscribers.insert(&subscriber);
+    auto found = std::find_if(m_allChangesSubscribers.begin(), m_allChangesSubscribers.end(),
+                        [&subscriber](const auto element){return &(element.get()) == &subscriber;});
+    if (found == m_allChangesSubscribers.end())
+    {
+        m_allChangesSubscribers.push_back(std::reference_wrapper<ISimpleInterfaceSubscriber>(subscriber));
+    }
 }
 
-void SimpleInterfacePublisherPimpl::unsubscribeFromSimpleInterfaceInterface(ISimpleInterfaceSubscriber& subscriber)
+void SimpleInterfacePublisher::unsubscribeFromAllChanges(ISimpleInterfaceSubscriber& subscriber)
 {
-    ISimpleInterfaceInterfaceSubscribers.erase(&subscriber);
+    auto found = std::find_if(m_allChangesSubscribers.begin(), m_allChangesSubscribers.end(),
+                        [&subscriber](const auto element){return &(element.get()) == &subscriber;});
+    if (found != m_allChangesSubscribers.end())
+    {
+        m_allChangesSubscribers.erase(found);
+    }
 }
 
-long SimpleInterfacePublisherPimpl::subscribeToPropBoolChanged(SimpleInterfacePropBoolPropertyCb callback)
+long SimpleInterfacePublisher::subscribeToPropBoolChanged(SimpleInterfacePropBoolPropertyCb callback)
 {
-    // this is a short term workaround - we need a better solution for unique handle identifiers
-    long handleId = static_cast<long>(PropBoolCallbacks.size());
-    PropBoolCallbacks[handleId] = callback;
+    auto handleId = m_propBoolChangedCallbackNextId++;
+    m_propBoolCallbacks[handleId] = callback;
     return handleId;
 }
 
-void SimpleInterfacePublisherPimpl::unsubscribeFromPropBoolChanged(long handleId)
+void SimpleInterfacePublisher::unsubscribeFromPropBoolChanged(long handleId)
 {
-    PropBoolCallbacks.erase(handleId);
+    m_propBoolCallbacks.erase(handleId);
 }
 
-void SimpleInterfacePublisherPimpl::publishPropBoolChanged(bool propBool) const
+void SimpleInterfacePublisher::publishPropBoolChanged(bool propBool) const
 {
-    for(const auto& Subscriber: ISimpleInterfaceInterfaceSubscribers)
+    for(const auto& subscriber: m_allChangesSubscribers)
     {
-        Subscriber->OnPropBoolChanged(propBool);
+        subscriber.get().onPropBoolChanged(propBool);
     }
-    for(const auto& callbackEntry: PropBoolCallbacks)
+    for(const auto& callbackEntry: m_propBoolCallbacks)
     {
         if(callbackEntry.second)
         {
@@ -118,26 +72,25 @@ void SimpleInterfacePublisherPimpl::publishPropBoolChanged(bool propBool) const
     }
 }
 
-long SimpleInterfacePublisherPimpl::subscribeToPropIntChanged(SimpleInterfacePropIntPropertyCb callback)
+long SimpleInterfacePublisher::subscribeToPropIntChanged(SimpleInterfacePropIntPropertyCb callback)
 {
-    // this is a short term workaround - we need a better solution for unique handle identifiers
-    long handleId = static_cast<long>(PropIntCallbacks.size());
-    PropIntCallbacks[handleId] = callback;
+    auto handleId = m_propIntChangedCallbackNextId++;
+    m_propIntCallbacks[handleId] = callback;
     return handleId;
 }
 
-void SimpleInterfacePublisherPimpl::unsubscribeFromPropIntChanged(long handleId)
+void SimpleInterfacePublisher::unsubscribeFromPropIntChanged(long handleId)
 {
-    PropIntCallbacks.erase(handleId);
+    m_propIntCallbacks.erase(handleId);
 }
 
-void SimpleInterfacePublisherPimpl::publishPropIntChanged(int propInt) const
+void SimpleInterfacePublisher::publishPropIntChanged(int propInt) const
 {
-    for(const auto& Subscriber: ISimpleInterfaceInterfaceSubscribers)
+    for(const auto& subscriber: m_allChangesSubscribers)
     {
-        Subscriber->OnPropIntChanged(propInt);
+        subscriber.get().onPropIntChanged(propInt);
     }
-    for(const auto& callbackEntry: PropIntCallbacks)
+    for(const auto& callbackEntry: m_propIntCallbacks)
     {
         if(callbackEntry.second)
         {
@@ -146,26 +99,25 @@ void SimpleInterfacePublisherPimpl::publishPropIntChanged(int propInt) const
     }
 }
 
-long SimpleInterfacePublisherPimpl::subscribeToPropFloatChanged(SimpleInterfacePropFloatPropertyCb callback)
+long SimpleInterfacePublisher::subscribeToPropFloatChanged(SimpleInterfacePropFloatPropertyCb callback)
 {
-    // this is a short term workaround - we need a better solution for unique handle identifiers
-    long handleId = static_cast<long>(PropFloatCallbacks.size());
-    PropFloatCallbacks[handleId] = callback;
+    auto handleId = m_propFloatChangedCallbackNextId++;
+    m_propFloatCallbacks[handleId] = callback;
     return handleId;
 }
 
-void SimpleInterfacePublisherPimpl::unsubscribeFromPropFloatChanged(long handleId)
+void SimpleInterfacePublisher::unsubscribeFromPropFloatChanged(long handleId)
 {
-    PropFloatCallbacks.erase(handleId);
+    m_propFloatCallbacks.erase(handleId);
 }
 
-void SimpleInterfacePublisherPimpl::publishPropFloatChanged(float propFloat) const
+void SimpleInterfacePublisher::publishPropFloatChanged(float propFloat) const
 {
-    for(const auto& Subscriber: ISimpleInterfaceInterfaceSubscribers)
+    for(const auto& subscriber: m_allChangesSubscribers)
     {
-        Subscriber->OnPropFloatChanged(propFloat);
+        subscriber.get().onPropFloatChanged(propFloat);
     }
-    for(const auto& callbackEntry: PropFloatCallbacks)
+    for(const auto& callbackEntry: m_propFloatCallbacks)
     {
         if(callbackEntry.second)
         {
@@ -174,26 +126,25 @@ void SimpleInterfacePublisherPimpl::publishPropFloatChanged(float propFloat) con
     }
 }
 
-long SimpleInterfacePublisherPimpl::subscribeToPropStringChanged(SimpleInterfacePropStringPropertyCb callback)
+long SimpleInterfacePublisher::subscribeToPropStringChanged(SimpleInterfacePropStringPropertyCb callback)
 {
-    // this is a short term workaround - we need a better solution for unique handle identifiers
-    long handleId = static_cast<long>(PropStringCallbacks.size());
-    PropStringCallbacks[handleId] = callback;
+    auto handleId = m_propStringChangedCallbackNextId++;
+    m_propStringCallbacks[handleId] = callback;
     return handleId;
 }
 
-void SimpleInterfacePublisherPimpl::unsubscribeFromPropStringChanged(long handleId)
+void SimpleInterfacePublisher::unsubscribeFromPropStringChanged(long handleId)
 {
-    PropStringCallbacks.erase(handleId);
+    m_propStringCallbacks.erase(handleId);
 }
 
-void SimpleInterfacePublisherPimpl::publishPropStringChanged(const std::string& propString) const
+void SimpleInterfacePublisher::publishPropStringChanged(const std::string& propString) const
 {
-    for(const auto& Subscriber: ISimpleInterfaceInterfaceSubscribers)
+    for(const auto& subscriber: m_allChangesSubscribers)
     {
-        Subscriber->OnPropStringChanged(propString);
+        subscriber.get().onPropStringChanged(propString);
     }
-    for(const auto& callbackEntry: PropStringCallbacks)
+    for(const auto& callbackEntry: m_propStringCallbacks)
     {
         if(callbackEntry.second)
         {
@@ -202,26 +153,26 @@ void SimpleInterfacePublisherPimpl::publishPropStringChanged(const std::string& 
     }
 }
 
-long SimpleInterfacePublisherPimpl::subscribeToSigBool(SimpleInterfaceSigBoolSignalCb callback)
+long SimpleInterfacePublisher::subscribeToSigBool(SimpleInterfaceSigBoolSignalCb callback)
 {
     // this is a short term workaround - we need a better solution for unique handle identifiers
-    long handleId = static_cast<long>(SigBoolCallbacks.size());
-    SigBoolCallbacks[handleId] = callback;
+    auto handleId = m_sigBoolSignalCallbackNextId++;
+    m_sigBoolCallbacks[handleId] = callback;
     return handleId;
 }
 
-void SimpleInterfacePublisherPimpl::unsubscribeFromSigBool(long handleId)
+void SimpleInterfacePublisher::unsubscribeFromSigBool(long handleId)
 {
-    SigBoolCallbacks.erase(handleId);
+    m_sigBoolCallbacks.erase(handleId);
 }
 
-void SimpleInterfacePublisherPimpl::publishSigBool(bool paramBool) const
+void SimpleInterfacePublisher::publishSigBool(bool paramBool) const
 {
-    for(const auto& Subscriber: ISimpleInterfaceInterfaceSubscribers)
+    for(const auto& subscriber: m_allChangesSubscribers)
     {
-        Subscriber->OnSigBool(paramBool);
+        subscriber.get().onSigBool(paramBool);
     }
-    for(const auto& callbackEntry: SigBoolCallbacks)
+    for(const auto& callbackEntry: m_sigBoolCallbacks)
     {
         if(callbackEntry.second)
         {
@@ -230,26 +181,26 @@ void SimpleInterfacePublisherPimpl::publishSigBool(bool paramBool) const
     }
 }
 
-long SimpleInterfacePublisherPimpl::subscribeToSigInt(SimpleInterfaceSigIntSignalCb callback)
+long SimpleInterfacePublisher::subscribeToSigInt(SimpleInterfaceSigIntSignalCb callback)
 {
     // this is a short term workaround - we need a better solution for unique handle identifiers
-    long handleId = static_cast<long>(SigIntCallbacks.size());
-    SigIntCallbacks[handleId] = callback;
+    auto handleId = m_sigIntSignalCallbackNextId++;
+    m_sigIntCallbacks[handleId] = callback;
     return handleId;
 }
 
-void SimpleInterfacePublisherPimpl::unsubscribeFromSigInt(long handleId)
+void SimpleInterfacePublisher::unsubscribeFromSigInt(long handleId)
 {
-    SigIntCallbacks.erase(handleId);
+    m_sigIntCallbacks.erase(handleId);
 }
 
-void SimpleInterfacePublisherPimpl::publishSigInt(int paramInt) const
+void SimpleInterfacePublisher::publishSigInt(int paramInt) const
 {
-    for(const auto& Subscriber: ISimpleInterfaceInterfaceSubscribers)
+    for(const auto& subscriber: m_allChangesSubscribers)
     {
-        Subscriber->OnSigInt(paramInt);
+        subscriber.get().onSigInt(paramInt);
     }
-    for(const auto& callbackEntry: SigIntCallbacks)
+    for(const auto& callbackEntry: m_sigIntCallbacks)
     {
         if(callbackEntry.second)
         {
@@ -258,26 +209,26 @@ void SimpleInterfacePublisherPimpl::publishSigInt(int paramInt) const
     }
 }
 
-long SimpleInterfacePublisherPimpl::subscribeToSigFloat(SimpleInterfaceSigFloatSignalCb callback)
+long SimpleInterfacePublisher::subscribeToSigFloat(SimpleInterfaceSigFloatSignalCb callback)
 {
     // this is a short term workaround - we need a better solution for unique handle identifiers
-    long handleId = static_cast<long>(SigFloatCallbacks.size());
-    SigFloatCallbacks[handleId] = callback;
+    auto handleId = m_sigFloatSignalCallbackNextId++;
+    m_sigFloatCallbacks[handleId] = callback;
     return handleId;
 }
 
-void SimpleInterfacePublisherPimpl::unsubscribeFromSigFloat(long handleId)
+void SimpleInterfacePublisher::unsubscribeFromSigFloat(long handleId)
 {
-    SigFloatCallbacks.erase(handleId);
+    m_sigFloatCallbacks.erase(handleId);
 }
 
-void SimpleInterfacePublisherPimpl::publishSigFloat(float paramFloat) const
+void SimpleInterfacePublisher::publishSigFloat(float paramFloat) const
 {
-    for(const auto& Subscriber: ISimpleInterfaceInterfaceSubscribers)
+    for(const auto& subscriber: m_allChangesSubscribers)
     {
-        Subscriber->OnSigFloat(paramFloat);
+        subscriber.get().onSigFloat(paramFloat);
     }
-    for(const auto& callbackEntry: SigFloatCallbacks)
+    for(const auto& callbackEntry: m_sigFloatCallbacks)
     {
         if(callbackEntry.second)
         {
@@ -286,26 +237,26 @@ void SimpleInterfacePublisherPimpl::publishSigFloat(float paramFloat) const
     }
 }
 
-long SimpleInterfacePublisherPimpl::subscribeToSigString(SimpleInterfaceSigStringSignalCb callback)
+long SimpleInterfacePublisher::subscribeToSigString(SimpleInterfaceSigStringSignalCb callback)
 {
     // this is a short term workaround - we need a better solution for unique handle identifiers
-    long handleId = static_cast<long>(SigStringCallbacks.size());
-    SigStringCallbacks[handleId] = callback;
+    auto handleId = m_sigStringSignalCallbackNextId++;
+    m_sigStringCallbacks[handleId] = callback;
     return handleId;
 }
 
-void SimpleInterfacePublisherPimpl::unsubscribeFromSigString(long handleId)
+void SimpleInterfacePublisher::unsubscribeFromSigString(long handleId)
 {
-    SigStringCallbacks.erase(handleId);
+    m_sigStringCallbacks.erase(handleId);
 }
 
-void SimpleInterfacePublisherPimpl::publishSigString(const std::string& paramString) const
+void SimpleInterfacePublisher::publishSigString(const std::string& paramString) const
 {
-    for(const auto& Subscriber: ISimpleInterfaceInterfaceSubscribers)
+    for(const auto& subscriber: m_allChangesSubscribers)
     {
-        Subscriber->OnSigString(paramString);
+        subscriber.get().onSigString(paramString);
     }
-    for(const auto& callbackEntry: SigStringCallbacks)
+    for(const auto& callbackEntry: m_sigStringCallbacks)
     {
         if(callbackEntry.second)
         {
@@ -314,141 +265,3 @@ void SimpleInterfacePublisherPimpl::publishSigString(const std::string& paramStr
     }
 }
 
-/**
- * Implementation SimpleInterfacePublisher
- */
-SimpleInterfacePublisher::SimpleInterfacePublisher()
-    : m_impl(std::make_shared<SimpleInterfacePublisherPimpl>())
-{
-}
-SimpleInterfacePublisher::~SimpleInterfacePublisher() = default;
-
-void SimpleInterfacePublisher::subscribeToSimpleInterfaceInterface(ISimpleInterfaceSubscriber& subscriber)
-{
-    m_impl->subscribeToSimpleInterfaceInterface(subscriber);
-}
-
-void SimpleInterfacePublisher::unsubscribeFromSimpleInterfaceInterface(ISimpleInterfaceSubscriber& subscriber)
-{
-    m_impl->unsubscribeFromSimpleInterfaceInterface(subscriber);
-}
-
-long SimpleInterfacePublisher::subscribeToPropBoolChanged(SimpleInterfacePropBoolPropertyCb callback)
-{
-    return m_impl->subscribeToPropBoolChanged(callback);
-}
-
-void SimpleInterfacePublisher::unsubscribeFromPropBoolChanged(long handleId)
-{
-    m_impl->unsubscribeFromPropBoolChanged(handleId);
-}
-
-void SimpleInterfacePublisher::publishPropBoolChanged(bool propBool) const
-{
-    m_impl->publishPropBoolChanged(propBool);
-}
-
-long SimpleInterfacePublisher::subscribeToPropIntChanged(SimpleInterfacePropIntPropertyCb callback)
-{
-    return m_impl->subscribeToPropIntChanged(callback);
-}
-
-void SimpleInterfacePublisher::unsubscribeFromPropIntChanged(long handleId)
-{
-    m_impl->unsubscribeFromPropIntChanged(handleId);
-}
-
-void SimpleInterfacePublisher::publishPropIntChanged(int propInt) const
-{
-    m_impl->publishPropIntChanged(propInt);
-}
-
-long SimpleInterfacePublisher::subscribeToPropFloatChanged(SimpleInterfacePropFloatPropertyCb callback)
-{
-    return m_impl->subscribeToPropFloatChanged(callback);
-}
-
-void SimpleInterfacePublisher::unsubscribeFromPropFloatChanged(long handleId)
-{
-    m_impl->unsubscribeFromPropFloatChanged(handleId);
-}
-
-void SimpleInterfacePublisher::publishPropFloatChanged(float propFloat) const
-{
-    m_impl->publishPropFloatChanged(propFloat);
-}
-
-long SimpleInterfacePublisher::subscribeToPropStringChanged(SimpleInterfacePropStringPropertyCb callback)
-{
-    return m_impl->subscribeToPropStringChanged(callback);
-}
-
-void SimpleInterfacePublisher::unsubscribeFromPropStringChanged(long handleId)
-{
-    m_impl->unsubscribeFromPropStringChanged(handleId);
-}
-
-void SimpleInterfacePublisher::publishPropStringChanged(const std::string& propString) const
-{
-    m_impl->publishPropStringChanged(propString);
-}
-
-long SimpleInterfacePublisher::subscribeToSigBool(SimpleInterfaceSigBoolSignalCb callback)
-{
-    return m_impl->subscribeToSigBool(callback);
-}
-
-void SimpleInterfacePublisher::unsubscribeFromSigBool(long handleId)
-{
-    m_impl->unsubscribeFromSigBool(handleId);
-}
-
-void SimpleInterfacePublisher::publishSigBool(bool paramBool) const
-{
-    m_impl->publishSigBool(paramBool);
-}
-
-long SimpleInterfacePublisher::subscribeToSigInt(SimpleInterfaceSigIntSignalCb callback)
-{
-    return m_impl->subscribeToSigInt(callback);
-}
-
-void SimpleInterfacePublisher::unsubscribeFromSigInt(long handleId)
-{
-    m_impl->unsubscribeFromSigInt(handleId);
-}
-
-void SimpleInterfacePublisher::publishSigInt(int paramInt) const
-{
-    m_impl->publishSigInt(paramInt);
-}
-
-long SimpleInterfacePublisher::subscribeToSigFloat(SimpleInterfaceSigFloatSignalCb callback)
-{
-    return m_impl->subscribeToSigFloat(callback);
-}
-
-void SimpleInterfacePublisher::unsubscribeFromSigFloat(long handleId)
-{
-    m_impl->unsubscribeFromSigFloat(handleId);
-}
-
-void SimpleInterfacePublisher::publishSigFloat(float paramFloat) const
-{
-    m_impl->publishSigFloat(paramFloat);
-}
-
-long SimpleInterfacePublisher::subscribeToSigString(SimpleInterfaceSigStringSignalCb callback)
-{
-    return m_impl->subscribeToSigString(callback);
-}
-
-void SimpleInterfacePublisher::unsubscribeFromSigString(long handleId)
-{
-    m_impl->unsubscribeFromSigString(handleId);
-}
-
-void SimpleInterfacePublisher::publishSigString(const std::string& paramString) const
-{
-    m_impl->publishSigString(paramString);
-}

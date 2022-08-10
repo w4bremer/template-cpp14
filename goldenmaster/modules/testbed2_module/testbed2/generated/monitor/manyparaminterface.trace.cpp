@@ -21,13 +21,13 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "testbed2/generated/monitor/manyparaminterface.tracer.h"
 
 using namespace Test::Testbed2;
-ManyParamInterfaceTracerDecorator::ManyParamInterfaceTracerDecorator(IManyParamInterface* impl, ApiGear::PocoImpl::Tracer* tracer)
+ManyParamInterfaceTracerDecorator::ManyParamInterfaceTracerDecorator(IManyParamInterface* impl, ApiGear::PocoImpl::Tracer& tracer)
     : AbstractManyParamInterfaceDecorator(impl)
     , m_tracer(std::make_unique<ManyParamInterfaceTracer>(tracer))
 {
 }
 ManyParamInterfaceTracerDecorator::~ManyParamInterfaceTracerDecorator() = default;
-ManyParamInterfaceTracerDecorator* ManyParamInterfaceTracerDecorator::connect(IManyParamInterface* impl, ApiGear::PocoImpl::Tracer* tracer)
+ManyParamInterfaceTracerDecorator* ManyParamInterfaceTracerDecorator::connect(IManyParamInterface* impl, ApiGear::PocoImpl::Tracer& tracer)
 {
     return new ManyParamInterfaceTracerDecorator(impl, tracer);
 }
@@ -83,25 +83,25 @@ std::future<int> ManyParamInterfaceTracerDecorator::func4Async(int param1, int p
     m_tracer->trace_func4(param1,param2,param3,param4);
     return AbstractManyParamInterfaceDecorator::func4Async(param1,param2,param3,param4);
 }
-void ManyParamInterfaceTracerDecorator::OnSig1(int param1)
+void ManyParamInterfaceTracerDecorator::onSig1(int param1)
 {
     (void) param1;
     //m_tracer->trace_Sig1(param1);
 }
-void ManyParamInterfaceTracerDecorator::OnSig2(int param1,int param2)
+void ManyParamInterfaceTracerDecorator::onSig2(int param1,int param2)
 {
     (void) param1;
     (void) param2;
     //m_tracer->trace_Sig2(param1,param2);
 }
-void ManyParamInterfaceTracerDecorator::OnSig3(int param1,int param2,int param3)
+void ManyParamInterfaceTracerDecorator::onSig3(int param1,int param2,int param3)
 {
     (void) param1;
     (void) param2;
     (void) param3;
     //m_tracer->trace_Sig3(param1,param2,param3);
 }
-void ManyParamInterfaceTracerDecorator::OnSig4(int param1,int param2,int param3,int param4)
+void ManyParamInterfaceTracerDecorator::onSig4(int param1,int param2,int param3,int param4)
 {
     (void) param1;
     (void) param2;
@@ -109,19 +109,19 @@ void ManyParamInterfaceTracerDecorator::OnSig4(int param1,int param2,int param3,
     (void) param4;
     //m_tracer->trace_Sig4(param1,param2,param3,param4);
 }
-void ManyParamInterfaceTracerDecorator::OnProp1Changed(int)
+void ManyParamInterfaceTracerDecorator::onProp1Changed(int)
 {
     m_tracer->capture_state(this);
 }
-void ManyParamInterfaceTracerDecorator::OnProp2Changed(int)
+void ManyParamInterfaceTracerDecorator::onProp2Changed(int)
 {
     m_tracer->capture_state(this);
 }
-void ManyParamInterfaceTracerDecorator::OnProp3Changed(int)
+void ManyParamInterfaceTracerDecorator::onProp3Changed(int)
 {
     m_tracer->capture_state(this);
 }
-void ManyParamInterfaceTracerDecorator::OnProp4Changed(int)
+void ManyParamInterfaceTracerDecorator::onProp4Changed(int)
 {
     m_tracer->capture_state(this);
 }

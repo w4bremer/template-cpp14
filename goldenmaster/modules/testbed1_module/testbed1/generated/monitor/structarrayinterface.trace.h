@@ -31,9 +31,9 @@ class StructArrayInterfaceTracer;
 class TEST_TESTBED1_EXPORT StructArrayInterfaceTracerDecorator : public AbstractStructArrayInterfaceDecorator
 {
 protected:
-    explicit StructArrayInterfaceTracerDecorator(IStructArrayInterface* impl, ApiGear::PocoImpl::Tracer* tracer);
+    explicit StructArrayInterfaceTracerDecorator(IStructArrayInterface* impl, ApiGear::PocoImpl::Tracer& tracer);
 public:
-    static StructArrayInterfaceTracerDecorator* connect(IStructArrayInterface* impl, ApiGear::PocoImpl::Tracer* tracer);
+    static StructArrayInterfaceTracerDecorator* connect(IStructArrayInterface* impl, ApiGear::PocoImpl::Tracer& tracer);
     virtual ~StructArrayInterfaceTracerDecorator();
 
     // operations
@@ -46,14 +46,14 @@ public:
     StructBool funcString(const std::list<StructString>& paramString) override;
     std::future<StructBool> funcStringAsync(const std::list<StructString>& paramString) override;
 public: // IStructArrayInterfaceSubscriber interface
-    void OnSigBool(const std::list<StructBool>& paramBool) override;
-    void OnSigInt(const std::list<StructInt>& paramInt) override;
-    void OnSigFloat(const std::list<StructFloat>& paramFloat) override;
-    void OnSigString(const std::list<StructString>& paramString) override;
-    void OnPropBoolChanged(const std::list<StructBool>& Value) override;
-    void OnPropIntChanged(const std::list<StructInt>& Value) override;
-    void OnPropFloatChanged(const std::list<StructFloat>& Value) override;
-    void OnPropStringChanged(const std::list<StructString>& Value) override;
+    void onSigBool(const std::list<StructBool>& paramBool) override;
+    void onSigInt(const std::list<StructInt>& paramInt) override;
+    void onSigFloat(const std::list<StructFloat>& paramFloat) override;
+    void onSigString(const std::list<StructString>& paramString) override;
+    void onPropBoolChanged(const std::list<StructBool>& Value) override;
+    void onPropIntChanged(const std::list<StructInt>& Value) override;
+    void onPropFloatChanged(const std::list<StructFloat>& Value) override;
+    void onPropStringChanged(const std::list<StructString>& Value) override;
 private:
     std::unique_ptr<StructArrayInterfaceTracer> m_tracer;
 };

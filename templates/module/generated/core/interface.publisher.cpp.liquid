@@ -1,95 +1,63 @@
 {% comment %} // Copyright (c) ApiGear UG 2020 {% endcomment -%}
 {{ module | licGPLcpp -}}
-#include <set>
-#include <map>
+
 #include "{{module.name|identifier}}/generated/core/{{interface.name|lower}}.publisher.h"
+
+#include <algorithm>
 
 {% assign class = "I" | append: interface.name | capital %}
 {% assign sub_class = "I" | append: interface.name | capital | append: "Subscriber" %}
 {% assign pub_interface = "I" | append: interface.name | capital | append: "Publisher" %}
 {% assign pub_class = interface.name | capital | append: "Publisher"%}
-{% assign pub_pimpl_class = interface.name | capital | append: "PublisherPimpl" %}
 {{nl}}
-
-namespace {{ system.name | capital }} {
-namespace {{ module.name | capital }} {
-class {{pub_pimpl_class}} : public {{pub_interface}}
-{
-public:
-    void subscribeTo{{interface.name | capital}}Interface({{sub_class}}& subscriber) override;
-    void unsubscribeFrom{{interface.name | capital}}Interface({{sub_class}}& subscriber) override;
-{{nl}}
-{% for property in interface.properties %}
-    long subscribeTo{{property.name|capital}}Changed({{interface.name | capital}}{{property.name | capital}}PropertyCb callback) override;
-    void unsubscribeFrom{{property.name | capital}}Changed(long handleId) override;
-{{nl}}
-{% endfor %}
-{% for signal in interface.signals %}
-    long subscribeTo{{signal.name | capital}}({{interface.name | capital}}{{signal.name | capital}}SignalCb callback) override;
-    void unsubscribeFrom{{signal.name | capital}}(long handleId) override;
-{{nl}}
-{% endfor %}
-{% for property in interface.properties %}
-    void publish{{property.name|capital}}Changed({{property|cpp14Param: true}}) const override;
-{% endfor %}
-{% for signal in interface.signals %}
-    void publish{{signal.name|capital}}(
-        {%- for param in signal.params -%}
-            {{param|cpp14Param: true}}{% unless forloop.last %},{% endunless -%}
-        {%- endfor -%}
-    ) const override;
-{% endfor %}
-private:
-    std::set<{{sub_class}}*> {{class}}InterfaceSubscribers;
-{% for property in interface.properties %}
-    std::map<long, {{interface.name | capital}}{{property.name | capital}}PropertyCb> {{property.name|capital}}Callbacks;
-{% endfor %}
-{% for signal in interface.signals %}
-    std::map<long, {{interface.name | capital}}{{signal.name | capital}}SignalCb> {{signal.name|capital}}Callbacks;
-{% endfor %}
-};
-{{nl}}
-} // namespace {{ module.name | capital }}
-} // namespace {{ system.name | capital }}
 
 using namespace {{ system.name | capital }}::{{ module.name | capital }};
 
 /**
- * Implementation {{pub_pimpl_class}}
+ * Implementation {{pub_class}}
  */
-void {{pub_pimpl_class}}::subscribeTo{{interface.name | capital}}Interface({{sub_class}}& subscriber)
+void {{pub_class}}::subscribeToAllChanges({{sub_class}}& subscriber)
 {
-    {{class}}InterfaceSubscribers.insert(&subscriber);
+    auto found = std::find_if(m_allChangesSubscribers.begin(), m_allChangesSubscribers.end(),
+                        [&subscriber](const auto element){return &(element.get()) == &subscriber;});
+    if (found == m_allChangesSubscribers.end())
+    {
+        m_allChangesSubscribers.push_back(std::reference_wrapper<{{sub_class}}>(subscriber));
+    }
 }
 {{nl}}
-void {{pub_pimpl_class}}::unsubscribeFrom{{interface.name | capital}}Interface({{sub_class}}& subscriber)
+void {{pub_class}}::unsubscribeFromAllChanges({{sub_class}}& subscriber)
 {
-    {{class}}InterfaceSubscribers.erase(&subscriber);
+    auto found = std::find_if(m_allChangesSubscribers.begin(), m_allChangesSubscribers.end(),
+                        [&subscriber](const auto element){return &(element.get()) == &subscriber;});
+    if (found != m_allChangesSubscribers.end())
+    {
+        m_allChangesSubscribers.erase(found);
+    }
 }
 {{nl}}
 {% for property in interface.properties %}
-long {{pub_pimpl_class}}::subscribeTo{{property.name|capital}}Changed({{interface.name | capital}}{{property.name | capital}}PropertyCb callback)
+long {{pub_class}}::subscribeTo{{property.name|capital}}Changed({{interface.name | capital}}{{property.name | capital}}PropertyCb callback)
 {
-    // this is a short term workaround - we need a better solution for unique handle identifiers
-    long handleId = static_cast<long>({{property.name|capital}}Callbacks.size());
-    {{property.name|capital}}Callbacks[handleId] = callback;
+    auto handleId = m_{{property.name | capital| lowerFirst}}ChangedCallbackNextId++;
+    m_{{property.name|capital| lowerFirst}}Callbacks[handleId] = callback;
     return handleId;
 }
 {{nl}}
-void {{pub_pimpl_class}}::unsubscribeFrom{{property.name | capital}}Changed(long handleId)
+void {{pub_class}}::unsubscribeFrom{{property.name | capital}}Changed(long handleId)
 {
-    {{property.name|capital}}Callbacks.erase(handleId);
+    m_{{property.name|capital| lowerFirst}}Callbacks.erase(handleId);
 }
 {{nl}}
-void {{pub_pimpl_class}}::publish{{property.name|capital}}Changed({{property|cpp14Param: true}}) const
+void {{pub_class}}::publish{{property.name|capital}}Changed({{property|cpp14Param: true}}) const
 {
-    for(const auto& Subscriber: {{class}}InterfaceSubscribers)
+    for(const auto& subscriber: m_allChangesSubscribers)
     {
-        Subscriber->On{{property.name|capital}}Changed({{property.name}});
+        subscriber.get().on{{property.name|capital}}Changed({{property.name}});
     }
-    for(const auto& callbackEntry: {{property.name|capital}}Callbacks)
+    for(const auto& callbackEntry: m_{{property.name|capital| lowerFirst}}Callbacks)
     {
-        {% comment %} TODO clean up Subscribers if Subscriber is not valid anymore {% endcomment %}
+        {% comment %} TODO clean up subscriber if subscriber is not valid anymore {% endcomment %}
         if(callbackEntry.second)
         {
             callbackEntry.second({{property.name}});
@@ -100,36 +68,36 @@ void {{pub_pimpl_class}}::publish{{property.name|capital}}Changed({{property|cpp
 {% endfor %}
 
 {% for signal in interface.signals %}
-long {{pub_pimpl_class}}::subscribeTo{{signal.name | capital}}({{interface.name | capital}}{{signal.name | capital}}SignalCb callback)
+long {{pub_class}}::subscribeTo{{signal.name | capital}}({{interface.name | capital}}{{signal.name | capital}}SignalCb callback)
 {
     // this is a short term workaround - we need a better solution for unique handle identifiers
-    long handleId = static_cast<long>({{signal.name | capital}}Callbacks.size());
-    {{signal.name | capital}}Callbacks[handleId] = callback;
+    auto handleId = m_{{signal.name | capital| lowerFirst}}SignalCallbackNextId++;
+    m_{{signal.name | capital| lowerFirst}}Callbacks[handleId] = callback;
     return handleId;
 }
 {{nl}}
-void {{pub_pimpl_class}}::unsubscribeFrom{{signal.name | capital}}(long handleId)
+void {{pub_class}}::unsubscribeFrom{{signal.name | capital}}(long handleId)
 {
-    {{signal.name | capital}}Callbacks.erase(handleId);
+    m_{{signal.name | capital| lowerFirst}}Callbacks.erase(handleId);
 }
 {{nl}}
-void {{pub_pimpl_class}}::publish{{signal.name|capital}}(
+void {{pub_class}}::publish{{signal.name|capital}}(
     {%- for param in signal.params -%}
         {{param|cpp14Param: true}}{% unless forloop.last %},{% endunless -%}
     {%- endfor -%}
 ) const
 {
-    for(const auto& Subscriber: {{class}}InterfaceSubscribers)
+    for(const auto& subscriber: m_allChangesSubscribers)
     {
-        Subscriber->On{{signal.name | capital}}(
+        subscriber.get().on{{signal.name | capital}}(
         {%- for param in signal.params -%}
             {{param.name}}{% unless forloop.last %},{% endunless -%}
         {%- endfor -%}
         );
     }
-    for(const auto& callbackEntry: {{signal.name|capital}}Callbacks)
+    for(const auto& callbackEntry: m_{{signal.name|capital| lowerFirst}}Callbacks)
     {
-        {% comment %} TODO clean up Subscribers if Subscriber is not valid anymore {% endcomment %}
+        {% comment %} TODO clean up subscriber if subscriber is not valid anymore {% endcomment %}
         if(callbackEntry.second)
         {
             callbackEntry.second(
@@ -142,64 +110,3 @@ void {{pub_pimpl_class}}::publish{{signal.name|capital}}(
 }
 {{nl}}
 {% endfor %}
-/**
- * Implementation {{pub_class}}
- */
-{{pub_class}}::{{pub_class}}()
-    : m_impl(std::make_shared<{{pub_pimpl_class}}>())
-{
-}
-{{pub_class}}::~{{pub_class}}() = default;
-{{nl}}
-void {{pub_class}}::subscribeTo{{interface.name | capital}}Interface({{sub_class}}& subscriber)
-{
-    m_impl->subscribeTo{{interface.name | capital}}Interface(subscriber);
-}
-{{nl}}
-void {{pub_class}}::unsubscribeFrom{{interface.name | capital}}Interface({{sub_class}}& subscriber)
-{
-    m_impl->unsubscribeFrom{{interface.name | capital}}Interface(subscriber);
-}
-{{nl}}
-{% for property in interface.properties %}
-long {{pub_class}}::subscribeTo{{property.name|capital}}Changed({{interface.name | capital}}{{property.name | capital}}PropertyCb callback)
-{
-    return m_impl->subscribeTo{{property.name|capital}}Changed(callback);
-}
-{{nl}}
-void {{pub_class}}::unsubscribeFrom{{property.name | capital}}Changed(long handleId)
-{
-    m_impl->unsubscribeFrom{{property.name | capital}}Changed(handleId);
-}
-{{nl}}
-void {{pub_class}}::publish{{property.name|capital}}Changed({{property|cpp14Param: true}}) const
-{
-    m_impl->publish{{property.name|capital}}Changed({{property.name}});
-}
-{{nl}}
-{% endfor %}
-{% for signal in interface.signals %}
-long {{pub_class}}::subscribeTo{{signal.name | capital}}({{interface.name | capital}}{{signal.name | capital}}SignalCb callback)
-{
-    return m_impl->subscribeTo{{signal.name | capital}}(callback);
-}
-{{nl}}
-void {{pub_class}}::unsubscribeFrom{{signal.name | capital}}(long handleId)
-{
-    m_impl->unsubscribeFrom{{signal.name | capital}}(handleId);
-}
-{{nl}}
-void {{pub_class}}::publish{{signal.name|capital}}(
-    {%- for param in signal.params -%}
-        {{param|cpp14Param: true}}{% unless forloop.last %},{% endunless -%}
-    {%- endfor -%}
-) const
-{
-    m_impl->publish{{signal.name|capital}}(
-        {%- for param in signal.params -%}
-            {{param.name}}{% unless forloop.last %},{% endunless -%}
-        {%- endfor -%}
-    );
-}
-{{nl}}
-{% endfor -%}

@@ -19,93 +19,75 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "testbed1/implementation/structarrayinterface.h"
 #include "testbed1/generated/core/structarrayinterface.publisher.h"
+#include "testbed1/generated/core/structarrayinterface.data.h"
 
 using namespace Test::Testbed1;
 
-struct StructArrayInterface::StructArrayInterfaceData
-{
-    StructArrayInterfaceData()
-    : _publisher(std::make_unique<StructArrayInterfacePublisher>())
-    , m_propBool(std::list<StructBool>())
-    , m_propInt(std::list<StructInt>())
-    , m_propFloat(std::list<StructFloat>())
-    , m_propString(std::list<StructString>())
-    {
-    }
-    std::unique_ptr<IStructArrayInterfacePublisher> _publisher;
-    std::list<StructBool> m_propBool;
-    std::list<StructInt> m_propInt;
-    std::list<StructFloat> m_propFloat;
-    std::list<StructString> m_propString;
-
-    ~StructArrayInterfaceData() = default;
-};
-/**
-   \brief 
-*/
 StructArrayInterface::StructArrayInterface()
-    : d_ptr(std::make_unique<StructArrayInterface::StructArrayInterfaceData>())
+    : m_publisher(std::make_unique<StructArrayInterfacePublisher>()) 
 {
 }
 StructArrayInterface::~StructArrayInterface()
 {
 }
-void StructArrayInterface::setPropbool(const std::list<StructBool>& propBool)
+
+void StructArrayInterface::setPropBool(const std::list<StructBool>& propBool)
 {
-    if (d_ptr->m_propBool != propBool) {
-        d_ptr->m_propBool = propBool;
-        d_ptr->_publisher->publishPropBoolChanged(propBool);
+    if (m_data.m_propBool != propBool) {
+        m_data.m_propBool = propBool;
+        m_publisher->publishPropBoolChanged(propBool);
     }
 }
 
 const std::list<StructBool>& StructArrayInterface::propBool() const
 {
-    return d_ptr->m_propBool;
+    return m_data.m_propBool;
 }
-void StructArrayInterface::setPropint(const std::list<StructInt>& propInt)
+
+void StructArrayInterface::setPropInt(const std::list<StructInt>& propInt)
 {
-    if (d_ptr->m_propInt != propInt) {
-        d_ptr->m_propInt = propInt;
-        d_ptr->_publisher->publishPropIntChanged(propInt);
+    if (m_data.m_propInt != propInt) {
+        m_data.m_propInt = propInt;
+        m_publisher->publishPropIntChanged(propInt);
     }
 }
 
 const std::list<StructInt>& StructArrayInterface::propInt() const
 {
-    return d_ptr->m_propInt;
+    return m_data.m_propInt;
 }
-void StructArrayInterface::setPropfloat(const std::list<StructFloat>& propFloat)
+
+void StructArrayInterface::setPropFloat(const std::list<StructFloat>& propFloat)
 {
-    if (d_ptr->m_propFloat != propFloat) {
-        d_ptr->m_propFloat = propFloat;
-        d_ptr->_publisher->publishPropFloatChanged(propFloat);
+    if (m_data.m_propFloat != propFloat) {
+        m_data.m_propFloat = propFloat;
+        m_publisher->publishPropFloatChanged(propFloat);
     }
 }
 
 const std::list<StructFloat>& StructArrayInterface::propFloat() const
 {
-    return d_ptr->m_propFloat;
+    return m_data.m_propFloat;
 }
-void StructArrayInterface::setPropstring(const std::list<StructString>& propString)
+
+void StructArrayInterface::setPropString(const std::list<StructString>& propString)
 {
-    if (d_ptr->m_propString != propString) {
-        d_ptr->m_propString = propString;
-        d_ptr->_publisher->publishPropStringChanged(propString);
+    if (m_data.m_propString != propString) {
+        m_data.m_propString = propString;
+        m_publisher->publishPropStringChanged(propString);
     }
 }
 
 const std::list<StructString>& StructArrayInterface::propString() const
 {
-    return d_ptr->m_propString;
+    return m_data.m_propString;
 }
-/**
-   \brief 
-*/
+
 StructBool StructArrayInterface::funcBool(const std::list<StructBool>& paramBool)
 {
-    (void) paramBool;
+    (void) paramBool; //suppress the 'Unreferenced Formal Parameter' warning.
     // do business logic here
-    return StructBool();
+    return {};
 }
 
 std::future<StructBool> StructArrayInterface::funcBoolAsync(const std::list<StructBool>& paramBool)
@@ -117,14 +99,12 @@ std::future<StructBool> StructArrayInterface::funcBoolAsync(const std::list<Stru
         }
     );
 }
-/**
-   \brief 
-*/
+
 StructBool StructArrayInterface::funcInt(const std::list<StructInt>& paramInt)
 {
-    (void) paramInt;
+    (void) paramInt; //suppress the 'Unreferenced Formal Parameter' warning.
     // do business logic here
-    return StructBool();
+    return {};
 }
 
 std::future<StructBool> StructArrayInterface::funcIntAsync(const std::list<StructInt>& paramInt)
@@ -136,14 +116,12 @@ std::future<StructBool> StructArrayInterface::funcIntAsync(const std::list<Struc
         }
     );
 }
-/**
-   \brief 
-*/
+
 StructBool StructArrayInterface::funcFloat(const std::list<StructFloat>& paramFloat)
 {
-    (void) paramFloat;
+    (void) paramFloat; //suppress the 'Unreferenced Formal Parameter' warning.
     // do business logic here
-    return StructBool();
+    return {};
 }
 
 std::future<StructBool> StructArrayInterface::funcFloatAsync(const std::list<StructFloat>& paramFloat)
@@ -155,14 +133,12 @@ std::future<StructBool> StructArrayInterface::funcFloatAsync(const std::list<Str
         }
     );
 }
-/**
-   \brief 
-*/
+
 StructBool StructArrayInterface::funcString(const std::list<StructString>& paramString)
 {
-    (void) paramString;
+    (void) paramString; //suppress the 'Unreferenced Formal Parameter' warning.
     // do business logic here
-    return StructBool();
+    return {};
 }
 
 std::future<StructBool> StructArrayInterface::funcStringAsync(const std::list<StructString>& paramString)
@@ -175,7 +151,7 @@ std::future<StructBool> StructArrayInterface::funcStringAsync(const std::list<St
     );
 }
 
-IStructArrayInterfacePublisher* StructArrayInterface::_getPublisher() const
+IStructArrayInterfacePublisher& StructArrayInterface::_getPublisher() const
 {
-    return d_ptr->_publisher.get();
+    return *m_publisher;
 }

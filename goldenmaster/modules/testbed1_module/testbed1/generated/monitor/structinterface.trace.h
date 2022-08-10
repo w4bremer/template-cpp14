@@ -31,9 +31,9 @@ class StructInterfaceTracer;
 class TEST_TESTBED1_EXPORT StructInterfaceTracerDecorator : public AbstractStructInterfaceDecorator
 {
 protected:
-    explicit StructInterfaceTracerDecorator(IStructInterface* impl, ApiGear::PocoImpl::Tracer* tracer);
+    explicit StructInterfaceTracerDecorator(IStructInterface* impl, ApiGear::PocoImpl::Tracer& tracer);
 public:
-    static StructInterfaceTracerDecorator* connect(IStructInterface* impl, ApiGear::PocoImpl::Tracer* tracer);
+    static StructInterfaceTracerDecorator* connect(IStructInterface* impl, ApiGear::PocoImpl::Tracer& tracer);
     virtual ~StructInterfaceTracerDecorator();
 
     // operations
@@ -46,14 +46,14 @@ public:
     StructString funcString(const StructString& paramString) override;
     std::future<StructString> funcStringAsync(const StructString& paramString) override;
 public: // IStructInterfaceSubscriber interface
-    void OnSigBool(const StructBool& paramBool) override;
-    void OnSigInt(const StructInt& paramInt) override;
-    void OnSigFloat(const StructFloat& paramFloat) override;
-    void OnSigString(const StructString& paramString) override;
-    void OnPropBoolChanged(const StructBool& Value) override;
-    void OnPropIntChanged(const StructInt& Value) override;
-    void OnPropFloatChanged(const StructFloat& Value) override;
-    void OnPropStringChanged(const StructString& Value) override;
+    void onSigBool(const StructBool& paramBool) override;
+    void onSigInt(const StructInt& paramInt) override;
+    void onSigFloat(const StructFloat& paramFloat) override;
+    void onSigString(const StructString& paramString) override;
+    void onPropBoolChanged(const StructBool& Value) override;
+    void onPropIntChanged(const StructInt& Value) override;
+    void onPropFloatChanged(const StructFloat& Value) override;
+    void onPropStringChanged(const StructString& Value) override;
 private:
     std::unique_ptr<StructInterfaceTracer> m_tracer;
 };
