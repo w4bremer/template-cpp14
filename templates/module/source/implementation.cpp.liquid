@@ -12,7 +12,7 @@
 using namespace {{ system.name | capital }}::{{ module.name | capital }};
 
 {{class}}::{{class}}()
-    : m_publisher(std::make_unique<{{pub_class}}>()) 
+    : m_publisher(std::make_unique<{{pub_class}}>())
 {
 }
 {{class}}::~{{class}}()
@@ -39,7 +39,7 @@ void {{class}}::set{{property.name|capital}}({{ property|cpp14Param }})
 {{operation|cpp14Return}} {{class}}::{{operation.name}}({{operation|cpp14Params}})
 {
     {% for parameter in operation.params %}
-    (void) {{parameter.name}}; //suppress the 'Unreferenced Formal Parameter' warning.
+    (void) {{parameter.name}}; // suppress the 'Unreferenced Formal Parameter' warning.
     {% endfor %}
     // do business logic here
     return {};

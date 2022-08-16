@@ -15,16 +15,14 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
-#include "tb_same2/generated/core/sameenum1interface.publisher.h"
 
+
+#include "tb_same2/generated/core/sameenum1interface.publisher.h"
 #include <algorithm>
 
 
 using namespace Test::TbSame2;
 
-/**
- * Implementation SameEnum1InterfacePublisher
- */
 void SameEnum1InterfacePublisher::subscribeToAllChanges(ISameEnum1InterfaceSubscriber& subscriber)
 {
     auto found = std::find_if(m_allChangesSubscribers.begin(), m_allChangesSubscribers.end(),

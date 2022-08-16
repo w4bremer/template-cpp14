@@ -3,17 +3,13 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(apigear QUIET COMPONENTS poco-tracer)
 set (SOURCES_MONITOR
-    manyparaminterface.trace.cpp
-
+    manyparaminterface.tracedecorator.cpp
     manyparaminterface.tracer.cpp
-    nestedstruct1interface.trace.cpp
-
+    nestedstruct1interface.tracedecorator.cpp
     nestedstruct1interface.tracer.cpp
-    nestedstruct2interface.trace.cpp
-
+    nestedstruct2interface.tracedecorator.cpp
     nestedstruct2interface.tracer.cpp
-    nestedstruct3interface.trace.cpp
-
+    nestedstruct3interface.tracedecorator.cpp
     nestedstruct3interface.tracer.cpp
 )
 add_library(testbed2-monitor SHARED ${SOURCES_MONITOR})

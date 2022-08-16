@@ -7,9 +7,7 @@ find_package(nlohmann_json REQUIRED)
 
 set (SOURCES_CORE_SUPPORT
     tb_simple.json.adapter.cpp
-    simpleinterface.decorator.cpp
     simpleinterface.publisher.cpp
-    simplearrayinterface.decorator.cpp
     simplearrayinterface.publisher.cpp
 )
 add_library(tb_simple-core SHARED ${SOURCES_CORE_SUPPORT})

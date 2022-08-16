@@ -3,8 +3,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(apigear QUIET COMPONENTS poco-tracer)
 set (SOURCES_MONITOR
-    enuminterface.trace.cpp
-
+    enuminterface.tracedecorator.cpp
     enuminterface.tracer.cpp
 )
 add_library(tb_enum-monitor SHARED ${SOURCES_MONITOR})

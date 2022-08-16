@@ -24,7 +24,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 using namespace Test::TbSimple;
 
 SimpleInterface::SimpleInterface()
-    : m_publisher(std::make_unique<SimpleInterfacePublisher>()) 
+    : m_publisher(std::make_unique<SimpleInterfacePublisher>())
 {
 }
 SimpleInterface::~SimpleInterface()
@@ -85,7 +85,7 @@ std::string SimpleInterface::propString() const
 
 bool SimpleInterface::funcBool(bool paramBool)
 {
-    (void) paramBool; //suppress the 'Unreferenced Formal Parameter' warning.
+    (void) paramBool; // suppress the 'Unreferenced Formal Parameter' warning.
     // do business logic here
     return {};
 }
@@ -102,7 +102,7 @@ std::future<bool> SimpleInterface::funcBoolAsync(bool paramBool)
 
 int SimpleInterface::funcInt(int paramInt)
 {
-    (void) paramInt; //suppress the 'Unreferenced Formal Parameter' warning.
+    (void) paramInt; // suppress the 'Unreferenced Formal Parameter' warning.
     // do business logic here
     return {};
 }
@@ -119,7 +119,7 @@ std::future<int> SimpleInterface::funcIntAsync(int paramInt)
 
 float SimpleInterface::funcFloat(float paramFloat)
 {
-    (void) paramFloat; //suppress the 'Unreferenced Formal Parameter' warning.
+    (void) paramFloat; // suppress the 'Unreferenced Formal Parameter' warning.
     // do business logic here
     return {};
 }
@@ -136,7 +136,7 @@ std::future<float> SimpleInterface::funcFloatAsync(float paramFloat)
 
 std::string SimpleInterface::funcString(const std::string& paramString)
 {
-    (void) paramString; //suppress the 'Unreferenced Formal Parameter' warning.
+    (void) paramString; // suppress the 'Unreferenced Formal Parameter' warning.
     // do business logic here
     return {};
 }

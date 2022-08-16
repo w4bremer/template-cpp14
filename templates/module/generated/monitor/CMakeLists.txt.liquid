@@ -8,8 +8,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 find_package(apigear QUIET COMPONENTS poco-tracer)
 set (SOURCES_MONITOR
 {% for interface in module.interfaces %}
-    {{interface.name|lower}}.trace.cpp
-
+    {{interface.name|lower}}.tracedecorator.cpp
     {{interface.name|lower}}.tracer.cpp
 {% endfor %}
 )

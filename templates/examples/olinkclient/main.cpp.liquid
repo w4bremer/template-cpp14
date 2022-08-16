@@ -2,7 +2,7 @@
 {%- for module in system.modules -%}
 {% for interface in module.interfaces %}
 #include "{{module.name|identifier}}/generated/olink/remote{{interface.name|lower}}.h"
-#include "{{module.name|identifier}}/generated/monitor/{{interface.name|lower}}.trace.h"
+#include "{{module.name|identifier}}/generated/monitor/{{interface.name|lower}}.tracedecorator.h"
 {% endfor %}
 {% endfor %}
 #include "apigear/olink/olinkclient.h"
@@ -18,9 +18,9 @@ int main(){
     {% for module in system.modules %}
     {% for interface in module.interfaces %}
     {% assign class = interface.name | capital %}
-    {% assign tracer_class = class | append: "TracerDecorator" %}
+    {% assign tracer_class = class | append: "TraceDecorator" %}
     std::unique_ptr<{{ module.name | capital }}::I{{class}}> test{{module.name | capital}}{{class}} = std::make_unique<{{ module.name | capital }}::olink::Remote{{interface.name}}>(registry, testClient);
-    std::unique_ptr<{{ module.name | capital }}::I{{class}}> test{{ module.name | capital }}{{tracer_class}}({{ module.name | capital }}::{{tracer_class}}::connect(test{{ module.name | capital }}{{class}}.get(), tracer));
+    std::unique_ptr<{{ module.name | capital }}::I{{class}}> test{{ module.name | capital }}{{tracer_class}} = {{ module.name | capital }}::{{tracer_class}}::connect(*test{{module.name | capital}}{{class}}, tracer);
     {% endfor %}
     {% endfor %}
     

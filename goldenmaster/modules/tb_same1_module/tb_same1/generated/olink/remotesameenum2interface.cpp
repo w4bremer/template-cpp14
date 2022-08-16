@@ -17,7 +17,6 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 
-
 #include "tb_same1/generated/olink/remotesameenum2interface.h"
 #include "tb_same1/generated/core/sameenum2interface.publisher.h"
 #include "tb_same1/generated/core/tb_same1.json.adapter.h"
@@ -27,7 +26,7 @@ using namespace Test::TbSame1::olink;
 
 RemoteSameEnum2Interface::RemoteSameEnum2Interface(ApiGear::ObjectLink::ClientRegistry& registry, ApiGear::PocoImpl::OLinkClient& client)
     : m_registry(registry),
-    m_publisher(std::make_unique<SameEnum2InterfacePublisher>())
+      m_publisher(std::make_unique<SameEnum2InterfacePublisher>())
 {
     m_registry.addObjectSink(this);
     client.linkObjectSource("tb.same1.SameEnum2Interface");

@@ -24,7 +24,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 using namespace Test::Testbed2;
 
 NestedStruct1Interface::NestedStruct1Interface()
-    : m_publisher(std::make_unique<NestedStruct1InterfacePublisher>()) 
+    : m_publisher(std::make_unique<NestedStruct1InterfacePublisher>())
 {
 }
 NestedStruct1Interface::~NestedStruct1Interface()
@@ -46,7 +46,7 @@ const NestedStruct1& NestedStruct1Interface::prop1() const
 
 NestedStruct1 NestedStruct1Interface::func1(const NestedStruct1& param1)
 {
-    (void) param1; //suppress the 'Unreferenced Formal Parameter' warning.
+    (void) param1; // suppress the 'Unreferenced Formal Parameter' warning.
     // do business logic here
     return {};
 }

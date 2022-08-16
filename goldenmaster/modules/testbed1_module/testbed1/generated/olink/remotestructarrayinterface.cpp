@@ -17,7 +17,6 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 
-
 #include "testbed1/generated/olink/remotestructarrayinterface.h"
 #include "testbed1/generated/core/structarrayinterface.publisher.h"
 #include "testbed1/generated/core/testbed1.json.adapter.h"
@@ -27,7 +26,7 @@ using namespace Test::Testbed1::olink;
 
 RemoteStructArrayInterface::RemoteStructArrayInterface(ApiGear::ObjectLink::ClientRegistry& registry, ApiGear::PocoImpl::OLinkClient& client)
     : m_registry(registry),
-    m_publisher(std::make_unique<StructArrayInterfacePublisher>())
+      m_publisher(std::make_unique<StructArrayInterfacePublisher>())
 {
     m_registry.addObjectSink(this);
     client.linkObjectSource("testbed1.StructArrayInterface");

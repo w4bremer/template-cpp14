@@ -5,7 +5,6 @@
 {% assign pub_interface = "I" | append: interface.name | capital | append: "Publisher"%}
 {% assign identifiername = module.name | append: "." | append: interface.name %}
 
-
 #include "{{module.name|identifier}}/generated/olink/remote{{interface.name|lower}}.h"
 #include "{{module.name|identifier}}/generated/core/{{interface.name|lower}}.publisher.h"
 #include "{{module.name|identifier}}/generated/core/{{module.name|identifier}}.json.adapter.h"
@@ -15,7 +14,7 @@ using namespace {{ system.name | capital }}::{{ module.name | capital }}::olink;
 
 {{class}}::{{class}}(ApiGear::ObjectLink::ClientRegistry& registry, ApiGear::PocoImpl::OLinkClient& client)
     : m_registry(registry),
-    m_publisher(std::make_unique<{{pub_class}}>())
+      m_publisher(std::make_unique<{{pub_class}}>())
 {
     m_registry.addObjectSink(this);
     client.linkObjectSource("{{identifiername}}");

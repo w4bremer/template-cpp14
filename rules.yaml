@@ -39,10 +39,6 @@ features:
           target: "modules/{{module.name|identifier}}_module/{{module.name|identifier}}/generated/core/{{interface.name|lower}}.publisher.h"
         - source: "module/generated/core/interface.publisher.cpp.liquid"
           target: "modules/{{module.name|identifier}}_module/{{module.name|identifier}}/generated/core/{{interface.name|lower}}.publisher.cpp"
-        - source: "module/generated/core/interface.decorator.h.liquid"
-          target: "modules/{{module.name|identifier}}_module/{{module.name|identifier}}/generated/core/{{interface.name|lower}}.decorator.h"
-        - source: "module/generated/core/interface.decorator.cpp.liquid"
-          target: "modules/{{module.name|identifier}}_module/{{module.name|identifier}}/generated/core/{{interface.name|lower}}.decorator.cpp"
   scaffold:
     module:
       documents:
@@ -72,10 +68,10 @@ features:
           target: "modules/{{module.name|identifier}}_module/{{module.name|identifier}}/generated/monitor/CMakeLists.txt"
     interface:
       documents:
-        - source: "module/generated/monitor/interface.trace.h.liquid"
-          target: "modules/{{module.name|identifier}}_module/{{module.name|identifier}}/generated/monitor/{{interface.name|lower}}.trace.h"
-        - source: "module/generated/monitor/interface.trace.cpp.liquid"
-          target: "modules/{{module.name|identifier}}_module/{{module.name|identifier}}/generated/monitor/{{interface.name|lower}}.trace.cpp"
+        - source: "module/generated/monitor/interface.tracedecorator.h.liquid"
+          target: "modules/{{module.name|identifier}}_module/{{module.name|identifier}}/generated/monitor/{{interface.name|lower}}.tracedecorator.h"
+        - source: "module/generated/monitor/interface.tracedecorator.cpp.liquid"
+          target: "modules/{{module.name|identifier}}_module/{{module.name|identifier}}/generated/monitor/{{interface.name|lower}}.tracedecorator.cpp"
         - source: "module/generated/monitor/interface.tracer.h.liquid"
           target: "modules/{{module.name|identifier}}_module/{{module.name|identifier}}/generated/monitor/{{interface.name|lower}}.tracer.h"
         - source: "module/generated/monitor/interface.tracer.cpp.liquid"

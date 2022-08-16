@@ -24,7 +24,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 using namespace Test::TbSame1;
 
 SameStruct1Interface::SameStruct1Interface()
-    : m_publisher(std::make_unique<SameStruct1InterfacePublisher>()) 
+    : m_publisher(std::make_unique<SameStruct1InterfacePublisher>())
 {
 }
 SameStruct1Interface::~SameStruct1Interface()
@@ -46,7 +46,7 @@ const Struct1& SameStruct1Interface::prop1() const
 
 Struct1 SameStruct1Interface::func1(const Struct1& param1)
 {
-    (void) param1; //suppress the 'Unreferenced Formal Parameter' warning.
+    (void) param1; // suppress the 'Unreferenced Formal Parameter' warning.
     // do business logic here
     return {};
 }

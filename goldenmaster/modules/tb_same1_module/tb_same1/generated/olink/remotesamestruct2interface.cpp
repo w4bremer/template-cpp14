@@ -17,7 +17,6 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 
-
 #include "tb_same1/generated/olink/remotesamestruct2interface.h"
 #include "tb_same1/generated/core/samestruct2interface.publisher.h"
 #include "tb_same1/generated/core/tb_same1.json.adapter.h"
@@ -27,7 +26,7 @@ using namespace Test::TbSame1::olink;
 
 RemoteSameStruct2Interface::RemoteSameStruct2Interface(ApiGear::ObjectLink::ClientRegistry& registry, ApiGear::PocoImpl::OLinkClient& client)
     : m_registry(registry),
-    m_publisher(std::make_unique<SameStruct2InterfacePublisher>())
+      m_publisher(std::make_unique<SameStruct2InterfacePublisher>())
 {
     m_registry.addObjectSink(this);
     client.linkObjectSource("tb.same1.SameStruct2Interface");

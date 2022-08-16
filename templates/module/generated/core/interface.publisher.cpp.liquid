@@ -1,21 +1,16 @@
 {% comment %} // Copyright (c) ApiGear UG 2020 {% endcomment -%}
 {{ module | licGPLcpp -}}
 
-#include "{{module.name|identifier}}/generated/core/{{interface.name|lower}}.publisher.h"
+{% assign class = "I" | append: interface.name | capital %}
+{% assign sub_class = class | append: "Subscriber" %}
+{% assign pub_class = interface.name | capital | append: "Publisher"%}
 
+#include "{{module.name|identifier}}/generated/core/{{interface.name|lower}}.publisher.h"
 #include <algorithm>
 
-{% assign class = "I" | append: interface.name | capital %}
-{% assign sub_class = "I" | append: interface.name | capital | append: "Subscriber" %}
-{% assign pub_interface = "I" | append: interface.name | capital | append: "Publisher" %}
-{% assign pub_class = interface.name | capital | append: "Publisher"%}
 {{nl}}
-
 using namespace {{ system.name | capital }}::{{ module.name | capital }};
 
-/**
- * Implementation {{pub_class}}
- */
 void {{pub_class}}::subscribeToAllChanges({{sub_class}}& subscriber)
 {
     auto found = std::find_if(m_allChangesSubscribers.begin(), m_allChangesSubscribers.end(),

@@ -7,13 +7,9 @@ find_package(nlohmann_json REQUIRED)
 
 set (SOURCES_CORE_SUPPORT
     testbed2.json.adapter.cpp
-    manyparaminterface.decorator.cpp
     manyparaminterface.publisher.cpp
-    nestedstruct1interface.decorator.cpp
     nestedstruct1interface.publisher.cpp
-    nestedstruct2interface.decorator.cpp
     nestedstruct2interface.publisher.cpp
-    nestedstruct3interface.decorator.cpp
     nestedstruct3interface.publisher.cpp
 )
 add_library(testbed2-core SHARED ${SOURCES_CORE_SUPPORT})

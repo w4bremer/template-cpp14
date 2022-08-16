@@ -24,7 +24,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 using namespace Test::TbSame2;
 
 SameEnum2Interface::SameEnum2Interface()
-    : m_publisher(std::make_unique<SameEnum2InterfacePublisher>()) 
+    : m_publisher(std::make_unique<SameEnum2InterfacePublisher>())
 {
 }
 SameEnum2Interface::~SameEnum2Interface()
@@ -59,7 +59,7 @@ const Enum2Enum& SameEnum2Interface::prop2() const
 
 Enum1Enum SameEnum2Interface::func1(const Enum1Enum& param1)
 {
-    (void) param1; //suppress the 'Unreferenced Formal Parameter' warning.
+    (void) param1; // suppress the 'Unreferenced Formal Parameter' warning.
     // do business logic here
     return {};
 }
@@ -76,8 +76,8 @@ std::future<Enum1Enum> SameEnum2Interface::func1Async(const Enum1Enum& param1)
 
 Enum1Enum SameEnum2Interface::func2(const Enum1Enum& param1, const Enum2Enum& param2)
 {
-    (void) param1; //suppress the 'Unreferenced Formal Parameter' warning.
-    (void) param2; //suppress the 'Unreferenced Formal Parameter' warning.
+    (void) param1; // suppress the 'Unreferenced Formal Parameter' warning.
+    (void) param2; // suppress the 'Unreferenced Formal Parameter' warning.
     // do business logic here
     return {};
 }

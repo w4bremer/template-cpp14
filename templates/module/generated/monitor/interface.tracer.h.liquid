@@ -37,7 +37,7 @@ public:
   */
   void trace_{{operation.name}}({{operation | cpp14Params}});
   {% endfor %}
-  {% for signal in interface.signals %}
+    {% for signal in interface.signals %}
   /**
   * Prepares information about the {{signal.name}} call in a nlohmann::json format and puts to a tracer.
   * @param The {{interface.name}} object to trace.

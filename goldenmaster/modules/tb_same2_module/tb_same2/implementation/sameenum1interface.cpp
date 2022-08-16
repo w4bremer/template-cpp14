@@ -24,7 +24,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 using namespace Test::TbSame2;
 
 SameEnum1Interface::SameEnum1Interface()
-    : m_publisher(std::make_unique<SameEnum1InterfacePublisher>()) 
+    : m_publisher(std::make_unique<SameEnum1InterfacePublisher>())
 {
 }
 SameEnum1Interface::~SameEnum1Interface()
@@ -46,7 +46,7 @@ const Enum1Enum& SameEnum1Interface::prop1() const
 
 Enum1Enum SameEnum1Interface::func1(const Enum1Enum& param1)
 {
-    (void) param1; //suppress the 'Unreferenced Formal Parameter' warning.
+    (void) param1; // suppress the 'Unreferenced Formal Parameter' warning.
     // do business logic here
     return {};
 }

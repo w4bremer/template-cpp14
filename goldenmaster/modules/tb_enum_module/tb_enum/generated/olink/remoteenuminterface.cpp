@@ -17,7 +17,6 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 
-
 #include "tb_enum/generated/olink/remoteenuminterface.h"
 #include "tb_enum/generated/core/enuminterface.publisher.h"
 #include "tb_enum/generated/core/tb_enum.json.adapter.h"
@@ -27,7 +26,7 @@ using namespace Test::TbEnum::olink;
 
 RemoteEnumInterface::RemoteEnumInterface(ApiGear::ObjectLink::ClientRegistry& registry, ApiGear::PocoImpl::OLinkClient& client)
     : m_registry(registry),
-    m_publisher(std::make_unique<EnumInterfacePublisher>())
+      m_publisher(std::make_unique<EnumInterfacePublisher>())
 {
     m_registry.addObjectSink(this);
     client.linkObjectSource("tb.enum.EnumInterface");

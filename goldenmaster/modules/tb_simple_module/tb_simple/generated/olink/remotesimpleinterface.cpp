@@ -17,7 +17,6 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 
-
 #include "tb_simple/generated/olink/remotesimpleinterface.h"
 #include "tb_simple/generated/core/simpleinterface.publisher.h"
 #include "tb_simple/generated/core/tb_simple.json.adapter.h"
@@ -27,7 +26,7 @@ using namespace Test::TbSimple::olink;
 
 RemoteSimpleInterface::RemoteSimpleInterface(ApiGear::ObjectLink::ClientRegistry& registry, ApiGear::PocoImpl::OLinkClient& client)
     : m_registry(registry),
-    m_publisher(std::make_unique<SimpleInterfacePublisher>())
+      m_publisher(std::make_unique<SimpleInterfacePublisher>())
 {
     m_registry.addObjectSink(this);
     client.linkObjectSource("tb.simple.SimpleInterface");

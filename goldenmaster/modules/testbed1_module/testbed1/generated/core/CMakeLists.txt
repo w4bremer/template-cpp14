@@ -7,9 +7,7 @@ find_package(nlohmann_json REQUIRED)
 
 set (SOURCES_CORE_SUPPORT
     testbed1.json.adapter.cpp
-    structinterface.decorator.cpp
     structinterface.publisher.cpp
-    structarrayinterface.decorator.cpp
     structarrayinterface.publisher.cpp
 )
 add_library(testbed1-core SHARED ${SOURCES_CORE_SUPPORT})

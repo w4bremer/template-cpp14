@@ -3,17 +3,13 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(apigear QUIET COMPONENTS poco-tracer)
 set (SOURCES_MONITOR
-    samestruct1interface.trace.cpp
-
+    samestruct1interface.tracedecorator.cpp
     samestruct1interface.tracer.cpp
-    samestruct2interface.trace.cpp
-
+    samestruct2interface.tracedecorator.cpp
     samestruct2interface.tracer.cpp
-    sameenum1interface.trace.cpp
-
+    sameenum1interface.tracedecorator.cpp
     sameenum1interface.tracer.cpp
-    sameenum2interface.trace.cpp
-
+    sameenum2interface.tracedecorator.cpp
     sameenum2interface.tracer.cpp
 )
 add_library(tb_same1-monitor SHARED ${SOURCES_MONITOR})

@@ -24,7 +24,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 using namespace Test::Testbed1;
 
 StructInterface::StructInterface()
-    : m_publisher(std::make_unique<StructInterfacePublisher>()) 
+    : m_publisher(std::make_unique<StructInterfacePublisher>())
 {
 }
 StructInterface::~StructInterface()
@@ -85,7 +85,7 @@ const StructString& StructInterface::propString() const
 
 StructBool StructInterface::funcBool(const StructBool& paramBool)
 {
-    (void) paramBool; //suppress the 'Unreferenced Formal Parameter' warning.
+    (void) paramBool; // suppress the 'Unreferenced Formal Parameter' warning.
     // do business logic here
     return {};
 }
@@ -102,7 +102,7 @@ std::future<StructBool> StructInterface::funcBoolAsync(const StructBool& paramBo
 
 StructBool StructInterface::funcInt(const StructInt& paramInt)
 {
-    (void) paramInt; //suppress the 'Unreferenced Formal Parameter' warning.
+    (void) paramInt; // suppress the 'Unreferenced Formal Parameter' warning.
     // do business logic here
     return {};
 }
@@ -119,7 +119,7 @@ std::future<StructBool> StructInterface::funcIntAsync(const StructInt& paramInt)
 
 StructFloat StructInterface::funcFloat(const StructFloat& paramFloat)
 {
-    (void) paramFloat; //suppress the 'Unreferenced Formal Parameter' warning.
+    (void) paramFloat; // suppress the 'Unreferenced Formal Parameter' warning.
     // do business logic here
     return {};
 }
@@ -136,7 +136,7 @@ std::future<StructFloat> StructInterface::funcFloatAsync(const StructFloat& para
 
 StructString StructInterface::funcString(const StructString& paramString)
 {
-    (void) paramString; //suppress the 'Unreferenced Formal Parameter' warning.
+    (void) paramString; // suppress the 'Unreferenced Formal Parameter' warning.
     // do business logic here
     return {};
 }

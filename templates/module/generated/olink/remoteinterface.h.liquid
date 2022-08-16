@@ -3,7 +3,6 @@
 {% assign class = interface.name |prepend:"Remote"-%}
 {% assign interface_class = "I" | append: interface.name | capital -%}
 {% assign sub_class = "I" | append: interface.name | capital | append: "Subscriber" %}
-{% assign pub_class = "Abstract" | append: interface.name | capital | append: "Publisher" -%}
 {% assign pub_interface = "I" | append: interface.name | capital | append: "Publisher"%}
 #pragma once
 

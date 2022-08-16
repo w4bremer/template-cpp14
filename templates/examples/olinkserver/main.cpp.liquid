@@ -3,6 +3,7 @@
 {% for interface in module.interfaces %}
 #include "{{module.name|identifier}}/implementation/{{interface.name|lower}}.h"
 #include "{{module.name|identifier}}/generated/olink/{{interface.name|lower}}service.adapter.h"
+
 {% endfor %}
 {% endfor %}
 #include "apigear/olink/olinkhost.h"

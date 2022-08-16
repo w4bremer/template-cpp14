@@ -111,7 +111,6 @@ public:
     */
     virtual int prop4() const = 0;
 
-
     /**
     * Access to a publisher, use it to subscribe for ManyParamInterface changes and signal emission.
     * This function name doesn't follow the convention, because it is added to user defined interface,

@@ -3,11 +3,9 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(apigear QUIET COMPONENTS poco-tracer)
 set (SOURCES_MONITOR
-    simpleinterface.trace.cpp
-
+    simpleinterface.tracedecorator.cpp
     simpleinterface.tracer.cpp
-    simplearrayinterface.trace.cpp
-
+    simplearrayinterface.tracedecorator.cpp
     simplearrayinterface.tracer.cpp
 )
 add_library(tb_simple-monitor SHARED ${SOURCES_MONITOR})

@@ -7,13 +7,9 @@ find_package(nlohmann_json REQUIRED)
 
 set (SOURCES_CORE_SUPPORT
     tb_same1.json.adapter.cpp
-    samestruct1interface.decorator.cpp
     samestruct1interface.publisher.cpp
-    samestruct2interface.decorator.cpp
     samestruct2interface.publisher.cpp
-    sameenum1interface.decorator.cpp
     sameenum1interface.publisher.cpp
-    sameenum2interface.decorator.cpp
     sameenum2interface.publisher.cpp
 )
 add_library(tb_same1-core SHARED ${SOURCES_CORE_SUPPORT})

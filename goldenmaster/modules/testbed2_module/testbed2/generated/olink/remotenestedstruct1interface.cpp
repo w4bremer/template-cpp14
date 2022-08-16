@@ -17,7 +17,6 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 
-
 #include "testbed2/generated/olink/remotenestedstruct1interface.h"
 #include "testbed2/generated/core/nestedstruct1interface.publisher.h"
 #include "testbed2/generated/core/testbed2.json.adapter.h"
@@ -27,7 +26,7 @@ using namespace Test::Testbed2::olink;
 
 RemoteNestedStruct1Interface::RemoteNestedStruct1Interface(ApiGear::ObjectLink::ClientRegistry& registry, ApiGear::PocoImpl::OLinkClient& client)
     : m_registry(registry),
-    m_publisher(std::make_unique<NestedStruct1InterfacePublisher>())
+      m_publisher(std::make_unique<NestedStruct1InterfacePublisher>())
 {
     m_registry.addObjectSink(this);
     client.linkObjectSource("testbed2.NestedStruct1Interface");

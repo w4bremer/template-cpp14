@@ -111,7 +111,6 @@ public:
     */
     virtual const Enum3Enum& prop3() const = 0;
 
-
     /**
     * Access to a publisher, use it to subscribe for EnumInterface changes and signal emission.
     * This function name doesn't follow the convention, because it is added to user defined interface,

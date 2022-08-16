@@ -15,16 +15,14 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
-#include "tb_simple/generated/core/simpleinterface.publisher.h"
 
+
+#include "tb_simple/generated/core/simpleinterface.publisher.h"
 #include <algorithm>
 
 
 using namespace Test::TbSimple;
 
-/**
- * Implementation SimpleInterfacePublisher
- */
 void SimpleInterfacePublisher::subscribeToAllChanges(ISimpleInterfaceSubscriber& subscriber)
 {
     auto found = std::find_if(m_allChangesSubscribers.begin(), m_allChangesSubscribers.end(),

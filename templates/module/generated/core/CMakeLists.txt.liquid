@@ -10,7 +10,6 @@ find_package(nlohmann_json REQUIRED)
 set (SOURCES_CORE_SUPPORT
     {{module_id}}.json.adapter.cpp
 {% for interface in module.interfaces %}
-    {{interface.name|lower}}.decorator.cpp
     {{interface.name|lower}}.publisher.cpp
 {% endfor %}
 )
