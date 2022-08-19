@@ -49,7 +49,7 @@ public:
     /**
     * Gets the value of the prop1 property.
     */
-    virtual const Struct2& prop1() const = 0;
+    virtual const Struct2& getProp1() const = 0;
 
     /**
     * Sets the value of the prop2 property.
@@ -58,7 +58,7 @@ public:
     /**
     * Gets the value of the prop2 property.
     */
-    virtual const Struct2& prop2() const = 0;
+    virtual const Struct2& getProp2() const = 0;
 
     /**
     * Access to a publisher, use it to subscribe for SameStruct2Interface changes and signal emission.

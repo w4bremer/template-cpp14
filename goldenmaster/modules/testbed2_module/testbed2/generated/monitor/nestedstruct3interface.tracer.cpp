@@ -12,9 +12,9 @@ NestedStruct3InterfaceTracer::NestedStruct3InterfaceTracer(ApiGear::PocoImpl::Tr
 void NestedStruct3InterfaceTracer::capture_state(INestedStruct3Interface* obj)
 {
     nlohmann::json fields_;
-    fields_["prop1"] = obj->prop1();
-    fields_["prop2"] = obj->prop2();
-    fields_["prop3"] = obj->prop3();
+    fields_["prop1"] = obj->getProp1();
+    fields_["prop2"] = obj->getProp2();
+    fields_["prop3"] = obj->getProp3();
     m_tracer.state("testbed2.NestedStruct3Interface#_state", fields_);
 }
 

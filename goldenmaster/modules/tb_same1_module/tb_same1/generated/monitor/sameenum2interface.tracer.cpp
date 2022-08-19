@@ -12,8 +12,8 @@ SameEnum2InterfaceTracer::SameEnum2InterfaceTracer(ApiGear::PocoImpl::Tracer& tr
 void SameEnum2InterfaceTracer::capture_state(ISameEnum2Interface* obj)
 {
     nlohmann::json fields_;
-    fields_["prop1"] = obj->prop1();
-    fields_["prop2"] = obj->prop2();
+    fields_["prop1"] = obj->getProp1();
+    fields_["prop2"] = obj->getProp2();
     m_tracer.state("tb.same1.SameEnum2Interface#_state", fields_);
 }
 

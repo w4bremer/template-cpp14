@@ -64,36 +64,36 @@ void ManyParamInterfaceTraceDecorator::setProp1(int prop1)
     m_impl.setProp1(prop1);
 }
 
-int ManyParamInterfaceTraceDecorator::prop1() const
+int ManyParamInterfaceTraceDecorator::getProp1() const
 {
-    return m_impl.prop1();
+    return m_impl.getProp1();
 }
 void ManyParamInterfaceTraceDecorator::setProp2(int prop2)
 {
     m_impl.setProp2(prop2);
 }
 
-int ManyParamInterfaceTraceDecorator::prop2() const
+int ManyParamInterfaceTraceDecorator::getProp2() const
 {
-    return m_impl.prop2();
+    return m_impl.getProp2();
 }
 void ManyParamInterfaceTraceDecorator::setProp3(int prop3)
 {
     m_impl.setProp3(prop3);
 }
 
-int ManyParamInterfaceTraceDecorator::prop3() const
+int ManyParamInterfaceTraceDecorator::getProp3() const
 {
-    return m_impl.prop3();
+    return m_impl.getProp3();
 }
 void ManyParamInterfaceTraceDecorator::setProp4(int prop4)
 {
     m_impl.setProp4(prop4);
 }
 
-int ManyParamInterfaceTraceDecorator::prop4() const
+int ManyParamInterfaceTraceDecorator::getProp4() const
 {
-    return m_impl.prop4();
+    return m_impl.getProp4();
 }
 void ManyParamInterfaceTraceDecorator::onSig1(int param1)
 {

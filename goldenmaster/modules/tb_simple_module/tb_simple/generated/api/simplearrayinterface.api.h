@@ -65,7 +65,7 @@ public:
     /**
     * Gets the value of the propBool property.
     */
-    virtual const std::list<bool>& propBool() const = 0;
+    virtual const std::list<bool>& getPropBool() const = 0;
 
     /**
     * Sets the value of the propInt property.
@@ -74,7 +74,7 @@ public:
     /**
     * Gets the value of the propInt property.
     */
-    virtual const std::list<int>& propInt() const = 0;
+    virtual const std::list<int>& getPropInt() const = 0;
 
     /**
     * Sets the value of the propFloat property.
@@ -83,7 +83,7 @@ public:
     /**
     * Gets the value of the propFloat property.
     */
-    virtual const std::list<float>& propFloat() const = 0;
+    virtual const std::list<float>& getPropFloat() const = 0;
 
     /**
     * Sets the value of the propString property.
@@ -92,7 +92,7 @@ public:
     /**
     * Gets the value of the propString property.
     */
-    virtual const std::list<std::string>& propString() const = 0;
+    virtual const std::list<std::string>& getPropString() const = 0;
 
     /**
     * Access to a publisher, use it to subscribe for SimpleArrayInterface changes and signal emission.

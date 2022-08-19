@@ -52,7 +52,7 @@ void RemoteStructArrayInterface::setPropBoolLocal(const std::list<StructBool>& p
     }
 }
 
-const std::list<StructBool>& RemoteStructArrayInterface::propBool() const
+const std::list<StructBool>& RemoteStructArrayInterface::getPropBool() const
 {
     return m_data.m_propBool;
 }
@@ -73,7 +73,7 @@ void RemoteStructArrayInterface::setPropIntLocal(const std::list<StructInt>& pro
     }
 }
 
-const std::list<StructInt>& RemoteStructArrayInterface::propInt() const
+const std::list<StructInt>& RemoteStructArrayInterface::getPropInt() const
 {
     return m_data.m_propInt;
 }
@@ -94,7 +94,7 @@ void RemoteStructArrayInterface::setPropFloatLocal(const std::list<StructFloat>&
     }
 }
 
-const std::list<StructFloat>& RemoteStructArrayInterface::propFloat() const
+const std::list<StructFloat>& RemoteStructArrayInterface::getPropFloat() const
 {
     return m_data.m_propFloat;
 }
@@ -115,7 +115,7 @@ void RemoteStructArrayInterface::setPropStringLocal(const std::list<StructString
     }
 }
 
-const std::list<StructString>& RemoteStructArrayInterface::propString() const
+const std::list<StructString>& RemoteStructArrayInterface::getPropString() const
 {
     return m_data.m_propString;
 }

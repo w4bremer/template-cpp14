@@ -47,12 +47,12 @@ public:
     /** Forwards call to SameEnum2Interface implementation. */
     void setProp1(const Enum1Enum& prop1) override;
     /** Forwards call to SameEnum2Interface implementation. */
-    const Enum1Enum& prop1() const override;
+    const Enum1Enum& getProp1() const override;
     
     /** Forwards call to SameEnum2Interface implementation. */
     void setProp2(const Enum2Enum& prop2) override;
     /** Forwards call to SameEnum2Interface implementation. */
-    const Enum2Enum& prop2() const override;
+    const Enum2Enum& getProp2() const override;
     
     /**
     Traces sig1 emission.

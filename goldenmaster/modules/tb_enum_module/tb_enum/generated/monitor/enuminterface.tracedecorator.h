@@ -57,22 +57,22 @@ public:
     /** Forwards call to EnumInterface implementation. */
     void setProp0(const Enum0Enum& prop0) override;
     /** Forwards call to EnumInterface implementation. */
-    const Enum0Enum& prop0() const override;
+    const Enum0Enum& getProp0() const override;
     
     /** Forwards call to EnumInterface implementation. */
     void setProp1(const Enum1Enum& prop1) override;
     /** Forwards call to EnumInterface implementation. */
-    const Enum1Enum& prop1() const override;
+    const Enum1Enum& getProp1() const override;
     
     /** Forwards call to EnumInterface implementation. */
     void setProp2(const Enum2Enum& prop2) override;
     /** Forwards call to EnumInterface implementation. */
-    const Enum2Enum& prop2() const override;
+    const Enum2Enum& getProp2() const override;
     
     /** Forwards call to EnumInterface implementation. */
     void setProp3(const Enum3Enum& prop3) override;
     /** Forwards call to EnumInterface implementation. */
-    const Enum3Enum& prop3() const override;
+    const Enum3Enum& getProp3() const override;
     
     /**
     Traces sig0 emission.

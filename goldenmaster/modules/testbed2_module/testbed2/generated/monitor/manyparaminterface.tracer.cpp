@@ -12,10 +12,10 @@ ManyParamInterfaceTracer::ManyParamInterfaceTracer(ApiGear::PocoImpl::Tracer& tr
 void ManyParamInterfaceTracer::capture_state(IManyParamInterface* obj)
 {
     nlohmann::json fields_;
-    fields_["prop1"] = obj->prop1();
-    fields_["prop2"] = obj->prop2();
-    fields_["prop3"] = obj->prop3();
-    fields_["prop4"] = obj->prop4();
+    fields_["prop1"] = obj->getProp1();
+    fields_["prop2"] = obj->getProp2();
+    fields_["prop3"] = obj->getProp3();
+    fields_["prop4"] = obj->getProp4();
     m_tracer.state("testbed2.ManyParamInterface#_state", fields_);
 }
 

@@ -87,10 +87,10 @@ void EnumInterfaceServiceAdapter::olinkUnlinked(std::string name)
 nlohmann::json EnumInterfaceServiceAdapter::olinkCollectProperties()
 {
     return nlohmann::json::object({
-        { "prop0", m_EnumInterface.prop0() },
-        { "prop1", m_EnumInterface.prop1() },
-        { "prop2", m_EnumInterface.prop2() },
-        { "prop3", m_EnumInterface.prop3() }
+        { "prop0", m_EnumInterface.getProp0() },
+        { "prop1", m_EnumInterface.getProp1() },
+        { "prop2", m_EnumInterface.getProp2() },
+        { "prop3", m_EnumInterface.getProp3() }
     });
 }
 void EnumInterfaceServiceAdapter::onSig0(const Enum0Enum& param0)

@@ -45,7 +45,7 @@ public:
     * Property getter
     * @return Locally stored locally value for {{property.name|capital}}.
     */
-    {{property|cpp14Return: true}} {{property.name}}() const override;
+    {{property|cpp14Return: true}} get{{property.name | capital}}() const override;
     /**
     * Request setting a property on the {{interface.name}} service.
     * @param The value to which set request is send for the {{property.name|capital}}.
@@ -57,11 +57,11 @@ public:
     * Remote call of {{interface_class}}::{{operation.name}} on the {{interface.name}} service.
     * Uses {{operation.name}}Async
     */
-    {{operation|cpp14Return}} {{operation.name}}({{operation|cpp14Params}}) override;
+    {{operation|cpp14Return}} {{operation.name| lowerFirst}}({{operation|cpp14Params}}) override;
     /**
     * Remote call of {{interface_class}}::{{operation.name}} on the {{interface.name}} service.
     */
-    std::future<{{operation|cpp14Return}}> {{operation.name}}Async({{operation|cpp14Params}}) override;
+    std::future<{{operation|cpp14Return}}> {{operation.name| lowerFirst}}Async({{operation|cpp14Params}}) override;
 {% endfor %}
 
     /** The publisher to subscribe to. */

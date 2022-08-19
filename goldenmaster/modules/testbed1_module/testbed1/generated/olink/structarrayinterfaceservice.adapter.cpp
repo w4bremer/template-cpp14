@@ -87,10 +87,10 @@ void StructArrayInterfaceServiceAdapter::olinkUnlinked(std::string name)
 nlohmann::json StructArrayInterfaceServiceAdapter::olinkCollectProperties()
 {
     return nlohmann::json::object({
-        { "propBool", m_StructArrayInterface.propBool() },
-        { "propInt", m_StructArrayInterface.propInt() },
-        { "propFloat", m_StructArrayInterface.propFloat() },
-        { "propString", m_StructArrayInterface.propString() }
+        { "propBool", m_StructArrayInterface.getPropBool() },
+        { "propInt", m_StructArrayInterface.getPropInt() },
+        { "propFloat", m_StructArrayInterface.getPropFloat() },
+        { "propString", m_StructArrayInterface.getPropString() }
     });
 }
 void StructArrayInterfaceServiceAdapter::onSigBool(const std::list<StructBool>& paramBool)

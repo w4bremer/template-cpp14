@@ -21,16 +21,16 @@ TEST_CASE("Testing NestedStruct3Interface", "[NestedStruct3Interface]"){
     SECTION("Test property prop1") {
         // Do implement test here
         testNestedStruct3Interface->setProp1(NestedStruct1());
-        REQUIRE( testNestedStruct3Interface->prop1() == NestedStruct1() );
+        REQUIRE( testNestedStruct3Interface->getProp1() == NestedStruct1() );
     }
     SECTION("Test property prop2") {
         // Do implement test here
         testNestedStruct3Interface->setProp2(NestedStruct2());
-        REQUIRE( testNestedStruct3Interface->prop2() == NestedStruct2() );
+        REQUIRE( testNestedStruct3Interface->getProp2() == NestedStruct2() );
     }
     SECTION("Test property prop3") {
         // Do implement test here
         testNestedStruct3Interface->setProp3(NestedStruct3());
-        REQUIRE( testNestedStruct3Interface->prop3() == NestedStruct3() );
+        REQUIRE( testNestedStruct3Interface->getProp3() == NestedStruct3() );
     }
 }

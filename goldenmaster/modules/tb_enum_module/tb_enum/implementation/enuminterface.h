@@ -18,16 +18,16 @@ public:
     ~EnumInterface();
 public:
     void setProp0(const Enum0Enum& prop0) override;
-    const Enum0Enum& prop0() const override;
+    const Enum0Enum& getProp0() const override;
     
     void setProp1(const Enum1Enum& prop1) override;
-    const Enum1Enum& prop1() const override;
+    const Enum1Enum& getProp1() const override;
     
     void setProp2(const Enum2Enum& prop2) override;
-    const Enum2Enum& prop2() const override;
+    const Enum2Enum& getProp2() const override;
     
     void setProp3(const Enum3Enum& prop3) override;
-    const Enum3Enum& prop3() const override;
+    const Enum3Enum& getProp3() const override;
     
     Enum0Enum func0(const Enum0Enum& param0) override;
     std::future<Enum0Enum> func0Async(const Enum0Enum& param0) override;

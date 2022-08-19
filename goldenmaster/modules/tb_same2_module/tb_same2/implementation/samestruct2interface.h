@@ -18,10 +18,10 @@ public:
     ~SameStruct2Interface();
 public:
     void setProp1(const Struct2& prop1) override;
-    const Struct2& prop1() const override;
+    const Struct2& getProp1() const override;
     
     void setProp2(const Struct2& prop2) override;
-    const Struct2& prop2() const override;
+    const Struct2& getProp2() const override;
     
     Struct1 func1(const Struct1& param1) override;
     std::future<Struct1> func1Async(const Struct1& param1) override;

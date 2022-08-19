@@ -22,7 +22,7 @@ void StructArrayInterface::setPropBool(const std::list<StructBool>& propBool)
     }
 }
 
-const std::list<StructBool>& StructArrayInterface::propBool() const
+const std::list<StructBool>& StructArrayInterface::getPropBool() const
 {
     return m_data.m_propBool;
 }
@@ -35,7 +35,7 @@ void StructArrayInterface::setPropInt(const std::list<StructInt>& propInt)
     }
 }
 
-const std::list<StructInt>& StructArrayInterface::propInt() const
+const std::list<StructInt>& StructArrayInterface::getPropInt() const
 {
     return m_data.m_propInt;
 }
@@ -48,7 +48,7 @@ void StructArrayInterface::setPropFloat(const std::list<StructFloat>& propFloat)
     }
 }
 
-const std::list<StructFloat>& StructArrayInterface::propFloat() const
+const std::list<StructFloat>& StructArrayInterface::getPropFloat() const
 {
     return m_data.m_propFloat;
 }
@@ -61,7 +61,7 @@ void StructArrayInterface::setPropString(const std::list<StructString>& propStri
     }
 }
 
-const std::list<StructString>& StructArrayInterface::propString() const
+const std::list<StructString>& StructArrayInterface::getPropString() const
 {
     return m_data.m_propString;
 }

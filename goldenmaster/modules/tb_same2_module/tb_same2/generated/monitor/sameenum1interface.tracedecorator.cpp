@@ -34,9 +34,9 @@ void SameEnum1InterfaceTraceDecorator::setProp1(const Enum1Enum& prop1)
     m_impl.setProp1(prop1);
 }
 
-const Enum1Enum& SameEnum1InterfaceTraceDecorator::prop1() const
+const Enum1Enum& SameEnum1InterfaceTraceDecorator::getProp1() const
 {
-    return m_impl.prop1();
+    return m_impl.getProp1();
 }
 void SameEnum1InterfaceTraceDecorator::onSig1(const Enum1Enum& param1)
 {

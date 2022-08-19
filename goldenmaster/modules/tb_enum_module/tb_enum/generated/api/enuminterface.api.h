@@ -65,7 +65,7 @@ public:
     /**
     * Gets the value of the prop0 property.
     */
-    virtual const Enum0Enum& prop0() const = 0;
+    virtual const Enum0Enum& getProp0() const = 0;
 
     /**
     * Sets the value of the prop1 property.
@@ -74,7 +74,7 @@ public:
     /**
     * Gets the value of the prop1 property.
     */
-    virtual const Enum1Enum& prop1() const = 0;
+    virtual const Enum1Enum& getProp1() const = 0;
 
     /**
     * Sets the value of the prop2 property.
@@ -83,7 +83,7 @@ public:
     /**
     * Gets the value of the prop2 property.
     */
-    virtual const Enum2Enum& prop2() const = 0;
+    virtual const Enum2Enum& getProp2() const = 0;
 
     /**
     * Sets the value of the prop3 property.
@@ -92,7 +92,7 @@ public:
     /**
     * Gets the value of the prop3 property.
     */
-    virtual const Enum3Enum& prop3() const = 0;
+    virtual const Enum3Enum& getProp3() const = 0;
 
     /**
     * Access to a publisher, use it to subscribe for EnumInterface changes and signal emission.

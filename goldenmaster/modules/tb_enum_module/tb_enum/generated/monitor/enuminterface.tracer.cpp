@@ -12,10 +12,10 @@ EnumInterfaceTracer::EnumInterfaceTracer(ApiGear::PocoImpl::Tracer& tracer)
 void EnumInterfaceTracer::capture_state(IEnumInterface* obj)
 {
     nlohmann::json fields_;
-    fields_["prop0"] = obj->prop0();
-    fields_["prop1"] = obj->prop1();
-    fields_["prop2"] = obj->prop2();
-    fields_["prop3"] = obj->prop3();
+    fields_["prop0"] = obj->getProp0();
+    fields_["prop1"] = obj->getProp1();
+    fields_["prop2"] = obj->getProp2();
+    fields_["prop3"] = obj->getProp3();
     m_tracer.state("tb.enum.EnumInterface#_state", fields_);
 }
 

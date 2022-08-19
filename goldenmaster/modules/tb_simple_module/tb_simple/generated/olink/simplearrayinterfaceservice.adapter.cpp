@@ -87,10 +87,10 @@ void SimpleArrayInterfaceServiceAdapter::olinkUnlinked(std::string name)
 nlohmann::json SimpleArrayInterfaceServiceAdapter::olinkCollectProperties()
 {
     return nlohmann::json::object({
-        { "propBool", m_SimpleArrayInterface.propBool() },
-        { "propInt", m_SimpleArrayInterface.propInt() },
-        { "propFloat", m_SimpleArrayInterface.propFloat() },
-        { "propString", m_SimpleArrayInterface.propString() }
+        { "propBool", m_SimpleArrayInterface.getPropBool() },
+        { "propInt", m_SimpleArrayInterface.getPropInt() },
+        { "propFloat", m_SimpleArrayInterface.getPropFloat() },
+        { "propString", m_SimpleArrayInterface.getPropString() }
     });
 }
 void SimpleArrayInterfaceServiceAdapter::onSigBool(const std::list<bool>& paramBool)

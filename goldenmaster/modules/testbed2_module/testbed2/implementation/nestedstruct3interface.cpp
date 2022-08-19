@@ -22,7 +22,7 @@ void NestedStruct3Interface::setProp1(const NestedStruct1& prop1)
     }
 }
 
-const NestedStruct1& NestedStruct3Interface::prop1() const
+const NestedStruct1& NestedStruct3Interface::getProp1() const
 {
     return m_data.m_prop1;
 }
@@ -35,7 +35,7 @@ void NestedStruct3Interface::setProp2(const NestedStruct2& prop2)
     }
 }
 
-const NestedStruct2& NestedStruct3Interface::prop2() const
+const NestedStruct2& NestedStruct3Interface::getProp2() const
 {
     return m_data.m_prop2;
 }
@@ -48,7 +48,7 @@ void NestedStruct3Interface::setProp3(const NestedStruct3& prop3)
     }
 }
 
-const NestedStruct3& NestedStruct3Interface::prop3() const
+const NestedStruct3& NestedStruct3Interface::getProp3() const
 {
     return m_data.m_prop3;
 }

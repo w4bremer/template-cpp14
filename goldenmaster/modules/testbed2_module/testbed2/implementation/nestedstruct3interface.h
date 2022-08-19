@@ -18,13 +18,13 @@ public:
     ~NestedStruct3Interface();
 public:
     void setProp1(const NestedStruct1& prop1) override;
-    const NestedStruct1& prop1() const override;
+    const NestedStruct1& getProp1() const override;
     
     void setProp2(const NestedStruct2& prop2) override;
-    const NestedStruct2& prop2() const override;
+    const NestedStruct2& getProp2() const override;
     
     void setProp3(const NestedStruct3& prop3) override;
-    const NestedStruct3& prop3() const override;
+    const NestedStruct3& getProp3() const override;
     
     NestedStruct1 func1(const NestedStruct1& param1) override;
     std::future<NestedStruct1> func1Async(const NestedStruct1& param1) override;

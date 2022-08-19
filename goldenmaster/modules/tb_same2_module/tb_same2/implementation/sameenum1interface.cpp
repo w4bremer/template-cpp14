@@ -22,7 +22,7 @@ void SameEnum1Interface::setProp1(const Enum1Enum& prop1)
     }
 }
 
-const Enum1Enum& SameEnum1Interface::prop1() const
+const Enum1Enum& SameEnum1Interface::getProp1() const
 {
     return m_data.m_prop1;
 }

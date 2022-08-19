@@ -52,7 +52,7 @@ void RemoteSimpleArrayInterface::setPropBoolLocal(const std::list<bool>& propBoo
     }
 }
 
-const std::list<bool>& RemoteSimpleArrayInterface::propBool() const
+const std::list<bool>& RemoteSimpleArrayInterface::getPropBool() const
 {
     return m_data.m_propBool;
 }
@@ -73,7 +73,7 @@ void RemoteSimpleArrayInterface::setPropIntLocal(const std::list<int>& propInt)
     }
 }
 
-const std::list<int>& RemoteSimpleArrayInterface::propInt() const
+const std::list<int>& RemoteSimpleArrayInterface::getPropInt() const
 {
     return m_data.m_propInt;
 }
@@ -94,7 +94,7 @@ void RemoteSimpleArrayInterface::setPropFloatLocal(const std::list<float>& propF
     }
 }
 
-const std::list<float>& RemoteSimpleArrayInterface::propFloat() const
+const std::list<float>& RemoteSimpleArrayInterface::getPropFloat() const
 {
     return m_data.m_propFloat;
 }
@@ -115,7 +115,7 @@ void RemoteSimpleArrayInterface::setPropStringLocal(const std::list<std::string>
     }
 }
 
-const std::list<std::string>& RemoteSimpleArrayInterface::propString() const
+const std::list<std::string>& RemoteSimpleArrayInterface::getPropString() const
 {
     return m_data.m_propString;
 }

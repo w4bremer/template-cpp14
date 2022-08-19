@@ -38,7 +38,7 @@ public:
     * Property getter
     * @return Locally stored locally value for Prop1.
     */
-    const Enum1Enum& prop1() const override;
+    const Enum1Enum& getProp1() const override;
     /**
     * Request setting a property on the SameEnum2Interface service.
     * @param The value to which set request is send for the Prop1.
@@ -48,7 +48,7 @@ public:
     * Property getter
     * @return Locally stored locally value for Prop2.
     */
-    const Enum2Enum& prop2() const override;
+    const Enum2Enum& getProp2() const override;
     /**
     * Request setting a property on the SameEnum2Interface service.
     * @param The value to which set request is send for the Prop2.

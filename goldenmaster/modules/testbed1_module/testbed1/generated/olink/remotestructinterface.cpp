@@ -52,7 +52,7 @@ void RemoteStructInterface::setPropBoolLocal(const StructBool& propBool)
     }
 }
 
-const StructBool& RemoteStructInterface::propBool() const
+const StructBool& RemoteStructInterface::getPropBool() const
 {
     return m_data.m_propBool;
 }
@@ -73,7 +73,7 @@ void RemoteStructInterface::setPropIntLocal(const StructInt& propInt)
     }
 }
 
-const StructInt& RemoteStructInterface::propInt() const
+const StructInt& RemoteStructInterface::getPropInt() const
 {
     return m_data.m_propInt;
 }
@@ -94,7 +94,7 @@ void RemoteStructInterface::setPropFloatLocal(const StructFloat& propFloat)
     }
 }
 
-const StructFloat& RemoteStructInterface::propFloat() const
+const StructFloat& RemoteStructInterface::getPropFloat() const
 {
     return m_data.m_propFloat;
 }
@@ -115,7 +115,7 @@ void RemoteStructInterface::setPropStringLocal(const StructString& propString)
     }
 }
 
-const StructString& RemoteStructInterface::propString() const
+const StructString& RemoteStructInterface::getPropString() const
 {
     return m_data.m_propString;
 }

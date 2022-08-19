@@ -18,16 +18,16 @@ public:
     ~StructArrayInterface();
 public:
     void setPropBool(const std::list<StructBool>& propBool) override;
-    const std::list<StructBool>& propBool() const override;
+    const std::list<StructBool>& getPropBool() const override;
     
     void setPropInt(const std::list<StructInt>& propInt) override;
-    const std::list<StructInt>& propInt() const override;
+    const std::list<StructInt>& getPropInt() const override;
     
     void setPropFloat(const std::list<StructFloat>& propFloat) override;
-    const std::list<StructFloat>& propFloat() const override;
+    const std::list<StructFloat>& getPropFloat() const override;
     
     void setPropString(const std::list<StructString>& propString) override;
-    const std::list<StructString>& propString() const override;
+    const std::list<StructString>& getPropString() const override;
     
     StructBool funcBool(const std::list<StructBool>& paramBool) override;
     std::future<StructBool> funcBoolAsync(const std::list<StructBool>& paramBool) override;

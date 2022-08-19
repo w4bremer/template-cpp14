@@ -25,21 +25,21 @@ TEST_CASE("Testing StructArrayInterface", "[StructArrayInterface]"){
     SECTION("Test property propBool") {
         // Do implement test here
         testStructArrayInterface->setPropBool(std::list<StructBool>());
-        REQUIRE( testStructArrayInterface->propBool() == std::list<StructBool>() );
+        REQUIRE( testStructArrayInterface->getPropBool() == std::list<StructBool>() );
     }
     SECTION("Test property propInt") {
         // Do implement test here
         testStructArrayInterface->setPropInt(std::list<StructInt>());
-        REQUIRE( testStructArrayInterface->propInt() == std::list<StructInt>() );
+        REQUIRE( testStructArrayInterface->getPropInt() == std::list<StructInt>() );
     }
     SECTION("Test property propFloat") {
         // Do implement test here
         testStructArrayInterface->setPropFloat(std::list<StructFloat>());
-        REQUIRE( testStructArrayInterface->propFloat() == std::list<StructFloat>() );
+        REQUIRE( testStructArrayInterface->getPropFloat() == std::list<StructFloat>() );
     }
     SECTION("Test property propString") {
         // Do implement test here
         testStructArrayInterface->setPropString(std::list<StructString>());
-        REQUIRE( testStructArrayInterface->propString() == std::list<StructString>() );
+        REQUIRE( testStructArrayInterface->getPropString() == std::list<StructString>() );
     }
 }

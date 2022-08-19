@@ -57,22 +57,22 @@ public:
     /** Forwards call to SimpleInterface implementation. */
     void setPropBool(bool propBool) override;
     /** Forwards call to SimpleInterface implementation. */
-    bool propBool() const override;
+    bool getPropBool() const override;
     
     /** Forwards call to SimpleInterface implementation. */
     void setPropInt(int propInt) override;
     /** Forwards call to SimpleInterface implementation. */
-    int propInt() const override;
+    int getPropInt() const override;
     
     /** Forwards call to SimpleInterface implementation. */
     void setPropFloat(float propFloat) override;
     /** Forwards call to SimpleInterface implementation. */
-    float propFloat() const override;
+    float getPropFloat() const override;
     
     /** Forwards call to SimpleInterface implementation. */
     void setPropString(const std::string& propString) override;
     /** Forwards call to SimpleInterface implementation. */
-    std::string propString() const override;
+    std::string getPropString() const override;
     
     /**
     Traces sigBool emission.

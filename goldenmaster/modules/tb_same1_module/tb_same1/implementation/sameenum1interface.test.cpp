@@ -13,6 +13,6 @@ TEST_CASE("Testing SameEnum1Interface", "[SameEnum1Interface]"){
     SECTION("Test property prop1") {
         // Do implement test here
         testSameEnum1Interface->setProp1(Enum1Enum::value1);
-        REQUIRE( testSameEnum1Interface->prop1() == Enum1Enum::value1 );
+        REQUIRE( testSameEnum1Interface->getProp1() == Enum1Enum::value1 );
     }
 }

@@ -46,7 +46,7 @@ void RemoteSameStruct2Interface::setProp1Local(const Struct2& prop1)
     }
 }
 
-const Struct2& RemoteSameStruct2Interface::prop1() const
+const Struct2& RemoteSameStruct2Interface::getProp1() const
 {
     return m_data.m_prop1;
 }
@@ -67,7 +67,7 @@ void RemoteSameStruct2Interface::setProp2Local(const Struct2& prop2)
     }
 }
 
-const Struct2& RemoteSameStruct2Interface::prop2() const
+const Struct2& RemoteSameStruct2Interface::getProp2() const
 {
     return m_data.m_prop2;
 }

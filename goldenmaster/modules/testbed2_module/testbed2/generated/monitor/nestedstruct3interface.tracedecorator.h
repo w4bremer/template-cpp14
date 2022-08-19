@@ -52,17 +52,17 @@ public:
     /** Forwards call to NestedStruct3Interface implementation. */
     void setProp1(const NestedStruct1& prop1) override;
     /** Forwards call to NestedStruct3Interface implementation. */
-    const NestedStruct1& prop1() const override;
+    const NestedStruct1& getProp1() const override;
     
     /** Forwards call to NestedStruct3Interface implementation. */
     void setProp2(const NestedStruct2& prop2) override;
     /** Forwards call to NestedStruct3Interface implementation. */
-    const NestedStruct2& prop2() const override;
+    const NestedStruct2& getProp2() const override;
     
     /** Forwards call to NestedStruct3Interface implementation. */
     void setProp3(const NestedStruct3& prop3) override;
     /** Forwards call to NestedStruct3Interface implementation. */
-    const NestedStruct3& prop3() const override;
+    const NestedStruct3& getProp3() const override;
     
     /**
     Traces sig1 emission.

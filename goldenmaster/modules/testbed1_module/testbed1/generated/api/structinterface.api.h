@@ -65,7 +65,7 @@ public:
     /**
     * Gets the value of the propBool property.
     */
-    virtual const StructBool& propBool() const = 0;
+    virtual const StructBool& getPropBool() const = 0;
 
     /**
     * Sets the value of the propInt property.
@@ -74,7 +74,7 @@ public:
     /**
     * Gets the value of the propInt property.
     */
-    virtual const StructInt& propInt() const = 0;
+    virtual const StructInt& getPropInt() const = 0;
 
     /**
     * Sets the value of the propFloat property.
@@ -83,7 +83,7 @@ public:
     /**
     * Gets the value of the propFloat property.
     */
-    virtual const StructFloat& propFloat() const = 0;
+    virtual const StructFloat& getPropFloat() const = 0;
 
     /**
     * Sets the value of the propString property.
@@ -92,7 +92,7 @@ public:
     /**
     * Gets the value of the propString property.
     */
-    virtual const StructString& propString() const = 0;
+    virtual const StructString& getPropString() const = 0;
 
     /**
     * Access to a publisher, use it to subscribe for StructInterface changes and signal emission.

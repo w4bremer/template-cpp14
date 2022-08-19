@@ -13,6 +13,6 @@ TEST_CASE("Testing NestedStruct1Interface", "[NestedStruct1Interface]"){
     SECTION("Test property prop1") {
         // Do implement test here
         testNestedStruct1Interface->setProp1(NestedStruct1());
-        REQUIRE( testNestedStruct1Interface->prop1() == NestedStruct1() );
+        REQUIRE( testNestedStruct1Interface->getProp1() == NestedStruct1() );
     }
 }

@@ -57,22 +57,22 @@ public:
     /** Forwards call to SimpleArrayInterface implementation. */
     void setPropBool(const std::list<bool>& propBool) override;
     /** Forwards call to SimpleArrayInterface implementation. */
-    const std::list<bool>& propBool() const override;
+    const std::list<bool>& getPropBool() const override;
     
     /** Forwards call to SimpleArrayInterface implementation. */
     void setPropInt(const std::list<int>& propInt) override;
     /** Forwards call to SimpleArrayInterface implementation. */
-    const std::list<int>& propInt() const override;
+    const std::list<int>& getPropInt() const override;
     
     /** Forwards call to SimpleArrayInterface implementation. */
     void setPropFloat(const std::list<float>& propFloat) override;
     /** Forwards call to SimpleArrayInterface implementation. */
-    const std::list<float>& propFloat() const override;
+    const std::list<float>& getPropFloat() const override;
     
     /** Forwards call to SimpleArrayInterface implementation. */
     void setPropString(const std::list<std::string>& propString) override;
     /** Forwards call to SimpleArrayInterface implementation. */
-    const std::list<std::string>& propString() const override;
+    const std::list<std::string>& getPropString() const override;
     
     /**
     Traces sigBool emission.

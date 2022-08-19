@@ -38,7 +38,7 @@ public:
     * Property getter
     * @return Locally stored locally value for Prop1.
     */
-    const NestedStruct1& prop1() const override;
+    const NestedStruct1& getProp1() const override;
     /**
     * Request setting a property on the NestedStruct3Interface service.
     * @param The value to which set request is send for the Prop1.
@@ -48,7 +48,7 @@ public:
     * Property getter
     * @return Locally stored locally value for Prop2.
     */
-    const NestedStruct2& prop2() const override;
+    const NestedStruct2& getProp2() const override;
     /**
     * Request setting a property on the NestedStruct3Interface service.
     * @param The value to which set request is send for the Prop2.
@@ -58,7 +58,7 @@ public:
     * Property getter
     * @return Locally stored locally value for Prop3.
     */
-    const NestedStruct3& prop3() const override;
+    const NestedStruct3& getProp3() const override;
     /**
     * Request setting a property on the NestedStruct3Interface service.
     * @param The value to which set request is send for the Prop3.

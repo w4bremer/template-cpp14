@@ -17,11 +17,11 @@ TEST_CASE("Testing SameEnum2Interface", "[SameEnum2Interface]"){
     SECTION("Test property prop1") {
         // Do implement test here
         testSameEnum2Interface->setProp1(Enum1Enum::value1);
-        REQUIRE( testSameEnum2Interface->prop1() == Enum1Enum::value1 );
+        REQUIRE( testSameEnum2Interface->getProp1() == Enum1Enum::value1 );
     }
     SECTION("Test property prop2") {
         // Do implement test here
         testSameEnum2Interface->setProp2(Enum2Enum::value1);
-        REQUIRE( testSameEnum2Interface->prop2() == Enum2Enum::value1 );
+        REQUIRE( testSameEnum2Interface->getProp2() == Enum2Enum::value1 );
     }
 }

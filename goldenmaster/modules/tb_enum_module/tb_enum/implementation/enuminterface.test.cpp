@@ -25,21 +25,21 @@ TEST_CASE("Testing EnumInterface", "[EnumInterface]"){
     SECTION("Test property prop0") {
         // Do implement test here
         testEnumInterface->setProp0(Enum0Enum::value0);
-        REQUIRE( testEnumInterface->prop0() == Enum0Enum::value0 );
+        REQUIRE( testEnumInterface->getProp0() == Enum0Enum::value0 );
     }
     SECTION("Test property prop1") {
         // Do implement test here
         testEnumInterface->setProp1(Enum1Enum::value1);
-        REQUIRE( testEnumInterface->prop1() == Enum1Enum::value1 );
+        REQUIRE( testEnumInterface->getProp1() == Enum1Enum::value1 );
     }
     SECTION("Test property prop2") {
         // Do implement test here
         testEnumInterface->setProp2(Enum2Enum::value2);
-        REQUIRE( testEnumInterface->prop2() == Enum2Enum::value2 );
+        REQUIRE( testEnumInterface->getProp2() == Enum2Enum::value2 );
     }
     SECTION("Test property prop3") {
         // Do implement test here
         testEnumInterface->setProp3(Enum3Enum::value3);
-        REQUIRE( testEnumInterface->prop3() == Enum3Enum::value3 );
+        REQUIRE( testEnumInterface->getProp3() == Enum3Enum::value3 );
     }
 }

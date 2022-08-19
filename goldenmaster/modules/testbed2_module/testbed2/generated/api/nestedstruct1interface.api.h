@@ -41,7 +41,7 @@ public:
     /**
     * Gets the value of the prop1 property.
     */
-    virtual const NestedStruct1& prop1() const = 0;
+    virtual const NestedStruct1& getProp1() const = 0;
 
     /**
     * Access to a publisher, use it to subscribe for NestedStruct1Interface changes and signal emission.

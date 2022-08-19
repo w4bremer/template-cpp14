@@ -22,7 +22,7 @@ void SameStruct1Interface::setProp1(const Struct1& prop1)
     }
 }
 
-const Struct1& SameStruct1Interface::prop1() const
+const Struct1& SameStruct1Interface::getProp1() const
 {
     return m_data.m_prop1;
 }

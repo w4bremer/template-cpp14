@@ -42,7 +42,7 @@ public:
     /** Forwards call to NestedStruct1Interface implementation. */
     void setProp1(const NestedStruct1& prop1) override;
     /** Forwards call to NestedStruct1Interface implementation. */
-    const NestedStruct1& prop1() const override;
+    const NestedStruct1& getProp1() const override;
     
     /**
     Traces sig1 emission.

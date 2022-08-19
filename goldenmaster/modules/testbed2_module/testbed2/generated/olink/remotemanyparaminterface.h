@@ -38,7 +38,7 @@ public:
     * Property getter
     * @return Locally stored locally value for Prop1.
     */
-    int prop1() const override;
+    int getProp1() const override;
     /**
     * Request setting a property on the ManyParamInterface service.
     * @param The value to which set request is send for the Prop1.
@@ -48,7 +48,7 @@ public:
     * Property getter
     * @return Locally stored locally value for Prop2.
     */
-    int prop2() const override;
+    int getProp2() const override;
     /**
     * Request setting a property on the ManyParamInterface service.
     * @param The value to which set request is send for the Prop2.
@@ -58,7 +58,7 @@ public:
     * Property getter
     * @return Locally stored locally value for Prop3.
     */
-    int prop3() const override;
+    int getProp3() const override;
     /**
     * Request setting a property on the ManyParamInterface service.
     * @param The value to which set request is send for the Prop3.
@@ -68,7 +68,7 @@ public:
     * Property getter
     * @return Locally stored locally value for Prop4.
     */
-    int prop4() const override;
+    int getProp4() const override;
     /**
     * Request setting a property on the ManyParamInterface service.
     * @param The value to which set request is send for the Prop4.

@@ -52,7 +52,7 @@ void RemoteManyParamInterface::setProp1Local(int prop1)
     }
 }
 
-int RemoteManyParamInterface::prop1() const
+int RemoteManyParamInterface::getProp1() const
 {
     return m_data.m_prop1;
 }
@@ -73,7 +73,7 @@ void RemoteManyParamInterface::setProp2Local(int prop2)
     }
 }
 
-int RemoteManyParamInterface::prop2() const
+int RemoteManyParamInterface::getProp2() const
 {
     return m_data.m_prop2;
 }
@@ -94,7 +94,7 @@ void RemoteManyParamInterface::setProp3Local(int prop3)
     }
 }
 
-int RemoteManyParamInterface::prop3() const
+int RemoteManyParamInterface::getProp3() const
 {
     return m_data.m_prop3;
 }
@@ -115,7 +115,7 @@ void RemoteManyParamInterface::setProp4Local(int prop4)
     }
 }
 
-int RemoteManyParamInterface::prop4() const
+int RemoteManyParamInterface::getProp4() const
 {
     return m_data.m_prop4;
 }

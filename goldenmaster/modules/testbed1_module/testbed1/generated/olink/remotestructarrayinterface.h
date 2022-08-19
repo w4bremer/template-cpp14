@@ -38,7 +38,7 @@ public:
     * Property getter
     * @return Locally stored locally value for PropBool.
     */
-    const std::list<StructBool>& propBool() const override;
+    const std::list<StructBool>& getPropBool() const override;
     /**
     * Request setting a property on the StructArrayInterface service.
     * @param The value to which set request is send for the PropBool.
@@ -48,7 +48,7 @@ public:
     * Property getter
     * @return Locally stored locally value for PropInt.
     */
-    const std::list<StructInt>& propInt() const override;
+    const std::list<StructInt>& getPropInt() const override;
     /**
     * Request setting a property on the StructArrayInterface service.
     * @param The value to which set request is send for the PropInt.
@@ -58,7 +58,7 @@ public:
     * Property getter
     * @return Locally stored locally value for PropFloat.
     */
-    const std::list<StructFloat>& propFloat() const override;
+    const std::list<StructFloat>& getPropFloat() const override;
     /**
     * Request setting a property on the StructArrayInterface service.
     * @param The value to which set request is send for the PropFloat.
@@ -68,7 +68,7 @@ public:
     * Property getter
     * @return Locally stored locally value for PropString.
     */
-    const std::list<StructString>& propString() const override;
+    const std::list<StructString>& getPropString() const override;
     /**
     * Request setting a property on the StructArrayInterface service.
     * @param The value to which set request is send for the PropString.

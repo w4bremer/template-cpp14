@@ -55,7 +55,7 @@ void {{class}}::set{{name|capital}}Local({{property|cpp14Param}})
     }
 }
 
-{{property|cpp14Return: true}} {{class}}::{{name}}() const
+{{property|cpp14Return: true}} {{class}}::get{{name | capital}}() const
 {
     return m_data.m_{{name}};
 }
@@ -66,7 +66,7 @@ void {{class}}::set{{name|capital}}Local({{property|cpp14Param}})
 {% for operation in interface.operations %}
 {% capture returnType %}{{operation|cpp14Return}}{% endcapture %}
 
-{{returnType}} {{class}}::{{operation.name}}({{operation|cpp14Params}})
+{{returnType}} {{class}}::{{operation.name| lowerFirst}}({{operation|cpp14Params}})
 {
     if(m_node == nullptr) {
         return {{operation|cpp14Default}};
@@ -82,12 +82,12 @@ void {{class}}::set{{name|capital}}Local({{property|cpp14Param}})
     });
     m_node->invokeRemote("{{module.name|identifier}}.{{interface}}/{{operation}}", args, func);
     {% else %}
-    {{returnType}} value({{operation.name}}Async({{ operation.params | map: 'name' | join: ', ' }}).get());
+    {{returnType}} value({{operation.name | lowerFirst}}Async({{ operation.params | map: 'name' | join: ', ' }}).get());
     return value;
     {% endif %}
 }
 
-std::future<{{returnType}}> {{class}}::{{operation.name}}Async({{operation|cpp14Params}})
+std::future<{{returnType}}> {{class}}::{{operation.name| lowerFirst}}Async({{operation|cpp14Params}})
 {
     if(m_node == nullptr) {
         throw std::runtime_error("Node is not initialized");

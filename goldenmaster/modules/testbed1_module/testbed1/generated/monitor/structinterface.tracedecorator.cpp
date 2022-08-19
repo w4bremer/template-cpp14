@@ -64,36 +64,36 @@ void StructInterfaceTraceDecorator::setPropBool(const StructBool& propBool)
     m_impl.setPropBool(propBool);
 }
 
-const StructBool& StructInterfaceTraceDecorator::propBool() const
+const StructBool& StructInterfaceTraceDecorator::getPropBool() const
 {
-    return m_impl.propBool();
+    return m_impl.getPropBool();
 }
 void StructInterfaceTraceDecorator::setPropInt(const StructInt& propInt)
 {
     m_impl.setPropInt(propInt);
 }
 
-const StructInt& StructInterfaceTraceDecorator::propInt() const
+const StructInt& StructInterfaceTraceDecorator::getPropInt() const
 {
-    return m_impl.propInt();
+    return m_impl.getPropInt();
 }
 void StructInterfaceTraceDecorator::setPropFloat(const StructFloat& propFloat)
 {
     m_impl.setPropFloat(propFloat);
 }
 
-const StructFloat& StructInterfaceTraceDecorator::propFloat() const
+const StructFloat& StructInterfaceTraceDecorator::getPropFloat() const
 {
-    return m_impl.propFloat();
+    return m_impl.getPropFloat();
 }
 void StructInterfaceTraceDecorator::setPropString(const StructString& propString)
 {
     m_impl.setPropString(propString);
 }
 
-const StructString& StructInterfaceTraceDecorator::propString() const
+const StructString& StructInterfaceTraceDecorator::getPropString() const
 {
-    return m_impl.propString();
+    return m_impl.getPropString();
 }
 void StructInterfaceTraceDecorator::onSigBool(const StructBool& paramBool)
 {

@@ -47,12 +47,12 @@ public:
     /** Forwards call to SameStruct2Interface implementation. */
     void setProp1(const Struct2& prop1) override;
     /** Forwards call to SameStruct2Interface implementation. */
-    const Struct2& prop1() const override;
+    const Struct2& getProp1() const override;
     
     /** Forwards call to SameStruct2Interface implementation. */
     void setProp2(const Struct2& prop2) override;
     /** Forwards call to SameStruct2Interface implementation. */
-    const Struct2& prop2() const override;
+    const Struct2& getProp2() const override;
     
     /**
     Traces sig1 emission.

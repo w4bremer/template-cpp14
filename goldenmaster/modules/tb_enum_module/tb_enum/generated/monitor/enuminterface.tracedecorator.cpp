@@ -64,36 +64,36 @@ void EnumInterfaceTraceDecorator::setProp0(const Enum0Enum& prop0)
     m_impl.setProp0(prop0);
 }
 
-const Enum0Enum& EnumInterfaceTraceDecorator::prop0() const
+const Enum0Enum& EnumInterfaceTraceDecorator::getProp0() const
 {
-    return m_impl.prop0();
+    return m_impl.getProp0();
 }
 void EnumInterfaceTraceDecorator::setProp1(const Enum1Enum& prop1)
 {
     m_impl.setProp1(prop1);
 }
 
-const Enum1Enum& EnumInterfaceTraceDecorator::prop1() const
+const Enum1Enum& EnumInterfaceTraceDecorator::getProp1() const
 {
-    return m_impl.prop1();
+    return m_impl.getProp1();
 }
 void EnumInterfaceTraceDecorator::setProp2(const Enum2Enum& prop2)
 {
     m_impl.setProp2(prop2);
 }
 
-const Enum2Enum& EnumInterfaceTraceDecorator::prop2() const
+const Enum2Enum& EnumInterfaceTraceDecorator::getProp2() const
 {
-    return m_impl.prop2();
+    return m_impl.getProp2();
 }
 void EnumInterfaceTraceDecorator::setProp3(const Enum3Enum& prop3)
 {
     m_impl.setProp3(prop3);
 }
 
-const Enum3Enum& EnumInterfaceTraceDecorator::prop3() const
+const Enum3Enum& EnumInterfaceTraceDecorator::getProp3() const
 {
-    return m_impl.prop3();
+    return m_impl.getProp3();
 }
 void EnumInterfaceTraceDecorator::onSig0(const Enum0Enum& param0)
 {

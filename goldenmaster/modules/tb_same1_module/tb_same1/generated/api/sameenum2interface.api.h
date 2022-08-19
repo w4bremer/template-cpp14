@@ -49,7 +49,7 @@ public:
     /**
     * Gets the value of the prop1 property.
     */
-    virtual const Enum1Enum& prop1() const = 0;
+    virtual const Enum1Enum& getProp1() const = 0;
 
     /**
     * Sets the value of the prop2 property.
@@ -58,7 +58,7 @@ public:
     /**
     * Gets the value of the prop2 property.
     */
-    virtual const Enum2Enum& prop2() const = 0;
+    virtual const Enum2Enum& getProp2() const = 0;
 
     /**
     * Access to a publisher, use it to subscribe for SameEnum2Interface changes and signal emission.

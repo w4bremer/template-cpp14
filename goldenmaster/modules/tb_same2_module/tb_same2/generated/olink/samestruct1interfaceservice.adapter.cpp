@@ -60,7 +60,7 @@ void SameStruct1InterfaceServiceAdapter::olinkUnlinked(std::string name)
 nlohmann::json SameStruct1InterfaceServiceAdapter::olinkCollectProperties()
 {
     return nlohmann::json::object({
-        { "prop1", m_SameStruct1Interface.prop1() }
+        { "prop1", m_SameStruct1Interface.getProp1() }
     });
 }
 void SameStruct1InterfaceServiceAdapter::onSig1(const Struct1& param1)

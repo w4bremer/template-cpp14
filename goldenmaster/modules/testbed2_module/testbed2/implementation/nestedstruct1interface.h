@@ -18,7 +18,7 @@ public:
     ~NestedStruct1Interface();
 public:
     void setProp1(const NestedStruct1& prop1) override;
-    const NestedStruct1& prop1() const override;
+    const NestedStruct1& getProp1() const override;
     
     NestedStruct1 func1(const NestedStruct1& param1) override;
     std::future<NestedStruct1> func1Async(const NestedStruct1& param1) override;

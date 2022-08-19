@@ -34,9 +34,9 @@ void SameStruct1InterfaceTraceDecorator::setProp1(const Struct1& prop1)
     m_impl.setProp1(prop1);
 }
 
-const Struct1& SameStruct1InterfaceTraceDecorator::prop1() const
+const Struct1& SameStruct1InterfaceTraceDecorator::getProp1() const
 {
-    return m_impl.prop1();
+    return m_impl.getProp1();
 }
 void SameStruct1InterfaceTraceDecorator::onSig1(const Struct1& param1)
 {

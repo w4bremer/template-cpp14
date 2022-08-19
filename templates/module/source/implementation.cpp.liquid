@@ -27,7 +27,7 @@ void {{class}}::set{{property.name|capital}}({{ property|cpp14Param }})
     }
 }
 
-{{property|cpp14Return: true}} {{class}}::{{property.name}}() const
+{{property|cpp14Return: true}} {{class}}::get{{property.name | capital}}() const
 {
     return m_data.m_{{property.name}};
 }
@@ -35,7 +35,7 @@ void {{class}}::set{{property.name|capital}}({{ property|cpp14Param }})
 
 {% for operation in interface.operations %}
 
-{{operation|cpp14Return}} {{class}}::{{operation.name}}({{operation|cpp14Params}})
+{{operation|cpp14Return}} {{class}}::{{operation.name| lowerFirst}}({{operation|cpp14Params}})
 {
     {% for parameter in operation.params %}
     (void) {{parameter.name}}; // suppress the 'Unreferenced Formal Parameter' warning.
@@ -46,13 +46,13 @@ void {{class}}::set{{property.name|capital}}({{ property|cpp14Param }})
 
 {% capture returnType %}{{operation|cpp14Return}}{% endcapture %}
 
-std::future<{{returnType}}> {{class}}::{{operation.name}}Async({{operation|cpp14Params}})
+std::future<{{returnType}}> {{class}}::{{operation.name | lowerFirst}}Async({{operation|cpp14Params}})
 {
     return std::async(std::launch::async, [this{%- for param in operation.params -%},
                     {{param}}
                 {%- endfor -%}]()
         {
-            return {{operation.name}}({%- for param in operation.params -%}
+            return {{operation.name | lowerFirst}}({%- for param in operation.params -%}
                     {{param}}{% unless forloop.last %},{% endunless %}
                 {%- endfor -%});
         }

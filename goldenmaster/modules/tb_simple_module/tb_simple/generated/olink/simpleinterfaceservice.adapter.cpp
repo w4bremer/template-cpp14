@@ -87,10 +87,10 @@ void SimpleInterfaceServiceAdapter::olinkUnlinked(std::string name)
 nlohmann::json SimpleInterfaceServiceAdapter::olinkCollectProperties()
 {
     return nlohmann::json::object({
-        { "propBool", m_SimpleInterface.propBool() },
-        { "propInt", m_SimpleInterface.propInt() },
-        { "propFloat", m_SimpleInterface.propFloat() },
-        { "propString", m_SimpleInterface.propString() }
+        { "propBool", m_SimpleInterface.getPropBool() },
+        { "propInt", m_SimpleInterface.getPropInt() },
+        { "propFloat", m_SimpleInterface.getPropFloat() },
+        { "propString", m_SimpleInterface.getPropString() }
     });
 }
 void SimpleInterfaceServiceAdapter::onSigBool(bool paramBool)

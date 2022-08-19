@@ -44,18 +44,18 @@ void SameEnum2InterfaceTraceDecorator::setProp1(const Enum1Enum& prop1)
     m_impl.setProp1(prop1);
 }
 
-const Enum1Enum& SameEnum2InterfaceTraceDecorator::prop1() const
+const Enum1Enum& SameEnum2InterfaceTraceDecorator::getProp1() const
 {
-    return m_impl.prop1();
+    return m_impl.getProp1();
 }
 void SameEnum2InterfaceTraceDecorator::setProp2(const Enum2Enum& prop2)
 {
     m_impl.setProp2(prop2);
 }
 
-const Enum2Enum& SameEnum2InterfaceTraceDecorator::prop2() const
+const Enum2Enum& SameEnum2InterfaceTraceDecorator::getProp2() const
 {
-    return m_impl.prop2();
+    return m_impl.getProp2();
 }
 void SameEnum2InterfaceTraceDecorator::onSig1(const Enum1Enum& param1)
 {

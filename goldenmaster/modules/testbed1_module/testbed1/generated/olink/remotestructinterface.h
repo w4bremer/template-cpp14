@@ -38,7 +38,7 @@ public:
     * Property getter
     * @return Locally stored locally value for PropBool.
     */
-    const StructBool& propBool() const override;
+    const StructBool& getPropBool() const override;
     /**
     * Request setting a property on the StructInterface service.
     * @param The value to which set request is send for the PropBool.
@@ -48,7 +48,7 @@ public:
     * Property getter
     * @return Locally stored locally value for PropInt.
     */
-    const StructInt& propInt() const override;
+    const StructInt& getPropInt() const override;
     /**
     * Request setting a property on the StructInterface service.
     * @param The value to which set request is send for the PropInt.
@@ -58,7 +58,7 @@ public:
     * Property getter
     * @return Locally stored locally value for PropFloat.
     */
-    const StructFloat& propFloat() const override;
+    const StructFloat& getPropFloat() const override;
     /**
     * Request setting a property on the StructInterface service.
     * @param The value to which set request is send for the PropFloat.
@@ -68,7 +68,7 @@ public:
     * Property getter
     * @return Locally stored locally value for PropString.
     */
-    const StructString& propString() const override;
+    const StructString& getPropString() const override;
     /**
     * Request setting a property on the StructInterface service.
     * @param The value to which set request is send for the PropString.

@@ -41,7 +41,7 @@ public:
     /**
     * Gets the value of the prop1 property.
     */
-    virtual const Struct1& prop1() const = 0;
+    virtual const Struct1& getProp1() const = 0;
 
     /**
     * Access to a publisher, use it to subscribe for SameStruct1Interface changes and signal emission.

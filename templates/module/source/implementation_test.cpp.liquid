@@ -13,7 +13,7 @@ TEST_CASE("Testing {{class}}", "[{{class}}]"){
 {% for operation in interface.operations %}
     SECTION("Test operation {{operation.name}}") {
         // Do implement test here
-        test{{class}}->{{operation.name}}(
+        test{{class}}->{{operation.name | lowerFirst}}(
             {% for param in operation.params -%}
                 {{param|cpp14Default}}
                 {% unless forloop.last %},
@@ -27,7 +27,7 @@ TEST_CASE("Testing {{class}}", "[{{class}}]"){
     SECTION("Test property {{property.name}}") {
         // Do implement test here
         test{{class}}->set{{property.name|capital}}({{property|cpp14Default}});
-        REQUIRE( test{{class}}->{{property.name}}() == {% if property.type == 'float'%} Approx({% endif %} {{property|cpp14Default}}{% if property.type == 'float'%} ){% endif %} );
+        REQUIRE( test{{class}}->get{{property.name | capital}}() == {% if property.type == 'float'%} Approx({% endif %} {{property|cpp14Default}}{% if property.type == 'float'%} ){% endif %} );
     }
 {% endfor %}
 }

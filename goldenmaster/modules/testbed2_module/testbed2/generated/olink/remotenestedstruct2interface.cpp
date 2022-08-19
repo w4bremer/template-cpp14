@@ -46,7 +46,7 @@ void RemoteNestedStruct2Interface::setProp1Local(const NestedStruct1& prop1)
     }
 }
 
-const NestedStruct1& RemoteNestedStruct2Interface::prop1() const
+const NestedStruct1& RemoteNestedStruct2Interface::getProp1() const
 {
     return m_data.m_prop1;
 }
@@ -67,7 +67,7 @@ void RemoteNestedStruct2Interface::setProp2Local(const NestedStruct2& prop2)
     }
 }
 
-const NestedStruct2& RemoteNestedStruct2Interface::prop2() const
+const NestedStruct2& RemoteNestedStruct2Interface::getProp2() const
 {
     return m_data.m_prop2;
 }

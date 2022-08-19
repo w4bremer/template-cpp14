@@ -22,7 +22,7 @@ void EnumInterface::setProp0(const Enum0Enum& prop0)
     }
 }
 
-const Enum0Enum& EnumInterface::prop0() const
+const Enum0Enum& EnumInterface::getProp0() const
 {
     return m_data.m_prop0;
 }
@@ -35,7 +35,7 @@ void EnumInterface::setProp1(const Enum1Enum& prop1)
     }
 }
 
-const Enum1Enum& EnumInterface::prop1() const
+const Enum1Enum& EnumInterface::getProp1() const
 {
     return m_data.m_prop1;
 }
@@ -48,7 +48,7 @@ void EnumInterface::setProp2(const Enum2Enum& prop2)
     }
 }
 
-const Enum2Enum& EnumInterface::prop2() const
+const Enum2Enum& EnumInterface::getProp2() const
 {
     return m_data.m_prop2;
 }
@@ -61,7 +61,7 @@ void EnumInterface::setProp3(const Enum3Enum& prop3)
     }
 }
 
-const Enum3Enum& EnumInterface::prop3() const
+const Enum3Enum& EnumInterface::getProp3() const
 {
     return m_data.m_prop3;
 }

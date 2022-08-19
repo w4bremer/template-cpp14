@@ -22,7 +22,7 @@ void SimpleInterface::setPropBool(bool propBool)
     }
 }
 
-bool SimpleInterface::propBool() const
+bool SimpleInterface::getPropBool() const
 {
     return m_data.m_propBool;
 }
@@ -35,7 +35,7 @@ void SimpleInterface::setPropInt(int propInt)
     }
 }
 
-int SimpleInterface::propInt() const
+int SimpleInterface::getPropInt() const
 {
     return m_data.m_propInt;
 }
@@ -48,7 +48,7 @@ void SimpleInterface::setPropFloat(float propFloat)
     }
 }
 
-float SimpleInterface::propFloat() const
+float SimpleInterface::getPropFloat() const
 {
     return m_data.m_propFloat;
 }
@@ -61,7 +61,7 @@ void SimpleInterface::setPropString(const std::string& propString)
     }
 }
 
-std::string SimpleInterface::propString() const
+std::string SimpleInterface::getPropString() const
 {
     return m_data.m_propString;
 }

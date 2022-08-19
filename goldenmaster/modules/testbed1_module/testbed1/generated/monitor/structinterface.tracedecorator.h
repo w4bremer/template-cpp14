@@ -57,22 +57,22 @@ public:
     /** Forwards call to StructInterface implementation. */
     void setPropBool(const StructBool& propBool) override;
     /** Forwards call to StructInterface implementation. */
-    const StructBool& propBool() const override;
+    const StructBool& getPropBool() const override;
     
     /** Forwards call to StructInterface implementation. */
     void setPropInt(const StructInt& propInt) override;
     /** Forwards call to StructInterface implementation. */
-    const StructInt& propInt() const override;
+    const StructInt& getPropInt() const override;
     
     /** Forwards call to StructInterface implementation. */
     void setPropFloat(const StructFloat& propFloat) override;
     /** Forwards call to StructInterface implementation. */
-    const StructFloat& propFloat() const override;
+    const StructFloat& getPropFloat() const override;
     
     /** Forwards call to StructInterface implementation. */
     void setPropString(const StructString& propString) override;
     /** Forwards call to StructInterface implementation. */
-    const StructString& propString() const override;
+    const StructString& getPropString() const override;
     
     /**
     Traces sigBool emission.

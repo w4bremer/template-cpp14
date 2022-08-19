@@ -65,7 +65,7 @@ public:
     /**
     * Gets the value of the prop1 property.
     */
-    virtual int prop1() const = 0;
+    virtual int getProp1() const = 0;
 
     /**
     * Sets the value of the prop2 property.
@@ -74,7 +74,7 @@ public:
     /**
     * Gets the value of the prop2 property.
     */
-    virtual int prop2() const = 0;
+    virtual int getProp2() const = 0;
 
     /**
     * Sets the value of the prop3 property.
@@ -83,7 +83,7 @@ public:
     /**
     * Gets the value of the prop3 property.
     */
-    virtual int prop3() const = 0;
+    virtual int getProp3() const = 0;
 
     /**
     * Sets the value of the prop4 property.
@@ -92,7 +92,7 @@ public:
     /**
     * Gets the value of the prop4 property.
     */
-    virtual int prop4() const = 0;
+    virtual int getProp4() const = 0;
 
     /**
     * Access to a publisher, use it to subscribe for ManyParamInterface changes and signal emission.

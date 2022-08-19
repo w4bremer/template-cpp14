@@ -64,36 +64,36 @@ void SimpleInterfaceTraceDecorator::setPropBool(bool propBool)
     m_impl.setPropBool(propBool);
 }
 
-bool SimpleInterfaceTraceDecorator::propBool() const
+bool SimpleInterfaceTraceDecorator::getPropBool() const
 {
-    return m_impl.propBool();
+    return m_impl.getPropBool();
 }
 void SimpleInterfaceTraceDecorator::setPropInt(int propInt)
 {
     m_impl.setPropInt(propInt);
 }
 
-int SimpleInterfaceTraceDecorator::propInt() const
+int SimpleInterfaceTraceDecorator::getPropInt() const
 {
-    return m_impl.propInt();
+    return m_impl.getPropInt();
 }
 void SimpleInterfaceTraceDecorator::setPropFloat(float propFloat)
 {
     m_impl.setPropFloat(propFloat);
 }
 
-float SimpleInterfaceTraceDecorator::propFloat() const
+float SimpleInterfaceTraceDecorator::getPropFloat() const
 {
-    return m_impl.propFloat();
+    return m_impl.getPropFloat();
 }
 void SimpleInterfaceTraceDecorator::setPropString(const std::string& propString)
 {
     m_impl.setPropString(propString);
 }
 
-std::string SimpleInterfaceTraceDecorator::propString() const
+std::string SimpleInterfaceTraceDecorator::getPropString() const
 {
-    return m_impl.propString();
+    return m_impl.getPropString();
 }
 void SimpleInterfaceTraceDecorator::onSigBool(bool paramBool)
 {

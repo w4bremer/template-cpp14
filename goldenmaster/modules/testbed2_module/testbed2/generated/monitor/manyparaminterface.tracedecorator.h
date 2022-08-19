@@ -57,22 +57,22 @@ public:
     /** Forwards call to ManyParamInterface implementation. */
     void setProp1(int prop1) override;
     /** Forwards call to ManyParamInterface implementation. */
-    int prop1() const override;
+    int getProp1() const override;
     
     /** Forwards call to ManyParamInterface implementation. */
     void setProp2(int prop2) override;
     /** Forwards call to ManyParamInterface implementation. */
-    int prop2() const override;
+    int getProp2() const override;
     
     /** Forwards call to ManyParamInterface implementation. */
     void setProp3(int prop3) override;
     /** Forwards call to ManyParamInterface implementation. */
-    int prop3() const override;
+    int getProp3() const override;
     
     /** Forwards call to ManyParamInterface implementation. */
     void setProp4(int prop4) override;
     /** Forwards call to ManyParamInterface implementation. */
-    int prop4() const override;
+    int getProp4() const override;
     
     /**
     Traces sig1 emission.

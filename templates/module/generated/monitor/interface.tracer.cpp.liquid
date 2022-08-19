@@ -16,7 +16,7 @@ void {{class}}::capture_state(I{{interface.name}}* obj)
 {
     nlohmann::json fields_;
     {% for property in interface.properties %}
-    fields_["{{property.name}}"] = obj->{{property.name}}();
+    fields_["{{property.name}}"] = obj->get{{property.name | capital}}();
     {% else %}
     (void) obj;
     {% endfor %}

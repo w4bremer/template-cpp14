@@ -12,7 +12,7 @@ SameEnum1InterfaceTracer::SameEnum1InterfaceTracer(ApiGear::PocoImpl::Tracer& tr
 void SameEnum1InterfaceTracer::capture_state(ISameEnum1Interface* obj)
 {
     nlohmann::json fields_;
-    fields_["prop1"] = obj->prop1();
+    fields_["prop1"] = obj->getProp1();
     m_tracer.state("tb.same2.SameEnum1Interface#_state", fields_);
 }
 

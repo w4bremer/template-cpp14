@@ -70,8 +70,8 @@ void SameEnum2InterfaceServiceAdapter::olinkUnlinked(std::string name)
 nlohmann::json SameEnum2InterfaceServiceAdapter::olinkCollectProperties()
 {
     return nlohmann::json::object({
-        { "prop1", m_SameEnum2Interface.prop1() },
-        { "prop2", m_SameEnum2Interface.prop2() }
+        { "prop1", m_SameEnum2Interface.getProp1() },
+        { "prop2", m_SameEnum2Interface.getProp2() }
     });
 }
 void SameEnum2InterfaceServiceAdapter::onSig1(const Enum1Enum& param1)

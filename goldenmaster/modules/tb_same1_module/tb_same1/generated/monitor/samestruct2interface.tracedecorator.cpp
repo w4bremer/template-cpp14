@@ -44,18 +44,18 @@ void SameStruct2InterfaceTraceDecorator::setProp1(const Struct2& prop1)
     m_impl.setProp1(prop1);
 }
 
-const Struct2& SameStruct2InterfaceTraceDecorator::prop1() const
+const Struct2& SameStruct2InterfaceTraceDecorator::getProp1() const
 {
-    return m_impl.prop1();
+    return m_impl.getProp1();
 }
 void SameStruct2InterfaceTraceDecorator::setProp2(const Struct2& prop2)
 {
     m_impl.setProp2(prop2);
 }
 
-const Struct2& SameStruct2InterfaceTraceDecorator::prop2() const
+const Struct2& SameStruct2InterfaceTraceDecorator::getProp2() const
 {
-    return m_impl.prop2();
+    return m_impl.getProp2();
 }
 void SameStruct2InterfaceTraceDecorator::onSig1(const Struct1& param1)
 {

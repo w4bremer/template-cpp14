@@ -38,7 +38,7 @@ public:
     * Property getter
     * @return Locally stored locally value for PropBool.
     */
-    bool propBool() const override;
+    bool getPropBool() const override;
     /**
     * Request setting a property on the SimpleInterface service.
     * @param The value to which set request is send for the PropBool.
@@ -48,7 +48,7 @@ public:
     * Property getter
     * @return Locally stored locally value for PropInt.
     */
-    int propInt() const override;
+    int getPropInt() const override;
     /**
     * Request setting a property on the SimpleInterface service.
     * @param The value to which set request is send for the PropInt.
@@ -58,7 +58,7 @@ public:
     * Property getter
     * @return Locally stored locally value for PropFloat.
     */
-    float propFloat() const override;
+    float getPropFloat() const override;
     /**
     * Request setting a property on the SimpleInterface service.
     * @param The value to which set request is send for the PropFloat.
@@ -68,7 +68,7 @@ public:
     * Property getter
     * @return Locally stored locally value for PropString.
     */
-    std::string propString() const override;
+    std::string getPropString() const override;
     /**
     * Request setting a property on the SimpleInterface service.
     * @param The value to which set request is send for the PropString.

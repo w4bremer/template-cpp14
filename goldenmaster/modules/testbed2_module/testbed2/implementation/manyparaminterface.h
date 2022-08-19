@@ -18,16 +18,16 @@ public:
     ~ManyParamInterface();
 public:
     void setProp1(int prop1) override;
-    int prop1() const override;
+    int getProp1() const override;
     
     void setProp2(int prop2) override;
-    int prop2() const override;
+    int getProp2() const override;
     
     void setProp3(int prop3) override;
-    int prop3() const override;
+    int getProp3() const override;
     
     void setProp4(int prop4) override;
-    int prop4() const override;
+    int getProp4() const override;
     
     int func1(int param1) override;
     std::future<int> func1Async(int param1) override;

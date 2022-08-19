@@ -18,16 +18,16 @@ public:
     ~SimpleInterface();
 public:
     void setPropBool(bool propBool) override;
-    bool propBool() const override;
+    bool getPropBool() const override;
     
     void setPropInt(int propInt) override;
-    int propInt() const override;
+    int getPropInt() const override;
     
     void setPropFloat(float propFloat) override;
-    float propFloat() const override;
+    float getPropFloat() const override;
     
     void setPropString(const std::string& propString) override;
-    std::string propString() const override;
+    std::string getPropString() const override;
     
     bool funcBool(bool paramBool) override;
     std::future<bool> funcBoolAsync(bool paramBool) override;

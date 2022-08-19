@@ -25,21 +25,21 @@ TEST_CASE("Testing SimpleInterface", "[SimpleInterface]"){
     SECTION("Test property propBool") {
         // Do implement test here
         testSimpleInterface->setPropBool(false);
-        REQUIRE( testSimpleInterface->propBool() == false );
+        REQUIRE( testSimpleInterface->getPropBool() == false );
     }
     SECTION("Test property propInt") {
         // Do implement test here
         testSimpleInterface->setPropInt(0);
-        REQUIRE( testSimpleInterface->propInt() == 0 );
+        REQUIRE( testSimpleInterface->getPropInt() == 0 );
     }
     SECTION("Test property propFloat") {
         // Do implement test here
         testSimpleInterface->setPropFloat(0.0f);
-        REQUIRE( testSimpleInterface->propFloat() == Approx( 0.0f ) );
+        REQUIRE( testSimpleInterface->getPropFloat() == Approx( 0.0f ) );
     }
     SECTION("Test property propString") {
         // Do implement test here
         testSimpleInterface->setPropString(std::string());
-        REQUIRE( testSimpleInterface->propString() == std::string() );
+        REQUIRE( testSimpleInterface->getPropString() == std::string() );
     }
 }

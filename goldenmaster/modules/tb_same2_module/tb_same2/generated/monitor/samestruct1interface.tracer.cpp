@@ -12,7 +12,7 @@ SameStruct1InterfaceTracer::SameStruct1InterfaceTracer(ApiGear::PocoImpl::Tracer
 void SameStruct1InterfaceTracer::capture_state(ISameStruct1Interface* obj)
 {
     nlohmann::json fields_;
-    fields_["prop1"] = obj->prop1();
+    fields_["prop1"] = obj->getProp1();
     m_tracer.state("tb.same2.SameStruct1Interface#_state", fields_);
 }
 

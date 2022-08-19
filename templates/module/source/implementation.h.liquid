@@ -31,7 +31,7 @@ public:
     */
 {% endif %}
     void set{{property.name|capital}}({{ property|cpp14Param }}) override;
-    {{property|cpp14Return: true}} {{property.name}}() const override;
+    {{property|cpp14Return: true}} get{{property.name | capital}}() const override;
     {{nl}}    
 {% endfor %}
 
@@ -41,8 +41,8 @@ public:
     * {{operation.description}}
     */
 {% endif %}
-    {{operation|cpp14Return}} {{operation.name}}({{operation|cpp14Params}}) override;
-    std::future<{{operation|cpp14Return}}> {{operation.name}}Async({{operation|cpp14Params}}) override;
+    {{operation|cpp14Return}} {{operation.name| lowerFirst}}({{operation|cpp14Params}}) override;
+    std::future<{{operation|cpp14Return}}> {{operation.name| lowerFirst}}Async({{operation|cpp14Params}}) override;
         {{nl}} 
 {% endfor %}
     /**

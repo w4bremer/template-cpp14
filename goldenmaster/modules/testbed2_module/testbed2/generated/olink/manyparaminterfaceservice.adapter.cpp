@@ -93,10 +93,10 @@ void ManyParamInterfaceServiceAdapter::olinkUnlinked(std::string name)
 nlohmann::json ManyParamInterfaceServiceAdapter::olinkCollectProperties()
 {
     return nlohmann::json::object({
-        { "prop1", m_ManyParamInterface.prop1() },
-        { "prop2", m_ManyParamInterface.prop2() },
-        { "prop3", m_ManyParamInterface.prop3() },
-        { "prop4", m_ManyParamInterface.prop4() }
+        { "prop1", m_ManyParamInterface.getProp1() },
+        { "prop2", m_ManyParamInterface.getProp2() },
+        { "prop3", m_ManyParamInterface.getProp3() },
+        { "prop4", m_ManyParamInterface.getProp4() }
     });
 }
 void ManyParamInterfaceServiceAdapter::onSig1(int param1)

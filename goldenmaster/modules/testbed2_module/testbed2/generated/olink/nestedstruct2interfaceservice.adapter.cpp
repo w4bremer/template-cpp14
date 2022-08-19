@@ -70,8 +70,8 @@ void NestedStruct2InterfaceServiceAdapter::olinkUnlinked(std::string name)
 nlohmann::json NestedStruct2InterfaceServiceAdapter::olinkCollectProperties()
 {
     return nlohmann::json::object({
-        { "prop1", m_NestedStruct2Interface.prop1() },
-        { "prop2", m_NestedStruct2Interface.prop2() }
+        { "prop1", m_NestedStruct2Interface.getProp1() },
+        { "prop2", m_NestedStruct2Interface.getProp2() }
     });
 }
 void NestedStruct2InterfaceServiceAdapter::onSig1(const NestedStruct1& param1)

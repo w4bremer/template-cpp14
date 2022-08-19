@@ -42,7 +42,7 @@ public:
     /** Forwards call to SameEnum1Interface implementation. */
     void setProp1(const Enum1Enum& prop1) override;
     /** Forwards call to SameEnum1Interface implementation. */
-    const Enum1Enum& prop1() const override;
+    const Enum1Enum& getProp1() const override;
     
     /**
     Traces sig1 emission.

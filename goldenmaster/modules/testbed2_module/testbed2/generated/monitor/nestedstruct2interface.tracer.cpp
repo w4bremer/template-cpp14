@@ -12,8 +12,8 @@ NestedStruct2InterfaceTracer::NestedStruct2InterfaceTracer(ApiGear::PocoImpl::Tr
 void NestedStruct2InterfaceTracer::capture_state(INestedStruct2Interface* obj)
 {
     nlohmann::json fields_;
-    fields_["prop1"] = obj->prop1();
-    fields_["prop2"] = obj->prop2();
+    fields_["prop1"] = obj->getProp1();
+    fields_["prop2"] = obj->getProp2();
     m_tracer.state("testbed2.NestedStruct2Interface#_state", fields_);
 }
 

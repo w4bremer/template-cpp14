@@ -31,15 +31,15 @@ nlohmann::json {{class}}::olinkInvoke(std::string fcnName, nlohmann::json fcnArg
     std::clog << fcnName << std::endl;
     std::string path = ApiGear::ObjectLink::Name::pathFromName(fcnName);
 {% for operation in interface.operations %}
-    if(path == "{{operation}}") {
+    if(path == "{{operation.name}}") {
 {% for param in operation.params %}
         const {{param|cpp14Return}}& {{param}} = fcnArgs.at({{ forloop.index0 }});      
 {% endfor %}
 {% if operation.type == 'void' %}
-        m_{{interface}}.{{operation}}({{ operation.params | map: 'name' | join: ', ' }});
+        m_{{interface}}.{{operation.name | lowerFirst}}({{ operation.params | map: 'name' | join: ', ' }});
         return nlohmann::json{};
 {% else %}
-        {{operation|cpp14Return}} result = m_{{interface}}.{{operation}}({{ operation.params | map: 'name' | join: ', ' }});
+        {{operation|cpp14Return}} result = m_{{interface}}.{{operation.name| lowerFirst}}({{ operation.params | map: 'name' | join: ', ' }});
         return result;
 {% endif %}
     }
@@ -79,7 +79,7 @@ nlohmann::json {{class}}::olinkCollectProperties()
 {
     return nlohmann::json::object({
 {% for property in interface.properties %}
-        { "{{property.name}}", m_{{interface}}.{{property.name}}() }{% unless forloop.last %},{% endunless %}
+        { "{{property.name}}", m_{{interface}}.get{{property.name | capital}}() }{% unless forloop.last %},{% endunless %}
 {% endfor %}
     });
 }

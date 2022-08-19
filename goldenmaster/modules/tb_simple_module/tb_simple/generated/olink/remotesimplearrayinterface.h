@@ -38,7 +38,7 @@ public:
     * Property getter
     * @return Locally stored locally value for PropBool.
     */
-    const std::list<bool>& propBool() const override;
+    const std::list<bool>& getPropBool() const override;
     /**
     * Request setting a property on the SimpleArrayInterface service.
     * @param The value to which set request is send for the PropBool.
@@ -48,7 +48,7 @@ public:
     * Property getter
     * @return Locally stored locally value for PropInt.
     */
-    const std::list<int>& propInt() const override;
+    const std::list<int>& getPropInt() const override;
     /**
     * Request setting a property on the SimpleArrayInterface service.
     * @param The value to which set request is send for the PropInt.
@@ -58,7 +58,7 @@ public:
     * Property getter
     * @return Locally stored locally value for PropFloat.
     */
-    const std::list<float>& propFloat() const override;
+    const std::list<float>& getPropFloat() const override;
     /**
     * Request setting a property on the SimpleArrayInterface service.
     * @param The value to which set request is send for the PropFloat.
@@ -68,7 +68,7 @@ public:
     * Property getter
     * @return Locally stored locally value for PropString.
     */
-    const std::list<std::string>& propString() const override;
+    const std::list<std::string>& getPropString() const override;
     /**
     * Request setting a property on the SimpleArrayInterface service.
     * @param The value to which set request is send for the PropString.

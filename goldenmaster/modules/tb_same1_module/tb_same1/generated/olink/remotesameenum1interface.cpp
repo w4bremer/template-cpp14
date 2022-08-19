@@ -43,7 +43,7 @@ void RemoteSameEnum1Interface::setProp1Local(const Enum1Enum& prop1)
     }
 }
 
-const Enum1Enum& RemoteSameEnum1Interface::prop1() const
+const Enum1Enum& RemoteSameEnum1Interface::getProp1() const
 {
     return m_data.m_prop1;
 }

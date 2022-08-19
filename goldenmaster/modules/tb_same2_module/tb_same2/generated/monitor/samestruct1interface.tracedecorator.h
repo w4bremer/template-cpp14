@@ -42,7 +42,7 @@ public:
     /** Forwards call to SameStruct1Interface implementation. */
     void setProp1(const Struct1& prop1) override;
     /** Forwards call to SameStruct1Interface implementation. */
-    const Struct1& prop1() const override;
+    const Struct1& getProp1() const override;
     
     /**
     Traces sig1 emission.

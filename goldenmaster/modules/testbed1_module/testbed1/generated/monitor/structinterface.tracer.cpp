@@ -12,10 +12,10 @@ StructInterfaceTracer::StructInterfaceTracer(ApiGear::PocoImpl::Tracer& tracer)
 void StructInterfaceTracer::capture_state(IStructInterface* obj)
 {
     nlohmann::json fields_;
-    fields_["propBool"] = obj->propBool();
-    fields_["propInt"] = obj->propInt();
-    fields_["propFloat"] = obj->propFloat();
-    fields_["propString"] = obj->propString();
+    fields_["propBool"] = obj->getPropBool();
+    fields_["propInt"] = obj->getPropInt();
+    fields_["propFloat"] = obj->getPropFloat();
+    fields_["propString"] = obj->getPropString();
     m_tracer.state("testbed1.StructInterface#_state", fields_);
 }
 

@@ -22,7 +22,7 @@ void SimpleArrayInterface::setPropBool(const std::list<bool>& propBool)
     }
 }
 
-const std::list<bool>& SimpleArrayInterface::propBool() const
+const std::list<bool>& SimpleArrayInterface::getPropBool() const
 {
     return m_data.m_propBool;
 }
@@ -35,7 +35,7 @@ void SimpleArrayInterface::setPropInt(const std::list<int>& propInt)
     }
 }
 
-const std::list<int>& SimpleArrayInterface::propInt() const
+const std::list<int>& SimpleArrayInterface::getPropInt() const
 {
     return m_data.m_propInt;
 }
@@ -48,7 +48,7 @@ void SimpleArrayInterface::setPropFloat(const std::list<float>& propFloat)
     }
 }
 
-const std::list<float>& SimpleArrayInterface::propFloat() const
+const std::list<float>& SimpleArrayInterface::getPropFloat() const
 {
     return m_data.m_propFloat;
 }
@@ -61,7 +61,7 @@ void SimpleArrayInterface::setPropString(const std::list<std::string>& propStrin
     }
 }
 
-const std::list<std::string>& SimpleArrayInterface::propString() const
+const std::list<std::string>& SimpleArrayInterface::getPropString() const
 {
     return m_data.m_propString;
 }

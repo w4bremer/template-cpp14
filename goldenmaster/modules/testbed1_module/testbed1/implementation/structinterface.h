@@ -18,16 +18,16 @@ public:
     ~StructInterface();
 public:
     void setPropBool(const StructBool& propBool) override;
-    const StructBool& propBool() const override;
+    const StructBool& getPropBool() const override;
     
     void setPropInt(const StructInt& propInt) override;
-    const StructInt& propInt() const override;
+    const StructInt& getPropInt() const override;
     
     void setPropFloat(const StructFloat& propFloat) override;
-    const StructFloat& propFloat() const override;
+    const StructFloat& getPropFloat() const override;
     
     void setPropString(const StructString& propString) override;
-    const StructString& propString() const override;
+    const StructString& getPropString() const override;
     
     StructBool funcBool(const StructBool& paramBool) override;
     std::future<StructBool> funcBoolAsync(const StructBool& paramBool) override;

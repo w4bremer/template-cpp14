@@ -25,21 +25,21 @@ TEST_CASE("Testing ManyParamInterface", "[ManyParamInterface]"){
     SECTION("Test property prop1") {
         // Do implement test here
         testManyParamInterface->setProp1(0);
-        REQUIRE( testManyParamInterface->prop1() == 0 );
+        REQUIRE( testManyParamInterface->getProp1() == 0 );
     }
     SECTION("Test property prop2") {
         // Do implement test here
         testManyParamInterface->setProp2(0);
-        REQUIRE( testManyParamInterface->prop2() == 0 );
+        REQUIRE( testManyParamInterface->getProp2() == 0 );
     }
     SECTION("Test property prop3") {
         // Do implement test here
         testManyParamInterface->setProp3(0);
-        REQUIRE( testManyParamInterface->prop3() == 0 );
+        REQUIRE( testManyParamInterface->getProp3() == 0 );
     }
     SECTION("Test property prop4") {
         // Do implement test here
         testManyParamInterface->setProp4(0);
-        REQUIRE( testManyParamInterface->prop4() == 0 );
+        REQUIRE( testManyParamInterface->getProp4() == 0 );
     }
 }

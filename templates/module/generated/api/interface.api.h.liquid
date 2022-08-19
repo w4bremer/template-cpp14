@@ -50,7 +50,7 @@ public:
     */
 {% endunless %}
 
-    virtual {{operation|cpp14Return}} {{operation.name}}({{operation|cpp14Params}}) = 0;
+    virtual {{operation|cpp14Return}} {{operation.name | lowerFirst}}({{operation|cpp14Params}}) = 0;
     /**
     * Asynchronous version of {{operation.name}}({{operation|cpp14Params}})
 {% unless operation.description == blank %}
@@ -63,7 +63,7 @@ public:
 {% endfor %}
     * @return Promise of type {{operation|cpp14Return}} which is set once the function has completed
     */
-    virtual std::future<{{operation|cpp14Return}}> {{operation.name}}Async({{operation|cpp14Params}}) = 0;
+    virtual std::future<{{operation|cpp14Return}}> {{operation.name | lowerFirst}}Async({{operation|cpp14Params}}) = 0;
 {{nl}}
 {% endfor %}
 {% endunless %}
@@ -83,7 +83,7 @@ public:
     * @return {{property.description}}
     {% endunless %}
     */
-    virtual {{property|cpp14Return: true}} {{property.name}}() const = 0;
+    virtual {{property|cpp14Return: true}} get{{property.name | capital}}() const = 0;
 {{nl}}
 {% endfor %}
 {% endunless %}

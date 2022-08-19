@@ -17,11 +17,11 @@ TEST_CASE("Testing SameStruct2Interface", "[SameStruct2Interface]"){
     SECTION("Test property prop1") {
         // Do implement test here
         testSameStruct2Interface->setProp1(Struct2());
-        REQUIRE( testSameStruct2Interface->prop1() == Struct2() );
+        REQUIRE( testSameStruct2Interface->getProp1() == Struct2() );
     }
     SECTION("Test property prop2") {
         // Do implement test here
         testSameStruct2Interface->setProp2(Struct2());
-        REQUIRE( testSameStruct2Interface->prop2() == Struct2() );
+        REQUIRE( testSameStruct2Interface->getProp2() == Struct2() );
     }
 }

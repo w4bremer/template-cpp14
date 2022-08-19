@@ -18,16 +18,16 @@ public:
     ~SimpleArrayInterface();
 public:
     void setPropBool(const std::list<bool>& propBool) override;
-    const std::list<bool>& propBool() const override;
+    const std::list<bool>& getPropBool() const override;
     
     void setPropInt(const std::list<int>& propInt) override;
-    const std::list<int>& propInt() const override;
+    const std::list<int>& getPropInt() const override;
     
     void setPropFloat(const std::list<float>& propFloat) override;
-    const std::list<float>& propFloat() const override;
+    const std::list<float>& getPropFloat() const override;
     
     void setPropString(const std::list<std::string>& propString) override;
-    const std::list<std::string>& propString() const override;
+    const std::list<std::string>& getPropString() const override;
     
     std::list<bool> funcBool(const std::list<bool>& paramBool) override;
     std::future<std::list<bool>> funcBoolAsync(const std::list<bool>& paramBool) override;

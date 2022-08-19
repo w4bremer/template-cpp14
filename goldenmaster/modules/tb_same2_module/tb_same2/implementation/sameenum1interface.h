@@ -18,7 +18,7 @@ public:
     ~SameEnum1Interface();
 public:
     void setProp1(const Enum1Enum& prop1) override;
-    const Enum1Enum& prop1() const override;
+    const Enum1Enum& getProp1() const override;
     
     Enum1Enum func1(const Enum1Enum& param1) override;
     std::future<Enum1Enum> func1Async(const Enum1Enum& param1) override;

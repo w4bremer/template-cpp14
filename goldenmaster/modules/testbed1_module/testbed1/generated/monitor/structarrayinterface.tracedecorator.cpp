@@ -64,36 +64,36 @@ void StructArrayInterfaceTraceDecorator::setPropBool(const std::list<StructBool>
     m_impl.setPropBool(propBool);
 }
 
-const std::list<StructBool>& StructArrayInterfaceTraceDecorator::propBool() const
+const std::list<StructBool>& StructArrayInterfaceTraceDecorator::getPropBool() const
 {
-    return m_impl.propBool();
+    return m_impl.getPropBool();
 }
 void StructArrayInterfaceTraceDecorator::setPropInt(const std::list<StructInt>& propInt)
 {
     m_impl.setPropInt(propInt);
 }
 
-const std::list<StructInt>& StructArrayInterfaceTraceDecorator::propInt() const
+const std::list<StructInt>& StructArrayInterfaceTraceDecorator::getPropInt() const
 {
-    return m_impl.propInt();
+    return m_impl.getPropInt();
 }
 void StructArrayInterfaceTraceDecorator::setPropFloat(const std::list<StructFloat>& propFloat)
 {
     m_impl.setPropFloat(propFloat);
 }
 
-const std::list<StructFloat>& StructArrayInterfaceTraceDecorator::propFloat() const
+const std::list<StructFloat>& StructArrayInterfaceTraceDecorator::getPropFloat() const
 {
-    return m_impl.propFloat();
+    return m_impl.getPropFloat();
 }
 void StructArrayInterfaceTraceDecorator::setPropString(const std::list<StructString>& propString)
 {
     m_impl.setPropString(propString);
 }
 
-const std::list<StructString>& StructArrayInterfaceTraceDecorator::propString() const
+const std::list<StructString>& StructArrayInterfaceTraceDecorator::getPropString() const
 {
-    return m_impl.propString();
+    return m_impl.getPropString();
 }
 void StructArrayInterfaceTraceDecorator::onSigBool(const std::list<StructBool>& paramBool)
 {

@@ -22,7 +22,7 @@ void ManyParamInterface::setProp1(int prop1)
     }
 }
 
-int ManyParamInterface::prop1() const
+int ManyParamInterface::getProp1() const
 {
     return m_data.m_prop1;
 }
@@ -35,7 +35,7 @@ void ManyParamInterface::setProp2(int prop2)
     }
 }
 
-int ManyParamInterface::prop2() const
+int ManyParamInterface::getProp2() const
 {
     return m_data.m_prop2;
 }
@@ -48,7 +48,7 @@ void ManyParamInterface::setProp3(int prop3)
     }
 }
 
-int ManyParamInterface::prop3() const
+int ManyParamInterface::getProp3() const
 {
     return m_data.m_prop3;
 }
@@ -61,7 +61,7 @@ void ManyParamInterface::setProp4(int prop4)
     }
 }
 
-int ManyParamInterface::prop4() const
+int ManyParamInterface::getProp4() const
 {
     return m_data.m_prop4;
 }

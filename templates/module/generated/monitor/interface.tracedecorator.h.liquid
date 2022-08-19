@@ -42,9 +42,9 @@ public:
 
 {% for operation in interface.operations %}
     /** Traces {{operation.name}} and forwards call to {{interface.name}} implementation. */
-    {{operation|cpp14Return}} {{operation.name}}({{operation|cpp14Params}}) override;
+    {{operation|cpp14Return}} {{operation.name| lowerFirst}}({{operation|cpp14Params}}) override;
     /** Traces {{operation.name}} and forwards call to {{interface.name}} implementation. */
-    std::future<{{operation|cpp14Return}}> {{operation.name}}Async({{operation|cpp14Params}}) override;
+    std::future<{{operation|cpp14Return}}> {{operation.name| lowerFirst}}Async({{operation|cpp14Params}}) override;
     {{nl}}
 {% endfor %}
 
@@ -52,7 +52,7 @@ public:
     /** Forwards call to {{interface.name}} implementation. */
     void set{{property.name|capital}}({{ property|cpp14Param }}) override;
     /** Forwards call to {{interface.name}} implementation. */
-    {{property|cpp14Return: true}} {{property.name}}() const override;
+    {{property|cpp14Return: true}} get{{property.name | capital}}() const override;
     {{nl}}    
 {% endfor %}
 

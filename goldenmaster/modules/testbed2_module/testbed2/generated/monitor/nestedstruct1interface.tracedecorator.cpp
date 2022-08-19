@@ -34,9 +34,9 @@ void NestedStruct1InterfaceTraceDecorator::setProp1(const NestedStruct1& prop1)
     m_impl.setProp1(prop1);
 }
 
-const NestedStruct1& NestedStruct1InterfaceTraceDecorator::prop1() const
+const NestedStruct1& NestedStruct1InterfaceTraceDecorator::getProp1() const
 {
-    return m_impl.prop1();
+    return m_impl.getProp1();
 }
 void NestedStruct1InterfaceTraceDecorator::onSig1(const NestedStruct1& param1)
 {

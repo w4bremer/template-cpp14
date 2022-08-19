@@ -22,7 +22,7 @@ void StructInterface::setPropBool(const StructBool& propBool)
     }
 }
 
-const StructBool& StructInterface::propBool() const
+const StructBool& StructInterface::getPropBool() const
 {
     return m_data.m_propBool;
 }
@@ -35,7 +35,7 @@ void StructInterface::setPropInt(const StructInt& propInt)
     }
 }
 
-const StructInt& StructInterface::propInt() const
+const StructInt& StructInterface::getPropInt() const
 {
     return m_data.m_propInt;
 }
@@ -48,7 +48,7 @@ void StructInterface::setPropFloat(const StructFloat& propFloat)
     }
 }
 
-const StructFloat& StructInterface::propFloat() const
+const StructFloat& StructInterface::getPropFloat() const
 {
     return m_data.m_propFloat;
 }
@@ -61,7 +61,7 @@ void StructInterface::setPropString(const StructString& propString)
     }
 }
 
-const StructString& StructInterface::propString() const
+const StructString& StructInterface::getPropString() const
 {
     return m_data.m_propString;
 }

@@ -81,9 +81,9 @@ void NestedStruct3InterfaceServiceAdapter::olinkUnlinked(std::string name)
 nlohmann::json NestedStruct3InterfaceServiceAdapter::olinkCollectProperties()
 {
     return nlohmann::json::object({
-        { "prop1", m_NestedStruct3Interface.prop1() },
-        { "prop2", m_NestedStruct3Interface.prop2() },
-        { "prop3", m_NestedStruct3Interface.prop3() }
+        { "prop1", m_NestedStruct3Interface.getProp1() },
+        { "prop2", m_NestedStruct3Interface.getProp2() },
+        { "prop3", m_NestedStruct3Interface.getProp3() }
     });
 }
 void NestedStruct3InterfaceServiceAdapter::onSig1(const NestedStruct1& param1)

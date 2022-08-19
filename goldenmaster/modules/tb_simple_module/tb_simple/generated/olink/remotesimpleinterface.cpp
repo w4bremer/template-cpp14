@@ -52,7 +52,7 @@ void RemoteSimpleInterface::setPropBoolLocal(bool propBool)
     }
 }
 
-bool RemoteSimpleInterface::propBool() const
+bool RemoteSimpleInterface::getPropBool() const
 {
     return m_data.m_propBool;
 }
@@ -73,7 +73,7 @@ void RemoteSimpleInterface::setPropIntLocal(int propInt)
     }
 }
 
-int RemoteSimpleInterface::propInt() const
+int RemoteSimpleInterface::getPropInt() const
 {
     return m_data.m_propInt;
 }
@@ -94,7 +94,7 @@ void RemoteSimpleInterface::setPropFloatLocal(float propFloat)
     }
 }
 
-float RemoteSimpleInterface::propFloat() const
+float RemoteSimpleInterface::getPropFloat() const
 {
     return m_data.m_propFloat;
 }
@@ -115,7 +115,7 @@ void RemoteSimpleInterface::setPropStringLocal(const std::string& propString)
     }
 }
 
-std::string RemoteSimpleInterface::propString() const
+std::string RemoteSimpleInterface::getPropString() const
 {
     return m_data.m_propString;
 }
