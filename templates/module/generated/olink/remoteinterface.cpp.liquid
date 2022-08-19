@@ -1,5 +1,4 @@
 {% comment %} // Copyright (c) ApiGear UG 2020 {% endcomment -%}
-{{ module | licGPLcpp -}}
 {% assign class = interface.name |prepend:"Remote"-%}
 {% assign pub_class = interface.name | capital | append: "Publisher" %}
 {% assign pub_interface = "I" | append: interface.name | capital | append: "Publisher"%}
