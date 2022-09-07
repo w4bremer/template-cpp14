@@ -8,7 +8,7 @@ class apigearConan(ConanFile):
     author = "ApiGear UG"
     #url = "<Package recipe repository url here, for issues about the package>"
     settings = "os", "compiler", "build_type", "arch"
-    requires = "catch2/2.13.7", "poco/1.11.3@#2f5e663a2d744e2d86962bfff2b2345e", "nlohmann_json/3.9.1"
+    requires = "catch2/2.13.7", "poco/1.11.3@#2f5e663a2d744e2d86962bfff2b2345e", "openssl/1.1.1s", "paho-mqtt-c/1.3.12", "nlohmann_json/3.9.1"
     generators = "cmake_find_package", "virtualenv"
     default_options = {"poco:shared": False,
                        "poco:enable_data_mysql": False,
@@ -35,7 +35,9 @@ class apigearConan(ConanFile):
                        "poco:enable_sevenzip": False,
                        "poco:enable_util": True,
                        "poco:enable_xml": False,
-                       "poco:enable_zip": False
+                       "poco:enable_zip": False,
+                       "paho-mqtt-c:shared": True,
+                       "paho-mqtt-c:asynchronous": True
                        }
     exports_sources = "*"
 
@@ -55,7 +57,7 @@ class apigearConan(ConanFile):
             self.options["poco"].shared = False
 
     def package(self):
-        packages = ["utilities", "tracer", "olink"]
+        packages = ["utilities", "tracer", "olink", "mqtt"]
         self.copy("**/*.h", dst="include/apigear", src=".")
         self.copy("*.lib", dst="lib", src=".", keep_path=False)
         self.copy("*.dll", dst="bin", src=".", keep_path=False)
@@ -75,3 +77,5 @@ class apigearConan(ConanFile):
         self.cpp_info.components["poco-olink"].libs = ["poco-olink"]
         self.cpp_info.components["poco-olink"].includedirs.append(os.path.join(self.package_folder, "include"))
         self.cpp_info.components["poco-olink"].requires = ["poco::poco", "nlohmann_json::nlohmann_json", "utilities"]
+        self.cpp_info.components["paho-mqtt"].libs = ["paho-mqtt"]
+        self.cpp_info.components["paho-mqtt"].requires = ["nlohmann_json::nlohmann_json"]

@@ -3,6 +3,7 @@ set(APIGEAR_VERSION 1.0)
 INCLUDE("${CMAKE_CURRENT_LIST_DIR}/ApiGearUtilitiesTargets.cmake")
 INCLUDE("${CMAKE_CURRENT_LIST_DIR}/ApiGearPocoOlinkTargets.cmake")
 INCLUDE("${CMAKE_CURRENT_LIST_DIR}/ApiGearPocoTracerTargets.cmake")
+INCLUDE("${CMAKE_CURRENT_LIST_DIR}/ApiGearPahoMQTTTargets.cmake")
 set_and_check(APIGEAR_INCLUDE_DIR "@PACKAGE_INCLUDE_INSTALL_DIR@")
 
 # make sure we have all needed dependencies
@@ -11,4 +12,4 @@ find_dependency(Poco COMPONENTS Foundation Net Util REQUIRED)
 find_dependency(nlohmann_json REQUIRED)
 find_dependency(objectlink-core-cpp REQUIRED)
 
-check_required_components(utilities poco-olink poco-tracer)
+check_required_components(utilities poco-olink poco-tracer paho-mqtt)

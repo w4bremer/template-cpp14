@@ -30,6 +30,9 @@ add_subdirectory(generated/monitor)
 {{- if $features.olink }}
 add_subdirectory(generated/olink)
 {{- end}}
+{{- if $features.mqtt }}
+add_subdirectory(generated/mqtt)
+{{- end}}
 
 include(CMakePackageConfigHelpers)
 configure_package_config_file({{$module_idFirstUpper}}Config.cmake.in

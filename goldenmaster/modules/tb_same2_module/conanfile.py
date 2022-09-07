@@ -55,3 +55,6 @@ class tb_same2Conan(ConanFile):
         self.cpp_info.components["tb_same2-olink"].includedirs.append(os.path.join(self.package_folder, "include"))
         self.cpp_info.components["tb_same2-olink"].libs = ["tb_same2-olink"]
         self.cpp_info.components["tb_same2-olink"].requires = ["tb_same2-core", "nlohmann_json::nlohmann_json", "apigear::poco-olink"]
+        self.cpp_info.components["tb_same2-mqtt"].includedirs.append(os.path.join(self.package_folder, "include"))
+        self.cpp_info.components["tb_same2-mqtt"].libs = ["tb_same2-mqtt"]
+        self.cpp_info.components["tb_same2-mqtt"].requires = ["tb_same2-core", "nlohmann_json::nlohmann_json", "apigear::paho-mqtt"]

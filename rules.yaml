@@ -137,6 +137,23 @@ features:
           target: "{{lower (camel .Interface.Name)}}client.h"
         - source: "module/generated/olink/interfaceclient.cpp.tpl"
           target: "{{lower (camel .Interface.Name)}}client.cpp"
+  - name: mqtt
+    scopes:
+    - match: module
+      documents:
+        - source: "module/generated/mqtt/CMakeLists.txt.tpl"
+          target: "modules/{{snake .Module.Name}}_module/{{snake .Module.Name}}/generated/mqtt/CMakeLists.txt"
+    - match: interface
+      prefix: "modules/{{snake .Module.Name}}_module/{{snake .Module.Name}}/generated/mqtt/"
+      documents:
+        - source: "module/generated/mqtt/mqttservice.h.tpl"
+          target: "{{lower (camel .Interface.Name)}}service.h"
+        - source: "module/generated/mqtt/mqttservice.cpp.tpl"
+          target: "{{lower (camel .Interface.Name)}}service.cpp"
+        - source: "module/generated/mqtt/mqttclient.h.tpl"
+          target: "{{lower (camel .Interface.Name)}}client.h"
+        - source: "module/generated/mqtt/mqttclient.cpp.tpl"
+          target: "{{lower (camel .Interface.Name)}}client.cpp"
   - name: apigear
     scopes:
     - match: system
@@ -233,12 +250,26 @@ features:
           raw: true
         - source: "apigear/olink/tests/private/test_server/test_server_request_handler.hpp"
           raw: true
+        - source: "apigear/mqtt/CMakeLists.txt"
+          raw: true
+        - source: "apigear/mqtt/mqttcppclient.cpp"
+          raw: true
+        - source: "apigear/mqtt/mqttcppclient.h"
+          raw: true
+        - source: "apigear/mqtt/mqtttopic.cpp"
+          raw: true
+        - source: "apigear/mqtt/mqtttopic.h"
+          raw: true
+        - source: "apigear/mqtt/mqttcommon.h"
+          raw: true
+        - source: "apigear/mqtt/mqtttopic.test.cpp"
+          raw: true
   - name: examples
     requires:
       - stubs
     scopes:
-    - match: system
-      documents:
+      - match: system
+        documents:
         - source: examples/app/CMakeLists.txt.tpl
           target: examples/app/CMakeLists.txt
         - source: examples/app/conanfile.txt.tpl
@@ -270,21 +301,33 @@ features:
           target: examples/olinkclient/conanfile.txt
         - source: examples/olinkclient/main.cpp.tpl
           target: examples/olinkclient/main.cpp
+        - source: examples/mqttserver/CMakeLists.txt.tpl
+          target: examples/mqttserver/CMakeLists.txt
+        - source: examples/mqttserver/conanfile.txt.tpl
+          target: examples/mqttserver/conanfile.txt
+        - source: examples/mqttserver/main.cpp.tpl
+          target: examples/mqttserver/main.cpp
+        - source: examples/mqttclient/CMakeLists.txt.tpl
+          target: examples/mqttclient/CMakeLists.txt
+        - source: examples/mqttclient/conanfile.txt.tpl
+          target: examples/mqttclient/conanfile.txt
+        - source: examples/mqttclient/main.cpp.tpl
+          target: examples/mqttclient/main.cpp
   - name: conan
     requires:
       - api
     scopes:
-    - match: system
-      documents:
+      - match: system
+        documents:
         - source: test_conan.sh.tpl
           target: test_conan.sh
           force: false
         - source: test_conan.bat.tpl
           target: test_conan.bat
           force: false
-    - match: module
-      prefix: "modules//{{snake .Module.Name}}_module/"
-      documents:
+      - match: module
+        prefix: "modules//{{snake .Module.Name}}_module/"
+        documents:
         - source: module/conanfile.py.tpl
           target: "conanfile.py"
           force: false

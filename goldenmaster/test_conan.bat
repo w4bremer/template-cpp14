@@ -183,3 +183,35 @@ if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
 CALL ../../build/examples/olinkclient/deactivate.bat
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
 popd
+if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
+if not exist build\examples\mqttserver mkdir build\examples\mqttserver
+if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
+pushd examples\mqttserver
+if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
+conan install --build missing . --install-folder ../../build/examples/mqttserver -g=virtualenv
+if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
+cmake -S . -B ../../build/examples/mqttserver --preset default
+if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
+CALL ../../build/examples/mqttserver/activate.bat
+if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
+cmake --build ../../build/examples/mqttserver
+if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
+CALL ../../build/examples/mqttserver/deactivate.bat
+if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
+popd
+if not exist examples\mqttclient mkdir examples\mqttclient
+if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
+pushd examples\mqttclient
+if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
+conan install --build missing . --install-folder ../../build/examples/mqttclient -g=virtualenv
+if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
+cmake -S . -B ../../build/examples/mqttclient --preset default
+if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
+CALL ../../build/examples/mqttclient/activate.bat
+if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
+cmake --build ../../build/examples/mqttclient
+if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
+CALL ../../build/examples/mqttclient/deactivate.bat
+if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
+popd
+cd ..

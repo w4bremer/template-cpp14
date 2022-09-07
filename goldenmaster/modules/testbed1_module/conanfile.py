@@ -55,3 +55,6 @@ class testbed1Conan(ConanFile):
         self.cpp_info.components["testbed1-olink"].includedirs.append(os.path.join(self.package_folder, "include"))
         self.cpp_info.components["testbed1-olink"].libs = ["testbed1-olink"]
         self.cpp_info.components["testbed1-olink"].requires = ["testbed1-core", "nlohmann_json::nlohmann_json", "apigear::poco-olink"]
+        self.cpp_info.components["testbed1-mqtt"].includedirs.append(os.path.join(self.package_folder, "include"))
+        self.cpp_info.components["testbed1-mqtt"].libs = ["testbed1-mqtt"]
+        self.cpp_info.components["testbed1-mqtt"].requires = ["testbed1-core", "nlohmann_json::nlohmann_json", "apigear::paho-mqtt"]

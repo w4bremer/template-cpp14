@@ -54,4 +54,8 @@ add_subdirectory(examples/appthreadsafe)
 {{- if .Features.examples }}
 add_subdirectory(examples/olinkserver)
 add_subdirectory(examples/olinkclient)
+{{- if .Features.mqtt }}
+add_subdirectory(examples/mqttserver)
+add_subdirectory(examples/mqttclient)
+{{- end }}
 {{- end }}
