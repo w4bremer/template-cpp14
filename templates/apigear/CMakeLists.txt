@@ -27,6 +27,9 @@ list(APPEND apigear_COMPONENTS "tracer")
 add_subdirectory(olink)
 list(APPEND apigear_COMPONENTS "olink")
 
+add_subdirectory(mqtt)
+list(APPEND apigear_COMPONENTS "mqtt")
+
 include(CMakePackageConfigHelpers)
 configure_package_config_file(ApigearConfig.cmake.in
   ${CMAKE_CURRENT_BINARY_DIR}/apigearConfig.cmake

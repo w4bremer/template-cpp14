@@ -77,3 +77,8 @@ class {{$module_id}}Conan(ConanFile):
         self.cpp_info.components["{{$module_id}}-olink"].libs = ["{{$module_id}}-olink"]
         self.cpp_info.components["{{$module_id}}-olink"].requires = ["{{$module_id}}-core", "nlohmann_json::nlohmann_json", "apigear::poco-olink"]
         {{- end}}
+        {{- if $features.mqtt }}
+        self.cpp_info.components["{{$module_id}}-mqtt"].includedirs.append(os.path.join(self.package_folder, "include"))
+        self.cpp_info.components["{{$module_id}}-mqtt"].libs = ["{{$module_id}}-mqtt"]
+        self.cpp_info.components["{{$module_id}}-mqtt"].requires = ["{{$module_id}}-core", "nlohmann_json::nlohmann_json", "apigear::paho-mqtt"]
+        {{- end}}
