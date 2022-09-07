@@ -55,3 +55,6 @@ class tb_enumConan(ConanFile):
         self.cpp_info.components["tb_enum-olink"].includedirs.append(os.path.join(self.package_folder, "include"))
         self.cpp_info.components["tb_enum-olink"].libs = ["tb_enum-olink"]
         self.cpp_info.components["tb_enum-olink"].requires = ["tb_enum-core", "nlohmann_json::nlohmann_json", "apigear::poco-olink"]
+        self.cpp_info.components["tb_enum-mqtt"].includedirs.append(os.path.join(self.package_folder, "include"))
+        self.cpp_info.components["tb_enum-mqtt"].libs = ["tb_enum-mqtt"]
+        self.cpp_info.components["tb_enum-mqtt"].requires = ["tb_enum-core", "nlohmann_json::nlohmann_json", "apigear::paho-mqtt"]

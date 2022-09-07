@@ -124,3 +124,13 @@ pushd examples/olinkclient;
 conan install --build missing . --install-folder ../../build/examples/olinkclient -g=virtualenv && cmake -S . -B ../../build/examples/olinkclient --preset release && cmake --build ../../build/examples/olinkclient
 if [ $? -ne 0 ]; then exit 1; fi;
 popd
+mkdir -p build/examples/mqttserver;
+pushd examples/mqttserver;
+conan install --build missing . --install-folder ../../build/examples/mqttserver -g=virtualenv && cmake -S . -B ../../build/examples/mqttserver --preset release && cmake --build ../../build/examples/mqttserver
+if [ $? -ne 0 ]; then exit 1; fi;
+popd
+mkdir -p build/examples/mqttclient;
+pushd examples/mqttclient;
+conan install --build missing . --install-folder ../../build/examples/mqttclient -g=virtualenv && cmake -S . -B ../../build/examples/mqttclient --preset release && cmake --build ../../build/examples/mqttclient
+if [ $? -ne 0 ]; then exit 1; fi;
+popd
