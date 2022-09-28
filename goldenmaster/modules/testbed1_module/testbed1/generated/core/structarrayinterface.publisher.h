@@ -4,9 +4,11 @@
 #include "testbed1/generated/api/structarrayinterface.api.h"
 #include "testbed1/generated/api/common.h"
 
+#include <atomic>
 #include <vector>
 #include <map>
 #include <functional>
+#include <shared_mutex>
 
 namespace Test {
 namespace Testbed1 {
@@ -135,38 +137,56 @@ public:
 private:
     // Subscribers informed about any property change or singal emited in StructArrayInterface
     std::vector<std::reference_wrapper<IStructArrayInterfaceSubscriber>> m_allChangesSubscribers;
+    // Mutex for m_allChangesSubscribers
+    mutable std::shared_timed_mutex m_allChangesSubscribersMutex;
     // Next free unique identifier to subscribe for the PropBool change.
-    long m_propBoolChangedCallbackNextId = 0;
+    std::atomic<long> m_propBoolChangedCallbackNextId {0};
     // Subscribed callbacks for the PropBool change.
     std::map<long, StructArrayInterfacePropBoolPropertyCb> m_propBoolCallbacks;
+    // Mutex for m_propBoolCallbacks
+    mutable std::shared_timed_mutex m_propBoolCallbacksMutex;
     // Next free unique identifier to subscribe for the PropInt change.
-    long m_propIntChangedCallbackNextId = 0;
+    std::atomic<long> m_propIntChangedCallbackNextId {0};
     // Subscribed callbacks for the PropInt change.
     std::map<long, StructArrayInterfacePropIntPropertyCb> m_propIntCallbacks;
+    // Mutex for m_propIntCallbacks
+    mutable std::shared_timed_mutex m_propIntCallbacksMutex;
     // Next free unique identifier to subscribe for the PropFloat change.
-    long m_propFloatChangedCallbackNextId = 0;
+    std::atomic<long> m_propFloatChangedCallbackNextId {0};
     // Subscribed callbacks for the PropFloat change.
     std::map<long, StructArrayInterfacePropFloatPropertyCb> m_propFloatCallbacks;
+    // Mutex for m_propFloatCallbacks
+    mutable std::shared_timed_mutex m_propFloatCallbacksMutex;
     // Next free unique identifier to subscribe for the PropString change.
-    long m_propStringChangedCallbackNextId = 0;
+    std::atomic<long> m_propStringChangedCallbackNextId {0};
     // Subscribed callbacks for the PropString change.
     std::map<long, StructArrayInterfacePropStringPropertyCb> m_propStringCallbacks;
+    // Mutex for m_propStringCallbacks
+    mutable std::shared_timed_mutex m_propStringCallbacksMutex;
     // Next free unique identifier to subscribe for the SigBool emission.
-    long m_sigBoolSignalCallbackNextId = 0;
+    std::atomic<long> m_sigBoolSignalCallbackNextId {0};
     // Subscribed callbacks for the SigBool emission.
     std::map<long, StructArrayInterfaceSigBoolSignalCb > m_sigBoolCallbacks;
+    // Mutex for m_sigBoolSignalCallbackNextId and m_sigBoolCallbacks
+    mutable std::shared_timed_mutex m_sigBoolCallbacksMutex;
     // Next free unique identifier to subscribe for the SigInt emission.
-    long m_sigIntSignalCallbackNextId = 0;
+    std::atomic<long> m_sigIntSignalCallbackNextId {0};
     // Subscribed callbacks for the SigInt emission.
     std::map<long, StructArrayInterfaceSigIntSignalCb > m_sigIntCallbacks;
+    // Mutex for m_sigIntSignalCallbackNextId and m_sigIntCallbacks
+    mutable std::shared_timed_mutex m_sigIntCallbacksMutex;
     // Next free unique identifier to subscribe for the SigFloat emission.
-    long m_sigFloatSignalCallbackNextId = 0;
+    std::atomic<long> m_sigFloatSignalCallbackNextId {0};
     // Subscribed callbacks for the SigFloat emission.
     std::map<long, StructArrayInterfaceSigFloatSignalCb > m_sigFloatCallbacks;
+    // Mutex for m_sigFloatSignalCallbackNextId and m_sigFloatCallbacks
+    mutable std::shared_timed_mutex m_sigFloatCallbacksMutex;
     // Next free unique identifier to subscribe for the SigString emission.
-    long m_sigStringSignalCallbackNextId = 0;
+    std::atomic<long> m_sigStringSignalCallbackNextId {0};
     // Subscribed callbacks for the SigString emission.
     std::map<long, StructArrayInterfaceSigStringSignalCb > m_sigStringCallbacks;
+    // Mutex for m_sigStringSignalCallbackNextId and m_sigStringCallbacks
+    mutable std::shared_timed_mutex m_sigStringCallbacksMutex;
 };
 
 } // namespace Testbed1

@@ -4,9 +4,11 @@
 #include "tb_same1/generated/api/samestruct1interface.api.h"
 #include "tb_same1/generated/api/common.h"
 
+#include <atomic>
 #include <vector>
 #include <map>
 #include <functional>
+#include <shared_mutex>
 
 namespace Test {
 namespace TbSame1 {
@@ -57,14 +59,20 @@ public:
 private:
     // Subscribers informed about any property change or singal emited in SameStruct1Interface
     std::vector<std::reference_wrapper<ISameStruct1InterfaceSubscriber>> m_allChangesSubscribers;
+    // Mutex for m_allChangesSubscribers
+    mutable std::shared_timed_mutex m_allChangesSubscribersMutex;
     // Next free unique identifier to subscribe for the Prop1 change.
-    long m_prop1ChangedCallbackNextId = 0;
+    std::atomic<long> m_prop1ChangedCallbackNextId {0};
     // Subscribed callbacks for the Prop1 change.
     std::map<long, SameStruct1InterfaceProp1PropertyCb> m_prop1Callbacks;
+    // Mutex for m_prop1Callbacks
+    mutable std::shared_timed_mutex m_prop1CallbacksMutex;
     // Next free unique identifier to subscribe for the Sig1 emission.
-    long m_sig1SignalCallbackNextId = 0;
+    std::atomic<long> m_sig1SignalCallbackNextId {0};
     // Subscribed callbacks for the Sig1 emission.
     std::map<long, SameStruct1InterfaceSig1SignalCb > m_sig1Callbacks;
+    // Mutex for m_sig1SignalCallbackNextId and m_sig1Callbacks
+    mutable std::shared_timed_mutex m_sig1CallbacksMutex;
 };
 
 } // namespace TbSame1

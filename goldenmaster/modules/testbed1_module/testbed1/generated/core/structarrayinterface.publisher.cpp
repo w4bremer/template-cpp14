@@ -8,6 +8,7 @@ using namespace Test::Testbed1;
 
 void StructArrayInterfacePublisher::subscribeToAllChanges(IStructArrayInterfaceSubscriber& subscriber)
 {
+    std::unique_lock<std::shared_timed_mutex> lock(m_allChangesSubscribersMutex);
     auto found = std::find_if(m_allChangesSubscribers.begin(), m_allChangesSubscribers.end(),
                         [&subscriber](const auto element){return &(element.get()) == &subscriber;});
     if (found == m_allChangesSubscribers.end())
@@ -18,6 +19,7 @@ void StructArrayInterfacePublisher::subscribeToAllChanges(IStructArrayInterfaceS
 
 void StructArrayInterfacePublisher::unsubscribeFromAllChanges(IStructArrayInterfaceSubscriber& subscriber)
 {
+    std::unique_lock<std::shared_timed_mutex> lock(m_allChangesSubscribersMutex);
     auto found = std::find_if(m_allChangesSubscribers.begin(), m_allChangesSubscribers.end(),
                         [&subscriber](const auto element){return &(element.get()) == &subscriber;});
     if (found != m_allChangesSubscribers.end())
@@ -28,23 +30,32 @@ void StructArrayInterfacePublisher::unsubscribeFromAllChanges(IStructArrayInterf
 
 long StructArrayInterfacePublisher::subscribeToPropBoolChanged(StructArrayInterfacePropBoolPropertyCb callback)
 {
+    // this is a short term workaround - we need a better solution for unique handle identifiers
     auto handleId = m_propBoolChangedCallbackNextId++;
+    std::unique_lock<std::shared_timed_mutex> lock(m_propBoolCallbacksMutex);
     m_propBoolCallbacks[handleId] = callback;
     return handleId;
 }
 
 void StructArrayInterfacePublisher::unsubscribeFromPropBoolChanged(long handleId)
 {
+    std::unique_lock<std::shared_timed_mutex> lock(m_propBoolCallbacksMutex);
     m_propBoolCallbacks.erase(handleId);
 }
 
 void StructArrayInterfacePublisher::publishPropBoolChanged(const std::list<StructBool>& propBool) const
 {
-    for(const auto& subscriber: m_allChangesSubscribers)
+    std::shared_lock<std::shared_timed_mutex> allChangesSubscribersLock(m_allChangesSubscribersMutex);
+    const auto allChangesSubscribers = m_allChangesSubscribers;
+    allChangesSubscribersLock.unlock();
+    for(const auto& subscriber: allChangesSubscribers)
     {
         subscriber.get().onPropBoolChanged(propBool);
     }
-    for(const auto& callbackEntry: m_propBoolCallbacks)
+    std::shared_lock<std::shared_timed_mutex> propBoolCallbacksLock(m_propBoolCallbacksMutex);
+    const auto propBoolCallbacks = m_propBoolCallbacks;
+    propBoolCallbacksLock.unlock();
+    for(const auto& callbackEntry: propBoolCallbacks)
     {
         if(callbackEntry.second)
         {
@@ -55,23 +66,32 @@ void StructArrayInterfacePublisher::publishPropBoolChanged(const std::list<Struc
 
 long StructArrayInterfacePublisher::subscribeToPropIntChanged(StructArrayInterfacePropIntPropertyCb callback)
 {
+    // this is a short term workaround - we need a better solution for unique handle identifiers
     auto handleId = m_propIntChangedCallbackNextId++;
+    std::unique_lock<std::shared_timed_mutex> lock(m_propIntCallbacksMutex);
     m_propIntCallbacks[handleId] = callback;
     return handleId;
 }
 
 void StructArrayInterfacePublisher::unsubscribeFromPropIntChanged(long handleId)
 {
+    std::unique_lock<std::shared_timed_mutex> lock(m_propIntCallbacksMutex);
     m_propIntCallbacks.erase(handleId);
 }
 
 void StructArrayInterfacePublisher::publishPropIntChanged(const std::list<StructInt>& propInt) const
 {
-    for(const auto& subscriber: m_allChangesSubscribers)
+    std::shared_lock<std::shared_timed_mutex> allChangesSubscribersLock(m_allChangesSubscribersMutex);
+    const auto allChangesSubscribers = m_allChangesSubscribers;
+    allChangesSubscribersLock.unlock();
+    for(const auto& subscriber: allChangesSubscribers)
     {
         subscriber.get().onPropIntChanged(propInt);
     }
-    for(const auto& callbackEntry: m_propIntCallbacks)
+    std::shared_lock<std::shared_timed_mutex> propIntCallbacksLock(m_propIntCallbacksMutex);
+    const auto propIntCallbacks = m_propIntCallbacks;
+    propIntCallbacksLock.unlock();
+    for(const auto& callbackEntry: propIntCallbacks)
     {
         if(callbackEntry.second)
         {
@@ -82,23 +102,32 @@ void StructArrayInterfacePublisher::publishPropIntChanged(const std::list<Struct
 
 long StructArrayInterfacePublisher::subscribeToPropFloatChanged(StructArrayInterfacePropFloatPropertyCb callback)
 {
+    // this is a short term workaround - we need a better solution for unique handle identifiers
     auto handleId = m_propFloatChangedCallbackNextId++;
+    std::unique_lock<std::shared_timed_mutex> lock(m_propFloatCallbacksMutex);
     m_propFloatCallbacks[handleId] = callback;
     return handleId;
 }
 
 void StructArrayInterfacePublisher::unsubscribeFromPropFloatChanged(long handleId)
 {
+    std::unique_lock<std::shared_timed_mutex> lock(m_propFloatCallbacksMutex);
     m_propFloatCallbacks.erase(handleId);
 }
 
 void StructArrayInterfacePublisher::publishPropFloatChanged(const std::list<StructFloat>& propFloat) const
 {
-    for(const auto& subscriber: m_allChangesSubscribers)
+    std::shared_lock<std::shared_timed_mutex> allChangesSubscribersLock(m_allChangesSubscribersMutex);
+    const auto allChangesSubscribers = m_allChangesSubscribers;
+    allChangesSubscribersLock.unlock();
+    for(const auto& subscriber: allChangesSubscribers)
     {
         subscriber.get().onPropFloatChanged(propFloat);
     }
-    for(const auto& callbackEntry: m_propFloatCallbacks)
+    std::shared_lock<std::shared_timed_mutex> propFloatCallbacksLock(m_propFloatCallbacksMutex);
+    const auto propFloatCallbacks = m_propFloatCallbacks;
+    propFloatCallbacksLock.unlock();
+    for(const auto& callbackEntry: propFloatCallbacks)
     {
         if(callbackEntry.second)
         {
@@ -109,23 +138,32 @@ void StructArrayInterfacePublisher::publishPropFloatChanged(const std::list<Stru
 
 long StructArrayInterfacePublisher::subscribeToPropStringChanged(StructArrayInterfacePropStringPropertyCb callback)
 {
+    // this is a short term workaround - we need a better solution for unique handle identifiers
     auto handleId = m_propStringChangedCallbackNextId++;
+    std::unique_lock<std::shared_timed_mutex> lock(m_propStringCallbacksMutex);
     m_propStringCallbacks[handleId] = callback;
     return handleId;
 }
 
 void StructArrayInterfacePublisher::unsubscribeFromPropStringChanged(long handleId)
 {
+    std::unique_lock<std::shared_timed_mutex> lock(m_propStringCallbacksMutex);
     m_propStringCallbacks.erase(handleId);
 }
 
 void StructArrayInterfacePublisher::publishPropStringChanged(const std::list<StructString>& propString) const
 {
-    for(const auto& subscriber: m_allChangesSubscribers)
+    std::shared_lock<std::shared_timed_mutex> allChangesSubscribersLock(m_allChangesSubscribersMutex);
+    const auto allChangesSubscribers = m_allChangesSubscribers;
+    allChangesSubscribersLock.unlock();
+    for(const auto& subscriber: allChangesSubscribers)
     {
         subscriber.get().onPropStringChanged(propString);
     }
-    for(const auto& callbackEntry: m_propStringCallbacks)
+    std::shared_lock<std::shared_timed_mutex> propStringCallbacksLock(m_propStringCallbacksMutex);
+    const auto propStringCallbacks = m_propStringCallbacks;
+    propStringCallbacksLock.unlock();
+    for(const auto& callbackEntry: propStringCallbacks)
     {
         if(callbackEntry.second)
         {
@@ -138,22 +176,30 @@ long StructArrayInterfacePublisher::subscribeToSigBool(StructArrayInterfaceSigBo
 {
     // this is a short term workaround - we need a better solution for unique handle identifiers
     auto handleId = m_sigBoolSignalCallbackNextId++;
+    std::unique_lock<std::shared_timed_mutex> lock(m_sigBoolCallbacksMutex);
     m_sigBoolCallbacks[handleId] = callback;
     return handleId;
 }
 
 void StructArrayInterfacePublisher::unsubscribeFromSigBool(long handleId)
 {
+    std::unique_lock<std::shared_timed_mutex> lock(m_sigBoolCallbacksMutex);
     m_sigBoolCallbacks.erase(handleId);
 }
 
 void StructArrayInterfacePublisher::publishSigBool(const std::list<StructBool>& paramBool) const
 {
-    for(const auto& subscriber: m_allChangesSubscribers)
+    std::shared_lock<std::shared_timed_mutex> allChangesSubscribersLock(m_allChangesSubscribersMutex);
+    const auto allChangesSubscribers = m_allChangesSubscribers;
+    allChangesSubscribersLock.unlock();
+    for(const auto& subscriber: allChangesSubscribers)
     {
         subscriber.get().onSigBool(paramBool);
     }
-    for(const auto& callbackEntry: m_sigBoolCallbacks)
+    std::shared_lock<std::shared_timed_mutex> sigBoolCallbacksLock(m_sigBoolCallbacksMutex);
+    const auto sigBoolCallbacks = m_sigBoolCallbacks;
+    sigBoolCallbacksLock.unlock();
+    for(const auto& callbackEntry: sigBoolCallbacks)
     {
         if(callbackEntry.second)
         {
@@ -166,22 +212,30 @@ long StructArrayInterfacePublisher::subscribeToSigInt(StructArrayInterfaceSigInt
 {
     // this is a short term workaround - we need a better solution for unique handle identifiers
     auto handleId = m_sigIntSignalCallbackNextId++;
+    std::unique_lock<std::shared_timed_mutex> lock(m_sigIntCallbacksMutex);
     m_sigIntCallbacks[handleId] = callback;
     return handleId;
 }
 
 void StructArrayInterfacePublisher::unsubscribeFromSigInt(long handleId)
 {
+    std::unique_lock<std::shared_timed_mutex> lock(m_sigIntCallbacksMutex);
     m_sigIntCallbacks.erase(handleId);
 }
 
 void StructArrayInterfacePublisher::publishSigInt(const std::list<StructInt>& paramInt) const
 {
-    for(const auto& subscriber: m_allChangesSubscribers)
+    std::shared_lock<std::shared_timed_mutex> allChangesSubscribersLock(m_allChangesSubscribersMutex);
+    const auto allChangesSubscribers = m_allChangesSubscribers;
+    allChangesSubscribersLock.unlock();
+    for(const auto& subscriber: allChangesSubscribers)
     {
         subscriber.get().onSigInt(paramInt);
     }
-    for(const auto& callbackEntry: m_sigIntCallbacks)
+    std::shared_lock<std::shared_timed_mutex> sigIntCallbacksLock(m_sigIntCallbacksMutex);
+    const auto sigIntCallbacks = m_sigIntCallbacks;
+    sigIntCallbacksLock.unlock();
+    for(const auto& callbackEntry: sigIntCallbacks)
     {
         if(callbackEntry.second)
         {
@@ -194,22 +248,30 @@ long StructArrayInterfacePublisher::subscribeToSigFloat(StructArrayInterfaceSigF
 {
     // this is a short term workaround - we need a better solution for unique handle identifiers
     auto handleId = m_sigFloatSignalCallbackNextId++;
+    std::unique_lock<std::shared_timed_mutex> lock(m_sigFloatCallbacksMutex);
     m_sigFloatCallbacks[handleId] = callback;
     return handleId;
 }
 
 void StructArrayInterfacePublisher::unsubscribeFromSigFloat(long handleId)
 {
+    std::unique_lock<std::shared_timed_mutex> lock(m_sigFloatCallbacksMutex);
     m_sigFloatCallbacks.erase(handleId);
 }
 
 void StructArrayInterfacePublisher::publishSigFloat(const std::list<StructFloat>& paramFloat) const
 {
-    for(const auto& subscriber: m_allChangesSubscribers)
+    std::shared_lock<std::shared_timed_mutex> allChangesSubscribersLock(m_allChangesSubscribersMutex);
+    const auto allChangesSubscribers = m_allChangesSubscribers;
+    allChangesSubscribersLock.unlock();
+    for(const auto& subscriber: allChangesSubscribers)
     {
         subscriber.get().onSigFloat(paramFloat);
     }
-    for(const auto& callbackEntry: m_sigFloatCallbacks)
+    std::shared_lock<std::shared_timed_mutex> sigFloatCallbacksLock(m_sigFloatCallbacksMutex);
+    const auto sigFloatCallbacks = m_sigFloatCallbacks;
+    sigFloatCallbacksLock.unlock();
+    for(const auto& callbackEntry: sigFloatCallbacks)
     {
         if(callbackEntry.second)
         {
@@ -222,22 +284,30 @@ long StructArrayInterfacePublisher::subscribeToSigString(StructArrayInterfaceSig
 {
     // this is a short term workaround - we need a better solution for unique handle identifiers
     auto handleId = m_sigStringSignalCallbackNextId++;
+    std::unique_lock<std::shared_timed_mutex> lock(m_sigStringCallbacksMutex);
     m_sigStringCallbacks[handleId] = callback;
     return handleId;
 }
 
 void StructArrayInterfacePublisher::unsubscribeFromSigString(long handleId)
 {
+    std::unique_lock<std::shared_timed_mutex> lock(m_sigStringCallbacksMutex);
     m_sigStringCallbacks.erase(handleId);
 }
 
 void StructArrayInterfacePublisher::publishSigString(const std::list<StructString>& paramString) const
 {
-    for(const auto& subscriber: m_allChangesSubscribers)
+    std::shared_lock<std::shared_timed_mutex> allChangesSubscribersLock(m_allChangesSubscribersMutex);
+    const auto allChangesSubscribers = m_allChangesSubscribers;
+    allChangesSubscribersLock.unlock();
+    for(const auto& subscriber: allChangesSubscribers)
     {
         subscriber.get().onSigString(paramString);
     }
-    for(const auto& callbackEntry: m_sigStringCallbacks)
+    std::shared_lock<std::shared_timed_mutex> sigStringCallbacksLock(m_sigStringCallbacksMutex);
+    const auto sigStringCallbacks = m_sigStringCallbacks;
+    sigStringCallbacksLock.unlock();
+    for(const auto& callbackEntry: sigStringCallbacks)
     {
         if(callbackEntry.second)
         {

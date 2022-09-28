@@ -4,9 +4,11 @@
 #include "testbed2/generated/api/nestedstruct3interface.api.h"
 #include "testbed2/generated/api/common.h"
 
+#include <atomic>
 #include <vector>
 #include <map>
 #include <functional>
+#include <shared_mutex>
 
 namespace Test {
 namespace Testbed2 {
@@ -109,30 +111,44 @@ public:
 private:
     // Subscribers informed about any property change or singal emited in NestedStruct3Interface
     std::vector<std::reference_wrapper<INestedStruct3InterfaceSubscriber>> m_allChangesSubscribers;
+    // Mutex for m_allChangesSubscribers
+    mutable std::shared_timed_mutex m_allChangesSubscribersMutex;
     // Next free unique identifier to subscribe for the Prop1 change.
-    long m_prop1ChangedCallbackNextId = 0;
+    std::atomic<long> m_prop1ChangedCallbackNextId {0};
     // Subscribed callbacks for the Prop1 change.
     std::map<long, NestedStruct3InterfaceProp1PropertyCb> m_prop1Callbacks;
+    // Mutex for m_prop1Callbacks
+    mutable std::shared_timed_mutex m_prop1CallbacksMutex;
     // Next free unique identifier to subscribe for the Prop2 change.
-    long m_prop2ChangedCallbackNextId = 0;
+    std::atomic<long> m_prop2ChangedCallbackNextId {0};
     // Subscribed callbacks for the Prop2 change.
     std::map<long, NestedStruct3InterfaceProp2PropertyCb> m_prop2Callbacks;
+    // Mutex for m_prop2Callbacks
+    mutable std::shared_timed_mutex m_prop2CallbacksMutex;
     // Next free unique identifier to subscribe for the Prop3 change.
-    long m_prop3ChangedCallbackNextId = 0;
+    std::atomic<long> m_prop3ChangedCallbackNextId {0};
     // Subscribed callbacks for the Prop3 change.
     std::map<long, NestedStruct3InterfaceProp3PropertyCb> m_prop3Callbacks;
+    // Mutex for m_prop3Callbacks
+    mutable std::shared_timed_mutex m_prop3CallbacksMutex;
     // Next free unique identifier to subscribe for the Sig1 emission.
-    long m_sig1SignalCallbackNextId = 0;
+    std::atomic<long> m_sig1SignalCallbackNextId {0};
     // Subscribed callbacks for the Sig1 emission.
     std::map<long, NestedStruct3InterfaceSig1SignalCb > m_sig1Callbacks;
+    // Mutex for m_sig1SignalCallbackNextId and m_sig1Callbacks
+    mutable std::shared_timed_mutex m_sig1CallbacksMutex;
     // Next free unique identifier to subscribe for the Sig2 emission.
-    long m_sig2SignalCallbackNextId = 0;
+    std::atomic<long> m_sig2SignalCallbackNextId {0};
     // Subscribed callbacks for the Sig2 emission.
     std::map<long, NestedStruct3InterfaceSig2SignalCb > m_sig2Callbacks;
+    // Mutex for m_sig2SignalCallbackNextId and m_sig2Callbacks
+    mutable std::shared_timed_mutex m_sig2CallbacksMutex;
     // Next free unique identifier to subscribe for the Sig3 emission.
-    long m_sig3SignalCallbackNextId = 0;
+    std::atomic<long> m_sig3SignalCallbackNextId {0};
     // Subscribed callbacks for the Sig3 emission.
     std::map<long, NestedStruct3InterfaceSig3SignalCb > m_sig3Callbacks;
+    // Mutex for m_sig3SignalCallbackNextId and m_sig3Callbacks
+    mutable std::shared_timed_mutex m_sig3CallbacksMutex;
 };
 
 } // namespace Testbed2

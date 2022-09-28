@@ -8,6 +8,7 @@ using namespace Test::TbSame2;
 
 void SameStruct1InterfacePublisher::subscribeToAllChanges(ISameStruct1InterfaceSubscriber& subscriber)
 {
+    std::unique_lock<std::shared_timed_mutex> lock(m_allChangesSubscribersMutex);
     auto found = std::find_if(m_allChangesSubscribers.begin(), m_allChangesSubscribers.end(),
                         [&subscriber](const auto element){return &(element.get()) == &subscriber;});
     if (found == m_allChangesSubscribers.end())
@@ -18,6 +19,7 @@ void SameStruct1InterfacePublisher::subscribeToAllChanges(ISameStruct1InterfaceS
 
 void SameStruct1InterfacePublisher::unsubscribeFromAllChanges(ISameStruct1InterfaceSubscriber& subscriber)
 {
+    std::unique_lock<std::shared_timed_mutex> lock(m_allChangesSubscribersMutex);
     auto found = std::find_if(m_allChangesSubscribers.begin(), m_allChangesSubscribers.end(),
                         [&subscriber](const auto element){return &(element.get()) == &subscriber;});
     if (found != m_allChangesSubscribers.end())
@@ -28,23 +30,32 @@ void SameStruct1InterfacePublisher::unsubscribeFromAllChanges(ISameStruct1Interf
 
 long SameStruct1InterfacePublisher::subscribeToProp1Changed(SameStruct1InterfaceProp1PropertyCb callback)
 {
+    // this is a short term workaround - we need a better solution for unique handle identifiers
     auto handleId = m_prop1ChangedCallbackNextId++;
+    std::unique_lock<std::shared_timed_mutex> lock(m_prop1CallbacksMutex);
     m_prop1Callbacks[handleId] = callback;
     return handleId;
 }
 
 void SameStruct1InterfacePublisher::unsubscribeFromProp1Changed(long handleId)
 {
+    std::unique_lock<std::shared_timed_mutex> lock(m_prop1CallbacksMutex);
     m_prop1Callbacks.erase(handleId);
 }
 
 void SameStruct1InterfacePublisher::publishProp1Changed(const Struct1& prop1) const
 {
-    for(const auto& subscriber: m_allChangesSubscribers)
+    std::shared_lock<std::shared_timed_mutex> allChangesSubscribersLock(m_allChangesSubscribersMutex);
+    const auto allChangesSubscribers = m_allChangesSubscribers;
+    allChangesSubscribersLock.unlock();
+    for(const auto& subscriber: allChangesSubscribers)
     {
         subscriber.get().onProp1Changed(prop1);
     }
-    for(const auto& callbackEntry: m_prop1Callbacks)
+    std::shared_lock<std::shared_timed_mutex> prop1CallbacksLock(m_prop1CallbacksMutex);
+    const auto prop1Callbacks = m_prop1Callbacks;
+    prop1CallbacksLock.unlock();
+    for(const auto& callbackEntry: prop1Callbacks)
     {
         if(callbackEntry.second)
         {
@@ -57,22 +68,30 @@ long SameStruct1InterfacePublisher::subscribeToSig1(SameStruct1InterfaceSig1Sign
 {
     // this is a short term workaround - we need a better solution for unique handle identifiers
     auto handleId = m_sig1SignalCallbackNextId++;
+    std::unique_lock<std::shared_timed_mutex> lock(m_sig1CallbacksMutex);
     m_sig1Callbacks[handleId] = callback;
     return handleId;
 }
 
 void SameStruct1InterfacePublisher::unsubscribeFromSig1(long handleId)
 {
+    std::unique_lock<std::shared_timed_mutex> lock(m_sig1CallbacksMutex);
     m_sig1Callbacks.erase(handleId);
 }
 
 void SameStruct1InterfacePublisher::publishSig1(const Struct1& param1) const
 {
-    for(const auto& subscriber: m_allChangesSubscribers)
+    std::shared_lock<std::shared_timed_mutex> allChangesSubscribersLock(m_allChangesSubscribersMutex);
+    const auto allChangesSubscribers = m_allChangesSubscribers;
+    allChangesSubscribersLock.unlock();
+    for(const auto& subscriber: allChangesSubscribers)
     {
         subscriber.get().onSig1(param1);
     }
-    for(const auto& callbackEntry: m_sig1Callbacks)
+    std::shared_lock<std::shared_timed_mutex> sig1CallbacksLock(m_sig1CallbacksMutex);
+    const auto sig1Callbacks = m_sig1Callbacks;
+    sig1CallbacksLock.unlock();
+    for(const auto& callbackEntry: sig1Callbacks)
     {
         if(callbackEntry.second)
         {
