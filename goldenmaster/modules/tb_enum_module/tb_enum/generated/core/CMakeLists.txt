@@ -8,6 +8,7 @@ find_package(nlohmann_json REQUIRED)
 set (SOURCES_CORE_SUPPORT
     tb_enum.json.adapter.cpp
     enuminterface.publisher.cpp
+    enuminterface.threadsafedecorator.cpp
 )
 add_library(tb_enum-core SHARED ${SOURCES_CORE_SUPPORT})
 add_library(tb_enum::tb_enum-core ALIAS tb_enum-core)

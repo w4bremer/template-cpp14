@@ -8,9 +8,13 @@ find_package(nlohmann_json REQUIRED)
 set (SOURCES_CORE_SUPPORT
     testbed2.json.adapter.cpp
     manyparaminterface.publisher.cpp
+    manyparaminterface.threadsafedecorator.cpp
     nestedstruct1interface.publisher.cpp
+    nestedstruct1interface.threadsafedecorator.cpp
     nestedstruct2interface.publisher.cpp
+    nestedstruct2interface.threadsafedecorator.cpp
     nestedstruct3interface.publisher.cpp
+    nestedstruct3interface.threadsafedecorator.cpp
 )
 add_library(testbed2-core SHARED ${SOURCES_CORE_SUPPORT})
 add_library(testbed2::testbed2-core ALIAS testbed2-core)

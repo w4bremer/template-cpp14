@@ -8,7 +8,9 @@ find_package(nlohmann_json REQUIRED)
 set (SOURCES_CORE_SUPPORT
     testbed1.json.adapter.cpp
     structinterface.publisher.cpp
+    structinterface.threadsafedecorator.cpp
     structarrayinterface.publisher.cpp
+    structarrayinterface.threadsafedecorator.cpp
 )
 add_library(testbed1-core SHARED ${SOURCES_CORE_SUPPORT})
 add_library(testbed1::testbed1-core ALIAS testbed1-core)

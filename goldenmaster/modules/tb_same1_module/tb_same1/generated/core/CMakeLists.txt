@@ -8,9 +8,13 @@ find_package(nlohmann_json REQUIRED)
 set (SOURCES_CORE_SUPPORT
     tb_same1.json.adapter.cpp
     samestruct1interface.publisher.cpp
+    samestruct1interface.threadsafedecorator.cpp
     samestruct2interface.publisher.cpp
+    samestruct2interface.threadsafedecorator.cpp
     sameenum1interface.publisher.cpp
+    sameenum1interface.threadsafedecorator.cpp
     sameenum2interface.publisher.cpp
+    sameenum2interface.threadsafedecorator.cpp
 )
 add_library(tb_same1-core SHARED ${SOURCES_CORE_SUPPORT})
 add_library(tb_same1::tb_same1-core ALIAS tb_same1-core)

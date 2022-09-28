@@ -56,6 +56,10 @@ features:
             target: "{{lower (camel .Interface.Name)}}.publisher.h"
           - source: "module/generated/core/interface.publisher.cpp.tpl"
             target: "{{lower (camel .Interface.Name)}}.publisher.cpp"
+          - source: "module/generated/core/interface.threadsafedecorator.h.tpl"
+            target: "{{lower (camel .Interface.Name)}}.threadsafedecorator.h"
+          - source: "module/generated/core/interface.threadsafedecorator.cpp.tpl"
+            target: "{{lower (camel .Interface.Name)}}.threadsafedecorator.cpp"
   - name: scaffold
     scopes:
       - match: module

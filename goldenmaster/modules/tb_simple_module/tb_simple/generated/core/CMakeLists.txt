@@ -8,7 +8,9 @@ find_package(nlohmann_json REQUIRED)
 set (SOURCES_CORE_SUPPORT
     tb_simple.json.adapter.cpp
     simpleinterface.publisher.cpp
+    simpleinterface.threadsafedecorator.cpp
     simplearrayinterface.publisher.cpp
+    simplearrayinterface.threadsafedecorator.cpp
 )
 add_library(tb_simple-core SHARED ${SOURCES_CORE_SUPPORT})
 add_library(tb_simple::tb_simple-core ALIAS tb_simple-core)

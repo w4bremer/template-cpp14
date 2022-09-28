@@ -12,6 +12,7 @@ set (SOURCES_CORE_SUPPORT
 {{- range .Module.Interfaces }}
 {{- $interface:= . }}
     {{lower (camel $interface.Name)}}.publisher.cpp
+    {{lower (camel $interface.Name)}}.threadsafedecorator.cpp
 {{- end }}
 )
 add_library({{$module_id}}-core SHARED ${SOURCES_CORE_SUPPORT})
