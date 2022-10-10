@@ -4,20 +4,33 @@
 #include "tb_same1/generated/core/samestruct2interface.publisher.h"
 #include "tb_same1/generated/core/tb_same1.json.adapter.h"
 
+#include "olink/iclientnode.h"
+#include "apigear/olink/olinkconnection.h"
+
 using namespace Test::TbSame1;
 using namespace Test::TbSame1::olink;
 
-RemoteSameStruct2Interface::RemoteSameStruct2Interface(ApiGear::ObjectLink::ClientRegistry& registry, ApiGear::PocoImpl::OLinkClient& client)
-    : m_registry(registry),
+namespace 
+{
+const std::string interfaceId = "tb.same1.SameStruct2Interface";
+}
+
+RemoteSameStruct2Interface::RemoteSameStruct2Interface(std::weak_ptr<ApiGear::PocoImpl::IOlinkConnector> olinkConnector)
+    : m_olinkConnector(olinkConnector),
       m_publisher(std::make_unique<SameStruct2InterfacePublisher>())
 {
-    m_registry.addObjectSink(this);
-    client.linkObjectSource("tb.same1.SameStruct2Interface");
+    if(auto connector = m_olinkConnector.lock())
+    {
+        connector->connectAndLinkObject(*this);
+    }
 }
 
 RemoteSameStruct2Interface::~RemoteSameStruct2Interface()
-{
-    m_registry.removeObjectSink(this);
+{    
+    if(auto connector = m_olinkConnector.lock())
+    {
+        connector->disconnectAndUnlink(olinkObjectName());
+    }
 }
 
 void RemoteSameStruct2Interface::applyState(const nlohmann::json& fields) 
@@ -32,10 +45,12 @@ void RemoteSameStruct2Interface::applyState(const nlohmann::json& fields)
 
 void RemoteSameStruct2Interface::setProp1(const Struct2& prop1)
 {
-    if(m_node == nullptr) {
+    if(!m_node) {
+        emitLog(ApiGear::Logger::LogLevel::Warning, "Attempt to set property but " + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return;
     }
-    m_node->setRemoteProperty("tb.same1.SameStruct2Interface/prop1", prop1);
+    const auto& propertyId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "prop1");
+    m_node->setRemoteProperty(propertyId, prop1);
 }
 
 void RemoteSameStruct2Interface::setProp1Local(const Struct2& prop1)
@@ -53,10 +68,12 @@ const Struct2& RemoteSameStruct2Interface::getProp1() const
 
 void RemoteSameStruct2Interface::setProp2(const Struct2& prop2)
 {
-    if(m_node == nullptr) {
+    if(!m_node) {
+        emitLog(ApiGear::Logger::LogLevel::Warning, "Attempt to set property but " + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return;
     }
-    m_node->setRemoteProperty("tb.same1.SameStruct2Interface/prop2", prop2);
+    const auto& propertyId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "prop2");
+    m_node->setRemoteProperty(propertyId, prop2);
 }
 
 void RemoteSameStruct2Interface::setProp2Local(const Struct2& prop2)
@@ -74,7 +91,8 @@ const Struct2& RemoteSameStruct2Interface::getProp2() const
 
 Struct1 RemoteSameStruct2Interface::func1(const Struct1& param1)
 {
-    if(m_node == nullptr) {
+     if(!m_node) {
+        emitLog(ApiGear::Logger::LogLevel::Warning, "Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return Struct1();
     }
     Struct1 value(func1Async(param1).get());
@@ -83,14 +101,16 @@ Struct1 RemoteSameStruct2Interface::func1(const Struct1& param1)
 
 std::future<Struct1> RemoteSameStruct2Interface::func1Async(const Struct1& param1)
 {
-    if(m_node == nullptr) {
-        throw std::runtime_error("Node is not initialized");
+    if(!m_node) {
+        emitLog(ApiGear::Logger::LogLevel::Warning, "Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
+        return std::future<Struct1>{};
     }
     return std::async(std::launch::async, [this,
                     param1]()
         {
             std::promise<Struct1> resultPromise;
-            m_node->invokeRemote("tb.same1.SameStruct2Interface/func1",
+            const auto& operationId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "func1");
+            m_node->invokeRemote(operationId,
                 nlohmann::json::array({param1}), [&resultPromise](ApiGear::ObjectLink::InvokeReplyArg arg) {
                     const Struct1& value = arg.value.get<Struct1>();
                     resultPromise.set_value(value);
@@ -102,7 +122,8 @@ std::future<Struct1> RemoteSameStruct2Interface::func1Async(const Struct1& param
 
 Struct1 RemoteSameStruct2Interface::func2(const Struct1& param1, const Struct2& param2)
 {
-    if(m_node == nullptr) {
+     if(!m_node) {
+        emitLog(ApiGear::Logger::LogLevel::Warning, "Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return Struct1();
     }
     Struct1 value(func2Async(param1, param2).get());
@@ -111,15 +132,17 @@ Struct1 RemoteSameStruct2Interface::func2(const Struct1& param1, const Struct2& 
 
 std::future<Struct1> RemoteSameStruct2Interface::func2Async(const Struct1& param1, const Struct2& param2)
 {
-    if(m_node == nullptr) {
-        throw std::runtime_error("Node is not initialized");
+    if(!m_node) {
+        emitLog(ApiGear::Logger::LogLevel::Warning, "Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
+        return std::future<Struct1>{};
     }
     return std::async(std::launch::async, [this,
                     param1,
                     param2]()
         {
             std::promise<Struct1> resultPromise;
-            m_node->invokeRemote("tb.same1.SameStruct2Interface/func2",
+            const auto& operationId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "func2");
+            m_node->invokeRemote(operationId,
                 nlohmann::json::array({param1,param2}), [&resultPromise](ApiGear::ObjectLink::InvokeReplyArg arg) {
                     const Struct1& value = arg.value.get<Struct1>();
                     resultPromise.set_value(value);
@@ -131,30 +154,28 @@ std::future<Struct1> RemoteSameStruct2Interface::func2Async(const Struct1& param
 
 std::string RemoteSameStruct2Interface::olinkObjectName()
 {
-    return "tb.same1.SameStruct2Interface";
+    return interfaceId;
 }
 
-void RemoteSameStruct2Interface::olinkOnSignal(std::string name, nlohmann::json args)
+void RemoteSameStruct2Interface::olinkOnSignal(const std::string& signalId, const nlohmann::json& args)
 {
-    std::string path = ApiGear::ObjectLink::Name::pathFromName(name);
-    if(path == "sig1") {
+    const auto& signalName = ApiGear::ObjectLink::Name::getMemberName(signalId);
+    if(signalName == "sig1") {
         m_publisher->publishSig1(args[0].get<Struct1>());   
         return;
     }
-    if(path == "sig2") {
+    if(signalName == "sig2") {
         m_publisher->publishSig2(args[0].get<Struct1>(),args[1].get<Struct2>());   
         return;
     }
 }
 
-void RemoteSameStruct2Interface::olinkOnPropertyChanged(std::string name, nlohmann::json value)
+void RemoteSameStruct2Interface::olinkOnPropertyChanged(const std::string& propertyId, const nlohmann::json& value)
 {
-    std::string path = ApiGear::ObjectLink::Name::pathFromName(name);
-    applyState({ {path, value} });
+    applyState({ {ApiGear::ObjectLink::Name::getMemberName(propertyId), value} });
 }
-void RemoteSameStruct2Interface::olinkOnInit(std::string name, nlohmann::json props, ApiGear::ObjectLink::IClientNode *node)
+void RemoteSameStruct2Interface::olinkOnInit(const std::string& /*name*/, const nlohmann::json& props, ApiGear::ObjectLink::IClientNode *node)
 {
-    (void) name; //suppress the 'Unreferenced Formal Parameter' warning.
     m_node = node;
     applyState(props);
 }

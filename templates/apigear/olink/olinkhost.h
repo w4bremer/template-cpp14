@@ -21,58 +21,61 @@
 * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 * SOFTWARE.
 */
+
 #pragma once
+
+#include "Poco/Net/HTTPServer.h"
+#include "private/connectionstorage.h"
+
+#include <memory>
+
 
 #if defined _WIN32 || defined __CYGWIN__
 #ifdef __GNUC__
-  #define APIGEAR_OLINK_EXPORT __attribute__ ((dllexport))
+#define APIGEAR_OLINK_EXPORT __attribute__ ((dllexport))
 #else
-  #define APIGEAR_OLINK_EXPORT __declspec(dllexport)
+#define APIGEAR_OLINK_EXPORT __declspec(dllexport)
 #endif
 #else
-  #if __GNUC__ >= 4
-    #define APIGEAR_OLINK_EXPORT __attribute__ ((visibility ("default")))
-  #else
-    #define APIGEAR_OLINK_EXPORT
-  #endif
+#if __GNUC__ >= 4
+#define APIGEAR_OLINK_EXPORT __attribute__ ((visibility ("default")))
+#else
+#define APIGEAR_OLINK_EXPORT
+#endif
 #endif
 
-// #include <QtCore>
-// #include <QtWebSockets>
-#include "Poco/Net/HTTPRequestHandler.h"
-#include "Poco/Net/HTTPServer.h"
-#include "Poco/Net/ServerSocket.h"
-#include "Poco/Net/WebSocket.h"
-#include "olink/remotenode.h"
-#include "olink/consolelogger.h"
-
-namespace Poco {
-    namespace Net {
-        class HTTPServerRequest;
-        class HTTPServerResponse;
-    }
-}
-
-
-class RequestHandlerFactory;
 namespace ApiGear {
 namespace PocoImpl {
+
+
+/**
+* Class that hosts a server for olink services.
+* Stores connections requested by clients and provides connection endpoints used by sources to the registry.
+* May hold multiple connections. 
+*/
 class APIGEAR_OLINK_EXPORT OLinkHost
 {
 public:
+    /** ctor
+    * @param registry A global registry to which network endpoints for sources are added.
+    */
     explicit OLinkHost(ApiGear::ObjectLink::RemoteRegistry& registry);
+    /**dtor*/
     virtual ~OLinkHost();
+    /** Starts a server and puts it in a listen state.
+    * @param port A port number on which the server should listen.
+    */
     void listen(int port);
+    /* Close the server and all connections. */
     void close();
-    void onNewConnection();
-    void onClosed();
-    const std::string &name() const;
 
 private:
-    Poco::Net::HTTPServer* m_webserver;
-    RequestHandlerFactory* m_handlerFactory;
-    ApiGear::ObjectLink::ConsoleLogger m_log;
-    ApiGear::ObjectLink::RemoteRegistry* m_registry;
+    /** A server used for connections.*/
+    std::unique_ptr<Poco::Net::HTTPServer> m_webserver;
+    /** A global registry for sources and network endpoints.*/
+    ApiGear::ObjectLink::RemoteRegistry& m_registry;
+    /** Storage for connections.*/
+    ConnectionStorage m_connectionStorage;
 };
 
 } // namespace PocoImpl

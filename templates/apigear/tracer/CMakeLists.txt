@@ -52,7 +52,7 @@ install(TARGETS poco-tracer
         EXPORT ApiGearPocoTracerTargets
         RUNTIME DESTINATION bin           COMPONENT Runtime
         LIBRARY DESTINATION lib           COMPONENT Runtime
-        ARCHIVE DESTINATION lib/apigear   COMPONENT Development)
+        ARCHIVE DESTINATION lib           COMPONENT Development)
 # install includes
 FILE(GLOB APIGEAR_INCLUDES *.h)
 install(FILES ${APIGEAR_INCLUDES}

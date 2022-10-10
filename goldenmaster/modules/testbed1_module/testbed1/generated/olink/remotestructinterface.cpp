@@ -4,20 +4,33 @@
 #include "testbed1/generated/core/structinterface.publisher.h"
 #include "testbed1/generated/core/testbed1.json.adapter.h"
 
+#include "olink/iclientnode.h"
+#include "apigear/olink/olinkconnection.h"
+
 using namespace Test::Testbed1;
 using namespace Test::Testbed1::olink;
 
-RemoteStructInterface::RemoteStructInterface(ApiGear::ObjectLink::ClientRegistry& registry, ApiGear::PocoImpl::OLinkClient& client)
-    : m_registry(registry),
+namespace 
+{
+const std::string interfaceId = "testbed1.StructInterface";
+}
+
+RemoteStructInterface::RemoteStructInterface(std::weak_ptr<ApiGear::PocoImpl::IOlinkConnector> olinkConnector)
+    : m_olinkConnector(olinkConnector),
       m_publisher(std::make_unique<StructInterfacePublisher>())
 {
-    m_registry.addObjectSink(this);
-    client.linkObjectSource("testbed1.StructInterface");
+    if(auto connector = m_olinkConnector.lock())
+    {
+        connector->connectAndLinkObject(*this);
+    }
 }
 
 RemoteStructInterface::~RemoteStructInterface()
-{
-    m_registry.removeObjectSink(this);
+{    
+    if(auto connector = m_olinkConnector.lock())
+    {
+        connector->disconnectAndUnlink(olinkObjectName());
+    }
 }
 
 void RemoteStructInterface::applyState(const nlohmann::json& fields) 
@@ -38,10 +51,12 @@ void RemoteStructInterface::applyState(const nlohmann::json& fields)
 
 void RemoteStructInterface::setPropBool(const StructBool& propBool)
 {
-    if(m_node == nullptr) {
+    if(!m_node) {
+        emitLog(ApiGear::Logger::LogLevel::Warning, "Attempt to set property but " + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return;
     }
-    m_node->setRemoteProperty("testbed1.StructInterface/propBool", propBool);
+    const auto& propertyId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "propBool");
+    m_node->setRemoteProperty(propertyId, propBool);
 }
 
 void RemoteStructInterface::setPropBoolLocal(const StructBool& propBool)
@@ -59,10 +74,12 @@ const StructBool& RemoteStructInterface::getPropBool() const
 
 void RemoteStructInterface::setPropInt(const StructInt& propInt)
 {
-    if(m_node == nullptr) {
+    if(!m_node) {
+        emitLog(ApiGear::Logger::LogLevel::Warning, "Attempt to set property but " + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return;
     }
-    m_node->setRemoteProperty("testbed1.StructInterface/propInt", propInt);
+    const auto& propertyId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "propInt");
+    m_node->setRemoteProperty(propertyId, propInt);
 }
 
 void RemoteStructInterface::setPropIntLocal(const StructInt& propInt)
@@ -80,10 +97,12 @@ const StructInt& RemoteStructInterface::getPropInt() const
 
 void RemoteStructInterface::setPropFloat(const StructFloat& propFloat)
 {
-    if(m_node == nullptr) {
+    if(!m_node) {
+        emitLog(ApiGear::Logger::LogLevel::Warning, "Attempt to set property but " + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return;
     }
-    m_node->setRemoteProperty("testbed1.StructInterface/propFloat", propFloat);
+    const auto& propertyId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "propFloat");
+    m_node->setRemoteProperty(propertyId, propFloat);
 }
 
 void RemoteStructInterface::setPropFloatLocal(const StructFloat& propFloat)
@@ -101,10 +120,12 @@ const StructFloat& RemoteStructInterface::getPropFloat() const
 
 void RemoteStructInterface::setPropString(const StructString& propString)
 {
-    if(m_node == nullptr) {
+    if(!m_node) {
+        emitLog(ApiGear::Logger::LogLevel::Warning, "Attempt to set property but " + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return;
     }
-    m_node->setRemoteProperty("testbed1.StructInterface/propString", propString);
+    const auto& propertyId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "propString");
+    m_node->setRemoteProperty(propertyId, propString);
 }
 
 void RemoteStructInterface::setPropStringLocal(const StructString& propString)
@@ -122,7 +143,8 @@ const StructString& RemoteStructInterface::getPropString() const
 
 StructBool RemoteStructInterface::funcBool(const StructBool& paramBool)
 {
-    if(m_node == nullptr) {
+     if(!m_node) {
+        emitLog(ApiGear::Logger::LogLevel::Warning, "Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return StructBool();
     }
     StructBool value(funcBoolAsync(paramBool).get());
@@ -131,14 +153,16 @@ StructBool RemoteStructInterface::funcBool(const StructBool& paramBool)
 
 std::future<StructBool> RemoteStructInterface::funcBoolAsync(const StructBool& paramBool)
 {
-    if(m_node == nullptr) {
-        throw std::runtime_error("Node is not initialized");
+    if(!m_node) {
+        emitLog(ApiGear::Logger::LogLevel::Warning, "Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
+        return std::future<StructBool>{};
     }
     return std::async(std::launch::async, [this,
                     paramBool]()
         {
             std::promise<StructBool> resultPromise;
-            m_node->invokeRemote("testbed1.StructInterface/funcBool",
+            const auto& operationId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "funcBool");
+            m_node->invokeRemote(operationId,
                 nlohmann::json::array({paramBool}), [&resultPromise](ApiGear::ObjectLink::InvokeReplyArg arg) {
                     const StructBool& value = arg.value.get<StructBool>();
                     resultPromise.set_value(value);
@@ -150,7 +174,8 @@ std::future<StructBool> RemoteStructInterface::funcBoolAsync(const StructBool& p
 
 StructBool RemoteStructInterface::funcInt(const StructInt& paramInt)
 {
-    if(m_node == nullptr) {
+     if(!m_node) {
+        emitLog(ApiGear::Logger::LogLevel::Warning, "Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return StructBool();
     }
     StructBool value(funcIntAsync(paramInt).get());
@@ -159,14 +184,16 @@ StructBool RemoteStructInterface::funcInt(const StructInt& paramInt)
 
 std::future<StructBool> RemoteStructInterface::funcIntAsync(const StructInt& paramInt)
 {
-    if(m_node == nullptr) {
-        throw std::runtime_error("Node is not initialized");
+    if(!m_node) {
+        emitLog(ApiGear::Logger::LogLevel::Warning, "Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
+        return std::future<StructBool>{};
     }
     return std::async(std::launch::async, [this,
                     paramInt]()
         {
             std::promise<StructBool> resultPromise;
-            m_node->invokeRemote("testbed1.StructInterface/funcInt",
+            const auto& operationId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "funcInt");
+            m_node->invokeRemote(operationId,
                 nlohmann::json::array({paramInt}), [&resultPromise](ApiGear::ObjectLink::InvokeReplyArg arg) {
                     const StructBool& value = arg.value.get<StructBool>();
                     resultPromise.set_value(value);
@@ -178,7 +205,8 @@ std::future<StructBool> RemoteStructInterface::funcIntAsync(const StructInt& par
 
 StructFloat RemoteStructInterface::funcFloat(const StructFloat& paramFloat)
 {
-    if(m_node == nullptr) {
+     if(!m_node) {
+        emitLog(ApiGear::Logger::LogLevel::Warning, "Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return StructFloat();
     }
     StructFloat value(funcFloatAsync(paramFloat).get());
@@ -187,14 +215,16 @@ StructFloat RemoteStructInterface::funcFloat(const StructFloat& paramFloat)
 
 std::future<StructFloat> RemoteStructInterface::funcFloatAsync(const StructFloat& paramFloat)
 {
-    if(m_node == nullptr) {
-        throw std::runtime_error("Node is not initialized");
+    if(!m_node) {
+        emitLog(ApiGear::Logger::LogLevel::Warning, "Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
+        return std::future<StructFloat>{};
     }
     return std::async(std::launch::async, [this,
                     paramFloat]()
         {
             std::promise<StructFloat> resultPromise;
-            m_node->invokeRemote("testbed1.StructInterface/funcFloat",
+            const auto& operationId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "funcFloat");
+            m_node->invokeRemote(operationId,
                 nlohmann::json::array({paramFloat}), [&resultPromise](ApiGear::ObjectLink::InvokeReplyArg arg) {
                     const StructFloat& value = arg.value.get<StructFloat>();
                     resultPromise.set_value(value);
@@ -206,7 +236,8 @@ std::future<StructFloat> RemoteStructInterface::funcFloatAsync(const StructFloat
 
 StructString RemoteStructInterface::funcString(const StructString& paramString)
 {
-    if(m_node == nullptr) {
+     if(!m_node) {
+        emitLog(ApiGear::Logger::LogLevel::Warning, "Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return StructString();
     }
     StructString value(funcStringAsync(paramString).get());
@@ -215,14 +246,16 @@ StructString RemoteStructInterface::funcString(const StructString& paramString)
 
 std::future<StructString> RemoteStructInterface::funcStringAsync(const StructString& paramString)
 {
-    if(m_node == nullptr) {
-        throw std::runtime_error("Node is not initialized");
+    if(!m_node) {
+        emitLog(ApiGear::Logger::LogLevel::Warning, "Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
+        return std::future<StructString>{};
     }
     return std::async(std::launch::async, [this,
                     paramString]()
         {
             std::promise<StructString> resultPromise;
-            m_node->invokeRemote("testbed1.StructInterface/funcString",
+            const auto& operationId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "funcString");
+            m_node->invokeRemote(operationId,
                 nlohmann::json::array({paramString}), [&resultPromise](ApiGear::ObjectLink::InvokeReplyArg arg) {
                     const StructString& value = arg.value.get<StructString>();
                     resultPromise.set_value(value);
@@ -234,38 +267,36 @@ std::future<StructString> RemoteStructInterface::funcStringAsync(const StructStr
 
 std::string RemoteStructInterface::olinkObjectName()
 {
-    return "testbed1.StructInterface";
+    return interfaceId;
 }
 
-void RemoteStructInterface::olinkOnSignal(std::string name, nlohmann::json args)
+void RemoteStructInterface::olinkOnSignal(const std::string& signalId, const nlohmann::json& args)
 {
-    std::string path = ApiGear::ObjectLink::Name::pathFromName(name);
-    if(path == "sigBool") {
+    const auto& signalName = ApiGear::ObjectLink::Name::getMemberName(signalId);
+    if(signalName == "sigBool") {
         m_publisher->publishSigBool(args[0].get<StructBool>());   
         return;
     }
-    if(path == "sigInt") {
+    if(signalName == "sigInt") {
         m_publisher->publishSigInt(args[0].get<StructInt>());   
         return;
     }
-    if(path == "sigFloat") {
+    if(signalName == "sigFloat") {
         m_publisher->publishSigFloat(args[0].get<StructFloat>());   
         return;
     }
-    if(path == "sigString") {
+    if(signalName == "sigString") {
         m_publisher->publishSigString(args[0].get<StructString>());   
         return;
     }
 }
 
-void RemoteStructInterface::olinkOnPropertyChanged(std::string name, nlohmann::json value)
+void RemoteStructInterface::olinkOnPropertyChanged(const std::string& propertyId, const nlohmann::json& value)
 {
-    std::string path = ApiGear::ObjectLink::Name::pathFromName(name);
-    applyState({ {path, value} });
+    applyState({ {ApiGear::ObjectLink::Name::getMemberName(propertyId), value} });
 }
-void RemoteStructInterface::olinkOnInit(std::string name, nlohmann::json props, ApiGear::ObjectLink::IClientNode *node)
+void RemoteStructInterface::olinkOnInit(const std::string& /*name*/, const nlohmann::json& props, ApiGear::ObjectLink::IClientNode *node)
 {
-    (void) name; //suppress the 'Unreferenced Formal Parameter' warning.
     m_node = node;
     applyState(props);
 }

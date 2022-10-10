@@ -1,45 +1,53 @@
 {% comment %} // Copyright (c) ApiGear UG 2020 {% endcomment -%}
 {% capture class%}{{interface.name}}ServiceAdapter{% endcapture %}
 
+#include "{{module.name|identifier}}/generated/api/datastructs.api.h"
 #include "{{module.name|identifier}}/generated/olink/{{interface.name|lower}}service.adapter.h"
 #include "{{module.name|identifier}}/generated/core/{{module.name|identifier}}.json.adapter.h"
+
+#include "olink/iremotenode.h"
+#include "olink/remoteregistry.h"
+
 #include <iostream>
+
 
 using namespace {{ system.name | capital }}::{{ module.name | capital }};
 using namespace {{ system.name | capital }}::{{ module.name | capital }}::olink;
 
-{{class}}::{{class}}(I{{interface}}& {{interface}}, ApiGear::ObjectLink::RemoteRegistry& registry)
+namespace 
+{
+const std::string interfaceId = "{{module}}.{{interface}}";
+}
+
+{{class}}::{{class}}(std::shared_ptr<I{{interface}}> {{interface}}, ApiGear::ObjectLink::RemoteRegistry& registry)
     : m_{{interface}}({{interface}})
-    , m_node(nullptr)
     , m_registry(registry)
 {
-    m_{{interface}}._getPublisher().subscribeToAllChanges(*this);
-    m_registry.addObjectSource(this);
+    m_{{interface}}->_getPublisher().subscribeToAllChanges(*this);
 }
 
 {{class}}::~{{class}}()
 {
-    m_registry.removeObjectSource(this);
-    m_{{interface}}._getPublisher().unsubscribeFromAllChanges(*this);
+    m_{{interface}}->_getPublisher().unsubscribeFromAllChanges(*this);
 }
 
 std::string {{class}}::olinkObjectName() {
-    return "{{module}}.{{interface}}";
+    return interfaceId;
 }
 
-nlohmann::json {{class}}::olinkInvoke(std::string fcnName, nlohmann::json fcnArgs) {
-    std::clog << fcnName << std::endl;
-    std::string path = ApiGear::ObjectLink::Name::pathFromName(fcnName);
+nlohmann::json {{class}}::olinkInvoke(const std::string& methodId, const nlohmann::json& fcnArgs) {
+    std::clog << methodId << std::endl;
+    const auto& memberMethod = ApiGear::ObjectLink::Name::getMemberName(methodId);
 {% for operation in interface.operations %}
-    if(path == "{{operation.name}}") {
+    if(memberMethod == "{{operation.name}}") {
 {% for param in operation.params %}
         const {{param|cpp14Return}}& {{param}} = fcnArgs.at({{ forloop.index0 }});      
 {% endfor %}
 {% if operation.type == 'void' %}
-        m_{{interface}}.{{operation.name | lowerFirst}}({{ operation.params | map: 'name' | join: ', ' }});
+        m_{{interface}}->{{operation.name | lowerFirst}}({{ operation.params | map: 'name' | join: ', ' }});
         return nlohmann::json{};
 {% else %}
-        {{operation|cpp14Return}} result = m_{{interface}}.{{operation.name| lowerFirst}}({{ operation.params | map: 'name' | join: ', ' }});
+        {{operation|cpp14Return}} result = m_{{interface}}->{{operation.name| lowerFirst}}({{ operation.params | map: 'name' | join: ', ' }});
         return result;
 {% endif %}
     }
@@ -50,13 +58,13 @@ nlohmann::json {{class}}::olinkInvoke(std::string fcnName, nlohmann::json fcnArg
     return nlohmann::json();
 }
 
-void {{class}}::olinkSetProperty(std::string name, nlohmann::json value) {
-    std::clog << name << std::endl;
-    std::string path = ApiGear::ObjectLink::Name::pathFromName(name);
+void {{class}}::olinkSetProperty(const std::string& propertyId, const nlohmann::json& value) {
+    std::clog << propertyId << std::endl;
+    const auto& memberProperty = ApiGear::ObjectLink::Name::getMemberName(propertyId);
 {% for property in interface.properties %}
-    if(path == "{{property}}") {
+    if(memberProperty == "{{property}}") {
         {{property|cpp14Return}} {{property}} = value.get<{{property|cpp14Return}}>();
-        m_{{interface}}.set{{property.name|capital}}({{property}});
+        m_{{interface}}->set{{property.name|capital}}({{property}});
     }
 {% else %}
     // no properties to set {% comment %} we generate anyway for consistency {% endcomment %}
@@ -64,22 +72,19 @@ void {{class}}::olinkSetProperty(std::string name, nlohmann::json value) {
 {% endfor %} 
 }
 
-void {{class}}::olinkLinked(std::string name, ApiGear::ObjectLink::IRemoteNode *node) {
-    std::clog << name << std::endl;
-    m_node = node;
+void {{class}}::olinkLinked(const std::string& objetId, ApiGear::ObjectLink::IRemoteNode* /*node*/) {
+    std::clog << objetId << std::endl;
 }
 
-void {{class}}::olinkUnlinked(std::string name)
-{
-    std::clog << name << std::endl;
-    m_node = nullptr;
+void {{class}}::olinkUnlinked(const std::string& objetId){
+    std::clog << objetId << std::endl;
 }
 
 nlohmann::json {{class}}::olinkCollectProperties()
 {
     return nlohmann::json::object({
 {% for property in interface.properties %}
-        { "{{property.name}}", m_{{interface}}.get{{property.name | capital}}() }{% unless forloop.last %},{% endunless %}
+        { "{{property.name}}", m_{{interface}}->get{{property.name | capital}}() }{% unless forloop.last %},{% endunless %}
 {% endfor %}
     });
 }
@@ -91,9 +96,13 @@ void {{class}}::on{{signal.name | capital}}(
         {%- endfor -%}
         )
 {
-    if(m_node != nullptr) {
-        const nlohmann::json& args = { {{ signal.params | map: 'name' | join: ', ' }} };
-        m_node->notifySignal("{{module}}.{{interface}}/{{signal}}", args);
+    const nlohmann::json args = { {{ signal.params | map: 'name' | join: ', ' }} };
+    const auto& signalId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "{{signal.name}}");
+    for(auto node: m_registry.getNodes(ApiGear::ObjectLink::Name::getObjectId(signalId))) {
+        auto lockedNode = node.lock();
+        if(lockedNode) {
+            lockedNode->notifySignal(signalId, args);
+        }
     }
 }
 {% endfor %}
@@ -101,8 +110,12 @@ void {{class}}::on{{signal.name | capital}}(
 {% for property in interface.properties %}
 void {{class}}::on{{property.name|capital}}Changed({{property|cpp14Return: true}} {{property}})
 {
-    if(m_node != nullptr) {
-        m_node->notifyPropertyChange("{{module}}.{{interface}}/{{property}}", {{property}});
+    const auto& propertyId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "{{property.name}}");
+    for(auto node: m_registry.getNodes(ApiGear::ObjectLink::Name::getObjectId(propertyId))) {
+        auto lockedNode = node.lock();
+        if(lockedNode) {
+            lockedNode->notifyPropertyChange(propertyId, {{property}});
+        }
     }
 }
 {% endfor %}

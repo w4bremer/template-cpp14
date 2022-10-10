@@ -4,20 +4,33 @@
 #include "tb_simple/generated/core/simplearrayinterface.publisher.h"
 #include "tb_simple/generated/core/tb_simple.json.adapter.h"
 
+#include "olink/iclientnode.h"
+#include "apigear/olink/olinkconnection.h"
+
 using namespace Test::TbSimple;
 using namespace Test::TbSimple::olink;
 
-RemoteSimpleArrayInterface::RemoteSimpleArrayInterface(ApiGear::ObjectLink::ClientRegistry& registry, ApiGear::PocoImpl::OLinkClient& client)
-    : m_registry(registry),
+namespace 
+{
+const std::string interfaceId = "tb.simple.SimpleArrayInterface";
+}
+
+RemoteSimpleArrayInterface::RemoteSimpleArrayInterface(std::weak_ptr<ApiGear::PocoImpl::IOlinkConnector> olinkConnector)
+    : m_olinkConnector(olinkConnector),
       m_publisher(std::make_unique<SimpleArrayInterfacePublisher>())
 {
-    m_registry.addObjectSink(this);
-    client.linkObjectSource("tb.simple.SimpleArrayInterface");
+    if(auto connector = m_olinkConnector.lock())
+    {
+        connector->connectAndLinkObject(*this);
+    }
 }
 
 RemoteSimpleArrayInterface::~RemoteSimpleArrayInterface()
-{
-    m_registry.removeObjectSink(this);
+{    
+    if(auto connector = m_olinkConnector.lock())
+    {
+        connector->disconnectAndUnlink(olinkObjectName());
+    }
 }
 
 void RemoteSimpleArrayInterface::applyState(const nlohmann::json& fields) 
@@ -38,10 +51,12 @@ void RemoteSimpleArrayInterface::applyState(const nlohmann::json& fields)
 
 void RemoteSimpleArrayInterface::setPropBool(const std::list<bool>& propBool)
 {
-    if(m_node == nullptr) {
+    if(!m_node) {
+        emitLog(ApiGear::Logger::LogLevel::Warning, "Attempt to set property but " + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return;
     }
-    m_node->setRemoteProperty("tb.simple.SimpleArrayInterface/propBool", propBool);
+    const auto& propertyId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "propBool");
+    m_node->setRemoteProperty(propertyId, propBool);
 }
 
 void RemoteSimpleArrayInterface::setPropBoolLocal(const std::list<bool>& propBool)
@@ -59,10 +74,12 @@ const std::list<bool>& RemoteSimpleArrayInterface::getPropBool() const
 
 void RemoteSimpleArrayInterface::setPropInt(const std::list<int>& propInt)
 {
-    if(m_node == nullptr) {
+    if(!m_node) {
+        emitLog(ApiGear::Logger::LogLevel::Warning, "Attempt to set property but " + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return;
     }
-    m_node->setRemoteProperty("tb.simple.SimpleArrayInterface/propInt", propInt);
+    const auto& propertyId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "propInt");
+    m_node->setRemoteProperty(propertyId, propInt);
 }
 
 void RemoteSimpleArrayInterface::setPropIntLocal(const std::list<int>& propInt)
@@ -80,10 +97,12 @@ const std::list<int>& RemoteSimpleArrayInterface::getPropInt() const
 
 void RemoteSimpleArrayInterface::setPropFloat(const std::list<float>& propFloat)
 {
-    if(m_node == nullptr) {
+    if(!m_node) {
+        emitLog(ApiGear::Logger::LogLevel::Warning, "Attempt to set property but " + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return;
     }
-    m_node->setRemoteProperty("tb.simple.SimpleArrayInterface/propFloat", propFloat);
+    const auto& propertyId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "propFloat");
+    m_node->setRemoteProperty(propertyId, propFloat);
 }
 
 void RemoteSimpleArrayInterface::setPropFloatLocal(const std::list<float>& propFloat)
@@ -101,10 +120,12 @@ const std::list<float>& RemoteSimpleArrayInterface::getPropFloat() const
 
 void RemoteSimpleArrayInterface::setPropString(const std::list<std::string>& propString)
 {
-    if(m_node == nullptr) {
+    if(!m_node) {
+        emitLog(ApiGear::Logger::LogLevel::Warning, "Attempt to set property but " + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return;
     }
-    m_node->setRemoteProperty("tb.simple.SimpleArrayInterface/propString", propString);
+    const auto& propertyId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "propString");
+    m_node->setRemoteProperty(propertyId, propString);
 }
 
 void RemoteSimpleArrayInterface::setPropStringLocal(const std::list<std::string>& propString)
@@ -122,7 +143,8 @@ const std::list<std::string>& RemoteSimpleArrayInterface::getPropString() const
 
 std::list<bool> RemoteSimpleArrayInterface::funcBool(const std::list<bool>& paramBool)
 {
-    if(m_node == nullptr) {
+     if(!m_node) {
+        emitLog(ApiGear::Logger::LogLevel::Warning, "Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return std::list<bool>();
     }
     std::list<bool> value(funcBoolAsync(paramBool).get());
@@ -131,14 +153,16 @@ std::list<bool> RemoteSimpleArrayInterface::funcBool(const std::list<bool>& para
 
 std::future<std::list<bool>> RemoteSimpleArrayInterface::funcBoolAsync(const std::list<bool>& paramBool)
 {
-    if(m_node == nullptr) {
-        throw std::runtime_error("Node is not initialized");
+    if(!m_node) {
+        emitLog(ApiGear::Logger::LogLevel::Warning, "Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
+        return std::future<std::list<bool>>{};
     }
     return std::async(std::launch::async, [this,
                     paramBool]()
         {
             std::promise<std::list<bool>> resultPromise;
-            m_node->invokeRemote("tb.simple.SimpleArrayInterface/funcBool",
+            const auto& operationId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "funcBool");
+            m_node->invokeRemote(operationId,
                 nlohmann::json::array({paramBool}), [&resultPromise](ApiGear::ObjectLink::InvokeReplyArg arg) {
                     const std::list<bool>& value = arg.value.get<std::list<bool>>();
                     resultPromise.set_value(value);
@@ -150,7 +174,8 @@ std::future<std::list<bool>> RemoteSimpleArrayInterface::funcBoolAsync(const std
 
 std::list<int> RemoteSimpleArrayInterface::funcInt(const std::list<int>& paramInt)
 {
-    if(m_node == nullptr) {
+     if(!m_node) {
+        emitLog(ApiGear::Logger::LogLevel::Warning, "Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return std::list<int>();
     }
     std::list<int> value(funcIntAsync(paramInt).get());
@@ -159,14 +184,16 @@ std::list<int> RemoteSimpleArrayInterface::funcInt(const std::list<int>& paramIn
 
 std::future<std::list<int>> RemoteSimpleArrayInterface::funcIntAsync(const std::list<int>& paramInt)
 {
-    if(m_node == nullptr) {
-        throw std::runtime_error("Node is not initialized");
+    if(!m_node) {
+        emitLog(ApiGear::Logger::LogLevel::Warning, "Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
+        return std::future<std::list<int>>{};
     }
     return std::async(std::launch::async, [this,
                     paramInt]()
         {
             std::promise<std::list<int>> resultPromise;
-            m_node->invokeRemote("tb.simple.SimpleArrayInterface/funcInt",
+            const auto& operationId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "funcInt");
+            m_node->invokeRemote(operationId,
                 nlohmann::json::array({paramInt}), [&resultPromise](ApiGear::ObjectLink::InvokeReplyArg arg) {
                     const std::list<int>& value = arg.value.get<std::list<int>>();
                     resultPromise.set_value(value);
@@ -178,7 +205,8 @@ std::future<std::list<int>> RemoteSimpleArrayInterface::funcIntAsync(const std::
 
 std::list<float> RemoteSimpleArrayInterface::funcFloat(const std::list<float>& paramFloat)
 {
-    if(m_node == nullptr) {
+     if(!m_node) {
+        emitLog(ApiGear::Logger::LogLevel::Warning, "Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return std::list<float>();
     }
     std::list<float> value(funcFloatAsync(paramFloat).get());
@@ -187,14 +215,16 @@ std::list<float> RemoteSimpleArrayInterface::funcFloat(const std::list<float>& p
 
 std::future<std::list<float>> RemoteSimpleArrayInterface::funcFloatAsync(const std::list<float>& paramFloat)
 {
-    if(m_node == nullptr) {
-        throw std::runtime_error("Node is not initialized");
+    if(!m_node) {
+        emitLog(ApiGear::Logger::LogLevel::Warning, "Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
+        return std::future<std::list<float>>{};
     }
     return std::async(std::launch::async, [this,
                     paramFloat]()
         {
             std::promise<std::list<float>> resultPromise;
-            m_node->invokeRemote("tb.simple.SimpleArrayInterface/funcFloat",
+            const auto& operationId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "funcFloat");
+            m_node->invokeRemote(operationId,
                 nlohmann::json::array({paramFloat}), [&resultPromise](ApiGear::ObjectLink::InvokeReplyArg arg) {
                     const std::list<float>& value = arg.value.get<std::list<float>>();
                     resultPromise.set_value(value);
@@ -206,7 +236,8 @@ std::future<std::list<float>> RemoteSimpleArrayInterface::funcFloatAsync(const s
 
 std::list<std::string> RemoteSimpleArrayInterface::funcString(const std::list<std::string>& paramString)
 {
-    if(m_node == nullptr) {
+     if(!m_node) {
+        emitLog(ApiGear::Logger::LogLevel::Warning, "Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return std::list<std::string>();
     }
     std::list<std::string> value(funcStringAsync(paramString).get());
@@ -215,14 +246,16 @@ std::list<std::string> RemoteSimpleArrayInterface::funcString(const std::list<st
 
 std::future<std::list<std::string>> RemoteSimpleArrayInterface::funcStringAsync(const std::list<std::string>& paramString)
 {
-    if(m_node == nullptr) {
-        throw std::runtime_error("Node is not initialized");
+    if(!m_node) {
+        emitLog(ApiGear::Logger::LogLevel::Warning, "Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
+        return std::future<std::list<std::string>>{};
     }
     return std::async(std::launch::async, [this,
                     paramString]()
         {
             std::promise<std::list<std::string>> resultPromise;
-            m_node->invokeRemote("tb.simple.SimpleArrayInterface/funcString",
+            const auto& operationId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "funcString");
+            m_node->invokeRemote(operationId,
                 nlohmann::json::array({paramString}), [&resultPromise](ApiGear::ObjectLink::InvokeReplyArg arg) {
                     const std::list<std::string>& value = arg.value.get<std::list<std::string>>();
                     resultPromise.set_value(value);
@@ -234,38 +267,36 @@ std::future<std::list<std::string>> RemoteSimpleArrayInterface::funcStringAsync(
 
 std::string RemoteSimpleArrayInterface::olinkObjectName()
 {
-    return "tb.simple.SimpleArrayInterface";
+    return interfaceId;
 }
 
-void RemoteSimpleArrayInterface::olinkOnSignal(std::string name, nlohmann::json args)
+void RemoteSimpleArrayInterface::olinkOnSignal(const std::string& signalId, const nlohmann::json& args)
 {
-    std::string path = ApiGear::ObjectLink::Name::pathFromName(name);
-    if(path == "sigBool") {
+    const auto& signalName = ApiGear::ObjectLink::Name::getMemberName(signalId);
+    if(signalName == "sigBool") {
         m_publisher->publishSigBool(args[0].get<std::list<bool>>());   
         return;
     }
-    if(path == "sigInt") {
+    if(signalName == "sigInt") {
         m_publisher->publishSigInt(args[0].get<std::list<int>>());   
         return;
     }
-    if(path == "sigFloat") {
+    if(signalName == "sigFloat") {
         m_publisher->publishSigFloat(args[0].get<std::list<float>>());   
         return;
     }
-    if(path == "sigString") {
+    if(signalName == "sigString") {
         m_publisher->publishSigString(args[0].get<std::list<std::string>>());   
         return;
     }
 }
 
-void RemoteSimpleArrayInterface::olinkOnPropertyChanged(std::string name, nlohmann::json value)
+void RemoteSimpleArrayInterface::olinkOnPropertyChanged(const std::string& propertyId, const nlohmann::json& value)
 {
-    std::string path = ApiGear::ObjectLink::Name::pathFromName(name);
-    applyState({ {path, value} });
+    applyState({ {ApiGear::ObjectLink::Name::getMemberName(propertyId), value} });
 }
-void RemoteSimpleArrayInterface::olinkOnInit(std::string name, nlohmann::json props, ApiGear::ObjectLink::IClientNode *node)
+void RemoteSimpleArrayInterface::olinkOnInit(const std::string& /*name*/, const nlohmann::json& props, ApiGear::ObjectLink::IClientNode *node)
 {
-    (void) name; //suppress the 'Unreferenced Formal Parameter' warning.
     m_node = node;
     applyState(props);
 }

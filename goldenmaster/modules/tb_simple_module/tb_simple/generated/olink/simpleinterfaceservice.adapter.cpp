@@ -1,148 +1,185 @@
 
 
+#include "tb_simple/generated/api/datastructs.api.h"
 #include "tb_simple/generated/olink/simpleinterfaceservice.adapter.h"
 #include "tb_simple/generated/core/tb_simple.json.adapter.h"
+
+#include "olink/iremotenode.h"
+#include "olink/remoteregistry.h"
+
 #include <iostream>
+
 
 using namespace Test::TbSimple;
 using namespace Test::TbSimple::olink;
 
-SimpleInterfaceServiceAdapter::SimpleInterfaceServiceAdapter(ISimpleInterface& SimpleInterface, ApiGear::ObjectLink::RemoteRegistry& registry)
+namespace 
+{
+const std::string interfaceId = "tb.simple.SimpleInterface";
+}
+
+SimpleInterfaceServiceAdapter::SimpleInterfaceServiceAdapter(std::shared_ptr<ISimpleInterface> SimpleInterface, ApiGear::ObjectLink::RemoteRegistry& registry)
     : m_SimpleInterface(SimpleInterface)
-    , m_node(nullptr)
     , m_registry(registry)
 {
-    m_SimpleInterface._getPublisher().subscribeToAllChanges(*this);
-    m_registry.addObjectSource(this);
+    m_SimpleInterface->_getPublisher().subscribeToAllChanges(*this);
 }
 
 SimpleInterfaceServiceAdapter::~SimpleInterfaceServiceAdapter()
 {
-    m_registry.removeObjectSource(this);
-    m_SimpleInterface._getPublisher().unsubscribeFromAllChanges(*this);
+    m_SimpleInterface->_getPublisher().unsubscribeFromAllChanges(*this);
 }
 
 std::string SimpleInterfaceServiceAdapter::olinkObjectName() {
-    return "tb.simple.SimpleInterface";
+    return interfaceId;
 }
 
-nlohmann::json SimpleInterfaceServiceAdapter::olinkInvoke(std::string fcnName, nlohmann::json fcnArgs) {
-    std::clog << fcnName << std::endl;
-    std::string path = ApiGear::ObjectLink::Name::pathFromName(fcnName);
-    if(path == "funcBool") {
+nlohmann::json SimpleInterfaceServiceAdapter::olinkInvoke(const std::string& methodId, const nlohmann::json& fcnArgs) {
+    std::clog << methodId << std::endl;
+    const auto& memberMethod = ApiGear::ObjectLink::Name::getMemberName(methodId);
+    if(memberMethod == "funcBool") {
         const bool& paramBool = fcnArgs.at(0);
-        bool result = m_SimpleInterface.funcBool(paramBool);
+        bool result = m_SimpleInterface->funcBool(paramBool);
         return result;
     }
-    if(path == "funcInt") {
+    if(memberMethod == "funcInt") {
         const int& paramInt = fcnArgs.at(0);
-        int result = m_SimpleInterface.funcInt(paramInt);
+        int result = m_SimpleInterface->funcInt(paramInt);
         return result;
     }
-    if(path == "funcFloat") {
+    if(memberMethod == "funcFloat") {
         const float& paramFloat = fcnArgs.at(0);
-        float result = m_SimpleInterface.funcFloat(paramFloat);
+        float result = m_SimpleInterface->funcFloat(paramFloat);
         return result;
     }
-    if(path == "funcString") {
+    if(memberMethod == "funcString") {
         const std::string& paramString = fcnArgs.at(0);
-        std::string result = m_SimpleInterface.funcString(paramString);
+        std::string result = m_SimpleInterface->funcString(paramString);
         return result;
     }
     return nlohmann::json();
 }
 
-void SimpleInterfaceServiceAdapter::olinkSetProperty(std::string name, nlohmann::json value) {
-    std::clog << name << std::endl;
-    std::string path = ApiGear::ObjectLink::Name::pathFromName(name);
-    if(path == "propBool") {
+void SimpleInterfaceServiceAdapter::olinkSetProperty(const std::string& propertyId, const nlohmann::json& value) {
+    std::clog << propertyId << std::endl;
+    const auto& memberProperty = ApiGear::ObjectLink::Name::getMemberName(propertyId);
+    if(memberProperty == "propBool") {
         bool propBool = value.get<bool>();
-        m_SimpleInterface.setPropBool(propBool);
+        m_SimpleInterface->setPropBool(propBool);
     }
-    if(path == "propInt") {
+    if(memberProperty == "propInt") {
         int propInt = value.get<int>();
-        m_SimpleInterface.setPropInt(propInt);
+        m_SimpleInterface->setPropInt(propInt);
     }
-    if(path == "propFloat") {
+    if(memberProperty == "propFloat") {
         float propFloat = value.get<float>();
-        m_SimpleInterface.setPropFloat(propFloat);
+        m_SimpleInterface->setPropFloat(propFloat);
     }
-    if(path == "propString") {
+    if(memberProperty == "propString") {
         std::string propString = value.get<std::string>();
-        m_SimpleInterface.setPropString(propString);
+        m_SimpleInterface->setPropString(propString);
     } 
 }
 
-void SimpleInterfaceServiceAdapter::olinkLinked(std::string name, ApiGear::ObjectLink::IRemoteNode *node) {
-    std::clog << name << std::endl;
-    m_node = node;
+void SimpleInterfaceServiceAdapter::olinkLinked(const std::string& objetId, ApiGear::ObjectLink::IRemoteNode* /*node*/) {
+    std::clog << objetId << std::endl;
 }
 
-void SimpleInterfaceServiceAdapter::olinkUnlinked(std::string name)
-{
-    std::clog << name << std::endl;
-    m_node = nullptr;
+void SimpleInterfaceServiceAdapter::olinkUnlinked(const std::string& objetId){
+    std::clog << objetId << std::endl;
 }
 
 nlohmann::json SimpleInterfaceServiceAdapter::olinkCollectProperties()
 {
     return nlohmann::json::object({
-        { "propBool", m_SimpleInterface.getPropBool() },
-        { "propInt", m_SimpleInterface.getPropInt() },
-        { "propFloat", m_SimpleInterface.getPropFloat() },
-        { "propString", m_SimpleInterface.getPropString() }
+        { "propBool", m_SimpleInterface->getPropBool() },
+        { "propInt", m_SimpleInterface->getPropInt() },
+        { "propFloat", m_SimpleInterface->getPropFloat() },
+        { "propString", m_SimpleInterface->getPropString() }
     });
 }
 void SimpleInterfaceServiceAdapter::onSigBool(bool paramBool)
 {
-    if(m_node != nullptr) {
-        const nlohmann::json& args = { paramBool };
-        m_node->notifySignal("tb.simple.SimpleInterface/sigBool", args);
+    const nlohmann::json args = { paramBool };
+    const auto& signalId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "sigBool");
+    for(auto node: m_registry.getNodes(ApiGear::ObjectLink::Name::getObjectId(signalId))) {
+        auto lockedNode = node.lock();
+        if(lockedNode) {
+            lockedNode->notifySignal(signalId, args);
+        }
     }
 }
 void SimpleInterfaceServiceAdapter::onSigInt(int paramInt)
 {
-    if(m_node != nullptr) {
-        const nlohmann::json& args = { paramInt };
-        m_node->notifySignal("tb.simple.SimpleInterface/sigInt", args);
+    const nlohmann::json args = { paramInt };
+    const auto& signalId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "sigInt");
+    for(auto node: m_registry.getNodes(ApiGear::ObjectLink::Name::getObjectId(signalId))) {
+        auto lockedNode = node.lock();
+        if(lockedNode) {
+            lockedNode->notifySignal(signalId, args);
+        }
     }
 }
 void SimpleInterfaceServiceAdapter::onSigFloat(float paramFloat)
 {
-    if(m_node != nullptr) {
-        const nlohmann::json& args = { paramFloat };
-        m_node->notifySignal("tb.simple.SimpleInterface/sigFloat", args);
+    const nlohmann::json args = { paramFloat };
+    const auto& signalId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "sigFloat");
+    for(auto node: m_registry.getNodes(ApiGear::ObjectLink::Name::getObjectId(signalId))) {
+        auto lockedNode = node.lock();
+        if(lockedNode) {
+            lockedNode->notifySignal(signalId, args);
+        }
     }
 }
 void SimpleInterfaceServiceAdapter::onSigString(const std::string& paramString)
 {
-    if(m_node != nullptr) {
-        const nlohmann::json& args = { paramString };
-        m_node->notifySignal("tb.simple.SimpleInterface/sigString", args);
+    const nlohmann::json args = { paramString };
+    const auto& signalId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "sigString");
+    for(auto node: m_registry.getNodes(ApiGear::ObjectLink::Name::getObjectId(signalId))) {
+        auto lockedNode = node.lock();
+        if(lockedNode) {
+            lockedNode->notifySignal(signalId, args);
+        }
     }
 }
 void SimpleInterfaceServiceAdapter::onPropBoolChanged(bool propBool)
 {
-    if(m_node != nullptr) {
-        m_node->notifyPropertyChange("tb.simple.SimpleInterface/propBool", propBool);
+    const auto& propertyId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "propBool");
+    for(auto node: m_registry.getNodes(ApiGear::ObjectLink::Name::getObjectId(propertyId))) {
+        auto lockedNode = node.lock();
+        if(lockedNode) {
+            lockedNode->notifyPropertyChange(propertyId, propBool);
+        }
     }
 }
 void SimpleInterfaceServiceAdapter::onPropIntChanged(int propInt)
 {
-    if(m_node != nullptr) {
-        m_node->notifyPropertyChange("tb.simple.SimpleInterface/propInt", propInt);
+    const auto& propertyId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "propInt");
+    for(auto node: m_registry.getNodes(ApiGear::ObjectLink::Name::getObjectId(propertyId))) {
+        auto lockedNode = node.lock();
+        if(lockedNode) {
+            lockedNode->notifyPropertyChange(propertyId, propInt);
+        }
     }
 }
 void SimpleInterfaceServiceAdapter::onPropFloatChanged(float propFloat)
 {
-    if(m_node != nullptr) {
-        m_node->notifyPropertyChange("tb.simple.SimpleInterface/propFloat", propFloat);
+    const auto& propertyId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "propFloat");
+    for(auto node: m_registry.getNodes(ApiGear::ObjectLink::Name::getObjectId(propertyId))) {
+        auto lockedNode = node.lock();
+        if(lockedNode) {
+            lockedNode->notifyPropertyChange(propertyId, propFloat);
+        }
     }
 }
 void SimpleInterfaceServiceAdapter::onPropStringChanged(std::string propString)
 {
-    if(m_node != nullptr) {
-        m_node->notifyPropertyChange("tb.simple.SimpleInterface/propString", propString);
+    const auto& propertyId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "propString");
+    for(auto node: m_registry.getNodes(ApiGear::ObjectLink::Name::getObjectId(propertyId))) {
+        auto lockedNode = node.lock();
+        if(lockedNode) {
+            lockedNode->notifyPropertyChange(propertyId, propString);
+        }
     }
 }
 

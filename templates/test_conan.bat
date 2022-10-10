@@ -11,10 +11,9 @@ if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
 conan remove "apigear" -b -f
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
 if not exist apigear mkdir apigear
+conan source ../apigear
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
 pushd apigear
-if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
-conan source ../../apigear
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
 conan install --build missing ../../apigear -g=virtualenv
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%

@@ -1,38 +1,47 @@
 
 #pragma once
 
-#include "testbed2/generated/api/testbed2.h"
 #include "testbed2/generated/api/common.h"
+#include "testbed2/generated/api/testbed2.h"
 #include "testbed2/generated/core/nestedstruct3interface.data.h"
 
-#include "olink/clientnode.h"
-#include "apigear/olink/olinkclient.h"
+#include "apigear/olink/iolinkconnector.h"
+#include "apigear/olink/logger/logger.h"
+#include "olink/iobjectsink.h"
 
 #include <future>
 #include <memory>
+
+namespace ApiGear{
+namespace ObjectLink{
+class IClientNode;
+class ClientRegistry;
+}
+}
 
 namespace Test {
 namespace Testbed2 {
 namespace olink {
 /**
-* Remote NestedStruct3Interface implemented with OLink. 
-* Handles connnectionn with NestedStruct3Interface service.
+* The class for handling connetion witha a NestedStruct3Interface service implemented for OLink protocol. 
 * Sends and receives data over the network with ObjectLink protocol. 
 * see https://objectlinkprotocol.net for ObjectLink details.
 * Use on client side to request changes of the NestedStruct3Interface on the server side 
 * and to subscribe for the NestedStruct3Interface changes.
 */
-class TEST_TESTBED2_EXPORT RemoteNestedStruct3Interface : public INestedStruct3Interface, public ApiGear::ObjectLink::IObjectSink
+class TEST_TESTBED2_EXPORT RemoteNestedStruct3Interface : public INestedStruct3Interface,
+    public ApiGear::ObjectLink::IObjectSink,
+    public ApiGear::Logger::Logger
 {
 public:
 
     /**
     * ctor
-    * @param registry The global registry with the sinks and client nodes.
-    * @param client Holds the socket, manages the connection and provides ClientNode
-    *   which is an abstraction layer between the Client and RemoteNestedStruct3Interface.
+    * @param olinkConnector An object, that sets up connection of this object sink to the service on server side. 
+    *        It manages the connection and a client node associated to it and is responsible for linking the object
+    *        depending on connection state.
     */
-    explicit RemoteNestedStruct3Interface(ApiGear::ObjectLink::ClientRegistry& registry, ApiGear::PocoImpl::OLinkClient& client);
+    explicit RemoteNestedStruct3Interface(std::weak_ptr<ApiGear::PocoImpl::IOlinkConnector> olinkConnector);
     virtual ~RemoteNestedStruct3Interface() override;
     /**
     * Property getter
@@ -96,7 +105,7 @@ public:
     INestedStruct3InterfacePublisher& _getPublisher() const override;
     
     /**
-    * Informs if the connection is established and the remote interface is operable.
+    * Informs if the remote RemoteNestedStruct3Interface is ready to send and revice messages.
     * @return true if remote interface is operable, false otherwise.
     */
     bool isReady() const;
@@ -109,28 +118,27 @@ public:
     std::string olinkObjectName() override;
     
     /**
-    * Forwards information about singal emission to publisher.
-    * @param name The name of the emited signal.
+    * Information about singal emission on a server side to all subscribers.
+    * @param signalId Unique identifier for the singal emited from object.
     * @param args The arguments for the signal.
     */
-    void olinkOnSignal(std::string name, nlohmann::json args) override;
+    void olinkOnSignal(const std::string& signalId, const nlohmann::json& args) override;
     
     /**
-    * Forwards information about the property with the object name to publisher and updates local state.
-    * @param name The name of the emited signal.
-    * @param args The arguments for the signal.
+    * Applies the information about the property changed on server side.
+    * @param propertyId Unique identifier of a changed property in object .
+    * @param value The value of the property.
     */
-    void olinkOnPropertyChanged(std::string name, nlohmann::json value) override;
+    void olinkOnPropertyChanged(const std::string& propertyId, const nlohmann::json& value) override;
     
     /** Informs this object sink that connetion was is established.
-    * @param name The name of the object for which link was established.
+    * @param interfaceId The name of the object for which link was established.
     * @param props Initial values obtained from the NestedStruct3Interface service
     * @param the initialized link endpoint for this sink.
     */
-    void olinkOnInit(std::string name, nlohmann::json props, ApiGear::ObjectLink::IClientNode *node) override;
+    void olinkOnInit(const std::string& interfaceId, const nlohmann::json& props, ApiGear::ObjectLink::IClientNode *node) override;
     /**
-    * Informs this objec source that the link was disconnected and cannot be used anymore.
-    * WARNING DOROTA: it is never called.
+    * Informs this object source that the link was disconnected and cannot be used anymore.
     */
     void olinkOnRelease() override;
 
@@ -150,18 +158,17 @@ private:
     /** Local storage for properties values. */
     NestedStruct3InterfaceData m_data;
 
-    /**
-    * An Olink client node used to connect with a Olink NestedStruct3Interface service for object given with olinkObjectName() .
-    * An abstraction layer over the socket for the RemoteNestedStruct3Interface.
-    * WARNING DOROTA if there's a sink already in registry for same name, it is silently disconnected, without the informing
-    * it may send requests as long as the pointer to node is valid, but will not receive any data the isReady will not tell the true.
+    /** 
+    * An abstraction layer over the connection with service for the RemoteNestedStruct3Interface.
+    * Handles incoming and outgoing messages.
+    * Is given when object is linked with the service.
     */
     ApiGear::ObjectLink::IClientNode* m_node = nullptr;
-    /** 
-    * Registry linking client nodes with sinks for the olinkObjectName().
-    * The registerd olinkObjects name must be unique.  
+    /**
+    * A helper used to connect with a Olink NestedStruct3Interface service for object given with olinkObjectName()
+    * takes care of setup and tear down linkage for this RemoteNestedStruct3Interface.
     */
-    ApiGear::ObjectLink::ClientRegistry& m_registry;
+    std::weak_ptr<ApiGear::PocoImpl::IOlinkConnector> m_olinkConnector;
     /** The publisher for NestedStruct3Interface */
     std::unique_ptr<INestedStruct3InterfacePublisher> m_publisher;
 };

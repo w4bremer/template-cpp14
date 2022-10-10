@@ -77,6 +77,10 @@ features:
         - source: "module/generated/monitor/interface.tracer.cpp.liquid"
           target: "modules/{{module.name|identifier}}_module/{{module.name|identifier}}/generated/monitor/{{interface.name|lower}}.tracer.cpp"
   olink:
+    system:
+        documents:
+        - source: "Lifecycle for olink client-server implementation.md"
+          raw: true
     interface:
       documents:
         - source: "module/generated/olink/CMakeLists.txt.liquid"
@@ -117,9 +121,57 @@ features:
           raw: true
         - source: "apigear/olink/olinkhost.h"
           raw: true
-        - source: "apigear/olink/olinkclient.cpp"
+        - source: "apigear/olink/olinkconnection.cpp"
           raw: true
-        - source: "apigear/olink/olinkclient.h"
+        - source: "apigear/olink/olinkconnection.h"
+          raw: true
+        - source: "apigear/olink/iolinkconnector.h"
+          raw: true
+        - source: "apigear/olink/private/apigear_olink.hpp"
+          raw: true
+        - source: "apigear/olink/private/olinkremote.cpp"
+          raw: true
+        - source: "apigear/olink/private/olinkremote.h"
+          raw: true
+        - source: "apigear/olink/private/olinkwebsockethandler.cpp"
+          raw: true
+        - source: "apigear/olink/private/olinkwebsockethandler.h"
+          raw: true
+        - source: "apigear/olink/private/requesthandlerfactory.cpp"
+          raw: true
+        - source: "apigear/olink/private/requesthandlerfactory.h"
+          raw: true
+        - source: "apigear/olink/private/iconnectionstorage.h"
+          raw: true
+        - source: "apigear/olink/private/connectionstorage.cpp"
+          raw: true
+        - source: "apigear/olink/private/connectionstorage.h"
+          raw: true
+        - source: "apigear/olink/logger/logger.cpp"
+          raw: true
+        - source: "apigear/olink/logger/logger.h"
+          raw: true
+        - source: "apigear/olink/tests/CMakeLists.txt"
+          raw: true
+        - source: "apigear/olink/tests/olink_connection.test.cpp"
+          raw: true
+        - source: "apigear/olink/tests/olinkhost.test.cpp"
+          raw: true
+        - source: "apigear/olink/tests/test_main.cpp"
+          raw: true
+        - source: "apigear/olink/tests/private/frame.hpp"
+          raw: true
+        - source: "apigear/olink/tests/private/sinkobjectmock.hpp"
+          raw: true
+        - source: "apigear/olink/tests/private/sourceobjectmock.hpp"
+          raw: true
+        - source: "apigear/olink/tests/private/test_server/test_server.hpp"
+          raw: true
+        - source: "apigear/olink/tests/private/test_server/test_server_request_factory.hpp"
+          raw: true
+        - source: "apigear/olink/tests/private/test_server/iframestorage.hpp"
+          raw: true
+        - source: "apigear/olink/tests/private/test_server/test_server_request_handler.hpp"
           raw: true
   examples:
     system:

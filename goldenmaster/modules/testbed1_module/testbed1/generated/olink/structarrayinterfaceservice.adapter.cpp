@@ -1,148 +1,185 @@
 
 
+#include "testbed1/generated/api/datastructs.api.h"
 #include "testbed1/generated/olink/structarrayinterfaceservice.adapter.h"
 #include "testbed1/generated/core/testbed1.json.adapter.h"
+
+#include "olink/iremotenode.h"
+#include "olink/remoteregistry.h"
+
 #include <iostream>
+
 
 using namespace Test::Testbed1;
 using namespace Test::Testbed1::olink;
 
-StructArrayInterfaceServiceAdapter::StructArrayInterfaceServiceAdapter(IStructArrayInterface& StructArrayInterface, ApiGear::ObjectLink::RemoteRegistry& registry)
+namespace 
+{
+const std::string interfaceId = "testbed1.StructArrayInterface";
+}
+
+StructArrayInterfaceServiceAdapter::StructArrayInterfaceServiceAdapter(std::shared_ptr<IStructArrayInterface> StructArrayInterface, ApiGear::ObjectLink::RemoteRegistry& registry)
     : m_StructArrayInterface(StructArrayInterface)
-    , m_node(nullptr)
     , m_registry(registry)
 {
-    m_StructArrayInterface._getPublisher().subscribeToAllChanges(*this);
-    m_registry.addObjectSource(this);
+    m_StructArrayInterface->_getPublisher().subscribeToAllChanges(*this);
 }
 
 StructArrayInterfaceServiceAdapter::~StructArrayInterfaceServiceAdapter()
 {
-    m_registry.removeObjectSource(this);
-    m_StructArrayInterface._getPublisher().unsubscribeFromAllChanges(*this);
+    m_StructArrayInterface->_getPublisher().unsubscribeFromAllChanges(*this);
 }
 
 std::string StructArrayInterfaceServiceAdapter::olinkObjectName() {
-    return "testbed1.StructArrayInterface";
+    return interfaceId;
 }
 
-nlohmann::json StructArrayInterfaceServiceAdapter::olinkInvoke(std::string fcnName, nlohmann::json fcnArgs) {
-    std::clog << fcnName << std::endl;
-    std::string path = ApiGear::ObjectLink::Name::pathFromName(fcnName);
-    if(path == "funcBool") {
+nlohmann::json StructArrayInterfaceServiceAdapter::olinkInvoke(const std::string& methodId, const nlohmann::json& fcnArgs) {
+    std::clog << methodId << std::endl;
+    const auto& memberMethod = ApiGear::ObjectLink::Name::getMemberName(methodId);
+    if(memberMethod == "funcBool") {
         const std::list<StructBool>& paramBool = fcnArgs.at(0);
-        StructBool result = m_StructArrayInterface.funcBool(paramBool);
+        StructBool result = m_StructArrayInterface->funcBool(paramBool);
         return result;
     }
-    if(path == "funcInt") {
+    if(memberMethod == "funcInt") {
         const std::list<StructInt>& paramInt = fcnArgs.at(0);
-        StructBool result = m_StructArrayInterface.funcInt(paramInt);
+        StructBool result = m_StructArrayInterface->funcInt(paramInt);
         return result;
     }
-    if(path == "funcFloat") {
+    if(memberMethod == "funcFloat") {
         const std::list<StructFloat>& paramFloat = fcnArgs.at(0);
-        StructBool result = m_StructArrayInterface.funcFloat(paramFloat);
+        StructBool result = m_StructArrayInterface->funcFloat(paramFloat);
         return result;
     }
-    if(path == "funcString") {
+    if(memberMethod == "funcString") {
         const std::list<StructString>& paramString = fcnArgs.at(0);
-        StructBool result = m_StructArrayInterface.funcString(paramString);
+        StructBool result = m_StructArrayInterface->funcString(paramString);
         return result;
     }
     return nlohmann::json();
 }
 
-void StructArrayInterfaceServiceAdapter::olinkSetProperty(std::string name, nlohmann::json value) {
-    std::clog << name << std::endl;
-    std::string path = ApiGear::ObjectLink::Name::pathFromName(name);
-    if(path == "propBool") {
+void StructArrayInterfaceServiceAdapter::olinkSetProperty(const std::string& propertyId, const nlohmann::json& value) {
+    std::clog << propertyId << std::endl;
+    const auto& memberProperty = ApiGear::ObjectLink::Name::getMemberName(propertyId);
+    if(memberProperty == "propBool") {
         std::list<StructBool> propBool = value.get<std::list<StructBool>>();
-        m_StructArrayInterface.setPropBool(propBool);
+        m_StructArrayInterface->setPropBool(propBool);
     }
-    if(path == "propInt") {
+    if(memberProperty == "propInt") {
         std::list<StructInt> propInt = value.get<std::list<StructInt>>();
-        m_StructArrayInterface.setPropInt(propInt);
+        m_StructArrayInterface->setPropInt(propInt);
     }
-    if(path == "propFloat") {
+    if(memberProperty == "propFloat") {
         std::list<StructFloat> propFloat = value.get<std::list<StructFloat>>();
-        m_StructArrayInterface.setPropFloat(propFloat);
+        m_StructArrayInterface->setPropFloat(propFloat);
     }
-    if(path == "propString") {
+    if(memberProperty == "propString") {
         std::list<StructString> propString = value.get<std::list<StructString>>();
-        m_StructArrayInterface.setPropString(propString);
+        m_StructArrayInterface->setPropString(propString);
     } 
 }
 
-void StructArrayInterfaceServiceAdapter::olinkLinked(std::string name, ApiGear::ObjectLink::IRemoteNode *node) {
-    std::clog << name << std::endl;
-    m_node = node;
+void StructArrayInterfaceServiceAdapter::olinkLinked(const std::string& objetId, ApiGear::ObjectLink::IRemoteNode* /*node*/) {
+    std::clog << objetId << std::endl;
 }
 
-void StructArrayInterfaceServiceAdapter::olinkUnlinked(std::string name)
-{
-    std::clog << name << std::endl;
-    m_node = nullptr;
+void StructArrayInterfaceServiceAdapter::olinkUnlinked(const std::string& objetId){
+    std::clog << objetId << std::endl;
 }
 
 nlohmann::json StructArrayInterfaceServiceAdapter::olinkCollectProperties()
 {
     return nlohmann::json::object({
-        { "propBool", m_StructArrayInterface.getPropBool() },
-        { "propInt", m_StructArrayInterface.getPropInt() },
-        { "propFloat", m_StructArrayInterface.getPropFloat() },
-        { "propString", m_StructArrayInterface.getPropString() }
+        { "propBool", m_StructArrayInterface->getPropBool() },
+        { "propInt", m_StructArrayInterface->getPropInt() },
+        { "propFloat", m_StructArrayInterface->getPropFloat() },
+        { "propString", m_StructArrayInterface->getPropString() }
     });
 }
 void StructArrayInterfaceServiceAdapter::onSigBool(const std::list<StructBool>& paramBool)
 {
-    if(m_node != nullptr) {
-        const nlohmann::json& args = { paramBool };
-        m_node->notifySignal("testbed1.StructArrayInterface/sigBool", args);
+    const nlohmann::json args = { paramBool };
+    const auto& signalId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "sigBool");
+    for(auto node: m_registry.getNodes(ApiGear::ObjectLink::Name::getObjectId(signalId))) {
+        auto lockedNode = node.lock();
+        if(lockedNode) {
+            lockedNode->notifySignal(signalId, args);
+        }
     }
 }
 void StructArrayInterfaceServiceAdapter::onSigInt(const std::list<StructInt>& paramInt)
 {
-    if(m_node != nullptr) {
-        const nlohmann::json& args = { paramInt };
-        m_node->notifySignal("testbed1.StructArrayInterface/sigInt", args);
+    const nlohmann::json args = { paramInt };
+    const auto& signalId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "sigInt");
+    for(auto node: m_registry.getNodes(ApiGear::ObjectLink::Name::getObjectId(signalId))) {
+        auto lockedNode = node.lock();
+        if(lockedNode) {
+            lockedNode->notifySignal(signalId, args);
+        }
     }
 }
 void StructArrayInterfaceServiceAdapter::onSigFloat(const std::list<StructFloat>& paramFloat)
 {
-    if(m_node != nullptr) {
-        const nlohmann::json& args = { paramFloat };
-        m_node->notifySignal("testbed1.StructArrayInterface/sigFloat", args);
+    const nlohmann::json args = { paramFloat };
+    const auto& signalId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "sigFloat");
+    for(auto node: m_registry.getNodes(ApiGear::ObjectLink::Name::getObjectId(signalId))) {
+        auto lockedNode = node.lock();
+        if(lockedNode) {
+            lockedNode->notifySignal(signalId, args);
+        }
     }
 }
 void StructArrayInterfaceServiceAdapter::onSigString(const std::list<StructString>& paramString)
 {
-    if(m_node != nullptr) {
-        const nlohmann::json& args = { paramString };
-        m_node->notifySignal("testbed1.StructArrayInterface/sigString", args);
+    const nlohmann::json args = { paramString };
+    const auto& signalId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "sigString");
+    for(auto node: m_registry.getNodes(ApiGear::ObjectLink::Name::getObjectId(signalId))) {
+        auto lockedNode = node.lock();
+        if(lockedNode) {
+            lockedNode->notifySignal(signalId, args);
+        }
     }
 }
 void StructArrayInterfaceServiceAdapter::onPropBoolChanged(const std::list<StructBool>& propBool)
 {
-    if(m_node != nullptr) {
-        m_node->notifyPropertyChange("testbed1.StructArrayInterface/propBool", propBool);
+    const auto& propertyId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "propBool");
+    for(auto node: m_registry.getNodes(ApiGear::ObjectLink::Name::getObjectId(propertyId))) {
+        auto lockedNode = node.lock();
+        if(lockedNode) {
+            lockedNode->notifyPropertyChange(propertyId, propBool);
+        }
     }
 }
 void StructArrayInterfaceServiceAdapter::onPropIntChanged(const std::list<StructInt>& propInt)
 {
-    if(m_node != nullptr) {
-        m_node->notifyPropertyChange("testbed1.StructArrayInterface/propInt", propInt);
+    const auto& propertyId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "propInt");
+    for(auto node: m_registry.getNodes(ApiGear::ObjectLink::Name::getObjectId(propertyId))) {
+        auto lockedNode = node.lock();
+        if(lockedNode) {
+            lockedNode->notifyPropertyChange(propertyId, propInt);
+        }
     }
 }
 void StructArrayInterfaceServiceAdapter::onPropFloatChanged(const std::list<StructFloat>& propFloat)
 {
-    if(m_node != nullptr) {
-        m_node->notifyPropertyChange("testbed1.StructArrayInterface/propFloat", propFloat);
+    const auto& propertyId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "propFloat");
+    for(auto node: m_registry.getNodes(ApiGear::ObjectLink::Name::getObjectId(propertyId))) {
+        auto lockedNode = node.lock();
+        if(lockedNode) {
+            lockedNode->notifyPropertyChange(propertyId, propFloat);
+        }
     }
 }
 void StructArrayInterfaceServiceAdapter::onPropStringChanged(const std::list<StructString>& propString)
 {
-    if(m_node != nullptr) {
-        m_node->notifyPropertyChange("testbed1.StructArrayInterface/propString", propString);
+    const auto& propertyId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "propString");
+    for(auto node: m_registry.getNodes(ApiGear::ObjectLink::Name::getObjectId(propertyId))) {
+        auto lockedNode = node.lock();
+        if(lockedNode) {
+            lockedNode->notifyPropertyChange(propertyId, propString);
+        }
     }
 }
 
