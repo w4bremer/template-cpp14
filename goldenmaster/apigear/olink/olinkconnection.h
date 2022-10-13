@@ -27,6 +27,7 @@
 
 #include <atomic>
 #include <queue>
+#include <deque>
 #include <set>
 #include <memory>
 #include <future>
@@ -104,8 +105,10 @@ private:
     * @param task. Parameter is not used. The function uses most recent task stored as a member.
     */
     void processMessages(Poco::Util::TimerTask& task);
-    /** Schedules a process messages task.*/
-    void scheduleProcessMessages();
+    /** Schedules a process messages task.
+        @param delayMiliseconds. A delay with which task is scheduled.
+    */
+    void scheduleProcessMessages(long delayMiliseconds);
 
     /** Finalize close connection. */
     void cleanupConnectionResources();
@@ -125,17 +128,23 @@ private:
     Poco::URI m_serverUrl;
     /** The websocket used for connection.*/
     std::unique_ptr<Poco::Net::WebSocket> m_socket;
+    /** A mutex for the socket */
+    std::timed_mutex m_socketMutex;
+    /** Flag to protect against opening a connection from many threads at the same time*/
+    std::atomic<bool> m_isConnecting;
     /** The timer used for to process messages. */
     Poco::Util::Timer m_retryTimer;
     /** Poco Task that handles processing messages */
     Poco::Util::TimerTask::Ptr m_processMessagesTask;
+    /** A mutex for the process messages task */
+    std::timed_mutex m_taskMutex;
     /** Messages queue, store messages to send also before the connection is set. */
-    std::queue<std::string> m_queue;
+    std::deque<std::string> m_queue;
     /** A mutex for the message queue */
-    Poco::Mutex m_queueMutex;
+    std::timed_mutex m_queueMutex;
     /** Flag handled between the threads with information that the connection should be closed. */
     std::atomic<bool> m_disconnectRequested;
-    /** Result of receiveInLoop. Used to wait for end of its work after m_stopConnection is set to true*/
+    /** Result of receiveInLoop. Used to wait for end of its work after m_disconnectRequested is set to true*/
     std::future<void> m_receivingDone;
 };
 }} // namespace ApiGear::PocoImpl

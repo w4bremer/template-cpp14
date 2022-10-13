@@ -15,6 +15,7 @@
 #include "private/test_server/test_server.hpp"
 
 #include "nlohmann/json.hpp"
+#include <thread>
 
 namespace tests{
 
@@ -45,6 +46,23 @@ namespace {
         }
         return out;
     }
+
+    int getMessageIndex(const std::vector<Frame>& container, const std::string& payload)
+    {
+        auto iter = std::find_if(container.begin(),
+            container.end(),
+            [&payload](auto& element){return element.payload == payload; });
+        return iter != container.end()? std::distance(container.begin(), iter) : -1;
+    }
+
+    bool checkMessageInContainer(const std::vector<Frame>& container, const std::string& payload)
+    {
+       return std::find_if(container.begin(),
+                           container.end(),
+                           [&payload](auto& element){return element.payload == payload; })
+           != container.end();
+    }
+
 }
 
 TEST_CASE("OlinkConnection tests")
@@ -231,6 +249,73 @@ TEST_CASE("OlinkConnection tests")
          // Check close frame was sent
          REQUIRE(msgs[0].flags == Poco::Net::WebSocket::FRAME_OP_CLOSE);
          server.stop();
+    }
+
+    SECTION("queuing messages when connection is lost")
+    {
+        server.start();
+        testOlinkConnection->connectToHost(Poco::URI(localHostAddress));
+        testOlinkConnection->connectAndLinkObject(sink1);
+
+        // Check that server received link message
+        auto expectedLinkMessage = converter.toString(ApiGear::ObjectLink::Protocol::linkMessage(sink1Id));
+        REQUIRE(checkMessageInContainer(server.getReceivedFrames(), expectedLinkMessage));
+ 
+        // Start test - Close connection with close frame
+        server.sendFrame(any_payload, Poco::Net::WebSocket::FRAME_OP_CLOSE);
+        Poco::Thread::sleep(30);
+        
+        auto propertyName = "property2";
+        auto propertyId = ApiGear::ObjectLink::Name::createMemberId(sink1Id, propertyName);
+        auto& node = testOlinkConnection->node();
+
+        auto sendTenSetPropertyMessages = [&propertyId, &node](int startingPropertyValue)
+        {
+            for (auto number = startingPropertyValue; number < startingPropertyValue +10; number++)
+            {
+                node.setRemoteProperty(propertyId, { number });
+            }
+        };
+        sendTenSetPropertyMessages(0);
+        Poco::Thread::sleep(10); // add some delay between messages series
+        auto future1 = std::async(std::launch::async, [sendTenSetPropertyMessages](){sendTenSetPropertyMessages(10);});
+        auto future2 = std::async(std::launch::async, [sendTenSetPropertyMessages](){sendTenSetPropertyMessages(20);});
+        auto future3 = std::async(std::launch::async, [sendTenSetPropertyMessages](){sendTenSetPropertyMessages(30);});
+        Poco::Thread::sleep(11); // add some delay between messages series                 
+        auto future4 = std::async(std::launch::async, [sendTenSetPropertyMessages](){sendTenSetPropertyMessages(40);});
+        auto future5 = std::async(std::launch::async, [sendTenSetPropertyMessages](){sendTenSetPropertyMessages(50);});
+        auto future6 = std::async(std::launch::async, [sendTenSetPropertyMessages](){sendTenSetPropertyMessages(60);});
+        auto future7 = std::async(std::launch::async, [sendTenSetPropertyMessages](){sendTenSetPropertyMessages(70);});
+
+        // wait for re-connection
+        Poco::Thread::sleep(501);
+        
+        auto msgs = removeAllNonTextMessages(server.getReceivedFrames());
+        // Expect socket re-connects, and sends change property messages and link message
+        for (auto i = 0; i< 80; i++)
+        {
+            auto changePropertyRequest = converter.toString(ApiGear::ObjectLink::Protocol::setPropertyMessage(propertyId, {i}));
+            REQUIRE(checkMessageInContainer(msgs, changePropertyRequest));
+        }
+
+        REQUIRE(checkMessageInContainer(msgs, expectedLinkMessage));
+        auto expectedLinkMesageIndex = getMessageIndex(msgs, expectedLinkMessage);
+        // The link message is not first neither the last, so there will be some messages that reach the server before client is linked.
+        // They won't be processed by server.
+        REQUIRE(expectedLinkMesageIndex > 0);
+        REQUIRE(expectedLinkMesageIndex < msgs.size()-1);
+
+        
+        // Cleanup
+        REQUIRE_CALL(sink1, olinkOnRelease());
+        testOlinkConnection->disconnectAndUnlink(sink1Id);
+        auto expectedUnlinkMessage = converter.toString(ApiGear::ObjectLink::Protocol::unlinkMessage(sink1Id));
+        REQUIRE(checkMessageInContainer(server.getReceivedFrames(), expectedUnlinkMessage));
+
+        testOlinkConnection->disconnect();
+        msgs = removePingMessages(server.getReceivedFrames());
+        REQUIRE(msgs[0].flags == Poco::Net::WebSocket::FRAME_OP_CLOSE);
+        server.stop();
     }
 }
 
