@@ -8,7 +8,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 find_package(apigear QUIET COMPONENTS poco-olink)
 set (SOURCES_OLINK
 {% for interface in module.interfaces %}
-    {{interface.name|lower}}service.adapter.cpp
+    {{interface.name|lower}}service.cpp
     remote{{interface.name|lower}}.cpp
 {% endfor %}
 )

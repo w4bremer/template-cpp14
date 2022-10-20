@@ -11,7 +11,7 @@ Classes that take care of setting up connection for client and server. They use 
 
 generated olink feature contains Interface dependent adapters: 
  - Remote"YourInterface" for client side which is a Sink object
- - "YourInterface"ServiceAdpapter for server side which is a Source object
+ - "YourInterface"Service for server side which is a Source object
  
 To have a better overview of classes responsibilities and protocol implementation we provide a sequence diagram for lifecycle messages.
 

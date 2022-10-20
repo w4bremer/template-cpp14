@@ -1,7 +1,7 @@
 {%- for module in system.modules -%}
 {% for interface in module.interfaces %}
 #include "{{module.name|identifier}}/implementation/{{interface.name|lower}}.h"
-#include "{{module.name|identifier}}/generated/olink/{{interface.name|lower}}service.adapter.h"
+#include "{{module.name|identifier}}/generated/olink/{{interface.name|lower}}service.h"
 {% endfor %}
 {% endfor %}
 
@@ -23,9 +23,11 @@ int main(){
     {% for module in system.modules %}
     {% for interface in module.interfaces %}
     {% assign class = interface.name | capital %}
-    auto test{{module.name | capital}}{{class}} = std::make_shared<{{ module.name | capital }}::{{class}}>();
-    auto test{{module.name|capital}}{{interface.name|capital}}ServiceAdapter = std::make_shared<{{ module.name | capital }}::olink::{{interface.name}}ServiceAdapter>(test{{module.name|capital}}{{interface.name|capital}}, registry);
-    registry.addSource(test{{module.name|capital}}{{interface.name|capital}}ServiceAdapter);
+    {% assign instanceName = module.name|capital|lowerFirst | append: class %}
+    {% assign serviceInstanceName = module.name|capital|lowerFirst | append: "Olink" | append: class | append: "Service" %}
+    auto {{instanceName}} = std::make_shared<{{ module.name | capital }}::{{class}}>();
+    auto {{serviceInstanceName}} = std::make_shared<{{ module.name | capital }}::olink::{{interface.name}}Service>({{instanceName}}, registry);
+    registry.addSource({{serviceInstanceName}});
     {% endfor %}
     {% endfor %}
 
@@ -46,7 +48,8 @@ int main(){
     {% for module in system.modules %}
     {% for interface in module.interfaces %}
     {% assign class = interface.name | capital %}
-    registry.removeSource(test{{module.name|capital}}{{interface.name|capital}}ServiceAdapter->olinkObjectName());
+    {% assign serviceInstanceName = module.name|capital|lowerFirst | append: "Olink" | append: class | append: "Service" %}
+    registry.removeSource({{serviceInstanceName}}->olinkObjectName());
     {% endfor %}
     {% endfor %}
     
