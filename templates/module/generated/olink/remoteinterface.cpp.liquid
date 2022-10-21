@@ -19,23 +19,9 @@ namespace
 const std::string interfaceId = "{{identifiername}}";
 }
 
-{{class}}::{{class}}(std::weak_ptr<ApiGear::PocoImpl::IOlinkConnector> olinkConnector)
-    : m_olinkConnector(olinkConnector),
-      m_publisher(std::make_unique<{{pub_class}}>())
-{
-    if(auto connector = m_olinkConnector.lock())
-    {
-        connector->connectAndLinkObject(*this);
-    }
-}
-
-{{class}}::~{{class}}()
-{    
-    if(auto connector = m_olinkConnector.lock())
-    {
-        connector->disconnectAndUnlink(olinkObjectName());
-    }
-}
+{{class}}::{{class}}()
+    : m_publisher(std::make_unique<{{pub_class}}>())
+{}
 
 void {{class}}::applyState(const nlohmann::json& fields) 
 {

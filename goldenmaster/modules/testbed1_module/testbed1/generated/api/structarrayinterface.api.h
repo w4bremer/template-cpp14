@@ -14,12 +14,12 @@ class IStructArrayInterfacePublisher;
 *
 * IStructArrayInterface provides an interface for
  *  - methods defined for your StructArrayInterface 
- *  - proeperty setters and getters for defined properties
- * The IStructArrayInterface also providess an interface to access a publisher IStructArrayInterfacePublisher, a class used by IStructArrayInterfaceSubscriber clients.
- * The implementation should notify the publisher IStructArrayInterfacePublisher about emited signals or state changed. 
+ *  - property setters and getters for defined properties
+ * The IStructArrayInterface also provides an interface to access a publisher IStructArrayInterfacePublisher, a class used by IStructArrayInterfaceSubscriber clients.
+ * The implementation should notify the publisher IStructArrayInterfacePublisher about emitted signals or state changed. 
  * The publisher responsibility is to keep its clients informed about requested changes.
  * See also IStructArrayInterfaceSubscriber, IStructArrayInterfacePublisher
- * and the exmaple implementation StructArrayInterface  or the
+ * and the example implementation StructArrayInterface  or the
  */
 class TEST_TESTBED1_EXPORT IStructArrayInterface
 {
@@ -105,10 +105,10 @@ public:
 
 
 /**
- * The IStructArrayInterfaceSubscriber contains functions to allow informing about singals or property changes of the IStructArrayInterface implementation.
- * The implementation for IStructArrayInterface should provide mechanism for subscibtion of the IStructArrayInterfaceSubscriber clients.
- * See IStructArrayInterfacePublisher, which provides facititation for this purpose.
- * The implementation for IStructArrayInterface should call the IStructArrayInterfaceSubscriber interface functions on either singal emit or property change.
+ * The IStructArrayInterfaceSubscriber contains functions to allow informing about signals or property changes of the IStructArrayInterface implementation.
+ * The implementation for IStructArrayInterface should provide mechanism for subscription of the IStructArrayInterfaceSubscriber clients.
+ * See IStructArrayInterfacePublisher, which provides facilitation for this purpose.
+ * The implementation for IStructArrayInterface should call the IStructArrayInterfaceSubscriber interface functions on either signal emit or property change.
  * You can use IStructArrayInterfaceSubscriber class to implement clients of the IStructArrayInterface or the network adapter - see Olink Server and Client example.
  */
 class TEST_TESTBED1_EXPORT IStructArrayInterfaceSubscriber
@@ -192,9 +192,9 @@ using StructArrayInterfaceSigStringSignalCb = std::function<void(const std::list
  * or a property change.
  * Implement this interface to keep track of clients of your IStructArrayInterface implementation.
  * The publisher provides two independent methods of subscription
- *  - subscribing with a ITunerSubscriber objects - for all of the changes
- *  - subscribing any object for signle type of change property or a signal
- * The publish functions needs to be called by implementation of the ITuner on each state changed or signal emited
+ *  - subscribing with a IIStructArrayInterfaceSubscriber objects - for all of the changes
+ *  - subscribing any object for single type of change property or a signal
+ * The publish functions needs to be called by implementation of the IIStructArrayInterface on each state changed or signal emitted
  * to notify all the subscribers about this change.
  */
 class TEST_TESTBED1_EXPORT IStructArrayInterfacePublisher
@@ -204,7 +204,7 @@ public:
 
     /**
     * Use this function to subscribe for any change of the StructArrayInterface.
-    * Subscriber will be informed of any emited signal and any property changes.
+    * Subscriber will be informed of any emitted signal and any property changes.
     * This is parallel notification system to single subscription. If you will subscribe also for a single change
     * your subscriber will be informed twice about that change, one for each subscription mechanism.
     * @param IStructArrayInterfaceSubscriber which is subscribed in this function to any change of the StructArrayInterface.
@@ -212,7 +212,7 @@ public:
     virtual void subscribeToAllChanges(IStructArrayInterfaceSubscriber& subscriber) = 0;
     /**
     * Use this function to remove subscription to all of the changes of the StructArrayInterface.
-    * Not all subscriptions will be removed, the ones made separately for single singal or property change stay intact.
+    * Not all subscriptions will be removed, the ones made separately for single signal or property change stay intact.
     * Make sure to remove them.
     * @param IStructArrayInterfaceSubscriber which subscription for any change of the StructArrayInterface is removed.
     */
@@ -220,7 +220,7 @@ public:
 
     /**
     * Use this function to subscribe for propBool value changes.
-    * If your subscriber uses subsrciption with IStructArrayInterfaceSubscriber interface, you will get two notifications, one for each subscription mechanism.
+    * If your subscriber uses subscription with IStructArrayInterfaceSubscriber interface, you will get two notifications, one for each subscription mechanism.
     * @param StructArrayInterfacePropBoolPropertyCb callback that will be executed on each change of the property.
     * Make sure to remove subscription before the callback becomes invalid.
     * @return subscription token for the subscription removal.
@@ -230,7 +230,7 @@ public:
     virtual long subscribeToPropBoolChanged(StructArrayInterfacePropBoolPropertyCb callback) = 0;
     /**
     * Use this function to unsubscribe from propBool property changes.
-    * If your subscriber uses subsrciption with IStructArrayInterfaceSubscriber interface, you will be still informed about this change,
+    * If your subscriber uses subscription with IStructArrayInterfaceSubscriber interface, you will be still informed about this change,
     * as those are two independent subscription mechanisms.
     * @param subscription token received on subscription.
     */
@@ -238,7 +238,7 @@ public:
 
     /**
     * Use this function to subscribe for propInt value changes.
-    * If your subscriber uses subsrciption with IStructArrayInterfaceSubscriber interface, you will get two notifications, one for each subscription mechanism.
+    * If your subscriber uses subscription with IStructArrayInterfaceSubscriber interface, you will get two notifications, one for each subscription mechanism.
     * @param StructArrayInterfacePropIntPropertyCb callback that will be executed on each change of the property.
     * Make sure to remove subscription before the callback becomes invalid.
     * @return subscription token for the subscription removal.
@@ -248,7 +248,7 @@ public:
     virtual long subscribeToPropIntChanged(StructArrayInterfacePropIntPropertyCb callback) = 0;
     /**
     * Use this function to unsubscribe from propInt property changes.
-    * If your subscriber uses subsrciption with IStructArrayInterfaceSubscriber interface, you will be still informed about this change,
+    * If your subscriber uses subscription with IStructArrayInterfaceSubscriber interface, you will be still informed about this change,
     * as those are two independent subscription mechanisms.
     * @param subscription token received on subscription.
     */
@@ -256,7 +256,7 @@ public:
 
     /**
     * Use this function to subscribe for propFloat value changes.
-    * If your subscriber uses subsrciption with IStructArrayInterfaceSubscriber interface, you will get two notifications, one for each subscription mechanism.
+    * If your subscriber uses subscription with IStructArrayInterfaceSubscriber interface, you will get two notifications, one for each subscription mechanism.
     * @param StructArrayInterfacePropFloatPropertyCb callback that will be executed on each change of the property.
     * Make sure to remove subscription before the callback becomes invalid.
     * @return subscription token for the subscription removal.
@@ -266,7 +266,7 @@ public:
     virtual long subscribeToPropFloatChanged(StructArrayInterfacePropFloatPropertyCb callback) = 0;
     /**
     * Use this function to unsubscribe from propFloat property changes.
-    * If your subscriber uses subsrciption with IStructArrayInterfaceSubscriber interface, you will be still informed about this change,
+    * If your subscriber uses subscription with IStructArrayInterfaceSubscriber interface, you will be still informed about this change,
     * as those are two independent subscription mechanisms.
     * @param subscription token received on subscription.
     */
@@ -274,7 +274,7 @@ public:
 
     /**
     * Use this function to subscribe for propString value changes.
-    * If your subscriber uses subsrciption with IStructArrayInterfaceSubscriber interface, you will get two notifications, one for each subscription mechanism.
+    * If your subscriber uses subscription with IStructArrayInterfaceSubscriber interface, you will get two notifications, one for each subscription mechanism.
     * @param StructArrayInterfacePropStringPropertyCb callback that will be executed on each change of the property.
     * Make sure to remove subscription before the callback becomes invalid.
     * @return subscription token for the subscription removal.
@@ -284,7 +284,7 @@ public:
     virtual long subscribeToPropStringChanged(StructArrayInterfacePropStringPropertyCb callback) = 0;
     /**
     * Use this function to unsubscribe from propString property changes.
-    * If your subscriber uses subsrciption with IStructArrayInterfaceSubscriber interface, you will be still informed about this change,
+    * If your subscriber uses subscription with IStructArrayInterfaceSubscriber interface, you will be still informed about this change,
     * as those are two independent subscription mechanisms.
     * @param subscription token received on subscription.
     */
@@ -375,26 +375,26 @@ public:
     */
     virtual void publishPropStringChanged(const std::list<StructString>& propString) const = 0;
     /**
-    * Publishes the emited singal to all subscribed clients.
-    * Needs to be invoked by the StructArrayInterface implementation when sigBool is emited.
+    * Publishes the emitted signal to all subscribed clients.
+    * Needs to be invoked by the StructArrayInterface implementation when sigBool is emitted.
     * @param paramBool 
     */
     virtual void publishSigBool(const std::list<StructBool>& paramBool) const = 0;
     /**
-    * Publishes the emited singal to all subscribed clients.
-    * Needs to be invoked by the StructArrayInterface implementation when sigInt is emited.
+    * Publishes the emitted signal to all subscribed clients.
+    * Needs to be invoked by the StructArrayInterface implementation when sigInt is emitted.
     * @param paramInt 
     */
     virtual void publishSigInt(const std::list<StructInt>& paramInt) const = 0;
     /**
-    * Publishes the emited singal to all subscribed clients.
-    * Needs to be invoked by the StructArrayInterface implementation when sigFloat is emited.
+    * Publishes the emitted signal to all subscribed clients.
+    * Needs to be invoked by the StructArrayInterface implementation when sigFloat is emitted.
     * @param paramFloat 
     */
     virtual void publishSigFloat(const std::list<StructFloat>& paramFloat) const = 0;
     /**
-    * Publishes the emited singal to all subscribed clients.
-    * Needs to be invoked by the StructArrayInterface implementation when sigString is emited.
+    * Publishes the emitted signal to all subscribed clients.
+    * Needs to be invoked by the StructArrayInterface implementation when sigString is emitted.
     * @param paramString 
     */
     virtual void publishSigString(const std::list<StructString>& paramString) const = 0;

@@ -87,7 +87,7 @@ private:
     /** Result of receiveInLoop. Used to wait for end of its work after m_stopConnection is set to true*/
     std::future<void> m_receivingDone;
     /** A mutex for the using socket */
-    std::timed_mutex m_socektMutex;
+    std::timed_mutex m_socketMutex;
 
     /** An abstract connection endpoint for services, network implementation independent.
     *   may serve several services associated with this node by the unique objectId given in link message.

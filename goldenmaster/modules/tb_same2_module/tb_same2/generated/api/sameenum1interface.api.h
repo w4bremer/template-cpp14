@@ -14,12 +14,12 @@ class ISameEnum1InterfacePublisher;
 *
 * ISameEnum1Interface provides an interface for
  *  - methods defined for your SameEnum1Interface 
- *  - proeperty setters and getters for defined properties
- * The ISameEnum1Interface also providess an interface to access a publisher ISameEnum1InterfacePublisher, a class used by ISameEnum1InterfaceSubscriber clients.
- * The implementation should notify the publisher ISameEnum1InterfacePublisher about emited signals or state changed. 
+ *  - property setters and getters for defined properties
+ * The ISameEnum1Interface also provides an interface to access a publisher ISameEnum1InterfacePublisher, a class used by ISameEnum1InterfaceSubscriber clients.
+ * The implementation should notify the publisher ISameEnum1InterfacePublisher about emitted signals or state changed. 
  * The publisher responsibility is to keep its clients informed about requested changes.
  * See also ISameEnum1InterfaceSubscriber, ISameEnum1InterfacePublisher
- * and the exmaple implementation SameEnum1Interface  or the
+ * and the example implementation SameEnum1Interface  or the
  */
 class TEST_TB_SAME2_EXPORT ISameEnum1Interface
 {
@@ -54,10 +54,10 @@ public:
 
 
 /**
- * The ISameEnum1InterfaceSubscriber contains functions to allow informing about singals or property changes of the ISameEnum1Interface implementation.
- * The implementation for ISameEnum1Interface should provide mechanism for subscibtion of the ISameEnum1InterfaceSubscriber clients.
- * See ISameEnum1InterfacePublisher, which provides facititation for this purpose.
- * The implementation for ISameEnum1Interface should call the ISameEnum1InterfaceSubscriber interface functions on either singal emit or property change.
+ * The ISameEnum1InterfaceSubscriber contains functions to allow informing about signals or property changes of the ISameEnum1Interface implementation.
+ * The implementation for ISameEnum1Interface should provide mechanism for subscription of the ISameEnum1InterfaceSubscriber clients.
+ * See ISameEnum1InterfacePublisher, which provides facilitation for this purpose.
+ * The implementation for ISameEnum1Interface should call the ISameEnum1InterfaceSubscriber interface functions on either signal emit or property change.
  * You can use ISameEnum1InterfaceSubscriber class to implement clients of the ISameEnum1Interface or the network adapter - see Olink Server and Client example.
  */
 class TEST_TB_SAME2_EXPORT ISameEnum1InterfaceSubscriber
@@ -90,9 +90,9 @@ using SameEnum1InterfaceSig1SignalCb = std::function<void(const Enum1Enum& param
  * or a property change.
  * Implement this interface to keep track of clients of your ISameEnum1Interface implementation.
  * The publisher provides two independent methods of subscription
- *  - subscribing with a ITunerSubscriber objects - for all of the changes
- *  - subscribing any object for signle type of change property or a signal
- * The publish functions needs to be called by implementation of the ITuner on each state changed or signal emited
+ *  - subscribing with a IISameEnum1InterfaceSubscriber objects - for all of the changes
+ *  - subscribing any object for single type of change property or a signal
+ * The publish functions needs to be called by implementation of the IISameEnum1Interface on each state changed or signal emitted
  * to notify all the subscribers about this change.
  */
 class TEST_TB_SAME2_EXPORT ISameEnum1InterfacePublisher
@@ -102,7 +102,7 @@ public:
 
     /**
     * Use this function to subscribe for any change of the SameEnum1Interface.
-    * Subscriber will be informed of any emited signal and any property changes.
+    * Subscriber will be informed of any emitted signal and any property changes.
     * This is parallel notification system to single subscription. If you will subscribe also for a single change
     * your subscriber will be informed twice about that change, one for each subscription mechanism.
     * @param ISameEnum1InterfaceSubscriber which is subscribed in this function to any change of the SameEnum1Interface.
@@ -110,7 +110,7 @@ public:
     virtual void subscribeToAllChanges(ISameEnum1InterfaceSubscriber& subscriber) = 0;
     /**
     * Use this function to remove subscription to all of the changes of the SameEnum1Interface.
-    * Not all subscriptions will be removed, the ones made separately for single singal or property change stay intact.
+    * Not all subscriptions will be removed, the ones made separately for single signal or property change stay intact.
     * Make sure to remove them.
     * @param ISameEnum1InterfaceSubscriber which subscription for any change of the SameEnum1Interface is removed.
     */
@@ -118,7 +118,7 @@ public:
 
     /**
     * Use this function to subscribe for prop1 value changes.
-    * If your subscriber uses subsrciption with ISameEnum1InterfaceSubscriber interface, you will get two notifications, one for each subscription mechanism.
+    * If your subscriber uses subscription with ISameEnum1InterfaceSubscriber interface, you will get two notifications, one for each subscription mechanism.
     * @param SameEnum1InterfaceProp1PropertyCb callback that will be executed on each change of the property.
     * Make sure to remove subscription before the callback becomes invalid.
     * @return subscription token for the subscription removal.
@@ -128,7 +128,7 @@ public:
     virtual long subscribeToProp1Changed(SameEnum1InterfaceProp1PropertyCb callback) = 0;
     /**
     * Use this function to unsubscribe from prop1 property changes.
-    * If your subscriber uses subsrciption with ISameEnum1InterfaceSubscriber interface, you will be still informed about this change,
+    * If your subscriber uses subscription with ISameEnum1InterfaceSubscriber interface, you will be still informed about this change,
     * as those are two independent subscription mechanisms.
     * @param subscription token received on subscription.
     */
@@ -156,8 +156,8 @@ public:
     */
     virtual void publishProp1Changed(const Enum1Enum& prop1) const = 0;
     /**
-    * Publishes the emited singal to all subscribed clients.
-    * Needs to be invoked by the SameEnum1Interface implementation when sig1 is emited.
+    * Publishes the emitted signal to all subscribed clients.
+    * Needs to be invoked by the SameEnum1Interface implementation when sig1 is emitted.
     * @param param1 
     */
     virtual void publishSig1(const Enum1Enum& param1) const = 0;

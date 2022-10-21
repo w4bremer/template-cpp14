@@ -16,6 +16,7 @@
 
 #include "nlohmann/json.hpp"
 #include <thread>
+#include <algorithm>
 
 namespace tests{
 
@@ -52,7 +53,7 @@ namespace {
         auto iter = std::find_if(container.begin(),
             container.end(),
             [&payload](auto& element){return element.payload == payload; });
-        return iter != container.end()? std::distance(container.begin(), iter) : -1;
+        return iter != container.end()? std::distance(container.begin(), iter) : int(-1);
     }
 
     bool checkMessageInContainer(const std::vector<Frame>& container, const std::string& payload)
@@ -72,11 +73,11 @@ TEST_CASE("OlinkConnection tests")
 
     TestServer server(portNumber);
     ApiGear::ObjectLink::ClientRegistry registry;
-    auto testOlinkConnection = ApiGear::PocoImpl::OlinkConnection::create(registry);
+    auto testOlinkConnection = std::make_shared<ApiGear::PocoImpl::OlinkConnection>(registry);
 
-    SinkObjectMock sink1;
+    auto sink1 = std::make_shared<SinkObjectMock>();
     std::string sink1Id = "tests.sink1";
-    ALLOW_CALL(sink1, olinkObjectName()).RETURN(sink1Id);
+    ALLOW_CALL(*sink1, olinkObjectName()).RETURN(sink1Id);
 
     SECTION("Connect to host when sink is added and server is running. On teardown first disconnect sink then the client")
     {
@@ -84,8 +85,8 @@ TEST_CASE("OlinkConnection tests")
 
         testOlinkConnection->connectToHost(Poco::URI(localHostAddress));
         testOlinkConnection->connectAndLinkObject(sink1);
-        REQUIRE(registry.getSink(sink1Id) == &sink1);
-        REQUIRE(registry.getNode(sink1Id) == &(testOlinkConnection->node()));
+        REQUIRE(registry.getSink(sink1Id).lock() == sink1);
+        REQUIRE(registry.getNode(sink1Id).lock() == testOlinkConnection->node());
 
         // Check that server received link message
         auto expectedLinkMessage = converter.toString(ApiGear::ObjectLink::Protocol::linkMessage(sink1Id));
@@ -96,7 +97,7 @@ TEST_CASE("OlinkConnection tests")
         
         // Send init message from server and check it is delivered and decoded
         nlohmann::json initProperties = { {"property1", "some_string" }, { "property2",  9 }, { "property3", false } };
-        REQUIRE_CALL(sink1, olinkOnInit(sink1Id, initProperties, &(testOlinkConnection->node())));
+        REQUIRE_CALL(*sink1, olinkOnInit(sink1Id, initProperties, testOlinkConnection->node().get()));
         
         auto preparedInitMessage = converter.toString(ApiGear::ObjectLink::Protocol::initMessage(sink1Id, initProperties));
         server.sendFrame(preparedInitMessage);
@@ -104,10 +105,10 @@ TEST_CASE("OlinkConnection tests")
         Poco::Thread::sleep(30);
 
         // Remove sink: unlink, detach from node, remove from registry.
-        REQUIRE_CALL(sink1, olinkOnRelease());
+        REQUIRE_CALL(*sink1, olinkOnRelease());
         testOlinkConnection->disconnectAndUnlink(sink1Id);
-        REQUIRE(registry.getSink(sink1Id) == nullptr);
-        REQUIRE(registry.getNode(sink1Id) == nullptr);
+        REQUIRE(registry.getSink(sink1Id).lock() == nullptr);
+        REQUIRE(registry.getNode(sink1Id).lock() == nullptr);
 
         //Check the unlink message
         auto expectedUnlinkMessage = converter.toString(ApiGear::ObjectLink::Protocol::unlinkMessage(sink1Id));
@@ -128,8 +129,9 @@ TEST_CASE("OlinkConnection tests")
         server.start();
         // Connect sink
         testOlinkConnection->connectAndLinkObject(sink1);
-        REQUIRE(registry.getSink(sink1Id) == &sink1);
-        REQUIRE(registry.getNode(sink1Id) == &(testOlinkConnection->node()));
+        REQUIRE(registry.getSink(sink1Id).lock() == sink1);
+        // Node will be added to registry after it is linked - so connection needs to be established first.
+        REQUIRE(registry.getNode(sink1Id).lock() == nullptr);
 
         // Connect to server
         testOlinkConnection->connectToHost(Poco::URI(localHostAddress));
@@ -138,20 +140,22 @@ TEST_CASE("OlinkConnection tests")
         auto expectedLinkMessage = converter.toString(ApiGear::ObjectLink::Protocol::linkMessage(sink1Id));
         REQUIRE(msgs[0].payload == expectedLinkMessage);
         REQUIRE(msgs[0].flags == Poco::Net::WebSocket::FRAME_TEXT);
+        REQUIRE(registry.getNode(sink1Id).lock() == testOlinkConnection->node());
 
         // Send from server init message
         nlohmann::json initProperties = { {"property1", "some_string" }, { "property2",  9 }, { "property3", false } };
-        REQUIRE_CALL(sink1, olinkOnInit(sink1Id, initProperties, &(testOlinkConnection->node())));
+        REQUIRE_CALL(*sink1, olinkOnInit(sink1Id, initProperties, testOlinkConnection->node().get()));
         auto preparedInitMessage = converter.toString(ApiGear::ObjectLink::Protocol::initMessage(sink1Id, initProperties));
         server.sendFrame(preparedInitMessage);
         
-        // Teardown
-        REQUIRE_CALL(sink1, olinkOnRelease());
+        // Stop connection
+        REQUIRE_CALL(*sink1, olinkOnRelease());
         testOlinkConnection->disconnect();
-        // No changes in registry in case user wants to restore connection.
-        REQUIRE(registry.getSink(sink1Id) == &sink1);
-        REQUIRE(registry.getNode(sink1Id) == &(testOlinkConnection->node()));
-        // Check unlink was sent
+
+        // Sink stays in registry in case user wants to reconnect.
+        REQUIRE(registry.getSink(sink1Id).lock() == sink1);
+        REQUIRE(registry.getNode(sink1Id).lock() == nullptr);
+
         msgs = removePingMessages(server.getReceivedFrames());
         auto expectedUnlinkMessage = converter.toString(ApiGear::ObjectLink::Protocol::unlinkMessage(sink1Id));
         REQUIRE(msgs.size() == 2);
@@ -160,10 +164,61 @@ TEST_CASE("OlinkConnection tests")
         // Check close frame was sent
         REQUIRE(msgs[1].flags == Poco::Net::WebSocket::FRAME_OP_CLOSE);
 
-        REQUIRE_CALL(sink1, olinkOnRelease());
         testOlinkConnection->disconnectAndUnlink(sink1Id);
-        REQUIRE(registry.getSink(sink1Id) == nullptr);
-        REQUIRE(registry.getNode(sink1Id) == nullptr);
+        REQUIRE(registry.getSink(sink1Id).lock() == nullptr);
+        server.stop();
+    }
+
+    SECTION("Disconnect and reconnect scenario")
+    {
+        auto sink2 = std::make_shared<SinkObjectMock>();
+        std::string sink2Id = "tests.sink2";
+        ALLOW_CALL(*sink2, olinkObjectName()).RETURN(sink2Id);
+
+        server.start();
+        testOlinkConnection->connectAndLinkObject(sink1);
+        testOlinkConnection->connectAndLinkObject(sink2);
+
+        // Connect to server
+        testOlinkConnection->connectToHost(Poco::URI(localHostAddress));
+        auto msgs = removePingMessages(server.getReceivedFrames());
+        // expect the link message to be received on server side 
+        auto expectedLinkMessage1 = converter.toString(ApiGear::ObjectLink::Protocol::linkMessage(sink1Id));
+        auto expectedLinkMessage2 = converter.toString(ApiGear::ObjectLink::Protocol::linkMessage(sink2Id));
+        
+        REQUIRE(checkMessageInContainer(msgs, expectedLinkMessage1));
+        REQUIRE(checkMessageInContainer(msgs, expectedLinkMessage2));
+
+        // Disconnect
+        REQUIRE_CALL(*sink1, olinkOnRelease());
+        REQUIRE_CALL(*sink2, olinkOnRelease());
+        testOlinkConnection->disconnect();
+
+        // Check unlink and close connection messages.
+        msgs = removePingMessages(server.getReceivedFrames());
+        auto expectedUnlinkMessage1 = converter.toString(ApiGear::ObjectLink::Protocol::unlinkMessage(sink1Id));
+        auto expectedUnlinkMessage2 = converter.toString(ApiGear::ObjectLink::Protocol::unlinkMessage(sink2Id));
+
+        REQUIRE(checkMessageInContainer(msgs, expectedUnlinkMessage1));
+        REQUIRE(checkMessageInContainer(msgs, expectedUnlinkMessage2));
+        REQUIRE(msgs[2].flags == Poco::Net::WebSocket::FRAME_OP_CLOSE);
+
+        // Remove sink2 during disconnected
+        testOlinkConnection->disconnectAndUnlink(sink2Id);
+
+        // Connect again, node sends link message only for sink1.
+        testOlinkConnection->connectToHost(Poco::URI(localHostAddress));
+        REQUIRE(checkMessageInContainer(server.getReceivedFrames(), expectedLinkMessage1));
+
+        //Test teardown and cleanup
+        REQUIRE_CALL(*sink1, olinkOnRelease());
+        testOlinkConnection->disconnectAndUnlink(sink1Id);
+        testOlinkConnection.reset();
+
+        msgs = removePingMessages(server.getReceivedFrames());
+        REQUIRE(checkMessageInContainer(msgs, expectedUnlinkMessage1));
+        REQUIRE(msgs[1].flags == Poco::Net::WebSocket::FRAME_OP_CLOSE);
+
         server.stop();
     }
 
@@ -172,21 +227,24 @@ TEST_CASE("OlinkConnection tests")
         server.start();
         // Connect sink
         testOlinkConnection->connectAndLinkObject(sink1);
-        REQUIRE(registry.getSink(sink1Id) == &sink1);
-        REQUIRE(registry.getNode(sink1Id) == &(testOlinkConnection->node()));
+        REQUIRE(registry.getSink(sink1Id).lock() == sink1);
+
 
         // Connect to server
         testOlinkConnection->connectToHost(Poco::URI(localHostAddress));
+        // Wait for message to be sent with queue flush on tick, and action after sent happen.
+        Poco::Thread::sleep(11);
+        REQUIRE(registry.getNode(sink1Id).lock() == testOlinkConnection->node());
         auto msgs = removePingMessages(server.getReceivedFrames());
         // expect the link message to be received on server side 
         auto expectedLinkMessage = converter.toString(ApiGear::ObjectLink::Protocol::linkMessage(sink1Id));
         REQUIRE(msgs[0].payload == expectedLinkMessage);
         REQUIRE(msgs[0].flags == Poco::Net::WebSocket::FRAME_TEXT);
 
-        REQUIRE_CALL(sink1, olinkOnRelease());
+        REQUIRE_CALL(*sink1, olinkOnRelease());
         testOlinkConnection.reset();
-        REQUIRE(registry.getSink(sink1Id) == nullptr);
-        REQUIRE(registry.getNode(sink1Id) == nullptr);
+        REQUIRE(registry.getSink(sink1Id).lock() == nullptr);
+        REQUIRE(registry.getNode(sink1Id).lock() == nullptr);
 
         // Check unlink was sent
         msgs = removePingMessages(server.getReceivedFrames());
@@ -196,7 +254,6 @@ TEST_CASE("OlinkConnection tests")
         REQUIRE(msgs[0].flags == Poco::Net::WebSocket::FRAME_TEXT);
         // Check close frame was sent
         REQUIRE(msgs[1].flags == Poco::Net::WebSocket::FRAME_OP_CLOSE);
-
         server.stop();
     }
 
@@ -206,8 +263,8 @@ TEST_CASE("OlinkConnection tests")
 
         testOlinkConnection->connectToHost(Poco::URI(localHostAddress));
         testOlinkConnection->connectAndLinkObject(sink1);
-        REQUIRE(registry.getSink(sink1Id) == &sink1);
-        REQUIRE(registry.getNode(sink1Id) == &(testOlinkConnection->node()));
+        REQUIRE(registry.getSink(sink1Id).lock() == sink1);
+        REQUIRE(registry.getNode(sink1Id).lock() == testOlinkConnection->node());
 
         // Check that server received link message
         auto expectedLinkMessage = converter.toString(ApiGear::ObjectLink::Protocol::linkMessage(sink1Id));
@@ -218,7 +275,7 @@ TEST_CASE("OlinkConnection tests")
 
         // Send init message from server and check it is delivered and decoded
         nlohmann::json initProperties = { {"property1", "some_string" }, { "property2",  9 }, { "property3", false } };
-        REQUIRE_CALL(sink1, olinkOnInit(sink1Id, initProperties, &(testOlinkConnection->node())));
+        REQUIRE_CALL(*sink1, olinkOnInit(sink1Id, initProperties, testOlinkConnection->node().get()));
 
         auto preparedInitMessage = converter.toString(ApiGear::ObjectLink::Protocol::initMessage(sink1Id, initProperties));
         server.sendFrame(preparedInitMessage);
@@ -233,7 +290,7 @@ TEST_CASE("OlinkConnection tests")
         // wait for re-connection
         Poco::Thread::sleep(1001);
         // Cleanup
-        REQUIRE_CALL(sink1, olinkOnRelease());
+        REQUIRE_CALL(*sink1, olinkOnRelease());
         testOlinkConnection->disconnectAndUnlink(sink1Id);
         auto expectedUnlinkMessage = converter.toString(ApiGear::ObjectLink::Protocol::unlinkMessage(sink1Id));
 
@@ -267,13 +324,13 @@ TEST_CASE("OlinkConnection tests")
         
         auto propertyName = "property2";
         auto propertyId = ApiGear::ObjectLink::Name::createMemberId(sink1Id, propertyName);
-        auto& node = testOlinkConnection->node();
+        auto node = testOlinkConnection->node();
 
-        auto sendTenSetPropertyMessages = [&propertyId, &node](int startingPropertyValue)
+        auto sendTenSetPropertyMessages = [&propertyId, node](int startingPropertyValue)
         {
             for (auto number = startingPropertyValue; number < startingPropertyValue +10; number++)
             {
-                node.setRemoteProperty(propertyId, { number });
+                node->setRemoteProperty(propertyId, { number });
             }
         };
         sendTenSetPropertyMessages(0);
@@ -307,7 +364,7 @@ TEST_CASE("OlinkConnection tests")
 
         
         // Cleanup
-        REQUIRE_CALL(sink1, olinkOnRelease());
+        REQUIRE_CALL(*sink1, olinkOnRelease());
         testOlinkConnection->disconnectAndUnlink(sink1Id);
         auto expectedUnlinkMessage = converter.toString(ApiGear::ObjectLink::Protocol::unlinkMessage(sink1Id));
         REQUIRE(checkMessageInContainer(server.getReceivedFrames(), expectedUnlinkMessage));

@@ -15,7 +15,6 @@
 namespace ApiGear{
 namespace ObjectLink{
 class IClientNode;
-class ClientRegistry;
 }
 }
 
@@ -23,9 +22,13 @@ namespace Test {
 namespace TbSimple {
 namespace olink {
 /**
-* The class for handling connetion witha a SimpleInterface service implemented for OLink protocol. 
-* Sends and receives data over the network with ObjectLink protocol. 
+* Adapts the general OLink Client handler to a SimpleInterface publisher in a way it provides access 
+* to remote SimpleInterface services. 
+* Sends and receives data over the network with ObjectLink protocol, through the communication node. 
 * see https://objectlinkprotocol.net for ObjectLink details.
+* see https://github.com/apigear-io/objectlink-core-cpp.git for olink client node - abstraction over the network.
+* see Apigear::ObjectLink::OLinkConnection for Olink Client Handler implementation.
+*     It provides a network implementation and tools to connect RemoteSimpleInterface to it.
 * Use on client side to request changes of the SimpleInterface on the server side 
 * and to subscribe for the SimpleInterface changes.
 */
@@ -35,14 +38,10 @@ class TEST_TB_SIMPLE_EXPORT RemoteSimpleInterface : public ISimpleInterface,
 {
 public:
 
-    /**
-    * ctor
-    * @param olinkConnector An object, that sets up connection of this object sink to the service on server side. 
-    *        It manages the connection and a client node associated to it and is responsible for linking the object
-    *        depending on connection state.
-    */
-    explicit RemoteSimpleInterface(std::weak_ptr<ApiGear::PocoImpl::IOlinkConnector> olinkConnector);
-    virtual ~RemoteSimpleInterface() override;
+    /** ctor */
+    explicit RemoteSimpleInterface();
+    /** dtor */
+    virtual ~RemoteSimpleInterface() = default;
     /**
     * Property getter
     * @return Locally stored locally value for PropBool.
@@ -185,11 +184,7 @@ private:
     * Is given when object is linked with the service.
     */
     ApiGear::ObjectLink::IClientNode* m_node = nullptr;
-    /**
-    * A helper used to connect with a Olink SimpleInterface service for object given with olinkObjectName()
-    * takes care of setup and tear down linkage for this RemoteSimpleInterface.
-    */
-    std::weak_ptr<ApiGear::PocoImpl::IOlinkConnector> m_olinkConnector;
+
     /** The publisher for SimpleInterface */
     std::unique_ptr<ISimpleInterfacePublisher> m_publisher;
 };

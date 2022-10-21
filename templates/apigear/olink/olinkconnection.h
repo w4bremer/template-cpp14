@@ -49,21 +49,15 @@ namespace PocoImpl {
 */
 class APIGEAR_OLINK_EXPORT OlinkConnection: public ApiGear::PocoImpl::IOlinkConnector
 {
-protected:
+public:
     /**
     * ctor
     * @param registry. A global client registry to which the client node and sink object are added.
     * Remark: the registered objects must provide unique identifiers
     */
     OlinkConnection(ApiGear::ObjectLink::ClientRegistry& registry);
-public:
-    /**
-    * Factory method to get shared_ptr<OlinkConnection>
-    * @param registry. A global client registry to which the client node and sink object are added.
-    * Remark: the registered objects must provide unique identifiers
-    */
-    static std::shared_ptr<OlinkConnection> create(ApiGear::ObjectLink::ClientRegistry& registry);
-    //TODO what with closing the connection
+
+    /** dtor */
     virtual ~OlinkConnection();
 
     /**
@@ -81,10 +75,10 @@ public:
     * Get underlaying client node.
     * @retunr a client node for which this OlinkConnection sets up the connection.
     */
-    ApiGear::ObjectLink::ClientNode& node();
+    std::shared_ptr<ApiGear::ObjectLink::ClientNode> node();
 
     /** IOlinkConnector::connectAndLinkObject implementation*/
-    void connectAndLinkObject(ApiGear::ObjectLink::IObjectSink& object) override;
+    void connectAndLinkObject(std::shared_ptr<ApiGear::ObjectLink::IObjectSink> object) override;
     /** IOlinkConnector::disconnectAndUnlink implementation*/
     void disconnectAndUnlink(const std::string& objectId)  override;
 
@@ -95,9 +89,14 @@ private:
     void receiveInLoop();
     /** Sends all the waiting messages when the connection is up. */
     void onConnected();
-    /** Handle disconnect sent from server side.
-    Sends all the necessary close messages when about to close socket. */
+    /** Cleans up resources after connection closed either from server side(close frame received)
+    *   or client side(close frame sent).
+    */
     void onDisconnected();
+
+    /* Sends all queued messages and sends close frame*/
+    void closeQueue();
+
     /** Handler for raw messages.*/
     void handleTextMessage(const std::string& message);
     /**
@@ -110,8 +109,9 @@ private:
     */
     void scheduleProcessMessages(long delayMiliseconds);
 
-    /** Finalize close connection. */
-    void cleanupConnectionResources();
+    /** Sends all stored messages*/
+    void flushMessages();
+
     /** Tries to send message immediately without queuing. 
     * If the connection is not working, message will not be stored to resend.
     * @param message a message in network format to be send as it is.
@@ -119,10 +119,17 @@ private:
     *   see Poco::Net::WebSocket Frame Opcodes for more info.
     * @return true if message was sent, false otherwise.
     */
-    bool trySendImmediately(std::string message, int frameOpCode);
+    bool writeMessage(std::string message, int frameOpCode);
 
     /** Client node that separates sinks Objects from created socket, and handles incoming and outgoing messages. */
-    ApiGear::ObjectLink::ClientNode m_node;
+    std::shared_ptr<ApiGear::ObjectLink::ClientNode> m_node;
+
+    enum class LinkStatus
+    {
+        Linked,
+        NotLinked
+    };
+    std::map<std::string, LinkStatus> m_objectLinkStatus;
 
     /** The server url to which socket connects. */
     Poco::URI m_serverUrl;
@@ -130,8 +137,14 @@ private:
     std::unique_ptr<Poco::Net::WebSocket> m_socket;
     /** A mutex for the socket */
     std::timed_mutex m_socketMutex;
+    /** Flag handled between the threads with information that the connection should be closed. */
+    std::atomic<bool> m_disconnectRequested;
+    /** Result of receiveInLoop. Used to wait for end of its work after m_disconnectRequested is set to true*/
+    std::future<void> m_receivingDone;
+
     /** Flag to protect against opening a connection from many threads at the same time*/
     std::atomic<bool> m_isConnecting;
+
     /** The timer used for to process messages. */
     Poco::Util::Timer m_retryTimer;
     /** Poco Task that handles processing messages */
@@ -142,9 +155,7 @@ private:
     std::deque<std::string> m_queue;
     /** A mutex for the message queue */
     std::timed_mutex m_queueMutex;
-    /** Flag handled between the threads with information that the connection should be closed. */
-    std::atomic<bool> m_disconnectRequested;
-    /** Result of receiveInLoop. Used to wait for end of its work after m_disconnectRequested is set to true*/
-    std::future<void> m_receivingDone;
+
+
 };
 }} // namespace ApiGear::PocoImpl

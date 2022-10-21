@@ -14,12 +14,12 @@ class IStructInterfacePublisher;
 *
 * IStructInterface provides an interface for
  *  - methods defined for your StructInterface 
- *  - proeperty setters and getters for defined properties
- * The IStructInterface also providess an interface to access a publisher IStructInterfacePublisher, a class used by IStructInterfaceSubscriber clients.
- * The implementation should notify the publisher IStructInterfacePublisher about emited signals or state changed. 
+ *  - property setters and getters for defined properties
+ * The IStructInterface also provides an interface to access a publisher IStructInterfacePublisher, a class used by IStructInterfaceSubscriber clients.
+ * The implementation should notify the publisher IStructInterfacePublisher about emitted signals or state changed. 
  * The publisher responsibility is to keep its clients informed about requested changes.
  * See also IStructInterfaceSubscriber, IStructInterfacePublisher
- * and the exmaple implementation StructInterface  or the
+ * and the example implementation StructInterface  or the
  */
 class TEST_TESTBED1_EXPORT IStructInterface
 {
@@ -105,10 +105,10 @@ public:
 
 
 /**
- * The IStructInterfaceSubscriber contains functions to allow informing about singals or property changes of the IStructInterface implementation.
- * The implementation for IStructInterface should provide mechanism for subscibtion of the IStructInterfaceSubscriber clients.
- * See IStructInterfacePublisher, which provides facititation for this purpose.
- * The implementation for IStructInterface should call the IStructInterfaceSubscriber interface functions on either singal emit or property change.
+ * The IStructInterfaceSubscriber contains functions to allow informing about signals or property changes of the IStructInterface implementation.
+ * The implementation for IStructInterface should provide mechanism for subscription of the IStructInterfaceSubscriber clients.
+ * See IStructInterfacePublisher, which provides facilitation for this purpose.
+ * The implementation for IStructInterface should call the IStructInterfaceSubscriber interface functions on either signal emit or property change.
  * You can use IStructInterfaceSubscriber class to implement clients of the IStructInterface or the network adapter - see Olink Server and Client example.
  */
 class TEST_TESTBED1_EXPORT IStructInterfaceSubscriber
@@ -192,9 +192,9 @@ using StructInterfaceSigStringSignalCb = std::function<void(const StructString& 
  * or a property change.
  * Implement this interface to keep track of clients of your IStructInterface implementation.
  * The publisher provides two independent methods of subscription
- *  - subscribing with a ITunerSubscriber objects - for all of the changes
- *  - subscribing any object for signle type of change property or a signal
- * The publish functions needs to be called by implementation of the ITuner on each state changed or signal emited
+ *  - subscribing with a IIStructInterfaceSubscriber objects - for all of the changes
+ *  - subscribing any object for single type of change property or a signal
+ * The publish functions needs to be called by implementation of the IIStructInterface on each state changed or signal emitted
  * to notify all the subscribers about this change.
  */
 class TEST_TESTBED1_EXPORT IStructInterfacePublisher
@@ -204,7 +204,7 @@ public:
 
     /**
     * Use this function to subscribe for any change of the StructInterface.
-    * Subscriber will be informed of any emited signal and any property changes.
+    * Subscriber will be informed of any emitted signal and any property changes.
     * This is parallel notification system to single subscription. If you will subscribe also for a single change
     * your subscriber will be informed twice about that change, one for each subscription mechanism.
     * @param IStructInterfaceSubscriber which is subscribed in this function to any change of the StructInterface.
@@ -212,7 +212,7 @@ public:
     virtual void subscribeToAllChanges(IStructInterfaceSubscriber& subscriber) = 0;
     /**
     * Use this function to remove subscription to all of the changes of the StructInterface.
-    * Not all subscriptions will be removed, the ones made separately for single singal or property change stay intact.
+    * Not all subscriptions will be removed, the ones made separately for single signal or property change stay intact.
     * Make sure to remove them.
     * @param IStructInterfaceSubscriber which subscription for any change of the StructInterface is removed.
     */
@@ -220,7 +220,7 @@ public:
 
     /**
     * Use this function to subscribe for propBool value changes.
-    * If your subscriber uses subsrciption with IStructInterfaceSubscriber interface, you will get two notifications, one for each subscription mechanism.
+    * If your subscriber uses subscription with IStructInterfaceSubscriber interface, you will get two notifications, one for each subscription mechanism.
     * @param StructInterfacePropBoolPropertyCb callback that will be executed on each change of the property.
     * Make sure to remove subscription before the callback becomes invalid.
     * @return subscription token for the subscription removal.
@@ -230,7 +230,7 @@ public:
     virtual long subscribeToPropBoolChanged(StructInterfacePropBoolPropertyCb callback) = 0;
     /**
     * Use this function to unsubscribe from propBool property changes.
-    * If your subscriber uses subsrciption with IStructInterfaceSubscriber interface, you will be still informed about this change,
+    * If your subscriber uses subscription with IStructInterfaceSubscriber interface, you will be still informed about this change,
     * as those are two independent subscription mechanisms.
     * @param subscription token received on subscription.
     */
@@ -238,7 +238,7 @@ public:
 
     /**
     * Use this function to subscribe for propInt value changes.
-    * If your subscriber uses subsrciption with IStructInterfaceSubscriber interface, you will get two notifications, one for each subscription mechanism.
+    * If your subscriber uses subscription with IStructInterfaceSubscriber interface, you will get two notifications, one for each subscription mechanism.
     * @param StructInterfacePropIntPropertyCb callback that will be executed on each change of the property.
     * Make sure to remove subscription before the callback becomes invalid.
     * @return subscription token for the subscription removal.
@@ -248,7 +248,7 @@ public:
     virtual long subscribeToPropIntChanged(StructInterfacePropIntPropertyCb callback) = 0;
     /**
     * Use this function to unsubscribe from propInt property changes.
-    * If your subscriber uses subsrciption with IStructInterfaceSubscriber interface, you will be still informed about this change,
+    * If your subscriber uses subscription with IStructInterfaceSubscriber interface, you will be still informed about this change,
     * as those are two independent subscription mechanisms.
     * @param subscription token received on subscription.
     */
@@ -256,7 +256,7 @@ public:
 
     /**
     * Use this function to subscribe for propFloat value changes.
-    * If your subscriber uses subsrciption with IStructInterfaceSubscriber interface, you will get two notifications, one for each subscription mechanism.
+    * If your subscriber uses subscription with IStructInterfaceSubscriber interface, you will get two notifications, one for each subscription mechanism.
     * @param StructInterfacePropFloatPropertyCb callback that will be executed on each change of the property.
     * Make sure to remove subscription before the callback becomes invalid.
     * @return subscription token for the subscription removal.
@@ -266,7 +266,7 @@ public:
     virtual long subscribeToPropFloatChanged(StructInterfacePropFloatPropertyCb callback) = 0;
     /**
     * Use this function to unsubscribe from propFloat property changes.
-    * If your subscriber uses subsrciption with IStructInterfaceSubscriber interface, you will be still informed about this change,
+    * If your subscriber uses subscription with IStructInterfaceSubscriber interface, you will be still informed about this change,
     * as those are two independent subscription mechanisms.
     * @param subscription token received on subscription.
     */
@@ -274,7 +274,7 @@ public:
 
     /**
     * Use this function to subscribe for propString value changes.
-    * If your subscriber uses subsrciption with IStructInterfaceSubscriber interface, you will get two notifications, one for each subscription mechanism.
+    * If your subscriber uses subscription with IStructInterfaceSubscriber interface, you will get two notifications, one for each subscription mechanism.
     * @param StructInterfacePropStringPropertyCb callback that will be executed on each change of the property.
     * Make sure to remove subscription before the callback becomes invalid.
     * @return subscription token for the subscription removal.
@@ -284,7 +284,7 @@ public:
     virtual long subscribeToPropStringChanged(StructInterfacePropStringPropertyCb callback) = 0;
     /**
     * Use this function to unsubscribe from propString property changes.
-    * If your subscriber uses subsrciption with IStructInterfaceSubscriber interface, you will be still informed about this change,
+    * If your subscriber uses subscription with IStructInterfaceSubscriber interface, you will be still informed about this change,
     * as those are two independent subscription mechanisms.
     * @param subscription token received on subscription.
     */
@@ -375,26 +375,26 @@ public:
     */
     virtual void publishPropStringChanged(const StructString& propString) const = 0;
     /**
-    * Publishes the emited singal to all subscribed clients.
-    * Needs to be invoked by the StructInterface implementation when sigBool is emited.
+    * Publishes the emitted signal to all subscribed clients.
+    * Needs to be invoked by the StructInterface implementation when sigBool is emitted.
     * @param paramBool 
     */
     virtual void publishSigBool(const StructBool& paramBool) const = 0;
     /**
-    * Publishes the emited singal to all subscribed clients.
-    * Needs to be invoked by the StructInterface implementation when sigInt is emited.
+    * Publishes the emitted signal to all subscribed clients.
+    * Needs to be invoked by the StructInterface implementation when sigInt is emitted.
     * @param paramInt 
     */
     virtual void publishSigInt(const StructInt& paramInt) const = 0;
     /**
-    * Publishes the emited singal to all subscribed clients.
-    * Needs to be invoked by the StructInterface implementation when sigFloat is emited.
+    * Publishes the emitted signal to all subscribed clients.
+    * Needs to be invoked by the StructInterface implementation when sigFloat is emitted.
     * @param paramFloat 
     */
     virtual void publishSigFloat(const StructFloat& paramFloat) const = 0;
     /**
-    * Publishes the emited singal to all subscribed clients.
-    * Needs to be invoked by the StructInterface implementation when sigString is emited.
+    * Publishes the emitted signal to all subscribed clients.
+    * Needs to be invoked by the StructInterface implementation when sigString is emitted.
     * @param paramString 
     */
     virtual void publishSigString(const StructString& paramString) const = 0;

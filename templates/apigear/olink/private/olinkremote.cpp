@@ -49,23 +49,18 @@ void OLinkRemote::close(){
 
 void OLinkRemote::writeMessage(const std::string msg, int frameOpcode)
 {
-    std::unique_lock<std::timed_mutex> lock(m_socektMutex, std::defer_lock);
     std::cout << "writing " << msg << std::endl;
 
     if (m_socket ){
-        if (!lock.try_lock_for(std::chrono::milliseconds(100))){
-            std::cout << "Socket busy, dropping message  " << msg << std::endl;
-            return;
-        }
         try {
+            std::unique_lock<std::timed_mutex> lock(m_socketMutex);
             m_socket->sendFrame(msg.c_str(), static_cast<int>(msg.size()), frameOpcode);
+            lock.unlock();
         }
         catch (Poco::Exception& e) {
-            lock.unlock();
             std::cerr << "Exception " << e.what() << std::endl;
         }
     }
-    lock.unlock();
 }
 
 void OLinkRemote::handleMessage(const std::string& msg)
@@ -83,31 +78,27 @@ void OLinkRemote::receiveInLoop(){
     do
     {
         try {
-            bool canSocketRead = m_socket && m_socket->poll(Poco::Timespan(10000), Poco::Net::WebSocket::SELECT_READ);
+            char buffer[1024];
+            std::memset(buffer, 0, sizeof buffer);
+            int flags;
+            std::unique_lock<std::timed_mutex> lock(m_socketMutex, std::defer_lock);
+            auto canSocketRead = m_socket && m_socket->poll(Poco::Timespan(10000), Poco::Net::WebSocket::SELECT_READ);
             if (canSocketRead && !m_stopConnection){
-                char buffer[1024];
-                int flags;
-                std::memset(buffer, 0, sizeof buffer);
-                std::unique_lock<std::timed_mutex> lock(m_socektMutex, std::defer_lock);
-                if (lock.try_lock_for(std::chrono::milliseconds(100))) {
-                
-                    auto receivedSize = m_socket->receiveFrame(buffer, sizeof(buffer), flags);
+                std::unique_lock<std::timed_mutex> lock(m_socketMutex);
+                auto frameSize = m_socket->receiveFrame(buffer, sizeof(buffer), flags);
+                lock.unlock();
                     
-                    auto frameOpcode = flags & Poco::Net::WebSocket::FRAME_OP_BITMASK;
-                    if (frameOpcode == Poco::Net::WebSocket::FRAME_OP_PING) {
-                         m_socket->sendFrame(buffer, receivedSize, Poco::Net::WebSocket::FRAME_OP_PONG);
-                         lock.unlock();
-                         continue;
-                    }
-                    lock.unlock();
-                    if (frameOpcode == Poco::Net::WebSocket::FRAME_OP_PONG){
-                         // handle pong
-                    } else if (receivedSize == 0 || frameOpcode == Poco::Net::WebSocket::FRAME_OP_CLOSE){
-                        clientClosedConnection = true;
-                    } else {
-                        handleMessage(buffer);
-                    }
+                auto frameOpcode = flags & Poco::Net::WebSocket::FRAME_OP_BITMASK;
+                if (frameOpcode == Poco::Net::WebSocket::FRAME_OP_PING) {
+                    writeMessage(buffer, Poco::Net::WebSocket::FRAME_OP_PONG);
+                } else if (frameOpcode == Poco::Net::WebSocket::FRAME_OP_PONG){
+                        // handle pong
+                } else if (frameSize == 0 || frameOpcode == Poco::Net::WebSocket::FRAME_OP_CLOSE){
+                    clientClosedConnection = true;
+                } else {
+                    handleMessage(buffer);
                 }
+                
             }
         } catch (Poco::Exception& /*e*/) {
             clientClosedConnection = true;
@@ -129,7 +120,7 @@ bool OLinkRemote::isClosed() const
 void OLinkRemote::closeSocket()
 {
     removeNodeFromRegistryIfNotUnlikend();
-    std::unique_lock<std::timed_mutex> lock(m_socektMutex, std::defer_lock);
+    std::unique_lock<std::timed_mutex> lock(m_socketMutex, std::defer_lock);
     if (!lock.try_lock_for(std::chrono::milliseconds(100))) {
         std::cout << "Closing socket, some messages may be dropped" << std::endl;
     }

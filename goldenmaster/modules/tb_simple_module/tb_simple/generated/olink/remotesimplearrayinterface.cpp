@@ -15,23 +15,9 @@ namespace
 const std::string interfaceId = "tb.simple.SimpleArrayInterface";
 }
 
-RemoteSimpleArrayInterface::RemoteSimpleArrayInterface(std::weak_ptr<ApiGear::PocoImpl::IOlinkConnector> olinkConnector)
-    : m_olinkConnector(olinkConnector),
-      m_publisher(std::make_unique<SimpleArrayInterfacePublisher>())
-{
-    if(auto connector = m_olinkConnector.lock())
-    {
-        connector->connectAndLinkObject(*this);
-    }
-}
-
-RemoteSimpleArrayInterface::~RemoteSimpleArrayInterface()
-{    
-    if(auto connector = m_olinkConnector.lock())
-    {
-        connector->disconnectAndUnlink(olinkObjectName());
-    }
-}
+RemoteSimpleArrayInterface::RemoteSimpleArrayInterface()
+    : m_publisher(std::make_unique<SimpleArrayInterfacePublisher>())
+{}
 
 void RemoteSimpleArrayInterface::applyState(const nlohmann::json& fields) 
 {

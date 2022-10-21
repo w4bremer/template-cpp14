@@ -15,23 +15,9 @@ namespace
 const std::string interfaceId = "testbed2.ManyParamInterface";
 }
 
-RemoteManyParamInterface::RemoteManyParamInterface(std::weak_ptr<ApiGear::PocoImpl::IOlinkConnector> olinkConnector)
-    : m_olinkConnector(olinkConnector),
-      m_publisher(std::make_unique<ManyParamInterfacePublisher>())
-{
-    if(auto connector = m_olinkConnector.lock())
-    {
-        connector->connectAndLinkObject(*this);
-    }
-}
-
-RemoteManyParamInterface::~RemoteManyParamInterface()
-{    
-    if(auto connector = m_olinkConnector.lock())
-    {
-        connector->disconnectAndUnlink(olinkObjectName());
-    }
-}
+RemoteManyParamInterface::RemoteManyParamInterface()
+    : m_publisher(std::make_unique<ManyParamInterfacePublisher>())
+{}
 
 void RemoteManyParamInterface::applyState(const nlohmann::json& fields) 
 {

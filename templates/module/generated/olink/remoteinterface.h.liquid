@@ -19,7 +19,6 @@
 namespace ApiGear{
 namespace ObjectLink{
 class IClientNode;
-class ClientRegistry;
 }
 }
 
@@ -27,9 +26,13 @@ namespace {{ system.name | capital }} {
 namespace {{ module.name | capital }} {
 namespace olink {
 /**
-* The class for handling connetion witha a {{interface.name}} service implemented for OLink protocol. 
-* Sends and receives data over the network with ObjectLink protocol. 
+* Adapts the general OLink Client handler to a {{interface.name}} publisher in a way it provides access 
+* to remote {{interface.name}} services. 
+* Sends and receives data over the network with ObjectLink protocol, through the communication node. 
 * see https://objectlinkprotocol.net for ObjectLink details.
+* see https://github.com/apigear-io/objectlink-core-cpp.git for olink client node - abstraction over the network.
+* see Apigear::ObjectLink::OLinkConnection for Olink Client Handler implementation.
+*     It provides a network implementation and tools to connect {{class}} to it.
 * Use on client side to request changes of the {{interface.name}} on the server side 
 * and to subscribe for the {{interface.name}} changes.
 */
@@ -39,14 +42,10 @@ class {{ system.name | constant }}_{{ module.name | constant }}_EXPORT {{class}}
 {
 public:
 
-    /**
-    * ctor
-    * @param olinkConnector An object, that sets up connection of this object sink to the service on server side. 
-    *        It manages the connection and a client node associated to it and is responsible for linking the object
-    *        depending on connection state.
-    */
-    explicit {{class}}(std::weak_ptr<ApiGear::PocoImpl::IOlinkConnector> olinkConnector);
-    virtual ~{{class}}() override;
+    /** ctor */
+    explicit {{class}}();
+    /** dtor */
+    virtual ~{{class}}() = default;
 
 {% for property in interface.properties %}
     /**
@@ -134,11 +133,7 @@ private:
     * Is given when object is linked with the service.
     */
     ApiGear::ObjectLink::IClientNode* m_node = nullptr;
-    /**
-    * A helper used to connect with a Olink {{interface.name}} service for object given with olinkObjectName()
-    * takes care of setup and tear down linkage for this {{class}}.
-    */
-    std::weak_ptr<ApiGear::PocoImpl::IOlinkConnector> m_olinkConnector;
+
     /** The publisher for {{interface.name}} */
     std::unique_ptr<{{pub_interface}}> m_publisher;
 };

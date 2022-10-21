@@ -19,18 +19,19 @@ int main(){
     ApiGear::ObjectLink::ClientRegistry registry;
     ApiGear::ObjectLink::ConsoleLogger logger;
     registry.onLog(logger.logFunc());
-    auto testClient = ApiGear::PocoImpl::OlinkConnection::create(registry);
-    testClient->node().onLog(logger.logFunc());
+    ApiGear::PocoImpl::OlinkConnection testClient(registry);
+    testClient.node()->onLog(logger.logFunc());
     {% for module in system.modules %}
     {% for interface in module.interfaces %}
     {% assign class = interface.name | capital %}
     {% assign tracer_class = class | append: "TraceDecorator" %}
-    std::unique_ptr<{{ module.name | capital }}::I{{class}}> test{{module.name | capital}}{{class}} = std::make_unique<{{ module.name | capital }}::olink::Remote{{interface.name}}>(testClient);
+    auto test{{module.name | capital}}{{class}} = std::make_shared<{{ module.name | capital }}::olink::Remote{{interface.name}}>();
+    testClient.connectAndLinkObject(test{{module.name | capital}}{{class}});
     std::unique_ptr<{{ module.name | capital }}::I{{class}}> test{{ module.name | capital }}{{tracer_class}} = {{ module.name | capital }}::{{tracer_class}}::connect(*test{{module.name | capital}}{{class}}, tracer);
     {% endfor %}
     {% endfor %}
     
-    testClient->connectToHost(Poco::URI("ws://localhost:8000"));
+    testClient.connectToHost(Poco::URI("ws://localhost:8000"));
 
     bool keepRunning = true;
     std::string cmd;
@@ -40,9 +41,15 @@ int main(){
 
         if(cmd == "quit"){
             keepRunning = false;
-            testClient->disconnect();
+            testClient.disconnect();
         }
     } while(keepRunning);
+    {% for module in system.modules %}
+    {% for interface in module.interfaces %}
+    {% assign class = interface.name | capital %}
+    testClient.disconnectAndUnlink(test{{module.name | capital}}{{class}}->olinkObjectName());
+    {% endfor %}
+    {% endfor %}
 
     return 0;
 }

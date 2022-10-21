@@ -15,6 +15,7 @@
 #endif
 
 #include <string>
+#include <memory>
 
 namespace ApiGear {
 // Forward declaration for IObjectSink
@@ -36,12 +37,12 @@ public:
 
     /** Use this function to setup linkage with the service object.
     * Connect your sink with protocol handling node, and request linking with service object.
-    * After successfull linking the IObjectSink will recive confirmation from service with olinkOnInit handler call.
+    * After successful linking the IObjectSink will receive confirmation from service with olinkOnInit handler call.
     * @param object An olink sink object which will be associated with protocol handling node and for which linking with service object will be requested.
     */
-    virtual void connectAndLinkObject(ApiGear::ObjectLink::IObjectSink& object) = 0;
+    virtual void connectAndLinkObject(std::shared_ptr<ApiGear::ObjectLink::IObjectSink> object) = 0;
     /**Use this function to disconnect your sink from protocol handling node, and request unlinking with service object.
-    * @param object An objectId no longer intreseted of using the service.
+    * @param object An objectId no longer interested of using the service.
     */
     virtual void disconnectAndUnlink(const std::string& objectId) = 0;
 };

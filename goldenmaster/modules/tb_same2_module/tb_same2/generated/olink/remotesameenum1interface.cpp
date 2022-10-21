@@ -15,23 +15,9 @@ namespace
 const std::string interfaceId = "tb.same2.SameEnum1Interface";
 }
 
-RemoteSameEnum1Interface::RemoteSameEnum1Interface(std::weak_ptr<ApiGear::PocoImpl::IOlinkConnector> olinkConnector)
-    : m_olinkConnector(olinkConnector),
-      m_publisher(std::make_unique<SameEnum1InterfacePublisher>())
-{
-    if(auto connector = m_olinkConnector.lock())
-    {
-        connector->connectAndLinkObject(*this);
-    }
-}
-
-RemoteSameEnum1Interface::~RemoteSameEnum1Interface()
-{    
-    if(auto connector = m_olinkConnector.lock())
-    {
-        connector->disconnectAndUnlink(olinkObjectName());
-    }
-}
+RemoteSameEnum1Interface::RemoteSameEnum1Interface()
+    : m_publisher(std::make_unique<SameEnum1InterfacePublisher>())
+{}
 
 void RemoteSameEnum1Interface::applyState(const nlohmann::json& fields) 
 {

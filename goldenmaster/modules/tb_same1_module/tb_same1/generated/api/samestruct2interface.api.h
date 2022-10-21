@@ -14,12 +14,12 @@ class ISameStruct2InterfacePublisher;
 *
 * ISameStruct2Interface provides an interface for
  *  - methods defined for your SameStruct2Interface 
- *  - proeperty setters and getters for defined properties
- * The ISameStruct2Interface also providess an interface to access a publisher ISameStruct2InterfacePublisher, a class used by ISameStruct2InterfaceSubscriber clients.
- * The implementation should notify the publisher ISameStruct2InterfacePublisher about emited signals or state changed. 
+ *  - property setters and getters for defined properties
+ * The ISameStruct2Interface also provides an interface to access a publisher ISameStruct2InterfacePublisher, a class used by ISameStruct2InterfaceSubscriber clients.
+ * The implementation should notify the publisher ISameStruct2InterfacePublisher about emitted signals or state changed. 
  * The publisher responsibility is to keep its clients informed about requested changes.
  * See also ISameStruct2InterfaceSubscriber, ISameStruct2InterfacePublisher
- * and the exmaple implementation SameStruct2Interface  or the
+ * and the example implementation SameStruct2Interface  or the
  */
 class TEST_TB_SAME1_EXPORT ISameStruct2Interface
 {
@@ -71,10 +71,10 @@ public:
 
 
 /**
- * The ISameStruct2InterfaceSubscriber contains functions to allow informing about singals or property changes of the ISameStruct2Interface implementation.
- * The implementation for ISameStruct2Interface should provide mechanism for subscibtion of the ISameStruct2InterfaceSubscriber clients.
- * See ISameStruct2InterfacePublisher, which provides facititation for this purpose.
- * The implementation for ISameStruct2Interface should call the ISameStruct2InterfaceSubscriber interface functions on either singal emit or property change.
+ * The ISameStruct2InterfaceSubscriber contains functions to allow informing about signals or property changes of the ISameStruct2Interface implementation.
+ * The implementation for ISameStruct2Interface should provide mechanism for subscription of the ISameStruct2InterfaceSubscriber clients.
+ * See ISameStruct2InterfacePublisher, which provides facilitation for this purpose.
+ * The implementation for ISameStruct2Interface should call the ISameStruct2InterfaceSubscriber interface functions on either signal emit or property change.
  * You can use ISameStruct2InterfaceSubscriber class to implement clients of the ISameStruct2Interface or the network adapter - see Olink Server and Client example.
  */
 class TEST_TB_SAME1_EXPORT ISameStruct2InterfaceSubscriber
@@ -125,9 +125,9 @@ using SameStruct2InterfaceSig2SignalCb = std::function<void(const Struct1& param
  * or a property change.
  * Implement this interface to keep track of clients of your ISameStruct2Interface implementation.
  * The publisher provides two independent methods of subscription
- *  - subscribing with a ITunerSubscriber objects - for all of the changes
- *  - subscribing any object for signle type of change property or a signal
- * The publish functions needs to be called by implementation of the ITuner on each state changed or signal emited
+ *  - subscribing with a IISameStruct2InterfaceSubscriber objects - for all of the changes
+ *  - subscribing any object for single type of change property or a signal
+ * The publish functions needs to be called by implementation of the IISameStruct2Interface on each state changed or signal emitted
  * to notify all the subscribers about this change.
  */
 class TEST_TB_SAME1_EXPORT ISameStruct2InterfacePublisher
@@ -137,7 +137,7 @@ public:
 
     /**
     * Use this function to subscribe for any change of the SameStruct2Interface.
-    * Subscriber will be informed of any emited signal and any property changes.
+    * Subscriber will be informed of any emitted signal and any property changes.
     * This is parallel notification system to single subscription. If you will subscribe also for a single change
     * your subscriber will be informed twice about that change, one for each subscription mechanism.
     * @param ISameStruct2InterfaceSubscriber which is subscribed in this function to any change of the SameStruct2Interface.
@@ -145,7 +145,7 @@ public:
     virtual void subscribeToAllChanges(ISameStruct2InterfaceSubscriber& subscriber) = 0;
     /**
     * Use this function to remove subscription to all of the changes of the SameStruct2Interface.
-    * Not all subscriptions will be removed, the ones made separately for single singal or property change stay intact.
+    * Not all subscriptions will be removed, the ones made separately for single signal or property change stay intact.
     * Make sure to remove them.
     * @param ISameStruct2InterfaceSubscriber which subscription for any change of the SameStruct2Interface is removed.
     */
@@ -153,7 +153,7 @@ public:
 
     /**
     * Use this function to subscribe for prop1 value changes.
-    * If your subscriber uses subsrciption with ISameStruct2InterfaceSubscriber interface, you will get two notifications, one for each subscription mechanism.
+    * If your subscriber uses subscription with ISameStruct2InterfaceSubscriber interface, you will get two notifications, one for each subscription mechanism.
     * @param SameStruct2InterfaceProp1PropertyCb callback that will be executed on each change of the property.
     * Make sure to remove subscription before the callback becomes invalid.
     * @return subscription token for the subscription removal.
@@ -163,7 +163,7 @@ public:
     virtual long subscribeToProp1Changed(SameStruct2InterfaceProp1PropertyCb callback) = 0;
     /**
     * Use this function to unsubscribe from prop1 property changes.
-    * If your subscriber uses subsrciption with ISameStruct2InterfaceSubscriber interface, you will be still informed about this change,
+    * If your subscriber uses subscription with ISameStruct2InterfaceSubscriber interface, you will be still informed about this change,
     * as those are two independent subscription mechanisms.
     * @param subscription token received on subscription.
     */
@@ -171,7 +171,7 @@ public:
 
     /**
     * Use this function to subscribe for prop2 value changes.
-    * If your subscriber uses subsrciption with ISameStruct2InterfaceSubscriber interface, you will get two notifications, one for each subscription mechanism.
+    * If your subscriber uses subscription with ISameStruct2InterfaceSubscriber interface, you will get two notifications, one for each subscription mechanism.
     * @param SameStruct2InterfaceProp2PropertyCb callback that will be executed on each change of the property.
     * Make sure to remove subscription before the callback becomes invalid.
     * @return subscription token for the subscription removal.
@@ -181,7 +181,7 @@ public:
     virtual long subscribeToProp2Changed(SameStruct2InterfaceProp2PropertyCb callback) = 0;
     /**
     * Use this function to unsubscribe from prop2 property changes.
-    * If your subscriber uses subsrciption with ISameStruct2InterfaceSubscriber interface, you will be still informed about this change,
+    * If your subscriber uses subscription with ISameStruct2InterfaceSubscriber interface, you will be still informed about this change,
     * as those are two independent subscription mechanisms.
     * @param subscription token received on subscription.
     */
@@ -230,14 +230,14 @@ public:
     */
     virtual void publishProp2Changed(const Struct2& prop2) const = 0;
     /**
-    * Publishes the emited singal to all subscribed clients.
-    * Needs to be invoked by the SameStruct2Interface implementation when sig1 is emited.
+    * Publishes the emitted signal to all subscribed clients.
+    * Needs to be invoked by the SameStruct2Interface implementation when sig1 is emitted.
     * @param param1 
     */
     virtual void publishSig1(const Struct1& param1) const = 0;
     /**
-    * Publishes the emited singal to all subscribed clients.
-    * Needs to be invoked by the SameStruct2Interface implementation when sig2 is emited.
+    * Publishes the emitted signal to all subscribed clients.
+    * Needs to be invoked by the SameStruct2Interface implementation when sig2 is emitted.
     * @param param1 
     * @param param2 
     */

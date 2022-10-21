@@ -15,23 +15,9 @@ namespace
 const std::string interfaceId = "testbed1.StructInterface";
 }
 
-RemoteStructInterface::RemoteStructInterface(std::weak_ptr<ApiGear::PocoImpl::IOlinkConnector> olinkConnector)
-    : m_olinkConnector(olinkConnector),
-      m_publisher(std::make_unique<StructInterfacePublisher>())
-{
-    if(auto connector = m_olinkConnector.lock())
-    {
-        connector->connectAndLinkObject(*this);
-    }
-}
-
-RemoteStructInterface::~RemoteStructInterface()
-{    
-    if(auto connector = m_olinkConnector.lock())
-    {
-        connector->disconnectAndUnlink(olinkObjectName());
-    }
-}
+RemoteStructInterface::RemoteStructInterface()
+    : m_publisher(std::make_unique<StructInterfacePublisher>())
+{}
 
 void RemoteStructInterface::applyState(const nlohmann::json& fields) 
 {

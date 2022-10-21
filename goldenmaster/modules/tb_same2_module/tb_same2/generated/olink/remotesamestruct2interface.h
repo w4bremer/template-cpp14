@@ -15,7 +15,6 @@
 namespace ApiGear{
 namespace ObjectLink{
 class IClientNode;
-class ClientRegistry;
 }
 }
 
@@ -23,9 +22,13 @@ namespace Test {
 namespace TbSame2 {
 namespace olink {
 /**
-* The class for handling connetion witha a SameStruct2Interface service implemented for OLink protocol. 
-* Sends and receives data over the network with ObjectLink protocol. 
+* Adapts the general OLink Client handler to a SameStruct2Interface publisher in a way it provides access 
+* to remote SameStruct2Interface services. 
+* Sends and receives data over the network with ObjectLink protocol, through the communication node. 
 * see https://objectlinkprotocol.net for ObjectLink details.
+* see https://github.com/apigear-io/objectlink-core-cpp.git for olink client node - abstraction over the network.
+* see Apigear::ObjectLink::OLinkConnection for Olink Client Handler implementation.
+*     It provides a network implementation and tools to connect RemoteSameStruct2Interface to it.
 * Use on client side to request changes of the SameStruct2Interface on the server side 
 * and to subscribe for the SameStruct2Interface changes.
 */
@@ -35,14 +38,10 @@ class TEST_TB_SAME2_EXPORT RemoteSameStruct2Interface : public ISameStruct2Inter
 {
 public:
 
-    /**
-    * ctor
-    * @param olinkConnector An object, that sets up connection of this object sink to the service on server side. 
-    *        It manages the connection and a client node associated to it and is responsible for linking the object
-    *        depending on connection state.
-    */
-    explicit RemoteSameStruct2Interface(std::weak_ptr<ApiGear::PocoImpl::IOlinkConnector> olinkConnector);
-    virtual ~RemoteSameStruct2Interface() override;
+    /** ctor */
+    explicit RemoteSameStruct2Interface();
+    /** dtor */
+    virtual ~RemoteSameStruct2Interface() = default;
     /**
     * Property getter
     * @return Locally stored locally value for Prop1.
@@ -143,11 +142,7 @@ private:
     * Is given when object is linked with the service.
     */
     ApiGear::ObjectLink::IClientNode* m_node = nullptr;
-    /**
-    * A helper used to connect with a Olink SameStruct2Interface service for object given with olinkObjectName()
-    * takes care of setup and tear down linkage for this RemoteSameStruct2Interface.
-    */
-    std::weak_ptr<ApiGear::PocoImpl::IOlinkConnector> m_olinkConnector;
+
     /** The publisher for SameStruct2Interface */
     std::unique_ptr<ISameStruct2InterfacePublisher> m_publisher;
 };
