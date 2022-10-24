@@ -1,37 +1,37 @@
 #include <iostream>
-#include "testbed2/generated/olink/remotemanyparaminterface.h"
+#include "testbed2/generated/olink/manyparaminterfaceclient.h"
 #include "testbed2/generated/monitor/manyparaminterface.tracedecorator.h"
-#include "testbed2/generated/olink/remotenestedstruct1interface.h"
+#include "testbed2/generated/olink/nestedstruct1interfaceclient.h"
 #include "testbed2/generated/monitor/nestedstruct1interface.tracedecorator.h"
-#include "testbed2/generated/olink/remotenestedstruct2interface.h"
+#include "testbed2/generated/olink/nestedstruct2interfaceclient.h"
 #include "testbed2/generated/monitor/nestedstruct2interface.tracedecorator.h"
-#include "testbed2/generated/olink/remotenestedstruct3interface.h"
+#include "testbed2/generated/olink/nestedstruct3interfaceclient.h"
 #include "testbed2/generated/monitor/nestedstruct3interface.tracedecorator.h"
-#include "tb_enum/generated/olink/remoteenuminterface.h"
+#include "tb_enum/generated/olink/enuminterfaceclient.h"
 #include "tb_enum/generated/monitor/enuminterface.tracedecorator.h"
-#include "tb_same1/generated/olink/remotesamestruct1interface.h"
+#include "tb_same1/generated/olink/samestruct1interfaceclient.h"
 #include "tb_same1/generated/monitor/samestruct1interface.tracedecorator.h"
-#include "tb_same1/generated/olink/remotesamestruct2interface.h"
+#include "tb_same1/generated/olink/samestruct2interfaceclient.h"
 #include "tb_same1/generated/monitor/samestruct2interface.tracedecorator.h"
-#include "tb_same1/generated/olink/remotesameenum1interface.h"
+#include "tb_same1/generated/olink/sameenum1interfaceclient.h"
 #include "tb_same1/generated/monitor/sameenum1interface.tracedecorator.h"
-#include "tb_same1/generated/olink/remotesameenum2interface.h"
+#include "tb_same1/generated/olink/sameenum2interfaceclient.h"
 #include "tb_same1/generated/monitor/sameenum2interface.tracedecorator.h"
-#include "tb_same2/generated/olink/remotesamestruct1interface.h"
+#include "tb_same2/generated/olink/samestruct1interfaceclient.h"
 #include "tb_same2/generated/monitor/samestruct1interface.tracedecorator.h"
-#include "tb_same2/generated/olink/remotesamestruct2interface.h"
+#include "tb_same2/generated/olink/samestruct2interfaceclient.h"
 #include "tb_same2/generated/monitor/samestruct2interface.tracedecorator.h"
-#include "tb_same2/generated/olink/remotesameenum1interface.h"
+#include "tb_same2/generated/olink/sameenum1interfaceclient.h"
 #include "tb_same2/generated/monitor/sameenum1interface.tracedecorator.h"
-#include "tb_same2/generated/olink/remotesameenum2interface.h"
+#include "tb_same2/generated/olink/sameenum2interfaceclient.h"
 #include "tb_same2/generated/monitor/sameenum2interface.tracedecorator.h"
-#include "tb_simple/generated/olink/remotesimpleinterface.h"
+#include "tb_simple/generated/olink/simpleinterfaceclient.h"
 #include "tb_simple/generated/monitor/simpleinterface.tracedecorator.h"
-#include "tb_simple/generated/olink/remotesimplearrayinterface.h"
+#include "tb_simple/generated/olink/simplearrayinterfaceclient.h"
 #include "tb_simple/generated/monitor/simplearrayinterface.tracedecorator.h"
-#include "testbed1/generated/olink/remotestructinterface.h"
+#include "testbed1/generated/olink/structinterfaceclient.h"
 #include "testbed1/generated/monitor/structinterface.tracedecorator.h"
-#include "testbed1/generated/olink/remotestructarrayinterface.h"
+#include "testbed1/generated/olink/structarrayinterfaceclient.h"
 #include "testbed1/generated/monitor/structarrayinterface.tracedecorator.h"
 
 #include "apigear/olink/olinkconnection.h"
@@ -47,61 +47,61 @@ int main(){
     ApiGear::ObjectLink::ClientRegistry registry;
     ApiGear::ObjectLink::ConsoleLogger logger;
     registry.onLog(logger.logFunc());
-    ApiGear::PocoImpl::OlinkConnection testClient(registry);
-    testClient.node()->onLog(logger.logFunc());
-    auto testTestbed2ManyParamInterface = std::make_shared<Testbed2::olink::RemoteManyParamInterface>();
-    testClient.connectAndLinkObject(testTestbed2ManyParamInterface);
-    std::unique_ptr<Testbed2::IManyParamInterface> testTestbed2ManyParamInterfaceTraceDecorator = Testbed2::ManyParamInterfaceTraceDecorator::connect(*testTestbed2ManyParamInterface, tracer);
-    auto testTestbed2NestedStruct1Interface = std::make_shared<Testbed2::olink::RemoteNestedStruct1Interface>();
-    testClient.connectAndLinkObject(testTestbed2NestedStruct1Interface);
-    std::unique_ptr<Testbed2::INestedStruct1Interface> testTestbed2NestedStruct1InterfaceTraceDecorator = Testbed2::NestedStruct1InterfaceTraceDecorator::connect(*testTestbed2NestedStruct1Interface, tracer);
-    auto testTestbed2NestedStruct2Interface = std::make_shared<Testbed2::olink::RemoteNestedStruct2Interface>();
-    testClient.connectAndLinkObject(testTestbed2NestedStruct2Interface);
-    std::unique_ptr<Testbed2::INestedStruct2Interface> testTestbed2NestedStruct2InterfaceTraceDecorator = Testbed2::NestedStruct2InterfaceTraceDecorator::connect(*testTestbed2NestedStruct2Interface, tracer);
-    auto testTestbed2NestedStruct3Interface = std::make_shared<Testbed2::olink::RemoteNestedStruct3Interface>();
-    testClient.connectAndLinkObject(testTestbed2NestedStruct3Interface);
-    std::unique_ptr<Testbed2::INestedStruct3Interface> testTestbed2NestedStruct3InterfaceTraceDecorator = Testbed2::NestedStruct3InterfaceTraceDecorator::connect(*testTestbed2NestedStruct3Interface, tracer);
-    auto testTbEnumEnumInterface = std::make_shared<TbEnum::olink::RemoteEnumInterface>();
-    testClient.connectAndLinkObject(testTbEnumEnumInterface);
-    std::unique_ptr<TbEnum::IEnumInterface> testTbEnumEnumInterfaceTraceDecorator = TbEnum::EnumInterfaceTraceDecorator::connect(*testTbEnumEnumInterface, tracer);
-    auto testTbSame1SameStruct1Interface = std::make_shared<TbSame1::olink::RemoteSameStruct1Interface>();
-    testClient.connectAndLinkObject(testTbSame1SameStruct1Interface);
-    std::unique_ptr<TbSame1::ISameStruct1Interface> testTbSame1SameStruct1InterfaceTraceDecorator = TbSame1::SameStruct1InterfaceTraceDecorator::connect(*testTbSame1SameStruct1Interface, tracer);
-    auto testTbSame1SameStruct2Interface = std::make_shared<TbSame1::olink::RemoteSameStruct2Interface>();
-    testClient.connectAndLinkObject(testTbSame1SameStruct2Interface);
-    std::unique_ptr<TbSame1::ISameStruct2Interface> testTbSame1SameStruct2InterfaceTraceDecorator = TbSame1::SameStruct2InterfaceTraceDecorator::connect(*testTbSame1SameStruct2Interface, tracer);
-    auto testTbSame1SameEnum1Interface = std::make_shared<TbSame1::olink::RemoteSameEnum1Interface>();
-    testClient.connectAndLinkObject(testTbSame1SameEnum1Interface);
-    std::unique_ptr<TbSame1::ISameEnum1Interface> testTbSame1SameEnum1InterfaceTraceDecorator = TbSame1::SameEnum1InterfaceTraceDecorator::connect(*testTbSame1SameEnum1Interface, tracer);
-    auto testTbSame1SameEnum2Interface = std::make_shared<TbSame1::olink::RemoteSameEnum2Interface>();
-    testClient.connectAndLinkObject(testTbSame1SameEnum2Interface);
-    std::unique_ptr<TbSame1::ISameEnum2Interface> testTbSame1SameEnum2InterfaceTraceDecorator = TbSame1::SameEnum2InterfaceTraceDecorator::connect(*testTbSame1SameEnum2Interface, tracer);
-    auto testTbSame2SameStruct1Interface = std::make_shared<TbSame2::olink::RemoteSameStruct1Interface>();
-    testClient.connectAndLinkObject(testTbSame2SameStruct1Interface);
-    std::unique_ptr<TbSame2::ISameStruct1Interface> testTbSame2SameStruct1InterfaceTraceDecorator = TbSame2::SameStruct1InterfaceTraceDecorator::connect(*testTbSame2SameStruct1Interface, tracer);
-    auto testTbSame2SameStruct2Interface = std::make_shared<TbSame2::olink::RemoteSameStruct2Interface>();
-    testClient.connectAndLinkObject(testTbSame2SameStruct2Interface);
-    std::unique_ptr<TbSame2::ISameStruct2Interface> testTbSame2SameStruct2InterfaceTraceDecorator = TbSame2::SameStruct2InterfaceTraceDecorator::connect(*testTbSame2SameStruct2Interface, tracer);
-    auto testTbSame2SameEnum1Interface = std::make_shared<TbSame2::olink::RemoteSameEnum1Interface>();
-    testClient.connectAndLinkObject(testTbSame2SameEnum1Interface);
-    std::unique_ptr<TbSame2::ISameEnum1Interface> testTbSame2SameEnum1InterfaceTraceDecorator = TbSame2::SameEnum1InterfaceTraceDecorator::connect(*testTbSame2SameEnum1Interface, tracer);
-    auto testTbSame2SameEnum2Interface = std::make_shared<TbSame2::olink::RemoteSameEnum2Interface>();
-    testClient.connectAndLinkObject(testTbSame2SameEnum2Interface);
-    std::unique_ptr<TbSame2::ISameEnum2Interface> testTbSame2SameEnum2InterfaceTraceDecorator = TbSame2::SameEnum2InterfaceTraceDecorator::connect(*testTbSame2SameEnum2Interface, tracer);
-    auto testTbSimpleSimpleInterface = std::make_shared<TbSimple::olink::RemoteSimpleInterface>();
-    testClient.connectAndLinkObject(testTbSimpleSimpleInterface);
-    std::unique_ptr<TbSimple::ISimpleInterface> testTbSimpleSimpleInterfaceTraceDecorator = TbSimple::SimpleInterfaceTraceDecorator::connect(*testTbSimpleSimpleInterface, tracer);
-    auto testTbSimpleSimpleArrayInterface = std::make_shared<TbSimple::olink::RemoteSimpleArrayInterface>();
-    testClient.connectAndLinkObject(testTbSimpleSimpleArrayInterface);
-    std::unique_ptr<TbSimple::ISimpleArrayInterface> testTbSimpleSimpleArrayInterfaceTraceDecorator = TbSimple::SimpleArrayInterfaceTraceDecorator::connect(*testTbSimpleSimpleArrayInterface, tracer);
-    auto testTestbed1StructInterface = std::make_shared<Testbed1::olink::RemoteStructInterface>();
-    testClient.connectAndLinkObject(testTestbed1StructInterface);
-    std::unique_ptr<Testbed1::IStructInterface> testTestbed1StructInterfaceTraceDecorator = Testbed1::StructInterfaceTraceDecorator::connect(*testTestbed1StructInterface, tracer);
-    auto testTestbed1StructArrayInterface = std::make_shared<Testbed1::olink::RemoteStructArrayInterface>();
-    testClient.connectAndLinkObject(testTestbed1StructArrayInterface);
-    std::unique_ptr<Testbed1::IStructArrayInterface> testTestbed1StructArrayInterfaceTraceDecorator = Testbed1::StructArrayInterfaceTraceDecorator::connect(*testTestbed1StructArrayInterface, tracer);
+    ApiGear::PocoImpl::OlinkConnection clientNetworkEndpoint(registry);
+    clientNetworkEndpoint.node()->onLog(logger.logFunc());
+    auto testbed2ManyParamInterface = std::make_shared<Testbed2::olink::ManyParamInterfaceClient>();
+    clientNetworkEndpoint.connectAndLinkObject(testbed2ManyParamInterface);
+    std::unique_ptr<Testbed2::IManyParamInterface> testbed2ManyParamInterfaceTraced = Testbed2::ManyParamInterfaceTraceDecorator::connect(*testbed2ManyParamInterface, tracer);
+    auto testbed2NestedStruct1Interface = std::make_shared<Testbed2::olink::NestedStruct1InterfaceClient>();
+    clientNetworkEndpoint.connectAndLinkObject(testbed2NestedStruct1Interface);
+    std::unique_ptr<Testbed2::INestedStruct1Interface> testbed2NestedStruct1InterfaceTraced = Testbed2::NestedStruct1InterfaceTraceDecorator::connect(*testbed2NestedStruct1Interface, tracer);
+    auto testbed2NestedStruct2Interface = std::make_shared<Testbed2::olink::NestedStruct2InterfaceClient>();
+    clientNetworkEndpoint.connectAndLinkObject(testbed2NestedStruct2Interface);
+    std::unique_ptr<Testbed2::INestedStruct2Interface> testbed2NestedStruct2InterfaceTraced = Testbed2::NestedStruct2InterfaceTraceDecorator::connect(*testbed2NestedStruct2Interface, tracer);
+    auto testbed2NestedStruct3Interface = std::make_shared<Testbed2::olink::NestedStruct3InterfaceClient>();
+    clientNetworkEndpoint.connectAndLinkObject(testbed2NestedStruct3Interface);
+    std::unique_ptr<Testbed2::INestedStruct3Interface> testbed2NestedStruct3InterfaceTraced = Testbed2::NestedStruct3InterfaceTraceDecorator::connect(*testbed2NestedStruct3Interface, tracer);
+    auto tbEnumEnumInterface = std::make_shared<TbEnum::olink::EnumInterfaceClient>();
+    clientNetworkEndpoint.connectAndLinkObject(tbEnumEnumInterface);
+    std::unique_ptr<TbEnum::IEnumInterface> tbEnumEnumInterfaceTraced = TbEnum::EnumInterfaceTraceDecorator::connect(*tbEnumEnumInterface, tracer);
+    auto tbSame1SameStruct1Interface = std::make_shared<TbSame1::olink::SameStruct1InterfaceClient>();
+    clientNetworkEndpoint.connectAndLinkObject(tbSame1SameStruct1Interface);
+    std::unique_ptr<TbSame1::ISameStruct1Interface> tbSame1SameStruct1InterfaceTraced = TbSame1::SameStruct1InterfaceTraceDecorator::connect(*tbSame1SameStruct1Interface, tracer);
+    auto tbSame1SameStruct2Interface = std::make_shared<TbSame1::olink::SameStruct2InterfaceClient>();
+    clientNetworkEndpoint.connectAndLinkObject(tbSame1SameStruct2Interface);
+    std::unique_ptr<TbSame1::ISameStruct2Interface> tbSame1SameStruct2InterfaceTraced = TbSame1::SameStruct2InterfaceTraceDecorator::connect(*tbSame1SameStruct2Interface, tracer);
+    auto tbSame1SameEnum1Interface = std::make_shared<TbSame1::olink::SameEnum1InterfaceClient>();
+    clientNetworkEndpoint.connectAndLinkObject(tbSame1SameEnum1Interface);
+    std::unique_ptr<TbSame1::ISameEnum1Interface> tbSame1SameEnum1InterfaceTraced = TbSame1::SameEnum1InterfaceTraceDecorator::connect(*tbSame1SameEnum1Interface, tracer);
+    auto tbSame1SameEnum2Interface = std::make_shared<TbSame1::olink::SameEnum2InterfaceClient>();
+    clientNetworkEndpoint.connectAndLinkObject(tbSame1SameEnum2Interface);
+    std::unique_ptr<TbSame1::ISameEnum2Interface> tbSame1SameEnum2InterfaceTraced = TbSame1::SameEnum2InterfaceTraceDecorator::connect(*tbSame1SameEnum2Interface, tracer);
+    auto tbSame2SameStruct1Interface = std::make_shared<TbSame2::olink::SameStruct1InterfaceClient>();
+    clientNetworkEndpoint.connectAndLinkObject(tbSame2SameStruct1Interface);
+    std::unique_ptr<TbSame2::ISameStruct1Interface> tbSame2SameStruct1InterfaceTraced = TbSame2::SameStruct1InterfaceTraceDecorator::connect(*tbSame2SameStruct1Interface, tracer);
+    auto tbSame2SameStruct2Interface = std::make_shared<TbSame2::olink::SameStruct2InterfaceClient>();
+    clientNetworkEndpoint.connectAndLinkObject(tbSame2SameStruct2Interface);
+    std::unique_ptr<TbSame2::ISameStruct2Interface> tbSame2SameStruct2InterfaceTraced = TbSame2::SameStruct2InterfaceTraceDecorator::connect(*tbSame2SameStruct2Interface, tracer);
+    auto tbSame2SameEnum1Interface = std::make_shared<TbSame2::olink::SameEnum1InterfaceClient>();
+    clientNetworkEndpoint.connectAndLinkObject(tbSame2SameEnum1Interface);
+    std::unique_ptr<TbSame2::ISameEnum1Interface> tbSame2SameEnum1InterfaceTraced = TbSame2::SameEnum1InterfaceTraceDecorator::connect(*tbSame2SameEnum1Interface, tracer);
+    auto tbSame2SameEnum2Interface = std::make_shared<TbSame2::olink::SameEnum2InterfaceClient>();
+    clientNetworkEndpoint.connectAndLinkObject(tbSame2SameEnum2Interface);
+    std::unique_ptr<TbSame2::ISameEnum2Interface> tbSame2SameEnum2InterfaceTraced = TbSame2::SameEnum2InterfaceTraceDecorator::connect(*tbSame2SameEnum2Interface, tracer);
+    auto tbSimpleSimpleInterface = std::make_shared<TbSimple::olink::SimpleInterfaceClient>();
+    clientNetworkEndpoint.connectAndLinkObject(tbSimpleSimpleInterface);
+    std::unique_ptr<TbSimple::ISimpleInterface> tbSimpleSimpleInterfaceTraced = TbSimple::SimpleInterfaceTraceDecorator::connect(*tbSimpleSimpleInterface, tracer);
+    auto tbSimpleSimpleArrayInterface = std::make_shared<TbSimple::olink::SimpleArrayInterfaceClient>();
+    clientNetworkEndpoint.connectAndLinkObject(tbSimpleSimpleArrayInterface);
+    std::unique_ptr<TbSimple::ISimpleArrayInterface> tbSimpleSimpleArrayInterfaceTraced = TbSimple::SimpleArrayInterfaceTraceDecorator::connect(*tbSimpleSimpleArrayInterface, tracer);
+    auto testbed1StructInterface = std::make_shared<Testbed1::olink::StructInterfaceClient>();
+    clientNetworkEndpoint.connectAndLinkObject(testbed1StructInterface);
+    std::unique_ptr<Testbed1::IStructInterface> testbed1StructInterfaceTraced = Testbed1::StructInterfaceTraceDecorator::connect(*testbed1StructInterface, tracer);
+    auto testbed1StructArrayInterface = std::make_shared<Testbed1::olink::StructArrayInterfaceClient>();
+    clientNetworkEndpoint.connectAndLinkObject(testbed1StructArrayInterface);
+    std::unique_ptr<Testbed1::IStructArrayInterface> testbed1StructArrayInterfaceTraced = Testbed1::StructArrayInterfaceTraceDecorator::connect(*testbed1StructArrayInterface, tracer);
     
-    testClient.connectToHost(Poco::URI("ws://localhost:8000"));
+    clientNetworkEndpoint.connectToHost(Poco::URI("ws://localhost:8000"));
 
     bool keepRunning = true;
     std::string cmd;
@@ -111,26 +111,26 @@ int main(){
 
         if(cmd == "quit"){
             keepRunning = false;
-            testClient.disconnect();
+            clientNetworkEndpoint.disconnect();
         }
     } while(keepRunning);
-    testClient.disconnectAndUnlink(testTestbed2ManyParamInterface->olinkObjectName());
-    testClient.disconnectAndUnlink(testTestbed2NestedStruct1Interface->olinkObjectName());
-    testClient.disconnectAndUnlink(testTestbed2NestedStruct2Interface->olinkObjectName());
-    testClient.disconnectAndUnlink(testTestbed2NestedStruct3Interface->olinkObjectName());
-    testClient.disconnectAndUnlink(testTbEnumEnumInterface->olinkObjectName());
-    testClient.disconnectAndUnlink(testTbSame1SameStruct1Interface->olinkObjectName());
-    testClient.disconnectAndUnlink(testTbSame1SameStruct2Interface->olinkObjectName());
-    testClient.disconnectAndUnlink(testTbSame1SameEnum1Interface->olinkObjectName());
-    testClient.disconnectAndUnlink(testTbSame1SameEnum2Interface->olinkObjectName());
-    testClient.disconnectAndUnlink(testTbSame2SameStruct1Interface->olinkObjectName());
-    testClient.disconnectAndUnlink(testTbSame2SameStruct2Interface->olinkObjectName());
-    testClient.disconnectAndUnlink(testTbSame2SameEnum1Interface->olinkObjectName());
-    testClient.disconnectAndUnlink(testTbSame2SameEnum2Interface->olinkObjectName());
-    testClient.disconnectAndUnlink(testTbSimpleSimpleInterface->olinkObjectName());
-    testClient.disconnectAndUnlink(testTbSimpleSimpleArrayInterface->olinkObjectName());
-    testClient.disconnectAndUnlink(testTestbed1StructInterface->olinkObjectName());
-    testClient.disconnectAndUnlink(testTestbed1StructArrayInterface->olinkObjectName());
+    clientNetworkEndpoint.disconnectAndUnlink(testbed2ManyParamInterface->olinkObjectName());
+    clientNetworkEndpoint.disconnectAndUnlink(testbed2NestedStruct1Interface->olinkObjectName());
+    clientNetworkEndpoint.disconnectAndUnlink(testbed2NestedStruct2Interface->olinkObjectName());
+    clientNetworkEndpoint.disconnectAndUnlink(testbed2NestedStruct3Interface->olinkObjectName());
+    clientNetworkEndpoint.disconnectAndUnlink(tbEnumEnumInterface->olinkObjectName());
+    clientNetworkEndpoint.disconnectAndUnlink(tbSame1SameStruct1Interface->olinkObjectName());
+    clientNetworkEndpoint.disconnectAndUnlink(tbSame1SameStruct2Interface->olinkObjectName());
+    clientNetworkEndpoint.disconnectAndUnlink(tbSame1SameEnum1Interface->olinkObjectName());
+    clientNetworkEndpoint.disconnectAndUnlink(tbSame1SameEnum2Interface->olinkObjectName());
+    clientNetworkEndpoint.disconnectAndUnlink(tbSame2SameStruct1Interface->olinkObjectName());
+    clientNetworkEndpoint.disconnectAndUnlink(tbSame2SameStruct2Interface->olinkObjectName());
+    clientNetworkEndpoint.disconnectAndUnlink(tbSame2SameEnum1Interface->olinkObjectName());
+    clientNetworkEndpoint.disconnectAndUnlink(tbSame2SameEnum2Interface->olinkObjectName());
+    clientNetworkEndpoint.disconnectAndUnlink(tbSimpleSimpleInterface->olinkObjectName());
+    clientNetworkEndpoint.disconnectAndUnlink(tbSimpleSimpleArrayInterface->olinkObjectName());
+    clientNetworkEndpoint.disconnectAndUnlink(testbed1StructInterface->olinkObjectName());
+    clientNetworkEndpoint.disconnectAndUnlink(testbed1StructArrayInterface->olinkObjectName());
 
     return 0;
 }

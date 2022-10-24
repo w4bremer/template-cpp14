@@ -4,7 +4,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 find_package(apigear QUIET COMPONENTS poco-olink)
 set (SOURCES_OLINK
     enuminterfaceservice.cpp
-    remoteenuminterface.cpp
+    enuminterfaceclient.cpp
 )
 add_library(tb_enum-olink SHARED ${SOURCES_OLINK})
 add_library(tb_enum::tb_enum-olink ALIAS tb_enum-olink)

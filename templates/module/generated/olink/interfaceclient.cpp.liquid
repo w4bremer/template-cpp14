@@ -1,0 +1,170 @@
+{% comment %} // Copyright (c) ApiGear UG 2020 {% endcomment -%}
+{% assign class = interface.name |append:"Client"-%}
+{% assign pub_class = interface.name | capital | append: "Publisher" %}
+{% assign pub_interface = "I" | append: interface.name | capital | append: "Publisher"%}
+{% assign identifiername = module.name | append: "." | append: interface.name %}
+
+#include "{{module.name|identifier}}/generated/olink/{{interface.name|lower}}client.h"
+#include "{{module.name|identifier}}/generated/core/{{interface.name|lower}}.publisher.h"
+#include "{{module.name|identifier}}/generated/core/{{module.name|identifier}}.json.adapter.h"
+
+#include "olink/iclientnode.h"
+#include "apigear/olink/olinkconnection.h"
+
+using namespace {{ system.name | capital }}::{{ module.name | capital }};
+using namespace {{ system.name | capital }}::{{ module.name | capital }}::olink;
+
+namespace 
+{
+const std::string interfaceId = "{{identifiername}}";
+}
+
+{{class}}::{{class}}()
+    : m_publisher(std::make_unique<{{pub_class}}>())
+{}
+
+void {{class}}::applyState(const nlohmann::json& fields) 
+{
+{% for property in interface.properties %}
+    if(fields.contains("{{property.name}}")) {
+        set{{property.name|capital}}Local(fields["{{property.name}}"].get<{{property | cpp14Return}}>());
+    }
+{% else %}
+    // no properties to apply state {% comment %} we generate anyway for consistency {% endcomment %}
+    (void) fields;
+{% endfor %}
+}
+
+{% for property in interface.properties %}
+{% assign name = property.name %}
+
+void {{class}}::set{{name|capital}}({{property|cpp14Param}})
+{
+    if(!m_node) {
+        emitLog(ApiGear::Logger::LogLevel::Warning, "Attempt to set property but " + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
+        return;
+    }
+    const auto& propertyId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "{{property.name}}");
+    m_node->setRemoteProperty(propertyId, {{property}});
+}
+
+void {{class}}::set{{name|capital}}Local({{property|cpp14Param}})
+{
+    if (m_data.m_{{name}} != {{name}}) {
+        m_data.m_{{name}} = {{name}};
+        m_publisher->publish{{name | capital}}Changed({{name}});
+    }
+}
+
+{{property|cpp14Return: true}} {{class}}::get{{name | capital}}() const
+{
+    return m_data.m_{{name}};
+}
+
+{% endfor %}
+
+
+{% for operation in interface.operations %}
+{% capture returnType %}{{operation|cpp14Return}}{% endcapture %}
+
+{{returnType}} {{class}}::{{operation.name| lowerFirst}}({{operation|cpp14Params}})
+{
+     if(!m_node) {
+        emitLog(ApiGear::Logger::LogLevel::Warning, "Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
+        return {{operation|cpp14Default}};
+    }
+    {% if operation.type == 'void' %}
+    ApiGear::ObjectLink::InvokeReplyFunc func = [this](ApiGear::ObjectLink::InvokeReplyArg arg)
+        {
+            (void) this;
+            (void) arg;
+        };
+    const nlohmann::json &args = nlohmann::json::array({
+        {{ operation.params | map: 'name' | join: ', ' }}
+    });
+    const auto& operationId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "{{operation.name}}");
+    m_node->invokeRemote(operationId, args, func);
+    {% else %}
+    {{returnType}} value({{operation.name | lowerFirst}}Async({{ operation.params | map: 'name' | join: ', ' }}).get());
+    return value;
+    {% endif %}
+}
+
+std::future<{{returnType}}> {{class}}::{{operation.name| lowerFirst}}Async({{operation|cpp14Params}})
+{
+    if(!m_node) {
+        emitLog(ApiGear::Logger::LogLevel::Warning, "Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
+        return std::future<{{returnType}}>{};
+    }
+    return std::async(std::launch::async, [this{%- for param in operation.params -%},
+                    {{param}}
+                {%- endfor -%}]()
+        {
+            std::promise<{{returnType}}> resultPromise;
+            const auto& operationId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "{{operation.name}}");
+            m_node->invokeRemote(operationId,
+                nlohmann::json::array({
+                {%- for param in operation.params -%}
+                    {{param}}{% unless forloop.last %},{% endunless -%}
+                {%- endfor -%}}), [&resultPromise](ApiGear::ObjectLink::InvokeReplyArg arg) {        
+                    {% if operation.type == 'void' %}
+                    (void) arg;
+                    resultPromise.set_value();
+                    {% else %}
+                    const {{returnType}}& value = arg.value.get<{{returnType}}>();
+                    resultPromise.set_value(value);
+                    {% endif %}
+                });
+            return resultPromise.get_future().get();
+        }
+    );
+}
+
+{% endfor %}
+
+std::string {{class}}::olinkObjectName()
+{
+    return interfaceId;
+}
+
+void {{class}}::olinkOnSignal(const std::string& signalId, const nlohmann::json& args)
+{
+    const auto& signalName = ApiGear::ObjectLink::Name::getMemberName(signalId);
+{% for signal in interface.signals %}
+    if(signalName == "{{signal}}") {
+        m_publisher->publish{{signal.name | capital}}(
+{%- for param in signal.params -%}
+        args[{{forloop.index0}}].get<{{param|cpp14Return}}>(){% unless forloop.last %},{% endunless -%}
+{%- endfor -%}
+        );   
+        return;
+    }
+{% else %}
+    (void) args;
+{% endfor %}
+}
+
+void {{class}}::olinkOnPropertyChanged(const std::string& propertyId, const nlohmann::json& value)
+{
+    applyState({ {ApiGear::ObjectLink::Name::getMemberName(propertyId), value} });
+}
+void {{class}}::olinkOnInit(const std::string& /*name*/, const nlohmann::json& props, ApiGear::ObjectLink::IClientNode *node)
+{
+    m_node = node;
+    applyState(props);
+}
+
+void {{class}}::olinkOnRelease()
+{
+    m_node = nullptr;
+}
+
+bool {{class}}::isReady() const
+{
+    return m_node != nullptr;
+}
+
+{{pub_interface}}& {{class}}::_getPublisher() const
+{
+    return *m_publisher;
+}

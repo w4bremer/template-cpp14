@@ -2,7 +2,7 @@
 ApiGear delivers implementation for Olink protocol and related classes to help you start using your interface over the network with our ready to use classes.
 You can find Olink Core library which contains:
  - registry for client (ClientRegistry) and server (RemoteRegistry) that keeps track of currently used endpoint nodes, sinks or sources
- - endpoint nodes (clientNode and RemoteNode) which are abstraction above the network layer
+ - endpoint nodes (ClientNode and RemoteNode) which are abstraction above the network layer
  These classes are independent from network implementation. They also provide interface for sink and source which are abstraction for your interface network adapters.
  
  generated apigear feature contains Olink Implementation for network service:
@@ -10,7 +10,7 @@ You can find Olink Core library which contains:
 Classes that take care of setting up connection for client and server. They use Olink core registry and nodes.
 
 generated olink feature contains Interface dependent adapters: 
- - Remote"YourInterface" for client side which is a Sink object
+ - "YourInterface"Client for client side which is a Sink object
  - "YourInterface"Service for server side which is a Source object
  
 To have a better overview of classes responsibilities and protocol implementation we provide a sequence diagram for lifecycle messages.
@@ -54,7 +54,7 @@ ClientNode ->> ObjectSink : olinkOnInit(name, properties, this)
 ```
 
 ### Tear down scenario: Disconnect OlinkConnection.
-User calls disconnect on OlinkConnection while connection is running and SinkObject (RemoteService) is attached.
+User calls disconnect on OlinkConnection while connection is running and SinkObject (InterfaceClient) is attached.
 
 ```mermaid
 sequenceDiagram
@@ -78,7 +78,7 @@ OlinkConnection ->> OlinkConnection: close socket
 Note: Node is not removed from the sinks in the registry, it is necessary for reconnect.
 
 
-### Tear down scenario: The ObjectSink (RemoteService) is destroyed.
+### Tear down scenario: The ObjectSink (InterfaceClient) is destroyed.
 ```mermaid
 sequenceDiagram
 

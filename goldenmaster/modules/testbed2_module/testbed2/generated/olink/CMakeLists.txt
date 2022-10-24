@@ -4,13 +4,13 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 find_package(apigear QUIET COMPONENTS poco-olink)
 set (SOURCES_OLINK
     manyparaminterfaceservice.cpp
-    remotemanyparaminterface.cpp
+    manyparaminterfaceclient.cpp
     nestedstruct1interfaceservice.cpp
-    remotenestedstruct1interface.cpp
+    nestedstruct1interfaceclient.cpp
     nestedstruct2interfaceservice.cpp
-    remotenestedstruct2interface.cpp
+    nestedstruct2interfaceclient.cpp
     nestedstruct3interfaceservice.cpp
-    remotenestedstruct3interface.cpp
+    nestedstruct3interfaceclient.cpp
 )
 add_library(testbed2-olink SHARED ${SOURCES_OLINK})
 add_library(testbed2::testbed2-olink ALIAS testbed2-olink)

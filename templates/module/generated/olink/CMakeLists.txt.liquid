@@ -9,7 +9,7 @@ find_package(apigear QUIET COMPONENTS poco-olink)
 set (SOURCES_OLINK
 {% for interface in module.interfaces %}
     {{interface.name|lower}}service.cpp
-    remote{{interface.name|lower}}.cpp
+    {{interface.name|lower}}client.cpp
 {% endfor %}
 )
 add_library({{module_id}}-olink SHARED ${SOURCES_OLINK})
