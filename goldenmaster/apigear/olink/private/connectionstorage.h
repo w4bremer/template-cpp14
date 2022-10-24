@@ -1,9 +1,14 @@
 #pragma once
 
 #include "iconnectionstorage.h"
+
+#include <Poco/Util/Timer.h>
+#include <Poco/Util/TimerTask.h>
+
 #include <mutex>
 #include <memory>
 #include <vector>
+#include <future>
 
 namespace ApiGear
 {
@@ -38,12 +43,25 @@ public:
 	/**IConnectionStorage::notifyConnectionClosed implementation*/
 	void notifyConnectionClosed() override;
 private:
+	/**
+	* Removes all connection that are marked as closed.
+	* @param task. Parameter is not used. The most recent task is stored as a member to cancel it if necessary.
+	*/
+	void removeClosedConnection(Poco::Util::TimerTask& task);
+
 	/**A global registry to which network endpoints will be added for olink objects.*/
 	ApiGear::ObjectLink::RemoteRegistry& m_registry;
 	/** Collection of server connections*/
 	std::vector<std::shared_ptr<OLinkRemote>> m_connectionNodes;
 	/** Mutex for connection storage*/
-	std::timed_mutex m_connectionsMutex;
+	std::mutex m_connectionsMutex;
+
+	/** The timer used to schedule remove closed connection. */
+	Poco::Util::Timer m_removeConnectionTimer;
+	/** Poco Task to remove closed connection, stored to be canceled if necessary. */
+	Poco::Util::TimerTask::Ptr m_removeConnectionTask;
+	/** A mutex for the process message*/
+	std::mutex m_taskMutex;
 };
 
 }}   //namespace ApiGear::PocoImpl
