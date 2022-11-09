@@ -72,11 +72,11 @@ public:
     /**
     * Forwards emitted sig1 through network if the connection is established.
     */
-    void onSig1(const Enum1Enum& param1) override;
+    void onSig1(Enum1Enum param1) override;
     /**
     * Forwards prop1 change through network if the connection is established.
     */
-    void onProp1Changed(const Enum1Enum& Value) override;
+    void onProp1Changed(Enum1Enum prop1) override;
 
 private:
     /**

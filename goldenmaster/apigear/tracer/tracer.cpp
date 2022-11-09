@@ -63,17 +63,17 @@ void Tracer::trace(const std::string &eventType, const std::string &symbol, cons
     process();
 }
 
-void Tracer::call(const std::string &symbol,const nlohmann::json &fields)
+void Tracer::call(const std::string &symbol, const nlohmann::json &fields)
 {
     trace("call", symbol, fields);
 }
 
-void Tracer::signal(const std::string &symbol,const nlohmann::json &fields)
+void Tracer::signal(const std::string &symbol, const nlohmann::json &fields)
 {
     trace("signal", symbol, fields);
 }
 
-void Tracer::state(const std::string &symbol,const nlohmann::json &fields)
+void Tracer::state(const std::string &symbol, const nlohmann::json &fields)
 {
     trace("state", symbol, fields);
 }

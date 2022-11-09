@@ -122,7 +122,7 @@ void SimpleInterfaceClient::setPropStringLocal(const std::string& propString)
     }
 }
 
-std::string SimpleInterfaceClient::getPropString() const
+const std::string& SimpleInterfaceClient::getPropString() const
 {
     return m_data.m_propString;
 }
@@ -193,7 +193,7 @@ float SimpleInterfaceClient::funcFloat(float paramFloat)
 {
      if(!m_node) {
         emitLog(ApiGear::Logger::LogLevel::Warning, "Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
-        return 0.0f;
+        return 0.0;
     }
     float value(funcFloatAsync(paramFloat).get());
     return value;

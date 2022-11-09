@@ -43,8 +43,9 @@ void NestedStruct1InterfaceTraceDecorator::onSig1(const NestedStruct1& param1)
     m_tracer->trace_sig1(param1);
 }
 
-void NestedStruct1InterfaceTraceDecorator::onProp1Changed(const NestedStruct1& /*prop1*/)
+void NestedStruct1InterfaceTraceDecorator::onProp1Changed(const NestedStruct1& prop1)
 {
+    (void) prop1; // suppress the 'Unreferenced Formal Parameter' warning.
     m_tracer->capture_state(this);
 }
 

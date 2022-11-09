@@ -71,7 +71,7 @@ std::future<NestedStruct1> NestedStruct2Interface::func2Async(const NestedStruct
                     param1,
                     param2]()
         {
-            return func2(param1,param2);
+            return func2(param1, param2);
         }
     );
 }

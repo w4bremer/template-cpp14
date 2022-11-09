@@ -43,8 +43,9 @@ void SameStruct1InterfaceTraceDecorator::onSig1(const Struct1& param1)
     m_tracer->trace_sig1(param1);
 }
 
-void SameStruct1InterfaceTraceDecorator::onProp1Changed(const Struct1& /*prop1*/)
+void SameStruct1InterfaceTraceDecorator::onProp1Changed(const Struct1& prop1)
 {
+    (void) prop1; // suppress the 'Unreferenced Formal Parameter' warning.
     m_tracer->capture_state(this);
 }
 

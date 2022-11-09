@@ -90,7 +90,7 @@ void SameStruct2InterfaceService::onSig1(const Struct1& param1)
         }
     }
 }
-void SameStruct2InterfaceService::onSig2(const Struct1& param1,const Struct2& param2)
+void SameStruct2InterfaceService::onSig2(const Struct1& param1, const Struct2& param2)
 {
     const nlohmann::json args = { param1, param2 };
     const auto& signalId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "sig2");

@@ -76,7 +76,7 @@ public:
     * Property getter
     * @return Locally stored locally value for PropString.
     */
-    std::string getPropString() const override;
+    const std::string& getPropString() const override;
     /**
     * Request setting a property on the SimpleInterface service.
     * @param The value to which set request is send for the PropString.

@@ -45,7 +45,7 @@ public:
   * Prepares information about the sig2 call in a nlohmann::json format and puts to a tracer.
   * @param The SameStruct2Interface object to trace.
   */
-  void trace_sig2(const Struct1& param1,const Struct2& param2);
+  void trace_sig2(const Struct1& param1, const Struct2& param2);
 private:
   /**
   * A tracer object to which the information about the state and operations is put.

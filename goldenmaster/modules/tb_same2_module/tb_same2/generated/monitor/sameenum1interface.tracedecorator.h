@@ -35,23 +35,23 @@ public:
     virtual ~SameEnum1InterfaceTraceDecorator();
 
     /** Traces func1 and forwards call to SameEnum1Interface implementation. */
-    Enum1Enum func1(const Enum1Enum& param1) override;
+    Enum1Enum func1(Enum1Enum param1) override;
     /** Traces func1 and forwards call to SameEnum1Interface implementation. */
-    std::future<Enum1Enum> func1Async(const Enum1Enum& param1) override;
+    std::future<Enum1Enum> func1Async(Enum1Enum param1) override;
     
     /** Forwards call to SameEnum1Interface implementation. */
-    void setProp1(const Enum1Enum& prop1) override;
+    void setProp1(Enum1Enum prop1) override;
     /** Forwards call to SameEnum1Interface implementation. */
-    const Enum1Enum& getProp1() const override;
+    Enum1Enum getProp1() const override;
     
     /**
     Traces sig1 emission.
     */
-    void onSig1(const Enum1Enum& param1) override;
+    void onSig1(Enum1Enum param1) override;
     /**
     Traces prop1 changed.
     */
-    void onProp1Changed(const Enum1Enum& prop1) override;
+    void onProp1Changed(Enum1Enum prop1) override;
 
     /**
     * Access to a publisher, use it to subscribe for SameEnum1Interface changes and signal emission.

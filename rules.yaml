@@ -1,103 +1,126 @@
 features:
-  api:
-    module:
-      documents:
-        - source: "module/CMakeLists.txt.liquid"
-          target: "modules/{{module.name|identifier}}_module/{{module.name|identifier}}/CMakeLists.txt"
-        - source: "module/ModuleConfig.cmake.in.liquid"
-          target: "modules/{{module.name|identifier}}_module/{{module.name|identifier}}/{{module.name|identifier|capitalize}}Config.cmake.in"
-        - source: "module/generated/api/CMakeLists.txt.liquid"
-          target: "modules/{{module.name|identifier}}_module/{{module.name|identifier}}/generated/api/CMakeLists.txt"
-        - source: "module/generated/api/module.h.liquid"
-          target: "modules/{{module.name|identifier}}_module/{{module.name|identifier}}/generated/api/{{module.name|identifier}}.h"
-        - source: "module/generated/api/module_common.h.liquid"
-          target: "modules/{{module.name|identifier}}_module/{{module.name|identifier}}/generated/api/common.h"
-        - source: "module/generated/api/datastructs.api.h.liquid"
-          target: "modules/{{module.name|identifier}}_module/{{module.name|identifier}}/generated/api/datastructs.api.h"
-        - source: "module/generated/api/datastructs.api.cpp.liquid"
-          target: "modules/{{module.name|identifier}}_module/{{module.name|identifier}}/generated/api/datastructs.api.cpp"
-    interface:
-      documents:
-        - source: "module/generated/api/interface.api.h.liquid"
-          target: "modules/{{module.name|identifier}}_module/{{module.name|identifier}}/generated/api/{{interface.name|lower}}.api.h"
-  core:
-    module:
-      documents:
-        - source: "module/generated/core/CMakeLists.txt.liquid"
-          target: "modules/{{module.name|identifier}}_module/{{module.name|identifier}}/generated/core/CMakeLists.txt"
-        - source: "module/generated/core/main_test.cpp"
-          target: "modules/{{module.name|identifier}}_module/{{module.name|identifier}}/generated/core/{{module.name|identifier}}.test.cpp"
-        - source: "module/generated/core/json.adapter.h.liquid"
-          target: "modules/{{module.name|identifier}}_module/{{module.name|identifier}}/generated/core/{{module.name|identifier}}.json.adapter.h"
-        - source: "module/generated/core/json.adapter.cpp.liquid"
-          target: "modules/{{module.name|identifier}}_module/{{module.name|identifier}}/generated/core/{{module.name|identifier}}.json.adapter.cpp"
-    interface:
-      documents:
-        - source: "module/generated/core/interface.data.h.liquid"
-          target: "modules/{{module.name|identifier}}_module/{{module.name|identifier}}/generated/core/{{interface.name|lower}}.data.h"
-        - source: "module/generated/core/interface.publisher.h.liquid"
-          target: "modules/{{module.name|identifier}}_module/{{module.name|identifier}}/generated/core/{{interface.name|lower}}.publisher.h"
-        - source: "module/generated/core/interface.publisher.cpp.liquid"
-          target: "modules/{{module.name|identifier}}_module/{{module.name|identifier}}/generated/core/{{interface.name|lower}}.publisher.cpp"
-  scaffold:
-    module:
-      documents:
-        - source: "README.md"
-          raw: true
-        - source: CMakeLists.txt.liquid
-          target: CMakeLists.txt
-          overwrite: false
-        - source: "module/source/CMakeLists.txt.liquid"
-          target: "modules/{{module.name|identifier}}_module/{{module.name|identifier}}/implementation/CMakeLists.txt"
-          overwrite: false
-    interface:
-      documents:
-        - source: "module/source/implementation.h.liquid"
-          target: "modules/{{module.name|identifier}}_module/{{module.name|identifier}}/implementation/{{interface.name|lower}}.h"
-          overwrite: false
-        - source: "module/source/implementation.cpp.liquid"
-          target: "modules/{{module.name|identifier}}_module/{{module.name|identifier}}/implementation/{{interface.name|lower}}.cpp"
-          overwrite: false
-        - source: "module/source/implementation_test.cpp.liquid"
-          target: "modules/{{module.name|identifier}}_module/{{module.name|identifier}}/implementation/{{interface.name|lower}}.test.cpp"
-          overwrite: false
-  monitor:
-    module:
-      documents:
-        - source: "module/generated/monitor/CMakeLists.txt.liquid"
-          target: "modules/{{module.name|identifier}}_module/{{module.name|identifier}}/generated/monitor/CMakeLists.txt"
-    interface:
-      documents:
-        - source: "module/generated/monitor/interface.tracedecorator.h.liquid"
-          target: "modules/{{module.name|identifier}}_module/{{module.name|identifier}}/generated/monitor/{{interface.name|lower}}.tracedecorator.h"
-        - source: "module/generated/monitor/interface.tracedecorator.cpp.liquid"
-          target: "modules/{{module.name|identifier}}_module/{{module.name|identifier}}/generated/monitor/{{interface.name|lower}}.tracedecorator.cpp"
-        - source: "module/generated/monitor/interface.tracer.h.liquid"
-          target: "modules/{{module.name|identifier}}_module/{{module.name|identifier}}/generated/monitor/{{interface.name|lower}}.tracer.h"
-        - source: "module/generated/monitor/interface.tracer.cpp.liquid"
-          target: "modules/{{module.name|identifier}}_module/{{module.name|identifier}}/generated/monitor/{{interface.name|lower}}.tracer.cpp"
-  olink:
-    system:
+  - name: api
+    scopes:
+      - match: module
+        prefix: "modules/{{snake .Module.Name}}_module/{{ snake .Module.Name}}/"
         documents:
+          - source: "module/CMakeLists.txt.tpl"
+            target: "CMakeLists.txt"
+            force: true
+          - source: "module/ModuleConfig.cmake.in.tpl"
+            target: "{{upper1 (snake .Module.Name)}}Config.cmake.in"
+            force: true
+          - source: "module/generated/api/CMakeLists.txt.tpl"
+            target: "generated/api/CMakeLists.txt"
+            force: true
+          - source: "module/generated/api/module.h.tpl"
+            target: "generated/api/{{snake .Module.Name}}.h"
+            force: true
+          - source: "module/generated/api/module_common.h.tpl"
+            target: "generated/api/common.h"
+            force: true
+          - source: "module/generated/api/datastructs.api.h.tpl"
+            target: "generated/api/datastructs.api.h"
+            force: true
+          - source: "module/generated/api/datastructs.api.cpp.tpl"
+            target: "generated/api/datastructs.api.cpp"
+            force: true
+      - match: interface
+        prefix: "modules/{{snake .Module.Name}}_module/{{snake .Module.Name}}/"
+        documents:
+        - source: "module/generated/api/interface.api.h.tpl"
+          target: "generated/api/{{lower (camel .Interface.Name)}}.api.h"
+  - name: core
+    scopes:
+      - match: module
+        prefix: "modules/{{snake .Module.Name}}_module/{{snake .Module.Name}}/generated/core/"
+        documents:
+          - source: "module/generated/core/CMakeLists.txt.tpl"
+            target: "CMakeLists.txt"
+            force: true
+          - source: "module/generated/core/main_test.cpp.tpl"
+            target: "{{snake .Module.Name}}.test.cpp"
+            force: true
+          - source: "module/generated/core/json.adapter.h.tpl"
+            target: "{{snake .Module.Name}}.json.adapter.h"
+            force: true
+          - source: "module/generated/core/json.adapter.cpp.tpl"
+            target: "{{snake .Module.Name}}.json.adapter.cpp"
+            force: true
+      - match: interface
+        prefix: "modules/{{snake .Module.Name}}_module/{{snake .Module.Name}}/generated/core/"
+        documents:
+          - source: "module/generated/core/interface.data.h.tpl"
+            target: "{{lower (camel .Interface.Name)}}.data.h"
+          - source: "module/generated/core/interface.publisher.h.tpl"
+            target: "{{lower (camel .Interface.Name)}}.publisher.h"
+          - source: "module/generated/core/interface.publisher.cpp.tpl"
+            target: "{{lower (camel .Interface.Name)}}.publisher.cpp"
+  - name: scaffold
+    scopes:
+      - match: module
+        documents:
+          - source: "README.md"
+            raw: true
+          - source: CMakeLists.txt.tpl
+            target: CMakeLists.txt
+            force: false
+          - source: "module/source/CMakeLists.txt.tpl"
+            target: "modules/{{snake .Module.Name}}_module/{{snake .Module.Name}}/implementation/CMakeLists.txt"
+            force: false
+      - match: interface
+        prefix: "modules/{{snake .Module.Name}}_module/{{snake .Module.Name}}/implementation/"
+        documents:
+          - source: "module/source/implementation.h.tpl"
+            target: "{{lower (camel .Interface.Name)}}.h"
+            force: false
+          - source: "module/source/implementation.cpp.tpl"
+            target: "{{lower (camel .Interface.Name)}}.cpp"
+            force: false
+          - source: "module/source/implementation_test.cpp.tpl"
+            target: "{{lower (camel .Interface.Name)}}.test.cpp"
+            force: false
+  - name: monitor
+    scopes:
+    - match: module
+      documents:
+          - source: "module/generated/monitor/CMakeLists.txt.tpl"
+            target: "modules/{{snake .Module.Name}}_module/{{snake .Module.Name}}/generated/monitor/CMakeLists.txt"
+    - match: interface
+      prefix: "modules/{{snake .Module.Name}}_module/{{snake .Module.Name}}/generated/monitor/"
+      documents:
+          - source: "module/generated/monitor/interface.tracedecorator.h.tpl"
+            target: "{{lower (camel .Interface.Name)}}.tracedecorator.h"
+          - source: "module/generated/monitor/interface.tracedecorator.cpp.tpl"
+            target: "{{lower (camel .Interface.Name)}}.tracedecorator.cpp"
+          - source: "module/generated/monitor/interface.tracer.h.tpl"
+            target: "{{lower (camel .Interface.Name)}}.tracer.h"
+          - source: "module/generated/monitor/interface.tracer.cpp.tpl"
+            target: "{{lower (camel .Interface.Name)}}.tracer.cpp"
+  - name: olink
+    scopes:
+    - match: system
+      documents:
         - source: "Lifecycle for olink client-server implementation.md"
           raw: true
-    interface:
+    - match: module
       documents:
-        - source: "module/generated/olink/CMakeLists.txt.liquid"
-          target: "modules/{{module.name|identifier}}_module/{{module.name|identifier}}/generated/olink/CMakeLists.txt"
-        - source: "module/generated/olink/interfaceservice.h.liquid"
-          target: "modules/{{module.name|identifier}}_module/{{module.name|identifier}}/generated/olink/{{interface.name|lower}}service.h"
-        - source: "module/generated/olink/interfaceservice.cpp.liquid"
-          target: "modules/{{module.name|identifier}}_module/{{module.name|identifier}}/generated/olink/{{interface.name|lower}}service.cpp"
-        - source: "module/generated/olink/interfaceclient.h.liquid"
-          target: "modules/{{module.name|identifier}}_module/{{module.name|identifier}}/generated/olink/{{interface.name|lower}}client.h"
-        - source: "module/generated/olink/interfaceclient.cpp.liquid"
-          target: "modules/{{module.name|identifier}}_module/{{module.name|identifier}}/generated/olink/{{interface.name|lower}}client.cpp"
-  apigear:
-    # when:
-      # - monitor
-      # - olink
-    system:
+          - source: "module/generated/olink/CMakeLists.txt.tpl"
+            target: "modules/{{snake .Module.Name}}_module/{{snake .Module.Name}}/generated/olink/CMakeLists.txt"
+    - match: interface
+      prefix: "modules/{{snake .Module.Name}}_module/{{snake .Module.Name}}/generated/olink/"
+      documents:
+        - source: "module/generated/olink/interfaceservice.h.tpl"
+          target: "{{lower (camel .Interface.Name)}}service.h"
+        - source: "module/generated/olink/interfaceservice.cpp.tpl"
+          target: "{{lower (camel .Interface.Name)}}service.cpp"
+        - source: "module/generated/olink/interfaceclient.h.tpl"
+          target: "{{lower (camel .Interface.Name)}}client.h"
+        - source: "module/generated/olink/interfaceclient.cpp.tpl"
+          target: "{{lower (camel .Interface.Name)}}client.cpp"
+  - name: apigear
+    scopes:
+    - match: system
       documents:
         - source: "apigear/apigear.test.cpp"
           raw: true
@@ -173,45 +196,50 @@ features:
           raw: true
         - source: "apigear/olink/tests/private/test_server/test_server_request_handler.hpp"
           raw: true
-  examples:
-    system:
+  - name: examples
+    scopes:
+    - match: system
       documents:
-        - source: examples/app/CMakeLists.txt.liquid
+        - source: examples/app/CMakeLists.txt.tpl
           target: examples/app/CMakeLists.txt
-        - source: examples/app/conanfile.txt.liquid
+        - source: examples/app/conanfile.txt.tpl
           target: examples/app/conanfile.txt
-        - source: examples/app/main.cpp.liquid
+        - source: examples/app/main.cpp.tpl
           target: examples/app/main.cpp
-        - source: examples/olinkserver/CMakeLists.txt.liquid
+        - source: examples/olinkserver/CMakeLists.txt.tpl
           target: examples/olinkserver/CMakeLists.txt
-        - source: examples/olinkserver/conanfile.txt.liquid
+        - source: examples/olinkserver/conanfile.txt.tpl
           target: examples/olinkserver/conanfile.txt
-        - source: examples/olinkserver/main.cpp.liquid
+        - source: examples/olinkserver/main.cpp.tpl
           target: examples/olinkserver/main.cpp
-        - source: examples/olinkclient/CMakeLists.txt.liquid
+        - source: examples/olinkclient/CMakeLists.txt.tpl
           target: examples/olinkclient/CMakeLists.txt
-        - source: examples/olinkclient/conanfile.txt.liquid
+        - source: examples/olinkclient/conanfile.txt.tpl
           target: examples/olinkclient/conanfile.txt
-        - source: examples/olinkclient/main.cpp.liquid
+        - source: examples/olinkclient/main.cpp.tpl
           target: examples/olinkclient/main.cpp
-  conan:
-    system:
+  - name: conan
+    scopes:
+    - match: system
       documents:
-        - source: test_conan.sh
-          overwrite: false
-        - source: test_conan.bat
-          overwrite: false
-    module:
+        - source: test_conan.sh.tpl
+          target: test_conan.sh
+          force: false
+        - source: test_conan.bat.tpl
+          target: test_conan.bat
+          force: false
+    - match: module
+      prefix: "modules//{{snake .Module.Name}}_module/"
       documents:
-        - source: module/conanfile.py.liquid
-          target: "modules//{{module.name|identifier}}_module//conanfile.py"
-          overwrite: false
-        - source: module/test_package/CMakeLists.txt.liquid
-          target: "modules//{{module.name|identifier}}_module//test_package/CMakeLists.txt"
-          overwrite: false
-        - source: module/test_package/conanfile.py.liquid
-          target: "modules/{{module.name|identifier}}_module//test_package/conanfile.py"
-          overwrite: false
-        - source: module/test_package/main.cpp.liquid
-          target: "modules//{{module.name|identifier}}_module//test_package/main.cpp"
-          overwrite: false
+        - source: module/conanfile.py.tpl
+          target: "conanfile.py"
+          force: false
+        - source: module/test_package/CMakeLists.txt.tpl
+          target: "test_package/CMakeLists.txt"
+          force: false
+        - source: module/test_package/conanfile.py.tpl
+          target: "test_package/conanfile.py"
+          force: false
+        - source: module/test_package/main.cpp.tpl
+          target: "test_package/main.cpp"
+          force: false

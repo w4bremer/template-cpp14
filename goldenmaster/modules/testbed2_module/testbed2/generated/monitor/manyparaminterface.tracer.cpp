@@ -58,14 +58,14 @@ void ManyParamInterfaceTracer::trace_sig1(int param1)
     fields_["param1"] = param1;
     m_tracer.signal("testbed2.ManyParamInterface#sig1", fields_);
 }
-void ManyParamInterfaceTracer::trace_sig2(int param1,int param2)
+void ManyParamInterfaceTracer::trace_sig2(int param1, int param2)
 {
     nlohmann::json fields_;
     fields_["param1"] = param1;
     fields_["param2"] = param2;
     m_tracer.signal("testbed2.ManyParamInterface#sig2", fields_);
 }
-void ManyParamInterfaceTracer::trace_sig3(int param1,int param2,int param3)
+void ManyParamInterfaceTracer::trace_sig3(int param1, int param2, int param3)
 {
     nlohmann::json fields_;
     fields_["param1"] = param1;
@@ -73,7 +73,7 @@ void ManyParamInterfaceTracer::trace_sig3(int param1,int param2,int param3)
     fields_["param3"] = param3;
     m_tracer.signal("testbed2.ManyParamInterface#sig3", fields_);
 }
-void ManyParamInterfaceTracer::trace_sig4(int param1,int param2,int param3,int param4)
+void ManyParamInterfaceTracer::trace_sig4(int param1, int param2, int param3, int param4)
 {
     nlohmann::json fields_;
     fields_["param1"] = param1;

@@ -27,72 +27,72 @@ public:
     virtual ~IEnumInterface() = default;
 
 
-    virtual Enum0Enum func0(const Enum0Enum& param0) = 0;
+    virtual Enum0Enum func0(Enum0Enum param0) = 0;
     /**
-    * Asynchronous version of func0(const Enum0Enum& param0)
+    * Asynchronous version of func0(Enum0Enum param0)
     * @return Promise of type Enum0Enum which is set once the function has completed
     */
-    virtual std::future<Enum0Enum> func0Async(const Enum0Enum& param0) = 0;
+    virtual std::future<Enum0Enum> func0Async(Enum0Enum param0) = 0;
 
 
-    virtual Enum1Enum func1(const Enum1Enum& param1) = 0;
+    virtual Enum1Enum func1(Enum1Enum param1) = 0;
     /**
-    * Asynchronous version of func1(const Enum1Enum& param1)
+    * Asynchronous version of func1(Enum1Enum param1)
     * @return Promise of type Enum1Enum which is set once the function has completed
     */
-    virtual std::future<Enum1Enum> func1Async(const Enum1Enum& param1) = 0;
+    virtual std::future<Enum1Enum> func1Async(Enum1Enum param1) = 0;
 
 
-    virtual Enum2Enum func2(const Enum2Enum& param2) = 0;
+    virtual Enum2Enum func2(Enum2Enum param2) = 0;
     /**
-    * Asynchronous version of func2(const Enum2Enum& param2)
+    * Asynchronous version of func2(Enum2Enum param2)
     * @return Promise of type Enum2Enum which is set once the function has completed
     */
-    virtual std::future<Enum2Enum> func2Async(const Enum2Enum& param2) = 0;
+    virtual std::future<Enum2Enum> func2Async(Enum2Enum param2) = 0;
 
 
-    virtual Enum3Enum func3(const Enum3Enum& param3) = 0;
+    virtual Enum3Enum func3(Enum3Enum param3) = 0;
     /**
-    * Asynchronous version of func3(const Enum3Enum& param3)
+    * Asynchronous version of func3(Enum3Enum param3)
     * @return Promise of type Enum3Enum which is set once the function has completed
     */
-    virtual std::future<Enum3Enum> func3Async(const Enum3Enum& param3) = 0;
+    virtual std::future<Enum3Enum> func3Async(Enum3Enum param3) = 0;
 
     /**
     * Sets the value of the prop0 property.
     */
-    virtual void setProp0(const Enum0Enum& prop0) = 0;
+    virtual void setProp0(Enum0Enum prop0) = 0;
     /**
     * Gets the value of the prop0 property.
     */
-    virtual const Enum0Enum& getProp0() const = 0;
+    virtual Enum0Enum getProp0() const = 0;
 
     /**
     * Sets the value of the prop1 property.
     */
-    virtual void setProp1(const Enum1Enum& prop1) = 0;
+    virtual void setProp1(Enum1Enum prop1) = 0;
     /**
     * Gets the value of the prop1 property.
     */
-    virtual const Enum1Enum& getProp1() const = 0;
+    virtual Enum1Enum getProp1() const = 0;
 
     /**
     * Sets the value of the prop2 property.
     */
-    virtual void setProp2(const Enum2Enum& prop2) = 0;
+    virtual void setProp2(Enum2Enum prop2) = 0;
     /**
     * Gets the value of the prop2 property.
     */
-    virtual const Enum2Enum& getProp2() const = 0;
+    virtual Enum2Enum getProp2() const = 0;
 
     /**
     * Sets the value of the prop3 property.
     */
-    virtual void setProp3(const Enum3Enum& prop3) = 0;
+    virtual void setProp3(Enum3Enum prop3) = 0;
     /**
     * Gets the value of the prop3 property.
     */
-    virtual const Enum3Enum& getProp3() const = 0;
+    virtual Enum3Enum getProp3() const = 0;
 
     /**
     * Access to a publisher, use it to subscribe for EnumInterface changes and signal emission.
@@ -121,70 +121,70 @@ public:
     *
     * @warning the subscribed function shall not be blocking and must return immediately!
     */
-    virtual void onSig0(const Enum0Enum& param0) = 0;
+    virtual void onSig0(Enum0Enum param0) = 0;
     /**
     * Called by the IEnumInterfacePublisher when the EnumInterface emits sig1, if subscribed for the sig1.
     * @param param1 
     *
     * @warning the subscribed function shall not be blocking and must return immediately!
     */
-    virtual void onSig1(const Enum1Enum& param1) = 0;
+    virtual void onSig1(Enum1Enum param1) = 0;
     /**
     * Called by the IEnumInterfacePublisher when the EnumInterface emits sig2, if subscribed for the sig2.
     * @param param2 
     *
     * @warning the subscribed function shall not be blocking and must return immediately!
     */
-    virtual void onSig2(const Enum2Enum& param2) = 0;
+    virtual void onSig2(Enum2Enum param2) = 0;
     /**
     * Called by the IEnumInterfacePublisher when the EnumInterface emits sig3, if subscribed for the sig3.
     * @param param3 
     *
     * @warning the subscribed function shall not be blocking and must return immediately!
     */
-    virtual void onSig3(const Enum3Enum& param3) = 0;
+    virtual void onSig3(Enum3Enum param3) = 0;
     /**
     * Called by the IEnumInterfacePublisher when prop0 value has changed if subscribed for the prop0 change.
     *
     * @warning the subscribed function shall not be blocking and must return immediately!
     */
-    virtual void onProp0Changed(const Enum0Enum& prop0) = 0;
+    virtual void onProp0Changed(Enum0Enum prop0) = 0;
     /**
     * Called by the IEnumInterfacePublisher when prop1 value has changed if subscribed for the prop1 change.
     *
     * @warning the subscribed function shall not be blocking and must return immediately!
     */
-    virtual void onProp1Changed(const Enum1Enum& prop1) = 0;
+    virtual void onProp1Changed(Enum1Enum prop1) = 0;
     /**
     * Called by the IEnumInterfacePublisher when prop2 value has changed if subscribed for the prop2 change.
     *
     * @warning the subscribed function shall not be blocking and must return immediately!
     */
-    virtual void onProp2Changed(const Enum2Enum& prop2) = 0;
+    virtual void onProp2Changed(Enum2Enum prop2) = 0;
     /**
     * Called by the IEnumInterfacePublisher when prop3 value has changed if subscribed for the prop3 change.
     *
     * @warning the subscribed function shall not be blocking and must return immediately!
     */
-    virtual void onProp3Changed(const Enum3Enum& prop3) = 0;
+    virtual void onProp3Changed(Enum3Enum prop3) = 0;
 };
 
 /** Callback for changes of prop0 */
-using EnumInterfaceProp0PropertyCb = std::function<void(const Enum0Enum& prop0)>;
+using EnumInterfaceProp0PropertyCb = std::function<void(Enum0Enum prop0)>;
 /** Callback for changes of prop1 */
-using EnumInterfaceProp1PropertyCb = std::function<void(const Enum1Enum& prop1)>;
+using EnumInterfaceProp1PropertyCb = std::function<void(Enum1Enum prop1)>;
 /** Callback for changes of prop2 */
-using EnumInterfaceProp2PropertyCb = std::function<void(const Enum2Enum& prop2)>;
+using EnumInterfaceProp2PropertyCb = std::function<void(Enum2Enum prop2)>;
 /** Callback for changes of prop3 */
-using EnumInterfaceProp3PropertyCb = std::function<void(const Enum3Enum& prop3)>;
+using EnumInterfaceProp3PropertyCb = std::function<void(Enum3Enum prop3)>;
 /** Callback for sig0 signal triggers */
-using EnumInterfaceSig0SignalCb = std::function<void(const Enum0Enum& param0)> ;
+using EnumInterfaceSig0SignalCb = std::function<void(Enum0Enum param0)> ;
 /** Callback for sig1 signal triggers */
-using EnumInterfaceSig1SignalCb = std::function<void(const Enum1Enum& param1)> ;
+using EnumInterfaceSig1SignalCb = std::function<void(Enum1Enum param1)> ;
 /** Callback for sig2 signal triggers */
-using EnumInterfaceSig2SignalCb = std::function<void(const Enum2Enum& param2)> ;
+using EnumInterfaceSig2SignalCb = std::function<void(Enum2Enum param2)> ;
 /** Callback for sig3 signal triggers */
-using EnumInterfaceSig3SignalCb = std::function<void(const Enum3Enum& param3)> ;
+using EnumInterfaceSig3SignalCb = std::function<void(Enum3Enum param3)> ;
 
 
 /**
@@ -355,49 +355,49 @@ public:
     * Needs to be invoked by the EnumInterface implementation when property prop0 changes.
     * @param The new value of prop0.
     */
-    virtual void publishProp0Changed(const Enum0Enum& prop0) const = 0;
+    virtual void publishProp0Changed(Enum0Enum prop0) const = 0;
     /**
     * Publishes the property changed to all subscribed clients.
     * Needs to be invoked by the EnumInterface implementation when property prop1 changes.
     * @param The new value of prop1.
     */
-    virtual void publishProp1Changed(const Enum1Enum& prop1) const = 0;
+    virtual void publishProp1Changed(Enum1Enum prop1) const = 0;
     /**
     * Publishes the property changed to all subscribed clients.
     * Needs to be invoked by the EnumInterface implementation when property prop2 changes.
     * @param The new value of prop2.
     */
-    virtual void publishProp2Changed(const Enum2Enum& prop2) const = 0;
+    virtual void publishProp2Changed(Enum2Enum prop2) const = 0;
     /**
     * Publishes the property changed to all subscribed clients.
     * Needs to be invoked by the EnumInterface implementation when property prop3 changes.
     * @param The new value of prop3.
     */
-    virtual void publishProp3Changed(const Enum3Enum& prop3) const = 0;
+    virtual void publishProp3Changed(Enum3Enum prop3) const = 0;
     /**
     * Publishes the emitted signal to all subscribed clients.
     * Needs to be invoked by the EnumInterface implementation when sig0 is emitted.
     * @param param0 
     */
-    virtual void publishSig0(const Enum0Enum& param0) const = 0;
+    virtual void publishSig0(Enum0Enum param0) const = 0;
     /**
     * Publishes the emitted signal to all subscribed clients.
     * Needs to be invoked by the EnumInterface implementation when sig1 is emitted.
     * @param param1 
     */
-    virtual void publishSig1(const Enum1Enum& param1) const = 0;
+    virtual void publishSig1(Enum1Enum param1) const = 0;
     /**
     * Publishes the emitted signal to all subscribed clients.
     * Needs to be invoked by the EnumInterface implementation when sig2 is emitted.
     * @param param2 
     */
-    virtual void publishSig2(const Enum2Enum& param2) const = 0;
+    virtual void publishSig2(Enum2Enum param2) const = 0;
     /**
     * Publishes the emitted signal to all subscribed clients.
     * Needs to be invoked by the EnumInterface implementation when sig3 is emitted.
     * @param param3 
     */
-    virtual void publishSig3(const Enum3Enum& param3) const = 0;
+    virtual void publishSig3(Enum3Enum param3) const = 0;
 };
 
 

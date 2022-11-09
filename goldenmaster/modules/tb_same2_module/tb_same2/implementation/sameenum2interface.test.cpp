@@ -12,7 +12,7 @@ TEST_CASE("Testing SameEnum2Interface", "[SameEnum2Interface]"){
     }
     SECTION("Test operation func2") {
         // Do implement test here
-        testSameEnum2Interface->func2(Enum1Enum::value1,Enum2Enum::value1);
+        testSameEnum2Interface->func2(Enum1Enum::value1, Enum2Enum::value1);
     }
     SECTION("Test property prop1") {
         // Do implement test here

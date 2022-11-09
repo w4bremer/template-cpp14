@@ -115,7 +115,7 @@ void ManyParamInterfaceService::onSig1(int param1)
         }
     }
 }
-void ManyParamInterfaceService::onSig2(int param1,int param2)
+void ManyParamInterfaceService::onSig2(int param1, int param2)
 {
     const nlohmann::json args = { param1, param2 };
     const auto& signalId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "sig2");
@@ -126,7 +126,7 @@ void ManyParamInterfaceService::onSig2(int param1,int param2)
         }
     }
 }
-void ManyParamInterfaceService::onSig3(int param1,int param2,int param3)
+void ManyParamInterfaceService::onSig3(int param1, int param2, int param3)
 {
     const nlohmann::json args = { param1, param2, param3 };
     const auto& signalId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "sig3");
@@ -137,7 +137,7 @@ void ManyParamInterfaceService::onSig3(int param1,int param2,int param3)
         }
     }
 }
-void ManyParamInterfaceService::onSig4(int param1,int param2,int param3,int param4)
+void ManyParamInterfaceService::onSig4(int param1, int param2, int param3, int param4)
 {
     const nlohmann::json args = { param1, param2, param3, param4 };
     const auto& signalId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "sig4");

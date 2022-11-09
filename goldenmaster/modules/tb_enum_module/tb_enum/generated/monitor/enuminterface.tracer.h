@@ -30,42 +30,42 @@ public:
   * Prepares information about the func0 call in a nlohmann::json format and puts to a tracer.
   * @param The EnumInterface object to trace.
   */
-  void trace_func0(const Enum0Enum& param0);
+  void trace_func0(Enum0Enum param0);
   /**
   * Prepares information about the func1 call in a nlohmann::json format and puts to a tracer.
   * @param The EnumInterface object to trace.
   */
-  void trace_func1(const Enum1Enum& param1);
+  void trace_func1(Enum1Enum param1);
   /**
   * Prepares information about the func2 call in a nlohmann::json format and puts to a tracer.
   * @param The EnumInterface object to trace.
   */
-  void trace_func2(const Enum2Enum& param2);
+  void trace_func2(Enum2Enum param2);
   /**
   * Prepares information about the func3 call in a nlohmann::json format and puts to a tracer.
   * @param The EnumInterface object to trace.
   */
-  void trace_func3(const Enum3Enum& param3);
+  void trace_func3(Enum3Enum param3);
   /**
   * Prepares information about the sig0 call in a nlohmann::json format and puts to a tracer.
   * @param The EnumInterface object to trace.
   */
-  void trace_sig0(const Enum0Enum& param0);
+  void trace_sig0(Enum0Enum param0);
   /**
   * Prepares information about the sig1 call in a nlohmann::json format and puts to a tracer.
   * @param The EnumInterface object to trace.
   */
-  void trace_sig1(const Enum1Enum& param1);
+  void trace_sig1(Enum1Enum param1);
   /**
   * Prepares information about the sig2 call in a nlohmann::json format and puts to a tracer.
   * @param The EnumInterface object to trace.
   */
-  void trace_sig2(const Enum2Enum& param2);
+  void trace_sig2(Enum2Enum param2);
   /**
   * Prepares information about the sig3 call in a nlohmann::json format and puts to a tracer.
   * @param The EnumInterface object to trace.
   */
-  void trace_sig3(const Enum3Enum& param3);
+  void trace_sig3(Enum3Enum param3);
 private:
   /**
   * A tracer object to which the information about the state and operations is put.

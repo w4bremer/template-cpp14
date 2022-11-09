@@ -115,23 +115,27 @@ void SimpleArrayInterfaceTraceDecorator::onSigString(const std::list<std::string
     m_tracer->trace_sigString(paramString);
 }
 
-void SimpleArrayInterfaceTraceDecorator::onPropBoolChanged(const std::list<bool>& /*propBool*/)
+void SimpleArrayInterfaceTraceDecorator::onPropBoolChanged(const std::list<bool>& propBool)
 {
+    (void) propBool; // suppress the 'Unreferenced Formal Parameter' warning.
     m_tracer->capture_state(this);
 }
 
-void SimpleArrayInterfaceTraceDecorator::onPropIntChanged(const std::list<int>& /*propInt*/)
+void SimpleArrayInterfaceTraceDecorator::onPropIntChanged(const std::list<int>& propInt)
 {
+    (void) propInt; // suppress the 'Unreferenced Formal Parameter' warning.
     m_tracer->capture_state(this);
 }
 
-void SimpleArrayInterfaceTraceDecorator::onPropFloatChanged(const std::list<float>& /*propFloat*/)
+void SimpleArrayInterfaceTraceDecorator::onPropFloatChanged(const std::list<float>& propFloat)
 {
+    (void) propFloat; // suppress the 'Unreferenced Formal Parameter' warning.
     m_tracer->capture_state(this);
 }
 
-void SimpleArrayInterfaceTraceDecorator::onPropStringChanged(const std::list<std::string>& /*propString*/)
+void SimpleArrayInterfaceTraceDecorator::onPropStringChanged(const std::list<std::string>& propString)
 {
+    (void) propString; // suppress the 'Unreferenced Formal Parameter' warning.
     m_tracer->capture_state(this);
 }
 

@@ -181,7 +181,7 @@ std::future<int> ManyParamInterfaceClient::func2Async(int param1, int param2)
             std::promise<int> resultPromise;
             const auto& operationId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "func2");
             m_node->invokeRemote(operationId,
-                nlohmann::json::array({param1,param2}), [&resultPromise](ApiGear::ObjectLink::InvokeReplyArg arg) {
+                nlohmann::json::array({param1, param2}), [&resultPromise](ApiGear::ObjectLink::InvokeReplyArg arg) {
                     const int& value = arg.value.get<int>();
                     resultPromise.set_value(value);
                 });
@@ -214,7 +214,7 @@ std::future<int> ManyParamInterfaceClient::func3Async(int param1, int param2, in
             std::promise<int> resultPromise;
             const auto& operationId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "func3");
             m_node->invokeRemote(operationId,
-                nlohmann::json::array({param1,param2,param3}), [&resultPromise](ApiGear::ObjectLink::InvokeReplyArg arg) {
+                nlohmann::json::array({param1, param2, param3}), [&resultPromise](ApiGear::ObjectLink::InvokeReplyArg arg) {
                     const int& value = arg.value.get<int>();
                     resultPromise.set_value(value);
                 });
@@ -248,7 +248,7 @@ std::future<int> ManyParamInterfaceClient::func4Async(int param1, int param2, in
             std::promise<int> resultPromise;
             const auto& operationId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "func4");
             m_node->invokeRemote(operationId,
-                nlohmann::json::array({param1,param2,param3,param4}), [&resultPromise](ApiGear::ObjectLink::InvokeReplyArg arg) {
+                nlohmann::json::array({param1, param2, param3, param4}), [&resultPromise](ApiGear::ObjectLink::InvokeReplyArg arg) {
                     const int& value = arg.value.get<int>();
                     resultPromise.set_value(value);
                 });

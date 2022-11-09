@@ -38,7 +38,7 @@ void EnumInterfacePublisher::unsubscribeFromProp0Changed(long handleId)
     m_prop0Callbacks.erase(handleId);
 }
 
-void EnumInterfacePublisher::publishProp0Changed(const Enum0Enum& prop0) const
+void EnumInterfacePublisher::publishProp0Changed(Enum0Enum prop0) const
 {
     for(const auto& subscriber: m_allChangesSubscribers)
     {
@@ -65,7 +65,7 @@ void EnumInterfacePublisher::unsubscribeFromProp1Changed(long handleId)
     m_prop1Callbacks.erase(handleId);
 }
 
-void EnumInterfacePublisher::publishProp1Changed(const Enum1Enum& prop1) const
+void EnumInterfacePublisher::publishProp1Changed(Enum1Enum prop1) const
 {
     for(const auto& subscriber: m_allChangesSubscribers)
     {
@@ -92,7 +92,7 @@ void EnumInterfacePublisher::unsubscribeFromProp2Changed(long handleId)
     m_prop2Callbacks.erase(handleId);
 }
 
-void EnumInterfacePublisher::publishProp2Changed(const Enum2Enum& prop2) const
+void EnumInterfacePublisher::publishProp2Changed(Enum2Enum prop2) const
 {
     for(const auto& subscriber: m_allChangesSubscribers)
     {
@@ -119,7 +119,7 @@ void EnumInterfacePublisher::unsubscribeFromProp3Changed(long handleId)
     m_prop3Callbacks.erase(handleId);
 }
 
-void EnumInterfacePublisher::publishProp3Changed(const Enum3Enum& prop3) const
+void EnumInterfacePublisher::publishProp3Changed(Enum3Enum prop3) const
 {
     for(const auto& subscriber: m_allChangesSubscribers)
     {
@@ -147,7 +147,7 @@ void EnumInterfacePublisher::unsubscribeFromSig0(long handleId)
     m_sig0Callbacks.erase(handleId);
 }
 
-void EnumInterfacePublisher::publishSig0(const Enum0Enum& param0) const
+void EnumInterfacePublisher::publishSig0(Enum0Enum param0) const
 {
     for(const auto& subscriber: m_allChangesSubscribers)
     {
@@ -175,7 +175,7 @@ void EnumInterfacePublisher::unsubscribeFromSig1(long handleId)
     m_sig1Callbacks.erase(handleId);
 }
 
-void EnumInterfacePublisher::publishSig1(const Enum1Enum& param1) const
+void EnumInterfacePublisher::publishSig1(Enum1Enum param1) const
 {
     for(const auto& subscriber: m_allChangesSubscribers)
     {
@@ -203,7 +203,7 @@ void EnumInterfacePublisher::unsubscribeFromSig2(long handleId)
     m_sig2Callbacks.erase(handleId);
 }
 
-void EnumInterfacePublisher::publishSig2(const Enum2Enum& param2) const
+void EnumInterfacePublisher::publishSig2(Enum2Enum param2) const
 {
     for(const auto& subscriber: m_allChangesSubscribers)
     {
@@ -231,7 +231,7 @@ void EnumInterfacePublisher::unsubscribeFromSig3(long handleId)
     m_sig3Callbacks.erase(handleId);
 }
 
-void EnumInterfacePublisher::publishSig3(const Enum3Enum& param3) const
+void EnumInterfacePublisher::publishSig3(Enum3Enum param3) const
 {
     for(const auto& subscriber: m_allChangesSubscribers)
     {

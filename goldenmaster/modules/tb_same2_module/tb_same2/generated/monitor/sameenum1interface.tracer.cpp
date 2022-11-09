@@ -16,13 +16,13 @@ void SameEnum1InterfaceTracer::capture_state(ISameEnum1Interface* obj)
     m_tracer.state("tb.same2.SameEnum1Interface#_state", fields_);
 }
 
-void SameEnum1InterfaceTracer::trace_func1(const Enum1Enum& param1)
+void SameEnum1InterfaceTracer::trace_func1(Enum1Enum param1)
 {
     nlohmann::json fields_;
     fields_["param1"] = param1;
     m_tracer.call("tb.same2.SameEnum1Interface#func1", fields_);
 }
-void SameEnum1InterfaceTracer::trace_sig1(const Enum1Enum& param1)
+void SameEnum1InterfaceTracer::trace_sig1(Enum1Enum param1)
 {
     nlohmann::json fields_;
     fields_["param1"] = param1;

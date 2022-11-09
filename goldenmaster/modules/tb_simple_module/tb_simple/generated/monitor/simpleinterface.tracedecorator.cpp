@@ -91,7 +91,7 @@ void SimpleInterfaceTraceDecorator::setPropString(const std::string& propString)
     m_impl.setPropString(propString);
 }
 
-std::string SimpleInterfaceTraceDecorator::getPropString() const
+const std::string& SimpleInterfaceTraceDecorator::getPropString() const
 {
     return m_impl.getPropString();
 }
@@ -115,23 +115,27 @@ void SimpleInterfaceTraceDecorator::onSigString(const std::string& paramString)
     m_tracer->trace_sigString(paramString);
 }
 
-void SimpleInterfaceTraceDecorator::onPropBoolChanged(bool /*propBool*/)
+void SimpleInterfaceTraceDecorator::onPropBoolChanged(bool propBool)
 {
+    (void) propBool; // suppress the 'Unreferenced Formal Parameter' warning.
     m_tracer->capture_state(this);
 }
 
-void SimpleInterfaceTraceDecorator::onPropIntChanged(int /*propInt*/)
+void SimpleInterfaceTraceDecorator::onPropIntChanged(int propInt)
 {
+    (void) propInt; // suppress the 'Unreferenced Formal Parameter' warning.
     m_tracer->capture_state(this);
 }
 
-void SimpleInterfaceTraceDecorator::onPropFloatChanged(float /*propFloat*/)
+void SimpleInterfaceTraceDecorator::onPropFloatChanged(float propFloat)
 {
+    (void) propFloat; // suppress the 'Unreferenced Formal Parameter' warning.
     m_tracer->capture_state(this);
 }
 
-void SimpleInterfaceTraceDecorator::onPropStringChanged(std::string /*propString*/)
+void SimpleInterfaceTraceDecorator::onPropStringChanged(const std::string& propString)
 {
+    (void) propString; // suppress the 'Unreferenced Formal Parameter' warning.
     m_tracer->capture_state(this);
 }
 

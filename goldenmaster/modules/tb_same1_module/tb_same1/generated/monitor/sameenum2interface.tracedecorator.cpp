@@ -19,61 +19,63 @@ std::unique_ptr<SameEnum2InterfaceTraceDecorator> SameEnum2InterfaceTraceDecorat
 {
     return std::unique_ptr<SameEnum2InterfaceTraceDecorator>(new SameEnum2InterfaceTraceDecorator(impl, tracer));
 }
-Enum1Enum SameEnum2InterfaceTraceDecorator::func1(const Enum1Enum& param1)
+Enum1Enum SameEnum2InterfaceTraceDecorator::func1(Enum1Enum param1)
 {
     m_tracer->trace_func1(param1);
     return m_impl.func1(param1);
 }
-std::future<Enum1Enum> SameEnum2InterfaceTraceDecorator::func1Async(const Enum1Enum& param1)
+std::future<Enum1Enum> SameEnum2InterfaceTraceDecorator::func1Async(Enum1Enum param1)
 {
     m_tracer->trace_func1(param1);
     return m_impl.func1Async(param1);
 }
-Enum1Enum SameEnum2InterfaceTraceDecorator::func2(const Enum1Enum& param1, const Enum2Enum& param2)
+Enum1Enum SameEnum2InterfaceTraceDecorator::func2(Enum1Enum param1, Enum2Enum param2)
 {
-    m_tracer->trace_func2(param1,param2);
-    return m_impl.func2(param1,param2);
+    m_tracer->trace_func2(param1, param2);
+    return m_impl.func2(param1, param2);
 }
-std::future<Enum1Enum> SameEnum2InterfaceTraceDecorator::func2Async(const Enum1Enum& param1, const Enum2Enum& param2)
+std::future<Enum1Enum> SameEnum2InterfaceTraceDecorator::func2Async(Enum1Enum param1, Enum2Enum param2)
 {
-    m_tracer->trace_func2(param1,param2);
-    return m_impl.func2Async(param1,param2);
+    m_tracer->trace_func2(param1, param2);
+    return m_impl.func2Async(param1, param2);
 }
-void SameEnum2InterfaceTraceDecorator::setProp1(const Enum1Enum& prop1)
+void SameEnum2InterfaceTraceDecorator::setProp1(Enum1Enum prop1)
 {
     m_impl.setProp1(prop1);
 }
 
-const Enum1Enum& SameEnum2InterfaceTraceDecorator::getProp1() const
+Enum1Enum SameEnum2InterfaceTraceDecorator::getProp1() const
 {
     return m_impl.getProp1();
 }
-void SameEnum2InterfaceTraceDecorator::setProp2(const Enum2Enum& prop2)
+void SameEnum2InterfaceTraceDecorator::setProp2(Enum2Enum prop2)
 {
     m_impl.setProp2(prop2);
 }
 
-const Enum2Enum& SameEnum2InterfaceTraceDecorator::getProp2() const
+Enum2Enum SameEnum2InterfaceTraceDecorator::getProp2() const
 {
     return m_impl.getProp2();
 }
-void SameEnum2InterfaceTraceDecorator::onSig1(const Enum1Enum& param1)
+void SameEnum2InterfaceTraceDecorator::onSig1(Enum1Enum param1)
 {
     m_tracer->trace_sig1(param1);
 }
 
-void SameEnum2InterfaceTraceDecorator::onSig2(const Enum1Enum& param1,const Enum2Enum& param2)
+void SameEnum2InterfaceTraceDecorator::onSig2(Enum1Enum param1, Enum2Enum param2)
 {
-    m_tracer->trace_sig2(param1,param2);
+    m_tracer->trace_sig2(param1, param2);
 }
 
-void SameEnum2InterfaceTraceDecorator::onProp1Changed(const Enum1Enum& /*prop1*/)
+void SameEnum2InterfaceTraceDecorator::onProp1Changed(Enum1Enum prop1)
 {
+    (void) prop1; // suppress the 'Unreferenced Formal Parameter' warning.
     m_tracer->capture_state(this);
 }
 
-void SameEnum2InterfaceTraceDecorator::onProp2Changed(const Enum2Enum& /*prop2*/)
+void SameEnum2InterfaceTraceDecorator::onProp2Changed(Enum2Enum prop2)
 {
+    (void) prop2; // suppress the 'Unreferenced Formal Parameter' warning.
     m_tracer->capture_state(this);
 }
 

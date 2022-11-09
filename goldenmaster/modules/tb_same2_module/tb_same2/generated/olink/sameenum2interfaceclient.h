@@ -46,40 +46,40 @@ public:
     * Property getter
     * @return Locally stored locally value for Prop1.
     */
-    const Enum1Enum& getProp1() const override;
+    Enum1Enum getProp1() const override;
     /**
     * Request setting a property on the SameEnum2Interface service.
     * @param The value to which set request is send for the Prop1.
     */
-    void setProp1(const Enum1Enum& prop1) override;
+    void setProp1(Enum1Enum prop1) override;
     /**
     * Property getter
     * @return Locally stored locally value for Prop2.
     */
-    const Enum2Enum& getProp2() const override;
+    Enum2Enum getProp2() const override;
     /**
     * Request setting a property on the SameEnum2Interface service.
     * @param The value to which set request is send for the Prop2.
     */
-    void setProp2(const Enum2Enum& prop2) override;
+    void setProp2(Enum2Enum prop2) override;
     /**
     * Remote call of ISameEnum2Interface::func1 on the SameEnum2Interface service.
     * Uses func1Async
     */
-    Enum1Enum func1(const Enum1Enum& param1) override;
+    Enum1Enum func1(Enum1Enum param1) override;
     /**
     * Remote call of ISameEnum2Interface::func1 on the SameEnum2Interface service.
     */
-    std::future<Enum1Enum> func1Async(const Enum1Enum& param1) override;
+    std::future<Enum1Enum> func1Async(Enum1Enum param1) override;
     /**
     * Remote call of ISameEnum2Interface::func2 on the SameEnum2Interface service.
     * Uses func2Async
     */
-    Enum1Enum func2(const Enum1Enum& param1, const Enum2Enum& param2) override;
+    Enum1Enum func2(Enum1Enum param1, Enum2Enum param2) override;
     /**
     * Remote call of ISameEnum2Interface::func2 on the SameEnum2Interface service.
     */
-    std::future<Enum1Enum> func2Async(const Enum1Enum& param1, const Enum2Enum& param2) override;
+    std::future<Enum1Enum> func2Async(Enum1Enum param1, Enum2Enum param2) override;
 
     /** The publisher to subscribe to. */
     ISameEnum2InterfacePublisher& _getPublisher() const override;
@@ -129,9 +129,9 @@ private:
     */
     void applyState(const nlohmann::json& fields);
     /**  Updates local value for Prop1 and informs subscriber about the change*/
-    void setProp1Local(const Enum1Enum& prop1);
+    void setProp1Local(Enum1Enum prop1);
     /**  Updates local value for Prop2 and informs subscriber about the change*/
-    void setProp2Local(const Enum2Enum& prop2);
+    void setProp2Local(Enum2Enum prop2);
     
     /** Local storage for properties values. */
     SameEnum2InterfaceData m_data;

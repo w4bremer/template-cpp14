@@ -12,7 +12,7 @@ TEST_CASE("Testing SameStruct2Interface", "[SameStruct2Interface]"){
     }
     SECTION("Test operation func2") {
         // Do implement test here
-        testSameStruct2Interface->func2(Struct1(),Struct2());
+        testSameStruct2Interface->func2(Struct1(), Struct2());
     }
     SECTION("Test property prop1") {
         // Do implement test here

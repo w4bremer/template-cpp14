@@ -46,78 +46,78 @@ public:
     * Property getter
     * @return Locally stored locally value for Prop0.
     */
-    const Enum0Enum& getProp0() const override;
+    Enum0Enum getProp0() const override;
     /**
     * Request setting a property on the EnumInterface service.
     * @param The value to which set request is send for the Prop0.
     */
-    void setProp0(const Enum0Enum& prop0) override;
+    void setProp0(Enum0Enum prop0) override;
     /**
     * Property getter
     * @return Locally stored locally value for Prop1.
     */
-    const Enum1Enum& getProp1() const override;
+    Enum1Enum getProp1() const override;
     /**
     * Request setting a property on the EnumInterface service.
     * @param The value to which set request is send for the Prop1.
     */
-    void setProp1(const Enum1Enum& prop1) override;
+    void setProp1(Enum1Enum prop1) override;
     /**
     * Property getter
     * @return Locally stored locally value for Prop2.
     */
-    const Enum2Enum& getProp2() const override;
+    Enum2Enum getProp2() const override;
     /**
     * Request setting a property on the EnumInterface service.
     * @param The value to which set request is send for the Prop2.
     */
-    void setProp2(const Enum2Enum& prop2) override;
+    void setProp2(Enum2Enum prop2) override;
     /**
     * Property getter
     * @return Locally stored locally value for Prop3.
     */
-    const Enum3Enum& getProp3() const override;
+    Enum3Enum getProp3() const override;
     /**
     * Request setting a property on the EnumInterface service.
     * @param The value to which set request is send for the Prop3.
     */
-    void setProp3(const Enum3Enum& prop3) override;
+    void setProp3(Enum3Enum prop3) override;
     /**
     * Remote call of IEnumInterface::func0 on the EnumInterface service.
     * Uses func0Async
     */
-    Enum0Enum func0(const Enum0Enum& param0) override;
+    Enum0Enum func0(Enum0Enum param0) override;
     /**
     * Remote call of IEnumInterface::func0 on the EnumInterface service.
     */
-    std::future<Enum0Enum> func0Async(const Enum0Enum& param0) override;
+    std::future<Enum0Enum> func0Async(Enum0Enum param0) override;
     /**
     * Remote call of IEnumInterface::func1 on the EnumInterface service.
     * Uses func1Async
     */
-    Enum1Enum func1(const Enum1Enum& param1) override;
+    Enum1Enum func1(Enum1Enum param1) override;
     /**
     * Remote call of IEnumInterface::func1 on the EnumInterface service.
     */
-    std::future<Enum1Enum> func1Async(const Enum1Enum& param1) override;
+    std::future<Enum1Enum> func1Async(Enum1Enum param1) override;
     /**
     * Remote call of IEnumInterface::func2 on the EnumInterface service.
     * Uses func2Async
     */
-    Enum2Enum func2(const Enum2Enum& param2) override;
+    Enum2Enum func2(Enum2Enum param2) override;
     /**
     * Remote call of IEnumInterface::func2 on the EnumInterface service.
     */
-    std::future<Enum2Enum> func2Async(const Enum2Enum& param2) override;
+    std::future<Enum2Enum> func2Async(Enum2Enum param2) override;
     /**
     * Remote call of IEnumInterface::func3 on the EnumInterface service.
     * Uses func3Async
     */
-    Enum3Enum func3(const Enum3Enum& param3) override;
+    Enum3Enum func3(Enum3Enum param3) override;
     /**
     * Remote call of IEnumInterface::func3 on the EnumInterface service.
     */
-    std::future<Enum3Enum> func3Async(const Enum3Enum& param3) override;
+    std::future<Enum3Enum> func3Async(Enum3Enum param3) override;
 
     /** The publisher to subscribe to. */
     IEnumInterfacePublisher& _getPublisher() const override;
@@ -167,13 +167,13 @@ private:
     */
     void applyState(const nlohmann::json& fields);
     /**  Updates local value for Prop0 and informs subscriber about the change*/
-    void setProp0Local(const Enum0Enum& prop0);
+    void setProp0Local(Enum0Enum prop0);
     /**  Updates local value for Prop1 and informs subscriber about the change*/
-    void setProp1Local(const Enum1Enum& prop1);
+    void setProp1Local(Enum1Enum prop1);
     /**  Updates local value for Prop2 and informs subscriber about the change*/
-    void setProp2Local(const Enum2Enum& prop2);
+    void setProp2Local(Enum2Enum prop2);
     /**  Updates local value for Prop3 and informs subscriber about the change*/
-    void setProp3Local(const Enum3Enum& prop3);
+    void setProp3Local(Enum3Enum prop3);
     
     /** Local storage for properties values. */
     EnumInterfaceData m_data;

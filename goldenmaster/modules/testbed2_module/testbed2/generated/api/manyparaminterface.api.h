@@ -129,7 +129,7 @@ public:
     *
     * @warning the subscribed function shall not be blocking and must return immediately!
     */
-    virtual void onSig2(int param1,int param2) = 0;
+    virtual void onSig2(int param1, int param2) = 0;
     /**
     * Called by the IManyParamInterfacePublisher when the ManyParamInterface emits sig3, if subscribed for the sig3.
     * @param param1 
@@ -138,7 +138,7 @@ public:
     *
     * @warning the subscribed function shall not be blocking and must return immediately!
     */
-    virtual void onSig3(int param1,int param2,int param3) = 0;
+    virtual void onSig3(int param1, int param2, int param3) = 0;
     /**
     * Called by the IManyParamInterfacePublisher when the ManyParamInterface emits sig4, if subscribed for the sig4.
     * @param param1 
@@ -148,7 +148,7 @@ public:
     *
     * @warning the subscribed function shall not be blocking and must return immediately!
     */
-    virtual void onSig4(int param1,int param2,int param3,int param4) = 0;
+    virtual void onSig4(int param1, int param2, int param3, int param4) = 0;
     /**
     * Called by the IManyParamInterfacePublisher when prop1 value has changed if subscribed for the prop1 change.
     *
@@ -186,11 +186,11 @@ using ManyParamInterfaceProp4PropertyCb = std::function<void(int prop4)>;
 /** Callback for sig1 signal triggers */
 using ManyParamInterfaceSig1SignalCb = std::function<void(int param1)> ;
 /** Callback for sig2 signal triggers */
-using ManyParamInterfaceSig2SignalCb = std::function<void(int param1,int param2)> ;
+using ManyParamInterfaceSig2SignalCb = std::function<void(int param1, int param2)> ;
 /** Callback for sig3 signal triggers */
-using ManyParamInterfaceSig3SignalCb = std::function<void(int param1,int param2,int param3)> ;
+using ManyParamInterfaceSig3SignalCb = std::function<void(int param1, int param2, int param3)> ;
 /** Callback for sig4 signal triggers */
-using ManyParamInterfaceSig4SignalCb = std::function<void(int param1,int param2,int param3,int param4)> ;
+using ManyParamInterfaceSig4SignalCb = std::function<void(int param1, int param2, int param3, int param4)> ;
 
 
 /**
@@ -392,7 +392,7 @@ public:
     * @param param1 
     * @param param2 
     */
-    virtual void publishSig2(int param1,int param2) const = 0;
+    virtual void publishSig2(int param1, int param2) const = 0;
     /**
     * Publishes the emitted signal to all subscribed clients.
     * Needs to be invoked by the ManyParamInterface implementation when sig3 is emitted.
@@ -400,7 +400,7 @@ public:
     * @param param2 
     * @param param3 
     */
-    virtual void publishSig3(int param1,int param2,int param3) const = 0;
+    virtual void publishSig3(int param1, int param2, int param3) const = 0;
     /**
     * Publishes the emitted signal to all subscribed clients.
     * Needs to be invoked by the ManyParamInterface implementation when sig4 is emitted.
@@ -409,7 +409,7 @@ public:
     * @param param3 
     * @param param4 
     */
-    virtual void publishSig4(int param1,int param2,int param3,int param4) const = 0;
+    virtual void publishSig4(int param1, int param2, int param3, int param4) const = 0;
 };
 
 

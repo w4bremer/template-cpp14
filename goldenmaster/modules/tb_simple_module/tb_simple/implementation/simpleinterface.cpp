@@ -61,7 +61,7 @@ void SimpleInterface::setPropString(const std::string& propString)
     }
 }
 
-std::string SimpleInterface::getPropString() const
+const std::string& SimpleInterface::getPropString() const
 {
     return m_data.m_propString;
 }

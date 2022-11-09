@@ -79,7 +79,7 @@ public:
     /**
     * Implementation of INestedStruct2InterfacePublisher::publishSig2
     */
-    void publishSig2(const NestedStruct1& param1,const NestedStruct2& param2) const override;
+    void publishSig2(const NestedStruct1& param1, const NestedStruct2& param2) const override;
 private:
     // Subscribers informed about any property change or singal emited in NestedStruct2Interface
     std::vector<std::reference_wrapper<INestedStruct2InterfaceSubscriber>> m_allChangesSubscribers;

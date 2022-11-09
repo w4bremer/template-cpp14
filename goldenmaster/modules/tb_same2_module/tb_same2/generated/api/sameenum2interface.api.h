@@ -27,38 +27,38 @@ public:
     virtual ~ISameEnum2Interface() = default;
 
 
-    virtual Enum1Enum func1(const Enum1Enum& param1) = 0;
+    virtual Enum1Enum func1(Enum1Enum param1) = 0;
     /**
-    * Asynchronous version of func1(const Enum1Enum& param1)
+    * Asynchronous version of func1(Enum1Enum param1)
     * @return Promise of type Enum1Enum which is set once the function has completed
     */
-    virtual std::future<Enum1Enum> func1Async(const Enum1Enum& param1) = 0;
+    virtual std::future<Enum1Enum> func1Async(Enum1Enum param1) = 0;
 
 
-    virtual Enum1Enum func2(const Enum1Enum& param1, const Enum2Enum& param2) = 0;
+    virtual Enum1Enum func2(Enum1Enum param1, Enum2Enum param2) = 0;
     /**
-    * Asynchronous version of func2(const Enum1Enum& param1, const Enum2Enum& param2)
+    * Asynchronous version of func2(Enum1Enum param1, Enum2Enum param2)
     * @return Promise of type Enum1Enum which is set once the function has completed
     */
-    virtual std::future<Enum1Enum> func2Async(const Enum1Enum& param1, const Enum2Enum& param2) = 0;
+    virtual std::future<Enum1Enum> func2Async(Enum1Enum param1, Enum2Enum param2) = 0;
 
     /**
     * Sets the value of the prop1 property.
     */
-    virtual void setProp1(const Enum1Enum& prop1) = 0;
+    virtual void setProp1(Enum1Enum prop1) = 0;
     /**
     * Gets the value of the prop1 property.
     */
-    virtual const Enum1Enum& getProp1() const = 0;
+    virtual Enum1Enum getProp1() const = 0;
 
     /**
     * Sets the value of the prop2 property.
     */
-    virtual void setProp2(const Enum2Enum& prop2) = 0;
+    virtual void setProp2(Enum2Enum prop2) = 0;
     /**
     * Gets the value of the prop2 property.
     */
-    virtual const Enum2Enum& getProp2() const = 0;
+    virtual Enum2Enum getProp2() const = 0;
 
     /**
     * Access to a publisher, use it to subscribe for SameEnum2Interface changes and signal emission.
@@ -87,7 +87,7 @@ public:
     *
     * @warning the subscribed function shall not be blocking and must return immediately!
     */
-    virtual void onSig1(const Enum1Enum& param1) = 0;
+    virtual void onSig1(Enum1Enum param1) = 0;
     /**
     * Called by the ISameEnum2InterfacePublisher when the SameEnum2Interface emits sig2, if subscribed for the sig2.
     * @param param1 
@@ -95,29 +95,29 @@ public:
     *
     * @warning the subscribed function shall not be blocking and must return immediately!
     */
-    virtual void onSig2(const Enum1Enum& param1,const Enum2Enum& param2) = 0;
+    virtual void onSig2(Enum1Enum param1, Enum2Enum param2) = 0;
     /**
     * Called by the ISameEnum2InterfacePublisher when prop1 value has changed if subscribed for the prop1 change.
     *
     * @warning the subscribed function shall not be blocking and must return immediately!
     */
-    virtual void onProp1Changed(const Enum1Enum& prop1) = 0;
+    virtual void onProp1Changed(Enum1Enum prop1) = 0;
     /**
     * Called by the ISameEnum2InterfacePublisher when prop2 value has changed if subscribed for the prop2 change.
     *
     * @warning the subscribed function shall not be blocking and must return immediately!
     */
-    virtual void onProp2Changed(const Enum2Enum& prop2) = 0;
+    virtual void onProp2Changed(Enum2Enum prop2) = 0;
 };
 
 /** Callback for changes of prop1 */
-using SameEnum2InterfaceProp1PropertyCb = std::function<void(const Enum1Enum& prop1)>;
+using SameEnum2InterfaceProp1PropertyCb = std::function<void(Enum1Enum prop1)>;
 /** Callback for changes of prop2 */
-using SameEnum2InterfaceProp2PropertyCb = std::function<void(const Enum2Enum& prop2)>;
+using SameEnum2InterfaceProp2PropertyCb = std::function<void(Enum2Enum prop2)>;
 /** Callback for sig1 signal triggers */
-using SameEnum2InterfaceSig1SignalCb = std::function<void(const Enum1Enum& param1)> ;
+using SameEnum2InterfaceSig1SignalCb = std::function<void(Enum1Enum param1)> ;
 /** Callback for sig2 signal triggers */
-using SameEnum2InterfaceSig2SignalCb = std::function<void(const Enum1Enum& param1,const Enum2Enum& param2)> ;
+using SameEnum2InterfaceSig2SignalCb = std::function<void(Enum1Enum param1, Enum2Enum param2)> ;
 
 
 /**
@@ -222,26 +222,26 @@ public:
     * Needs to be invoked by the SameEnum2Interface implementation when property prop1 changes.
     * @param The new value of prop1.
     */
-    virtual void publishProp1Changed(const Enum1Enum& prop1) const = 0;
+    virtual void publishProp1Changed(Enum1Enum prop1) const = 0;
     /**
     * Publishes the property changed to all subscribed clients.
     * Needs to be invoked by the SameEnum2Interface implementation when property prop2 changes.
     * @param The new value of prop2.
     */
-    virtual void publishProp2Changed(const Enum2Enum& prop2) const = 0;
+    virtual void publishProp2Changed(Enum2Enum prop2) const = 0;
     /**
     * Publishes the emitted signal to all subscribed clients.
     * Needs to be invoked by the SameEnum2Interface implementation when sig1 is emitted.
     * @param param1 
     */
-    virtual void publishSig1(const Enum1Enum& param1) const = 0;
+    virtual void publishSig1(Enum1Enum param1) const = 0;
     /**
     * Publishes the emitted signal to all subscribed clients.
     * Needs to be invoked by the SameEnum2Interface implementation when sig2 is emitted.
     * @param param1 
     * @param param2 
     */
-    virtual void publishSig2(const Enum1Enum& param1,const Enum2Enum& param2) const = 0;
+    virtual void publishSig2(Enum1Enum param1, Enum2Enum param2) const = 0;
 };
 
 

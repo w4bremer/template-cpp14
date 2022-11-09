@@ -35,41 +35,41 @@ public:
     virtual ~SameEnum2InterfaceTraceDecorator();
 
     /** Traces func1 and forwards call to SameEnum2Interface implementation. */
-    Enum1Enum func1(const Enum1Enum& param1) override;
+    Enum1Enum func1(Enum1Enum param1) override;
     /** Traces func1 and forwards call to SameEnum2Interface implementation. */
-    std::future<Enum1Enum> func1Async(const Enum1Enum& param1) override;
+    std::future<Enum1Enum> func1Async(Enum1Enum param1) override;
     
     /** Traces func2 and forwards call to SameEnum2Interface implementation. */
-    Enum1Enum func2(const Enum1Enum& param1, const Enum2Enum& param2) override;
+    Enum1Enum func2(Enum1Enum param1, Enum2Enum param2) override;
     /** Traces func2 and forwards call to SameEnum2Interface implementation. */
-    std::future<Enum1Enum> func2Async(const Enum1Enum& param1, const Enum2Enum& param2) override;
+    std::future<Enum1Enum> func2Async(Enum1Enum param1, Enum2Enum param2) override;
     
     /** Forwards call to SameEnum2Interface implementation. */
-    void setProp1(const Enum1Enum& prop1) override;
+    void setProp1(Enum1Enum prop1) override;
     /** Forwards call to SameEnum2Interface implementation. */
-    const Enum1Enum& getProp1() const override;
+    Enum1Enum getProp1() const override;
     
     /** Forwards call to SameEnum2Interface implementation. */
-    void setProp2(const Enum2Enum& prop2) override;
+    void setProp2(Enum2Enum prop2) override;
     /** Forwards call to SameEnum2Interface implementation. */
-    const Enum2Enum& getProp2() const override;
+    Enum2Enum getProp2() const override;
     
     /**
     Traces sig1 emission.
     */
-    void onSig1(const Enum1Enum& param1) override;
+    void onSig1(Enum1Enum param1) override;
     /**
     Traces sig2 emission.
     */
-    void onSig2(const Enum1Enum& param1,const Enum2Enum& param2) override;
+    void onSig2(Enum1Enum param1, Enum2Enum param2) override;
     /**
     Traces prop1 changed.
     */
-    void onProp1Changed(const Enum1Enum& prop1) override;
+    void onProp1Changed(Enum1Enum prop1) override;
     /**
     Traces prop2 changed.
     */
-    void onProp2Changed(const Enum2Enum& prop2) override;
+    void onProp2Changed(Enum2Enum prop2) override;
 
     /**
     * Access to a publisher, use it to subscribe for SameEnum2Interface changes and signal emission.

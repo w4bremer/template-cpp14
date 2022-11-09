@@ -29,7 +29,7 @@ void SameEnum2InterfaceClient::applyState(const nlohmann::json& fields)
     }
 }
 
-void SameEnum2InterfaceClient::setProp1(const Enum1Enum& prop1)
+void SameEnum2InterfaceClient::setProp1(Enum1Enum prop1)
 {
     if(!m_node) {
         emitLog(ApiGear::Logger::LogLevel::Warning, "Attempt to set property but " + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
@@ -39,7 +39,7 @@ void SameEnum2InterfaceClient::setProp1(const Enum1Enum& prop1)
     m_node->setRemoteProperty(propertyId, prop1);
 }
 
-void SameEnum2InterfaceClient::setProp1Local(const Enum1Enum& prop1)
+void SameEnum2InterfaceClient::setProp1Local(Enum1Enum prop1)
 {
     if (m_data.m_prop1 != prop1) {
         m_data.m_prop1 = prop1;
@@ -47,12 +47,12 @@ void SameEnum2InterfaceClient::setProp1Local(const Enum1Enum& prop1)
     }
 }
 
-const Enum1Enum& SameEnum2InterfaceClient::getProp1() const
+Enum1Enum SameEnum2InterfaceClient::getProp1() const
 {
     return m_data.m_prop1;
 }
 
-void SameEnum2InterfaceClient::setProp2(const Enum2Enum& prop2)
+void SameEnum2InterfaceClient::setProp2(Enum2Enum prop2)
 {
     if(!m_node) {
         emitLog(ApiGear::Logger::LogLevel::Warning, "Attempt to set property but " + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
@@ -62,7 +62,7 @@ void SameEnum2InterfaceClient::setProp2(const Enum2Enum& prop2)
     m_node->setRemoteProperty(propertyId, prop2);
 }
 
-void SameEnum2InterfaceClient::setProp2Local(const Enum2Enum& prop2)
+void SameEnum2InterfaceClient::setProp2Local(Enum2Enum prop2)
 {
     if (m_data.m_prop2 != prop2) {
         m_data.m_prop2 = prop2;
@@ -70,12 +70,12 @@ void SameEnum2InterfaceClient::setProp2Local(const Enum2Enum& prop2)
     }
 }
 
-const Enum2Enum& SameEnum2InterfaceClient::getProp2() const
+Enum2Enum SameEnum2InterfaceClient::getProp2() const
 {
     return m_data.m_prop2;
 }
 
-Enum1Enum SameEnum2InterfaceClient::func1(const Enum1Enum& param1)
+Enum1Enum SameEnum2InterfaceClient::func1(Enum1Enum param1)
 {
      if(!m_node) {
         emitLog(ApiGear::Logger::LogLevel::Warning, "Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
@@ -85,7 +85,7 @@ Enum1Enum SameEnum2InterfaceClient::func1(const Enum1Enum& param1)
     return value;
 }
 
-std::future<Enum1Enum> SameEnum2InterfaceClient::func1Async(const Enum1Enum& param1)
+std::future<Enum1Enum> SameEnum2InterfaceClient::func1Async(Enum1Enum param1)
 {
     if(!m_node) {
         emitLog(ApiGear::Logger::LogLevel::Warning, "Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
@@ -106,7 +106,7 @@ std::future<Enum1Enum> SameEnum2InterfaceClient::func1Async(const Enum1Enum& par
     );
 }
 
-Enum1Enum SameEnum2InterfaceClient::func2(const Enum1Enum& param1, const Enum2Enum& param2)
+Enum1Enum SameEnum2InterfaceClient::func2(Enum1Enum param1, Enum2Enum param2)
 {
      if(!m_node) {
         emitLog(ApiGear::Logger::LogLevel::Warning, "Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
@@ -116,7 +116,7 @@ Enum1Enum SameEnum2InterfaceClient::func2(const Enum1Enum& param1, const Enum2En
     return value;
 }
 
-std::future<Enum1Enum> SameEnum2InterfaceClient::func2Async(const Enum1Enum& param1, const Enum2Enum& param2)
+std::future<Enum1Enum> SameEnum2InterfaceClient::func2Async(Enum1Enum param1, Enum2Enum param2)
 {
     if(!m_node) {
         emitLog(ApiGear::Logger::LogLevel::Warning, "Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
@@ -129,7 +129,7 @@ std::future<Enum1Enum> SameEnum2InterfaceClient::func2Async(const Enum1Enum& par
             std::promise<Enum1Enum> resultPromise;
             const auto& operationId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "func2");
             m_node->invokeRemote(operationId,
-                nlohmann::json::array({param1,param2}), [&resultPromise](ApiGear::ObjectLink::InvokeReplyArg arg) {
+                nlohmann::json::array({param1, param2}), [&resultPromise](ApiGear::ObjectLink::InvokeReplyArg arg) {
                     const Enum1Enum& value = arg.value.get<Enum1Enum>();
                     resultPromise.set_value(value);
                 });

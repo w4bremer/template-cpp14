@@ -172,7 +172,7 @@ void SimpleInterfaceService::onPropFloatChanged(float propFloat)
         }
     }
 }
-void SimpleInterfaceService::onPropStringChanged(std::string propString)
+void SimpleInterfaceService::onPropStringChanged(const std::string& propString)
 {
     const auto& propertyId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "propString");
     for(auto node: m_registry.getNodes(ApiGear::ObjectLink::Name::getObjectId(propertyId))) {

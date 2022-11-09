@@ -26,7 +26,7 @@ void SameEnum1InterfaceClient::applyState(const nlohmann::json& fields)
     }
 }
 
-void SameEnum1InterfaceClient::setProp1(const Enum1Enum& prop1)
+void SameEnum1InterfaceClient::setProp1(Enum1Enum prop1)
 {
     if(!m_node) {
         emitLog(ApiGear::Logger::LogLevel::Warning, "Attempt to set property but " + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
@@ -36,7 +36,7 @@ void SameEnum1InterfaceClient::setProp1(const Enum1Enum& prop1)
     m_node->setRemoteProperty(propertyId, prop1);
 }
 
-void SameEnum1InterfaceClient::setProp1Local(const Enum1Enum& prop1)
+void SameEnum1InterfaceClient::setProp1Local(Enum1Enum prop1)
 {
     if (m_data.m_prop1 != prop1) {
         m_data.m_prop1 = prop1;
@@ -44,12 +44,12 @@ void SameEnum1InterfaceClient::setProp1Local(const Enum1Enum& prop1)
     }
 }
 
-const Enum1Enum& SameEnum1InterfaceClient::getProp1() const
+Enum1Enum SameEnum1InterfaceClient::getProp1() const
 {
     return m_data.m_prop1;
 }
 
-Enum1Enum SameEnum1InterfaceClient::func1(const Enum1Enum& param1)
+Enum1Enum SameEnum1InterfaceClient::func1(Enum1Enum param1)
 {
      if(!m_node) {
         emitLog(ApiGear::Logger::LogLevel::Warning, "Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
@@ -59,7 +59,7 @@ Enum1Enum SameEnum1InterfaceClient::func1(const Enum1Enum& param1)
     return value;
 }
 
-std::future<Enum1Enum> SameEnum1InterfaceClient::func1Async(const Enum1Enum& param1)
+std::future<Enum1Enum> SameEnum1InterfaceClient::func1Async(Enum1Enum param1)
 {
     if(!m_node) {
         emitLog(ApiGear::Logger::LogLevel::Warning, "Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");

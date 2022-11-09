@@ -17,29 +17,29 @@ public:
     explicit EnumInterface();
     ~EnumInterface();
 public:
-    void setProp0(const Enum0Enum& prop0) override;
-    const Enum0Enum& getProp0() const override;
+    void setProp0(Enum0Enum prop0) override;
+    Enum0Enum getProp0() const override;
     
-    void setProp1(const Enum1Enum& prop1) override;
-    const Enum1Enum& getProp1() const override;
+    void setProp1(Enum1Enum prop1) override;
+    Enum1Enum getProp1() const override;
     
-    void setProp2(const Enum2Enum& prop2) override;
-    const Enum2Enum& getProp2() const override;
+    void setProp2(Enum2Enum prop2) override;
+    Enum2Enum getProp2() const override;
     
-    void setProp3(const Enum3Enum& prop3) override;
-    const Enum3Enum& getProp3() const override;
+    void setProp3(Enum3Enum prop3) override;
+    Enum3Enum getProp3() const override;
     
-    Enum0Enum func0(const Enum0Enum& param0) override;
-    std::future<Enum0Enum> func0Async(const Enum0Enum& param0) override;
+    Enum0Enum func0(Enum0Enum param0) override;
+    std::future<Enum0Enum> func0Async(Enum0Enum param0) override;
         
-    Enum1Enum func1(const Enum1Enum& param1) override;
-    std::future<Enum1Enum> func1Async(const Enum1Enum& param1) override;
+    Enum1Enum func1(Enum1Enum param1) override;
+    std::future<Enum1Enum> func1Async(Enum1Enum param1) override;
         
-    Enum2Enum func2(const Enum2Enum& param2) override;
-    std::future<Enum2Enum> func2Async(const Enum2Enum& param2) override;
+    Enum2Enum func2(Enum2Enum param2) override;
+    std::future<Enum2Enum> func2Async(Enum2Enum param2) override;
         
-    Enum3Enum func3(const Enum3Enum& param3) override;
-    std::future<Enum3Enum> func3Async(const Enum3Enum& param3) override;
+    Enum3Enum func3(Enum3Enum param3) override;
+    std::future<Enum3Enum> func3Async(Enum3Enum param3) override;
         
     /**
     * Access to a publisher, use it to subscribe for EnumInterface changes and signal emission.

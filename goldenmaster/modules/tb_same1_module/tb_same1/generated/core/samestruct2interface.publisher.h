@@ -79,7 +79,7 @@ public:
     /**
     * Implementation of ISameStruct2InterfacePublisher::publishSig2
     */
-    void publishSig2(const Struct1& param1,const Struct2& param2) const override;
+    void publishSig2(const Struct1& param1, const Struct2& param2) const override;
 private:
     // Subscribers informed about any property change or singal emited in SameStruct2Interface
     std::vector<std::reference_wrapper<ISameStruct2InterfaceSubscriber>> m_allChangesSubscribers;

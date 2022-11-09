@@ -71,11 +71,11 @@ public:
     /**
     Traces sig2 emission.
     */
-    void onSig2(const NestedStruct1& param1,const NestedStruct2& param2) override;
+    void onSig2(const NestedStruct1& param1, const NestedStruct2& param2) override;
     /**
     Traces sig3 emission.
     */
-    void onSig3(const NestedStruct1& param1,const NestedStruct2& param2,const NestedStruct3& param3) override;
+    void onSig3(const NestedStruct1& param1, const NestedStruct2& param2, const NestedStruct3& param3) override;
     /**
     Traces prop1 changed.
     */

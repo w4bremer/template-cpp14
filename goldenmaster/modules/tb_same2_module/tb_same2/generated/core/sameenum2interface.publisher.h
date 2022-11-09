@@ -67,19 +67,19 @@ public:
     /**
     * Implementation of ISameEnum2InterfacePublisher::publishProp1Changed
     */
-    void publishProp1Changed(const Enum1Enum& prop1) const override;
+    void publishProp1Changed(Enum1Enum prop1) const override;
     /**
     * Implementation of ISameEnum2InterfacePublisher::publishProp2Changed
     */
-    void publishProp2Changed(const Enum2Enum& prop2) const override;
+    void publishProp2Changed(Enum2Enum prop2) const override;
     /**
     * Implementation of ISameEnum2InterfacePublisher::publishSig1
     */
-    void publishSig1(const Enum1Enum& param1) const override;
+    void publishSig1(Enum1Enum param1) const override;
     /**
     * Implementation of ISameEnum2InterfacePublisher::publishSig2
     */
-    void publishSig2(const Enum1Enum& param1,const Enum2Enum& param2) const override;
+    void publishSig2(Enum1Enum param1, Enum2Enum param2) const override;
 private:
     // Subscribers informed about any property change or singal emited in SameEnum2Interface
     std::vector<std::reference_wrapper<ISameEnum2InterfaceSubscriber>> m_allChangesSubscribers;

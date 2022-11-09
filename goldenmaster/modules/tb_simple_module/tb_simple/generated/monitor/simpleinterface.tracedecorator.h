@@ -72,7 +72,7 @@ public:
     /** Forwards call to SimpleInterface implementation. */
     void setPropString(const std::string& propString) override;
     /** Forwards call to SimpleInterface implementation. */
-    std::string getPropString() const override;
+    const std::string& getPropString() const override;
     
     /**
     Traces sigBool emission.
@@ -105,7 +105,7 @@ public:
     /**
     Traces propString changed.
     */
-    void onPropStringChanged(std::string propString) override;
+    void onPropStringChanged(const std::string& propString) override;
 
     /**
     * Access to a publisher, use it to subscribe for SimpleInterface changes and signal emission.

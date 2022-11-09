@@ -14,7 +14,7 @@ SameEnum1Interface::~SameEnum1Interface()
 {
 }
 
-void SameEnum1Interface::setProp1(const Enum1Enum& prop1)
+void SameEnum1Interface::setProp1(Enum1Enum prop1)
 {
     if (m_data.m_prop1 != prop1) {
         m_data.m_prop1 = prop1;
@@ -22,19 +22,19 @@ void SameEnum1Interface::setProp1(const Enum1Enum& prop1)
     }
 }
 
-const Enum1Enum& SameEnum1Interface::getProp1() const
+Enum1Enum SameEnum1Interface::getProp1() const
 {
     return m_data.m_prop1;
 }
 
-Enum1Enum SameEnum1Interface::func1(const Enum1Enum& param1)
+Enum1Enum SameEnum1Interface::func1(Enum1Enum param1)
 {
     (void) param1; // suppress the 'Unreferenced Formal Parameter' warning.
     // do business logic here
     return {};
 }
 
-std::future<Enum1Enum> SameEnum1Interface::func1Async(const Enum1Enum& param1)
+std::future<Enum1Enum> SameEnum1Interface::func1Async(Enum1Enum param1)
 {
     return std::async(std::launch::async, [this,
                     param1]()

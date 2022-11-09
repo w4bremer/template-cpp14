@@ -31,33 +31,33 @@ std::future<int> ManyParamInterfaceTraceDecorator::func1Async(int param1)
 }
 int ManyParamInterfaceTraceDecorator::func2(int param1, int param2)
 {
-    m_tracer->trace_func2(param1,param2);
-    return m_impl.func2(param1,param2);
+    m_tracer->trace_func2(param1, param2);
+    return m_impl.func2(param1, param2);
 }
 std::future<int> ManyParamInterfaceTraceDecorator::func2Async(int param1, int param2)
 {
-    m_tracer->trace_func2(param1,param2);
-    return m_impl.func2Async(param1,param2);
+    m_tracer->trace_func2(param1, param2);
+    return m_impl.func2Async(param1, param2);
 }
 int ManyParamInterfaceTraceDecorator::func3(int param1, int param2, int param3)
 {
-    m_tracer->trace_func3(param1,param2,param3);
-    return m_impl.func3(param1,param2,param3);
+    m_tracer->trace_func3(param1, param2, param3);
+    return m_impl.func3(param1, param2, param3);
 }
 std::future<int> ManyParamInterfaceTraceDecorator::func3Async(int param1, int param2, int param3)
 {
-    m_tracer->trace_func3(param1,param2,param3);
-    return m_impl.func3Async(param1,param2,param3);
+    m_tracer->trace_func3(param1, param2, param3);
+    return m_impl.func3Async(param1, param2, param3);
 }
 int ManyParamInterfaceTraceDecorator::func4(int param1, int param2, int param3, int param4)
 {
-    m_tracer->trace_func4(param1,param2,param3,param4);
-    return m_impl.func4(param1,param2,param3,param4);
+    m_tracer->trace_func4(param1, param2, param3, param4);
+    return m_impl.func4(param1, param2, param3, param4);
 }
 std::future<int> ManyParamInterfaceTraceDecorator::func4Async(int param1, int param2, int param3, int param4)
 {
-    m_tracer->trace_func4(param1,param2,param3,param4);
-    return m_impl.func4Async(param1,param2,param3,param4);
+    m_tracer->trace_func4(param1, param2, param3, param4);
+    return m_impl.func4Async(param1, param2, param3, param4);
 }
 void ManyParamInterfaceTraceDecorator::setProp1(int prop1)
 {
@@ -100,38 +100,42 @@ void ManyParamInterfaceTraceDecorator::onSig1(int param1)
     m_tracer->trace_sig1(param1);
 }
 
-void ManyParamInterfaceTraceDecorator::onSig2(int param1,int param2)
+void ManyParamInterfaceTraceDecorator::onSig2(int param1, int param2)
 {
-    m_tracer->trace_sig2(param1,param2);
+    m_tracer->trace_sig2(param1, param2);
 }
 
-void ManyParamInterfaceTraceDecorator::onSig3(int param1,int param2,int param3)
+void ManyParamInterfaceTraceDecorator::onSig3(int param1, int param2, int param3)
 {
-    m_tracer->trace_sig3(param1,param2,param3);
+    m_tracer->trace_sig3(param1, param2, param3);
 }
 
-void ManyParamInterfaceTraceDecorator::onSig4(int param1,int param2,int param3,int param4)
+void ManyParamInterfaceTraceDecorator::onSig4(int param1, int param2, int param3, int param4)
 {
-    m_tracer->trace_sig4(param1,param2,param3,param4);
+    m_tracer->trace_sig4(param1, param2, param3, param4);
 }
 
-void ManyParamInterfaceTraceDecorator::onProp1Changed(int /*prop1*/)
+void ManyParamInterfaceTraceDecorator::onProp1Changed(int prop1)
 {
+    (void) prop1; // suppress the 'Unreferenced Formal Parameter' warning.
     m_tracer->capture_state(this);
 }
 
-void ManyParamInterfaceTraceDecorator::onProp2Changed(int /*prop2*/)
+void ManyParamInterfaceTraceDecorator::onProp2Changed(int prop2)
 {
+    (void) prop2; // suppress the 'Unreferenced Formal Parameter' warning.
     m_tracer->capture_state(this);
 }
 
-void ManyParamInterfaceTraceDecorator::onProp3Changed(int /*prop3*/)
+void ManyParamInterfaceTraceDecorator::onProp3Changed(int prop3)
 {
+    (void) prop3; // suppress the 'Unreferenced Formal Parameter' warning.
     m_tracer->capture_state(this);
 }
 
-void ManyParamInterfaceTraceDecorator::onProp4Changed(int /*prop4*/)
+void ManyParamInterfaceTraceDecorator::onProp4Changed(int prop4)
 {
+    (void) prop4; // suppress the 'Unreferenced Formal Parameter' warning.
     m_tracer->capture_state(this);
 }
 

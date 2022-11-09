@@ -121,17 +121,17 @@ void NestedStruct2InterfacePublisher::unsubscribeFromSig2(long handleId)
     m_sig2Callbacks.erase(handleId);
 }
 
-void NestedStruct2InterfacePublisher::publishSig2(const NestedStruct1& param1,const NestedStruct2& param2) const
+void NestedStruct2InterfacePublisher::publishSig2(const NestedStruct1& param1, const NestedStruct2& param2) const
 {
     for(const auto& subscriber: m_allChangesSubscribers)
     {
-        subscriber.get().onSig2(param1,param2);
+        subscriber.get().onSig2(param1, param2);
     }
     for(const auto& callbackEntry: m_sig2Callbacks)
     {
         if(callbackEntry.second)
         {
-            callbackEntry.second(param1,param2);
+            callbackEntry.second(param1, param2);
         }
     }
 }

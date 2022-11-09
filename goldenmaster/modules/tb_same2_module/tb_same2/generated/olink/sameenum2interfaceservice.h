@@ -72,19 +72,19 @@ public:
     /**
     * Forwards emitted sig1 through network if the connection is established.
     */
-    void onSig1(const Enum1Enum& param1) override;
+    void onSig1(Enum1Enum param1) override;
     /**
     * Forwards emitted sig2 through network if the connection is established.
     */
-    void onSig2(const Enum1Enum& param1,const Enum2Enum& param2) override;
+    void onSig2(Enum1Enum param1, Enum2Enum param2) override;
     /**
     * Forwards prop1 change through network if the connection is established.
     */
-    void onProp1Changed(const Enum1Enum& Value) override;
+    void onProp1Changed(Enum1Enum prop1) override;
     /**
     * Forwards prop2 change through network if the connection is established.
     */
-    void onProp2Changed(const Enum2Enum& Value) override;
+    void onProp2Changed(Enum2Enum prop2) override;
 
 private:
     /**

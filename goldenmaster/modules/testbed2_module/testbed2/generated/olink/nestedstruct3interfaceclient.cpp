@@ -155,7 +155,7 @@ std::future<NestedStruct1> NestedStruct3InterfaceClient::func2Async(const Nested
             std::promise<NestedStruct1> resultPromise;
             const auto& operationId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "func2");
             m_node->invokeRemote(operationId,
-                nlohmann::json::array({param1,param2}), [&resultPromise](ApiGear::ObjectLink::InvokeReplyArg arg) {
+                nlohmann::json::array({param1, param2}), [&resultPromise](ApiGear::ObjectLink::InvokeReplyArg arg) {
                     const NestedStruct1& value = arg.value.get<NestedStruct1>();
                     resultPromise.set_value(value);
                 });
@@ -188,7 +188,7 @@ std::future<NestedStruct1> NestedStruct3InterfaceClient::func3Async(const Nested
             std::promise<NestedStruct1> resultPromise;
             const auto& operationId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "func3");
             m_node->invokeRemote(operationId,
-                nlohmann::json::array({param1,param2,param3}), [&resultPromise](ApiGear::ObjectLink::InvokeReplyArg arg) {
+                nlohmann::json::array({param1, param2, param3}), [&resultPromise](ApiGear::ObjectLink::InvokeReplyArg arg) {
                     const NestedStruct1& value = arg.value.get<NestedStruct1>();
                     resultPromise.set_value(value);
                 });

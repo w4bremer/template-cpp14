@@ -14,7 +14,7 @@ SameEnum2Interface::~SameEnum2Interface()
 {
 }
 
-void SameEnum2Interface::setProp1(const Enum1Enum& prop1)
+void SameEnum2Interface::setProp1(Enum1Enum prop1)
 {
     if (m_data.m_prop1 != prop1) {
         m_data.m_prop1 = prop1;
@@ -22,12 +22,12 @@ void SameEnum2Interface::setProp1(const Enum1Enum& prop1)
     }
 }
 
-const Enum1Enum& SameEnum2Interface::getProp1() const
+Enum1Enum SameEnum2Interface::getProp1() const
 {
     return m_data.m_prop1;
 }
 
-void SameEnum2Interface::setProp2(const Enum2Enum& prop2)
+void SameEnum2Interface::setProp2(Enum2Enum prop2)
 {
     if (m_data.m_prop2 != prop2) {
         m_data.m_prop2 = prop2;
@@ -35,19 +35,19 @@ void SameEnum2Interface::setProp2(const Enum2Enum& prop2)
     }
 }
 
-const Enum2Enum& SameEnum2Interface::getProp2() const
+Enum2Enum SameEnum2Interface::getProp2() const
 {
     return m_data.m_prop2;
 }
 
-Enum1Enum SameEnum2Interface::func1(const Enum1Enum& param1)
+Enum1Enum SameEnum2Interface::func1(Enum1Enum param1)
 {
     (void) param1; // suppress the 'Unreferenced Formal Parameter' warning.
     // do business logic here
     return {};
 }
 
-std::future<Enum1Enum> SameEnum2Interface::func1Async(const Enum1Enum& param1)
+std::future<Enum1Enum> SameEnum2Interface::func1Async(Enum1Enum param1)
 {
     return std::async(std::launch::async, [this,
                     param1]()
@@ -57,7 +57,7 @@ std::future<Enum1Enum> SameEnum2Interface::func1Async(const Enum1Enum& param1)
     );
 }
 
-Enum1Enum SameEnum2Interface::func2(const Enum1Enum& param1, const Enum2Enum& param2)
+Enum1Enum SameEnum2Interface::func2(Enum1Enum param1, Enum2Enum param2)
 {
     (void) param1; // suppress the 'Unreferenced Formal Parameter' warning.
     (void) param2; // suppress the 'Unreferenced Formal Parameter' warning.
@@ -65,13 +65,13 @@ Enum1Enum SameEnum2Interface::func2(const Enum1Enum& param1, const Enum2Enum& pa
     return {};
 }
 
-std::future<Enum1Enum> SameEnum2Interface::func2Async(const Enum1Enum& param1, const Enum2Enum& param2)
+std::future<Enum1Enum> SameEnum2Interface::func2Async(Enum1Enum param1, Enum2Enum param2)
 {
     return std::async(std::launch::async, [this,
                     param1,
                     param2]()
         {
-            return func2(param1,param2);
+            return func2(param1, param2);
         }
     );
 }

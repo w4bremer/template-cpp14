@@ -88,19 +88,19 @@ public:
     /**
     * Forwards propBool change through network if the connection is established.
     */
-    void onPropBoolChanged(bool Value) override;
+    void onPropBoolChanged(bool propBool) override;
     /**
     * Forwards propInt change through network if the connection is established.
     */
-    void onPropIntChanged(int Value) override;
+    void onPropIntChanged(int propInt) override;
     /**
     * Forwards propFloat change through network if the connection is established.
     */
-    void onPropFloatChanged(float Value) override;
+    void onPropFloatChanged(float propFloat) override;
     /**
     * Forwards propString change through network if the connection is established.
     */
-    void onPropStringChanged(std::string Value) override;
+    void onPropStringChanged(const std::string& propString) override;
 
 private:
     /**

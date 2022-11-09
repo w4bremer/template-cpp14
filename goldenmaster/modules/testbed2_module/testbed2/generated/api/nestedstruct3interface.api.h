@@ -112,7 +112,7 @@ public:
     *
     * @warning the subscribed function shall not be blocking and must return immediately!
     */
-    virtual void onSig2(const NestedStruct1& param1,const NestedStruct2& param2) = 0;
+    virtual void onSig2(const NestedStruct1& param1, const NestedStruct2& param2) = 0;
     /**
     * Called by the INestedStruct3InterfacePublisher when the NestedStruct3Interface emits sig3, if subscribed for the sig3.
     * @param param1 
@@ -121,7 +121,7 @@ public:
     *
     * @warning the subscribed function shall not be blocking and must return immediately!
     */
-    virtual void onSig3(const NestedStruct1& param1,const NestedStruct2& param2,const NestedStruct3& param3) = 0;
+    virtual void onSig3(const NestedStruct1& param1, const NestedStruct2& param2, const NestedStruct3& param3) = 0;
     /**
     * Called by the INestedStruct3InterfacePublisher when prop1 value has changed if subscribed for the prop1 change.
     *
@@ -151,9 +151,9 @@ using NestedStruct3InterfaceProp3PropertyCb = std::function<void(const NestedStr
 /** Callback for sig1 signal triggers */
 using NestedStruct3InterfaceSig1SignalCb = std::function<void(const NestedStruct1& param1)> ;
 /** Callback for sig2 signal triggers */
-using NestedStruct3InterfaceSig2SignalCb = std::function<void(const NestedStruct1& param1,const NestedStruct2& param2)> ;
+using NestedStruct3InterfaceSig2SignalCb = std::function<void(const NestedStruct1& param1, const NestedStruct2& param2)> ;
 /** Callback for sig3 signal triggers */
-using NestedStruct3InterfaceSig3SignalCb = std::function<void(const NestedStruct1& param1,const NestedStruct2& param2,const NestedStruct3& param3)> ;
+using NestedStruct3InterfaceSig3SignalCb = std::function<void(const NestedStruct1& param1, const NestedStruct2& param2, const NestedStruct3& param3)> ;
 
 
 /**
@@ -316,7 +316,7 @@ public:
     * @param param1 
     * @param param2 
     */
-    virtual void publishSig2(const NestedStruct1& param1,const NestedStruct2& param2) const = 0;
+    virtual void publishSig2(const NestedStruct1& param1, const NestedStruct2& param2) const = 0;
     /**
     * Publishes the emitted signal to all subscribed clients.
     * Needs to be invoked by the NestedStruct3Interface implementation when sig3 is emitted.
@@ -324,7 +324,7 @@ public:
     * @param param2 
     * @param param3 
     */
-    virtual void publishSig3(const NestedStruct1& param1,const NestedStruct2& param2,const NestedStruct3& param3) const = 0;
+    virtual void publishSig3(const NestedStruct1& param1, const NestedStruct2& param2, const NestedStruct3& param3) const = 0;
 };
 
 

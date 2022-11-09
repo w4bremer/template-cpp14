@@ -38,7 +38,7 @@ void SameEnum2InterfacePublisher::unsubscribeFromProp1Changed(long handleId)
     m_prop1Callbacks.erase(handleId);
 }
 
-void SameEnum2InterfacePublisher::publishProp1Changed(const Enum1Enum& prop1) const
+void SameEnum2InterfacePublisher::publishProp1Changed(Enum1Enum prop1) const
 {
     for(const auto& subscriber: m_allChangesSubscribers)
     {
@@ -65,7 +65,7 @@ void SameEnum2InterfacePublisher::unsubscribeFromProp2Changed(long handleId)
     m_prop2Callbacks.erase(handleId);
 }
 
-void SameEnum2InterfacePublisher::publishProp2Changed(const Enum2Enum& prop2) const
+void SameEnum2InterfacePublisher::publishProp2Changed(Enum2Enum prop2) const
 {
     for(const auto& subscriber: m_allChangesSubscribers)
     {
@@ -93,7 +93,7 @@ void SameEnum2InterfacePublisher::unsubscribeFromSig1(long handleId)
     m_sig1Callbacks.erase(handleId);
 }
 
-void SameEnum2InterfacePublisher::publishSig1(const Enum1Enum& param1) const
+void SameEnum2InterfacePublisher::publishSig1(Enum1Enum param1) const
 {
     for(const auto& subscriber: m_allChangesSubscribers)
     {
@@ -121,17 +121,17 @@ void SameEnum2InterfacePublisher::unsubscribeFromSig2(long handleId)
     m_sig2Callbacks.erase(handleId);
 }
 
-void SameEnum2InterfacePublisher::publishSig2(const Enum1Enum& param1,const Enum2Enum& param2) const
+void SameEnum2InterfacePublisher::publishSig2(Enum1Enum param1, Enum2Enum param2) const
 {
     for(const auto& subscriber: m_allChangesSubscribers)
     {
-        subscriber.get().onSig2(param1,param2);
+        subscriber.get().onSig2(param1, param2);
     }
     for(const auto& callbackEntry: m_sig2Callbacks)
     {
         if(callbackEntry.second)
         {
-            callbackEntry.second(param1,param2);
+            callbackEntry.second(param1, param2);
         }
     }
 }

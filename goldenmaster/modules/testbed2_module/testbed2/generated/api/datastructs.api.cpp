@@ -69,8 +69,7 @@ Enum3Enum toEnum3Enum(std::uint8_t v, bool *ok)
 // Struct Struct1
 // ********************************************************************
 Struct1::Struct1() = default;
-Struct1::Struct1(
-    int field1):
+Struct1::Struct1(int field1):
     field1(field1)
 {
 }
@@ -91,9 +90,7 @@ bool operator!=(const Struct1& lhs, const Struct1& rhs) noexcept
 // Struct Struct2
 // ********************************************************************
 Struct2::Struct2() = default;
-Struct2::Struct2(
-    int field1,
-    int field2):
+Struct2::Struct2(int field1, int field2):
     field1(field1),
     field2(field2)
 {
@@ -116,10 +113,7 @@ bool operator!=(const Struct2& lhs, const Struct2& rhs) noexcept
 // Struct Struct3
 // ********************************************************************
 Struct3::Struct3() = default;
-Struct3::Struct3(
-    int field1,
-    int field2,
-    int field3):
+Struct3::Struct3(int field1, int field2, int field3):
     field1(field1),
     field2(field2),
     field3(field3)
@@ -144,11 +138,7 @@ bool operator!=(const Struct3& lhs, const Struct3& rhs) noexcept
 // Struct Struct4
 // ********************************************************************
 Struct4::Struct4() = default;
-Struct4::Struct4(
-    int field1,
-    int field2,
-    int field3,
-    int field4):
+Struct4::Struct4(int field1, int field2, int field3, int field4):
     field1(field1),
     field2(field2),
     field3(field3),
@@ -175,8 +165,7 @@ bool operator!=(const Struct4& lhs, const Struct4& rhs) noexcept
 // Struct NestedStruct1
 // ********************************************************************
 NestedStruct1::NestedStruct1() = default;
-NestedStruct1::NestedStruct1(
-    const Struct1& field1):
+NestedStruct1::NestedStruct1(const Struct1& field1):
     field1(field1)
 {
 }
@@ -197,9 +186,7 @@ bool operator!=(const NestedStruct1& lhs, const NestedStruct1& rhs) noexcept
 // Struct NestedStruct2
 // ********************************************************************
 NestedStruct2::NestedStruct2() = default;
-NestedStruct2::NestedStruct2(
-    const Struct1& field1,
-    const Struct2& field2):
+NestedStruct2::NestedStruct2(const Struct1& field1, const Struct2& field2):
     field1(field1),
     field2(field2)
 {
@@ -222,10 +209,7 @@ bool operator!=(const NestedStruct2& lhs, const NestedStruct2& rhs) noexcept
 // Struct NestedStruct3
 // ********************************************************************
 NestedStruct3::NestedStruct3() = default;
-NestedStruct3::NestedStruct3(
-    const Struct1& field1,
-    const Struct2& field2,
-    const Struct3& field3):
+NestedStruct3::NestedStruct3(const Struct1& field1, const Struct2& field2, const Struct3& field3):
     field1(field1),
     field2(field2),
     field3(field3)

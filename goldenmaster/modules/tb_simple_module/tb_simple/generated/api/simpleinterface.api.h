@@ -92,7 +92,7 @@ public:
     /**
     * Gets the value of the propString property.
     */
-    virtual std::string getPropString() const = 0;
+    virtual const std::string& getPropString() const = 0;
 
     /**
     * Access to a publisher, use it to subscribe for SimpleInterface changes and signal emission.
@@ -166,7 +166,7 @@ public:
     *
     * @warning the subscribed function shall not be blocking and must return immediately!
     */
-    virtual void onPropStringChanged(std::string propString) = 0;
+    virtual void onPropStringChanged(const std::string& propString) = 0;
 };
 
 /** Callback for changes of propBool */

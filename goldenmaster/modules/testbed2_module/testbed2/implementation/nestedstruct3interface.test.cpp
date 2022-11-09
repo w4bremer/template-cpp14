@@ -12,11 +12,11 @@ TEST_CASE("Testing NestedStruct3Interface", "[NestedStruct3Interface]"){
     }
     SECTION("Test operation func2") {
         // Do implement test here
-        testNestedStruct3Interface->func2(NestedStruct1(),NestedStruct2());
+        testNestedStruct3Interface->func2(NestedStruct1(), NestedStruct2());
     }
     SECTION("Test operation func3") {
         // Do implement test here
-        testNestedStruct3Interface->func3(NestedStruct1(),NestedStruct2(),NestedStruct3());
+        testNestedStruct3Interface->func3(NestedStruct1(), NestedStruct2(), NestedStruct3());
     }
     SECTION("Test property prop1") {
         // Do implement test here

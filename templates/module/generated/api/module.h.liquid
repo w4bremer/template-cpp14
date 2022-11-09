@@ -1,8 +1,0 @@
-{% comment %} // Copyright (c) ApiGear UG 2020 {% endcomment -%}
-#pragma once
-
-#include "{{module.name|identifier}}/generated/api/datastructs.api.h"
-
-{% for interface in module.interfaces %}
-#include "{{module.name|identifier}}/generated/api/{{interface.name|lower}}.api.h"
-{% endfor %}

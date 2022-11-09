@@ -115,23 +115,27 @@ void StructInterfaceTraceDecorator::onSigString(const StructString& paramString)
     m_tracer->trace_sigString(paramString);
 }
 
-void StructInterfaceTraceDecorator::onPropBoolChanged(const StructBool& /*propBool*/)
+void StructInterfaceTraceDecorator::onPropBoolChanged(const StructBool& propBool)
 {
+    (void) propBool; // suppress the 'Unreferenced Formal Parameter' warning.
     m_tracer->capture_state(this);
 }
 
-void StructInterfaceTraceDecorator::onPropIntChanged(const StructInt& /*propInt*/)
+void StructInterfaceTraceDecorator::onPropIntChanged(const StructInt& propInt)
 {
+    (void) propInt; // suppress the 'Unreferenced Formal Parameter' warning.
     m_tracer->capture_state(this);
 }
 
-void StructInterfaceTraceDecorator::onPropFloatChanged(const StructFloat& /*propFloat*/)
+void StructInterfaceTraceDecorator::onPropFloatChanged(const StructFloat& propFloat)
 {
+    (void) propFloat; // suppress the 'Unreferenced Formal Parameter' warning.
     m_tracer->capture_state(this);
 }
 
-void StructInterfaceTraceDecorator::onPropStringChanged(const StructString& /*propString*/)
+void StructInterfaceTraceDecorator::onPropStringChanged(const StructString& propString)
 {
+    (void) propString; // suppress the 'Unreferenced Formal Parameter' warning.
     m_tracer->capture_state(this);
 }
 

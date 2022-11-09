@@ -69,7 +69,7 @@ bool TEST_TESTBED2_EXPORT operator!=(const Struct1 &, const Struct1 &) noexcept;
 struct TEST_TESTBED2_EXPORT Struct2
 {
     Struct2();
-    Struct2(int field1,int field2);
+    Struct2(int field1, int field2);
 
     int field1{};
     int field2{};
@@ -84,7 +84,7 @@ bool TEST_TESTBED2_EXPORT operator!=(const Struct2 &, const Struct2 &) noexcept;
 struct TEST_TESTBED2_EXPORT Struct3
 {
     Struct3();
-    Struct3(int field1,int field2,int field3);
+    Struct3(int field1, int field2, int field3);
 
     int field1{};
     int field2{};
@@ -100,7 +100,7 @@ bool TEST_TESTBED2_EXPORT operator!=(const Struct3 &, const Struct3 &) noexcept;
 struct TEST_TESTBED2_EXPORT Struct4
 {
     Struct4();
-    Struct4(int field1,int field2,int field3,int field4);
+    Struct4(int field1, int field2, int field3, int field4);
 
     int field1{};
     int field2{};
@@ -131,7 +131,7 @@ bool TEST_TESTBED2_EXPORT operator!=(const NestedStruct1 &, const NestedStruct1 
 struct TEST_TESTBED2_EXPORT NestedStruct2
 {
     NestedStruct2();
-    NestedStruct2(const Struct1& field1,const Struct2& field2);
+    NestedStruct2(const Struct1& field1, const Struct2& field2);
 
     Struct1 field1{};
     Struct2 field2{};
@@ -146,7 +146,7 @@ bool TEST_TESTBED2_EXPORT operator!=(const NestedStruct2 &, const NestedStruct2 
 struct TEST_TESTBED2_EXPORT NestedStruct3
 {
     NestedStruct3();
-    NestedStruct3(const Struct1& field1,const Struct2& field2,const Struct3& field3);
+    NestedStruct3(const Struct1& field1, const Struct2& field2, const Struct3& field3);
 
     Struct1 field1{};
     Struct2 field2{};

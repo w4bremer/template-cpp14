@@ -71,7 +71,7 @@ std::future<Struct1> SameStruct2Interface::func2Async(const Struct1& param1, con
                     param1,
                     param2]()
         {
-            return func2(param1,param2);
+            return func2(param1, param2);
         }
     );
 }

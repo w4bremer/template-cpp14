@@ -79,7 +79,7 @@ nlohmann::json SameEnum2InterfaceService::olinkCollectProperties()
         { "prop2", m_SameEnum2Interface->getProp2() }
     });
 }
-void SameEnum2InterfaceService::onSig1(const Enum1Enum& param1)
+void SameEnum2InterfaceService::onSig1(Enum1Enum param1)
 {
     const nlohmann::json args = { param1 };
     const auto& signalId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "sig1");
@@ -90,7 +90,7 @@ void SameEnum2InterfaceService::onSig1(const Enum1Enum& param1)
         }
     }
 }
-void SameEnum2InterfaceService::onSig2(const Enum1Enum& param1,const Enum2Enum& param2)
+void SameEnum2InterfaceService::onSig2(Enum1Enum param1, Enum2Enum param2)
 {
     const nlohmann::json args = { param1, param2 };
     const auto& signalId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "sig2");
@@ -101,7 +101,7 @@ void SameEnum2InterfaceService::onSig2(const Enum1Enum& param1,const Enum2Enum& 
         }
     }
 }
-void SameEnum2InterfaceService::onProp1Changed(const Enum1Enum& prop1)
+void SameEnum2InterfaceService::onProp1Changed(Enum1Enum prop1)
 {
     const auto& propertyId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "prop1");
     for(auto node: m_registry.getNodes(ApiGear::ObjectLink::Name::getObjectId(propertyId))) {
@@ -111,7 +111,7 @@ void SameEnum2InterfaceService::onProp1Changed(const Enum1Enum& prop1)
         }
     }
 }
-void SameEnum2InterfaceService::onProp2Changed(const Enum2Enum& prop2)
+void SameEnum2InterfaceService::onProp2Changed(Enum2Enum prop2)
 {
     const auto& propertyId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "prop2");
     for(auto node: m_registry.getNodes(ApiGear::ObjectLink::Name::getObjectId(propertyId))) {

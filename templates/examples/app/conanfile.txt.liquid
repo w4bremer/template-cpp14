@@ -1,8 +1,0 @@
-[requires]
-{% for module in system.modules %}
-{{module.name| identifier}}/{{module.version}}
-{% endfor %}
-
-[generators]
-cmake_find_package
-virtualenv

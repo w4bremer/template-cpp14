@@ -123,15 +123,15 @@ public:
     /**
     * Implementation of IManyParamInterfacePublisher::publishSig2
     */
-    void publishSig2(int param1,int param2) const override;
+    void publishSig2(int param1, int param2) const override;
     /**
     * Implementation of IManyParamInterfacePublisher::publishSig3
     */
-    void publishSig3(int param1,int param2,int param3) const override;
+    void publishSig3(int param1, int param2, int param3) const override;
     /**
     * Implementation of IManyParamInterfacePublisher::publishSig4
     */
-    void publishSig4(int param1,int param2,int param3,int param4) const override;
+    void publishSig4(int param1, int param2, int param3, int param4) const override;
 private:
     // Subscribers informed about any property change or singal emited in ManyParamInterface
     std::vector<std::reference_wrapper<IManyParamInterfaceSubscriber>> m_allChangesSubscribers;

@@ -16,7 +16,7 @@ TEST_CASE("Testing SimpleInterface", "[SimpleInterface]"){
     }
     SECTION("Test operation funcFloat") {
         // Do implement test here
-        testSimpleInterface->funcFloat(0.0f);
+        testSimpleInterface->funcFloat(0.0);
     }
     SECTION("Test operation funcString") {
         // Do implement test here
@@ -34,8 +34,8 @@ TEST_CASE("Testing SimpleInterface", "[SimpleInterface]"){
     }
     SECTION("Test property propFloat") {
         // Do implement test here
-        testSimpleInterface->setPropFloat(0.0f);
-        REQUIRE( testSimpleInterface->getPropFloat() == Approx( 0.0f ) );
+        testSimpleInterface->setPropFloat(0.0);
+        REQUIRE( testSimpleInterface->getPropFloat() == Approx( 0.0 ) );
     }
     SECTION("Test property propString") {
         // Do implement test here

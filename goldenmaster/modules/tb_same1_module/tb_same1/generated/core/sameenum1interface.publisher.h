@@ -49,11 +49,11 @@ public:
     /**
     * Implementation of ISameEnum1InterfacePublisher::publishProp1Changed
     */
-    void publishProp1Changed(const Enum1Enum& prop1) const override;
+    void publishProp1Changed(Enum1Enum prop1) const override;
     /**
     * Implementation of ISameEnum1InterfacePublisher::publishSig1
     */
-    void publishSig1(const Enum1Enum& param1) const override;
+    void publishSig1(Enum1Enum param1) const override;
 private:
     // Subscribers informed about any property change or singal emited in SameEnum1Interface
     std::vector<std::reference_wrapper<ISameEnum1InterfaceSubscriber>> m_allChangesSubscribers;

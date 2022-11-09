@@ -175,17 +175,17 @@ void ManyParamInterfacePublisher::unsubscribeFromSig2(long handleId)
     m_sig2Callbacks.erase(handleId);
 }
 
-void ManyParamInterfacePublisher::publishSig2(int param1,int param2) const
+void ManyParamInterfacePublisher::publishSig2(int param1, int param2) const
 {
     for(const auto& subscriber: m_allChangesSubscribers)
     {
-        subscriber.get().onSig2(param1,param2);
+        subscriber.get().onSig2(param1, param2);
     }
     for(const auto& callbackEntry: m_sig2Callbacks)
     {
         if(callbackEntry.second)
         {
-            callbackEntry.second(param1,param2);
+            callbackEntry.second(param1, param2);
         }
     }
 }
@@ -203,17 +203,17 @@ void ManyParamInterfacePublisher::unsubscribeFromSig3(long handleId)
     m_sig3Callbacks.erase(handleId);
 }
 
-void ManyParamInterfacePublisher::publishSig3(int param1,int param2,int param3) const
+void ManyParamInterfacePublisher::publishSig3(int param1, int param2, int param3) const
 {
     for(const auto& subscriber: m_allChangesSubscribers)
     {
-        subscriber.get().onSig3(param1,param2,param3);
+        subscriber.get().onSig3(param1, param2, param3);
     }
     for(const auto& callbackEntry: m_sig3Callbacks)
     {
         if(callbackEntry.second)
         {
-            callbackEntry.second(param1,param2,param3);
+            callbackEntry.second(param1, param2, param3);
         }
     }
 }
@@ -231,17 +231,17 @@ void ManyParamInterfacePublisher::unsubscribeFromSig4(long handleId)
     m_sig4Callbacks.erase(handleId);
 }
 
-void ManyParamInterfacePublisher::publishSig4(int param1,int param2,int param3,int param4) const
+void ManyParamInterfacePublisher::publishSig4(int param1, int param2, int param3, int param4) const
 {
     for(const auto& subscriber: m_allChangesSubscribers)
     {
-        subscriber.get().onSig4(param1,param2,param3,param4);
+        subscriber.get().onSig4(param1, param2, param3, param4);
     }
     for(const auto& callbackEntry: m_sig4Callbacks)
     {
         if(callbackEntry.second)
         {
-            callbackEntry.second(param1,param2,param3,param4);
+            callbackEntry.second(param1, param2, param3, param4);
         }
     }
 }

@@ -31,13 +31,13 @@ std::future<NestedStruct1> NestedStruct2InterfaceTraceDecorator::func1Async(cons
 }
 NestedStruct1 NestedStruct2InterfaceTraceDecorator::func2(const NestedStruct1& param1, const NestedStruct2& param2)
 {
-    m_tracer->trace_func2(param1,param2);
-    return m_impl.func2(param1,param2);
+    m_tracer->trace_func2(param1, param2);
+    return m_impl.func2(param1, param2);
 }
 std::future<NestedStruct1> NestedStruct2InterfaceTraceDecorator::func2Async(const NestedStruct1& param1, const NestedStruct2& param2)
 {
-    m_tracer->trace_func2(param1,param2);
-    return m_impl.func2Async(param1,param2);
+    m_tracer->trace_func2(param1, param2);
+    return m_impl.func2Async(param1, param2);
 }
 void NestedStruct2InterfaceTraceDecorator::setProp1(const NestedStruct1& prop1)
 {
@@ -62,18 +62,20 @@ void NestedStruct2InterfaceTraceDecorator::onSig1(const NestedStruct1& param1)
     m_tracer->trace_sig1(param1);
 }
 
-void NestedStruct2InterfaceTraceDecorator::onSig2(const NestedStruct1& param1,const NestedStruct2& param2)
+void NestedStruct2InterfaceTraceDecorator::onSig2(const NestedStruct1& param1, const NestedStruct2& param2)
 {
-    m_tracer->trace_sig2(param1,param2);
+    m_tracer->trace_sig2(param1, param2);
 }
 
-void NestedStruct2InterfaceTraceDecorator::onProp1Changed(const NestedStruct1& /*prop1*/)
+void NestedStruct2InterfaceTraceDecorator::onProp1Changed(const NestedStruct1& prop1)
 {
+    (void) prop1; // suppress the 'Unreferenced Formal Parameter' warning.
     m_tracer->capture_state(this);
 }
 
-void NestedStruct2InterfaceTraceDecorator::onProp2Changed(const NestedStruct2& /*prop2*/)
+void NestedStruct2InterfaceTraceDecorator::onProp2Changed(const NestedStruct2& prop2)
 {
+    (void) prop2; // suppress the 'Unreferenced Formal Parameter' warning.
     m_tracer->capture_state(this);
 }
 

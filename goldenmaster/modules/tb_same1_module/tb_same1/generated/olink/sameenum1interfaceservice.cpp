@@ -68,7 +68,7 @@ nlohmann::json SameEnum1InterfaceService::olinkCollectProperties()
         { "prop1", m_SameEnum1Interface->getProp1() }
     });
 }
-void SameEnum1InterfaceService::onSig1(const Enum1Enum& param1)
+void SameEnum1InterfaceService::onSig1(Enum1Enum param1)
 {
     const nlohmann::json args = { param1 };
     const auto& signalId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "sig1");
@@ -79,7 +79,7 @@ void SameEnum1InterfaceService::onSig1(const Enum1Enum& param1)
         }
     }
 }
-void SameEnum1InterfaceService::onProp1Changed(const Enum1Enum& prop1)
+void SameEnum1InterfaceService::onProp1Changed(Enum1Enum prop1)
 {
     const auto& propertyId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "prop1");
     for(auto node: m_registry.getNodes(ApiGear::ObjectLink::Name::getObjectId(propertyId))) {

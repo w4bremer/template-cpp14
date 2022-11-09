@@ -35,77 +35,77 @@ public:
     virtual ~EnumInterfaceTraceDecorator();
 
     /** Traces func0 and forwards call to EnumInterface implementation. */
-    Enum0Enum func0(const Enum0Enum& param0) override;
+    Enum0Enum func0(Enum0Enum param0) override;
     /** Traces func0 and forwards call to EnumInterface implementation. */
-    std::future<Enum0Enum> func0Async(const Enum0Enum& param0) override;
+    std::future<Enum0Enum> func0Async(Enum0Enum param0) override;
     
     /** Traces func1 and forwards call to EnumInterface implementation. */
-    Enum1Enum func1(const Enum1Enum& param1) override;
+    Enum1Enum func1(Enum1Enum param1) override;
     /** Traces func1 and forwards call to EnumInterface implementation. */
-    std::future<Enum1Enum> func1Async(const Enum1Enum& param1) override;
+    std::future<Enum1Enum> func1Async(Enum1Enum param1) override;
     
     /** Traces func2 and forwards call to EnumInterface implementation. */
-    Enum2Enum func2(const Enum2Enum& param2) override;
+    Enum2Enum func2(Enum2Enum param2) override;
     /** Traces func2 and forwards call to EnumInterface implementation. */
-    std::future<Enum2Enum> func2Async(const Enum2Enum& param2) override;
+    std::future<Enum2Enum> func2Async(Enum2Enum param2) override;
     
     /** Traces func3 and forwards call to EnumInterface implementation. */
-    Enum3Enum func3(const Enum3Enum& param3) override;
+    Enum3Enum func3(Enum3Enum param3) override;
     /** Traces func3 and forwards call to EnumInterface implementation. */
-    std::future<Enum3Enum> func3Async(const Enum3Enum& param3) override;
+    std::future<Enum3Enum> func3Async(Enum3Enum param3) override;
     
     /** Forwards call to EnumInterface implementation. */
-    void setProp0(const Enum0Enum& prop0) override;
+    void setProp0(Enum0Enum prop0) override;
     /** Forwards call to EnumInterface implementation. */
-    const Enum0Enum& getProp0() const override;
+    Enum0Enum getProp0() const override;
     
     /** Forwards call to EnumInterface implementation. */
-    void setProp1(const Enum1Enum& prop1) override;
+    void setProp1(Enum1Enum prop1) override;
     /** Forwards call to EnumInterface implementation. */
-    const Enum1Enum& getProp1() const override;
+    Enum1Enum getProp1() const override;
     
     /** Forwards call to EnumInterface implementation. */
-    void setProp2(const Enum2Enum& prop2) override;
+    void setProp2(Enum2Enum prop2) override;
     /** Forwards call to EnumInterface implementation. */
-    const Enum2Enum& getProp2() const override;
+    Enum2Enum getProp2() const override;
     
     /** Forwards call to EnumInterface implementation. */
-    void setProp3(const Enum3Enum& prop3) override;
+    void setProp3(Enum3Enum prop3) override;
     /** Forwards call to EnumInterface implementation. */
-    const Enum3Enum& getProp3() const override;
+    Enum3Enum getProp3() const override;
     
     /**
     Traces sig0 emission.
     */
-    void onSig0(const Enum0Enum& param0) override;
+    void onSig0(Enum0Enum param0) override;
     /**
     Traces sig1 emission.
     */
-    void onSig1(const Enum1Enum& param1) override;
+    void onSig1(Enum1Enum param1) override;
     /**
     Traces sig2 emission.
     */
-    void onSig2(const Enum2Enum& param2) override;
+    void onSig2(Enum2Enum param2) override;
     /**
     Traces sig3 emission.
     */
-    void onSig3(const Enum3Enum& param3) override;
+    void onSig3(Enum3Enum param3) override;
     /**
     Traces prop0 changed.
     */
-    void onProp0Changed(const Enum0Enum& prop0) override;
+    void onProp0Changed(Enum0Enum prop0) override;
     /**
     Traces prop1 changed.
     */
-    void onProp1Changed(const Enum1Enum& prop1) override;
+    void onProp1Changed(Enum1Enum prop1) override;
     /**
     Traces prop2 changed.
     */
-    void onProp2Changed(const Enum2Enum& prop2) override;
+    void onProp2Changed(Enum2Enum prop2) override;
     /**
     Traces prop3 changed.
     */
-    void onProp3Changed(const Enum3Enum& prop3) override;
+    void onProp3Changed(Enum3Enum prop3) override;
 
     /**
     * Access to a publisher, use it to subscribe for EnumInterface changes and signal emission.

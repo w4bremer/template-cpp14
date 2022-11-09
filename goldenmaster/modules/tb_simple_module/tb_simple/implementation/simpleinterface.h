@@ -27,7 +27,7 @@ public:
     float getPropFloat() const override;
     
     void setPropString(const std::string& propString) override;
-    std::string getPropString() const override;
+    const std::string& getPropString() const override;
     
     bool funcBool(bool paramBool) override;
     std::future<bool> funcBoolAsync(bool paramBool) override;

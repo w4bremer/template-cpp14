@@ -46,21 +46,21 @@ public:
     * Property getter
     * @return Locally stored locally value for Prop1.
     */
-    const Enum1Enum& getProp1() const override;
+    Enum1Enum getProp1() const override;
     /**
     * Request setting a property on the SameEnum1Interface service.
     * @param The value to which set request is send for the Prop1.
     */
-    void setProp1(const Enum1Enum& prop1) override;
+    void setProp1(Enum1Enum prop1) override;
     /**
     * Remote call of ISameEnum1Interface::func1 on the SameEnum1Interface service.
     * Uses func1Async
     */
-    Enum1Enum func1(const Enum1Enum& param1) override;
+    Enum1Enum func1(Enum1Enum param1) override;
     /**
     * Remote call of ISameEnum1Interface::func1 on the SameEnum1Interface service.
     */
-    std::future<Enum1Enum> func1Async(const Enum1Enum& param1) override;
+    std::future<Enum1Enum> func1Async(Enum1Enum param1) override;
 
     /** The publisher to subscribe to. */
     ISameEnum1InterfacePublisher& _getPublisher() const override;
@@ -110,7 +110,7 @@ private:
     */
     void applyState(const nlohmann::json& fields);
     /**  Updates local value for Prop1 and informs subscriber about the change*/
-    void setProp1Local(const Enum1Enum& prop1);
+    void setProp1Local(Enum1Enum prop1);
     
     /** Local storage for properties values. */
     SameEnum1InterfaceData m_data;

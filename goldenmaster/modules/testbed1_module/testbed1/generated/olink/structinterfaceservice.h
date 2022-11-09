@@ -88,19 +88,19 @@ public:
     /**
     * Forwards propBool change through network if the connection is established.
     */
-    void onPropBoolChanged(const StructBool& Value) override;
+    void onPropBoolChanged(const StructBool& propBool) override;
     /**
     * Forwards propInt change through network if the connection is established.
     */
-    void onPropIntChanged(const StructInt& Value) override;
+    void onPropIntChanged(const StructInt& propInt) override;
     /**
     * Forwards propFloat change through network if the connection is established.
     */
-    void onPropFloatChanged(const StructFloat& Value) override;
+    void onPropFloatChanged(const StructFloat& propFloat) override;
     /**
     * Forwards propString change through network if the connection is established.
     */
-    void onPropStringChanged(const StructString& Value) override;
+    void onPropStringChanged(const StructString& propString) override;
 
 private:
     /**

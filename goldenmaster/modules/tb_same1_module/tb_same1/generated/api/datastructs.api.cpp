@@ -44,10 +44,7 @@ Enum2Enum toEnum2Enum(std::uint8_t v, bool *ok)
 // Struct Struct1
 // ********************************************************************
 Struct1::Struct1() = default;
-Struct1::Struct1(
-    int field1,
-    int field2,
-    int field3):
+Struct1::Struct1(int field1, int field2, int field3):
     field1(field1),
     field2(field2),
     field3(field3)
@@ -72,10 +69,7 @@ bool operator!=(const Struct1& lhs, const Struct1& rhs) noexcept
 // Struct Struct2
 // ********************************************************************
 Struct2::Struct2() = default;
-Struct2::Struct2(
-    int field1,
-    int field2,
-    int field3):
+Struct2::Struct2(int field1, int field2, int field3):
     field1(field1),
     field2(field2),
     field3(field3)

@@ -148,17 +148,17 @@ void NestedStruct3InterfacePublisher::unsubscribeFromSig2(long handleId)
     m_sig2Callbacks.erase(handleId);
 }
 
-void NestedStruct3InterfacePublisher::publishSig2(const NestedStruct1& param1,const NestedStruct2& param2) const
+void NestedStruct3InterfacePublisher::publishSig2(const NestedStruct1& param1, const NestedStruct2& param2) const
 {
     for(const auto& subscriber: m_allChangesSubscribers)
     {
-        subscriber.get().onSig2(param1,param2);
+        subscriber.get().onSig2(param1, param2);
     }
     for(const auto& callbackEntry: m_sig2Callbacks)
     {
         if(callbackEntry.second)
         {
-            callbackEntry.second(param1,param2);
+            callbackEntry.second(param1, param2);
         }
     }
 }
@@ -176,17 +176,17 @@ void NestedStruct3InterfacePublisher::unsubscribeFromSig3(long handleId)
     m_sig3Callbacks.erase(handleId);
 }
 
-void NestedStruct3InterfacePublisher::publishSig3(const NestedStruct1& param1,const NestedStruct2& param2,const NestedStruct3& param3) const
+void NestedStruct3InterfacePublisher::publishSig3(const NestedStruct1& param1, const NestedStruct2& param2, const NestedStruct3& param3) const
 {
     for(const auto& subscriber: m_allChangesSubscribers)
     {
-        subscriber.get().onSig3(param1,param2,param3);
+        subscriber.get().onSig3(param1, param2, param3);
     }
     for(const auto& callbackEntry: m_sig3Callbacks)
     {
         if(callbackEntry.second)
         {
-            callbackEntry.second(param1,param2,param3);
+            callbackEntry.second(param1, param2, param3);
         }
     }
 }

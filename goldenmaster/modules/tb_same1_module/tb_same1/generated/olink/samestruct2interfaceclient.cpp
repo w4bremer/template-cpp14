@@ -129,7 +129,7 @@ std::future<Struct1> SameStruct2InterfaceClient::func2Async(const Struct1& param
             std::promise<Struct1> resultPromise;
             const auto& operationId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "func2");
             m_node->invokeRemote(operationId,
-                nlohmann::json::array({param1,param2}), [&resultPromise](ApiGear::ObjectLink::InvokeReplyArg arg) {
+                nlohmann::json::array({param1, param2}), [&resultPromise](ApiGear::ObjectLink::InvokeReplyArg arg) {
                     const Struct1& value = arg.value.get<Struct1>();
                     resultPromise.set_value(value);
                 });

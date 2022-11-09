@@ -97,7 +97,7 @@ std::future<int> ManyParamInterface::func2Async(int param1, int param2)
                     param1,
                     param2]()
         {
-            return func2(param1,param2);
+            return func2(param1, param2);
         }
     );
 }
@@ -118,7 +118,7 @@ std::future<int> ManyParamInterface::func3Async(int param1, int param2, int para
                     param2,
                     param3]()
         {
-            return func3(param1,param2,param3);
+            return func3(param1, param2, param3);
         }
     );
 }
@@ -141,7 +141,7 @@ std::future<int> ManyParamInterface::func4Async(int param1, int param2, int para
                     param3,
                     param4]()
         {
-            return func4(param1,param2,param3,param4);
+            return func4(param1, param2, param3, param4);
         }
     );
 }

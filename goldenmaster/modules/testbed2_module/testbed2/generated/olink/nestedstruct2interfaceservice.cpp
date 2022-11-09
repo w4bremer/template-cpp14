@@ -90,7 +90,7 @@ void NestedStruct2InterfaceService::onSig1(const NestedStruct1& param1)
         }
     }
 }
-void NestedStruct2InterfaceService::onSig2(const NestedStruct1& param1,const NestedStruct2& param2)
+void NestedStruct2InterfaceService::onSig2(const NestedStruct1& param1, const NestedStruct2& param2)
 {
     const nlohmann::json args = { param1, param2 };
     const auto& signalId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "sig2");

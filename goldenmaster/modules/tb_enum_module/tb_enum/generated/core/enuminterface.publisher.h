@@ -103,35 +103,35 @@ public:
     /**
     * Implementation of IEnumInterfacePublisher::publishProp0Changed
     */
-    void publishProp0Changed(const Enum0Enum& prop0) const override;
+    void publishProp0Changed(Enum0Enum prop0) const override;
     /**
     * Implementation of IEnumInterfacePublisher::publishProp1Changed
     */
-    void publishProp1Changed(const Enum1Enum& prop1) const override;
+    void publishProp1Changed(Enum1Enum prop1) const override;
     /**
     * Implementation of IEnumInterfacePublisher::publishProp2Changed
     */
-    void publishProp2Changed(const Enum2Enum& prop2) const override;
+    void publishProp2Changed(Enum2Enum prop2) const override;
     /**
     * Implementation of IEnumInterfacePublisher::publishProp3Changed
     */
-    void publishProp3Changed(const Enum3Enum& prop3) const override;
+    void publishProp3Changed(Enum3Enum prop3) const override;
     /**
     * Implementation of IEnumInterfacePublisher::publishSig0
     */
-    void publishSig0(const Enum0Enum& param0) const override;
+    void publishSig0(Enum0Enum param0) const override;
     /**
     * Implementation of IEnumInterfacePublisher::publishSig1
     */
-    void publishSig1(const Enum1Enum& param1) const override;
+    void publishSig1(Enum1Enum param1) const override;
     /**
     * Implementation of IEnumInterfacePublisher::publishSig2
     */
-    void publishSig2(const Enum2Enum& param2) const override;
+    void publishSig2(Enum2Enum param2) const override;
     /**
     * Implementation of IEnumInterfacePublisher::publishSig3
     */
-    void publishSig3(const Enum3Enum& param3) const override;
+    void publishSig3(Enum3Enum param3) const override;
 private:
     // Subscribers informed about any property change or singal emited in EnumInterface
     std::vector<std::reference_wrapper<IEnumInterfaceSubscriber>> m_allChangesSubscribers;

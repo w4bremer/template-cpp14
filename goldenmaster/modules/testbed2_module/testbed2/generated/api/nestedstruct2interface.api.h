@@ -95,7 +95,7 @@ public:
     *
     * @warning the subscribed function shall not be blocking and must return immediately!
     */
-    virtual void onSig2(const NestedStruct1& param1,const NestedStruct2& param2) = 0;
+    virtual void onSig2(const NestedStruct1& param1, const NestedStruct2& param2) = 0;
     /**
     * Called by the INestedStruct2InterfacePublisher when prop1 value has changed if subscribed for the prop1 change.
     *
@@ -117,7 +117,7 @@ using NestedStruct2InterfaceProp2PropertyCb = std::function<void(const NestedStr
 /** Callback for sig1 signal triggers */
 using NestedStruct2InterfaceSig1SignalCb = std::function<void(const NestedStruct1& param1)> ;
 /** Callback for sig2 signal triggers */
-using NestedStruct2InterfaceSig2SignalCb = std::function<void(const NestedStruct1& param1,const NestedStruct2& param2)> ;
+using NestedStruct2InterfaceSig2SignalCb = std::function<void(const NestedStruct1& param1, const NestedStruct2& param2)> ;
 
 
 /**
@@ -241,7 +241,7 @@ public:
     * @param param1 
     * @param param2 
     */
-    virtual void publishSig2(const NestedStruct1& param1,const NestedStruct2& param2) const = 0;
+    virtual void publishSig2(const NestedStruct1& param1, const NestedStruct2& param2) const = 0;
 };
 
 

@@ -88,19 +88,19 @@ public:
     /**
     * Forwards propBool change through network if the connection is established.
     */
-    void onPropBoolChanged(const std::list<StructBool>& Value) override;
+    void onPropBoolChanged(const std::list<StructBool>& propBool) override;
     /**
     * Forwards propInt change through network if the connection is established.
     */
-    void onPropIntChanged(const std::list<StructInt>& Value) override;
+    void onPropIntChanged(const std::list<StructInt>& propInt) override;
     /**
     * Forwards propFloat change through network if the connection is established.
     */
-    void onPropFloatChanged(const std::list<StructFloat>& Value) override;
+    void onPropFloatChanged(const std::list<StructFloat>& propFloat) override;
     /**
     * Forwards propString change through network if the connection is established.
     */
-    void onPropStringChanged(const std::list<StructString>& Value) override;
+    void onPropStringChanged(const std::list<StructString>& propString) override;
 
 private:
     /**

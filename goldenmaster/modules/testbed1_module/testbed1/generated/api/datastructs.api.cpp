@@ -6,8 +6,7 @@ namespace Testbed1 {
 // Struct StructBool
 // ********************************************************************
 StructBool::StructBool() = default;
-StructBool::StructBool(
-    bool fieldBool):
+StructBool::StructBool(bool fieldBool):
     fieldBool(fieldBool)
 {
 }
@@ -28,8 +27,7 @@ bool operator!=(const StructBool& lhs, const StructBool& rhs) noexcept
 // Struct StructInt
 // ********************************************************************
 StructInt::StructInt() = default;
-StructInt::StructInt(
-    int fieldInt):
+StructInt::StructInt(int fieldInt):
     fieldInt(fieldInt)
 {
 }
@@ -50,8 +48,7 @@ bool operator!=(const StructInt& lhs, const StructInt& rhs) noexcept
 // Struct StructFloat
 // ********************************************************************
 StructFloat::StructFloat() = default;
-StructFloat::StructFloat(
-    float fieldFloat):
+StructFloat::StructFloat(float fieldFloat):
     fieldFloat(fieldFloat)
 {
 }
@@ -72,8 +69,7 @@ bool operator!=(const StructFloat& lhs, const StructFloat& rhs) noexcept
 // Struct StructString
 // ********************************************************************
 StructString::StructString() = default;
-StructString::StructString(
-    const std::string& fieldString):
+StructString::StructString(const std::string& fieldString):
     fieldString(fieldString)
 {
 }

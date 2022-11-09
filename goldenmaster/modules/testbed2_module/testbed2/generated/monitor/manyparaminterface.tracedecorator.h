@@ -81,15 +81,15 @@ public:
     /**
     Traces sig2 emission.
     */
-    void onSig2(int param1,int param2) override;
+    void onSig2(int param1, int param2) override;
     /**
     Traces sig3 emission.
     */
-    void onSig3(int param1,int param2,int param3) override;
+    void onSig3(int param1, int param2, int param3) override;
     /**
     Traces sig4 emission.
     */
-    void onSig4(int param1,int param2,int param3,int param4) override;
+    void onSig4(int param1, int param2, int param3, int param4) override;
     /**
     Traces prop1 changed.
     */

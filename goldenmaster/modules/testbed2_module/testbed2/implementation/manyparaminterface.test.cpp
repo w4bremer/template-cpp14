@@ -12,15 +12,15 @@ TEST_CASE("Testing ManyParamInterface", "[ManyParamInterface]"){
     }
     SECTION("Test operation func2") {
         // Do implement test here
-        testManyParamInterface->func2(0,0);
+        testManyParamInterface->func2(0, 0);
     }
     SECTION("Test operation func3") {
         // Do implement test here
-        testManyParamInterface->func3(0,0,0);
+        testManyParamInterface->func3(0, 0, 0);
     }
     SECTION("Test operation func4") {
         // Do implement test here
-        testManyParamInterface->func4(0,0,0,0);
+        testManyParamInterface->func4(0, 0, 0, 0);
     }
     SECTION("Test property prop1") {
         // Do implement test here

@@ -35,7 +35,7 @@ TEST_TB_SAME2_EXPORT Enum2Enum toEnum2Enum(std::uint8_t v, bool *ok);
 struct TEST_TB_SAME2_EXPORT Struct1
 {
     Struct1();
-    Struct1(int field1,int field2,int field3);
+    Struct1(int field1, int field2, int field3);
 
     int field1{};
     int field2{};
@@ -51,7 +51,7 @@ bool TEST_TB_SAME2_EXPORT operator!=(const Struct1 &, const Struct1 &) noexcept;
 struct TEST_TB_SAME2_EXPORT Struct2
 {
     Struct2();
-    Struct2(int field1,int field2,int field3);
+    Struct2(int field1, int field2, int field3);
 
     int field1{};
     int field2{};

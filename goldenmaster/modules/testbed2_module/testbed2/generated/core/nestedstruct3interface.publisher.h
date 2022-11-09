@@ -101,11 +101,11 @@ public:
     /**
     * Implementation of INestedStruct3InterfacePublisher::publishSig2
     */
-    void publishSig2(const NestedStruct1& param1,const NestedStruct2& param2) const override;
+    void publishSig2(const NestedStruct1& param1, const NestedStruct2& param2) const override;
     /**
     * Implementation of INestedStruct3InterfacePublisher::publishSig3
     */
-    void publishSig3(const NestedStruct1& param1,const NestedStruct2& param2,const NestedStruct3& param3) const override;
+    void publishSig3(const NestedStruct1& param1, const NestedStruct2& param2, const NestedStruct3& param3) const override;
 private:
     // Subscribers informed about any property change or singal emited in NestedStruct3Interface
     std::vector<std::reference_wrapper<INestedStruct3InterfaceSubscriber>> m_allChangesSubscribers;

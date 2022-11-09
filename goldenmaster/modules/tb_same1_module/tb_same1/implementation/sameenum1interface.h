@@ -17,11 +17,11 @@ public:
     explicit SameEnum1Interface();
     ~SameEnum1Interface();
 public:
-    void setProp1(const Enum1Enum& prop1) override;
-    const Enum1Enum& getProp1() const override;
+    void setProp1(Enum1Enum prop1) override;
+    Enum1Enum getProp1() const override;
     
-    Enum1Enum func1(const Enum1Enum& param1) override;
-    std::future<Enum1Enum> func1Async(const Enum1Enum& param1) override;
+    Enum1Enum func1(Enum1Enum param1) override;
+    std::future<Enum1Enum> func1Async(Enum1Enum param1) override;
         
     /**
     * Access to a publisher, use it to subscribe for SameEnum1Interface changes and signal emission.

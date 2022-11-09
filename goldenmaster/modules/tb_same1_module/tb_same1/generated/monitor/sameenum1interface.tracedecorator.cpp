@@ -19,32 +19,33 @@ std::unique_ptr<SameEnum1InterfaceTraceDecorator> SameEnum1InterfaceTraceDecorat
 {
     return std::unique_ptr<SameEnum1InterfaceTraceDecorator>(new SameEnum1InterfaceTraceDecorator(impl, tracer));
 }
-Enum1Enum SameEnum1InterfaceTraceDecorator::func1(const Enum1Enum& param1)
+Enum1Enum SameEnum1InterfaceTraceDecorator::func1(Enum1Enum param1)
 {
     m_tracer->trace_func1(param1);
     return m_impl.func1(param1);
 }
-std::future<Enum1Enum> SameEnum1InterfaceTraceDecorator::func1Async(const Enum1Enum& param1)
+std::future<Enum1Enum> SameEnum1InterfaceTraceDecorator::func1Async(Enum1Enum param1)
 {
     m_tracer->trace_func1(param1);
     return m_impl.func1Async(param1);
 }
-void SameEnum1InterfaceTraceDecorator::setProp1(const Enum1Enum& prop1)
+void SameEnum1InterfaceTraceDecorator::setProp1(Enum1Enum prop1)
 {
     m_impl.setProp1(prop1);
 }
 
-const Enum1Enum& SameEnum1InterfaceTraceDecorator::getProp1() const
+Enum1Enum SameEnum1InterfaceTraceDecorator::getProp1() const
 {
     return m_impl.getProp1();
 }
-void SameEnum1InterfaceTraceDecorator::onSig1(const Enum1Enum& param1)
+void SameEnum1InterfaceTraceDecorator::onSig1(Enum1Enum param1)
 {
     m_tracer->trace_sig1(param1);
 }
 
-void SameEnum1InterfaceTraceDecorator::onProp1Changed(const Enum1Enum& /*prop1*/)
+void SameEnum1InterfaceTraceDecorator::onProp1Changed(Enum1Enum prop1)
 {
+    (void) prop1; // suppress the 'Unreferenced Formal Parameter' warning.
     m_tracer->capture_state(this);
 }
 
