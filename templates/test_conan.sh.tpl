@@ -33,6 +33,12 @@ pushd examples/app;
 conan install --build missing ../../../examples/app -g=virtualenv && cmake ../../../examples/app && cmake --build .
 if [ $? -ne 0 ]; then exit 1; fi;
 popd
+# examples appthreadsafe
+mkdir -p examples/appthreadsafe;
+pushd examples/appthreadsafe;
+conan install --build missing ../../../examples/appthreadsafe -g=virtualenv && cmake ../../../examples/appthreadsafe && cmake --build .
+if [ $? -ne 0 ]; then exit 1; fi;
+popd
 mkdir -p examples/olinkserver;
 pushd examples/olinkserver;
 conan install --build missing ../../../examples/olinkserver -g=virtualenv && cmake ../../../examples/olinkserver && cmake --build .

@@ -210,6 +210,12 @@ features:
           target: examples/app/conanfile.txt
         - source: examples/app/main.cpp.tpl
           target: examples/app/main.cpp
+        - source: examples/appthreadsafe/CMakeLists.txt.tpl
+          target: examples/appthreadsafe/CMakeLists.txt
+        - source: examples/appthreadsafe/conanfile.txt.tpl
+          target: examples/appthreadsafe/conanfile.txt
+        - source: examples/appthreadsafe/main.cpp.tpl
+          target: examples/appthreadsafe/main.cpp
         - source: examples/olinkserver/CMakeLists.txt.tpl
           target: examples/olinkserver/CMakeLists.txt
         - source: examples/olinkserver/conanfile.txt.tpl

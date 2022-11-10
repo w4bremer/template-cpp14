@@ -134,6 +134,22 @@ if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
 CALL deactivate.bat
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
 popd
+@REM Building examples appthreadsafe
+if not exist examples\appthreadsafe mkdir examples\appthreadsafe
+if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
+pushd examples\appthreadsafe
+if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
+conan install --build missing ../../../examples/appthreadsafe -g=virtualenv
+if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
+cmake ../../../examples/appthreadsafe
+if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
+CALL activate.bat
+if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
+cmake --build .
+if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
+CALL deactivate.bat
+if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
+popd
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
 if not exist examples\olinkserver mkdir examples\olinkserver
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
