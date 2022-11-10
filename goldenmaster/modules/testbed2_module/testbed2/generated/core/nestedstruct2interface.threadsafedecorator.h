@@ -20,15 +20,15 @@ namespace Testbed2 {
 * @see NestedStruct2Interface
 *
 \code{.cpp}
-int main(){
-    std::unique_ptr<Testbed2::INestedStruct2Interface> testTestbed2NestedStruct2Interface = std::make_unique<Testbed2::NestedStruct2Interface>();
-    std::unique_ptr<Testbed2::INestedStruct2Interface> testTestbed2NestedStruct2InterfaceThreadSafeDecorator = std::make_unique<Test::Testbed2::NestedStruct2InterfaceThreadSafeDecorator>(std::move(testTestbed2NestedStruct2Interface));
+using namespace Test::Testbed2;
 
-    // Thread safe access
-    testTestbed2NestedStruct2InterfaceThreadSafeDecorator->setProp1(testTestbed2NestedStruct2InterfaceThreadSafeDecorator->getProp1());
-    testTestbed2NestedStruct2InterfaceThreadSafeDecorator->setProp2(testTestbed2NestedStruct2InterfaceThreadSafeDecorator->getProp2());
-    return 0;
-}
+std::unique_ptr<INestedStruct2Interface> testNestedStruct2Interface = std::make_unique<NestedStruct2InterfaceThreadSafeDecorator>(std::make_shared<NestedStruct2Interface>());
+
+// Thread safe access
+auto prop1 = testNestedStruct2Interface->getProp1();
+testNestedStruct2Interface->setProp1(NestedStruct1());
+auto prop2 = testNestedStruct2Interface->getProp2();
+testNestedStruct2Interface->setProp2(NestedStruct2());
 \endcode
 */
 class TEST_TESTBED2_EXPORT NestedStruct2InterfaceThreadSafeDecorator : public INestedStruct2Interface

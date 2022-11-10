@@ -26,17 +26,16 @@ namespace {{ Camel .Module.Name }} {
 * @see {{.Interface.Name}}
 *
 \code{.cpp}
-int main(){
-    std::unique_ptr<{{ Camel .Module.Name }}::I{{.Interface.Name}}> test{{ Camel .Module.Name }}{{.Interface.Name}} = std::make_unique<{{ Camel .Module.Name }}::{{.Interface.Name}}>();
-    std::unique_ptr<{{ Camel .Module.Name }}::I{{.Interface.Name}}> test{{ Camel .Module.Name }}{{$class}} = std::make_unique<{{ Camel .System.Name }}::{{ Camel .Module.Name }}::{{$class}}>(std::move(test{{ Camel .Module.Name }}{{.Interface.Name}}));
+using namespace {{ Camel .System.Name }}::{{ Camel .Module.Name }};
 
-    // Thread safe access
+std::unique_ptr<{{$interfaceClass}}> test{{$interfaceName}} = std::make_unique<{{$class}}>(std::make_shared<{{$interfaceName}}>());
+
+// Thread safe access
 {{- range .Interface.Properties}}
 {{- $property := . }}
-    test{{ Camel .Module.Name }}{{$class}}->set{{Camel $property.Name}}(test{{ Camel .Module.Name }}{{$class}}->get{{Camel $property.Name}}());
+auto {{lower1 (Camel $property.Name)}} = test{{$interfaceName}}->get{{Camel $property.Name}}();
+test{{$interfaceName}}->set{{Camel $property.Name}}({{cppDefault "" $property}});
 {{- end }}
-    return 0;
-}
 \endcode
 */
 class {{ SNAKE .System.Name  }}_{{ SNAKE .Module.Name  }}_EXPORT {{$class}} : public I{{.Interface.Name}}

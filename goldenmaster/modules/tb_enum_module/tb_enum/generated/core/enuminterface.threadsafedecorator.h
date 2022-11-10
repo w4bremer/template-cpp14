@@ -20,17 +20,19 @@ namespace TbEnum {
 * @see EnumInterface
 *
 \code{.cpp}
-int main(){
-    std::unique_ptr<TbEnum::IEnumInterface> testTbEnumEnumInterface = std::make_unique<TbEnum::EnumInterface>();
-    std::unique_ptr<TbEnum::IEnumInterface> testTbEnumEnumInterfaceThreadSafeDecorator = std::make_unique<Test::TbEnum::EnumInterfaceThreadSafeDecorator>(std::move(testTbEnumEnumInterface));
+using namespace Test::TbEnum;
 
-    // Thread safe access
-    testTbEnumEnumInterfaceThreadSafeDecorator->setProp0(testTbEnumEnumInterfaceThreadSafeDecorator->getProp0());
-    testTbEnumEnumInterfaceThreadSafeDecorator->setProp1(testTbEnumEnumInterfaceThreadSafeDecorator->getProp1());
-    testTbEnumEnumInterfaceThreadSafeDecorator->setProp2(testTbEnumEnumInterfaceThreadSafeDecorator->getProp2());
-    testTbEnumEnumInterfaceThreadSafeDecorator->setProp3(testTbEnumEnumInterfaceThreadSafeDecorator->getProp3());
-    return 0;
-}
+std::unique_ptr<IEnumInterface> testEnumInterface = std::make_unique<EnumInterfaceThreadSafeDecorator>(std::make_shared<EnumInterface>());
+
+// Thread safe access
+auto prop0 = testEnumInterface->getProp0();
+testEnumInterface->setProp0(Enum0Enum::value0);
+auto prop1 = testEnumInterface->getProp1();
+testEnumInterface->setProp1(Enum1Enum::value1);
+auto prop2 = testEnumInterface->getProp2();
+testEnumInterface->setProp2(Enum2Enum::value2);
+auto prop3 = testEnumInterface->getProp3();
+testEnumInterface->setProp3(Enum3Enum::value3);
 \endcode
 */
 class TEST_TB_ENUM_EXPORT EnumInterfaceThreadSafeDecorator : public IEnumInterface

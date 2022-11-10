@@ -20,17 +20,19 @@ namespace Testbed1 {
 * @see StructArrayInterface
 *
 \code{.cpp}
-int main(){
-    std::unique_ptr<Testbed1::IStructArrayInterface> testTestbed1StructArrayInterface = std::make_unique<Testbed1::StructArrayInterface>();
-    std::unique_ptr<Testbed1::IStructArrayInterface> testTestbed1StructArrayInterfaceThreadSafeDecorator = std::make_unique<Test::Testbed1::StructArrayInterfaceThreadSafeDecorator>(std::move(testTestbed1StructArrayInterface));
+using namespace Test::Testbed1;
 
-    // Thread safe access
-    testTestbed1StructArrayInterfaceThreadSafeDecorator->setPropBool(testTestbed1StructArrayInterfaceThreadSafeDecorator->getPropBool());
-    testTestbed1StructArrayInterfaceThreadSafeDecorator->setPropInt(testTestbed1StructArrayInterfaceThreadSafeDecorator->getPropInt());
-    testTestbed1StructArrayInterfaceThreadSafeDecorator->setPropFloat(testTestbed1StructArrayInterfaceThreadSafeDecorator->getPropFloat());
-    testTestbed1StructArrayInterfaceThreadSafeDecorator->setPropString(testTestbed1StructArrayInterfaceThreadSafeDecorator->getPropString());
-    return 0;
-}
+std::unique_ptr<IStructArrayInterface> testStructArrayInterface = std::make_unique<StructArrayInterfaceThreadSafeDecorator>(std::make_shared<StructArrayInterface>());
+
+// Thread safe access
+auto propBool = testStructArrayInterface->getPropBool();
+testStructArrayInterface->setPropBool(std::list<StructBool>());
+auto propInt = testStructArrayInterface->getPropInt();
+testStructArrayInterface->setPropInt(std::list<StructInt>());
+auto propFloat = testStructArrayInterface->getPropFloat();
+testStructArrayInterface->setPropFloat(std::list<StructFloat>());
+auto propString = testStructArrayInterface->getPropString();
+testStructArrayInterface->setPropString(std::list<StructString>());
 \endcode
 */
 class TEST_TESTBED1_EXPORT StructArrayInterfaceThreadSafeDecorator : public IStructArrayInterface

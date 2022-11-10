@@ -20,15 +20,15 @@ namespace TbSame2 {
 * @see SameEnum2Interface
 *
 \code{.cpp}
-int main(){
-    std::unique_ptr<TbSame2::ISameEnum2Interface> testTbSame2SameEnum2Interface = std::make_unique<TbSame2::SameEnum2Interface>();
-    std::unique_ptr<TbSame2::ISameEnum2Interface> testTbSame2SameEnum2InterfaceThreadSafeDecorator = std::make_unique<Test::TbSame2::SameEnum2InterfaceThreadSafeDecorator>(std::move(testTbSame2SameEnum2Interface));
+using namespace Test::TbSame2;
 
-    // Thread safe access
-    testTbSame2SameEnum2InterfaceThreadSafeDecorator->setProp1(testTbSame2SameEnum2InterfaceThreadSafeDecorator->getProp1());
-    testTbSame2SameEnum2InterfaceThreadSafeDecorator->setProp2(testTbSame2SameEnum2InterfaceThreadSafeDecorator->getProp2());
-    return 0;
-}
+std::unique_ptr<ISameEnum2Interface> testSameEnum2Interface = std::make_unique<SameEnum2InterfaceThreadSafeDecorator>(std::make_shared<SameEnum2Interface>());
+
+// Thread safe access
+auto prop1 = testSameEnum2Interface->getProp1();
+testSameEnum2Interface->setProp1(Enum1Enum::value1);
+auto prop2 = testSameEnum2Interface->getProp2();
+testSameEnum2Interface->setProp2(Enum2Enum::value1);
 \endcode
 */
 class TEST_TB_SAME2_EXPORT SameEnum2InterfaceThreadSafeDecorator : public ISameEnum2Interface

@@ -20,17 +20,19 @@ namespace TbSimple {
 * @see SimpleArrayInterface
 *
 \code{.cpp}
-int main(){
-    std::unique_ptr<TbSimple::ISimpleArrayInterface> testTbSimpleSimpleArrayInterface = std::make_unique<TbSimple::SimpleArrayInterface>();
-    std::unique_ptr<TbSimple::ISimpleArrayInterface> testTbSimpleSimpleArrayInterfaceThreadSafeDecorator = std::make_unique<Test::TbSimple::SimpleArrayInterfaceThreadSafeDecorator>(std::move(testTbSimpleSimpleArrayInterface));
+using namespace Test::TbSimple;
 
-    // Thread safe access
-    testTbSimpleSimpleArrayInterfaceThreadSafeDecorator->setPropBool(testTbSimpleSimpleArrayInterfaceThreadSafeDecorator->getPropBool());
-    testTbSimpleSimpleArrayInterfaceThreadSafeDecorator->setPropInt(testTbSimpleSimpleArrayInterfaceThreadSafeDecorator->getPropInt());
-    testTbSimpleSimpleArrayInterfaceThreadSafeDecorator->setPropFloat(testTbSimpleSimpleArrayInterfaceThreadSafeDecorator->getPropFloat());
-    testTbSimpleSimpleArrayInterfaceThreadSafeDecorator->setPropString(testTbSimpleSimpleArrayInterfaceThreadSafeDecorator->getPropString());
-    return 0;
-}
+std::unique_ptr<ISimpleArrayInterface> testSimpleArrayInterface = std::make_unique<SimpleArrayInterfaceThreadSafeDecorator>(std::make_shared<SimpleArrayInterface>());
+
+// Thread safe access
+auto propBool = testSimpleArrayInterface->getPropBool();
+testSimpleArrayInterface->setPropBool(std::list<bool>());
+auto propInt = testSimpleArrayInterface->getPropInt();
+testSimpleArrayInterface->setPropInt(std::list<int>());
+auto propFloat = testSimpleArrayInterface->getPropFloat();
+testSimpleArrayInterface->setPropFloat(std::list<float>());
+auto propString = testSimpleArrayInterface->getPropString();
+testSimpleArrayInterface->setPropString(std::list<std::string>());
 \endcode
 */
 class TEST_TB_SIMPLE_EXPORT SimpleArrayInterfaceThreadSafeDecorator : public ISimpleArrayInterface

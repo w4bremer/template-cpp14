@@ -20,14 +20,13 @@ namespace TbSame1 {
 * @see SameStruct1Interface
 *
 \code{.cpp}
-int main(){
-    std::unique_ptr<TbSame1::ISameStruct1Interface> testTbSame1SameStruct1Interface = std::make_unique<TbSame1::SameStruct1Interface>();
-    std::unique_ptr<TbSame1::ISameStruct1Interface> testTbSame1SameStruct1InterfaceThreadSafeDecorator = std::make_unique<Test::TbSame1::SameStruct1InterfaceThreadSafeDecorator>(std::move(testTbSame1SameStruct1Interface));
+using namespace Test::TbSame1;
 
-    // Thread safe access
-    testTbSame1SameStruct1InterfaceThreadSafeDecorator->setProp1(testTbSame1SameStruct1InterfaceThreadSafeDecorator->getProp1());
-    return 0;
-}
+std::unique_ptr<ISameStruct1Interface> testSameStruct1Interface = std::make_unique<SameStruct1InterfaceThreadSafeDecorator>(std::make_shared<SameStruct1Interface>());
+
+// Thread safe access
+auto prop1 = testSameStruct1Interface->getProp1();
+testSameStruct1Interface->setProp1(Struct1());
 \endcode
 */
 class TEST_TB_SAME1_EXPORT SameStruct1InterfaceThreadSafeDecorator : public ISameStruct1Interface

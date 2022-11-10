@@ -20,17 +20,19 @@ namespace Testbed2 {
 * @see ManyParamInterface
 *
 \code{.cpp}
-int main(){
-    std::unique_ptr<Testbed2::IManyParamInterface> testTestbed2ManyParamInterface = std::make_unique<Testbed2::ManyParamInterface>();
-    std::unique_ptr<Testbed2::IManyParamInterface> testTestbed2ManyParamInterfaceThreadSafeDecorator = std::make_unique<Test::Testbed2::ManyParamInterfaceThreadSafeDecorator>(std::move(testTestbed2ManyParamInterface));
+using namespace Test::Testbed2;
 
-    // Thread safe access
-    testTestbed2ManyParamInterfaceThreadSafeDecorator->setProp1(testTestbed2ManyParamInterfaceThreadSafeDecorator->getProp1());
-    testTestbed2ManyParamInterfaceThreadSafeDecorator->setProp2(testTestbed2ManyParamInterfaceThreadSafeDecorator->getProp2());
-    testTestbed2ManyParamInterfaceThreadSafeDecorator->setProp3(testTestbed2ManyParamInterfaceThreadSafeDecorator->getProp3());
-    testTestbed2ManyParamInterfaceThreadSafeDecorator->setProp4(testTestbed2ManyParamInterfaceThreadSafeDecorator->getProp4());
-    return 0;
-}
+std::unique_ptr<IManyParamInterface> testManyParamInterface = std::make_unique<ManyParamInterfaceThreadSafeDecorator>(std::make_shared<ManyParamInterface>());
+
+// Thread safe access
+auto prop1 = testManyParamInterface->getProp1();
+testManyParamInterface->setProp1(0);
+auto prop2 = testManyParamInterface->getProp2();
+testManyParamInterface->setProp2(0);
+auto prop3 = testManyParamInterface->getProp3();
+testManyParamInterface->setProp3(0);
+auto prop4 = testManyParamInterface->getProp4();
+testManyParamInterface->setProp4(0);
 \endcode
 */
 class TEST_TESTBED2_EXPORT ManyParamInterfaceThreadSafeDecorator : public IManyParamInterface

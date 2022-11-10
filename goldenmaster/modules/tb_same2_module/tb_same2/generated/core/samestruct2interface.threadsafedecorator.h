@@ -20,15 +20,15 @@ namespace TbSame2 {
 * @see SameStruct2Interface
 *
 \code{.cpp}
-int main(){
-    std::unique_ptr<TbSame2::ISameStruct2Interface> testTbSame2SameStruct2Interface = std::make_unique<TbSame2::SameStruct2Interface>();
-    std::unique_ptr<TbSame2::ISameStruct2Interface> testTbSame2SameStruct2InterfaceThreadSafeDecorator = std::make_unique<Test::TbSame2::SameStruct2InterfaceThreadSafeDecorator>(std::move(testTbSame2SameStruct2Interface));
+using namespace Test::TbSame2;
 
-    // Thread safe access
-    testTbSame2SameStruct2InterfaceThreadSafeDecorator->setProp1(testTbSame2SameStruct2InterfaceThreadSafeDecorator->getProp1());
-    testTbSame2SameStruct2InterfaceThreadSafeDecorator->setProp2(testTbSame2SameStruct2InterfaceThreadSafeDecorator->getProp2());
-    return 0;
-}
+std::unique_ptr<ISameStruct2Interface> testSameStruct2Interface = std::make_unique<SameStruct2InterfaceThreadSafeDecorator>(std::make_shared<SameStruct2Interface>());
+
+// Thread safe access
+auto prop1 = testSameStruct2Interface->getProp1();
+testSameStruct2Interface->setProp1(Struct2());
+auto prop2 = testSameStruct2Interface->getProp2();
+testSameStruct2Interface->setProp2(Struct2());
 \endcode
 */
 class TEST_TB_SAME2_EXPORT SameStruct2InterfaceThreadSafeDecorator : public ISameStruct2Interface

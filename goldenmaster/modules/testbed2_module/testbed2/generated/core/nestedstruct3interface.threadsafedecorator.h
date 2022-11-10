@@ -20,16 +20,17 @@ namespace Testbed2 {
 * @see NestedStruct3Interface
 *
 \code{.cpp}
-int main(){
-    std::unique_ptr<Testbed2::INestedStruct3Interface> testTestbed2NestedStruct3Interface = std::make_unique<Testbed2::NestedStruct3Interface>();
-    std::unique_ptr<Testbed2::INestedStruct3Interface> testTestbed2NestedStruct3InterfaceThreadSafeDecorator = std::make_unique<Test::Testbed2::NestedStruct3InterfaceThreadSafeDecorator>(std::move(testTestbed2NestedStruct3Interface));
+using namespace Test::Testbed2;
 
-    // Thread safe access
-    testTestbed2NestedStruct3InterfaceThreadSafeDecorator->setProp1(testTestbed2NestedStruct3InterfaceThreadSafeDecorator->getProp1());
-    testTestbed2NestedStruct3InterfaceThreadSafeDecorator->setProp2(testTestbed2NestedStruct3InterfaceThreadSafeDecorator->getProp2());
-    testTestbed2NestedStruct3InterfaceThreadSafeDecorator->setProp3(testTestbed2NestedStruct3InterfaceThreadSafeDecorator->getProp3());
-    return 0;
-}
+std::unique_ptr<INestedStruct3Interface> testNestedStruct3Interface = std::make_unique<NestedStruct3InterfaceThreadSafeDecorator>(std::make_shared<NestedStruct3Interface>());
+
+// Thread safe access
+auto prop1 = testNestedStruct3Interface->getProp1();
+testNestedStruct3Interface->setProp1(NestedStruct1());
+auto prop2 = testNestedStruct3Interface->getProp2();
+testNestedStruct3Interface->setProp2(NestedStruct2());
+auto prop3 = testNestedStruct3Interface->getProp3();
+testNestedStruct3Interface->setProp3(NestedStruct3());
 \endcode
 */
 class TEST_TESTBED2_EXPORT NestedStruct3InterfaceThreadSafeDecorator : public INestedStruct3Interface

@@ -20,17 +20,19 @@ namespace TbSimple {
 * @see SimpleInterface
 *
 \code{.cpp}
-int main(){
-    std::unique_ptr<TbSimple::ISimpleInterface> testTbSimpleSimpleInterface = std::make_unique<TbSimple::SimpleInterface>();
-    std::unique_ptr<TbSimple::ISimpleInterface> testTbSimpleSimpleInterfaceThreadSafeDecorator = std::make_unique<Test::TbSimple::SimpleInterfaceThreadSafeDecorator>(std::move(testTbSimpleSimpleInterface));
+using namespace Test::TbSimple;
 
-    // Thread safe access
-    testTbSimpleSimpleInterfaceThreadSafeDecorator->setPropBool(testTbSimpleSimpleInterfaceThreadSafeDecorator->getPropBool());
-    testTbSimpleSimpleInterfaceThreadSafeDecorator->setPropInt(testTbSimpleSimpleInterfaceThreadSafeDecorator->getPropInt());
-    testTbSimpleSimpleInterfaceThreadSafeDecorator->setPropFloat(testTbSimpleSimpleInterfaceThreadSafeDecorator->getPropFloat());
-    testTbSimpleSimpleInterfaceThreadSafeDecorator->setPropString(testTbSimpleSimpleInterfaceThreadSafeDecorator->getPropString());
-    return 0;
-}
+std::unique_ptr<ISimpleInterface> testSimpleInterface = std::make_unique<SimpleInterfaceThreadSafeDecorator>(std::make_shared<SimpleInterface>());
+
+// Thread safe access
+auto propBool = testSimpleInterface->getPropBool();
+testSimpleInterface->setPropBool(false);
+auto propInt = testSimpleInterface->getPropInt();
+testSimpleInterface->setPropInt(0);
+auto propFloat = testSimpleInterface->getPropFloat();
+testSimpleInterface->setPropFloat(0.0);
+auto propString = testSimpleInterface->getPropString();
+testSimpleInterface->setPropString(std::string());
 \endcode
 */
 class TEST_TB_SIMPLE_EXPORT SimpleInterfaceThreadSafeDecorator : public ISimpleInterface

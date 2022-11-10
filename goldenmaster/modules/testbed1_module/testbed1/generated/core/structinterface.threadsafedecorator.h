@@ -20,17 +20,19 @@ namespace Testbed1 {
 * @see StructInterface
 *
 \code{.cpp}
-int main(){
-    std::unique_ptr<Testbed1::IStructInterface> testTestbed1StructInterface = std::make_unique<Testbed1::StructInterface>();
-    std::unique_ptr<Testbed1::IStructInterface> testTestbed1StructInterfaceThreadSafeDecorator = std::make_unique<Test::Testbed1::StructInterfaceThreadSafeDecorator>(std::move(testTestbed1StructInterface));
+using namespace Test::Testbed1;
 
-    // Thread safe access
-    testTestbed1StructInterfaceThreadSafeDecorator->setPropBool(testTestbed1StructInterfaceThreadSafeDecorator->getPropBool());
-    testTestbed1StructInterfaceThreadSafeDecorator->setPropInt(testTestbed1StructInterfaceThreadSafeDecorator->getPropInt());
-    testTestbed1StructInterfaceThreadSafeDecorator->setPropFloat(testTestbed1StructInterfaceThreadSafeDecorator->getPropFloat());
-    testTestbed1StructInterfaceThreadSafeDecorator->setPropString(testTestbed1StructInterfaceThreadSafeDecorator->getPropString());
-    return 0;
-}
+std::unique_ptr<IStructInterface> testStructInterface = std::make_unique<StructInterfaceThreadSafeDecorator>(std::make_shared<StructInterface>());
+
+// Thread safe access
+auto propBool = testStructInterface->getPropBool();
+testStructInterface->setPropBool(StructBool());
+auto propInt = testStructInterface->getPropInt();
+testStructInterface->setPropInt(StructInt());
+auto propFloat = testStructInterface->getPropFloat();
+testStructInterface->setPropFloat(StructFloat());
+auto propString = testStructInterface->getPropString();
+testStructInterface->setPropString(StructString());
 \endcode
 */
 class TEST_TESTBED1_EXPORT StructInterfaceThreadSafeDecorator : public IStructInterface
