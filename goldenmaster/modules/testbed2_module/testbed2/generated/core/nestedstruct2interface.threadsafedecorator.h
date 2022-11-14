@@ -14,7 +14,7 @@ namespace Testbed2 {
 * Each property is guarded with its own mutex.
 * Multiple read/get operations can occur at the same time but only one write/set operation at a time.
 *
-* Operations a are not guarded by default since the function logic can be too complex than to simply lock it.
+* Operations are not guarded by default since the function logic can be too complex than to simply lock it.
 * However, functions can be locked by just adding the same mechanism in the implementation file of
 * the NestedStruct2Interface interface.
 * @see NestedStruct2Interface
@@ -40,14 +40,26 @@ public:
     */
     explicit NestedStruct2InterfaceThreadSafeDecorator(std::shared_ptr<INestedStruct2Interface> impl);
 
-    /** Forwards call to NestedStruct2Interface implementation. */
+    /** 
+    * Forwards call to NestedStruct2Interface implementation.
+    * @warning This forward call is not made thread safe by this class.
+    */
     NestedStruct1 func1(const NestedStruct1& param1) override;
-    /** Forwards call to NestedStruct2Interface implementation. */
+    /** 
+    * Forwards call to NestedStruct2Interface implementation.
+    * @warning This forward call is not made thread safe by this class.
+    */
     std::future<NestedStruct1> func1Async(const NestedStruct1& param1) override;
 
-    /** Forwards call to NestedStruct2Interface implementation. */
+    /** 
+    * Forwards call to NestedStruct2Interface implementation.
+    * @warning This forward call is not made thread safe by this class.
+    */
     NestedStruct1 func2(const NestedStruct1& param1, const NestedStruct2& param2) override;
-    /** Forwards call to NestedStruct2Interface implementation. */
+    /** 
+    * Forwards call to NestedStruct2Interface implementation.
+    * @warning This forward call is not made thread safe by this class.
+    */
     std::future<NestedStruct1> func2Async(const NestedStruct1& param1, const NestedStruct2& param2) override;
 
     /** Guards and forwards call to NestedStruct2Interface implementation. */
@@ -62,6 +74,7 @@ public:
 
     /**
     * Access to a publisher, use it to subscribe for NestedStruct2Interface changes and signal emission.
+    * This call is thread safe.
     * @return The publisher for NestedStruct2Interface.
     */
     INestedStruct2InterfacePublisher& _getPublisher() const override;

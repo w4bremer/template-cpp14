@@ -16,7 +16,7 @@ class TEST_TESTBED1_EXPORT StructInterfaceTraceDecorator : public IStructInterfa
 protected:
     /** 
     * ctor
-    * Subscribes for singal emmission.
+    * Subscribes for signal emission.
     * @param impl The StructInterface object to trace.
     * @param tracer A Poco tracer to which traces are put, wrapped with relevant object info.
     */
@@ -30,7 +30,7 @@ public:
     static std::unique_ptr<StructInterfaceTraceDecorator> connect(IStructInterface& impl, ApiGear::PocoImpl::Tracer& tracer);
     /**
     * dtor
-    * Unsubscribes from signal emision.
+    * Unsubscribes from signal emission.
     */
     virtual ~StructInterfaceTraceDecorator();
 

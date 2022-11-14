@@ -22,7 +22,7 @@ class {{ SNAKE .System.Name  }}_{{ SNAKE .Module.Name  }}_EXPORT {{$class}} : pu
 protected:
     /** 
     * ctor
-    * Subscribes for singal emmission.
+    * Subscribes for signal emission.
     * @param impl The {{.Interface.Name}} object to trace.
     * @param tracer A Poco tracer to which traces are put, wrapped with relevant object info.
     */
@@ -36,7 +36,7 @@ public:
     static std::unique_ptr<{{$class}}> connect({{$interfaceClass}}& impl, ApiGear::PocoImpl::Tracer& tracer);
     /**
     * dtor
-    * Unsubscribes from signal emision.
+    * Unsubscribes from signal emission.
     */
     virtual ~{{$class}}();
 {{- nl}}

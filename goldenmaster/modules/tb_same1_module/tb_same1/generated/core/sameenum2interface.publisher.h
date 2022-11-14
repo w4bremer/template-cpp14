@@ -17,6 +17,8 @@ namespace TbSame1 {
  * The implementation of a SameEnum2InterfacePublisher.
  * Use this class to store clients of the SameEnum2Interface and inform them about the change
  * on call of the appropriate publish function.
+ *
+ * @warning This class is thread safe, but the subscribed classes or functions are not protected.
  */
 class TEST_TB_SAME1_EXPORT SameEnum2InterfacePublisher : public ISameEnum2InterfacePublisher
 {
@@ -83,7 +85,7 @@ public:
     */
     void publishSig2(Enum1Enum param1, Enum2Enum param2) const override;
 private:
-    // Subscribers informed about any property change or singal emited in SameEnum2Interface
+    // Subscribers informed about any property change or signal emitted in SameEnum2Interface
     std::vector<std::reference_wrapper<ISameEnum2InterfaceSubscriber>> m_allChangesSubscribers;
     // Mutex for m_allChangesSubscribers
     mutable std::shared_timed_mutex m_allChangesSubscribersMutex;

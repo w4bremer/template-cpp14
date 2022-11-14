@@ -16,7 +16,7 @@ class TEST_TESTBED2_EXPORT NestedStruct3InterfaceTraceDecorator : public INested
 protected:
     /** 
     * ctor
-    * Subscribes for singal emmission.
+    * Subscribes for signal emission.
     * @param impl The NestedStruct3Interface object to trace.
     * @param tracer A Poco tracer to which traces are put, wrapped with relevant object info.
     */
@@ -30,7 +30,7 @@ public:
     static std::unique_ptr<NestedStruct3InterfaceTraceDecorator> connect(INestedStruct3Interface& impl, ApiGear::PocoImpl::Tracer& tracer);
     /**
     * dtor
-    * Unsubscribes from signal emision.
+    * Unsubscribes from signal emission.
     */
     virtual ~NestedStruct3InterfaceTraceDecorator();
 

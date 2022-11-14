@@ -14,7 +14,7 @@ namespace TbSame2 {
 * Each property is guarded with its own mutex.
 * Multiple read/get operations can occur at the same time but only one write/set operation at a time.
 *
-* Operations a are not guarded by default since the function logic can be too complex than to simply lock it.
+* Operations are not guarded by default since the function logic can be too complex than to simply lock it.
 * However, functions can be locked by just adding the same mechanism in the implementation file of
 * the SameStruct1Interface interface.
 * @see SameStruct1Interface
@@ -38,9 +38,15 @@ public:
     */
     explicit SameStruct1InterfaceThreadSafeDecorator(std::shared_ptr<ISameStruct1Interface> impl);
 
-    /** Forwards call to SameStruct1Interface implementation. */
+    /** 
+    * Forwards call to SameStruct1Interface implementation.
+    * @warning This forward call is not made thread safe by this class.
+    */
     Struct1 func1(const Struct1& param1) override;
-    /** Forwards call to SameStruct1Interface implementation. */
+    /** 
+    * Forwards call to SameStruct1Interface implementation.
+    * @warning This forward call is not made thread safe by this class.
+    */
     std::future<Struct1> func1Async(const Struct1& param1) override;
 
     /** Guards and forwards call to SameStruct1Interface implementation. */
@@ -50,6 +56,7 @@ public:
 
     /**
     * Access to a publisher, use it to subscribe for SameStruct1Interface changes and signal emission.
+    * This call is thread safe.
     * @return The publisher for SameStruct1Interface.
     */
     ISameStruct1InterfacePublisher& _getPublisher() const override;

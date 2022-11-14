@@ -16,7 +16,7 @@ class TEST_TESTBED2_EXPORT ManyParamInterfaceTraceDecorator : public IManyParamI
 protected:
     /** 
     * ctor
-    * Subscribes for singal emmission.
+    * Subscribes for signal emission.
     * @param impl The ManyParamInterface object to trace.
     * @param tracer A Poco tracer to which traces are put, wrapped with relevant object info.
     */
@@ -30,7 +30,7 @@ public:
     static std::unique_ptr<ManyParamInterfaceTraceDecorator> connect(IManyParamInterface& impl, ApiGear::PocoImpl::Tracer& tracer);
     /**
     * dtor
-    * Unsubscribes from signal emision.
+    * Unsubscribes from signal emission.
     */
     virtual ~ManyParamInterfaceTraceDecorator();
 

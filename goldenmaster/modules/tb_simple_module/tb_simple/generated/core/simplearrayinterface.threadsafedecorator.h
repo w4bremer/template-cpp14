@@ -14,7 +14,7 @@ namespace TbSimple {
 * Each property is guarded with its own mutex.
 * Multiple read/get operations can occur at the same time but only one write/set operation at a time.
 *
-* Operations a are not guarded by default since the function logic can be too complex than to simply lock it.
+* Operations are not guarded by default since the function logic can be too complex than to simply lock it.
 * However, functions can be locked by just adding the same mechanism in the implementation file of
 * the SimpleArrayInterface interface.
 * @see SimpleArrayInterface
@@ -44,24 +44,48 @@ public:
     */
     explicit SimpleArrayInterfaceThreadSafeDecorator(std::shared_ptr<ISimpleArrayInterface> impl);
 
-    /** Forwards call to SimpleArrayInterface implementation. */
+    /** 
+    * Forwards call to SimpleArrayInterface implementation.
+    * @warning This forward call is not made thread safe by this class.
+    */
     std::list<bool> funcBool(const std::list<bool>& paramBool) override;
-    /** Forwards call to SimpleArrayInterface implementation. */
+    /** 
+    * Forwards call to SimpleArrayInterface implementation.
+    * @warning This forward call is not made thread safe by this class.
+    */
     std::future<std::list<bool>> funcBoolAsync(const std::list<bool>& paramBool) override;
 
-    /** Forwards call to SimpleArrayInterface implementation. */
+    /** 
+    * Forwards call to SimpleArrayInterface implementation.
+    * @warning This forward call is not made thread safe by this class.
+    */
     std::list<int> funcInt(const std::list<int>& paramInt) override;
-    /** Forwards call to SimpleArrayInterface implementation. */
+    /** 
+    * Forwards call to SimpleArrayInterface implementation.
+    * @warning This forward call is not made thread safe by this class.
+    */
     std::future<std::list<int>> funcIntAsync(const std::list<int>& paramInt) override;
 
-    /** Forwards call to SimpleArrayInterface implementation. */
+    /** 
+    * Forwards call to SimpleArrayInterface implementation.
+    * @warning This forward call is not made thread safe by this class.
+    */
     std::list<float> funcFloat(const std::list<float>& paramFloat) override;
-    /** Forwards call to SimpleArrayInterface implementation. */
+    /** 
+    * Forwards call to SimpleArrayInterface implementation.
+    * @warning This forward call is not made thread safe by this class.
+    */
     std::future<std::list<float>> funcFloatAsync(const std::list<float>& paramFloat) override;
 
-    /** Forwards call to SimpleArrayInterface implementation. */
+    /** 
+    * Forwards call to SimpleArrayInterface implementation.
+    * @warning This forward call is not made thread safe by this class.
+    */
     std::list<std::string> funcString(const std::list<std::string>& paramString) override;
-    /** Forwards call to SimpleArrayInterface implementation. */
+    /** 
+    * Forwards call to SimpleArrayInterface implementation.
+    * @warning This forward call is not made thread safe by this class.
+    */
     std::future<std::list<std::string>> funcStringAsync(const std::list<std::string>& paramString) override;
 
     /** Guards and forwards call to SimpleArrayInterface implementation. */
@@ -86,6 +110,7 @@ public:
 
     /**
     * Access to a publisher, use it to subscribe for SimpleArrayInterface changes and signal emission.
+    * This call is thread safe.
     * @return The publisher for SimpleArrayInterface.
     */
     ISimpleArrayInterfacePublisher& _getPublisher() const override;

@@ -17,6 +17,8 @@ namespace TbEnum {
  * The implementation of a EnumInterfacePublisher.
  * Use this class to store clients of the EnumInterface and inform them about the change
  * on call of the appropriate publish function.
+ *
+ * @warning This class is thread safe, but the subscribed classes or functions are not protected.
  */
 class TEST_TB_ENUM_EXPORT EnumInterfacePublisher : public IEnumInterfacePublisher
 {
@@ -135,7 +137,7 @@ public:
     */
     void publishSig3(Enum3Enum param3) const override;
 private:
-    // Subscribers informed about any property change or singal emited in EnumInterface
+    // Subscribers informed about any property change or signal emitted in EnumInterface
     std::vector<std::reference_wrapper<IEnumInterfaceSubscriber>> m_allChangesSubscribers;
     // Mutex for m_allChangesSubscribers
     mutable std::shared_timed_mutex m_allChangesSubscribersMutex;

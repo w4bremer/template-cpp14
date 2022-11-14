@@ -30,7 +30,6 @@ void EnumInterfacePublisher::unsubscribeFromAllChanges(IEnumInterfaceSubscriber&
 
 long EnumInterfacePublisher::subscribeToProp0Changed(EnumInterfaceProp0PropertyCb callback)
 {
-    // this is a short term workaround - we need a better solution for unique handle identifiers
     auto handleId = m_prop0ChangedCallbackNextId++;
     std::unique_lock<std::shared_timed_mutex> lock(m_prop0CallbacksMutex);
     m_prop0Callbacks[handleId] = callback;
@@ -66,7 +65,6 @@ void EnumInterfacePublisher::publishProp0Changed(Enum0Enum prop0) const
 
 long EnumInterfacePublisher::subscribeToProp1Changed(EnumInterfaceProp1PropertyCb callback)
 {
-    // this is a short term workaround - we need a better solution for unique handle identifiers
     auto handleId = m_prop1ChangedCallbackNextId++;
     std::unique_lock<std::shared_timed_mutex> lock(m_prop1CallbacksMutex);
     m_prop1Callbacks[handleId] = callback;
@@ -102,7 +100,6 @@ void EnumInterfacePublisher::publishProp1Changed(Enum1Enum prop1) const
 
 long EnumInterfacePublisher::subscribeToProp2Changed(EnumInterfaceProp2PropertyCb callback)
 {
-    // this is a short term workaround - we need a better solution for unique handle identifiers
     auto handleId = m_prop2ChangedCallbackNextId++;
     std::unique_lock<std::shared_timed_mutex> lock(m_prop2CallbacksMutex);
     m_prop2Callbacks[handleId] = callback;
@@ -138,7 +135,6 @@ void EnumInterfacePublisher::publishProp2Changed(Enum2Enum prop2) const
 
 long EnumInterfacePublisher::subscribeToProp3Changed(EnumInterfaceProp3PropertyCb callback)
 {
-    // this is a short term workaround - we need a better solution for unique handle identifiers
     auto handleId = m_prop3ChangedCallbackNextId++;
     std::unique_lock<std::shared_timed_mutex> lock(m_prop3CallbacksMutex);
     m_prop3Callbacks[handleId] = callback;

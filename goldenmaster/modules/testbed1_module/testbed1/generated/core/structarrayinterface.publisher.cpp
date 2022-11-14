@@ -30,7 +30,6 @@ void StructArrayInterfacePublisher::unsubscribeFromAllChanges(IStructArrayInterf
 
 long StructArrayInterfacePublisher::subscribeToPropBoolChanged(StructArrayInterfacePropBoolPropertyCb callback)
 {
-    // this is a short term workaround - we need a better solution for unique handle identifiers
     auto handleId = m_propBoolChangedCallbackNextId++;
     std::unique_lock<std::shared_timed_mutex> lock(m_propBoolCallbacksMutex);
     m_propBoolCallbacks[handleId] = callback;
@@ -66,7 +65,6 @@ void StructArrayInterfacePublisher::publishPropBoolChanged(const std::list<Struc
 
 long StructArrayInterfacePublisher::subscribeToPropIntChanged(StructArrayInterfacePropIntPropertyCb callback)
 {
-    // this is a short term workaround - we need a better solution for unique handle identifiers
     auto handleId = m_propIntChangedCallbackNextId++;
     std::unique_lock<std::shared_timed_mutex> lock(m_propIntCallbacksMutex);
     m_propIntCallbacks[handleId] = callback;
@@ -102,7 +100,6 @@ void StructArrayInterfacePublisher::publishPropIntChanged(const std::list<Struct
 
 long StructArrayInterfacePublisher::subscribeToPropFloatChanged(StructArrayInterfacePropFloatPropertyCb callback)
 {
-    // this is a short term workaround - we need a better solution for unique handle identifiers
     auto handleId = m_propFloatChangedCallbackNextId++;
     std::unique_lock<std::shared_timed_mutex> lock(m_propFloatCallbacksMutex);
     m_propFloatCallbacks[handleId] = callback;
@@ -138,7 +135,6 @@ void StructArrayInterfacePublisher::publishPropFloatChanged(const std::list<Stru
 
 long StructArrayInterfacePublisher::subscribeToPropStringChanged(StructArrayInterfacePropStringPropertyCb callback)
 {
-    // this is a short term workaround - we need a better solution for unique handle identifiers
     auto handleId = m_propStringChangedCallbackNextId++;
     std::unique_lock<std::shared_timed_mutex> lock(m_propStringCallbacksMutex);
     m_propStringCallbacks[handleId] = callback;

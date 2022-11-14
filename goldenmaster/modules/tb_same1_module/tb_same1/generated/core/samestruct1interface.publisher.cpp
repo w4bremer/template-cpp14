@@ -30,7 +30,6 @@ void SameStruct1InterfacePublisher::unsubscribeFromAllChanges(ISameStruct1Interf
 
 long SameStruct1InterfacePublisher::subscribeToProp1Changed(SameStruct1InterfaceProp1PropertyCb callback)
 {
-    // this is a short term workaround - we need a better solution for unique handle identifiers
     auto handleId = m_prop1ChangedCallbackNextId++;
     std::unique_lock<std::shared_timed_mutex> lock(m_prop1CallbacksMutex);
     m_prop1Callbacks[handleId] = callback;

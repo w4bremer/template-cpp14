@@ -17,6 +17,8 @@ namespace TbSimple {
  * The implementation of a SimpleInterfacePublisher.
  * Use this class to store clients of the SimpleInterface and inform them about the change
  * on call of the appropriate publish function.
+ *
+ * @warning This class is thread safe, but the subscribed classes or functions are not protected.
  */
 class TEST_TB_SIMPLE_EXPORT SimpleInterfacePublisher : public ISimpleInterfacePublisher
 {
@@ -135,7 +137,7 @@ public:
     */
     void publishSigString(const std::string& paramString) const override;
 private:
-    // Subscribers informed about any property change or singal emited in SimpleInterface
+    // Subscribers informed about any property change or signal emitted in SimpleInterface
     std::vector<std::reference_wrapper<ISimpleInterfaceSubscriber>> m_allChangesSubscribers;
     // Mutex for m_allChangesSubscribers
     mutable std::shared_timed_mutex m_allChangesSubscribersMutex;

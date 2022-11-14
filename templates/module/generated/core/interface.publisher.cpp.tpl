@@ -37,7 +37,6 @@ void {{$pub_class}}::unsubscribeFromAllChanges({{$sub_class}}& subscriber)
 {{- $camelProperty := Camel .Name }}
 long {{$pub_class}}::subscribeTo{{$camelProperty}}Changed({{$interfaceName}}{{$camelProperty}}PropertyCb callback)
 {
-    // this is a short term workaround - we need a better solution for unique handle identifiers
     auto handleId = m_{{lower1 $camelProperty}}ChangedCallbackNextId++;
     std::unique_lock<std::shared_timed_mutex> lock(m_{{lower1 $camelProperty}}CallbacksMutex);
     m_{{lower1 $camelProperty}}Callbacks[handleId] = callback;

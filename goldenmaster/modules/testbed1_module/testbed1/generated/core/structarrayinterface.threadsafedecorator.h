@@ -14,7 +14,7 @@ namespace Testbed1 {
 * Each property is guarded with its own mutex.
 * Multiple read/get operations can occur at the same time but only one write/set operation at a time.
 *
-* Operations a are not guarded by default since the function logic can be too complex than to simply lock it.
+* Operations are not guarded by default since the function logic can be too complex than to simply lock it.
 * However, functions can be locked by just adding the same mechanism in the implementation file of
 * the StructArrayInterface interface.
 * @see StructArrayInterface
@@ -44,24 +44,48 @@ public:
     */
     explicit StructArrayInterfaceThreadSafeDecorator(std::shared_ptr<IStructArrayInterface> impl);
 
-    /** Forwards call to StructArrayInterface implementation. */
+    /** 
+    * Forwards call to StructArrayInterface implementation.
+    * @warning This forward call is not made thread safe by this class.
+    */
     StructBool funcBool(const std::list<StructBool>& paramBool) override;
-    /** Forwards call to StructArrayInterface implementation. */
+    /** 
+    * Forwards call to StructArrayInterface implementation.
+    * @warning This forward call is not made thread safe by this class.
+    */
     std::future<StructBool> funcBoolAsync(const std::list<StructBool>& paramBool) override;
 
-    /** Forwards call to StructArrayInterface implementation. */
+    /** 
+    * Forwards call to StructArrayInterface implementation.
+    * @warning This forward call is not made thread safe by this class.
+    */
     StructBool funcInt(const std::list<StructInt>& paramInt) override;
-    /** Forwards call to StructArrayInterface implementation. */
+    /** 
+    * Forwards call to StructArrayInterface implementation.
+    * @warning This forward call is not made thread safe by this class.
+    */
     std::future<StructBool> funcIntAsync(const std::list<StructInt>& paramInt) override;
 
-    /** Forwards call to StructArrayInterface implementation. */
+    /** 
+    * Forwards call to StructArrayInterface implementation.
+    * @warning This forward call is not made thread safe by this class.
+    */
     StructBool funcFloat(const std::list<StructFloat>& paramFloat) override;
-    /** Forwards call to StructArrayInterface implementation. */
+    /** 
+    * Forwards call to StructArrayInterface implementation.
+    * @warning This forward call is not made thread safe by this class.
+    */
     std::future<StructBool> funcFloatAsync(const std::list<StructFloat>& paramFloat) override;
 
-    /** Forwards call to StructArrayInterface implementation. */
+    /** 
+    * Forwards call to StructArrayInterface implementation.
+    * @warning This forward call is not made thread safe by this class.
+    */
     StructBool funcString(const std::list<StructString>& paramString) override;
-    /** Forwards call to StructArrayInterface implementation. */
+    /** 
+    * Forwards call to StructArrayInterface implementation.
+    * @warning This forward call is not made thread safe by this class.
+    */
     std::future<StructBool> funcStringAsync(const std::list<StructString>& paramString) override;
 
     /** Guards and forwards call to StructArrayInterface implementation. */
@@ -86,6 +110,7 @@ public:
 
     /**
     * Access to a publisher, use it to subscribe for StructArrayInterface changes and signal emission.
+    * This call is thread safe.
     * @return The publisher for StructArrayInterface.
     */
     IStructArrayInterfacePublisher& _getPublisher() const override;

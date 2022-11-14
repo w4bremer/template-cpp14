@@ -17,6 +17,8 @@ namespace Testbed1 {
  * The implementation of a StructArrayInterfacePublisher.
  * Use this class to store clients of the StructArrayInterface and inform them about the change
  * on call of the appropriate publish function.
+ *
+ * @warning This class is thread safe, but the subscribed classes or functions are not protected.
  */
 class TEST_TESTBED1_EXPORT StructArrayInterfacePublisher : public IStructArrayInterfacePublisher
 {
@@ -135,7 +137,7 @@ public:
     */
     void publishSigString(const std::list<StructString>& paramString) const override;
 private:
-    // Subscribers informed about any property change or singal emited in StructArrayInterface
+    // Subscribers informed about any property change or signal emitted in StructArrayInterface
     std::vector<std::reference_wrapper<IStructArrayInterfaceSubscriber>> m_allChangesSubscribers;
     // Mutex for m_allChangesSubscribers
     mutable std::shared_timed_mutex m_allChangesSubscribersMutex;

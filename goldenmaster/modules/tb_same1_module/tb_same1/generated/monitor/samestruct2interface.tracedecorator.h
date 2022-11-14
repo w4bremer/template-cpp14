@@ -16,7 +16,7 @@ class TEST_TB_SAME1_EXPORT SameStruct2InterfaceTraceDecorator : public ISameStru
 protected:
     /** 
     * ctor
-    * Subscribes for singal emmission.
+    * Subscribes for signal emission.
     * @param impl The SameStruct2Interface object to trace.
     * @param tracer A Poco tracer to which traces are put, wrapped with relevant object info.
     */
@@ -30,7 +30,7 @@ public:
     static std::unique_ptr<SameStruct2InterfaceTraceDecorator> connect(ISameStruct2Interface& impl, ApiGear::PocoImpl::Tracer& tracer);
     /**
     * dtor
-    * Unsubscribes from signal emision.
+    * Unsubscribes from signal emission.
     */
     virtual ~SameStruct2InterfaceTraceDecorator();
 

@@ -14,7 +14,7 @@ namespace TbSame1 {
 * Each property is guarded with its own mutex.
 * Multiple read/get operations can occur at the same time but only one write/set operation at a time.
 *
-* Operations a are not guarded by default since the function logic can be too complex than to simply lock it.
+* Operations are not guarded by default since the function logic can be too complex than to simply lock it.
 * However, functions can be locked by just adding the same mechanism in the implementation file of
 * the SameEnum2Interface interface.
 * @see SameEnum2Interface
@@ -40,14 +40,26 @@ public:
     */
     explicit SameEnum2InterfaceThreadSafeDecorator(std::shared_ptr<ISameEnum2Interface> impl);
 
-    /** Forwards call to SameEnum2Interface implementation. */
+    /** 
+    * Forwards call to SameEnum2Interface implementation.
+    * @warning This forward call is not made thread safe by this class.
+    */
     Enum1Enum func1(Enum1Enum param1) override;
-    /** Forwards call to SameEnum2Interface implementation. */
+    /** 
+    * Forwards call to SameEnum2Interface implementation.
+    * @warning This forward call is not made thread safe by this class.
+    */
     std::future<Enum1Enum> func1Async(Enum1Enum param1) override;
 
-    /** Forwards call to SameEnum2Interface implementation. */
+    /** 
+    * Forwards call to SameEnum2Interface implementation.
+    * @warning This forward call is not made thread safe by this class.
+    */
     Enum1Enum func2(Enum1Enum param1, Enum2Enum param2) override;
-    /** Forwards call to SameEnum2Interface implementation. */
+    /** 
+    * Forwards call to SameEnum2Interface implementation.
+    * @warning This forward call is not made thread safe by this class.
+    */
     std::future<Enum1Enum> func2Async(Enum1Enum param1, Enum2Enum param2) override;
 
     /** Guards and forwards call to SameEnum2Interface implementation. */
@@ -62,6 +74,7 @@ public:
 
     /**
     * Access to a publisher, use it to subscribe for SameEnum2Interface changes and signal emission.
+    * This call is thread safe.
     * @return The publisher for SameEnum2Interface.
     */
     ISameEnum2InterfacePublisher& _getPublisher() const override;

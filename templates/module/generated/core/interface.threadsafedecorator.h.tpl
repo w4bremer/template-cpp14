@@ -20,7 +20,7 @@ namespace {{ Camel .Module.Name }} {
 * Each property is guarded with its own mutex.
 * Multiple read/get operations can occur at the same time but only one write/set operation at a time.
 *
-* Operations a are not guarded by default since the function logic can be too complex than to simply lock it.
+* Operations are not guarded by default since the function logic can be too complex than to simply lock it.
 * However, functions can be locked by just adding the same mechanism in the implementation file of
 * the {{.Interface.Name}} interface.
 * @see {{.Interface.Name}}
@@ -48,9 +48,15 @@ public:
     explicit {{$class}}(std::shared_ptr<{{$interfaceClass}}> impl);{{nl}}
 {{- range .Interface.Operations}}
 {{- $operation := . }}
-    /** Forwards call to {{$interfaceNameOriginal}} implementation. */
+    /** 
+    * Forwards call to {{$interfaceNameOriginal}} implementation.
+    * @warning This forward call is not made thread safe by this class.
+    */
     {{cppReturn "" $operation.Return}} {{lower1 $operation.Name}}({{cppParams "" $operation.Params}}) override;
-    /** Forwards call to {{$interfaceNameOriginal}} implementation. */
+    /** 
+    * Forwards call to {{$interfaceNameOriginal}} implementation.
+    * @warning This forward call is not made thread safe by this class.
+    */
     std::future<{{cppReturn "" $operation.Return}}> {{lower1 $operation.Name}}Async({{cppParams "" $operation.Params}}) override;
 {{- nl }}
 {{- end }}
@@ -64,6 +70,7 @@ public:
 {{- end }}
     /**
     * Access to a publisher, use it to subscribe for {{$interfaceNameOriginal}} changes and signal emission.
+    * This call is thread safe.
     * @return The publisher for {{$interfaceNameOriginal}}.
     */
     {{$pub_class}}& _getPublisher() const override;

@@ -14,7 +14,7 @@ namespace TbSimple {
 * Each property is guarded with its own mutex.
 * Multiple read/get operations can occur at the same time but only one write/set operation at a time.
 *
-* Operations a are not guarded by default since the function logic can be too complex than to simply lock it.
+* Operations are not guarded by default since the function logic can be too complex than to simply lock it.
 * However, functions can be locked by just adding the same mechanism in the implementation file of
 * the SimpleInterface interface.
 * @see SimpleInterface
@@ -44,24 +44,48 @@ public:
     */
     explicit SimpleInterfaceThreadSafeDecorator(std::shared_ptr<ISimpleInterface> impl);
 
-    /** Forwards call to SimpleInterface implementation. */
+    /** 
+    * Forwards call to SimpleInterface implementation.
+    * @warning This forward call is not made thread safe by this class.
+    */
     bool funcBool(bool paramBool) override;
-    /** Forwards call to SimpleInterface implementation. */
+    /** 
+    * Forwards call to SimpleInterface implementation.
+    * @warning This forward call is not made thread safe by this class.
+    */
     std::future<bool> funcBoolAsync(bool paramBool) override;
 
-    /** Forwards call to SimpleInterface implementation. */
+    /** 
+    * Forwards call to SimpleInterface implementation.
+    * @warning This forward call is not made thread safe by this class.
+    */
     int funcInt(int paramInt) override;
-    /** Forwards call to SimpleInterface implementation. */
+    /** 
+    * Forwards call to SimpleInterface implementation.
+    * @warning This forward call is not made thread safe by this class.
+    */
     std::future<int> funcIntAsync(int paramInt) override;
 
-    /** Forwards call to SimpleInterface implementation. */
+    /** 
+    * Forwards call to SimpleInterface implementation.
+    * @warning This forward call is not made thread safe by this class.
+    */
     float funcFloat(float paramFloat) override;
-    /** Forwards call to SimpleInterface implementation. */
+    /** 
+    * Forwards call to SimpleInterface implementation.
+    * @warning This forward call is not made thread safe by this class.
+    */
     std::future<float> funcFloatAsync(float paramFloat) override;
 
-    /** Forwards call to SimpleInterface implementation. */
+    /** 
+    * Forwards call to SimpleInterface implementation.
+    * @warning This forward call is not made thread safe by this class.
+    */
     std::string funcString(const std::string& paramString) override;
-    /** Forwards call to SimpleInterface implementation. */
+    /** 
+    * Forwards call to SimpleInterface implementation.
+    * @warning This forward call is not made thread safe by this class.
+    */
     std::future<std::string> funcStringAsync(const std::string& paramString) override;
 
     /** Guards and forwards call to SimpleInterface implementation. */
@@ -86,6 +110,7 @@ public:
 
     /**
     * Access to a publisher, use it to subscribe for SimpleInterface changes and signal emission.
+    * This call is thread safe.
     * @return The publisher for SimpleInterface.
     */
     ISimpleInterfacePublisher& _getPublisher() const override;

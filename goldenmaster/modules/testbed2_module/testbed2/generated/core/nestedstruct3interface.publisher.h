@@ -17,6 +17,8 @@ namespace Testbed2 {
  * The implementation of a NestedStruct3InterfacePublisher.
  * Use this class to store clients of the NestedStruct3Interface and inform them about the change
  * on call of the appropriate publish function.
+ *
+ * @warning This class is thread safe, but the subscribed classes or functions are not protected.
  */
 class TEST_TESTBED2_EXPORT NestedStruct3InterfacePublisher : public INestedStruct3InterfacePublisher
 {
@@ -109,7 +111,7 @@ public:
     */
     void publishSig3(const NestedStruct1& param1, const NestedStruct2& param2, const NestedStruct3& param3) const override;
 private:
-    // Subscribers informed about any property change or singal emited in NestedStruct3Interface
+    // Subscribers informed about any property change or signal emitted in NestedStruct3Interface
     std::vector<std::reference_wrapper<INestedStruct3InterfaceSubscriber>> m_allChangesSubscribers;
     // Mutex for m_allChangesSubscribers
     mutable std::shared_timed_mutex m_allChangesSubscribersMutex;

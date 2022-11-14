@@ -30,7 +30,6 @@ void SimpleInterfacePublisher::unsubscribeFromAllChanges(ISimpleInterfaceSubscri
 
 long SimpleInterfacePublisher::subscribeToPropBoolChanged(SimpleInterfacePropBoolPropertyCb callback)
 {
-    // this is a short term workaround - we need a better solution for unique handle identifiers
     auto handleId = m_propBoolChangedCallbackNextId++;
     std::unique_lock<std::shared_timed_mutex> lock(m_propBoolCallbacksMutex);
     m_propBoolCallbacks[handleId] = callback;
@@ -66,7 +65,6 @@ void SimpleInterfacePublisher::publishPropBoolChanged(bool propBool) const
 
 long SimpleInterfacePublisher::subscribeToPropIntChanged(SimpleInterfacePropIntPropertyCb callback)
 {
-    // this is a short term workaround - we need a better solution for unique handle identifiers
     auto handleId = m_propIntChangedCallbackNextId++;
     std::unique_lock<std::shared_timed_mutex> lock(m_propIntCallbacksMutex);
     m_propIntCallbacks[handleId] = callback;
@@ -102,7 +100,6 @@ void SimpleInterfacePublisher::publishPropIntChanged(int propInt) const
 
 long SimpleInterfacePublisher::subscribeToPropFloatChanged(SimpleInterfacePropFloatPropertyCb callback)
 {
-    // this is a short term workaround - we need a better solution for unique handle identifiers
     auto handleId = m_propFloatChangedCallbackNextId++;
     std::unique_lock<std::shared_timed_mutex> lock(m_propFloatCallbacksMutex);
     m_propFloatCallbacks[handleId] = callback;
@@ -138,7 +135,6 @@ void SimpleInterfacePublisher::publishPropFloatChanged(float propFloat) const
 
 long SimpleInterfacePublisher::subscribeToPropStringChanged(SimpleInterfacePropStringPropertyCb callback)
 {
-    // this is a short term workaround - we need a better solution for unique handle identifiers
     auto handleId = m_propStringChangedCallbackNextId++;
     std::unique_lock<std::shared_timed_mutex> lock(m_propStringCallbacksMutex);
     m_propStringCallbacks[handleId] = callback;

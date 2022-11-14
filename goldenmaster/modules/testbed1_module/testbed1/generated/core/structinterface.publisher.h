@@ -17,6 +17,8 @@ namespace Testbed1 {
  * The implementation of a StructInterfacePublisher.
  * Use this class to store clients of the StructInterface and inform them about the change
  * on call of the appropriate publish function.
+ *
+ * @warning This class is thread safe, but the subscribed classes or functions are not protected.
  */
 class TEST_TESTBED1_EXPORT StructInterfacePublisher : public IStructInterfacePublisher
 {
@@ -135,7 +137,7 @@ public:
     */
     void publishSigString(const StructString& paramString) const override;
 private:
-    // Subscribers informed about any property change or singal emited in StructInterface
+    // Subscribers informed about any property change or signal emitted in StructInterface
     std::vector<std::reference_wrapper<IStructInterfaceSubscriber>> m_allChangesSubscribers;
     // Mutex for m_allChangesSubscribers
     mutable std::shared_timed_mutex m_allChangesSubscribersMutex;

@@ -24,6 +24,8 @@ namespace {{ Camel .Module.Name }} {
  * The implementation of a {{$pub_class}}.
  * Use this class to store clients of the {{.Interface.Name}} and inform them about the change
  * on call of the appropriate publish function.
+ *
+ * @warning This class is thread safe, but the subscribed classes or functions are not protected.
  */
 class {{ SNAKE .System.Name  }}_{{ SNAKE .Module.Name  }}_EXPORT {{$pub_class}} : public {{$pub_interface}}
 {
@@ -76,7 +78,7 @@ public:
     void publish{{Camel $signal.Name}}({{cppParams "" $signal.Params}}) const override;
 {{- end }}
 private:
-    // Subscribers informed about any property change or singal emited in {{.Interface.Name}}
+    // Subscribers informed about any property change or signal emitted in {{.Interface.Name}}
     std::vector<std::reference_wrapper<{{$sub_class}}>> m_allChangesSubscribers;
     // Mutex for m_allChangesSubscribers
     mutable std::shared_timed_mutex m_allChangesSubscribersMutex;

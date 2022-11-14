@@ -30,7 +30,6 @@ void ManyParamInterfacePublisher::unsubscribeFromAllChanges(IManyParamInterfaceS
 
 long ManyParamInterfacePublisher::subscribeToProp1Changed(ManyParamInterfaceProp1PropertyCb callback)
 {
-    // this is a short term workaround - we need a better solution for unique handle identifiers
     auto handleId = m_prop1ChangedCallbackNextId++;
     std::unique_lock<std::shared_timed_mutex> lock(m_prop1CallbacksMutex);
     m_prop1Callbacks[handleId] = callback;
@@ -66,7 +65,6 @@ void ManyParamInterfacePublisher::publishProp1Changed(int prop1) const
 
 long ManyParamInterfacePublisher::subscribeToProp2Changed(ManyParamInterfaceProp2PropertyCb callback)
 {
-    // this is a short term workaround - we need a better solution for unique handle identifiers
     auto handleId = m_prop2ChangedCallbackNextId++;
     std::unique_lock<std::shared_timed_mutex> lock(m_prop2CallbacksMutex);
     m_prop2Callbacks[handleId] = callback;
@@ -102,7 +100,6 @@ void ManyParamInterfacePublisher::publishProp2Changed(int prop2) const
 
 long ManyParamInterfacePublisher::subscribeToProp3Changed(ManyParamInterfaceProp3PropertyCb callback)
 {
-    // this is a short term workaround - we need a better solution for unique handle identifiers
     auto handleId = m_prop3ChangedCallbackNextId++;
     std::unique_lock<std::shared_timed_mutex> lock(m_prop3CallbacksMutex);
     m_prop3Callbacks[handleId] = callback;
@@ -138,7 +135,6 @@ void ManyParamInterfacePublisher::publishProp3Changed(int prop3) const
 
 long ManyParamInterfacePublisher::subscribeToProp4Changed(ManyParamInterfaceProp4PropertyCb callback)
 {
-    // this is a short term workaround - we need a better solution for unique handle identifiers
     auto handleId = m_prop4ChangedCallbackNextId++;
     std::unique_lock<std::shared_timed_mutex> lock(m_prop4CallbacksMutex);
     m_prop4Callbacks[handleId] = callback;

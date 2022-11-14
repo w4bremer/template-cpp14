@@ -16,7 +16,7 @@ class TEST_TB_ENUM_EXPORT EnumInterfaceTraceDecorator : public IEnumInterface, p
 protected:
     /** 
     * ctor
-    * Subscribes for singal emmission.
+    * Subscribes for signal emission.
     * @param impl The EnumInterface object to trace.
     * @param tracer A Poco tracer to which traces are put, wrapped with relevant object info.
     */
@@ -30,7 +30,7 @@ public:
     static std::unique_ptr<EnumInterfaceTraceDecorator> connect(IEnumInterface& impl, ApiGear::PocoImpl::Tracer& tracer);
     /**
     * dtor
-    * Unsubscribes from signal emision.
+    * Unsubscribes from signal emission.
     */
     virtual ~EnumInterfaceTraceDecorator();
 

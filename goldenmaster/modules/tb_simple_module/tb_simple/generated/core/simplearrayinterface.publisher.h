@@ -17,6 +17,8 @@ namespace TbSimple {
  * The implementation of a SimpleArrayInterfacePublisher.
  * Use this class to store clients of the SimpleArrayInterface and inform them about the change
  * on call of the appropriate publish function.
+ *
+ * @warning This class is thread safe, but the subscribed classes or functions are not protected.
  */
 class TEST_TB_SIMPLE_EXPORT SimpleArrayInterfacePublisher : public ISimpleArrayInterfacePublisher
 {
@@ -135,7 +137,7 @@ public:
     */
     void publishSigString(const std::list<std::string>& paramString) const override;
 private:
-    // Subscribers informed about any property change or singal emited in SimpleArrayInterface
+    // Subscribers informed about any property change or signal emitted in SimpleArrayInterface
     std::vector<std::reference_wrapper<ISimpleArrayInterfaceSubscriber>> m_allChangesSubscribers;
     // Mutex for m_allChangesSubscribers
     mutable std::shared_timed_mutex m_allChangesSubscribersMutex;

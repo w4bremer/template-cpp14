@@ -17,6 +17,8 @@ namespace Testbed2 {
  * The implementation of a ManyParamInterfacePublisher.
  * Use this class to store clients of the ManyParamInterface and inform them about the change
  * on call of the appropriate publish function.
+ *
+ * @warning This class is thread safe, but the subscribed classes or functions are not protected.
  */
 class TEST_TESTBED2_EXPORT ManyParamInterfacePublisher : public IManyParamInterfacePublisher
 {
@@ -135,7 +137,7 @@ public:
     */
     void publishSig4(int param1, int param2, int param3, int param4) const override;
 private:
-    // Subscribers informed about any property change or singal emited in ManyParamInterface
+    // Subscribers informed about any property change or signal emitted in ManyParamInterface
     std::vector<std::reference_wrapper<IManyParamInterfaceSubscriber>> m_allChangesSubscribers;
     // Mutex for m_allChangesSubscribers
     mutable std::shared_timed_mutex m_allChangesSubscribersMutex;

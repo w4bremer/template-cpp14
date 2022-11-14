@@ -30,7 +30,6 @@ void NestedStruct2InterfacePublisher::unsubscribeFromAllChanges(INestedStruct2In
 
 long NestedStruct2InterfacePublisher::subscribeToProp1Changed(NestedStruct2InterfaceProp1PropertyCb callback)
 {
-    // this is a short term workaround - we need a better solution for unique handle identifiers
     auto handleId = m_prop1ChangedCallbackNextId++;
     std::unique_lock<std::shared_timed_mutex> lock(m_prop1CallbacksMutex);
     m_prop1Callbacks[handleId] = callback;
@@ -66,7 +65,6 @@ void NestedStruct2InterfacePublisher::publishProp1Changed(const NestedStruct1& p
 
 long NestedStruct2InterfacePublisher::subscribeToProp2Changed(NestedStruct2InterfaceProp2PropertyCb callback)
 {
-    // this is a short term workaround - we need a better solution for unique handle identifiers
     auto handleId = m_prop2ChangedCallbackNextId++;
     std::unique_lock<std::shared_timed_mutex> lock(m_prop2CallbacksMutex);
     m_prop2Callbacks[handleId] = callback;

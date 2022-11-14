@@ -17,6 +17,8 @@ namespace TbSame1 {
  * The implementation of a SameStruct2InterfacePublisher.
  * Use this class to store clients of the SameStruct2Interface and inform them about the change
  * on call of the appropriate publish function.
+ *
+ * @warning This class is thread safe, but the subscribed classes or functions are not protected.
  */
 class TEST_TB_SAME1_EXPORT SameStruct2InterfacePublisher : public ISameStruct2InterfacePublisher
 {
@@ -83,7 +85,7 @@ public:
     */
     void publishSig2(const Struct1& param1, const Struct2& param2) const override;
 private:
-    // Subscribers informed about any property change or singal emited in SameStruct2Interface
+    // Subscribers informed about any property change or signal emitted in SameStruct2Interface
     std::vector<std::reference_wrapper<ISameStruct2InterfaceSubscriber>> m_allChangesSubscribers;
     // Mutex for m_allChangesSubscribers
     mutable std::shared_timed_mutex m_allChangesSubscribersMutex;

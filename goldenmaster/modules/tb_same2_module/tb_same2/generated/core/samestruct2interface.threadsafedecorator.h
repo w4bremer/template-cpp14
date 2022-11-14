@@ -14,7 +14,7 @@ namespace TbSame2 {
 * Each property is guarded with its own mutex.
 * Multiple read/get operations can occur at the same time but only one write/set operation at a time.
 *
-* Operations a are not guarded by default since the function logic can be too complex than to simply lock it.
+* Operations are not guarded by default since the function logic can be too complex than to simply lock it.
 * However, functions can be locked by just adding the same mechanism in the implementation file of
 * the SameStruct2Interface interface.
 * @see SameStruct2Interface
@@ -40,14 +40,26 @@ public:
     */
     explicit SameStruct2InterfaceThreadSafeDecorator(std::shared_ptr<ISameStruct2Interface> impl);
 
-    /** Forwards call to SameStruct2Interface implementation. */
+    /** 
+    * Forwards call to SameStruct2Interface implementation.
+    * @warning This forward call is not made thread safe by this class.
+    */
     Struct1 func1(const Struct1& param1) override;
-    /** Forwards call to SameStruct2Interface implementation. */
+    /** 
+    * Forwards call to SameStruct2Interface implementation.
+    * @warning This forward call is not made thread safe by this class.
+    */
     std::future<Struct1> func1Async(const Struct1& param1) override;
 
-    /** Forwards call to SameStruct2Interface implementation. */
+    /** 
+    * Forwards call to SameStruct2Interface implementation.
+    * @warning This forward call is not made thread safe by this class.
+    */
     Struct1 func2(const Struct1& param1, const Struct2& param2) override;
-    /** Forwards call to SameStruct2Interface implementation. */
+    /** 
+    * Forwards call to SameStruct2Interface implementation.
+    * @warning This forward call is not made thread safe by this class.
+    */
     std::future<Struct1> func2Async(const Struct1& param1, const Struct2& param2) override;
 
     /** Guards and forwards call to SameStruct2Interface implementation. */
@@ -62,6 +74,7 @@ public:
 
     /**
     * Access to a publisher, use it to subscribe for SameStruct2Interface changes and signal emission.
+    * This call is thread safe.
     * @return The publisher for SameStruct2Interface.
     */
     ISameStruct2InterfacePublisher& _getPublisher() const override;

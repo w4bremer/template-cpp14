@@ -14,7 +14,7 @@ namespace Testbed1 {
 * Each property is guarded with its own mutex.
 * Multiple read/get operations can occur at the same time but only one write/set operation at a time.
 *
-* Operations a are not guarded by default since the function logic can be too complex than to simply lock it.
+* Operations are not guarded by default since the function logic can be too complex than to simply lock it.
 * However, functions can be locked by just adding the same mechanism in the implementation file of
 * the StructInterface interface.
 * @see StructInterface
@@ -44,24 +44,48 @@ public:
     */
     explicit StructInterfaceThreadSafeDecorator(std::shared_ptr<IStructInterface> impl);
 
-    /** Forwards call to StructInterface implementation. */
+    /** 
+    * Forwards call to StructInterface implementation.
+    * @warning This forward call is not made thread safe by this class.
+    */
     StructBool funcBool(const StructBool& paramBool) override;
-    /** Forwards call to StructInterface implementation. */
+    /** 
+    * Forwards call to StructInterface implementation.
+    * @warning This forward call is not made thread safe by this class.
+    */
     std::future<StructBool> funcBoolAsync(const StructBool& paramBool) override;
 
-    /** Forwards call to StructInterface implementation. */
+    /** 
+    * Forwards call to StructInterface implementation.
+    * @warning This forward call is not made thread safe by this class.
+    */
     StructBool funcInt(const StructInt& paramInt) override;
-    /** Forwards call to StructInterface implementation. */
+    /** 
+    * Forwards call to StructInterface implementation.
+    * @warning This forward call is not made thread safe by this class.
+    */
     std::future<StructBool> funcIntAsync(const StructInt& paramInt) override;
 
-    /** Forwards call to StructInterface implementation. */
+    /** 
+    * Forwards call to StructInterface implementation.
+    * @warning This forward call is not made thread safe by this class.
+    */
     StructFloat funcFloat(const StructFloat& paramFloat) override;
-    /** Forwards call to StructInterface implementation. */
+    /** 
+    * Forwards call to StructInterface implementation.
+    * @warning This forward call is not made thread safe by this class.
+    */
     std::future<StructFloat> funcFloatAsync(const StructFloat& paramFloat) override;
 
-    /** Forwards call to StructInterface implementation. */
+    /** 
+    * Forwards call to StructInterface implementation.
+    * @warning This forward call is not made thread safe by this class.
+    */
     StructString funcString(const StructString& paramString) override;
-    /** Forwards call to StructInterface implementation. */
+    /** 
+    * Forwards call to StructInterface implementation.
+    * @warning This forward call is not made thread safe by this class.
+    */
     std::future<StructString> funcStringAsync(const StructString& paramString) override;
 
     /** Guards and forwards call to StructInterface implementation. */
@@ -86,6 +110,7 @@ public:
 
     /**
     * Access to a publisher, use it to subscribe for StructInterface changes and signal emission.
+    * This call is thread safe.
     * @return The publisher for StructInterface.
     */
     IStructInterfacePublisher& _getPublisher() const override;
