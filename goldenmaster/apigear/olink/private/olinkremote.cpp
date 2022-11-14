@@ -26,6 +26,10 @@ OLinkRemote::OLinkRemote(std::unique_ptr<Poco::Net::WebSocket> socket, IConnecti
      m_node(ApiGear::ObjectLink::RemoteNode::createRemoteNode(registry)),
      m_registry(registry)
 {
+    if (m_socket){
+        // Common default maximum frame size is 1Mb
+        m_socket->setMaxPayloadSize(1048576);
+    }
     m_node->onLog(m_log.logFunc());
     m_node->onWrite([this](std::string msg) {
         writeMessage(msg, Poco::Net::WebSocket::FRAME_TEXT);
@@ -78,27 +82,25 @@ void OLinkRemote::receiveInLoop(){
     do
     {
         try {
-            char buffer[1024];
-            std::memset(buffer, 0, sizeof buffer);
+            Poco::Buffer<char> pocobuffer(0);
             int flags;
-            std::unique_lock<std::timed_mutex> lock(m_socketMutex, std::defer_lock);
-            auto canSocketRead = m_socket && m_socket->poll(Poco::Timespan(10000), Poco::Net::WebSocket::SELECT_READ);
+            auto canSocketRead = m_socket ? m_socket->poll(Poco::Timespan(10000), Poco::Net::WebSocket::SELECT_READ) : false;
             if (canSocketRead && !m_stopConnection){
                 std::unique_lock<std::timed_mutex> lock(m_socketMutex);
-                auto frameSize = m_socket->receiveFrame(buffer, sizeof(buffer), flags);
+                auto frameSize = m_socket->receiveFrame(pocobuffer, flags);
                 lock.unlock();
-                    
-                auto frameOpcode = flags & Poco::Net::WebSocket::FRAME_OP_BITMASK;
-                if (frameOpcode == Poco::Net::WebSocket::FRAME_OP_PING) {
-                    writeMessage(buffer, Poco::Net::WebSocket::FRAME_OP_PONG);
-                } else if (frameOpcode == Poco::Net::WebSocket::FRAME_OP_PONG){
-                        // handle pong
-                } else if (frameSize == 0 || frameOpcode == Poco::Net::WebSocket::FRAME_OP_CLOSE){
+                auto messagePayload = std::string(pocobuffer.begin(), frameSize);
+                auto frameOpCode = flags & Poco::Net::WebSocket::FRAME_OP_BITMASK;
+                if (frameOpCode == Poco::Net::WebSocket::FRAME_OP_PING){
+                    writeMessage(messagePayload, Poco::Net::WebSocket::FRAME_OP_PONG);
+                } else if (frameOpCode == Poco::Net::WebSocket::FRAME_OP_PONG) {
+                    // handle pong
+                } else if (frameSize == 0 || frameOpCode == Poco::Net::WebSocket::FRAME_OP_CLOSE){
+                    std::cout << "close connection" << std::endl;
                     clientClosedConnection = true;
                 } else {
-                    handleMessage(buffer);
+                    handleMessage(messagePayload);
                 }
-                
             }
         } catch (Poco::Exception& /*e*/) {
             clientClosedConnection = true;

@@ -57,26 +57,25 @@ void OlinkConnection::receiveInLoop()
     auto serverClosedConnection = false;
     do{
         try {
-            // TODO change buffer size
-            char buffer[1024];
-            std::memset(buffer, 0, sizeof buffer);
+            // receiveFrame requires pocobuffer with initial size 0, as it always extends it with adding frame content.
+            Poco::Buffer<char> pocobuffer(0);
             int flags;
             auto canSocketRead = m_socket ? m_socket->poll(Poco::Timespan(10000), Poco::Net::WebSocket::SELECT_READ) : false;
             if (canSocketRead && !m_disconnectRequested && m_socket) {
                 std::unique_lock<std::timed_mutex> lock(m_socketMutex);
-                auto frameSize = m_socket->receiveFrame(buffer, sizeof(buffer), flags);
+                auto frameSize = m_socket->receiveFrame(pocobuffer, flags);
                 lock.unlock();
-
+                auto messagePayload = std::string(pocobuffer.begin(), frameSize);
                 auto frameOpCode = flags & Poco::Net::WebSocket::FRAME_OP_BITMASK;
                 if (frameOpCode == Poco::Net::WebSocket::FRAME_OP_PING){
-                    writeMessage(buffer, Poco::Net::WebSocket::FRAME_OP_PONG);
+                    writeMessage(messagePayload, Poco::Net::WebSocket::FRAME_OP_PONG);
                 } else if (frameOpCode == Poco::Net::WebSocket::FRAME_OP_PONG) {
                     // handle pong
                 } else if (frameSize == 0 || frameOpCode == Poco::Net::WebSocket::FRAME_OP_CLOSE){
                     std::cout << "close connection" << std::endl;
                     serverClosedConnection = true;
                 } else {
-                    handleTextMessage(buffer);
+                    handleTextMessage(messagePayload);
                 }
             }
         }
@@ -145,6 +144,10 @@ void OlinkConnection::connectToHost(Poco::URI url)
             Poco::Net::HTTPResponse response;
 
             m_socket = std::make_unique<Poco::Net::WebSocket>(session, request, response);
+            if (m_socket){
+                // Common default maximum frame size is 1Mb
+                m_socket->setMaxPayloadSize(1048576);
+            }
             m_receivingDone = std::async(std::launch::async, [this](){receiveInLoop(); });
         } catch (std::exception &e) {
             m_socket.reset();
