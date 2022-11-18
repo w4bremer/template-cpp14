@@ -5,11 +5,11 @@
 using namespace Test::TbSimple;
 using namespace Test::TbSimple::mqtt;
 
-NoPropertiesInterfaceService::NoPropertiesInterfaceService(INoPropertiesInterface& impl, std::shared_ptr<ApiGear::MQTTImpl::Client> client)
+NoPropertiesInterfaceService::NoPropertiesInterfaceService(std::shared_ptr<INoPropertiesInterface> impl, std::shared_ptr<ApiGear::MQTTImpl::Client> client)
     : m_impl(impl)
     , m_client(client)
 {
-    m_impl._getPublisher().subscribeToAllChanges(*this);
+    m_impl->_getPublisher().subscribeToAllChanges(*this);
 
     m_client->registerSink(*this);
     // subscribe to all property change request methods
@@ -20,7 +20,7 @@ NoPropertiesInterfaceService::NoPropertiesInterfaceService(INoPropertiesInterfac
 
 NoPropertiesInterfaceService::~NoPropertiesInterfaceService()
 {
-    m_impl._getPublisher().unsubscribeFromAllChanges(*this);
+    m_impl->_getPublisher().unsubscribeFromAllChanges(*this);
 
     m_client->unregisterSink(*this);
     m_client->unsubscribeTopic(ApiGear::MQTTImpl::Topic("tb.simple","NoPropertiesInterface",ApiGear::MQTTImpl::Topic::TopicType::Operation,"funcVoid"), this);
@@ -39,12 +39,12 @@ void NoPropertiesInterfaceService::onInvoke(const ApiGear::MQTTImpl::Topic& topi
 
 
     if(name == "funcVoid") {
-        m_impl.funcVoid();
+        m_impl->funcVoid();
         return;
     }
     if(name == "funcBool") {
         const bool& paramBool = json_args.at(0).get<bool>();
-        auto result = m_impl.funcBool(paramBool);
+        auto result = m_impl->funcBool(paramBool);
         m_client->notifyInvokeResponse(responseTopic, nlohmann::json(result).dump(), correlationData);
         return;
     }

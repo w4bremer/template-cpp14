@@ -8,11 +8,11 @@
 using namespace {{ Camel .System.Name }}::{{ Camel .Module.Name }};
 using namespace {{ Camel .System.Name }}::{{ Camel .Module.Name }}::mqtt;
 
-{{$class}}::{{$class}}(I{{$interface}}& impl, std::shared_ptr<ApiGear::MQTTImpl::Client> client)
+{{$class}}::{{$class}}(std::shared_ptr<I{{$interface}}> impl, std::shared_ptr<ApiGear::MQTTImpl::Client> client)
     : m_impl(impl)
     , m_client(client)
 {
-    m_impl._getPublisher().subscribeToAllChanges(*this);
+    m_impl->_getPublisher().subscribeToAllChanges(*this);
 
     m_client->registerSink(*this);
     // subscribe to all property change request methods
@@ -29,7 +29,7 @@ using namespace {{ Camel .System.Name }}::{{ Camel .Module.Name }}::mqtt;
 
 {{$class}}::~{{$class}}()
 {
-    m_impl._getPublisher().unsubscribeFromAllChanges(*this);
+    m_impl->_getPublisher().unsubscribeFromAllChanges(*this);
 
     m_client->unregisterSink(*this);
 
@@ -48,7 +48,7 @@ void {{$class}}::onConnected()
     // send current values
 {{- range .Interface.Properties}}
 {{- $property := . }}
-    on{{Camel $property.Name}}Changed(m_impl.get{{Camel $property.Name}}());
+    on{{Camel $property.Name}}Changed(m_impl->get{{Camel $property.Name}}());
 {{- end }}
 }
 
@@ -60,7 +60,7 @@ void {{$class}}::onInvoke(const ApiGear::MQTTImpl::Topic& topic, const std::stri
 {{- $property := . }}
     if(name == "_set{{$property}}") {
         auto {{$property}} = json_args.get<{{cppType "" $property}}>();
-        m_impl.set{{Camel $property.Name}}({{$property}});
+        m_impl->set{{Camel $property.Name}}({{$property}});
         return;
     }
 {{- end }}
@@ -87,9 +87,9 @@ void {{$class}}::onInvoke(const ApiGear::MQTTImpl::Topic& topic, const std::stri
         const {{cppType "" $param}}& {{$param}} = json_args.at({{$idx}}).get<{{cppType "" $param}}>();
 {{- end }}
     {{- if ( eq (cppReturn "" $operation.Return) "void") }}
-        m_impl.{{lower1 $operation.Name}}({{ cppVars $operation.Params }});
+        m_impl->{{lower1 $operation.Name}}({{ cppVars $operation.Params }});
     {{- else }}
-        auto result = m_impl.{{lower1 $operation.Name}}({{ cppVars $operation.Params }});
+        auto result = m_impl->{{lower1 $operation.Name}}({{ cppVars $operation.Params }});
         m_client->notifyInvokeResponse(responseTopic, nlohmann::json(result).dump(), correlationData);
     {{- end}}
         return;

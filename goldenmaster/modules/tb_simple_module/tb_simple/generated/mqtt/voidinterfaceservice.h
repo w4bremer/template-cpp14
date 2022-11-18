@@ -10,7 +10,7 @@ namespace mqtt {
 class TEST_TB_SIMPLE_EXPORT VoidInterfaceService : public virtual ApiGear::MQTTImpl::ISink, public IVoidInterfaceSubscriber
 {
 public:
-    explicit VoidInterfaceService(IVoidInterface& impl, std::shared_ptr<ApiGear::MQTTImpl::Client> client);
+    explicit VoidInterfaceService(std::shared_ptr<IVoidInterface> impl, std::shared_ptr<ApiGear::MQTTImpl::Client> client);
     virtual ~VoidInterfaceService() override;
 
     // sink interface
@@ -23,7 +23,7 @@ public:
     void onSigVoid() override;
 
 private:
-    IVoidInterface& m_impl;
+    std::shared_ptr<IVoidInterface> m_impl;
     std::shared_ptr<ApiGear::MQTTImpl::Client> m_client;
 };
 } // namespace mqtt

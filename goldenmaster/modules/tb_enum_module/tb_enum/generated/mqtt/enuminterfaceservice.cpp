@@ -5,11 +5,11 @@
 using namespace Test::TbEnum;
 using namespace Test::TbEnum::mqtt;
 
-EnumInterfaceService::EnumInterfaceService(IEnumInterface& impl, std::shared_ptr<ApiGear::MQTTImpl::Client> client)
+EnumInterfaceService::EnumInterfaceService(std::shared_ptr<IEnumInterface> impl, std::shared_ptr<ApiGear::MQTTImpl::Client> client)
     : m_impl(impl)
     , m_client(client)
 {
-    m_impl._getPublisher().subscribeToAllChanges(*this);
+    m_impl->_getPublisher().subscribeToAllChanges(*this);
 
     m_client->registerSink(*this);
     // subscribe to all property change request methods
@@ -26,7 +26,7 @@ EnumInterfaceService::EnumInterfaceService(IEnumInterface& impl, std::shared_ptr
 
 EnumInterfaceService::~EnumInterfaceService()
 {
-    m_impl._getPublisher().unsubscribeFromAllChanges(*this);
+    m_impl->_getPublisher().unsubscribeFromAllChanges(*this);
 
     m_client->unregisterSink(*this);
     m_client->unsubscribeTopic(ApiGear::MQTTImpl::Topic("tb.enum","EnumInterface",ApiGear::MQTTImpl::Topic::TopicType::Operation,"_setprop0"), this);
@@ -42,10 +42,10 @@ EnumInterfaceService::~EnumInterfaceService()
 void EnumInterfaceService::onConnected()
 {
     // send current values
-    onProp0Changed(m_impl.getProp0());
-    onProp1Changed(m_impl.getProp1());
-    onProp2Changed(m_impl.getProp2());
-    onProp3Changed(m_impl.getProp3());
+    onProp0Changed(m_impl->getProp0());
+    onProp1Changed(m_impl->getProp1());
+    onProp2Changed(m_impl->getProp2());
+    onProp3Changed(m_impl->getProp3());
 }
 
 void EnumInterfaceService::onInvoke(const ApiGear::MQTTImpl::Topic& topic, const std::string& args, const ApiGear::MQTTImpl::Topic& responseTopic, const std::string& correlationData)
@@ -54,47 +54,47 @@ void EnumInterfaceService::onInvoke(const ApiGear::MQTTImpl::Topic& topic, const
     const std::string& name = topic.getEntityName();
     if(name == "_setprop0") {
         auto prop0 = json_args.get<Enum0Enum>();
-        m_impl.setProp0(prop0);
+        m_impl->setProp0(prop0);
         return;
     }
     if(name == "_setprop1") {
         auto prop1 = json_args.get<Enum1Enum>();
-        m_impl.setProp1(prop1);
+        m_impl->setProp1(prop1);
         return;
     }
     if(name == "_setprop2") {
         auto prop2 = json_args.get<Enum2Enum>();
-        m_impl.setProp2(prop2);
+        m_impl->setProp2(prop2);
         return;
     }
     if(name == "_setprop3") {
         auto prop3 = json_args.get<Enum3Enum>();
-        m_impl.setProp3(prop3);
+        m_impl->setProp3(prop3);
         return;
     }
 
 
     if(name == "func0") {
         const Enum0Enum& param0 = json_args.at(0).get<Enum0Enum>();
-        auto result = m_impl.func0(param0);
+        auto result = m_impl->func0(param0);
         m_client->notifyInvokeResponse(responseTopic, nlohmann::json(result).dump(), correlationData);
         return;
     }
     if(name == "func1") {
         const Enum1Enum& param1 = json_args.at(0).get<Enum1Enum>();
-        auto result = m_impl.func1(param1);
+        auto result = m_impl->func1(param1);
         m_client->notifyInvokeResponse(responseTopic, nlohmann::json(result).dump(), correlationData);
         return;
     }
     if(name == "func2") {
         const Enum2Enum& param2 = json_args.at(0).get<Enum2Enum>();
-        auto result = m_impl.func2(param2);
+        auto result = m_impl->func2(param2);
         m_client->notifyInvokeResponse(responseTopic, nlohmann::json(result).dump(), correlationData);
         return;
     }
     if(name == "func3") {
         const Enum3Enum& param3 = json_args.at(0).get<Enum3Enum>();
-        auto result = m_impl.func3(param3);
+        auto result = m_impl->func3(param3);
         m_client->notifyInvokeResponse(responseTopic, nlohmann::json(result).dump(), correlationData);
         return;
     }

@@ -10,7 +10,7 @@ namespace mqtt {
 class TEST_TB_ENUM_EXPORT EnumInterfaceService : public virtual ApiGear::MQTTImpl::ISink, public IEnumInterfaceSubscriber
 {
 public:
-    explicit EnumInterfaceService(IEnumInterface& impl, std::shared_ptr<ApiGear::MQTTImpl::Client> client);
+    explicit EnumInterfaceService(std::shared_ptr<IEnumInterface> impl, std::shared_ptr<ApiGear::MQTTImpl::Client> client);
     virtual ~EnumInterfaceService() override;
 
     // sink interface
@@ -30,7 +30,7 @@ public:
     void onProp3Changed(Enum3Enum prop3) override;
 
 private:
-    IEnumInterface& m_impl;
+    std::shared_ptr<IEnumInterface> m_impl;
     std::shared_ptr<ApiGear::MQTTImpl::Client> m_client;
 };
 } // namespace mqtt

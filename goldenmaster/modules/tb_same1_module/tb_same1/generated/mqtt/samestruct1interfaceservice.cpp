@@ -5,11 +5,11 @@
 using namespace Test::TbSame1;
 using namespace Test::TbSame1::mqtt;
 
-SameStruct1InterfaceService::SameStruct1InterfaceService(ISameStruct1Interface& impl, std::shared_ptr<ApiGear::MQTTImpl::Client> client)
+SameStruct1InterfaceService::SameStruct1InterfaceService(std::shared_ptr<ISameStruct1Interface> impl, std::shared_ptr<ApiGear::MQTTImpl::Client> client)
     : m_impl(impl)
     , m_client(client)
 {
-    m_impl._getPublisher().subscribeToAllChanges(*this);
+    m_impl->_getPublisher().subscribeToAllChanges(*this);
 
     m_client->registerSink(*this);
     // subscribe to all property change request methods
@@ -20,7 +20,7 @@ SameStruct1InterfaceService::SameStruct1InterfaceService(ISameStruct1Interface& 
 
 SameStruct1InterfaceService::~SameStruct1InterfaceService()
 {
-    m_impl._getPublisher().unsubscribeFromAllChanges(*this);
+    m_impl->_getPublisher().unsubscribeFromAllChanges(*this);
 
     m_client->unregisterSink(*this);
     m_client->unsubscribeTopic(ApiGear::MQTTImpl::Topic("tb.same1","SameStruct1Interface",ApiGear::MQTTImpl::Topic::TopicType::Operation,"_setprop1"), this);
@@ -30,7 +30,7 @@ SameStruct1InterfaceService::~SameStruct1InterfaceService()
 void SameStruct1InterfaceService::onConnected()
 {
     // send current values
-    onProp1Changed(m_impl.getProp1());
+    onProp1Changed(m_impl->getProp1());
 }
 
 void SameStruct1InterfaceService::onInvoke(const ApiGear::MQTTImpl::Topic& topic, const std::string& args, const ApiGear::MQTTImpl::Topic& responseTopic, const std::string& correlationData)
@@ -39,14 +39,14 @@ void SameStruct1InterfaceService::onInvoke(const ApiGear::MQTTImpl::Topic& topic
     const std::string& name = topic.getEntityName();
     if(name == "_setprop1") {
         auto prop1 = json_args.get<Struct1>();
-        m_impl.setProp1(prop1);
+        m_impl->setProp1(prop1);
         return;
     }
 
 
     if(name == "func1") {
         const Struct1& param1 = json_args.at(0).get<Struct1>();
-        auto result = m_impl.func1(param1);
+        auto result = m_impl->func1(param1);
         m_client->notifyInvokeResponse(responseTopic, nlohmann::json(result).dump(), correlationData);
         return;
     }

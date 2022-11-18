@@ -10,7 +10,7 @@ namespace mqtt {
 class TEST_TB_SIMPLE_EXPORT NoPropertiesInterfaceService : public virtual ApiGear::MQTTImpl::ISink, public INoPropertiesInterfaceSubscriber
 {
 public:
-    explicit NoPropertiesInterfaceService(INoPropertiesInterface& impl, std::shared_ptr<ApiGear::MQTTImpl::Client> client);
+    explicit NoPropertiesInterfaceService(std::shared_ptr<INoPropertiesInterface> impl, std::shared_ptr<ApiGear::MQTTImpl::Client> client);
     virtual ~NoPropertiesInterfaceService() override;
 
     // sink interface
@@ -24,7 +24,7 @@ public:
     void onSigBool(bool paramBool) override;
 
 private:
-    INoPropertiesInterface& m_impl;
+    std::shared_ptr<INoPropertiesInterface> m_impl;
     std::shared_ptr<ApiGear::MQTTImpl::Client> m_client;
 };
 } // namespace mqtt

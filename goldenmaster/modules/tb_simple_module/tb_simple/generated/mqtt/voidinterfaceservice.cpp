@@ -5,11 +5,11 @@
 using namespace Test::TbSimple;
 using namespace Test::TbSimple::mqtt;
 
-VoidInterfaceService::VoidInterfaceService(IVoidInterface& impl, std::shared_ptr<ApiGear::MQTTImpl::Client> client)
+VoidInterfaceService::VoidInterfaceService(std::shared_ptr<IVoidInterface> impl, std::shared_ptr<ApiGear::MQTTImpl::Client> client)
     : m_impl(impl)
     , m_client(client)
 {
-    m_impl._getPublisher().subscribeToAllChanges(*this);
+    m_impl->_getPublisher().subscribeToAllChanges(*this);
 
     m_client->registerSink(*this);
     // subscribe to all property change request methods
@@ -19,7 +19,7 @@ VoidInterfaceService::VoidInterfaceService(IVoidInterface& impl, std::shared_ptr
 
 VoidInterfaceService::~VoidInterfaceService()
 {
-    m_impl._getPublisher().unsubscribeFromAllChanges(*this);
+    m_impl->_getPublisher().unsubscribeFromAllChanges(*this);
 
     m_client->unregisterSink(*this);
     m_client->unsubscribeTopic(ApiGear::MQTTImpl::Topic("tb.simple","VoidInterface",ApiGear::MQTTImpl::Topic::TopicType::Operation,"funcVoid"), this);
@@ -40,7 +40,7 @@ void VoidInterfaceService::onInvoke(const ApiGear::MQTTImpl::Topic& topic, const
     (void) correlationData;
 
     if(name == "funcVoid") {
-        m_impl.funcVoid();
+        m_impl->funcVoid();
         return;
     }
 }
