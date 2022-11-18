@@ -10,7 +10,7 @@ namespace mqtt {
 class TEST_TESTBED2_EXPORT NestedStruct1InterfaceService : public virtual ApiGear::MQTTImpl::ISink, public INestedStruct1InterfaceSubscriber
 {
 public:
-    explicit NestedStruct1InterfaceService(INestedStruct1Interface& impl, std::shared_ptr<ApiGear::MQTTImpl::Client> client);
+    explicit NestedStruct1InterfaceService(std::shared_ptr<INestedStruct1Interface> impl, std::shared_ptr<ApiGear::MQTTImpl::Client> client);
     virtual ~NestedStruct1InterfaceService() override;
 
     // sink interface
@@ -24,7 +24,7 @@ public:
     void onProp1Changed(const NestedStruct1& prop1) override;
 
 private:
-    INestedStruct1Interface& m_impl;
+    std::shared_ptr<INestedStruct1Interface> m_impl;
     std::shared_ptr<ApiGear::MQTTImpl::Client> m_client;
 };
 } // namespace mqtt

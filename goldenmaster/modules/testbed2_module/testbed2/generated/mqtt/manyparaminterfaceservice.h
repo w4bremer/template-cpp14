@@ -10,7 +10,7 @@ namespace mqtt {
 class TEST_TESTBED2_EXPORT ManyParamInterfaceService : public virtual ApiGear::MQTTImpl::ISink, public IManyParamInterfaceSubscriber
 {
 public:
-    explicit ManyParamInterfaceService(IManyParamInterface& impl, std::shared_ptr<ApiGear::MQTTImpl::Client> client);
+    explicit ManyParamInterfaceService(std::shared_ptr<IManyParamInterface> impl, std::shared_ptr<ApiGear::MQTTImpl::Client> client);
     virtual ~ManyParamInterfaceService() override;
 
     // sink interface
@@ -30,7 +30,7 @@ public:
     void onProp4Changed(int prop4) override;
 
 private:
-    IManyParamInterface& m_impl;
+    std::shared_ptr<IManyParamInterface> m_impl;
     std::shared_ptr<ApiGear::MQTTImpl::Client> m_client;
 };
 } // namespace mqtt

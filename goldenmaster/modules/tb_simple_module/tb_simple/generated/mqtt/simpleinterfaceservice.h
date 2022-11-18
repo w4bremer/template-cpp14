@@ -10,7 +10,7 @@ namespace mqtt {
 class TEST_TB_SIMPLE_EXPORT SimpleInterfaceService : public virtual ApiGear::MQTTImpl::ISink, public ISimpleInterfaceSubscriber
 {
 public:
-    explicit SimpleInterfaceService(ISimpleInterface& impl, std::shared_ptr<ApiGear::MQTTImpl::Client> client);
+    explicit SimpleInterfaceService(std::shared_ptr<ISimpleInterface> impl, std::shared_ptr<ApiGear::MQTTImpl::Client> client);
     virtual ~SimpleInterfaceService() override;
 
     // sink interface
@@ -38,7 +38,7 @@ public:
     void onPropStringChanged(const std::string& propString) override;
 
 private:
-    ISimpleInterface& m_impl;
+    std::shared_ptr<ISimpleInterface> m_impl;
     std::shared_ptr<ApiGear::MQTTImpl::Client> m_client;
 };
 } // namespace mqtt
