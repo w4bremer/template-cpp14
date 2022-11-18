@@ -60,7 +60,7 @@ jobs:
           conan profile update settings.compiler.runtime=MDd default
           conan profile update settings.build_type=Debug default
       - name: Install CMake
-        run: conan install cmake/3.24.2@ -g=virtualrunenv
+        run: conan install cmake/3.24.2@ -g=virtualrunenv --build=missing
       - name: Run conan build Linux/macOS
         if: ${{ matrix.config.os != 'windows-latest'}}
         working-directory: goldenmaster
