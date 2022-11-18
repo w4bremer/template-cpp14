@@ -5,11 +5,11 @@
 using namespace Test::Testbed1;
 using namespace Test::Testbed1::mqtt;
 
-StructInterfaceService::StructInterfaceService(IStructInterface& impl, std::shared_ptr<ApiGear::MQTTImpl::Client> client)
+StructInterfaceService::StructInterfaceService(std::shared_ptr<IStructInterface> impl, std::shared_ptr<ApiGear::MQTTImpl::Client> client)
     : m_impl(impl)
     , m_client(client)
 {
-    m_impl._getPublisher().subscribeToAllChanges(*this);
+    m_impl->_getPublisher().subscribeToAllChanges(*this);
 
     m_client->registerSink(*this);
     // subscribe to all property change request methods
@@ -26,7 +26,7 @@ StructInterfaceService::StructInterfaceService(IStructInterface& impl, std::shar
 
 StructInterfaceService::~StructInterfaceService()
 {
-    m_impl._getPublisher().unsubscribeFromAllChanges(*this);
+    m_impl->_getPublisher().unsubscribeFromAllChanges(*this);
 
     m_client->unregisterSink(*this);
     m_client->unsubscribeTopic(ApiGear::MQTTImpl::Topic("testbed1","StructInterface",ApiGear::MQTTImpl::Topic::TopicType::Operation,"_setpropBool"), this);
@@ -42,10 +42,10 @@ StructInterfaceService::~StructInterfaceService()
 void StructInterfaceService::onConnected()
 {
     // send current values
-    onPropBoolChanged(m_impl.getPropBool());
-    onPropIntChanged(m_impl.getPropInt());
-    onPropFloatChanged(m_impl.getPropFloat());
-    onPropStringChanged(m_impl.getPropString());
+    onPropBoolChanged(m_impl->getPropBool());
+    onPropIntChanged(m_impl->getPropInt());
+    onPropFloatChanged(m_impl->getPropFloat());
+    onPropStringChanged(m_impl->getPropString());
 }
 
 void StructInterfaceService::onInvoke(const ApiGear::MQTTImpl::Topic& topic, const std::string& args, const ApiGear::MQTTImpl::Topic& responseTopic, const std::string& correlationData)
@@ -54,47 +54,47 @@ void StructInterfaceService::onInvoke(const ApiGear::MQTTImpl::Topic& topic, con
     const std::string& name = topic.getEntityName();
     if(name == "_setpropBool") {
         auto propBool = json_args.get<StructBool>();
-        m_impl.setPropBool(propBool);
+        m_impl->setPropBool(propBool);
         return;
     }
     if(name == "_setpropInt") {
         auto propInt = json_args.get<StructInt>();
-        m_impl.setPropInt(propInt);
+        m_impl->setPropInt(propInt);
         return;
     }
     if(name == "_setpropFloat") {
         auto propFloat = json_args.get<StructFloat>();
-        m_impl.setPropFloat(propFloat);
+        m_impl->setPropFloat(propFloat);
         return;
     }
     if(name == "_setpropString") {
         auto propString = json_args.get<StructString>();
-        m_impl.setPropString(propString);
+        m_impl->setPropString(propString);
         return;
     }
 
 
     if(name == "funcBool") {
         const StructBool& paramBool = json_args.at(0).get<StructBool>();
-        auto result = m_impl.funcBool(paramBool);
+        auto result = m_impl->funcBool(paramBool);
         m_client->notifyInvokeResponse(responseTopic, nlohmann::json(result).dump(), correlationData);
         return;
     }
     if(name == "funcInt") {
         const StructInt& paramInt = json_args.at(0).get<StructInt>();
-        auto result = m_impl.funcInt(paramInt);
+        auto result = m_impl->funcInt(paramInt);
         m_client->notifyInvokeResponse(responseTopic, nlohmann::json(result).dump(), correlationData);
         return;
     }
     if(name == "funcFloat") {
         const StructFloat& paramFloat = json_args.at(0).get<StructFloat>();
-        auto result = m_impl.funcFloat(paramFloat);
+        auto result = m_impl->funcFloat(paramFloat);
         m_client->notifyInvokeResponse(responseTopic, nlohmann::json(result).dump(), correlationData);
         return;
     }
     if(name == "funcString") {
         const StructString& paramString = json_args.at(0).get<StructString>();
-        auto result = m_impl.funcString(paramString);
+        auto result = m_impl->funcString(paramString);
         m_client->notifyInvokeResponse(responseTopic, nlohmann::json(result).dump(), correlationData);
         return;
     }

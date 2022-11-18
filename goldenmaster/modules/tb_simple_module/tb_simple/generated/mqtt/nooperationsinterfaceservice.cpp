@@ -5,11 +5,11 @@
 using namespace Test::TbSimple;
 using namespace Test::TbSimple::mqtt;
 
-NoOperationsInterfaceService::NoOperationsInterfaceService(INoOperationsInterface& impl, std::shared_ptr<ApiGear::MQTTImpl::Client> client)
+NoOperationsInterfaceService::NoOperationsInterfaceService(std::shared_ptr<INoOperationsInterface> impl, std::shared_ptr<ApiGear::MQTTImpl::Client> client)
     : m_impl(impl)
     , m_client(client)
 {
-    m_impl._getPublisher().subscribeToAllChanges(*this);
+    m_impl->_getPublisher().subscribeToAllChanges(*this);
 
     m_client->registerSink(*this);
     // subscribe to all property change request methods
@@ -20,7 +20,7 @@ NoOperationsInterfaceService::NoOperationsInterfaceService(INoOperationsInterfac
 
 NoOperationsInterfaceService::~NoOperationsInterfaceService()
 {
-    m_impl._getPublisher().unsubscribeFromAllChanges(*this);
+    m_impl->_getPublisher().unsubscribeFromAllChanges(*this);
 
     m_client->unregisterSink(*this);
     m_client->unsubscribeTopic(ApiGear::MQTTImpl::Topic("tb.simple","NoOperationsInterface",ApiGear::MQTTImpl::Topic::TopicType::Operation,"_setpropBool"), this);
@@ -30,8 +30,8 @@ NoOperationsInterfaceService::~NoOperationsInterfaceService()
 void NoOperationsInterfaceService::onConnected()
 {
     // send current values
-    onPropBoolChanged(m_impl.getPropBool());
-    onPropIntChanged(m_impl.getPropInt());
+    onPropBoolChanged(m_impl->getPropBool());
+    onPropIntChanged(m_impl->getPropInt());
 }
 
 void NoOperationsInterfaceService::onInvoke(const ApiGear::MQTTImpl::Topic& topic, const std::string& args, const ApiGear::MQTTImpl::Topic& responseTopic, const std::string& correlationData)
@@ -40,12 +40,12 @@ void NoOperationsInterfaceService::onInvoke(const ApiGear::MQTTImpl::Topic& topi
     const std::string& name = topic.getEntityName();
     if(name == "_setpropBool") {
         auto propBool = json_args.get<bool>();
-        m_impl.setPropBool(propBool);
+        m_impl->setPropBool(propBool);
         return;
     }
     if(name == "_setpropInt") {
         auto propInt = json_args.get<int>();
-        m_impl.setPropInt(propInt);
+        m_impl->setPropInt(propInt);
         return;
     }
 

@@ -10,7 +10,7 @@ namespace mqtt {
 class TEST_TB_SAME2_EXPORT SameEnum1InterfaceService : public virtual ApiGear::MQTTImpl::ISink, public ISameEnum1InterfaceSubscriber
 {
 public:
-    explicit SameEnum1InterfaceService(ISameEnum1Interface& impl, std::shared_ptr<ApiGear::MQTTImpl::Client> client);
+    explicit SameEnum1InterfaceService(std::shared_ptr<ISameEnum1Interface> impl, std::shared_ptr<ApiGear::MQTTImpl::Client> client);
     virtual ~SameEnum1InterfaceService() override;
 
     // sink interface
@@ -24,7 +24,7 @@ public:
     void onProp1Changed(Enum1Enum prop1) override;
 
 private:
-    ISameEnum1Interface& m_impl;
+    std::shared_ptr<ISameEnum1Interface> m_impl;
     std::shared_ptr<ApiGear::MQTTImpl::Client> m_client;
 };
 } // namespace mqtt

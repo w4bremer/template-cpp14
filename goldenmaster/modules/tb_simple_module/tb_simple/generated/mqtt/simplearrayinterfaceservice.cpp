@@ -5,11 +5,11 @@
 using namespace Test::TbSimple;
 using namespace Test::TbSimple::mqtt;
 
-SimpleArrayInterfaceService::SimpleArrayInterfaceService(ISimpleArrayInterface& impl, std::shared_ptr<ApiGear::MQTTImpl::Client> client)
+SimpleArrayInterfaceService::SimpleArrayInterfaceService(std::shared_ptr<ISimpleArrayInterface> impl, std::shared_ptr<ApiGear::MQTTImpl::Client> client)
     : m_impl(impl)
     , m_client(client)
 {
-    m_impl._getPublisher().subscribeToAllChanges(*this);
+    m_impl->_getPublisher().subscribeToAllChanges(*this);
 
     m_client->registerSink(*this);
     // subscribe to all property change request methods
@@ -34,7 +34,7 @@ SimpleArrayInterfaceService::SimpleArrayInterfaceService(ISimpleArrayInterface& 
 
 SimpleArrayInterfaceService::~SimpleArrayInterfaceService()
 {
-    m_impl._getPublisher().unsubscribeFromAllChanges(*this);
+    m_impl->_getPublisher().unsubscribeFromAllChanges(*this);
 
     m_client->unregisterSink(*this);
     m_client->unsubscribeTopic(ApiGear::MQTTImpl::Topic("tb.simple","SimpleArrayInterface",ApiGear::MQTTImpl::Topic::TopicType::Operation,"_setpropBool"), this);
@@ -58,14 +58,14 @@ SimpleArrayInterfaceService::~SimpleArrayInterfaceService()
 void SimpleArrayInterfaceService::onConnected()
 {
     // send current values
-    onPropBoolChanged(m_impl.getPropBool());
-    onPropIntChanged(m_impl.getPropInt());
-    onPropInt32Changed(m_impl.getPropInt32());
-    onPropInt64Changed(m_impl.getPropInt64());
-    onPropFloatChanged(m_impl.getPropFloat());
-    onPropFloat32Changed(m_impl.getPropFloat32());
-    onPropFloat64Changed(m_impl.getPropFloat64());
-    onPropStringChanged(m_impl.getPropString());
+    onPropBoolChanged(m_impl->getPropBool());
+    onPropIntChanged(m_impl->getPropInt());
+    onPropInt32Changed(m_impl->getPropInt32());
+    onPropInt64Changed(m_impl->getPropInt64());
+    onPropFloatChanged(m_impl->getPropFloat());
+    onPropFloat32Changed(m_impl->getPropFloat32());
+    onPropFloat64Changed(m_impl->getPropFloat64());
+    onPropStringChanged(m_impl->getPropString());
 }
 
 void SimpleArrayInterfaceService::onInvoke(const ApiGear::MQTTImpl::Topic& topic, const std::string& args, const ApiGear::MQTTImpl::Topic& responseTopic, const std::string& correlationData)
@@ -74,91 +74,91 @@ void SimpleArrayInterfaceService::onInvoke(const ApiGear::MQTTImpl::Topic& topic
     const std::string& name = topic.getEntityName();
     if(name == "_setpropBool") {
         auto propBool = json_args.get<std::list<bool>>();
-        m_impl.setPropBool(propBool);
+        m_impl->setPropBool(propBool);
         return;
     }
     if(name == "_setpropInt") {
         auto propInt = json_args.get<std::list<int>>();
-        m_impl.setPropInt(propInt);
+        m_impl->setPropInt(propInt);
         return;
     }
     if(name == "_setpropInt32") {
         auto propInt32 = json_args.get<std::list<int32_t>>();
-        m_impl.setPropInt32(propInt32);
+        m_impl->setPropInt32(propInt32);
         return;
     }
     if(name == "_setpropInt64") {
         auto propInt64 = json_args.get<std::list<int64_t>>();
-        m_impl.setPropInt64(propInt64);
+        m_impl->setPropInt64(propInt64);
         return;
     }
     if(name == "_setpropFloat") {
         auto propFloat = json_args.get<std::list<float>>();
-        m_impl.setPropFloat(propFloat);
+        m_impl->setPropFloat(propFloat);
         return;
     }
     if(name == "_setpropFloat32") {
         auto propFloat32 = json_args.get<std::list<float>>();
-        m_impl.setPropFloat32(propFloat32);
+        m_impl->setPropFloat32(propFloat32);
         return;
     }
     if(name == "_setpropFloat64") {
         auto propFloat64 = json_args.get<std::list<double>>();
-        m_impl.setPropFloat64(propFloat64);
+        m_impl->setPropFloat64(propFloat64);
         return;
     }
     if(name == "_setpropString") {
         auto propString = json_args.get<std::list<std::string>>();
-        m_impl.setPropString(propString);
+        m_impl->setPropString(propString);
         return;
     }
 
 
     if(name == "funcBool") {
         const std::list<bool>& paramBool = json_args.at(0).get<std::list<bool>>();
-        auto result = m_impl.funcBool(paramBool);
+        auto result = m_impl->funcBool(paramBool);
         m_client->notifyInvokeResponse(responseTopic, nlohmann::json(result).dump(), correlationData);
         return;
     }
     if(name == "funcInt") {
         const std::list<int>& paramInt = json_args.at(0).get<std::list<int>>();
-        auto result = m_impl.funcInt(paramInt);
+        auto result = m_impl->funcInt(paramInt);
         m_client->notifyInvokeResponse(responseTopic, nlohmann::json(result).dump(), correlationData);
         return;
     }
     if(name == "funcInt32") {
         const std::list<int32_t>& paramInt32 = json_args.at(0).get<std::list<int32_t>>();
-        auto result = m_impl.funcInt32(paramInt32);
+        auto result = m_impl->funcInt32(paramInt32);
         m_client->notifyInvokeResponse(responseTopic, nlohmann::json(result).dump(), correlationData);
         return;
     }
     if(name == "funcInt64") {
         const std::list<int64_t>& paramInt64 = json_args.at(0).get<std::list<int64_t>>();
-        auto result = m_impl.funcInt64(paramInt64);
+        auto result = m_impl->funcInt64(paramInt64);
         m_client->notifyInvokeResponse(responseTopic, nlohmann::json(result).dump(), correlationData);
         return;
     }
     if(name == "funcFloat") {
         const std::list<float>& paramFloat = json_args.at(0).get<std::list<float>>();
-        auto result = m_impl.funcFloat(paramFloat);
+        auto result = m_impl->funcFloat(paramFloat);
         m_client->notifyInvokeResponse(responseTopic, nlohmann::json(result).dump(), correlationData);
         return;
     }
     if(name == "funcFloat32") {
         const std::list<float>& paramFloat32 = json_args.at(0).get<std::list<float>>();
-        auto result = m_impl.funcFloat32(paramFloat32);
+        auto result = m_impl->funcFloat32(paramFloat32);
         m_client->notifyInvokeResponse(responseTopic, nlohmann::json(result).dump(), correlationData);
         return;
     }
     if(name == "funcFloat64") {
         const std::list<double>& paramFloat = json_args.at(0).get<std::list<double>>();
-        auto result = m_impl.funcFloat64(paramFloat);
+        auto result = m_impl->funcFloat64(paramFloat);
         m_client->notifyInvokeResponse(responseTopic, nlohmann::json(result).dump(), correlationData);
         return;
     }
     if(name == "funcString") {
         const std::list<std::string>& paramString = json_args.at(0).get<std::list<std::string>>();
-        auto result = m_impl.funcString(paramString);
+        auto result = m_impl->funcString(paramString);
         m_client->notifyInvokeResponse(responseTopic, nlohmann::json(result).dump(), correlationData);
         return;
     }

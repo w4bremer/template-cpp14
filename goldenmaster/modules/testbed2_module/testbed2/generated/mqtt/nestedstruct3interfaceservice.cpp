@@ -5,11 +5,11 @@
 using namespace Test::Testbed2;
 using namespace Test::Testbed2::mqtt;
 
-NestedStruct3InterfaceService::NestedStruct3InterfaceService(INestedStruct3Interface& impl, std::shared_ptr<ApiGear::MQTTImpl::Client> client)
+NestedStruct3InterfaceService::NestedStruct3InterfaceService(std::shared_ptr<INestedStruct3Interface> impl, std::shared_ptr<ApiGear::MQTTImpl::Client> client)
     : m_impl(impl)
     , m_client(client)
 {
-    m_impl._getPublisher().subscribeToAllChanges(*this);
+    m_impl->_getPublisher().subscribeToAllChanges(*this);
 
     m_client->registerSink(*this);
     // subscribe to all property change request methods
@@ -24,7 +24,7 @@ NestedStruct3InterfaceService::NestedStruct3InterfaceService(INestedStruct3Inter
 
 NestedStruct3InterfaceService::~NestedStruct3InterfaceService()
 {
-    m_impl._getPublisher().unsubscribeFromAllChanges(*this);
+    m_impl->_getPublisher().unsubscribeFromAllChanges(*this);
 
     m_client->unregisterSink(*this);
     m_client->unsubscribeTopic(ApiGear::MQTTImpl::Topic("testbed2","NestedStruct3Interface",ApiGear::MQTTImpl::Topic::TopicType::Operation,"_setprop1"), this);
@@ -38,9 +38,9 @@ NestedStruct3InterfaceService::~NestedStruct3InterfaceService()
 void NestedStruct3InterfaceService::onConnected()
 {
     // send current values
-    onProp1Changed(m_impl.getProp1());
-    onProp2Changed(m_impl.getProp2());
-    onProp3Changed(m_impl.getProp3());
+    onProp1Changed(m_impl->getProp1());
+    onProp2Changed(m_impl->getProp2());
+    onProp3Changed(m_impl->getProp3());
 }
 
 void NestedStruct3InterfaceService::onInvoke(const ApiGear::MQTTImpl::Topic& topic, const std::string& args, const ApiGear::MQTTImpl::Topic& responseTopic, const std::string& correlationData)
@@ -49,31 +49,31 @@ void NestedStruct3InterfaceService::onInvoke(const ApiGear::MQTTImpl::Topic& top
     const std::string& name = topic.getEntityName();
     if(name == "_setprop1") {
         auto prop1 = json_args.get<NestedStruct1>();
-        m_impl.setProp1(prop1);
+        m_impl->setProp1(prop1);
         return;
     }
     if(name == "_setprop2") {
         auto prop2 = json_args.get<NestedStruct2>();
-        m_impl.setProp2(prop2);
+        m_impl->setProp2(prop2);
         return;
     }
     if(name == "_setprop3") {
         auto prop3 = json_args.get<NestedStruct3>();
-        m_impl.setProp3(prop3);
+        m_impl->setProp3(prop3);
         return;
     }
 
 
     if(name == "func1") {
         const NestedStruct1& param1 = json_args.at(0).get<NestedStruct1>();
-        auto result = m_impl.func1(param1);
+        auto result = m_impl->func1(param1);
         m_client->notifyInvokeResponse(responseTopic, nlohmann::json(result).dump(), correlationData);
         return;
     }
     if(name == "func2") {
         const NestedStruct1& param1 = json_args.at(0).get<NestedStruct1>();
         const NestedStruct2& param2 = json_args.at(1).get<NestedStruct2>();
-        auto result = m_impl.func2(param1, param2);
+        auto result = m_impl->func2(param1, param2);
         m_client->notifyInvokeResponse(responseTopic, nlohmann::json(result).dump(), correlationData);
         return;
     }
@@ -81,7 +81,7 @@ void NestedStruct3InterfaceService::onInvoke(const ApiGear::MQTTImpl::Topic& top
         const NestedStruct1& param1 = json_args.at(0).get<NestedStruct1>();
         const NestedStruct2& param2 = json_args.at(1).get<NestedStruct2>();
         const NestedStruct3& param3 = json_args.at(2).get<NestedStruct3>();
-        auto result = m_impl.func3(param1, param2, param3);
+        auto result = m_impl->func3(param1, param2, param3);
         m_client->notifyInvokeResponse(responseTopic, nlohmann::json(result).dump(), correlationData);
         return;
     }

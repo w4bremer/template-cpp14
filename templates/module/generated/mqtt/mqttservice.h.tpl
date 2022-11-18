@@ -13,7 +13,7 @@ namespace mqtt {
 class {{ SNAKE .System.Name  }}_{{ SNAKE .Module.Name  }}_EXPORT {{$class}} : public virtual ApiGear::MQTTImpl::ISink, public I{{$interface}}Subscriber
 {
 public:
-    explicit {{$class}}(I{{$interface}}& impl, std::shared_ptr<ApiGear::MQTTImpl::Client> client);
+    explicit {{$class}}(std::shared_ptr<I{{$interface}}> impl, std::shared_ptr<ApiGear::MQTTImpl::Client> client);
     virtual ~{{$class}}() override;
 
     // sink interface
@@ -34,7 +34,7 @@ public:
 {{- end }}
 
 private:
-    I{{$interface}}& m_impl;
+    std::shared_ptr<I{{$interface}}> m_impl;
     std::shared_ptr<ApiGear::MQTTImpl::Client> m_client;
 };
 } // namespace mqtt

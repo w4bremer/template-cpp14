@@ -10,7 +10,7 @@ namespace mqtt {
 class TEST_TB_SIMPLE_EXPORT SimpleArrayInterfaceService : public virtual ApiGear::MQTTImpl::ISink, public ISimpleArrayInterfaceSubscriber
 {
 public:
-    explicit SimpleArrayInterfaceService(ISimpleArrayInterface& impl, std::shared_ptr<ApiGear::MQTTImpl::Client> client);
+    explicit SimpleArrayInterfaceService(std::shared_ptr<ISimpleArrayInterface> impl, std::shared_ptr<ApiGear::MQTTImpl::Client> client);
     virtual ~SimpleArrayInterfaceService() override;
 
     // sink interface
@@ -38,7 +38,7 @@ public:
     void onPropStringChanged(const std::list<std::string>& propString) override;
 
 private:
-    ISimpleArrayInterface& m_impl;
+    std::shared_ptr<ISimpleArrayInterface> m_impl;
     std::shared_ptr<ApiGear::MQTTImpl::Client> m_client;
 };
 } // namespace mqtt

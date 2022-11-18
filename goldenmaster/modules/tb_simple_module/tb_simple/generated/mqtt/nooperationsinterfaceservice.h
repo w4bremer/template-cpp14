@@ -10,7 +10,7 @@ namespace mqtt {
 class TEST_TB_SIMPLE_EXPORT NoOperationsInterfaceService : public virtual ApiGear::MQTTImpl::ISink, public INoOperationsInterfaceSubscriber
 {
 public:
-    explicit NoOperationsInterfaceService(INoOperationsInterface& impl, std::shared_ptr<ApiGear::MQTTImpl::Client> client);
+    explicit NoOperationsInterfaceService(std::shared_ptr<INoOperationsInterface> impl, std::shared_ptr<ApiGear::MQTTImpl::Client> client);
     virtual ~NoOperationsInterfaceService() override;
 
     // sink interface
@@ -26,7 +26,7 @@ public:
     void onPropIntChanged(int propInt) override;
 
 private:
-    INoOperationsInterface& m_impl;
+    std::shared_ptr<INoOperationsInterface> m_impl;
     std::shared_ptr<ApiGear::MQTTImpl::Client> m_client;
 };
 } // namespace mqtt

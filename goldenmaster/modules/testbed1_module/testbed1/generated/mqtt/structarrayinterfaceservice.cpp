@@ -5,11 +5,11 @@
 using namespace Test::Testbed1;
 using namespace Test::Testbed1::mqtt;
 
-StructArrayInterfaceService::StructArrayInterfaceService(IStructArrayInterface& impl, std::shared_ptr<ApiGear::MQTTImpl::Client> client)
+StructArrayInterfaceService::StructArrayInterfaceService(std::shared_ptr<IStructArrayInterface> impl, std::shared_ptr<ApiGear::MQTTImpl::Client> client)
     : m_impl(impl)
     , m_client(client)
 {
-    m_impl._getPublisher().subscribeToAllChanges(*this);
+    m_impl->_getPublisher().subscribeToAllChanges(*this);
 
     m_client->registerSink(*this);
     // subscribe to all property change request methods
@@ -26,7 +26,7 @@ StructArrayInterfaceService::StructArrayInterfaceService(IStructArrayInterface& 
 
 StructArrayInterfaceService::~StructArrayInterfaceService()
 {
-    m_impl._getPublisher().unsubscribeFromAllChanges(*this);
+    m_impl->_getPublisher().unsubscribeFromAllChanges(*this);
 
     m_client->unregisterSink(*this);
     m_client->unsubscribeTopic(ApiGear::MQTTImpl::Topic("testbed1","StructArrayInterface",ApiGear::MQTTImpl::Topic::TopicType::Operation,"_setpropBool"), this);
@@ -42,10 +42,10 @@ StructArrayInterfaceService::~StructArrayInterfaceService()
 void StructArrayInterfaceService::onConnected()
 {
     // send current values
-    onPropBoolChanged(m_impl.getPropBool());
-    onPropIntChanged(m_impl.getPropInt());
-    onPropFloatChanged(m_impl.getPropFloat());
-    onPropStringChanged(m_impl.getPropString());
+    onPropBoolChanged(m_impl->getPropBool());
+    onPropIntChanged(m_impl->getPropInt());
+    onPropFloatChanged(m_impl->getPropFloat());
+    onPropStringChanged(m_impl->getPropString());
 }
 
 void StructArrayInterfaceService::onInvoke(const ApiGear::MQTTImpl::Topic& topic, const std::string& args, const ApiGear::MQTTImpl::Topic& responseTopic, const std::string& correlationData)
@@ -54,47 +54,47 @@ void StructArrayInterfaceService::onInvoke(const ApiGear::MQTTImpl::Topic& topic
     const std::string& name = topic.getEntityName();
     if(name == "_setpropBool") {
         auto propBool = json_args.get<std::list<StructBool>>();
-        m_impl.setPropBool(propBool);
+        m_impl->setPropBool(propBool);
         return;
     }
     if(name == "_setpropInt") {
         auto propInt = json_args.get<std::list<StructInt>>();
-        m_impl.setPropInt(propInt);
+        m_impl->setPropInt(propInt);
         return;
     }
     if(name == "_setpropFloat") {
         auto propFloat = json_args.get<std::list<StructFloat>>();
-        m_impl.setPropFloat(propFloat);
+        m_impl->setPropFloat(propFloat);
         return;
     }
     if(name == "_setpropString") {
         auto propString = json_args.get<std::list<StructString>>();
-        m_impl.setPropString(propString);
+        m_impl->setPropString(propString);
         return;
     }
 
 
     if(name == "funcBool") {
         const std::list<StructBool>& paramBool = json_args.at(0).get<std::list<StructBool>>();
-        auto result = m_impl.funcBool(paramBool);
+        auto result = m_impl->funcBool(paramBool);
         m_client->notifyInvokeResponse(responseTopic, nlohmann::json(result).dump(), correlationData);
         return;
     }
     if(name == "funcInt") {
         const std::list<StructInt>& paramInt = json_args.at(0).get<std::list<StructInt>>();
-        auto result = m_impl.funcInt(paramInt);
+        auto result = m_impl->funcInt(paramInt);
         m_client->notifyInvokeResponse(responseTopic, nlohmann::json(result).dump(), correlationData);
         return;
     }
     if(name == "funcFloat") {
         const std::list<StructFloat>& paramFloat = json_args.at(0).get<std::list<StructFloat>>();
-        auto result = m_impl.funcFloat(paramFloat);
+        auto result = m_impl->funcFloat(paramFloat);
         m_client->notifyInvokeResponse(responseTopic, nlohmann::json(result).dump(), correlationData);
         return;
     }
     if(name == "funcString") {
         const std::list<StructString>& paramString = json_args.at(0).get<std::list<StructString>>();
-        auto result = m_impl.funcString(paramString);
+        auto result = m_impl->funcString(paramString);
         m_client->notifyInvokeResponse(responseTopic, nlohmann::json(result).dump(), correlationData);
         return;
     }
