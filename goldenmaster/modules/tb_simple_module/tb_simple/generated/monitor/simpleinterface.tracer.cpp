@@ -19,6 +19,12 @@ void SimpleInterfaceTracer::capture_state(ISimpleInterface* obj)
     m_tracer.state("tb.simple.SimpleInterface#_state", fields_);
 }
 
+void SimpleInterfaceTracer::trace_funcVoid()
+{
+    nlohmann::json fields_;
+    m_tracer.call("tb.simple.SimpleInterface#funcVoid", fields_);
+}
+
 void SimpleInterfaceTracer::trace_funcBool(bool paramBool)
 {
     nlohmann::json fields_;

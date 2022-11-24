@@ -70,7 +70,7 @@ Enum0Enum EnumInterface::func0(Enum0Enum param0)
 {
     (void) param0; // suppress the 'Unreferenced Formal Parameter' warning.
     // do business logic here
-    return {};
+    return Enum0Enum::value0;
 }
 
 std::future<Enum0Enum> EnumInterface::func0Async(Enum0Enum param0)
@@ -87,7 +87,7 @@ Enum1Enum EnumInterface::func1(Enum1Enum param1)
 {
     (void) param1; // suppress the 'Unreferenced Formal Parameter' warning.
     // do business logic here
-    return {};
+    return Enum1Enum::value1;
 }
 
 std::future<Enum1Enum> EnumInterface::func1Async(Enum1Enum param1)
@@ -104,7 +104,7 @@ Enum2Enum EnumInterface::func2(Enum2Enum param2)
 {
     (void) param2; // suppress the 'Unreferenced Formal Parameter' warning.
     // do business logic here
-    return {};
+    return Enum2Enum::value2;
 }
 
 std::future<Enum2Enum> EnumInterface::func2Async(Enum2Enum param2)
@@ -121,7 +121,7 @@ Enum3Enum EnumInterface::func3(Enum3Enum param3)
 {
     (void) param3; // suppress the 'Unreferenced Formal Parameter' warning.
     // do business logic here
-    return {};
+    return Enum3Enum::value3;
 }
 
 std::future<Enum3Enum> EnumInterface::func3Async(Enum3Enum param3)

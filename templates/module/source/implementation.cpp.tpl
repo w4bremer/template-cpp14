@@ -44,7 +44,9 @@ void {{$class}}::set{{Camel $property.Name}}({{cppParam "" $property }})
     (void) {{$parameter.Name}}; // suppress the 'Unreferenced Formal Parameter' warning.
     {{- end }}
     // do business logic here
-    return {};
+    {{- if not .Return.IsVoid }}
+    return {{cppDefault "" .Return}};
+    {{- end }}
 }
 {{ $returnType := cppReturn "" $operation.Return }}
 std::future<{{$returnType}}> {{$class}}::{{lower1 $operation.Name}}Async({{cppParams "" $operation.Params}})

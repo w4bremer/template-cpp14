@@ -29,6 +29,9 @@ public:
     void setPropString(const std::string& propString) override;
     const std::string& getPropString() const override;
     
+    void funcVoid() override;
+    std::future<void> funcVoidAsync() override;
+        
     bool funcBool(bool paramBool) override;
     std::future<bool> funcBoolAsync(bool paramBool) override;
         

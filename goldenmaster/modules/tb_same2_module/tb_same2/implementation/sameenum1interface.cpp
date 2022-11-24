@@ -31,7 +31,7 @@ Enum1Enum SameEnum1Interface::func1(Enum1Enum param1)
 {
     (void) param1; // suppress the 'Unreferenced Formal Parameter' warning.
     // do business logic here
-    return {};
+    return Enum1Enum::value1;
 }
 
 std::future<Enum1Enum> SameEnum1Interface::func1Async(Enum1Enum param1)

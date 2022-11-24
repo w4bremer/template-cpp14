@@ -31,7 +31,7 @@ Struct1 SameStruct1Interface::func1(const Struct1& param1)
 {
     (void) param1; // suppress the 'Unreferenced Formal Parameter' warning.
     // do business logic here
-    return {};
+    return Struct1();
 }
 
 std::future<Struct1> SameStruct1Interface::func1Async(const Struct1& param1)

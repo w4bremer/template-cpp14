@@ -19,6 +19,7 @@ interfaces:
       - { name: propFloat, type: float }
       - { name: propString, type: string }
     operations:
+      - name: funcVoid
       - name: funcBool
         params:
           - { name: paramBool, type: bool }

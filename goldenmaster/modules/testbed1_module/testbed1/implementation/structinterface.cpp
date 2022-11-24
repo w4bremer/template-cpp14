@@ -70,7 +70,7 @@ StructBool StructInterface::funcBool(const StructBool& paramBool)
 {
     (void) paramBool; // suppress the 'Unreferenced Formal Parameter' warning.
     // do business logic here
-    return {};
+    return StructBool();
 }
 
 std::future<StructBool> StructInterface::funcBoolAsync(const StructBool& paramBool)
@@ -87,7 +87,7 @@ StructBool StructInterface::funcInt(const StructInt& paramInt)
 {
     (void) paramInt; // suppress the 'Unreferenced Formal Parameter' warning.
     // do business logic here
-    return {};
+    return StructBool();
 }
 
 std::future<StructBool> StructInterface::funcIntAsync(const StructInt& paramInt)
@@ -104,7 +104,7 @@ StructFloat StructInterface::funcFloat(const StructFloat& paramFloat)
 {
     (void) paramFloat; // suppress the 'Unreferenced Formal Parameter' warning.
     // do business logic here
-    return {};
+    return StructFloat();
 }
 
 std::future<StructFloat> StructInterface::funcFloatAsync(const StructFloat& paramFloat)
@@ -121,7 +121,7 @@ StructString StructInterface::funcString(const StructString& paramString)
 {
     (void) paramString; // suppress the 'Unreferenced Formal Parameter' warning.
     // do business logic here
-    return {};
+    return StructString();
 }
 
 std::future<StructString> StructInterface::funcStringAsync(const StructString& paramString)

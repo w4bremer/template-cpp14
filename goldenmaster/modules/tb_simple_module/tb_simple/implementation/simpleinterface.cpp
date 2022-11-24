@@ -66,11 +66,25 @@ const std::string& SimpleInterface::getPropString() const
     return m_data.m_propString;
 }
 
+void SimpleInterface::funcVoid()
+{
+    // do business logic here
+}
+
+std::future<void> SimpleInterface::funcVoidAsync()
+{
+    return std::async(std::launch::async, [this]()
+        {
+            return funcVoid();
+        }
+    );
+}
+
 bool SimpleInterface::funcBool(bool paramBool)
 {
     (void) paramBool; // suppress the 'Unreferenced Formal Parameter' warning.
     // do business logic here
-    return {};
+    return false;
 }
 
 std::future<bool> SimpleInterface::funcBoolAsync(bool paramBool)
@@ -87,7 +101,7 @@ int SimpleInterface::funcInt(int paramInt)
 {
     (void) paramInt; // suppress the 'Unreferenced Formal Parameter' warning.
     // do business logic here
-    return {};
+    return 0;
 }
 
 std::future<int> SimpleInterface::funcIntAsync(int paramInt)
@@ -104,7 +118,7 @@ float SimpleInterface::funcFloat(float paramFloat)
 {
     (void) paramFloat; // suppress the 'Unreferenced Formal Parameter' warning.
     // do business logic here
-    return {};
+    return 0.0;
 }
 
 std::future<float> SimpleInterface::funcFloatAsync(float paramFloat)
@@ -121,7 +135,7 @@ std::string SimpleInterface::funcString(const std::string& paramString)
 {
     (void) paramString; // suppress the 'Unreferenced Formal Parameter' warning.
     // do business logic here
-    return {};
+    return std::string();
 }
 
 std::future<std::string> SimpleInterface::funcStringAsync(const std::string& paramString)

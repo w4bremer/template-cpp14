@@ -31,7 +31,7 @@ NestedStruct1 NestedStruct1Interface::func1(const NestedStruct1& param1)
 {
     (void) param1; // suppress the 'Unreferenced Formal Parameter' warning.
     // do business logic here
-    return {};
+    return NestedStruct1();
 }
 
 std::future<NestedStruct1> NestedStruct1Interface::func1Async(const NestedStruct1& param1)
