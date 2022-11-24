@@ -7,6 +7,12 @@ set (SOURCES_OLINK
     simpleinterfaceclient.cpp
     simplearrayinterfaceservice.cpp
     simplearrayinterfaceclient.cpp
+    nopropertiesinterfaceservice.cpp
+    nopropertiesinterfaceclient.cpp
+    nooperationsinterfaceservice.cpp
+    nooperationsinterfaceclient.cpp
+    nosignalsinterfaceservice.cpp
+    nosignalsinterfaceclient.cpp
 )
 add_library(tb_simple-olink SHARED ${SOURCES_OLINK})
 add_library(tb_simple::tb_simple-olink ALIAS tb_simple-olink)

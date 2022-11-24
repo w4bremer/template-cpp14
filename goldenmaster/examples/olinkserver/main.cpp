@@ -29,6 +29,12 @@
 #include "tb_simple/generated/olink/simpleinterfaceservice.h"
 #include "tb_simple/implementation/simplearrayinterface.h"
 #include "tb_simple/generated/olink/simplearrayinterfaceservice.h"
+#include "tb_simple/implementation/nopropertiesinterface.h"
+#include "tb_simple/generated/olink/nopropertiesinterfaceservice.h"
+#include "tb_simple/implementation/nooperationsinterface.h"
+#include "tb_simple/generated/olink/nooperationsinterfaceservice.h"
+#include "tb_simple/implementation/nosignalsinterface.h"
+#include "tb_simple/generated/olink/nosignalsinterfaceservice.h"
 #include "testbed1/implementation/structinterface.h"
 #include "testbed1/generated/olink/structinterfaceservice.h"
 #include "testbed1/implementation/structarrayinterface.h"
@@ -93,6 +99,15 @@ int main(){
     auto tbSimpleSimpleArrayInterface = std::make_shared<TbSimple::SimpleArrayInterface>();
     auto tbSimpleOlinkSimpleArrayInterfaceService = std::make_shared<TbSimple::olink::SimpleArrayInterfaceService>(tbSimpleSimpleArrayInterface, registry);
     registry.addSource(tbSimpleOlinkSimpleArrayInterfaceService);
+    auto tbSimpleNoPropertiesInterface = std::make_shared<TbSimple::NoPropertiesInterface>();
+    auto tbSimpleOlinkNoPropertiesInterfaceService = std::make_shared<TbSimple::olink::NoPropertiesInterfaceService>(tbSimpleNoPropertiesInterface, registry);
+    registry.addSource(tbSimpleOlinkNoPropertiesInterfaceService);
+    auto tbSimpleNoOperationsInterface = std::make_shared<TbSimple::NoOperationsInterface>();
+    auto tbSimpleOlinkNoOperationsInterfaceService = std::make_shared<TbSimple::olink::NoOperationsInterfaceService>(tbSimpleNoOperationsInterface, registry);
+    registry.addSource(tbSimpleOlinkNoOperationsInterfaceService);
+    auto tbSimpleNoSignalsInterface = std::make_shared<TbSimple::NoSignalsInterface>();
+    auto tbSimpleOlinkNoSignalsInterfaceService = std::make_shared<TbSimple::olink::NoSignalsInterfaceService>(tbSimpleNoSignalsInterface, registry);
+    registry.addSource(tbSimpleOlinkNoSignalsInterfaceService);
     auto testbed1StructInterface = std::make_shared<Testbed1::StructInterface>();
     auto testbed1OlinkStructInterfaceService = std::make_shared<Testbed1::olink::StructInterfaceService>(testbed1StructInterface, registry);
     registry.addSource(testbed1OlinkStructInterfaceService);
@@ -128,6 +143,9 @@ int main(){
     registry.removeSource(tbSame2OlinkSameEnum2InterfaceService->olinkObjectName());
     registry.removeSource(tbSimpleOlinkSimpleInterfaceService->olinkObjectName());
     registry.removeSource(tbSimpleOlinkSimpleArrayInterfaceService->olinkObjectName());
+    registry.removeSource(tbSimpleOlinkNoPropertiesInterfaceService->olinkObjectName());
+    registry.removeSource(tbSimpleOlinkNoOperationsInterfaceService->olinkObjectName());
+    registry.removeSource(tbSimpleOlinkNoSignalsInterfaceService->olinkObjectName());
     registry.removeSource(testbed1OlinkStructInterfaceService->olinkObjectName());
     registry.removeSource(testbed1OlinkStructArrayInterfaceService->olinkObjectName());
     

@@ -29,6 +29,12 @@
 #include "tb_simple/generated/core/simpleinterface.threadsafedecorator.h"
 #include "tb_simple/implementation/simplearrayinterface.h"
 #include "tb_simple/generated/core/simplearrayinterface.threadsafedecorator.h"
+#include "tb_simple/implementation/nopropertiesinterface.h"
+#include "tb_simple/generated/core/nopropertiesinterface.threadsafedecorator.h"
+#include "tb_simple/implementation/nooperationsinterface.h"
+#include "tb_simple/generated/core/nooperationsinterface.threadsafedecorator.h"
+#include "tb_simple/implementation/nosignalsinterface.h"
+#include "tb_simple/generated/core/nosignalsinterface.threadsafedecorator.h"
 #include "testbed1/implementation/structinterface.h"
 #include "testbed1/generated/core/structinterface.threadsafedecorator.h"
 #include "testbed1/implementation/structarrayinterface.h"
@@ -237,6 +243,41 @@ void testTbSimpleSimpleArrayInterface()
     testSimpleArrayInterface->setPropString(std::list<std::string>());
 }
 
+void testTbSimpleNoPropertiesInterface()
+{
+    using namespace Test::TbSimple;
+
+    std::unique_ptr<INoPropertiesInterface> testNoPropertiesInterface = std::make_unique<NoPropertiesInterfaceThreadSafeDecorator>(std::make_shared<NoPropertiesInterface>());
+
+    // Thread safe access
+}
+
+void testTbSimpleNoOperationsInterface()
+{
+    using namespace Test::TbSimple;
+
+    std::unique_ptr<INoOperationsInterface> testNoOperationsInterface = std::make_unique<NoOperationsInterfaceThreadSafeDecorator>(std::make_shared<NoOperationsInterface>());
+
+    // Thread safe access
+    auto propBool = testNoOperationsInterface->getPropBool();
+    testNoOperationsInterface->setPropBool(false);
+    auto propInt = testNoOperationsInterface->getPropInt();
+    testNoOperationsInterface->setPropInt(0);
+}
+
+void testTbSimpleNoSignalsInterface()
+{
+    using namespace Test::TbSimple;
+
+    std::unique_ptr<INoSignalsInterface> testNoSignalsInterface = std::make_unique<NoSignalsInterfaceThreadSafeDecorator>(std::make_shared<NoSignalsInterface>());
+
+    // Thread safe access
+    auto propBool = testNoSignalsInterface->getPropBool();
+    testNoSignalsInterface->setPropBool(false);
+    auto propInt = testNoSignalsInterface->getPropInt();
+    testNoSignalsInterface->setPropInt(0);
+}
+
 void testTestbed1StructInterface()
 {
     using namespace Test::Testbed1;
@@ -288,6 +329,9 @@ int main(){
     testTbSame2SameEnum2Interface();
     testTbSimpleSimpleInterface();
     testTbSimpleSimpleArrayInterface();
+    testTbSimpleNoPropertiesInterface();
+    testTbSimpleNoOperationsInterface();
+    testTbSimpleNoSignalsInterface();
     testTestbed1StructInterface();
     testTestbed1StructArrayInterface();
 

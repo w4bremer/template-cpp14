@@ -11,6 +11,12 @@ set (SOURCES_CORE_SUPPORT
     simpleinterface.threadsafedecorator.cpp
     simplearrayinterface.publisher.cpp
     simplearrayinterface.threadsafedecorator.cpp
+    nopropertiesinterface.publisher.cpp
+    nopropertiesinterface.threadsafedecorator.cpp
+    nooperationsinterface.publisher.cpp
+    nooperationsinterface.threadsafedecorator.cpp
+    nosignalsinterface.publisher.cpp
+    nosignalsinterface.threadsafedecorator.cpp
 )
 add_library(tb_simple-core SHARED ${SOURCES_CORE_SUPPORT})
 add_library(tb_simple::tb_simple-core ALIAS tb_simple-core)

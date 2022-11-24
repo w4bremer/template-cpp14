@@ -29,6 +29,12 @@
 #include "tb_simple/generated/monitor/simpleinterface.tracedecorator.h"
 #include "tb_simple/implementation/simplearrayinterface.h"
 #include "tb_simple/generated/monitor/simplearrayinterface.tracedecorator.h"
+#include "tb_simple/implementation/nopropertiesinterface.h"
+#include "tb_simple/generated/monitor/nopropertiesinterface.tracedecorator.h"
+#include "tb_simple/implementation/nooperationsinterface.h"
+#include "tb_simple/generated/monitor/nooperationsinterface.tracedecorator.h"
+#include "tb_simple/implementation/nosignalsinterface.h"
+#include "tb_simple/generated/monitor/nosignalsinterface.tracedecorator.h"
 #include "testbed1/implementation/structinterface.h"
 #include "testbed1/generated/monitor/structinterface.tracedecorator.h"
 #include "testbed1/implementation/structarrayinterface.h"
@@ -70,6 +76,12 @@ int main(){
     std::unique_ptr<TbSimple::ISimpleInterface> testTbSimpleSimpleInterfaceTraceDecorator = TbSimple::SimpleInterfaceTraceDecorator::connect(*testTbSimpleSimpleInterface, tracer);
     std::unique_ptr<TbSimple::ISimpleArrayInterface> testTbSimpleSimpleArrayInterface = std::make_unique<TbSimple::SimpleArrayInterface>();
     std::unique_ptr<TbSimple::ISimpleArrayInterface> testTbSimpleSimpleArrayInterfaceTraceDecorator = TbSimple::SimpleArrayInterfaceTraceDecorator::connect(*testTbSimpleSimpleArrayInterface, tracer);
+    std::unique_ptr<TbSimple::INoPropertiesInterface> testTbSimpleNoPropertiesInterface = std::make_unique<TbSimple::NoPropertiesInterface>();
+    std::unique_ptr<TbSimple::INoPropertiesInterface> testTbSimpleNoPropertiesInterfaceTraceDecorator = TbSimple::NoPropertiesInterfaceTraceDecorator::connect(*testTbSimpleNoPropertiesInterface, tracer);
+    std::unique_ptr<TbSimple::INoOperationsInterface> testTbSimpleNoOperationsInterface = std::make_unique<TbSimple::NoOperationsInterface>();
+    std::unique_ptr<TbSimple::INoOperationsInterface> testTbSimpleNoOperationsInterfaceTraceDecorator = TbSimple::NoOperationsInterfaceTraceDecorator::connect(*testTbSimpleNoOperationsInterface, tracer);
+    std::unique_ptr<TbSimple::INoSignalsInterface> testTbSimpleNoSignalsInterface = std::make_unique<TbSimple::NoSignalsInterface>();
+    std::unique_ptr<TbSimple::INoSignalsInterface> testTbSimpleNoSignalsInterfaceTraceDecorator = TbSimple::NoSignalsInterfaceTraceDecorator::connect(*testTbSimpleNoSignalsInterface, tracer);
     std::unique_ptr<Testbed1::IStructInterface> testTestbed1StructInterface = std::make_unique<Testbed1::StructInterface>();
     std::unique_ptr<Testbed1::IStructInterface> testTestbed1StructInterfaceTraceDecorator = Testbed1::StructInterfaceTraceDecorator::connect(*testTestbed1StructInterface, tracer);
     std::unique_ptr<Testbed1::IStructArrayInterface> testTestbed1StructArrayInterface = std::make_unique<Testbed1::StructArrayInterface>();

@@ -29,6 +29,12 @@
 #include "tb_simple/generated/monitor/simpleinterface.tracedecorator.h"
 #include "tb_simple/generated/olink/simplearrayinterfaceclient.h"
 #include "tb_simple/generated/monitor/simplearrayinterface.tracedecorator.h"
+#include "tb_simple/generated/olink/nopropertiesinterfaceclient.h"
+#include "tb_simple/generated/monitor/nopropertiesinterface.tracedecorator.h"
+#include "tb_simple/generated/olink/nooperationsinterfaceclient.h"
+#include "tb_simple/generated/monitor/nooperationsinterface.tracedecorator.h"
+#include "tb_simple/generated/olink/nosignalsinterfaceclient.h"
+#include "tb_simple/generated/monitor/nosignalsinterface.tracedecorator.h"
 #include "testbed1/generated/olink/structinterfaceclient.h"
 #include "testbed1/generated/monitor/structinterface.tracedecorator.h"
 #include "testbed1/generated/olink/structarrayinterfaceclient.h"
@@ -94,6 +100,15 @@ int main(){
     auto tbSimpleSimpleArrayInterface = std::make_shared<TbSimple::olink::SimpleArrayInterfaceClient>();
     clientNetworkEndpoint.connectAndLinkObject(tbSimpleSimpleArrayInterface);
     std::unique_ptr<TbSimple::ISimpleArrayInterface> tbSimpleSimpleArrayInterfaceTraced = TbSimple::SimpleArrayInterfaceTraceDecorator::connect(*tbSimpleSimpleArrayInterface, tracer);
+    auto tbSimpleNoPropertiesInterface = std::make_shared<TbSimple::olink::NoPropertiesInterfaceClient>();
+    clientNetworkEndpoint.connectAndLinkObject(tbSimpleNoPropertiesInterface);
+    std::unique_ptr<TbSimple::INoPropertiesInterface> tbSimpleNoPropertiesInterfaceTraced = TbSimple::NoPropertiesInterfaceTraceDecorator::connect(*tbSimpleNoPropertiesInterface, tracer);
+    auto tbSimpleNoOperationsInterface = std::make_shared<TbSimple::olink::NoOperationsInterfaceClient>();
+    clientNetworkEndpoint.connectAndLinkObject(tbSimpleNoOperationsInterface);
+    std::unique_ptr<TbSimple::INoOperationsInterface> tbSimpleNoOperationsInterfaceTraced = TbSimple::NoOperationsInterfaceTraceDecorator::connect(*tbSimpleNoOperationsInterface, tracer);
+    auto tbSimpleNoSignalsInterface = std::make_shared<TbSimple::olink::NoSignalsInterfaceClient>();
+    clientNetworkEndpoint.connectAndLinkObject(tbSimpleNoSignalsInterface);
+    std::unique_ptr<TbSimple::INoSignalsInterface> tbSimpleNoSignalsInterfaceTraced = TbSimple::NoSignalsInterfaceTraceDecorator::connect(*tbSimpleNoSignalsInterface, tracer);
     auto testbed1StructInterface = std::make_shared<Testbed1::olink::StructInterfaceClient>();
     clientNetworkEndpoint.connectAndLinkObject(testbed1StructInterface);
     std::unique_ptr<Testbed1::IStructInterface> testbed1StructInterfaceTraced = Testbed1::StructInterfaceTraceDecorator::connect(*testbed1StructInterface, tracer);
@@ -129,6 +144,9 @@ int main(){
     clientNetworkEndpoint.disconnectAndUnlink(tbSame2SameEnum2Interface->olinkObjectName());
     clientNetworkEndpoint.disconnectAndUnlink(tbSimpleSimpleInterface->olinkObjectName());
     clientNetworkEndpoint.disconnectAndUnlink(tbSimpleSimpleArrayInterface->olinkObjectName());
+    clientNetworkEndpoint.disconnectAndUnlink(tbSimpleNoPropertiesInterface->olinkObjectName());
+    clientNetworkEndpoint.disconnectAndUnlink(tbSimpleNoOperationsInterface->olinkObjectName());
+    clientNetworkEndpoint.disconnectAndUnlink(tbSimpleNoSignalsInterface->olinkObjectName());
     clientNetworkEndpoint.disconnectAndUnlink(testbed1StructInterface->olinkObjectName());
     clientNetworkEndpoint.disconnectAndUnlink(testbed1StructArrayInterface->olinkObjectName());
 

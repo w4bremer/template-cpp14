@@ -9,6 +9,9 @@ find_package(Threads REQUIRED)
 set (SOURCES_CORE_IMPL
     simpleinterface.cpp
     simplearrayinterface.cpp
+    nopropertiesinterface.cpp
+    nooperationsinterface.cpp
+    nosignalsinterface.cpp
 )
 add_library(tb_simple-implementation SHARED ${SOURCES_CORE_IMPL})
 add_library(tb_simple::tb_simple-implementation ALIAS tb_simple-implementation)
@@ -39,6 +42,9 @@ set (SOURCES_TEST
     ${CMAKE_CURRENT_SOURCE_DIR}/../generated/core/tb_simple.test.cpp
     simpleinterface.test.cpp
     simplearrayinterface.test.cpp
+    nopropertiesinterface.test.cpp
+    nooperationsinterface.test.cpp
+    nosignalsinterface.test.cpp
 )
 add_executable(test_tb_simple
     ${SOURCES_TEST}

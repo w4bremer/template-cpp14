@@ -57,6 +57,7 @@ nlohmann::json {{$class}}::olinkInvoke(const std::string& methodId, const nlohma
 {{- else }}
     // no operations to invoke {{- /* we generate anyway for consistency */}}
     (void) fcnArgs;
+    (void) memberMethod;
 {{- end }}
     return nlohmann::json();
 }
@@ -73,6 +74,7 @@ void {{$class}}::olinkSetProperty(const std::string& propertyId, const nlohmann:
 {{- else }}
     // no properties to set {{- /* we generate anyway for consistency */}}
     (void) value;
+    (void) memberProperty;
 {{- end }} 
 }
 

@@ -150,6 +150,7 @@ void {{$class}}::olinkOnSignal(const std::string& signalId, const nlohmann::json
     }
 {{- else }}
     (void) args;
+    (void) signalName;
 {{- end }}
 }
 
