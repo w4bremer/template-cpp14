@@ -128,10 +128,10 @@ private:
     /**  Updates local value for {{Camel $property.Name}} and informs subscriber about the change*/
     void set{{Camel $property.Name}}Local({{cppParam "" $property}});
 {{- end }}
-    
+{{ if .Interface.Properties}}
     /** Local storage for properties values. */
     {{$interfaceName}}Data m_data;
-
+{{ end }}
     /** 
     * An abstraction layer over the connection with service for the {{$class}}.
     * Handles incoming and outgoing messages.

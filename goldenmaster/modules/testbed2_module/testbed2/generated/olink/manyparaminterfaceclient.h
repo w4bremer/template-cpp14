@@ -174,7 +174,7 @@ private:
     void setProp3Local(int prop3);
     /**  Updates local value for Prop4 and informs subscriber about the change*/
     void setProp4Local(int prop4);
-    
+
     /** Local storage for properties values. */
     ManyParamInterfaceData m_data;
 

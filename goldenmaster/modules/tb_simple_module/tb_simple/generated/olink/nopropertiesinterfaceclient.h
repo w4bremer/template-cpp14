@@ -108,9 +108,6 @@ private:
     * @param the data received from NoPropertiesInterface service.
     */
     void applyState(const nlohmann::json& fields);
-    
-    /** Local storage for properties values. */
-    NoPropertiesInterfaceData m_data;
 
     /** 
     * An abstraction layer over the connection with service for the NoPropertiesInterfaceClient.

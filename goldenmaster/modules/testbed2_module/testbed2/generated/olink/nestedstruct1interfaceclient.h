@@ -111,7 +111,7 @@ private:
     void applyState(const nlohmann::json& fields);
     /**  Updates local value for Prop1 and informs subscriber about the change*/
     void setProp1Local(const NestedStruct1& prop1);
-    
+
     /** Local storage for properties values. */
     NestedStruct1InterfaceData m_data;
 

@@ -56,8 +56,10 @@ public:
 private:
     /** The publisher for the {{$interfaceNameOriginal}}. */
     std::unique_ptr<{{$pub_class}}> m_publisher;
+{{- if .Interface.Properties}}
     /** The helper structure to store all the properties for {{$interfaceNameOriginal}}. */
     {{$class}}Data m_data;
+{{- end }}
 };
 } // namespace {{ Camel .Module.Name }}
 } // namespace {{ Camel .System.Name }}

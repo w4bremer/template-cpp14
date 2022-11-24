@@ -153,7 +153,7 @@ private:
     void setProp2Local(const NestedStruct2& prop2);
     /**  Updates local value for Prop3 and informs subscriber about the change*/
     void setProp3Local(const NestedStruct3& prop3);
-    
+
     /** Local storage for properties values. */
     NestedStruct3InterfaceData m_data;
 

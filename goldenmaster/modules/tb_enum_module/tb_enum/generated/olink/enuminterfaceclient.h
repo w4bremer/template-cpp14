@@ -174,7 +174,7 @@ private:
     void setProp2Local(Enum2Enum prop2);
     /**  Updates local value for Prop3 and informs subscriber about the change*/
     void setProp3Local(Enum3Enum prop3);
-    
+
     /** Local storage for properties values. */
     EnumInterfaceData m_data;
 

@@ -31,8 +31,6 @@ public:
 private:
     /** The publisher for the NoPropertiesInterface. */
     std::unique_ptr<INoPropertiesInterfacePublisher> m_publisher;
-    /** The helper structure to store all the properties for NoPropertiesInterface. */
-    NoPropertiesInterfaceData m_data;
 };
 } // namespace TbSimple
 } // namespace Test

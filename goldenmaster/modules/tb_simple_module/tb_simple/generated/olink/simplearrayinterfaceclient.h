@@ -174,7 +174,7 @@ private:
     void setPropFloatLocal(const std::list<float>& propFloat);
     /**  Updates local value for PropString and informs subscriber about the change*/
     void setPropStringLocal(const std::list<std::string>& propString);
-    
+
     /** Local storage for properties values. */
     SimpleArrayInterfaceData m_data;
 

@@ -111,7 +111,7 @@ private:
     void applyState(const nlohmann::json& fields);
     /**  Updates local value for Prop1 and informs subscriber about the change*/
     void setProp1Local(Enum1Enum prop1);
-    
+
     /** Local storage for properties values. */
     SameEnum1InterfaceData m_data;
 

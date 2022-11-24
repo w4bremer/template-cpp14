@@ -132,7 +132,7 @@ private:
     void setProp1Local(const Struct2& prop1);
     /**  Updates local value for Prop2 and informs subscriber about the change*/
     void setProp2Local(const Struct2& prop2);
-    
+
     /** Local storage for properties values. */
     SameStruct2InterfaceData m_data;
 

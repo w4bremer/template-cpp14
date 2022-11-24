@@ -114,7 +114,7 @@ private:
     void setPropBoolLocal(bool propBool);
     /**  Updates local value for PropInt and informs subscriber about the change*/
     void setPropIntLocal(int propInt);
-    
+
     /** Local storage for properties values. */
     NoOperationsInterfaceData m_data;
 

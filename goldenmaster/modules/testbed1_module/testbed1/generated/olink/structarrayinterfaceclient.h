@@ -174,7 +174,7 @@ private:
     void setPropFloatLocal(const std::list<StructFloat>& propFloat);
     /**  Updates local value for PropString and informs subscriber about the change*/
     void setPropStringLocal(const std::list<StructString>& propString);
-    
+
     /** Local storage for properties values. */
     StructArrayInterfaceData m_data;
 

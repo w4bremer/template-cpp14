@@ -132,7 +132,7 @@ private:
     void setProp1Local(Enum1Enum prop1);
     /**  Updates local value for Prop2 and informs subscriber about the change*/
     void setProp2Local(Enum2Enum prop2);
-    
+
     /** Local storage for properties values. */
     SameEnum2InterfaceData m_data;
 

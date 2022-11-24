@@ -174,7 +174,7 @@ private:
     void setPropFloatLocal(const StructFloat& propFloat);
     /**  Updates local value for PropString and informs subscriber about the change*/
     void setPropStringLocal(const StructString& propString);
-    
+
     /** Local storage for properties values. */
     StructInterfaceData m_data;
 

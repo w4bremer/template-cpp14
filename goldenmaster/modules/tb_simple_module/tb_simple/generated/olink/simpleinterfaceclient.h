@@ -183,7 +183,7 @@ private:
     void setPropFloatLocal(float propFloat);
     /**  Updates local value for PropString and informs subscriber about the change*/
     void setPropStringLocal(const std::string& propString);
-    
+
     /** Local storage for properties values. */
     SimpleInterfaceData m_data;
 
