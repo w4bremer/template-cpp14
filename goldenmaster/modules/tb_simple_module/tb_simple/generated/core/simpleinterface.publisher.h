@@ -69,6 +69,15 @@ public:
     void unsubscribeFromPropStringChanged(long handleId) override;
 
     /**
+    * Implementation of ISimpleInterfacePublisher::subscribeToSigVoid
+    */
+    long subscribeToSigVoid(SimpleInterfaceSigVoidSignalCb callback) override;
+    /**
+    * Implementation of ISimpleInterfacePublisher::unsubscribeFromSigVoid
+    */
+    void unsubscribeFromSigVoid(long handleId) override;
+
+    /**
     * Implementation of ISimpleInterfacePublisher::subscribeToSigBool
     */
     long subscribeToSigBool(SimpleInterfaceSigBoolSignalCb callback) override;
@@ -121,6 +130,10 @@ public:
     */
     void publishPropStringChanged(const std::string& propString) const override;
     /**
+    * Implementation of ISimpleInterfacePublisher::publishSigVoid
+    */
+    void publishSigVoid() const override;
+    /**
     * Implementation of ISimpleInterfacePublisher::publishSigBool
     */
     void publishSigBool(bool paramBool) const override;
@@ -165,6 +178,12 @@ private:
     std::map<long, SimpleInterfacePropStringPropertyCb> m_propStringCallbacks;
     // Mutex for m_propStringCallbacks
     mutable std::shared_timed_mutex m_propStringCallbacksMutex;
+    // Next free unique identifier to subscribe for the SigVoid emission.
+    std::atomic<long> m_sigVoidSignalCallbackNextId {0};
+    // Subscribed callbacks for the SigVoid emission.
+    std::map<long, SimpleInterfaceSigVoidSignalCb > m_sigVoidCallbacks;
+    // Mutex for m_sigVoidSignalCallbackNextId and m_sigVoidCallbacks
+    mutable std::shared_timed_mutex m_sigVoidCallbacksMutex;
     // Next free unique identifier to subscribe for the SigBool emission.
     std::atomic<long> m_sigBoolSignalCallbackNextId {0};
     // Subscribed callbacks for the SigBool emission.

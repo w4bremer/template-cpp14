@@ -102,6 +102,17 @@ nlohmann::json SimpleInterfaceService::olinkCollectProperties()
         { "propString", m_SimpleInterface->getPropString() }
     });
 }
+void SimpleInterfaceService::onSigVoid()
+{
+    const nlohmann::json args = {  };
+    const auto& signalId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "sigVoid");
+    for(auto node: m_registry.getNodes(ApiGear::ObjectLink::Name::getObjectId(signalId))) {
+        auto lockedNode = node.lock();
+        if(lockedNode) {
+            lockedNode->notifySignal(signalId, args);
+        }
+    }
+}
 void SimpleInterfaceService::onSigBool(bool paramBool)
 {
     const nlohmann::json args = { paramBool };

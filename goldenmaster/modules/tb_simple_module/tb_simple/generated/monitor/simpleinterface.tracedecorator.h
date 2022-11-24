@@ -80,6 +80,10 @@ public:
     const std::string& getPropString() const override;
     
     /**
+    Traces sigVoid emission.
+    */
+    void onSigVoid() override;
+    /**
     Traces sigBool emission.
     */
     void onSigBool(bool paramBool) override;

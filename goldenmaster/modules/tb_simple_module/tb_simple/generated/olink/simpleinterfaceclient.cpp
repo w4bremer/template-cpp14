@@ -295,6 +295,10 @@ std::string SimpleInterfaceClient::olinkObjectName()
 void SimpleInterfaceClient::olinkOnSignal(const std::string& signalId, const nlohmann::json& args)
 {
     const auto& signalName = ApiGear::ObjectLink::Name::getMemberName(signalId);
+    if(signalName == "sigVoid") {
+        m_publisher->publishSigVoid();   
+        return;
+    }
     if(signalName == "sigBool") {
         m_publisher->publishSigBool(args[0].get<bool>());   
         return;

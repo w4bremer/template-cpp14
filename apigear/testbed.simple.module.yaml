@@ -41,6 +41,7 @@ interfaces:
         return:
           type: string
     signals:
+      - name: sigVoid
       - name: sigBool
         params:
           - { name: paramBool, type: bool }

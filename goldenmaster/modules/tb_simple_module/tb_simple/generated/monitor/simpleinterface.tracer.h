@@ -52,6 +52,11 @@ public:
   */
   void trace_funcString(const std::string& paramString);
   /**
+  * Prepares information about the sigVoid call in a nlohmann::json format and puts to a tracer.
+  * @param The SimpleInterface object to trace.
+  */
+  void trace_sigVoid();
+  /**
   * Prepares information about the sigBool call in a nlohmann::json format and puts to a tracer.
   * @param The SimpleInterface object to trace.
   */

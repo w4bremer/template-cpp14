@@ -70,6 +70,10 @@ public:
     */
     nlohmann::json olinkCollectProperties() override;
     /**
+    * Forwards emitted sigVoid through network if the connection is established.
+    */
+    void onSigVoid() override;
+    /**
     * Forwards emitted sigBool through network if the connection is established.
     */
     void onSigBool(bool paramBool) override;

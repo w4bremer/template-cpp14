@@ -105,6 +105,11 @@ const std::string& SimpleInterfaceTraceDecorator::getPropString() const
 {
     return m_impl.getPropString();
 }
+void SimpleInterfaceTraceDecorator::onSigVoid()
+{
+    m_tracer->trace_sigVoid();
+}
+
 void SimpleInterfaceTraceDecorator::onSigBool(bool paramBool)
 {
     m_tracer->trace_sigBool(paramBool);
