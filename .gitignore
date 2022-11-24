@@ -12,6 +12,8 @@ demo/
 goldenmaster/build/*
 .vs/*
 
+# folder for apigear binary
+bin/
 
 # do not add temporary test folder
 test/
