@@ -13,10 +13,10 @@ namespace Testbed1
 */
 struct StructArrayInterfaceData
 {
-    std::list<StructBool> m_propBool;
-    std::list<StructInt> m_propInt;
-    std::list<StructFloat> m_propFloat;
-    std::list<StructString> m_propString;
+    std::list<StructBool> m_propBool {std::list<StructBool>()};
+    std::list<StructInt> m_propInt {std::list<StructInt>()};
+    std::list<StructFloat> m_propFloat {std::list<StructFloat>()};
+    std::list<StructString> m_propString {std::list<StructString>()};
 };
 
 }

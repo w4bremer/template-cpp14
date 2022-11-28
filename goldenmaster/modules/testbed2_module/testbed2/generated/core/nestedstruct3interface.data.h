@@ -13,9 +13,9 @@ namespace Testbed2
 */
 struct NestedStruct3InterfaceData
 {
-    NestedStruct1 m_prop1;
-    NestedStruct2 m_prop2;
-    NestedStruct3 m_prop3;
+    NestedStruct1 m_prop1 {NestedStruct1()};
+    NestedStruct2 m_prop2 {NestedStruct2()};
+    NestedStruct3 m_prop3 {NestedStruct3()};
 };
 
 }

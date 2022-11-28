@@ -13,8 +13,8 @@ namespace TbSame2
 */
 struct SameEnum2InterfaceData
 {
-    Enum1Enum m_prop1;
-    Enum2Enum m_prop2;
+    Enum1Enum m_prop1 {Enum1Enum::value1};
+    Enum2Enum m_prop2 {Enum2Enum::value1};
 };
 
 }

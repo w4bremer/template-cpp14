@@ -13,8 +13,8 @@ namespace TbSimple
 */
 struct NoSignalsInterfaceData
 {
-    bool m_propBool;
-    int m_propInt;
+    bool m_propBool {false};
+    int m_propInt {0};
 };
 
 }

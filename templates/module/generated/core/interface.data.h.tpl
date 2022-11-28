@@ -18,7 +18,7 @@ struct {{$class}}Data
 {
 {{- range .Interface.Properties }}
 {{- $property:= . }}
-    {{cppType "" $property}} m_{{$property.Name}};
+    {{cppType "" $property}} m_{{$property.Name}} { {{- cppDefault "" $property -}} };
 {{- end }}
 };
 

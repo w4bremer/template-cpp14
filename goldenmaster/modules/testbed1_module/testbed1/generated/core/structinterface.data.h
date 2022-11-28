@@ -13,10 +13,10 @@ namespace Testbed1
 */
 struct StructInterfaceData
 {
-    StructBool m_propBool;
-    StructInt m_propInt;
-    StructFloat m_propFloat;
-    StructString m_propString;
+    StructBool m_propBool {StructBool()};
+    StructInt m_propInt {StructInt()};
+    StructFloat m_propFloat {StructFloat()};
+    StructString m_propString {StructString()};
 };
 
 }

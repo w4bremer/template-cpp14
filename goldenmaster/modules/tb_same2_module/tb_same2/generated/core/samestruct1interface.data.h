@@ -13,7 +13,7 @@ namespace TbSame2
 */
 struct SameStruct1InterfaceData
 {
-    Struct1 m_prop1;
+    Struct1 m_prop1 {Struct1()};
 };
 
 }

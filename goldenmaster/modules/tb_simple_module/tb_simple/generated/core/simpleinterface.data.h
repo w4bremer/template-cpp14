@@ -13,10 +13,10 @@ namespace TbSimple
 */
 struct SimpleInterfaceData
 {
-    bool m_propBool;
-    int m_propInt;
-    float m_propFloat;
-    std::string m_propString;
+    bool m_propBool {false};
+    int m_propInt {0};
+    float m_propFloat {0.0};
+    std::string m_propString {std::string()};
 };
 
 }

@@ -13,10 +13,10 @@ namespace TbSimple
 */
 struct SimpleArrayInterfaceData
 {
-    std::list<bool> m_propBool;
-    std::list<int> m_propInt;
-    std::list<float> m_propFloat;
-    std::list<std::string> m_propString;
+    std::list<bool> m_propBool {std::list<bool>()};
+    std::list<int> m_propInt {std::list<int>()};
+    std::list<float> m_propFloat {std::list<float>()};
+    std::list<std::string> m_propString {std::list<std::string>()};
 };
 
 }

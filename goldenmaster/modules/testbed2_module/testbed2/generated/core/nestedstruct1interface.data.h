@@ -13,7 +13,7 @@ namespace Testbed2
 */
 struct NestedStruct1InterfaceData
 {
-    NestedStruct1 m_prop1;
+    NestedStruct1 m_prop1 {NestedStruct1()};
 };
 
 }
