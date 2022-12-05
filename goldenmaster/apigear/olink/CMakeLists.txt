@@ -38,11 +38,7 @@ set (SOURCES
     private/olinkwebsockethandler.cpp
     private/requesthandlerfactory.cpp
     private/connectionstorage.cpp
-    private/olinkremote.h
-    private/olinkwebsockethandler.h
-    private/requesthandlerfactory.h
-    private/connectionstorage.h
-    private/iconnectionstorage.h
+    private/socketwrapper.cpp
     logger/logger.cpp
 )
 add_library(poco-olink SHARED ${SOURCES})
@@ -64,7 +60,7 @@ install(TARGETS poco-olink
         LIBRARY DESTINATION lib           COMPONENT Runtime
         ARCHIVE DESTINATION lib           COMPONENT Development)
 # install includes
-FILE(GLOB APIGEAR_INCLUDES *.h)
+FILE(GLOB_RECURSE APIGEAR_INCLUDES *.h)
 install(FILES ${APIGEAR_INCLUDES}
         DESTINATION include/apigear/olink)
 

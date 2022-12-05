@@ -4,8 +4,6 @@
 #include <catch2/catch.hpp>
 #include <catch2/trompeloeil.hpp>
 
-#include "../olinkconnection.h"
-
 #include "olink/clientregistry.h"
 #include "olink/core/types.h"
 #include "olink/core/protocol.h"
@@ -13,6 +11,8 @@
 #include "private/frame.hpp"
 #include "private/sinkobjectmock.hpp"
 #include "private/test_server/test_server.hpp"
+
+#include "../olinkconnection.h"
 
 #include "nlohmann/json.hpp"
 #include <thread>

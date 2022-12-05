@@ -1,6 +1,6 @@
 #pragma once
 
-#include "private/apigear_olink.hpp"
+#include "private/apigear_olink.h"
 #include "Poco/Net/HTTPRequestHandlerFactory.h"
 
 // HTTPServerRequest forward declaration

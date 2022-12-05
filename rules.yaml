@@ -154,7 +154,7 @@ features:
           raw: true
         - source: "apigear/olink/iolinkconnector.h"
           raw: true
-        - source: "apigear/olink/private/apigear_olink.hpp"
+        - source: "apigear/olink/private/apigear_olink.h"
           raw: true
         - source: "apigear/olink/private/olinkremote.cpp"
           raw: true
@@ -173,6 +173,12 @@ features:
         - source: "apigear/olink/private/connectionstorage.cpp"
           raw: true
         - source: "apigear/olink/private/connectionstorage.h"
+          raw: true
+        - source: "apigear/olink/private/isocketuser.h"
+          raw: true
+        - source: "apigear/olink/private/socketwrapper.cpp"
+          raw: true
+        - source: "apigear/olink/private/socketwrapper.h"
           raw: true
         - source: "apigear/olink/logger/logger.cpp"
           raw: true

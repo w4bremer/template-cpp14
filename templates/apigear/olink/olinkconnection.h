@@ -1,36 +1,20 @@
 #pragma once
 
-#if defined _WIN32 || defined __CYGWIN__
-#ifdef __GNUC__
-  #define APIGEAR_OLINK_EXPORT __attribute__ ((dllexport))
-#else
-  #define APIGEAR_OLINK_EXPORT __declspec(dllexport)
-#endif
-#else
-  #if __GNUC__ >= 4
-    #define APIGEAR_OLINK_EXPORT __attribute__ ((visibility ("default")))
-  #else
-    #define APIGEAR_OLINK_EXPORT
-  #endif
-#endif
+#include "iolinkconnector.h"
+#include "private/socketwrapper.h"
+#include "private/apigear_olink.h"
+#include "private/isocketuser.h"
+
+#include "olink/clientnode.h"
 
 #include <Poco/URI.h>
 #include <Poco/Util/Timer.h>
 #include <Poco/Util/TimerTask.h>
-#include <Poco/Mutex.h>
-#include <Poco/Net/WebSocket.h>
-
-#include "olink/clientnode.h"
-#include "olink/consolelogger.h"
-
-#include "iolinkconnector.h"
 
 #include <atomic>
-#include <queue>
 #include <deque>
-#include <set>
 #include <memory>
-#include <future>
+#include <map>
 
 namespace ApiGear {
 
@@ -47,7 +31,7 @@ namespace PocoImpl {
 * It handles linking and unlinking with remote service for the sink with regard to the connection state.
 * Implements a message queue.
 */
-class APIGEAR_OLINK_EXPORT OlinkConnection: public ApiGear::PocoImpl::IOlinkConnector
+class APIGEAR_OLINK_EXPORT OlinkConnection: public ApiGear::PocoImpl::IOlinkConnector, public ISocketUser
 {
 public:
     /**
@@ -82,11 +66,18 @@ public:
     /** IOlinkConnector::disconnectAndUnlink implementation*/
     void disconnectAndUnlink(const std::string& objectId)  override;
 
-private:
-    /** 
-    * Implements handling incoming messages in a loop.
+    /**
+    * ISocketUser::handleTextMessage implementation.
+    * Handler for raw message received.
     */
-    void receiveInLoop();
+    void handleTextMessage(const std::string& message) override;
+    /**
+    * ISocketUser::onConnectionClosedFromNetwork implementation
+    * A callback to inform the socket user that connection was closed with close frame received from network.
+    */
+    void onConnectionClosedFromNetwork() override;
+
+private:
     /** Sends all the waiting messages when the connection is up. */
     void onConnected();
     /** Cleans up resources after connection closed either from server side(close frame received)
@@ -96,9 +87,6 @@ private:
 
     /* Sends all queued messages and sends close frame*/
     void closeQueue();
-
-    /** Handler for raw messages.*/
-    void handleTextMessage(const std::string& message);
     /**
     * Processes queued messages.
     * @param task. Parameter is not used. The function uses most recent task stored as a member.
@@ -111,15 +99,6 @@ private:
 
     /** Sends all stored messages*/
     void flushMessages();
-
-    /** Tries to send message immediately without queuing. 
-    * If the connection is not working, message will not be stored to resend.
-    * @param message a message in network format to be send as it is.
-    * @param the frame opcode. Use FRAME_TEXT or FRAME_BINARY for regular text messages
-    *   see Poco::Net::WebSocket Frame Opcodes for more info.
-    * @return true if message was sent, false otherwise.
-    */
-    bool writeMessage(std::string message, int frameOpCode);
 
     /** Client node that separates sinks Objects from created socket, and handles incoming and outgoing messages. */
     std::shared_ptr<ApiGear::ObjectLink::ClientNode> m_node;
@@ -134,13 +113,7 @@ private:
     /** The server url to which socket connects. */
     Poco::URI m_serverUrl;
     /** The websocket used for connection.*/
-    std::unique_ptr<Poco::Net::WebSocket> m_socket;
-    /** A mutex for the socket */
-    std::timed_mutex m_socketMutex;
-    /** Flag handled between the threads with information that the connection should be closed. */
-    std::atomic<bool> m_disconnectRequested;
-    /** Result of receiveInLoop. Used to wait for end of its work after m_disconnectRequested is set to true*/
-    std::future<void> m_receivingDone;
+    SocketWrapper m_socket;
 
     /** Flag to protect against opening a connection from many threads at the same time*/
     std::atomic<bool> m_isConnecting;
@@ -155,7 +128,6 @@ private:
     std::deque<std::string> m_queue;
     /** A mutex for the message queue */
     std::timed_mutex m_queueMutex;
-
 
 };
 }} // namespace ApiGear::PocoImpl
