@@ -16,8 +16,7 @@ namespace PocoImpl {
 OLinkRemote::OLinkRemote(std::unique_ptr<Poco::Net::WebSocket> socket, IConnectionStorage& connectionStorage, ApiGear::ObjectLink::RemoteRegistry& registry)
     : m_socket(*this),
      m_connectionStorage(connectionStorage),
-     m_node(ApiGear::ObjectLink::RemoteNode::createRemoteNode(registry)),
-     m_registry(registry)
+     m_node(ApiGear::ObjectLink::RemoteNode::createRemoteNode(registry))
 {
     m_node->onLog(m_log.logFunc());
     m_node->onWrite([this](std::string msg) {
@@ -28,7 +27,6 @@ OLinkRemote::OLinkRemote(std::unique_ptr<Poco::Net::WebSocket> socket, IConnecti
 
 OLinkRemote::~OLinkRemote()
 {
-    removeNodeFromRegistryIfNotUnlikend();
     if(!m_socket.isClosed())
     {
         m_socket.close();
@@ -46,22 +44,12 @@ void OLinkRemote::handleTextMessage(const std::string& msg)
 
 void OLinkRemote::onConnectionClosedFromNetwork()
 {
-    removeNodeFromRegistryIfNotUnlikend();
     m_connectionStorage.notifyConnectionClosed();
 }
 
 bool OLinkRemote::isClosed() const
 {
     return m_socket.isClosed();
-}
-
-void OLinkRemote::removeNodeFromRegistryIfNotUnlikend()
-{
-    auto objectsUsingNode = m_registry.getObjectIds(m_node);
-    for (auto objectId : objectsUsingNode)
-    {
-        m_registry.removeNodeFromSource(m_node, objectId);
-    }
 }
 
 }}  //namespace ApiGear::PocoImpl

@@ -59,13 +59,6 @@ public:
     */
     void onConnectionClosedFromNetwork() override;
 private:
-
-    /**
-    * Call this function when closing connection.
-    * Removes the node from registry, for objects which didn't got the unlink message for this connection.
-    */
-    void removeNodeFromRegistryIfNotUnlikend();
-
     /**A socket used for this connection.*/
     SocketWrapper m_socket;
     /**Storage that needs to be informed if client ended the connection.*/
@@ -76,8 +69,7 @@ private:
     *   may serve several services associated with this node by the unique objectId given in link message.
     */
     std::shared_ptr<ApiGear::ObjectLink::RemoteNode> m_node;
-    /**A global registry to which network endpoints are added for olink objects. */
-    ApiGear::ObjectLink::RemoteRegistry& m_registry;
+
     /** Logger*/
     ApiGear::ObjectLink::ConsoleLogger m_log;
 };
