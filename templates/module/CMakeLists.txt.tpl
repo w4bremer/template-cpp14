@@ -1,5 +1,6 @@
 {{- $module_id := snake .Module.Name -}}
 {{- $module_idFirstUpper := upper1 $module_id -}}
+{{- $features := .Features -}}
 cmake_minimum_required(VERSION 3.1)
 project({{$module_id}})
 
@@ -12,21 +13,19 @@ set(INCLUDE_INSTALL_DIR include/{{$module_id}}/ CACHE FILEPATH "")
 set(LIB_INSTALL_DIR lib/ CACHE FILEPATH "")
 set(InstallDir ${LIB_INSTALL_DIR}/cmake/{{$module_id}})
 
-# checks are workaround until generator support feature check properly
-IF( IS_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/generated/api" )
 add_subdirectory(generated/api)
-ENDIF()
-IF( IS_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/generated/core" )
+{{- if $features.core }}
 add_subdirectory(generated/core)
-ENDIF()
-# implementation target
+{{- end}}
+{{- if $features.stubs }}
 add_subdirectory(implementation)
-IF( IS_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/generated/monitor" )
+{{- end}}
+{{- if $features.monitor }}
 add_subdirectory(generated/monitor)
-ENDIF()
-IF( IS_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/generated/olink" )
+{{- end}}
+{{- if $features.olink }}
 add_subdirectory(generated/olink)
-ENDIF()
+{{- end}}
 
 include(CMakePackageConfigHelpers)
 configure_package_config_file({{$module_idFirstUpper}}Config.cmake.in

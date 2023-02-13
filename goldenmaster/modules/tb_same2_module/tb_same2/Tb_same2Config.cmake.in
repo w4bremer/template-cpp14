@@ -12,4 +12,10 @@ include(CMakeFindDependencyMacro)
 find_dependency(Threads REQUIRED)
 find_dependency(apigear COMPONENTS poco-tracer poco-olink REQUIRED)
 
-check_required_components(TbSame2-api TbSame2-core TbSame2-monitor TbSame2-olink TbSame2-implementation)
+check_required_components(
+TbSame2-api
+TbSame2-core
+TbSame2-monitor
+TbSame2-olink
+TbSame2-implementation
+)

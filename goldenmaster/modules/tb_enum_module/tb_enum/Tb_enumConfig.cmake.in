@@ -12,4 +12,10 @@ include(CMakeFindDependencyMacro)
 find_dependency(Threads REQUIRED)
 find_dependency(apigear COMPONENTS poco-tracer poco-olink REQUIRED)
 
-check_required_components(TbEnum-api TbEnum-core TbEnum-monitor TbEnum-olink TbEnum-implementation)
+check_required_components(
+TbEnum-api
+TbEnum-core
+TbEnum-monitor
+TbEnum-olink
+TbEnum-implementation
+)

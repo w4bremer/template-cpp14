@@ -10,21 +10,11 @@ set(INCLUDE_INSTALL_DIR include/testbed1/ CACHE FILEPATH "")
 set(LIB_INSTALL_DIR lib/ CACHE FILEPATH "")
 set(InstallDir ${LIB_INSTALL_DIR}/cmake/testbed1)
 
-# checks are workaround until generator support feature check properly
-IF( IS_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/generated/api" )
 add_subdirectory(generated/api)
-ENDIF()
-IF( IS_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/generated/core" )
 add_subdirectory(generated/core)
-ENDIF()
-# implementation target
 add_subdirectory(implementation)
-IF( IS_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/generated/monitor" )
 add_subdirectory(generated/monitor)
-ENDIF()
-IF( IS_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/generated/olink" )
 add_subdirectory(generated/olink)
-ENDIF()
 
 include(CMakePackageConfigHelpers)
 configure_package_config_file(Testbed1Config.cmake.in

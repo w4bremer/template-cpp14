@@ -1,3 +1,4 @@
+{{- $features := .Features -}}
 SET DIR=%~dp0
 echo %DIR:~0,-1%
 cd %DIR:~0,-1%
@@ -7,6 +8,7 @@ if not exist build mkdir build
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
 cd build
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
+{{- if $features.apigear }}
 @REM Building and testing apigear module
 conan remove "apigear" -b -f
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
@@ -22,6 +24,7 @@ if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
 conan create ../../apigear
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
 popd
+{{- end }}
 {{- range .System.Modules }}
 @REM Building and testing {{snake .Name}} module
 conan remove "{{snake .Name}}" -b -f
@@ -40,6 +43,7 @@ conan create ../../../modules/{{snake .Name}}_module
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
 popd
 {{- end }}
+{{- if $features.examples }}
 @REM Building examples app
 if not exist examples\app mkdir examples\app
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
@@ -72,6 +76,8 @@ if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
 CALL deactivate.bat
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
 popd
+{{- end}}
+{{- if $features.examples_olink }}
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
 if not exist examples\olinkserver mkdir examples\olinkserver
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
@@ -103,4 +109,5 @@ if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
 CALL deactivate.bat
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
 popd
+{{- end}}
 cd ..

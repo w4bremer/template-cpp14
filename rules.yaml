@@ -1,8 +1,15 @@
 features:
   - name: api
     scopes:
+      - match: system
+        documents:
+          - source: CMakeLists.txt.tpl
+            target: CMakeLists.txt
+            force: false
+          - source: "README.md"
+            raw: true
       - match: module
-        prefix: "modules/{{snake .Module.Name}}_module/{{ snake .Module.Name}}/"
+        prefix: "modules/{{snake .Module.Name}}_module/{{snake .Module.Name}}/"
         documents:
           - source: "module/CMakeLists.txt.tpl"
             target: "CMakeLists.txt"
@@ -31,6 +38,8 @@ features:
         - source: "module/generated/api/interface.api.h.tpl"
           target: "generated/api/{{lower (camel .Interface.Name)}}.api.h"
   - name: core
+    requires:
+      - api
     scopes:
       - match: module
         prefix: "modules/{{snake .Module.Name}}_module/{{snake .Module.Name}}/generated/core/"
@@ -60,15 +69,13 @@ features:
             target: "{{lower (camel .Interface.Name)}}.threadsafedecorator.h"
           - source: "module/generated/core/interface.threadsafedecorator.cpp.tpl"
             target: "{{lower (camel .Interface.Name)}}.threadsafedecorator.cpp"
-  - name: scaffold
+  - name: stubs
+    requires:
+      - api
+      - core
     scopes:
       - match: module
         documents:
-          - source: "README.md"
-            raw: true
-          - source: CMakeLists.txt.tpl
-            target: CMakeLists.txt
-            force: false
           - source: "module/source/CMakeLists.txt.tpl"
             target: "modules/{{snake .Module.Name}}_module/{{snake .Module.Name}}/implementation/CMakeLists.txt"
             force: false
@@ -85,6 +92,10 @@ features:
             target: "{{lower (camel .Interface.Name)}}.test.cpp"
             force: false
   - name: monitor
+    requires:
+      - api
+      - core
+      - apigear
     scopes:
     - match: module
       documents:
@@ -102,6 +113,10 @@ features:
           - source: "module/generated/monitor/interface.tracer.cpp.tpl"
             target: "{{lower (camel .Interface.Name)}}.tracer.cpp"
   - name: olink
+    requires:
+      - api
+      - core
+      - apigear
     scopes:
     - match: system
       documents:
@@ -207,6 +222,8 @@ features:
         - source: "apigear/olink/tests/private/test_server/test_server_request_handler.hpp"
           raw: true
   - name: examples
+    requires:
+      - stubs
     scopes:
     - match: system
       documents:
@@ -222,6 +239,13 @@ features:
           target: examples/appthreadsafe/conanfile.txt
         - source: examples/appthreadsafe/main.cpp.tpl
           target: examples/appthreadsafe/main.cpp
+  - name: examples_olink
+    requires:
+      - stubs
+      - olink
+    scopes:
+    - match: system
+      documents:
         - source: examples/olinkserver/CMakeLists.txt.tpl
           target: examples/olinkserver/CMakeLists.txt
         - source: examples/olinkserver/conanfile.txt.tpl
@@ -235,6 +259,8 @@ features:
         - source: examples/olinkclient/main.cpp.tpl
           target: examples/olinkclient/main.cpp
   - name: conan
+    requires:
+      - api
     scopes:
     - match: system
       documents:

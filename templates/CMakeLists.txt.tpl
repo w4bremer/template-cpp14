@@ -15,7 +15,7 @@ endif()
 endif(BUILD_TESTING)
 
 # checks are workaround until generator support feature check properly
-IF( IS_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/apigear" )
+{{- if .Features.apigear }}
 find_package(apigear QUIET)
 if(NOT apigear_FOUND)
   # pull apigear as dependency
@@ -26,7 +26,8 @@ if(NOT apigear_FOUND)
   )
   FetchContent_MakeAvailable(apigear)
 endif()
-ENDIF()
+{{- end }}
+
 {{- range .System.Modules }}
 {{- $module_id := snake .Name}}
 find_package({{$module_id}} QUIET)
@@ -40,10 +41,12 @@ if(NOT {{$module_id}}_FOUND)
   FetchContent_MakeAvailable({{$module_id}})
 endif()
 {{- end }}
-IF( IS_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/examples" )
+
+{{- if .Features.examples }}
 add_subdirectory(examples/app)
-IF( IS_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/examples/olinkserver" )
+add_subdirectory(examples/appthreadsafe)
+{{- end }}
+{{- if .Features.examples }}
 add_subdirectory(examples/olinkserver)
 add_subdirectory(examples/olinkclient)
-ENDIF()
-ENDIF()
+{{- end }}

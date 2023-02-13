@@ -7,20 +7,25 @@ The following list presents a set of features which can be individually enabled 
 
 * **api**<br/>
     Create the plain interface data structure files
-* **core**<br/>
-    Create a core set of files for json serialization and event handling support implemented
+* **stubs**<br/>
+    Provides a basic example implementation, without business logic in operations.
 * **scaffold**<br/>
-    Create a fully featured project with reference implementations, tests and this README. This is only for convenience. It is also possible to just build and link against e.g. the **api** and **core** libraries. And provide a implementation in a completely seperate folder.
+    Adds a structure to project. Adds cmake files for the api and stubs, sets up tests with catch2.
 * **monitor**<br/>
     Create support libraries for monitoring API traffic
 * **olink**<br/>
-    Create IPC implementation for [ObjectLink](https://objectlinkprotocol.net/)
-* **apigear**<br/>
-    Create necessary ApiGear support library for extended features like monitoring, olink IPC - needs to be generated for monitor or olink
+    Create IPC [ObjectLink](https://objectlinkprotocol.net/) adapters for your interface classes.
 * **examples**<br/>
-    Create simple examples for "How to use" the generated code
+    Create simple examples for "How to use" the generated code for stubs
+* **example-olink**<br/>
+    Creates simple example for "How to use" the generated code with olink
 * **conan**<br/>
     Create files for conan package manager
+
+* **core**<br/>
+    Create a core set of files common for few features. Generated anytime one of features is enabled: stubs, monitor, olink.
+* **apigear**<br/>
+    Create necessary ApiGear support library for extended features like monitoring, olink IPC - needs to be generated for monitor or olink
 
 ## Folder structure
 The following gives a simplified overview of the generated code structure with `all` features enabled.
@@ -28,9 +33,9 @@ The following gives a simplified overview of the generated code structure with `
 In general, the files in the `modules/modulename1/generated/..` are completely auto generated and should not be modified manually.
 If changes to these files are necessary those should be applied in the technology template.
 
-The files in the `modules/modulename1/implementation/..` are meant to be a starting point for the imlementation of real business logic for the interface. Those files will not be automatically overwritten by the generators **scaffold** feature unless `force: true` is specified in the solution file.
+The files in the `modules/modulename1/implementation/..` are meant to be a starting point for the implementation of real business logic for the interface. Those files will not be automatically overwritten by the generators **scaffold** feature unless `force: true` is specified in the solution file.
 
-It is recommeded to have at least manually modified files, like the `implementation` folder, under source code version control. This can also be helpful to spot differences in the auto generated code, e.g. after API changes or a new version of the template, generator.
+It is recommended to have at least manually modified files, like the `implementation` folder, under source code version control. This can also be helpful to spot differences in the auto generated code, e.g. after API changes or a new version of the template, generator.
 
 ```
 outputfolder
@@ -117,7 +122,7 @@ If you want to manage and install dependencies manually into the environment, th
 
 #### Minimum Poco build
 
-In case you want to build a minimum poco version. You need to install the necessary dependencies like describeded [here](https://github.com/pocoproject/poco#prerequisites) and then do a minimal configuration.
+In case you want to build a minimum poco version. You need to install the necessary dependencies like described [here](https://github.com/pocoproject/poco#prerequisites) and then do a minimal configuration.
 
 ```
 $ mkdir cmake-build && cd cmake-build
@@ -135,7 +140,7 @@ For ease of use and package distribution we generate all files necessary files t
     ```
     compiler.libcxx=libstdc++11
     ```
-2. Execute the test script depending on the host platform. This will build all depedencies and module files, including examples.
+2. Execute the test script depending on the host platform. This will build all dependencies and module files, including examples.
    * Or on **Linux, Mac** execute the shell script `test_conan.sh`.
 
         ```
