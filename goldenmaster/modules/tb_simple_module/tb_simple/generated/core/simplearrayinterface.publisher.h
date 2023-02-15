@@ -51,6 +51,24 @@ public:
     void unsubscribeFromPropIntChanged(long handleId) override;
 
     /**
+    * Implementation of ISimpleArrayInterfacePublisher::subscribeToPropInt32Changed
+    */
+    long subscribeToPropInt32Changed(SimpleArrayInterfacePropInt32PropertyCb callback) override;
+    /**
+    * Implementation of ISimpleArrayInterfacePublisher::subscribeToPropInt32Changed
+    */
+    void unsubscribeFromPropInt32Changed(long handleId) override;
+
+    /**
+    * Implementation of ISimpleArrayInterfacePublisher::subscribeToPropInt64Changed
+    */
+    long subscribeToPropInt64Changed(SimpleArrayInterfacePropInt64PropertyCb callback) override;
+    /**
+    * Implementation of ISimpleArrayInterfacePublisher::subscribeToPropInt64Changed
+    */
+    void unsubscribeFromPropInt64Changed(long handleId) override;
+
+    /**
     * Implementation of ISimpleArrayInterfacePublisher::subscribeToPropFloatChanged
     */
     long subscribeToPropFloatChanged(SimpleArrayInterfacePropFloatPropertyCb callback) override;
@@ -58,6 +76,24 @@ public:
     * Implementation of ISimpleArrayInterfacePublisher::subscribeToPropFloatChanged
     */
     void unsubscribeFromPropFloatChanged(long handleId) override;
+
+    /**
+    * Implementation of ISimpleArrayInterfacePublisher::subscribeToPropFloat32Changed
+    */
+    long subscribeToPropFloat32Changed(SimpleArrayInterfacePropFloat32PropertyCb callback) override;
+    /**
+    * Implementation of ISimpleArrayInterfacePublisher::subscribeToPropFloat32Changed
+    */
+    void unsubscribeFromPropFloat32Changed(long handleId) override;
+
+    /**
+    * Implementation of ISimpleArrayInterfacePublisher::subscribeToPropFloat64Changed
+    */
+    long subscribeToPropFloat64Changed(SimpleArrayInterfacePropFloat64PropertyCb callback) override;
+    /**
+    * Implementation of ISimpleArrayInterfacePublisher::subscribeToPropFloat64Changed
+    */
+    void unsubscribeFromPropFloat64Changed(long handleId) override;
 
     /**
     * Implementation of ISimpleArrayInterfacePublisher::subscribeToPropStringChanged
@@ -87,6 +123,24 @@ public:
     void unsubscribeFromSigInt(long handleId) override;
 
     /**
+    * Implementation of ISimpleArrayInterfacePublisher::subscribeToSigInt32
+    */
+    long subscribeToSigInt32(SimpleArrayInterfaceSigInt32SignalCb callback) override;
+    /**
+    * Implementation of ISimpleArrayInterfacePublisher::unsubscribeFromSigInt32
+    */
+    void unsubscribeFromSigInt32(long handleId) override;
+
+    /**
+    * Implementation of ISimpleArrayInterfacePublisher::subscribeToSigInt64
+    */
+    long subscribeToSigInt64(SimpleArrayInterfaceSigInt64SignalCb callback) override;
+    /**
+    * Implementation of ISimpleArrayInterfacePublisher::unsubscribeFromSigInt64
+    */
+    void unsubscribeFromSigInt64(long handleId) override;
+
+    /**
     * Implementation of ISimpleArrayInterfacePublisher::subscribeToSigFloat
     */
     long subscribeToSigFloat(SimpleArrayInterfaceSigFloatSignalCb callback) override;
@@ -94,6 +148,24 @@ public:
     * Implementation of ISimpleArrayInterfacePublisher::unsubscribeFromSigFloat
     */
     void unsubscribeFromSigFloat(long handleId) override;
+
+    /**
+    * Implementation of ISimpleArrayInterfacePublisher::subscribeToSigFloat32
+    */
+    long subscribeToSigFloat32(SimpleArrayInterfaceSigFloat32SignalCb callback) override;
+    /**
+    * Implementation of ISimpleArrayInterfacePublisher::unsubscribeFromSigFloat32
+    */
+    void unsubscribeFromSigFloat32(long handleId) override;
+
+    /**
+    * Implementation of ISimpleArrayInterfacePublisher::subscribeToSigFloat64
+    */
+    long subscribeToSigFloat64(SimpleArrayInterfaceSigFloat64SignalCb callback) override;
+    /**
+    * Implementation of ISimpleArrayInterfacePublisher::unsubscribeFromSigFloat64
+    */
+    void unsubscribeFromSigFloat64(long handleId) override;
 
     /**
     * Implementation of ISimpleArrayInterfacePublisher::subscribeToSigString
@@ -113,9 +185,25 @@ public:
     */
     void publishPropIntChanged(const std::list<int>& propInt) const override;
     /**
+    * Implementation of ISimpleArrayInterfacePublisher::publishPropInt32Changed
+    */
+    void publishPropInt32Changed(const std::list<int32_t>& propInt32) const override;
+    /**
+    * Implementation of ISimpleArrayInterfacePublisher::publishPropInt64Changed
+    */
+    void publishPropInt64Changed(const std::list<int64_t>& propInt64) const override;
+    /**
     * Implementation of ISimpleArrayInterfacePublisher::publishPropFloatChanged
     */
     void publishPropFloatChanged(const std::list<float>& propFloat) const override;
+    /**
+    * Implementation of ISimpleArrayInterfacePublisher::publishPropFloat32Changed
+    */
+    void publishPropFloat32Changed(const std::list<float>& propFloat32) const override;
+    /**
+    * Implementation of ISimpleArrayInterfacePublisher::publishPropFloat64Changed
+    */
+    void publishPropFloat64Changed(const std::list<double>& propFloat64) const override;
     /**
     * Implementation of ISimpleArrayInterfacePublisher::publishPropStringChanged
     */
@@ -129,9 +217,25 @@ public:
     */
     void publishSigInt(const std::list<int>& paramInt) const override;
     /**
+    * Implementation of ISimpleArrayInterfacePublisher::publishSigInt32
+    */
+    void publishSigInt32(const std::list<int32_t>& paramInt32) const override;
+    /**
+    * Implementation of ISimpleArrayInterfacePublisher::publishSigInt64
+    */
+    void publishSigInt64(const std::list<int64_t>& paramInt64) const override;
+    /**
     * Implementation of ISimpleArrayInterfacePublisher::publishSigFloat
     */
     void publishSigFloat(const std::list<float>& paramFloat) const override;
+    /**
+    * Implementation of ISimpleArrayInterfacePublisher::publishSigFloat32
+    */
+    void publishSigFloat32(const std::list<float>& paramFloa32) const override;
+    /**
+    * Implementation of ISimpleArrayInterfacePublisher::publishSigFloat64
+    */
+    void publishSigFloat64(const std::list<double>& paramFloat64) const override;
     /**
     * Implementation of ISimpleArrayInterfacePublisher::publishSigString
     */
@@ -153,12 +257,36 @@ private:
     std::map<long, SimpleArrayInterfacePropIntPropertyCb> m_propIntCallbacks;
     // Mutex for m_propIntCallbacks
     mutable std::shared_timed_mutex m_propIntCallbacksMutex;
+    // Next free unique identifier to subscribe for the PropInt32 change.
+    std::atomic<long> m_propInt32ChangedCallbackNextId {0};
+    // Subscribed callbacks for the PropInt32 change.
+    std::map<long, SimpleArrayInterfacePropInt32PropertyCb> m_propInt32Callbacks;
+    // Mutex for m_propInt32Callbacks
+    mutable std::shared_timed_mutex m_propInt32CallbacksMutex;
+    // Next free unique identifier to subscribe for the PropInt64 change.
+    std::atomic<long> m_propInt64ChangedCallbackNextId {0};
+    // Subscribed callbacks for the PropInt64 change.
+    std::map<long, SimpleArrayInterfacePropInt64PropertyCb> m_propInt64Callbacks;
+    // Mutex for m_propInt64Callbacks
+    mutable std::shared_timed_mutex m_propInt64CallbacksMutex;
     // Next free unique identifier to subscribe for the PropFloat change.
     std::atomic<long> m_propFloatChangedCallbackNextId {0};
     // Subscribed callbacks for the PropFloat change.
     std::map<long, SimpleArrayInterfacePropFloatPropertyCb> m_propFloatCallbacks;
     // Mutex for m_propFloatCallbacks
     mutable std::shared_timed_mutex m_propFloatCallbacksMutex;
+    // Next free unique identifier to subscribe for the PropFloat32 change.
+    std::atomic<long> m_propFloat32ChangedCallbackNextId {0};
+    // Subscribed callbacks for the PropFloat32 change.
+    std::map<long, SimpleArrayInterfacePropFloat32PropertyCb> m_propFloat32Callbacks;
+    // Mutex for m_propFloat32Callbacks
+    mutable std::shared_timed_mutex m_propFloat32CallbacksMutex;
+    // Next free unique identifier to subscribe for the PropFloat64 change.
+    std::atomic<long> m_propFloat64ChangedCallbackNextId {0};
+    // Subscribed callbacks for the PropFloat64 change.
+    std::map<long, SimpleArrayInterfacePropFloat64PropertyCb> m_propFloat64Callbacks;
+    // Mutex for m_propFloat64Callbacks
+    mutable std::shared_timed_mutex m_propFloat64CallbacksMutex;
     // Next free unique identifier to subscribe for the PropString change.
     std::atomic<long> m_propStringChangedCallbackNextId {0};
     // Subscribed callbacks for the PropString change.
@@ -177,12 +305,36 @@ private:
     std::map<long, SimpleArrayInterfaceSigIntSignalCb > m_sigIntCallbacks;
     // Mutex for m_sigIntSignalCallbackNextId and m_sigIntCallbacks
     mutable std::shared_timed_mutex m_sigIntCallbacksMutex;
+    // Next free unique identifier to subscribe for the SigInt32 emission.
+    std::atomic<long> m_sigInt32SignalCallbackNextId {0};
+    // Subscribed callbacks for the SigInt32 emission.
+    std::map<long, SimpleArrayInterfaceSigInt32SignalCb > m_sigInt32Callbacks;
+    // Mutex for m_sigInt32SignalCallbackNextId and m_sigInt32Callbacks
+    mutable std::shared_timed_mutex m_sigInt32CallbacksMutex;
+    // Next free unique identifier to subscribe for the SigInt64 emission.
+    std::atomic<long> m_sigInt64SignalCallbackNextId {0};
+    // Subscribed callbacks for the SigInt64 emission.
+    std::map<long, SimpleArrayInterfaceSigInt64SignalCb > m_sigInt64Callbacks;
+    // Mutex for m_sigInt64SignalCallbackNextId and m_sigInt64Callbacks
+    mutable std::shared_timed_mutex m_sigInt64CallbacksMutex;
     // Next free unique identifier to subscribe for the SigFloat emission.
     std::atomic<long> m_sigFloatSignalCallbackNextId {0};
     // Subscribed callbacks for the SigFloat emission.
     std::map<long, SimpleArrayInterfaceSigFloatSignalCb > m_sigFloatCallbacks;
     // Mutex for m_sigFloatSignalCallbackNextId and m_sigFloatCallbacks
     mutable std::shared_timed_mutex m_sigFloatCallbacksMutex;
+    // Next free unique identifier to subscribe for the SigFloat32 emission.
+    std::atomic<long> m_sigFloat32SignalCallbackNextId {0};
+    // Subscribed callbacks for the SigFloat32 emission.
+    std::map<long, SimpleArrayInterfaceSigFloat32SignalCb > m_sigFloat32Callbacks;
+    // Mutex for m_sigFloat32SignalCallbackNextId and m_sigFloat32Callbacks
+    mutable std::shared_timed_mutex m_sigFloat32CallbacksMutex;
+    // Next free unique identifier to subscribe for the SigFloat64 emission.
+    std::atomic<long> m_sigFloat64SignalCallbackNextId {0};
+    // Subscribed callbacks for the SigFloat64 emission.
+    std::map<long, SimpleArrayInterfaceSigFloat64SignalCb > m_sigFloat64Callbacks;
+    // Mutex for m_sigFloat64SignalCallbackNextId and m_sigFloat64Callbacks
+    mutable std::shared_timed_mutex m_sigFloat64CallbacksMutex;
     // Next free unique identifier to subscribe for the SigString emission.
     std::atomic<long> m_sigStringSignalCallbackNextId {0};
     // Subscribed callbacks for the SigString emission.

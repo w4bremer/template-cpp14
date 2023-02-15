@@ -29,8 +29,16 @@ auto propBool = testSimpleInterface->getPropBool();
 testSimpleInterface->setPropBool(false);
 auto propInt = testSimpleInterface->getPropInt();
 testSimpleInterface->setPropInt(0);
+auto propInt32 = testSimpleInterface->getPropInt32();
+testSimpleInterface->setPropInt32(0);
+auto propInt64 = testSimpleInterface->getPropInt64();
+testSimpleInterface->setPropInt64(0);
 auto propFloat = testSimpleInterface->getPropFloat();
 testSimpleInterface->setPropFloat(0.0);
+auto propFloat32 = testSimpleInterface->getPropFloat32();
+testSimpleInterface->setPropFloat32(0.0);
+auto propFloat64 = testSimpleInterface->getPropFloat64();
+testSimpleInterface->setPropFloat64(0.0);
 auto propString = testSimpleInterface->getPropString();
 testSimpleInterface->setPropString(std::string());
 \endcode
@@ -81,12 +89,56 @@ public:
     * Forwards call to SimpleInterface implementation.
     * @warning This forward call is not made thread safe by this class.
     */
+    int32_t funcInt32(int32_t paramInt32) override;
+    /** 
+    * Forwards call to SimpleInterface implementation.
+    * @warning This forward call is not made thread safe by this class.
+    */
+    std::future<int32_t> funcInt32Async(int32_t paramInt32) override;
+
+    /** 
+    * Forwards call to SimpleInterface implementation.
+    * @warning This forward call is not made thread safe by this class.
+    */
+    int64_t funcInt64(int64_t paramInt64) override;
+    /** 
+    * Forwards call to SimpleInterface implementation.
+    * @warning This forward call is not made thread safe by this class.
+    */
+    std::future<int64_t> funcInt64Async(int64_t paramInt64) override;
+
+    /** 
+    * Forwards call to SimpleInterface implementation.
+    * @warning This forward call is not made thread safe by this class.
+    */
     float funcFloat(float paramFloat) override;
     /** 
     * Forwards call to SimpleInterface implementation.
     * @warning This forward call is not made thread safe by this class.
     */
     std::future<float> funcFloatAsync(float paramFloat) override;
+
+    /** 
+    * Forwards call to SimpleInterface implementation.
+    * @warning This forward call is not made thread safe by this class.
+    */
+    float funcFloat32(float paramFloat32) override;
+    /** 
+    * Forwards call to SimpleInterface implementation.
+    * @warning This forward call is not made thread safe by this class.
+    */
+    std::future<float> funcFloat32Async(float paramFloat32) override;
+
+    /** 
+    * Forwards call to SimpleInterface implementation.
+    * @warning This forward call is not made thread safe by this class.
+    */
+    double funcFloat64(double paramFloat) override;
+    /** 
+    * Forwards call to SimpleInterface implementation.
+    * @warning This forward call is not made thread safe by this class.
+    */
+    std::future<double> funcFloat64Async(double paramFloat) override;
 
     /** 
     * Forwards call to SimpleInterface implementation.
@@ -110,9 +162,29 @@ public:
     int getPropInt() const override;
 
     /** Guards and forwards call to SimpleInterface implementation. */
+    void setPropInt32(int32_t propInt32) override;
+    /** Guards and forwards call to SimpleInterface implementation. */
+    int32_t getPropInt32() const override;
+
+    /** Guards and forwards call to SimpleInterface implementation. */
+    void setPropInt64(int64_t propInt64) override;
+    /** Guards and forwards call to SimpleInterface implementation. */
+    int64_t getPropInt64() const override;
+
+    /** Guards and forwards call to SimpleInterface implementation. */
     void setPropFloat(float propFloat) override;
     /** Guards and forwards call to SimpleInterface implementation. */
     float getPropFloat() const override;
+
+    /** Guards and forwards call to SimpleInterface implementation. */
+    void setPropFloat32(float propFloat32) override;
+    /** Guards and forwards call to SimpleInterface implementation. */
+    float getPropFloat32() const override;
+
+    /** Guards and forwards call to SimpleInterface implementation. */
+    void setPropFloat64(double propFloat64) override;
+    /** Guards and forwards call to SimpleInterface implementation. */
+    double getPropFloat64() const override;
 
     /** Guards and forwards call to SimpleInterface implementation. */
     void setPropString(const std::string& propString) override;
@@ -132,8 +204,16 @@ private:
     mutable std::shared_timed_mutex m_propBoolMutex;
     // Mutex for propInt property
     mutable std::shared_timed_mutex m_propIntMutex;
+    // Mutex for propInt32 property
+    mutable std::shared_timed_mutex m_propInt32Mutex;
+    // Mutex for propInt64 property
+    mutable std::shared_timed_mutex m_propInt64Mutex;
     // Mutex for propFloat property
     mutable std::shared_timed_mutex m_propFloatMutex;
+    // Mutex for propFloat32 property
+    mutable std::shared_timed_mutex m_propFloat32Mutex;
+    // Mutex for propFloat64 property
+    mutable std::shared_timed_mutex m_propFloat64Mutex;
     // Mutex for propString property
     mutable std::shared_timed_mutex m_propStringMutex;
 };

@@ -64,6 +64,26 @@ public:
     void setPropInt(const std::list<int>& propInt) override;
     /**
     * Property getter
+    * @return Locally stored locally value for PropInt32.
+    */
+    const std::list<int32_t>& getPropInt32() const override;
+    /**
+    * Request setting a property on the SimpleArrayInterface service.
+    * @param The value to which set request is send for the PropInt32.
+    */
+    void setPropInt32(const std::list<int32_t>& propInt32) override;
+    /**
+    * Property getter
+    * @return Locally stored locally value for PropInt64.
+    */
+    const std::list<int64_t>& getPropInt64() const override;
+    /**
+    * Request setting a property on the SimpleArrayInterface service.
+    * @param The value to which set request is send for the PropInt64.
+    */
+    void setPropInt64(const std::list<int64_t>& propInt64) override;
+    /**
+    * Property getter
     * @return Locally stored locally value for PropFloat.
     */
     const std::list<float>& getPropFloat() const override;
@@ -72,6 +92,26 @@ public:
     * @param The value to which set request is send for the PropFloat.
     */
     void setPropFloat(const std::list<float>& propFloat) override;
+    /**
+    * Property getter
+    * @return Locally stored locally value for PropFloat32.
+    */
+    const std::list<float>& getPropFloat32() const override;
+    /**
+    * Request setting a property on the SimpleArrayInterface service.
+    * @param The value to which set request is send for the PropFloat32.
+    */
+    void setPropFloat32(const std::list<float>& propFloat32) override;
+    /**
+    * Property getter
+    * @return Locally stored locally value for PropFloat64.
+    */
+    const std::list<double>& getPropFloat64() const override;
+    /**
+    * Request setting a property on the SimpleArrayInterface service.
+    * @param The value to which set request is send for the PropFloat64.
+    */
+    void setPropFloat64(const std::list<double>& propFloat64) override;
     /**
     * Property getter
     * @return Locally stored locally value for PropString.
@@ -101,6 +141,24 @@ public:
     */
     std::future<std::list<int>> funcIntAsync(const std::list<int>& paramInt) override;
     /**
+    * Remote call of ISimpleArrayInterface::funcInt32 on the SimpleArrayInterface service.
+    * Uses funcInt32Async
+    */
+    std::list<int32_t> funcInt32(const std::list<int32_t>& paramInt32) override;
+    /**
+    * Remote call of ISimpleArrayInterface::funcInt32 on the SimpleArrayInterface service.
+    */
+    std::future<std::list<int32_t>> funcInt32Async(const std::list<int32_t>& paramInt32) override;
+    /**
+    * Remote call of ISimpleArrayInterface::funcInt64 on the SimpleArrayInterface service.
+    * Uses funcInt64Async
+    */
+    std::list<int64_t> funcInt64(const std::list<int64_t>& paramInt64) override;
+    /**
+    * Remote call of ISimpleArrayInterface::funcInt64 on the SimpleArrayInterface service.
+    */
+    std::future<std::list<int64_t>> funcInt64Async(const std::list<int64_t>& paramInt64) override;
+    /**
     * Remote call of ISimpleArrayInterface::funcFloat on the SimpleArrayInterface service.
     * Uses funcFloatAsync
     */
@@ -109,6 +167,24 @@ public:
     * Remote call of ISimpleArrayInterface::funcFloat on the SimpleArrayInterface service.
     */
     std::future<std::list<float>> funcFloatAsync(const std::list<float>& paramFloat) override;
+    /**
+    * Remote call of ISimpleArrayInterface::funcFloat32 on the SimpleArrayInterface service.
+    * Uses funcFloat32Async
+    */
+    std::list<float> funcFloat32(const std::list<float>& paramFloat32) override;
+    /**
+    * Remote call of ISimpleArrayInterface::funcFloat32 on the SimpleArrayInterface service.
+    */
+    std::future<std::list<float>> funcFloat32Async(const std::list<float>& paramFloat32) override;
+    /**
+    * Remote call of ISimpleArrayInterface::funcFloat64 on the SimpleArrayInterface service.
+    * Uses funcFloat64Async
+    */
+    std::list<double> funcFloat64(const std::list<double>& paramFloat) override;
+    /**
+    * Remote call of ISimpleArrayInterface::funcFloat64 on the SimpleArrayInterface service.
+    */
+    std::future<std::list<double>> funcFloat64Async(const std::list<double>& paramFloat) override;
     /**
     * Remote call of ISimpleArrayInterface::funcString on the SimpleArrayInterface service.
     * Uses funcStringAsync
@@ -170,8 +246,16 @@ private:
     void setPropBoolLocal(const std::list<bool>& propBool);
     /**  Updates local value for PropInt and informs subscriber about the change*/
     void setPropIntLocal(const std::list<int>& propInt);
+    /**  Updates local value for PropInt32 and informs subscriber about the change*/
+    void setPropInt32Local(const std::list<int32_t>& propInt32);
+    /**  Updates local value for PropInt64 and informs subscriber about the change*/
+    void setPropInt64Local(const std::list<int64_t>& propInt64);
     /**  Updates local value for PropFloat and informs subscriber about the change*/
     void setPropFloatLocal(const std::list<float>& propFloat);
+    /**  Updates local value for PropFloat32 and informs subscriber about the change*/
+    void setPropFloat32Local(const std::list<float>& propFloat32);
+    /**  Updates local value for PropFloat64 and informs subscriber about the change*/
+    void setPropFloat64Local(const std::list<double>& propFloat64);
     /**  Updates local value for PropString and informs subscriber about the change*/
     void setPropStringLocal(const std::list<std::string>& propString);
 

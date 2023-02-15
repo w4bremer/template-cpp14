@@ -49,6 +49,26 @@ std::future<int> SimpleInterfaceTraceDecorator::funcIntAsync(int paramInt)
     m_tracer->trace_funcInt(paramInt);
     return m_impl.funcIntAsync(paramInt);
 }
+int32_t SimpleInterfaceTraceDecorator::funcInt32(int32_t paramInt32)
+{
+    m_tracer->trace_funcInt32(paramInt32);
+    return m_impl.funcInt32(paramInt32);
+}
+std::future<int32_t> SimpleInterfaceTraceDecorator::funcInt32Async(int32_t paramInt32)
+{
+    m_tracer->trace_funcInt32(paramInt32);
+    return m_impl.funcInt32Async(paramInt32);
+}
+int64_t SimpleInterfaceTraceDecorator::funcInt64(int64_t paramInt64)
+{
+    m_tracer->trace_funcInt64(paramInt64);
+    return m_impl.funcInt64(paramInt64);
+}
+std::future<int64_t> SimpleInterfaceTraceDecorator::funcInt64Async(int64_t paramInt64)
+{
+    m_tracer->trace_funcInt64(paramInt64);
+    return m_impl.funcInt64Async(paramInt64);
+}
 float SimpleInterfaceTraceDecorator::funcFloat(float paramFloat)
 {
     m_tracer->trace_funcFloat(paramFloat);
@@ -58,6 +78,26 @@ std::future<float> SimpleInterfaceTraceDecorator::funcFloatAsync(float paramFloa
 {
     m_tracer->trace_funcFloat(paramFloat);
     return m_impl.funcFloatAsync(paramFloat);
+}
+float SimpleInterfaceTraceDecorator::funcFloat32(float paramFloat32)
+{
+    m_tracer->trace_funcFloat32(paramFloat32);
+    return m_impl.funcFloat32(paramFloat32);
+}
+std::future<float> SimpleInterfaceTraceDecorator::funcFloat32Async(float paramFloat32)
+{
+    m_tracer->trace_funcFloat32(paramFloat32);
+    return m_impl.funcFloat32Async(paramFloat32);
+}
+double SimpleInterfaceTraceDecorator::funcFloat64(double paramFloat)
+{
+    m_tracer->trace_funcFloat64(paramFloat);
+    return m_impl.funcFloat64(paramFloat);
+}
+std::future<double> SimpleInterfaceTraceDecorator::funcFloat64Async(double paramFloat)
+{
+    m_tracer->trace_funcFloat64(paramFloat);
+    return m_impl.funcFloat64Async(paramFloat);
 }
 std::string SimpleInterfaceTraceDecorator::funcString(const std::string& paramString)
 {
@@ -87,6 +127,24 @@ int SimpleInterfaceTraceDecorator::getPropInt() const
 {
     return m_impl.getPropInt();
 }
+void SimpleInterfaceTraceDecorator::setPropInt32(int32_t propInt32)
+{
+    m_impl.setPropInt32(propInt32);
+}
+
+int32_t SimpleInterfaceTraceDecorator::getPropInt32() const
+{
+    return m_impl.getPropInt32();
+}
+void SimpleInterfaceTraceDecorator::setPropInt64(int64_t propInt64)
+{
+    m_impl.setPropInt64(propInt64);
+}
+
+int64_t SimpleInterfaceTraceDecorator::getPropInt64() const
+{
+    return m_impl.getPropInt64();
+}
 void SimpleInterfaceTraceDecorator::setPropFloat(float propFloat)
 {
     m_impl.setPropFloat(propFloat);
@@ -95,6 +153,24 @@ void SimpleInterfaceTraceDecorator::setPropFloat(float propFloat)
 float SimpleInterfaceTraceDecorator::getPropFloat() const
 {
     return m_impl.getPropFloat();
+}
+void SimpleInterfaceTraceDecorator::setPropFloat32(float propFloat32)
+{
+    m_impl.setPropFloat32(propFloat32);
+}
+
+float SimpleInterfaceTraceDecorator::getPropFloat32() const
+{
+    return m_impl.getPropFloat32();
+}
+void SimpleInterfaceTraceDecorator::setPropFloat64(double propFloat64)
+{
+    m_impl.setPropFloat64(propFloat64);
+}
+
+double SimpleInterfaceTraceDecorator::getPropFloat64() const
+{
+    return m_impl.getPropFloat64();
 }
 void SimpleInterfaceTraceDecorator::setPropString(const std::string& propString)
 {
@@ -120,9 +196,29 @@ void SimpleInterfaceTraceDecorator::onSigInt(int paramInt)
     m_tracer->trace_sigInt(paramInt);
 }
 
+void SimpleInterfaceTraceDecorator::onSigInt32(int32_t paramInt32)
+{
+    m_tracer->trace_sigInt32(paramInt32);
+}
+
+void SimpleInterfaceTraceDecorator::onSigInt64(int64_t paramInt64)
+{
+    m_tracer->trace_sigInt64(paramInt64);
+}
+
 void SimpleInterfaceTraceDecorator::onSigFloat(float paramFloat)
 {
     m_tracer->trace_sigFloat(paramFloat);
+}
+
+void SimpleInterfaceTraceDecorator::onSigFloat32(float paramFloa32)
+{
+    m_tracer->trace_sigFloat32(paramFloa32);
+}
+
+void SimpleInterfaceTraceDecorator::onSigFloat64(double paramFloat64)
+{
+    m_tracer->trace_sigFloat64(paramFloat64);
 }
 
 void SimpleInterfaceTraceDecorator::onSigString(const std::string& paramString)
@@ -142,9 +238,33 @@ void SimpleInterfaceTraceDecorator::onPropIntChanged(int propInt)
     m_tracer->capture_state(this);
 }
 
+void SimpleInterfaceTraceDecorator::onPropInt32Changed(int32_t propInt32)
+{
+    (void) propInt32; // suppress the 'Unreferenced Formal Parameter' warning.
+    m_tracer->capture_state(this);
+}
+
+void SimpleInterfaceTraceDecorator::onPropInt64Changed(int64_t propInt64)
+{
+    (void) propInt64; // suppress the 'Unreferenced Formal Parameter' warning.
+    m_tracer->capture_state(this);
+}
+
 void SimpleInterfaceTraceDecorator::onPropFloatChanged(float propFloat)
 {
     (void) propFloat; // suppress the 'Unreferenced Formal Parameter' warning.
+    m_tracer->capture_state(this);
+}
+
+void SimpleInterfaceTraceDecorator::onPropFloat32Changed(float propFloat32)
+{
+    (void) propFloat32; // suppress the 'Unreferenced Formal Parameter' warning.
+    m_tracer->capture_state(this);
+}
+
+void SimpleInterfaceTraceDecorator::onPropFloat64Changed(double propFloat64)
+{
+    (void) propFloat64; // suppress the 'Unreferenced Formal Parameter' warning.
     m_tracer->capture_state(this);
 }
 

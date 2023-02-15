@@ -37,10 +37,30 @@ public:
   */
   void trace_funcInt(const std::list<int>& paramInt);
   /**
+  * Prepares information about the funcInt32 call in a nlohmann::json format and puts to a tracer.
+  * @param The SimpleArrayInterface object to trace.
+  */
+  void trace_funcInt32(const std::list<int32_t>& paramInt32);
+  /**
+  * Prepares information about the funcInt64 call in a nlohmann::json format and puts to a tracer.
+  * @param The SimpleArrayInterface object to trace.
+  */
+  void trace_funcInt64(const std::list<int64_t>& paramInt64);
+  /**
   * Prepares information about the funcFloat call in a nlohmann::json format and puts to a tracer.
   * @param The SimpleArrayInterface object to trace.
   */
   void trace_funcFloat(const std::list<float>& paramFloat);
+  /**
+  * Prepares information about the funcFloat32 call in a nlohmann::json format and puts to a tracer.
+  * @param The SimpleArrayInterface object to trace.
+  */
+  void trace_funcFloat32(const std::list<float>& paramFloat32);
+  /**
+  * Prepares information about the funcFloat64 call in a nlohmann::json format and puts to a tracer.
+  * @param The SimpleArrayInterface object to trace.
+  */
+  void trace_funcFloat64(const std::list<double>& paramFloat);
   /**
   * Prepares information about the funcString call in a nlohmann::json format and puts to a tracer.
   * @param The SimpleArrayInterface object to trace.
@@ -57,10 +77,30 @@ public:
   */
   void trace_sigInt(const std::list<int>& paramInt);
   /**
+  * Prepares information about the sigInt32 call in a nlohmann::json format and puts to a tracer.
+  * @param The SimpleArrayInterface object to trace.
+  */
+  void trace_sigInt32(const std::list<int32_t>& paramInt32);
+  /**
+  * Prepares information about the sigInt64 call in a nlohmann::json format and puts to a tracer.
+  * @param The SimpleArrayInterface object to trace.
+  */
+  void trace_sigInt64(const std::list<int64_t>& paramInt64);
+  /**
   * Prepares information about the sigFloat call in a nlohmann::json format and puts to a tracer.
   * @param The SimpleArrayInterface object to trace.
   */
   void trace_sigFloat(const std::list<float>& paramFloat);
+  /**
+  * Prepares information about the sigFloat32 call in a nlohmann::json format and puts to a tracer.
+  * @param The SimpleArrayInterface object to trace.
+  */
+  void trace_sigFloat32(const std::list<float>& paramFloa32);
+  /**
+  * Prepares information about the sigFloat64 call in a nlohmann::json format and puts to a tracer.
+  * @param The SimpleArrayInterface object to trace.
+  */
+  void trace_sigFloat64(const std::list<double>& paramFloat64);
   /**
   * Prepares information about the sigString call in a nlohmann::json format and puts to a tracer.
   * @param The SimpleArrayInterface object to trace.

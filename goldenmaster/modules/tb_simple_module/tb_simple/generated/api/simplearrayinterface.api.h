@@ -43,12 +43,44 @@ public:
     virtual std::future<std::list<int>> funcIntAsync(const std::list<int>& paramInt) = 0;
 
 
+    virtual std::list<int32_t> funcInt32(const std::list<int32_t>& paramInt32) = 0;
+    /**
+    * Asynchronous version of funcInt32(const std::list<int32_t>& paramInt32)
+    * @return Promise of type std::list<int32_t> which is set once the function has completed
+    */
+    virtual std::future<std::list<int32_t>> funcInt32Async(const std::list<int32_t>& paramInt32) = 0;
+
+
+    virtual std::list<int64_t> funcInt64(const std::list<int64_t>& paramInt64) = 0;
+    /**
+    * Asynchronous version of funcInt64(const std::list<int64_t>& paramInt64)
+    * @return Promise of type std::list<int64_t> which is set once the function has completed
+    */
+    virtual std::future<std::list<int64_t>> funcInt64Async(const std::list<int64_t>& paramInt64) = 0;
+
+
     virtual std::list<float> funcFloat(const std::list<float>& paramFloat) = 0;
     /**
     * Asynchronous version of funcFloat(const std::list<float>& paramFloat)
     * @return Promise of type std::list<float> which is set once the function has completed
     */
     virtual std::future<std::list<float>> funcFloatAsync(const std::list<float>& paramFloat) = 0;
+
+
+    virtual std::list<float> funcFloat32(const std::list<float>& paramFloat32) = 0;
+    /**
+    * Asynchronous version of funcFloat32(const std::list<float>& paramFloat32)
+    * @return Promise of type std::list<float> which is set once the function has completed
+    */
+    virtual std::future<std::list<float>> funcFloat32Async(const std::list<float>& paramFloat32) = 0;
+
+
+    virtual std::list<double> funcFloat64(const std::list<double>& paramFloat) = 0;
+    /**
+    * Asynchronous version of funcFloat64(const std::list<double>& paramFloat)
+    * @return Promise of type std::list<double> which is set once the function has completed
+    */
+    virtual std::future<std::list<double>> funcFloat64Async(const std::list<double>& paramFloat) = 0;
 
 
     virtual std::list<std::string> funcString(const std::list<std::string>& paramString) = 0;
@@ -77,6 +109,24 @@ public:
     virtual const std::list<int>& getPropInt() const = 0;
 
     /**
+    * Sets the value of the propInt32 property.
+    */
+    virtual void setPropInt32(const std::list<int32_t>& propInt32) = 0;
+    /**
+    * Gets the value of the propInt32 property.
+    */
+    virtual const std::list<int32_t>& getPropInt32() const = 0;
+
+    /**
+    * Sets the value of the propInt64 property.
+    */
+    virtual void setPropInt64(const std::list<int64_t>& propInt64) = 0;
+    /**
+    * Gets the value of the propInt64 property.
+    */
+    virtual const std::list<int64_t>& getPropInt64() const = 0;
+
+    /**
     * Sets the value of the propFloat property.
     */
     virtual void setPropFloat(const std::list<float>& propFloat) = 0;
@@ -84,6 +134,24 @@ public:
     * Gets the value of the propFloat property.
     */
     virtual const std::list<float>& getPropFloat() const = 0;
+
+    /**
+    * Sets the value of the propFloat32 property.
+    */
+    virtual void setPropFloat32(const std::list<float>& propFloat32) = 0;
+    /**
+    * Gets the value of the propFloat32 property.
+    */
+    virtual const std::list<float>& getPropFloat32() const = 0;
+
+    /**
+    * Sets the value of the propFloat64 property.
+    */
+    virtual void setPropFloat64(const std::list<double>& propFloat64) = 0;
+    /**
+    * Gets the value of the propFloat64 property.
+    */
+    virtual const std::list<double>& getPropFloat64() const = 0;
 
     /**
     * Sets the value of the propString property.
@@ -130,12 +198,40 @@ public:
     */
     virtual void onSigInt(const std::list<int>& paramInt) = 0;
     /**
+    * Called by the ISimpleArrayInterfacePublisher when the SimpleArrayInterface emits sigInt32, if subscribed for the sigInt32.
+    * @param paramInt32 
+    *
+    * @warning the subscribed function shall not be blocking and must return immediately!
+    */
+    virtual void onSigInt32(const std::list<int32_t>& paramInt32) = 0;
+    /**
+    * Called by the ISimpleArrayInterfacePublisher when the SimpleArrayInterface emits sigInt64, if subscribed for the sigInt64.
+    * @param paramInt64 
+    *
+    * @warning the subscribed function shall not be blocking and must return immediately!
+    */
+    virtual void onSigInt64(const std::list<int64_t>& paramInt64) = 0;
+    /**
     * Called by the ISimpleArrayInterfacePublisher when the SimpleArrayInterface emits sigFloat, if subscribed for the sigFloat.
     * @param paramFloat 
     *
     * @warning the subscribed function shall not be blocking and must return immediately!
     */
     virtual void onSigFloat(const std::list<float>& paramFloat) = 0;
+    /**
+    * Called by the ISimpleArrayInterfacePublisher when the SimpleArrayInterface emits sigFloat32, if subscribed for the sigFloat32.
+    * @param paramFloa32 
+    *
+    * @warning the subscribed function shall not be blocking and must return immediately!
+    */
+    virtual void onSigFloat32(const std::list<float>& paramFloa32) = 0;
+    /**
+    * Called by the ISimpleArrayInterfacePublisher when the SimpleArrayInterface emits sigFloat64, if subscribed for the sigFloat64.
+    * @param paramFloat64 
+    *
+    * @warning the subscribed function shall not be blocking and must return immediately!
+    */
+    virtual void onSigFloat64(const std::list<double>& paramFloat64) = 0;
     /**
     * Called by the ISimpleArrayInterfacePublisher when the SimpleArrayInterface emits sigString, if subscribed for the sigString.
     * @param paramString 
@@ -156,11 +252,35 @@ public:
     */
     virtual void onPropIntChanged(const std::list<int>& propInt) = 0;
     /**
+    * Called by the ISimpleArrayInterfacePublisher when propInt32 value has changed if subscribed for the propInt32 change.
+    *
+    * @warning the subscribed function shall not be blocking and must return immediately!
+    */
+    virtual void onPropInt32Changed(const std::list<int32_t>& propInt32) = 0;
+    /**
+    * Called by the ISimpleArrayInterfacePublisher when propInt64 value has changed if subscribed for the propInt64 change.
+    *
+    * @warning the subscribed function shall not be blocking and must return immediately!
+    */
+    virtual void onPropInt64Changed(const std::list<int64_t>& propInt64) = 0;
+    /**
     * Called by the ISimpleArrayInterfacePublisher when propFloat value has changed if subscribed for the propFloat change.
     *
     * @warning the subscribed function shall not be blocking and must return immediately!
     */
     virtual void onPropFloatChanged(const std::list<float>& propFloat) = 0;
+    /**
+    * Called by the ISimpleArrayInterfacePublisher when propFloat32 value has changed if subscribed for the propFloat32 change.
+    *
+    * @warning the subscribed function shall not be blocking and must return immediately!
+    */
+    virtual void onPropFloat32Changed(const std::list<float>& propFloat32) = 0;
+    /**
+    * Called by the ISimpleArrayInterfacePublisher when propFloat64 value has changed if subscribed for the propFloat64 change.
+    *
+    * @warning the subscribed function shall not be blocking and must return immediately!
+    */
+    virtual void onPropFloat64Changed(const std::list<double>& propFloat64) = 0;
     /**
     * Called by the ISimpleArrayInterfacePublisher when propString value has changed if subscribed for the propString change.
     *
@@ -173,16 +293,32 @@ public:
 using SimpleArrayInterfacePropBoolPropertyCb = std::function<void(const std::list<bool>& propBool)>;
 /** Callback for changes of propInt */
 using SimpleArrayInterfacePropIntPropertyCb = std::function<void(const std::list<int>& propInt)>;
+/** Callback for changes of propInt32 */
+using SimpleArrayInterfacePropInt32PropertyCb = std::function<void(const std::list<int32_t>& propInt32)>;
+/** Callback for changes of propInt64 */
+using SimpleArrayInterfacePropInt64PropertyCb = std::function<void(const std::list<int64_t>& propInt64)>;
 /** Callback for changes of propFloat */
 using SimpleArrayInterfacePropFloatPropertyCb = std::function<void(const std::list<float>& propFloat)>;
+/** Callback for changes of propFloat32 */
+using SimpleArrayInterfacePropFloat32PropertyCb = std::function<void(const std::list<float>& propFloat32)>;
+/** Callback for changes of propFloat64 */
+using SimpleArrayInterfacePropFloat64PropertyCb = std::function<void(const std::list<double>& propFloat64)>;
 /** Callback for changes of propString */
 using SimpleArrayInterfacePropStringPropertyCb = std::function<void(const std::list<std::string>& propString)>;
 /** Callback for sigBool signal triggers */
 using SimpleArrayInterfaceSigBoolSignalCb = std::function<void(const std::list<bool>& paramBool)> ;
 /** Callback for sigInt signal triggers */
 using SimpleArrayInterfaceSigIntSignalCb = std::function<void(const std::list<int>& paramInt)> ;
+/** Callback for sigInt32 signal triggers */
+using SimpleArrayInterfaceSigInt32SignalCb = std::function<void(const std::list<int32_t>& paramInt32)> ;
+/** Callback for sigInt64 signal triggers */
+using SimpleArrayInterfaceSigInt64SignalCb = std::function<void(const std::list<int64_t>& paramInt64)> ;
 /** Callback for sigFloat signal triggers */
 using SimpleArrayInterfaceSigFloatSignalCb = std::function<void(const std::list<float>& paramFloat)> ;
+/** Callback for sigFloat32 signal triggers */
+using SimpleArrayInterfaceSigFloat32SignalCb = std::function<void(const std::list<float>& paramFloa32)> ;
+/** Callback for sigFloat64 signal triggers */
+using SimpleArrayInterfaceSigFloat64SignalCb = std::function<void(const std::list<double>& paramFloat64)> ;
 /** Callback for sigString signal triggers */
 using SimpleArrayInterfaceSigStringSignalCb = std::function<void(const std::list<std::string>& paramString)> ;
 
@@ -255,6 +391,42 @@ public:
     virtual void unsubscribeFromPropIntChanged(long handleId) = 0;
 
     /**
+    * Use this function to subscribe for propInt32 value changes.
+    * If your subscriber uses subscription with ISimpleArrayInterfaceSubscriber interface, you will get two notifications, one for each subscription mechanism.
+    * @param SimpleArrayInterfacePropInt32PropertyCb callback that will be executed on each change of the property.
+    * Make sure to remove subscription before the callback becomes invalid.
+    * @return subscription token for the subscription removal.
+    *
+    * @warning the subscribed function shall not be blocking and must return immediately!
+    */
+    virtual long subscribeToPropInt32Changed(SimpleArrayInterfacePropInt32PropertyCb callback) = 0;
+    /**
+    * Use this function to unsubscribe from propInt32 property changes.
+    * If your subscriber uses subscription with ISimpleArrayInterfaceSubscriber interface, you will be still informed about this change,
+    * as those are two independent subscription mechanisms.
+    * @param subscription token received on subscription.
+    */
+    virtual void unsubscribeFromPropInt32Changed(long handleId) = 0;
+
+    /**
+    * Use this function to subscribe for propInt64 value changes.
+    * If your subscriber uses subscription with ISimpleArrayInterfaceSubscriber interface, you will get two notifications, one for each subscription mechanism.
+    * @param SimpleArrayInterfacePropInt64PropertyCb callback that will be executed on each change of the property.
+    * Make sure to remove subscription before the callback becomes invalid.
+    * @return subscription token for the subscription removal.
+    *
+    * @warning the subscribed function shall not be blocking and must return immediately!
+    */
+    virtual long subscribeToPropInt64Changed(SimpleArrayInterfacePropInt64PropertyCb callback) = 0;
+    /**
+    * Use this function to unsubscribe from propInt64 property changes.
+    * If your subscriber uses subscription with ISimpleArrayInterfaceSubscriber interface, you will be still informed about this change,
+    * as those are two independent subscription mechanisms.
+    * @param subscription token received on subscription.
+    */
+    virtual void unsubscribeFromPropInt64Changed(long handleId) = 0;
+
+    /**
     * Use this function to subscribe for propFloat value changes.
     * If your subscriber uses subscription with ISimpleArrayInterfaceSubscriber interface, you will get two notifications, one for each subscription mechanism.
     * @param SimpleArrayInterfacePropFloatPropertyCb callback that will be executed on each change of the property.
@@ -271,6 +443,42 @@ public:
     * @param subscription token received on subscription.
     */
     virtual void unsubscribeFromPropFloatChanged(long handleId) = 0;
+
+    /**
+    * Use this function to subscribe for propFloat32 value changes.
+    * If your subscriber uses subscription with ISimpleArrayInterfaceSubscriber interface, you will get two notifications, one for each subscription mechanism.
+    * @param SimpleArrayInterfacePropFloat32PropertyCb callback that will be executed on each change of the property.
+    * Make sure to remove subscription before the callback becomes invalid.
+    * @return subscription token for the subscription removal.
+    *
+    * @warning the subscribed function shall not be blocking and must return immediately!
+    */
+    virtual long subscribeToPropFloat32Changed(SimpleArrayInterfacePropFloat32PropertyCb callback) = 0;
+    /**
+    * Use this function to unsubscribe from propFloat32 property changes.
+    * If your subscriber uses subscription with ISimpleArrayInterfaceSubscriber interface, you will be still informed about this change,
+    * as those are two independent subscription mechanisms.
+    * @param subscription token received on subscription.
+    */
+    virtual void unsubscribeFromPropFloat32Changed(long handleId) = 0;
+
+    /**
+    * Use this function to subscribe for propFloat64 value changes.
+    * If your subscriber uses subscription with ISimpleArrayInterfaceSubscriber interface, you will get two notifications, one for each subscription mechanism.
+    * @param SimpleArrayInterfacePropFloat64PropertyCb callback that will be executed on each change of the property.
+    * Make sure to remove subscription before the callback becomes invalid.
+    * @return subscription token for the subscription removal.
+    *
+    * @warning the subscribed function shall not be blocking and must return immediately!
+    */
+    virtual long subscribeToPropFloat64Changed(SimpleArrayInterfacePropFloat64PropertyCb callback) = 0;
+    /**
+    * Use this function to unsubscribe from propFloat64 property changes.
+    * If your subscriber uses subscription with ISimpleArrayInterfaceSubscriber interface, you will be still informed about this change,
+    * as those are two independent subscription mechanisms.
+    * @param subscription token received on subscription.
+    */
+    virtual void unsubscribeFromPropFloat64Changed(long handleId) = 0;
 
     /**
     * Use this function to subscribe for propString value changes.
@@ -321,6 +529,36 @@ public:
     virtual void unsubscribeFromSigInt(long handleId) = 0;
 
     /**
+    * Use this function to subscribe for sigInt32 signal changes.
+    * @param SimpleArrayInterfaceSigInt32SignalCb callback that will be executed on each signal emission.
+    * Make sure to remove subscription before the callback becomes invalid.
+    * @return subscription token for the subscription removal.
+    *
+    * @warning the subscribed function shall not be blocking and must return immediately!
+    */
+    virtual long subscribeToSigInt32(SimpleArrayInterfaceSigInt32SignalCb callback) = 0;
+    /**
+    * Use this function to unsubscribe from sigInt32 signal changes.
+    * @param subscription token received on subscription.
+    */
+    virtual void unsubscribeFromSigInt32(long handleId) = 0;
+
+    /**
+    * Use this function to subscribe for sigInt64 signal changes.
+    * @param SimpleArrayInterfaceSigInt64SignalCb callback that will be executed on each signal emission.
+    * Make sure to remove subscription before the callback becomes invalid.
+    * @return subscription token for the subscription removal.
+    *
+    * @warning the subscribed function shall not be blocking and must return immediately!
+    */
+    virtual long subscribeToSigInt64(SimpleArrayInterfaceSigInt64SignalCb callback) = 0;
+    /**
+    * Use this function to unsubscribe from sigInt64 signal changes.
+    * @param subscription token received on subscription.
+    */
+    virtual void unsubscribeFromSigInt64(long handleId) = 0;
+
+    /**
     * Use this function to subscribe for sigFloat signal changes.
     * @param SimpleArrayInterfaceSigFloatSignalCb callback that will be executed on each signal emission.
     * Make sure to remove subscription before the callback becomes invalid.
@@ -334,6 +572,36 @@ public:
     * @param subscription token received on subscription.
     */
     virtual void unsubscribeFromSigFloat(long handleId) = 0;
+
+    /**
+    * Use this function to subscribe for sigFloat32 signal changes.
+    * @param SimpleArrayInterfaceSigFloat32SignalCb callback that will be executed on each signal emission.
+    * Make sure to remove subscription before the callback becomes invalid.
+    * @return subscription token for the subscription removal.
+    *
+    * @warning the subscribed function shall not be blocking and must return immediately!
+    */
+    virtual long subscribeToSigFloat32(SimpleArrayInterfaceSigFloat32SignalCb callback) = 0;
+    /**
+    * Use this function to unsubscribe from sigFloat32 signal changes.
+    * @param subscription token received on subscription.
+    */
+    virtual void unsubscribeFromSigFloat32(long handleId) = 0;
+
+    /**
+    * Use this function to subscribe for sigFloat64 signal changes.
+    * @param SimpleArrayInterfaceSigFloat64SignalCb callback that will be executed on each signal emission.
+    * Make sure to remove subscription before the callback becomes invalid.
+    * @return subscription token for the subscription removal.
+    *
+    * @warning the subscribed function shall not be blocking and must return immediately!
+    */
+    virtual long subscribeToSigFloat64(SimpleArrayInterfaceSigFloat64SignalCb callback) = 0;
+    /**
+    * Use this function to unsubscribe from sigFloat64 signal changes.
+    * @param subscription token received on subscription.
+    */
+    virtual void unsubscribeFromSigFloat64(long handleId) = 0;
 
     /**
     * Use this function to subscribe for sigString signal changes.
@@ -364,10 +632,34 @@ public:
     virtual void publishPropIntChanged(const std::list<int>& propInt) const = 0;
     /**
     * Publishes the property changed to all subscribed clients.
+    * Needs to be invoked by the SimpleArrayInterface implementation when property propInt32 changes.
+    * @param The new value of propInt32.
+    */
+    virtual void publishPropInt32Changed(const std::list<int32_t>& propInt32) const = 0;
+    /**
+    * Publishes the property changed to all subscribed clients.
+    * Needs to be invoked by the SimpleArrayInterface implementation when property propInt64 changes.
+    * @param The new value of propInt64.
+    */
+    virtual void publishPropInt64Changed(const std::list<int64_t>& propInt64) const = 0;
+    /**
+    * Publishes the property changed to all subscribed clients.
     * Needs to be invoked by the SimpleArrayInterface implementation when property propFloat changes.
     * @param The new value of propFloat.
     */
     virtual void publishPropFloatChanged(const std::list<float>& propFloat) const = 0;
+    /**
+    * Publishes the property changed to all subscribed clients.
+    * Needs to be invoked by the SimpleArrayInterface implementation when property propFloat32 changes.
+    * @param The new value of propFloat32.
+    */
+    virtual void publishPropFloat32Changed(const std::list<float>& propFloat32) const = 0;
+    /**
+    * Publishes the property changed to all subscribed clients.
+    * Needs to be invoked by the SimpleArrayInterface implementation when property propFloat64 changes.
+    * @param The new value of propFloat64.
+    */
+    virtual void publishPropFloat64Changed(const std::list<double>& propFloat64) const = 0;
     /**
     * Publishes the property changed to all subscribed clients.
     * Needs to be invoked by the SimpleArrayInterface implementation when property propString changes.
@@ -388,10 +680,34 @@ public:
     virtual void publishSigInt(const std::list<int>& paramInt) const = 0;
     /**
     * Publishes the emitted signal to all subscribed clients.
+    * Needs to be invoked by the SimpleArrayInterface implementation when sigInt32 is emitted.
+    * @param paramInt32 
+    */
+    virtual void publishSigInt32(const std::list<int32_t>& paramInt32) const = 0;
+    /**
+    * Publishes the emitted signal to all subscribed clients.
+    * Needs to be invoked by the SimpleArrayInterface implementation when sigInt64 is emitted.
+    * @param paramInt64 
+    */
+    virtual void publishSigInt64(const std::list<int64_t>& paramInt64) const = 0;
+    /**
+    * Publishes the emitted signal to all subscribed clients.
     * Needs to be invoked by the SimpleArrayInterface implementation when sigFloat is emitted.
     * @param paramFloat 
     */
     virtual void publishSigFloat(const std::list<float>& paramFloat) const = 0;
+    /**
+    * Publishes the emitted signal to all subscribed clients.
+    * Needs to be invoked by the SimpleArrayInterface implementation when sigFloat32 is emitted.
+    * @param paramFloa32 
+    */
+    virtual void publishSigFloat32(const std::list<float>& paramFloa32) const = 0;
+    /**
+    * Publishes the emitted signal to all subscribed clients.
+    * Needs to be invoked by the SimpleArrayInterface implementation when sigFloat64 is emitted.
+    * @param paramFloat64 
+    */
+    virtual void publishSigFloat64(const std::list<double>& paramFloat64) const = 0;
     /**
     * Publishes the emitted signal to all subscribed clients.
     * Needs to be invoked by the SimpleArrayInterface implementation when sigString is emitted.

@@ -40,6 +40,32 @@ const std::list<int>& SimpleArrayInterface::getPropInt() const
     return m_data.m_propInt;
 }
 
+void SimpleArrayInterface::setPropInt32(const std::list<int32_t>& propInt32)
+{
+    if (m_data.m_propInt32 != propInt32) {
+        m_data.m_propInt32 = propInt32;
+        m_publisher->publishPropInt32Changed(propInt32);
+    }
+}
+
+const std::list<int32_t>& SimpleArrayInterface::getPropInt32() const
+{
+    return m_data.m_propInt32;
+}
+
+void SimpleArrayInterface::setPropInt64(const std::list<int64_t>& propInt64)
+{
+    if (m_data.m_propInt64 != propInt64) {
+        m_data.m_propInt64 = propInt64;
+        m_publisher->publishPropInt64Changed(propInt64);
+    }
+}
+
+const std::list<int64_t>& SimpleArrayInterface::getPropInt64() const
+{
+    return m_data.m_propInt64;
+}
+
 void SimpleArrayInterface::setPropFloat(const std::list<float>& propFloat)
 {
     if (m_data.m_propFloat != propFloat) {
@@ -51,6 +77,32 @@ void SimpleArrayInterface::setPropFloat(const std::list<float>& propFloat)
 const std::list<float>& SimpleArrayInterface::getPropFloat() const
 {
     return m_data.m_propFloat;
+}
+
+void SimpleArrayInterface::setPropFloat32(const std::list<float>& propFloat32)
+{
+    if (m_data.m_propFloat32 != propFloat32) {
+        m_data.m_propFloat32 = propFloat32;
+        m_publisher->publishPropFloat32Changed(propFloat32);
+    }
+}
+
+const std::list<float>& SimpleArrayInterface::getPropFloat32() const
+{
+    return m_data.m_propFloat32;
+}
+
+void SimpleArrayInterface::setPropFloat64(const std::list<double>& propFloat64)
+{
+    if (m_data.m_propFloat64 != propFloat64) {
+        m_data.m_propFloat64 = propFloat64;
+        m_publisher->publishPropFloat64Changed(propFloat64);
+    }
+}
+
+const std::list<double>& SimpleArrayInterface::getPropFloat64() const
+{
+    return m_data.m_propFloat64;
 }
 
 void SimpleArrayInterface::setPropString(const std::list<std::string>& propString)
@@ -100,6 +152,40 @@ std::future<std::list<int>> SimpleArrayInterface::funcIntAsync(const std::list<i
     );
 }
 
+std::list<int32_t> SimpleArrayInterface::funcInt32(const std::list<int32_t>& paramInt32)
+{
+    (void) paramInt32; // suppress the 'Unreferenced Formal Parameter' warning.
+    // do business logic here
+    return std::list<int32_t>();
+}
+
+std::future<std::list<int32_t>> SimpleArrayInterface::funcInt32Async(const std::list<int32_t>& paramInt32)
+{
+    return std::async(std::launch::async, [this,
+                    paramInt32]()
+        {
+            return funcInt32(paramInt32);
+        }
+    );
+}
+
+std::list<int64_t> SimpleArrayInterface::funcInt64(const std::list<int64_t>& paramInt64)
+{
+    (void) paramInt64; // suppress the 'Unreferenced Formal Parameter' warning.
+    // do business logic here
+    return std::list<int64_t>();
+}
+
+std::future<std::list<int64_t>> SimpleArrayInterface::funcInt64Async(const std::list<int64_t>& paramInt64)
+{
+    return std::async(std::launch::async, [this,
+                    paramInt64]()
+        {
+            return funcInt64(paramInt64);
+        }
+    );
+}
+
 std::list<float> SimpleArrayInterface::funcFloat(const std::list<float>& paramFloat)
 {
     (void) paramFloat; // suppress the 'Unreferenced Formal Parameter' warning.
@@ -113,6 +199,40 @@ std::future<std::list<float>> SimpleArrayInterface::funcFloatAsync(const std::li
                     paramFloat]()
         {
             return funcFloat(paramFloat);
+        }
+    );
+}
+
+std::list<float> SimpleArrayInterface::funcFloat32(const std::list<float>& paramFloat32)
+{
+    (void) paramFloat32; // suppress the 'Unreferenced Formal Parameter' warning.
+    // do business logic here
+    return std::list<float>();
+}
+
+std::future<std::list<float>> SimpleArrayInterface::funcFloat32Async(const std::list<float>& paramFloat32)
+{
+    return std::async(std::launch::async, [this,
+                    paramFloat32]()
+        {
+            return funcFloat32(paramFloat32);
+        }
+    );
+}
+
+std::list<double> SimpleArrayInterface::funcFloat64(const std::list<double>& paramFloat)
+{
+    (void) paramFloat; // suppress the 'Unreferenced Formal Parameter' warning.
+    // do business logic here
+    return std::list<double>();
+}
+
+std::future<std::list<double>> SimpleArrayInterface::funcFloat64Async(const std::list<double>& paramFloat)
+{
+    return std::async(std::launch::async, [this,
+                    paramFloat]()
+        {
+            return funcFloat64(paramFloat);
         }
     );
 }

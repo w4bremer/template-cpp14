@@ -44,10 +44,30 @@ public:
     /** Traces funcInt and forwards call to SimpleArrayInterface implementation. */
     std::future<std::list<int>> funcIntAsync(const std::list<int>& paramInt) override;
     
+    /** Traces funcInt32 and forwards call to SimpleArrayInterface implementation. */
+    std::list<int32_t> funcInt32(const std::list<int32_t>& paramInt32) override;
+    /** Traces funcInt32 and forwards call to SimpleArrayInterface implementation. */
+    std::future<std::list<int32_t>> funcInt32Async(const std::list<int32_t>& paramInt32) override;
+    
+    /** Traces funcInt64 and forwards call to SimpleArrayInterface implementation. */
+    std::list<int64_t> funcInt64(const std::list<int64_t>& paramInt64) override;
+    /** Traces funcInt64 and forwards call to SimpleArrayInterface implementation. */
+    std::future<std::list<int64_t>> funcInt64Async(const std::list<int64_t>& paramInt64) override;
+    
     /** Traces funcFloat and forwards call to SimpleArrayInterface implementation. */
     std::list<float> funcFloat(const std::list<float>& paramFloat) override;
     /** Traces funcFloat and forwards call to SimpleArrayInterface implementation. */
     std::future<std::list<float>> funcFloatAsync(const std::list<float>& paramFloat) override;
+    
+    /** Traces funcFloat32 and forwards call to SimpleArrayInterface implementation. */
+    std::list<float> funcFloat32(const std::list<float>& paramFloat32) override;
+    /** Traces funcFloat32 and forwards call to SimpleArrayInterface implementation. */
+    std::future<std::list<float>> funcFloat32Async(const std::list<float>& paramFloat32) override;
+    
+    /** Traces funcFloat64 and forwards call to SimpleArrayInterface implementation. */
+    std::list<double> funcFloat64(const std::list<double>& paramFloat) override;
+    /** Traces funcFloat64 and forwards call to SimpleArrayInterface implementation. */
+    std::future<std::list<double>> funcFloat64Async(const std::list<double>& paramFloat) override;
     
     /** Traces funcString and forwards call to SimpleArrayInterface implementation. */
     std::list<std::string> funcString(const std::list<std::string>& paramString) override;
@@ -65,9 +85,29 @@ public:
     const std::list<int>& getPropInt() const override;
     
     /** Forwards call to SimpleArrayInterface implementation. */
+    void setPropInt32(const std::list<int32_t>& propInt32) override;
+    /** Forwards call to SimpleArrayInterface implementation. */
+    const std::list<int32_t>& getPropInt32() const override;
+    
+    /** Forwards call to SimpleArrayInterface implementation. */
+    void setPropInt64(const std::list<int64_t>& propInt64) override;
+    /** Forwards call to SimpleArrayInterface implementation. */
+    const std::list<int64_t>& getPropInt64() const override;
+    
+    /** Forwards call to SimpleArrayInterface implementation. */
     void setPropFloat(const std::list<float>& propFloat) override;
     /** Forwards call to SimpleArrayInterface implementation. */
     const std::list<float>& getPropFloat() const override;
+    
+    /** Forwards call to SimpleArrayInterface implementation. */
+    void setPropFloat32(const std::list<float>& propFloat32) override;
+    /** Forwards call to SimpleArrayInterface implementation. */
+    const std::list<float>& getPropFloat32() const override;
+    
+    /** Forwards call to SimpleArrayInterface implementation. */
+    void setPropFloat64(const std::list<double>& propFloat64) override;
+    /** Forwards call to SimpleArrayInterface implementation. */
+    const std::list<double>& getPropFloat64() const override;
     
     /** Forwards call to SimpleArrayInterface implementation. */
     void setPropString(const std::list<std::string>& propString) override;
@@ -83,9 +123,25 @@ public:
     */
     void onSigInt(const std::list<int>& paramInt) override;
     /**
+    Traces sigInt32 emission.
+    */
+    void onSigInt32(const std::list<int32_t>& paramInt32) override;
+    /**
+    Traces sigInt64 emission.
+    */
+    void onSigInt64(const std::list<int64_t>& paramInt64) override;
+    /**
     Traces sigFloat emission.
     */
     void onSigFloat(const std::list<float>& paramFloat) override;
+    /**
+    Traces sigFloat32 emission.
+    */
+    void onSigFloat32(const std::list<float>& paramFloa32) override;
+    /**
+    Traces sigFloat64 emission.
+    */
+    void onSigFloat64(const std::list<double>& paramFloat64) override;
     /**
     Traces sigString emission.
     */
@@ -99,9 +155,25 @@ public:
     */
     void onPropIntChanged(const std::list<int>& propInt) override;
     /**
+    Traces propInt32 changed.
+    */
+    void onPropInt32Changed(const std::list<int32_t>& propInt32) override;
+    /**
+    Traces propInt64 changed.
+    */
+    void onPropInt64Changed(const std::list<int64_t>& propInt64) override;
+    /**
     Traces propFloat changed.
     */
     void onPropFloatChanged(const std::list<float>& propFloat) override;
+    /**
+    Traces propFloat32 changed.
+    */
+    void onPropFloat32Changed(const std::list<float>& propFloat32) override;
+    /**
+    Traces propFloat64 changed.
+    */
+    void onPropFloat64Changed(const std::list<double>& propFloat64) override;
     /**
     Traces propString changed.
     */

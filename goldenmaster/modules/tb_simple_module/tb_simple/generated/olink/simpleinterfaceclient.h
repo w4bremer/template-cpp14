@@ -64,6 +64,26 @@ public:
     void setPropInt(int propInt) override;
     /**
     * Property getter
+    * @return Locally stored locally value for PropInt32.
+    */
+    int32_t getPropInt32() const override;
+    /**
+    * Request setting a property on the SimpleInterface service.
+    * @param The value to which set request is send for the PropInt32.
+    */
+    void setPropInt32(int32_t propInt32) override;
+    /**
+    * Property getter
+    * @return Locally stored locally value for PropInt64.
+    */
+    int64_t getPropInt64() const override;
+    /**
+    * Request setting a property on the SimpleInterface service.
+    * @param The value to which set request is send for the PropInt64.
+    */
+    void setPropInt64(int64_t propInt64) override;
+    /**
+    * Property getter
     * @return Locally stored locally value for PropFloat.
     */
     float getPropFloat() const override;
@@ -72,6 +92,26 @@ public:
     * @param The value to which set request is send for the PropFloat.
     */
     void setPropFloat(float propFloat) override;
+    /**
+    * Property getter
+    * @return Locally stored locally value for PropFloat32.
+    */
+    float getPropFloat32() const override;
+    /**
+    * Request setting a property on the SimpleInterface service.
+    * @param The value to which set request is send for the PropFloat32.
+    */
+    void setPropFloat32(float propFloat32) override;
+    /**
+    * Property getter
+    * @return Locally stored locally value for PropFloat64.
+    */
+    double getPropFloat64() const override;
+    /**
+    * Request setting a property on the SimpleInterface service.
+    * @param The value to which set request is send for the PropFloat64.
+    */
+    void setPropFloat64(double propFloat64) override;
     /**
     * Property getter
     * @return Locally stored locally value for PropString.
@@ -110,6 +150,24 @@ public:
     */
     std::future<int> funcIntAsync(int paramInt) override;
     /**
+    * Remote call of ISimpleInterface::funcInt32 on the SimpleInterface service.
+    * Uses funcInt32Async
+    */
+    int32_t funcInt32(int32_t paramInt32) override;
+    /**
+    * Remote call of ISimpleInterface::funcInt32 on the SimpleInterface service.
+    */
+    std::future<int32_t> funcInt32Async(int32_t paramInt32) override;
+    /**
+    * Remote call of ISimpleInterface::funcInt64 on the SimpleInterface service.
+    * Uses funcInt64Async
+    */
+    int64_t funcInt64(int64_t paramInt64) override;
+    /**
+    * Remote call of ISimpleInterface::funcInt64 on the SimpleInterface service.
+    */
+    std::future<int64_t> funcInt64Async(int64_t paramInt64) override;
+    /**
     * Remote call of ISimpleInterface::funcFloat on the SimpleInterface service.
     * Uses funcFloatAsync
     */
@@ -118,6 +176,24 @@ public:
     * Remote call of ISimpleInterface::funcFloat on the SimpleInterface service.
     */
     std::future<float> funcFloatAsync(float paramFloat) override;
+    /**
+    * Remote call of ISimpleInterface::funcFloat32 on the SimpleInterface service.
+    * Uses funcFloat32Async
+    */
+    float funcFloat32(float paramFloat32) override;
+    /**
+    * Remote call of ISimpleInterface::funcFloat32 on the SimpleInterface service.
+    */
+    std::future<float> funcFloat32Async(float paramFloat32) override;
+    /**
+    * Remote call of ISimpleInterface::funcFloat64 on the SimpleInterface service.
+    * Uses funcFloat64Async
+    */
+    double funcFloat64(double paramFloat) override;
+    /**
+    * Remote call of ISimpleInterface::funcFloat64 on the SimpleInterface service.
+    */
+    std::future<double> funcFloat64Async(double paramFloat) override;
     /**
     * Remote call of ISimpleInterface::funcString on the SimpleInterface service.
     * Uses funcStringAsync
@@ -179,8 +255,16 @@ private:
     void setPropBoolLocal(bool propBool);
     /**  Updates local value for PropInt and informs subscriber about the change*/
     void setPropIntLocal(int propInt);
+    /**  Updates local value for PropInt32 and informs subscriber about the change*/
+    void setPropInt32Local(int32_t propInt32);
+    /**  Updates local value for PropInt64 and informs subscriber about the change*/
+    void setPropInt64Local(int64_t propInt64);
     /**  Updates local value for PropFloat and informs subscriber about the change*/
     void setPropFloatLocal(float propFloat);
+    /**  Updates local value for PropFloat32 and informs subscriber about the change*/
+    void setPropFloat32Local(float propFloat32);
+    /**  Updates local value for PropFloat64 and informs subscriber about the change*/
+    void setPropFloat64Local(double propFloat64);
     /**  Updates local value for PropString and informs subscriber about the change*/
     void setPropStringLocal(const std::string& propString);
 

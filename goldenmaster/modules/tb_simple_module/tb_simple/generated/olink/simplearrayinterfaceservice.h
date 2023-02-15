@@ -78,9 +78,25 @@ public:
     */
     void onSigInt(const std::list<int>& paramInt) override;
     /**
+    * Forwards emitted sigInt32 through network if the connection is established.
+    */
+    void onSigInt32(const std::list<int32_t>& paramInt32) override;
+    /**
+    * Forwards emitted sigInt64 through network if the connection is established.
+    */
+    void onSigInt64(const std::list<int64_t>& paramInt64) override;
+    /**
     * Forwards emitted sigFloat through network if the connection is established.
     */
     void onSigFloat(const std::list<float>& paramFloat) override;
+    /**
+    * Forwards emitted sigFloat32 through network if the connection is established.
+    */
+    void onSigFloat32(const std::list<float>& paramFloa32) override;
+    /**
+    * Forwards emitted sigFloat64 through network if the connection is established.
+    */
+    void onSigFloat64(const std::list<double>& paramFloat64) override;
     /**
     * Forwards emitted sigString through network if the connection is established.
     */
@@ -94,9 +110,25 @@ public:
     */
     void onPropIntChanged(const std::list<int>& propInt) override;
     /**
+    * Forwards propInt32 change through network if the connection is established.
+    */
+    void onPropInt32Changed(const std::list<int32_t>& propInt32) override;
+    /**
+    * Forwards propInt64 change through network if the connection is established.
+    */
+    void onPropInt64Changed(const std::list<int64_t>& propInt64) override;
+    /**
     * Forwards propFloat change through network if the connection is established.
     */
     void onPropFloatChanged(const std::list<float>& propFloat) override;
+    /**
+    * Forwards propFloat32 change through network if the connection is established.
+    */
+    void onPropFloat32Changed(const std::list<float>& propFloat32) override;
+    /**
+    * Forwards propFloat64 change through network if the connection is established.
+    */
+    void onPropFloat64Changed(const std::list<double>& propFloat64) override;
     /**
     * Forwards propString change through network if the connection is established.
     */

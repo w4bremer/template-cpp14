@@ -42,10 +42,30 @@ public:
   */
   void trace_funcInt(int paramInt);
   /**
+  * Prepares information about the funcInt32 call in a nlohmann::json format and puts to a tracer.
+  * @param The SimpleInterface object to trace.
+  */
+  void trace_funcInt32(int32_t paramInt32);
+  /**
+  * Prepares information about the funcInt64 call in a nlohmann::json format and puts to a tracer.
+  * @param The SimpleInterface object to trace.
+  */
+  void trace_funcInt64(int64_t paramInt64);
+  /**
   * Prepares information about the funcFloat call in a nlohmann::json format and puts to a tracer.
   * @param The SimpleInterface object to trace.
   */
   void trace_funcFloat(float paramFloat);
+  /**
+  * Prepares information about the funcFloat32 call in a nlohmann::json format and puts to a tracer.
+  * @param The SimpleInterface object to trace.
+  */
+  void trace_funcFloat32(float paramFloat32);
+  /**
+  * Prepares information about the funcFloat64 call in a nlohmann::json format and puts to a tracer.
+  * @param The SimpleInterface object to trace.
+  */
+  void trace_funcFloat64(double paramFloat);
   /**
   * Prepares information about the funcString call in a nlohmann::json format and puts to a tracer.
   * @param The SimpleInterface object to trace.
@@ -67,10 +87,30 @@ public:
   */
   void trace_sigInt(int paramInt);
   /**
+  * Prepares information about the sigInt32 call in a nlohmann::json format and puts to a tracer.
+  * @param The SimpleInterface object to trace.
+  */
+  void trace_sigInt32(int32_t paramInt32);
+  /**
+  * Prepares information about the sigInt64 call in a nlohmann::json format and puts to a tracer.
+  * @param The SimpleInterface object to trace.
+  */
+  void trace_sigInt64(int64_t paramInt64);
+  /**
   * Prepares information about the sigFloat call in a nlohmann::json format and puts to a tracer.
   * @param The SimpleInterface object to trace.
   */
   void trace_sigFloat(float paramFloat);
+  /**
+  * Prepares information about the sigFloat32 call in a nlohmann::json format and puts to a tracer.
+  * @param The SimpleInterface object to trace.
+  */
+  void trace_sigFloat32(float paramFloa32);
+  /**
+  * Prepares information about the sigFloat64 call in a nlohmann::json format and puts to a tracer.
+  * @param The SimpleInterface object to trace.
+  */
+  void trace_sigFloat64(double paramFloat64);
   /**
   * Prepares information about the sigString call in a nlohmann::json format and puts to a tracer.
   * @param The SimpleInterface object to trace.

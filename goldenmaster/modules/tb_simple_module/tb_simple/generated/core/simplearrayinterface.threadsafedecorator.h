@@ -29,8 +29,16 @@ auto propBool = testSimpleArrayInterface->getPropBool();
 testSimpleArrayInterface->setPropBool(std::list<bool>());
 auto propInt = testSimpleArrayInterface->getPropInt();
 testSimpleArrayInterface->setPropInt(std::list<int>());
+auto propInt32 = testSimpleArrayInterface->getPropInt32();
+testSimpleArrayInterface->setPropInt32(std::list<int32_t>());
+auto propInt64 = testSimpleArrayInterface->getPropInt64();
+testSimpleArrayInterface->setPropInt64(std::list<int64_t>());
 auto propFloat = testSimpleArrayInterface->getPropFloat();
 testSimpleArrayInterface->setPropFloat(std::list<float>());
+auto propFloat32 = testSimpleArrayInterface->getPropFloat32();
+testSimpleArrayInterface->setPropFloat32(std::list<float>());
+auto propFloat64 = testSimpleArrayInterface->getPropFloat64();
+testSimpleArrayInterface->setPropFloat64(std::list<double>());
 auto propString = testSimpleArrayInterface->getPropString();
 testSimpleArrayInterface->setPropString(std::list<std::string>());
 \endcode
@@ -70,12 +78,56 @@ public:
     * Forwards call to SimpleArrayInterface implementation.
     * @warning This forward call is not made thread safe by this class.
     */
+    std::list<int32_t> funcInt32(const std::list<int32_t>& paramInt32) override;
+    /** 
+    * Forwards call to SimpleArrayInterface implementation.
+    * @warning This forward call is not made thread safe by this class.
+    */
+    std::future<std::list<int32_t>> funcInt32Async(const std::list<int32_t>& paramInt32) override;
+
+    /** 
+    * Forwards call to SimpleArrayInterface implementation.
+    * @warning This forward call is not made thread safe by this class.
+    */
+    std::list<int64_t> funcInt64(const std::list<int64_t>& paramInt64) override;
+    /** 
+    * Forwards call to SimpleArrayInterface implementation.
+    * @warning This forward call is not made thread safe by this class.
+    */
+    std::future<std::list<int64_t>> funcInt64Async(const std::list<int64_t>& paramInt64) override;
+
+    /** 
+    * Forwards call to SimpleArrayInterface implementation.
+    * @warning This forward call is not made thread safe by this class.
+    */
     std::list<float> funcFloat(const std::list<float>& paramFloat) override;
     /** 
     * Forwards call to SimpleArrayInterface implementation.
     * @warning This forward call is not made thread safe by this class.
     */
     std::future<std::list<float>> funcFloatAsync(const std::list<float>& paramFloat) override;
+
+    /** 
+    * Forwards call to SimpleArrayInterface implementation.
+    * @warning This forward call is not made thread safe by this class.
+    */
+    std::list<float> funcFloat32(const std::list<float>& paramFloat32) override;
+    /** 
+    * Forwards call to SimpleArrayInterface implementation.
+    * @warning This forward call is not made thread safe by this class.
+    */
+    std::future<std::list<float>> funcFloat32Async(const std::list<float>& paramFloat32) override;
+
+    /** 
+    * Forwards call to SimpleArrayInterface implementation.
+    * @warning This forward call is not made thread safe by this class.
+    */
+    std::list<double> funcFloat64(const std::list<double>& paramFloat) override;
+    /** 
+    * Forwards call to SimpleArrayInterface implementation.
+    * @warning This forward call is not made thread safe by this class.
+    */
+    std::future<std::list<double>> funcFloat64Async(const std::list<double>& paramFloat) override;
 
     /** 
     * Forwards call to SimpleArrayInterface implementation.
@@ -99,9 +151,29 @@ public:
     const std::list<int>& getPropInt() const override;
 
     /** Guards and forwards call to SimpleArrayInterface implementation. */
+    void setPropInt32(const std::list<int32_t>& propInt32) override;
+    /** Guards and forwards call to SimpleArrayInterface implementation. */
+    const std::list<int32_t>& getPropInt32() const override;
+
+    /** Guards and forwards call to SimpleArrayInterface implementation. */
+    void setPropInt64(const std::list<int64_t>& propInt64) override;
+    /** Guards and forwards call to SimpleArrayInterface implementation. */
+    const std::list<int64_t>& getPropInt64() const override;
+
+    /** Guards and forwards call to SimpleArrayInterface implementation. */
     void setPropFloat(const std::list<float>& propFloat) override;
     /** Guards and forwards call to SimpleArrayInterface implementation. */
     const std::list<float>& getPropFloat() const override;
+
+    /** Guards and forwards call to SimpleArrayInterface implementation. */
+    void setPropFloat32(const std::list<float>& propFloat32) override;
+    /** Guards and forwards call to SimpleArrayInterface implementation. */
+    const std::list<float>& getPropFloat32() const override;
+
+    /** Guards and forwards call to SimpleArrayInterface implementation. */
+    void setPropFloat64(const std::list<double>& propFloat64) override;
+    /** Guards and forwards call to SimpleArrayInterface implementation. */
+    const std::list<double>& getPropFloat64() const override;
 
     /** Guards and forwards call to SimpleArrayInterface implementation. */
     void setPropString(const std::list<std::string>& propString) override;
@@ -121,8 +193,16 @@ private:
     mutable std::shared_timed_mutex m_propBoolMutex;
     // Mutex for propInt property
     mutable std::shared_timed_mutex m_propIntMutex;
+    // Mutex for propInt32 property
+    mutable std::shared_timed_mutex m_propInt32Mutex;
+    // Mutex for propInt64 property
+    mutable std::shared_timed_mutex m_propInt64Mutex;
     // Mutex for propFloat property
     mutable std::shared_timed_mutex m_propFloatMutex;
+    // Mutex for propFloat32 property
+    mutable std::shared_timed_mutex m_propFloat32Mutex;
+    // Mutex for propFloat64 property
+    mutable std::shared_timed_mutex m_propFloat64Mutex;
     // Mutex for propString property
     mutable std::shared_timed_mutex m_propStringMutex;
 };

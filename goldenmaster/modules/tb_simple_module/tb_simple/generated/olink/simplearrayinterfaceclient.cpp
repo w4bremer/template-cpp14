@@ -27,8 +27,20 @@ void SimpleArrayInterfaceClient::applyState(const nlohmann::json& fields)
     if(fields.contains("propInt")) {
         setPropIntLocal(fields["propInt"].get<std::list<int>>());
     }
+    if(fields.contains("propInt32")) {
+        setPropInt32Local(fields["propInt32"].get<std::list<int32_t>>());
+    }
+    if(fields.contains("propInt64")) {
+        setPropInt64Local(fields["propInt64"].get<std::list<int64_t>>());
+    }
     if(fields.contains("propFloat")) {
         setPropFloatLocal(fields["propFloat"].get<std::list<float>>());
+    }
+    if(fields.contains("propFloat32")) {
+        setPropFloat32Local(fields["propFloat32"].get<std::list<float>>());
+    }
+    if(fields.contains("propFloat64")) {
+        setPropFloat64Local(fields["propFloat64"].get<std::list<double>>());
     }
     if(fields.contains("propString")) {
         setPropStringLocal(fields["propString"].get<std::list<std::string>>());
@@ -81,6 +93,52 @@ const std::list<int>& SimpleArrayInterfaceClient::getPropInt() const
     return m_data.m_propInt;
 }
 
+void SimpleArrayInterfaceClient::setPropInt32(const std::list<int32_t>& propInt32)
+{
+    if(!m_node) {
+        emitLog(ApiGear::Logger::LogLevel::Warning, "Attempt to set property but " + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
+        return;
+    }
+    const auto& propertyId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "propInt32");
+    m_node->setRemoteProperty(propertyId, propInt32);
+}
+
+void SimpleArrayInterfaceClient::setPropInt32Local(const std::list<int32_t>& propInt32)
+{
+    if (m_data.m_propInt32 != propInt32) {
+        m_data.m_propInt32 = propInt32;
+        m_publisher->publishPropInt32Changed(propInt32);
+    }
+}
+
+const std::list<int32_t>& SimpleArrayInterfaceClient::getPropInt32() const
+{
+    return m_data.m_propInt32;
+}
+
+void SimpleArrayInterfaceClient::setPropInt64(const std::list<int64_t>& propInt64)
+{
+    if(!m_node) {
+        emitLog(ApiGear::Logger::LogLevel::Warning, "Attempt to set property but " + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
+        return;
+    }
+    const auto& propertyId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "propInt64");
+    m_node->setRemoteProperty(propertyId, propInt64);
+}
+
+void SimpleArrayInterfaceClient::setPropInt64Local(const std::list<int64_t>& propInt64)
+{
+    if (m_data.m_propInt64 != propInt64) {
+        m_data.m_propInt64 = propInt64;
+        m_publisher->publishPropInt64Changed(propInt64);
+    }
+}
+
+const std::list<int64_t>& SimpleArrayInterfaceClient::getPropInt64() const
+{
+    return m_data.m_propInt64;
+}
+
 void SimpleArrayInterfaceClient::setPropFloat(const std::list<float>& propFloat)
 {
     if(!m_node) {
@@ -102,6 +160,52 @@ void SimpleArrayInterfaceClient::setPropFloatLocal(const std::list<float>& propF
 const std::list<float>& SimpleArrayInterfaceClient::getPropFloat() const
 {
     return m_data.m_propFloat;
+}
+
+void SimpleArrayInterfaceClient::setPropFloat32(const std::list<float>& propFloat32)
+{
+    if(!m_node) {
+        emitLog(ApiGear::Logger::LogLevel::Warning, "Attempt to set property but " + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
+        return;
+    }
+    const auto& propertyId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "propFloat32");
+    m_node->setRemoteProperty(propertyId, propFloat32);
+}
+
+void SimpleArrayInterfaceClient::setPropFloat32Local(const std::list<float>& propFloat32)
+{
+    if (m_data.m_propFloat32 != propFloat32) {
+        m_data.m_propFloat32 = propFloat32;
+        m_publisher->publishPropFloat32Changed(propFloat32);
+    }
+}
+
+const std::list<float>& SimpleArrayInterfaceClient::getPropFloat32() const
+{
+    return m_data.m_propFloat32;
+}
+
+void SimpleArrayInterfaceClient::setPropFloat64(const std::list<double>& propFloat64)
+{
+    if(!m_node) {
+        emitLog(ApiGear::Logger::LogLevel::Warning, "Attempt to set property but " + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
+        return;
+    }
+    const auto& propertyId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "propFloat64");
+    m_node->setRemoteProperty(propertyId, propFloat64);
+}
+
+void SimpleArrayInterfaceClient::setPropFloat64Local(const std::list<double>& propFloat64)
+{
+    if (m_data.m_propFloat64 != propFloat64) {
+        m_data.m_propFloat64 = propFloat64;
+        m_publisher->publishPropFloat64Changed(propFloat64);
+    }
+}
+
+const std::list<double>& SimpleArrayInterfaceClient::getPropFloat64() const
+{
+    return m_data.m_propFloat64;
 }
 
 void SimpleArrayInterfaceClient::setPropString(const std::list<std::string>& propString)
@@ -189,6 +293,68 @@ std::future<std::list<int>> SimpleArrayInterfaceClient::funcIntAsync(const std::
     );
 }
 
+std::list<int32_t> SimpleArrayInterfaceClient::funcInt32(const std::list<int32_t>& paramInt32)
+{
+     if(!m_node) {
+        emitLog(ApiGear::Logger::LogLevel::Warning, "Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
+        return std::list<int32_t>();
+    }
+    std::list<int32_t> value(funcInt32Async(paramInt32).get());
+    return value;
+}
+
+std::future<std::list<int32_t>> SimpleArrayInterfaceClient::funcInt32Async(const std::list<int32_t>& paramInt32)
+{
+    if(!m_node) {
+        emitLog(ApiGear::Logger::LogLevel::Warning, "Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
+        return std::future<std::list<int32_t>>{};
+    }
+    return std::async(std::launch::async, [this,
+                    paramInt32]()
+        {
+            std::promise<std::list<int32_t>> resultPromise;
+            const auto& operationId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "funcInt32");
+            m_node->invokeRemote(operationId,
+                nlohmann::json::array({paramInt32}), [&resultPromise](ApiGear::ObjectLink::InvokeReplyArg arg) {
+                    const std::list<int32_t>& value = arg.value.get<std::list<int32_t>>();
+                    resultPromise.set_value(value);
+                });
+            return resultPromise.get_future().get();
+        }
+    );
+}
+
+std::list<int64_t> SimpleArrayInterfaceClient::funcInt64(const std::list<int64_t>& paramInt64)
+{
+     if(!m_node) {
+        emitLog(ApiGear::Logger::LogLevel::Warning, "Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
+        return std::list<int64_t>();
+    }
+    std::list<int64_t> value(funcInt64Async(paramInt64).get());
+    return value;
+}
+
+std::future<std::list<int64_t>> SimpleArrayInterfaceClient::funcInt64Async(const std::list<int64_t>& paramInt64)
+{
+    if(!m_node) {
+        emitLog(ApiGear::Logger::LogLevel::Warning, "Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
+        return std::future<std::list<int64_t>>{};
+    }
+    return std::async(std::launch::async, [this,
+                    paramInt64]()
+        {
+            std::promise<std::list<int64_t>> resultPromise;
+            const auto& operationId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "funcInt64");
+            m_node->invokeRemote(operationId,
+                nlohmann::json::array({paramInt64}), [&resultPromise](ApiGear::ObjectLink::InvokeReplyArg arg) {
+                    const std::list<int64_t>& value = arg.value.get<std::list<int64_t>>();
+                    resultPromise.set_value(value);
+                });
+            return resultPromise.get_future().get();
+        }
+    );
+}
+
 std::list<float> SimpleArrayInterfaceClient::funcFloat(const std::list<float>& paramFloat)
 {
      if(!m_node) {
@@ -213,6 +379,68 @@ std::future<std::list<float>> SimpleArrayInterfaceClient::funcFloatAsync(const s
             m_node->invokeRemote(operationId,
                 nlohmann::json::array({paramFloat}), [&resultPromise](ApiGear::ObjectLink::InvokeReplyArg arg) {
                     const std::list<float>& value = arg.value.get<std::list<float>>();
+                    resultPromise.set_value(value);
+                });
+            return resultPromise.get_future().get();
+        }
+    );
+}
+
+std::list<float> SimpleArrayInterfaceClient::funcFloat32(const std::list<float>& paramFloat32)
+{
+     if(!m_node) {
+        emitLog(ApiGear::Logger::LogLevel::Warning, "Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
+        return std::list<float>();
+    }
+    std::list<float> value(funcFloat32Async(paramFloat32).get());
+    return value;
+}
+
+std::future<std::list<float>> SimpleArrayInterfaceClient::funcFloat32Async(const std::list<float>& paramFloat32)
+{
+    if(!m_node) {
+        emitLog(ApiGear::Logger::LogLevel::Warning, "Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
+        return std::future<std::list<float>>{};
+    }
+    return std::async(std::launch::async, [this,
+                    paramFloat32]()
+        {
+            std::promise<std::list<float>> resultPromise;
+            const auto& operationId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "funcFloat32");
+            m_node->invokeRemote(operationId,
+                nlohmann::json::array({paramFloat32}), [&resultPromise](ApiGear::ObjectLink::InvokeReplyArg arg) {
+                    const std::list<float>& value = arg.value.get<std::list<float>>();
+                    resultPromise.set_value(value);
+                });
+            return resultPromise.get_future().get();
+        }
+    );
+}
+
+std::list<double> SimpleArrayInterfaceClient::funcFloat64(const std::list<double>& paramFloat)
+{
+     if(!m_node) {
+        emitLog(ApiGear::Logger::LogLevel::Warning, "Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
+        return std::list<double>();
+    }
+    std::list<double> value(funcFloat64Async(paramFloat).get());
+    return value;
+}
+
+std::future<std::list<double>> SimpleArrayInterfaceClient::funcFloat64Async(const std::list<double>& paramFloat)
+{
+    if(!m_node) {
+        emitLog(ApiGear::Logger::LogLevel::Warning, "Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
+        return std::future<std::list<double>>{};
+    }
+    return std::async(std::launch::async, [this,
+                    paramFloat]()
+        {
+            std::promise<std::list<double>> resultPromise;
+            const auto& operationId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "funcFloat64");
+            m_node->invokeRemote(operationId,
+                nlohmann::json::array({paramFloat}), [&resultPromise](ApiGear::ObjectLink::InvokeReplyArg arg) {
+                    const std::list<double>& value = arg.value.get<std::list<double>>();
                     resultPromise.set_value(value);
                 });
             return resultPromise.get_future().get();
@@ -267,8 +495,24 @@ void SimpleArrayInterfaceClient::olinkOnSignal(const std::string& signalId, cons
         m_publisher->publishSigInt(args[0].get<std::list<int>>());   
         return;
     }
+    if(signalName == "sigInt32") {
+        m_publisher->publishSigInt32(args[0].get<std::list<int32_t>>());   
+        return;
+    }
+    if(signalName == "sigInt64") {
+        m_publisher->publishSigInt64(args[0].get<std::list<int64_t>>());   
+        return;
+    }
     if(signalName == "sigFloat") {
         m_publisher->publishSigFloat(args[0].get<std::list<float>>());   
+        return;
+    }
+    if(signalName == "sigFloat32") {
+        m_publisher->publishSigFloat32(args[0].get<std::list<float>>());   
+        return;
+    }
+    if(signalName == "sigFloat64") {
+        m_publisher->publishSigFloat64(args[0].get<std::list<double>>());   
         return;
     }
     if(signalName == "sigString") {

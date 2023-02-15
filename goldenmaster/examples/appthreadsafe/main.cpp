@@ -220,8 +220,16 @@ void testTbSimpleSimpleInterface()
     testSimpleInterface->setPropBool(false);
     auto propInt = testSimpleInterface->getPropInt();
     testSimpleInterface->setPropInt(0);
+    auto propInt32 = testSimpleInterface->getPropInt32();
+    testSimpleInterface->setPropInt32(0);
+    auto propInt64 = testSimpleInterface->getPropInt64();
+    testSimpleInterface->setPropInt64(0);
     auto propFloat = testSimpleInterface->getPropFloat();
     testSimpleInterface->setPropFloat(0.0);
+    auto propFloat32 = testSimpleInterface->getPropFloat32();
+    testSimpleInterface->setPropFloat32(0.0);
+    auto propFloat64 = testSimpleInterface->getPropFloat64();
+    testSimpleInterface->setPropFloat64(0.0);
     auto propString = testSimpleInterface->getPropString();
     testSimpleInterface->setPropString(std::string());
 }
@@ -237,8 +245,16 @@ void testTbSimpleSimpleArrayInterface()
     testSimpleArrayInterface->setPropBool(std::list<bool>());
     auto propInt = testSimpleArrayInterface->getPropInt();
     testSimpleArrayInterface->setPropInt(std::list<int>());
+    auto propInt32 = testSimpleArrayInterface->getPropInt32();
+    testSimpleArrayInterface->setPropInt32(std::list<int32_t>());
+    auto propInt64 = testSimpleArrayInterface->getPropInt64();
+    testSimpleArrayInterface->setPropInt64(std::list<int64_t>());
     auto propFloat = testSimpleArrayInterface->getPropFloat();
     testSimpleArrayInterface->setPropFloat(std::list<float>());
+    auto propFloat32 = testSimpleArrayInterface->getPropFloat32();
+    testSimpleArrayInterface->setPropFloat32(std::list<float>());
+    auto propFloat64 = testSimpleArrayInterface->getPropFloat64();
+    testSimpleArrayInterface->setPropFloat64(std::list<double>());
     auto propString = testSimpleArrayInterface->getPropString();
     testSimpleArrayInterface->setPropString(std::list<std::string>());
 }

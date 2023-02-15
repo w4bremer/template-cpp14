@@ -51,6 +51,24 @@ public:
     void unsubscribeFromPropIntChanged(long handleId) override;
 
     /**
+    * Implementation of ISimpleInterfacePublisher::subscribeToPropInt32Changed
+    */
+    long subscribeToPropInt32Changed(SimpleInterfacePropInt32PropertyCb callback) override;
+    /**
+    * Implementation of ISimpleInterfacePublisher::subscribeToPropInt32Changed
+    */
+    void unsubscribeFromPropInt32Changed(long handleId) override;
+
+    /**
+    * Implementation of ISimpleInterfacePublisher::subscribeToPropInt64Changed
+    */
+    long subscribeToPropInt64Changed(SimpleInterfacePropInt64PropertyCb callback) override;
+    /**
+    * Implementation of ISimpleInterfacePublisher::subscribeToPropInt64Changed
+    */
+    void unsubscribeFromPropInt64Changed(long handleId) override;
+
+    /**
     * Implementation of ISimpleInterfacePublisher::subscribeToPropFloatChanged
     */
     long subscribeToPropFloatChanged(SimpleInterfacePropFloatPropertyCb callback) override;
@@ -58,6 +76,24 @@ public:
     * Implementation of ISimpleInterfacePublisher::subscribeToPropFloatChanged
     */
     void unsubscribeFromPropFloatChanged(long handleId) override;
+
+    /**
+    * Implementation of ISimpleInterfacePublisher::subscribeToPropFloat32Changed
+    */
+    long subscribeToPropFloat32Changed(SimpleInterfacePropFloat32PropertyCb callback) override;
+    /**
+    * Implementation of ISimpleInterfacePublisher::subscribeToPropFloat32Changed
+    */
+    void unsubscribeFromPropFloat32Changed(long handleId) override;
+
+    /**
+    * Implementation of ISimpleInterfacePublisher::subscribeToPropFloat64Changed
+    */
+    long subscribeToPropFloat64Changed(SimpleInterfacePropFloat64PropertyCb callback) override;
+    /**
+    * Implementation of ISimpleInterfacePublisher::subscribeToPropFloat64Changed
+    */
+    void unsubscribeFromPropFloat64Changed(long handleId) override;
 
     /**
     * Implementation of ISimpleInterfacePublisher::subscribeToPropStringChanged
@@ -96,6 +132,24 @@ public:
     void unsubscribeFromSigInt(long handleId) override;
 
     /**
+    * Implementation of ISimpleInterfacePublisher::subscribeToSigInt32
+    */
+    long subscribeToSigInt32(SimpleInterfaceSigInt32SignalCb callback) override;
+    /**
+    * Implementation of ISimpleInterfacePublisher::unsubscribeFromSigInt32
+    */
+    void unsubscribeFromSigInt32(long handleId) override;
+
+    /**
+    * Implementation of ISimpleInterfacePublisher::subscribeToSigInt64
+    */
+    long subscribeToSigInt64(SimpleInterfaceSigInt64SignalCb callback) override;
+    /**
+    * Implementation of ISimpleInterfacePublisher::unsubscribeFromSigInt64
+    */
+    void unsubscribeFromSigInt64(long handleId) override;
+
+    /**
     * Implementation of ISimpleInterfacePublisher::subscribeToSigFloat
     */
     long subscribeToSigFloat(SimpleInterfaceSigFloatSignalCb callback) override;
@@ -103,6 +157,24 @@ public:
     * Implementation of ISimpleInterfacePublisher::unsubscribeFromSigFloat
     */
     void unsubscribeFromSigFloat(long handleId) override;
+
+    /**
+    * Implementation of ISimpleInterfacePublisher::subscribeToSigFloat32
+    */
+    long subscribeToSigFloat32(SimpleInterfaceSigFloat32SignalCb callback) override;
+    /**
+    * Implementation of ISimpleInterfacePublisher::unsubscribeFromSigFloat32
+    */
+    void unsubscribeFromSigFloat32(long handleId) override;
+
+    /**
+    * Implementation of ISimpleInterfacePublisher::subscribeToSigFloat64
+    */
+    long subscribeToSigFloat64(SimpleInterfaceSigFloat64SignalCb callback) override;
+    /**
+    * Implementation of ISimpleInterfacePublisher::unsubscribeFromSigFloat64
+    */
+    void unsubscribeFromSigFloat64(long handleId) override;
 
     /**
     * Implementation of ISimpleInterfacePublisher::subscribeToSigString
@@ -122,9 +194,25 @@ public:
     */
     void publishPropIntChanged(int propInt) const override;
     /**
+    * Implementation of ISimpleInterfacePublisher::publishPropInt32Changed
+    */
+    void publishPropInt32Changed(int32_t propInt32) const override;
+    /**
+    * Implementation of ISimpleInterfacePublisher::publishPropInt64Changed
+    */
+    void publishPropInt64Changed(int64_t propInt64) const override;
+    /**
     * Implementation of ISimpleInterfacePublisher::publishPropFloatChanged
     */
     void publishPropFloatChanged(float propFloat) const override;
+    /**
+    * Implementation of ISimpleInterfacePublisher::publishPropFloat32Changed
+    */
+    void publishPropFloat32Changed(float propFloat32) const override;
+    /**
+    * Implementation of ISimpleInterfacePublisher::publishPropFloat64Changed
+    */
+    void publishPropFloat64Changed(double propFloat64) const override;
     /**
     * Implementation of ISimpleInterfacePublisher::publishPropStringChanged
     */
@@ -142,9 +230,25 @@ public:
     */
     void publishSigInt(int paramInt) const override;
     /**
+    * Implementation of ISimpleInterfacePublisher::publishSigInt32
+    */
+    void publishSigInt32(int32_t paramInt32) const override;
+    /**
+    * Implementation of ISimpleInterfacePublisher::publishSigInt64
+    */
+    void publishSigInt64(int64_t paramInt64) const override;
+    /**
     * Implementation of ISimpleInterfacePublisher::publishSigFloat
     */
     void publishSigFloat(float paramFloat) const override;
+    /**
+    * Implementation of ISimpleInterfacePublisher::publishSigFloat32
+    */
+    void publishSigFloat32(float paramFloa32) const override;
+    /**
+    * Implementation of ISimpleInterfacePublisher::publishSigFloat64
+    */
+    void publishSigFloat64(double paramFloat64) const override;
     /**
     * Implementation of ISimpleInterfacePublisher::publishSigString
     */
@@ -166,12 +270,36 @@ private:
     std::map<long, SimpleInterfacePropIntPropertyCb> m_propIntCallbacks;
     // Mutex for m_propIntCallbacks
     mutable std::shared_timed_mutex m_propIntCallbacksMutex;
+    // Next free unique identifier to subscribe for the PropInt32 change.
+    std::atomic<long> m_propInt32ChangedCallbackNextId {0};
+    // Subscribed callbacks for the PropInt32 change.
+    std::map<long, SimpleInterfacePropInt32PropertyCb> m_propInt32Callbacks;
+    // Mutex for m_propInt32Callbacks
+    mutable std::shared_timed_mutex m_propInt32CallbacksMutex;
+    // Next free unique identifier to subscribe for the PropInt64 change.
+    std::atomic<long> m_propInt64ChangedCallbackNextId {0};
+    // Subscribed callbacks for the PropInt64 change.
+    std::map<long, SimpleInterfacePropInt64PropertyCb> m_propInt64Callbacks;
+    // Mutex for m_propInt64Callbacks
+    mutable std::shared_timed_mutex m_propInt64CallbacksMutex;
     // Next free unique identifier to subscribe for the PropFloat change.
     std::atomic<long> m_propFloatChangedCallbackNextId {0};
     // Subscribed callbacks for the PropFloat change.
     std::map<long, SimpleInterfacePropFloatPropertyCb> m_propFloatCallbacks;
     // Mutex for m_propFloatCallbacks
     mutable std::shared_timed_mutex m_propFloatCallbacksMutex;
+    // Next free unique identifier to subscribe for the PropFloat32 change.
+    std::atomic<long> m_propFloat32ChangedCallbackNextId {0};
+    // Subscribed callbacks for the PropFloat32 change.
+    std::map<long, SimpleInterfacePropFloat32PropertyCb> m_propFloat32Callbacks;
+    // Mutex for m_propFloat32Callbacks
+    mutable std::shared_timed_mutex m_propFloat32CallbacksMutex;
+    // Next free unique identifier to subscribe for the PropFloat64 change.
+    std::atomic<long> m_propFloat64ChangedCallbackNextId {0};
+    // Subscribed callbacks for the PropFloat64 change.
+    std::map<long, SimpleInterfacePropFloat64PropertyCb> m_propFloat64Callbacks;
+    // Mutex for m_propFloat64Callbacks
+    mutable std::shared_timed_mutex m_propFloat64CallbacksMutex;
     // Next free unique identifier to subscribe for the PropString change.
     std::atomic<long> m_propStringChangedCallbackNextId {0};
     // Subscribed callbacks for the PropString change.
@@ -196,12 +324,36 @@ private:
     std::map<long, SimpleInterfaceSigIntSignalCb > m_sigIntCallbacks;
     // Mutex for m_sigIntSignalCallbackNextId and m_sigIntCallbacks
     mutable std::shared_timed_mutex m_sigIntCallbacksMutex;
+    // Next free unique identifier to subscribe for the SigInt32 emission.
+    std::atomic<long> m_sigInt32SignalCallbackNextId {0};
+    // Subscribed callbacks for the SigInt32 emission.
+    std::map<long, SimpleInterfaceSigInt32SignalCb > m_sigInt32Callbacks;
+    // Mutex for m_sigInt32SignalCallbackNextId and m_sigInt32Callbacks
+    mutable std::shared_timed_mutex m_sigInt32CallbacksMutex;
+    // Next free unique identifier to subscribe for the SigInt64 emission.
+    std::atomic<long> m_sigInt64SignalCallbackNextId {0};
+    // Subscribed callbacks for the SigInt64 emission.
+    std::map<long, SimpleInterfaceSigInt64SignalCb > m_sigInt64Callbacks;
+    // Mutex for m_sigInt64SignalCallbackNextId and m_sigInt64Callbacks
+    mutable std::shared_timed_mutex m_sigInt64CallbacksMutex;
     // Next free unique identifier to subscribe for the SigFloat emission.
     std::atomic<long> m_sigFloatSignalCallbackNextId {0};
     // Subscribed callbacks for the SigFloat emission.
     std::map<long, SimpleInterfaceSigFloatSignalCb > m_sigFloatCallbacks;
     // Mutex for m_sigFloatSignalCallbackNextId and m_sigFloatCallbacks
     mutable std::shared_timed_mutex m_sigFloatCallbacksMutex;
+    // Next free unique identifier to subscribe for the SigFloat32 emission.
+    std::atomic<long> m_sigFloat32SignalCallbackNextId {0};
+    // Subscribed callbacks for the SigFloat32 emission.
+    std::map<long, SimpleInterfaceSigFloat32SignalCb > m_sigFloat32Callbacks;
+    // Mutex for m_sigFloat32SignalCallbackNextId and m_sigFloat32Callbacks
+    mutable std::shared_timed_mutex m_sigFloat32CallbacksMutex;
+    // Next free unique identifier to subscribe for the SigFloat64 emission.
+    std::atomic<long> m_sigFloat64SignalCallbackNextId {0};
+    // Subscribed callbacks for the SigFloat64 emission.
+    std::map<long, SimpleInterfaceSigFloat64SignalCb > m_sigFloat64Callbacks;
+    // Mutex for m_sigFloat64SignalCallbackNextId and m_sigFloat64Callbacks
+    mutable std::shared_timed_mutex m_sigFloat64CallbacksMutex;
     // Next free unique identifier to subscribe for the SigString emission.
     std::atomic<long> m_sigStringSignalCallbackNextId {0};
     // Subscribed callbacks for the SigString emission.

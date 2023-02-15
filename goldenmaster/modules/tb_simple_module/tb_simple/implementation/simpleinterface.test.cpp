@@ -18,9 +18,25 @@ TEST_CASE("Testing SimpleInterface", "[SimpleInterface]"){
         // Do implement test here
         testSimpleInterface->funcInt(0);
     }
+    SECTION("Test operation funcInt32") {
+        // Do implement test here
+        testSimpleInterface->funcInt32(0);
+    }
+    SECTION("Test operation funcInt64") {
+        // Do implement test here
+        testSimpleInterface->funcInt64(0);
+    }
     SECTION("Test operation funcFloat") {
         // Do implement test here
         testSimpleInterface->funcFloat(0.0);
+    }
+    SECTION("Test operation funcFloat32") {
+        // Do implement test here
+        testSimpleInterface->funcFloat32(0.0);
+    }
+    SECTION("Test operation funcFloat64") {
+        // Do implement test here
+        testSimpleInterface->funcFloat64(0.0);
     }
     SECTION("Test operation funcString") {
         // Do implement test here
@@ -36,10 +52,30 @@ TEST_CASE("Testing SimpleInterface", "[SimpleInterface]"){
         testSimpleInterface->setPropInt(0);
         REQUIRE( testSimpleInterface->getPropInt() == 0 );
     }
+    SECTION("Test property propInt32") {
+        // Do implement test here
+        testSimpleInterface->setPropInt32(0);
+        REQUIRE( testSimpleInterface->getPropInt32() == 0 );
+    }
+    SECTION("Test property propInt64") {
+        // Do implement test here
+        testSimpleInterface->setPropInt64(0);
+        REQUIRE( testSimpleInterface->getPropInt64() == 0 );
+    }
     SECTION("Test property propFloat") {
         // Do implement test here
         testSimpleInterface->setPropFloat(0.0);
         REQUIRE( testSimpleInterface->getPropFloat() == Approx( 0.0 ) );
+    }
+    SECTION("Test property propFloat32") {
+        // Do implement test here
+        testSimpleInterface->setPropFloat32(0.0);
+        REQUIRE( testSimpleInterface->getPropFloat32() == Approx( 0.0 ) );
+    }
+    SECTION("Test property propFloat64") {
+        // Do implement test here
+        testSimpleInterface->setPropFloat64(0.0);
+        REQUIRE( testSimpleInterface->getPropFloat64() == 0.0 );
     }
     SECTION("Test property propString") {
         // Do implement test here

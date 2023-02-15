@@ -40,6 +40,32 @@ int SimpleInterface::getPropInt() const
     return m_data.m_propInt;
 }
 
+void SimpleInterface::setPropInt32(int32_t propInt32)
+{
+    if (m_data.m_propInt32 != propInt32) {
+        m_data.m_propInt32 = propInt32;
+        m_publisher->publishPropInt32Changed(propInt32);
+    }
+}
+
+int32_t SimpleInterface::getPropInt32() const
+{
+    return m_data.m_propInt32;
+}
+
+void SimpleInterface::setPropInt64(int64_t propInt64)
+{
+    if (m_data.m_propInt64 != propInt64) {
+        m_data.m_propInt64 = propInt64;
+        m_publisher->publishPropInt64Changed(propInt64);
+    }
+}
+
+int64_t SimpleInterface::getPropInt64() const
+{
+    return m_data.m_propInt64;
+}
+
 void SimpleInterface::setPropFloat(float propFloat)
 {
     if (m_data.m_propFloat != propFloat) {
@@ -51,6 +77,32 @@ void SimpleInterface::setPropFloat(float propFloat)
 float SimpleInterface::getPropFloat() const
 {
     return m_data.m_propFloat;
+}
+
+void SimpleInterface::setPropFloat32(float propFloat32)
+{
+    if (m_data.m_propFloat32 != propFloat32) {
+        m_data.m_propFloat32 = propFloat32;
+        m_publisher->publishPropFloat32Changed(propFloat32);
+    }
+}
+
+float SimpleInterface::getPropFloat32() const
+{
+    return m_data.m_propFloat32;
+}
+
+void SimpleInterface::setPropFloat64(double propFloat64)
+{
+    if (m_data.m_propFloat64 != propFloat64) {
+        m_data.m_propFloat64 = propFloat64;
+        m_publisher->publishPropFloat64Changed(propFloat64);
+    }
+}
+
+double SimpleInterface::getPropFloat64() const
+{
+    return m_data.m_propFloat64;
 }
 
 void SimpleInterface::setPropString(const std::string& propString)
@@ -114,6 +166,40 @@ std::future<int> SimpleInterface::funcIntAsync(int paramInt)
     );
 }
 
+int32_t SimpleInterface::funcInt32(int32_t paramInt32)
+{
+    (void) paramInt32; // suppress the 'Unreferenced Formal Parameter' warning.
+    // do business logic here
+    return 0;
+}
+
+std::future<int32_t> SimpleInterface::funcInt32Async(int32_t paramInt32)
+{
+    return std::async(std::launch::async, [this,
+                    paramInt32]()
+        {
+            return funcInt32(paramInt32);
+        }
+    );
+}
+
+int64_t SimpleInterface::funcInt64(int64_t paramInt64)
+{
+    (void) paramInt64; // suppress the 'Unreferenced Formal Parameter' warning.
+    // do business logic here
+    return 0;
+}
+
+std::future<int64_t> SimpleInterface::funcInt64Async(int64_t paramInt64)
+{
+    return std::async(std::launch::async, [this,
+                    paramInt64]()
+        {
+            return funcInt64(paramInt64);
+        }
+    );
+}
+
 float SimpleInterface::funcFloat(float paramFloat)
 {
     (void) paramFloat; // suppress the 'Unreferenced Formal Parameter' warning.
@@ -127,6 +213,40 @@ std::future<float> SimpleInterface::funcFloatAsync(float paramFloat)
                     paramFloat]()
         {
             return funcFloat(paramFloat);
+        }
+    );
+}
+
+float SimpleInterface::funcFloat32(float paramFloat32)
+{
+    (void) paramFloat32; // suppress the 'Unreferenced Formal Parameter' warning.
+    // do business logic here
+    return 0.0;
+}
+
+std::future<float> SimpleInterface::funcFloat32Async(float paramFloat32)
+{
+    return std::async(std::launch::async, [this,
+                    paramFloat32]()
+        {
+            return funcFloat32(paramFloat32);
+        }
+    );
+}
+
+double SimpleInterface::funcFloat64(double paramFloat)
+{
+    (void) paramFloat; // suppress the 'Unreferenced Formal Parameter' warning.
+    // do business logic here
+    return 0.0;
+}
+
+std::future<double> SimpleInterface::funcFloat64Async(double paramFloat)
+{
+    return std::async(std::launch::async, [this,
+                    paramFloat]()
+        {
+            return funcFloat64(paramFloat);
         }
     );
 }

@@ -25,6 +25,24 @@ std::future<std::list<int>> SimpleArrayInterfaceThreadSafeDecorator::funcIntAsyn
 {
     return m_impl->funcIntAsync(paramInt);
 }
+std::list<int32_t> SimpleArrayInterfaceThreadSafeDecorator::funcInt32(const std::list<int32_t>& paramInt32)
+{
+    return m_impl->funcInt32(paramInt32);
+}
+
+std::future<std::list<int32_t>> SimpleArrayInterfaceThreadSafeDecorator::funcInt32Async(const std::list<int32_t>& paramInt32)
+{
+    return m_impl->funcInt32Async(paramInt32);
+}
+std::list<int64_t> SimpleArrayInterfaceThreadSafeDecorator::funcInt64(const std::list<int64_t>& paramInt64)
+{
+    return m_impl->funcInt64(paramInt64);
+}
+
+std::future<std::list<int64_t>> SimpleArrayInterfaceThreadSafeDecorator::funcInt64Async(const std::list<int64_t>& paramInt64)
+{
+    return m_impl->funcInt64Async(paramInt64);
+}
 std::list<float> SimpleArrayInterfaceThreadSafeDecorator::funcFloat(const std::list<float>& paramFloat)
 {
     return m_impl->funcFloat(paramFloat);
@@ -33,6 +51,24 @@ std::list<float> SimpleArrayInterfaceThreadSafeDecorator::funcFloat(const std::l
 std::future<std::list<float>> SimpleArrayInterfaceThreadSafeDecorator::funcFloatAsync(const std::list<float>& paramFloat)
 {
     return m_impl->funcFloatAsync(paramFloat);
+}
+std::list<float> SimpleArrayInterfaceThreadSafeDecorator::funcFloat32(const std::list<float>& paramFloat32)
+{
+    return m_impl->funcFloat32(paramFloat32);
+}
+
+std::future<std::list<float>> SimpleArrayInterfaceThreadSafeDecorator::funcFloat32Async(const std::list<float>& paramFloat32)
+{
+    return m_impl->funcFloat32Async(paramFloat32);
+}
+std::list<double> SimpleArrayInterfaceThreadSafeDecorator::funcFloat64(const std::list<double>& paramFloat)
+{
+    return m_impl->funcFloat64(paramFloat);
+}
+
+std::future<std::list<double>> SimpleArrayInterfaceThreadSafeDecorator::funcFloat64Async(const std::list<double>& paramFloat)
+{
+    return m_impl->funcFloat64Async(paramFloat);
 }
 std::list<std::string> SimpleArrayInterfaceThreadSafeDecorator::funcString(const std::list<std::string>& paramString)
 {
@@ -65,6 +101,28 @@ const std::list<int>& SimpleArrayInterfaceThreadSafeDecorator::getPropInt() cons
     std::shared_lock<std::shared_timed_mutex> lock(m_propIntMutex);
     return m_impl->getPropInt();
 }
+void SimpleArrayInterfaceThreadSafeDecorator::setPropInt32(const std::list<int32_t>& propInt32)
+{
+    std::unique_lock<std::shared_timed_mutex> lock(m_propInt32Mutex);
+    m_impl->setPropInt32(propInt32);
+}
+
+const std::list<int32_t>& SimpleArrayInterfaceThreadSafeDecorator::getPropInt32() const
+{
+    std::shared_lock<std::shared_timed_mutex> lock(m_propInt32Mutex);
+    return m_impl->getPropInt32();
+}
+void SimpleArrayInterfaceThreadSafeDecorator::setPropInt64(const std::list<int64_t>& propInt64)
+{
+    std::unique_lock<std::shared_timed_mutex> lock(m_propInt64Mutex);
+    m_impl->setPropInt64(propInt64);
+}
+
+const std::list<int64_t>& SimpleArrayInterfaceThreadSafeDecorator::getPropInt64() const
+{
+    std::shared_lock<std::shared_timed_mutex> lock(m_propInt64Mutex);
+    return m_impl->getPropInt64();
+}
 void SimpleArrayInterfaceThreadSafeDecorator::setPropFloat(const std::list<float>& propFloat)
 {
     std::unique_lock<std::shared_timed_mutex> lock(m_propFloatMutex);
@@ -75,6 +133,28 @@ const std::list<float>& SimpleArrayInterfaceThreadSafeDecorator::getPropFloat() 
 {
     std::shared_lock<std::shared_timed_mutex> lock(m_propFloatMutex);
     return m_impl->getPropFloat();
+}
+void SimpleArrayInterfaceThreadSafeDecorator::setPropFloat32(const std::list<float>& propFloat32)
+{
+    std::unique_lock<std::shared_timed_mutex> lock(m_propFloat32Mutex);
+    m_impl->setPropFloat32(propFloat32);
+}
+
+const std::list<float>& SimpleArrayInterfaceThreadSafeDecorator::getPropFloat32() const
+{
+    std::shared_lock<std::shared_timed_mutex> lock(m_propFloat32Mutex);
+    return m_impl->getPropFloat32();
+}
+void SimpleArrayInterfaceThreadSafeDecorator::setPropFloat64(const std::list<double>& propFloat64)
+{
+    std::unique_lock<std::shared_timed_mutex> lock(m_propFloat64Mutex);
+    m_impl->setPropFloat64(propFloat64);
+}
+
+const std::list<double>& SimpleArrayInterfaceThreadSafeDecorator::getPropFloat64() const
+{
+    std::shared_lock<std::shared_timed_mutex> lock(m_propFloat64Mutex);
+    return m_impl->getPropFloat64();
 }
 void SimpleArrayInterfaceThreadSafeDecorator::setPropString(const std::list<std::string>& propString)
 {

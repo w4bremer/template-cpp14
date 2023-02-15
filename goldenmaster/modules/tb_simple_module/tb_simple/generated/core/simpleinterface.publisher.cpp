@@ -98,6 +98,76 @@ void SimpleInterfacePublisher::publishPropIntChanged(int propInt) const
     }
 }
 
+long SimpleInterfacePublisher::subscribeToPropInt32Changed(SimpleInterfacePropInt32PropertyCb callback)
+{
+    auto handleId = m_propInt32ChangedCallbackNextId++;
+    std::unique_lock<std::shared_timed_mutex> lock(m_propInt32CallbacksMutex);
+    m_propInt32Callbacks[handleId] = callback;
+    return handleId;
+}
+
+void SimpleInterfacePublisher::unsubscribeFromPropInt32Changed(long handleId)
+{
+    std::unique_lock<std::shared_timed_mutex> lock(m_propInt32CallbacksMutex);
+    m_propInt32Callbacks.erase(handleId);
+}
+
+void SimpleInterfacePublisher::publishPropInt32Changed(int32_t propInt32) const
+{
+    std::shared_lock<std::shared_timed_mutex> allChangesSubscribersLock(m_allChangesSubscribersMutex);
+    const auto allChangesSubscribers = m_allChangesSubscribers;
+    allChangesSubscribersLock.unlock();
+    for(const auto& subscriber: allChangesSubscribers)
+    {
+        subscriber.get().onPropInt32Changed(propInt32);
+    }
+    std::shared_lock<std::shared_timed_mutex> propInt32CallbacksLock(m_propInt32CallbacksMutex);
+    const auto propInt32Callbacks = m_propInt32Callbacks;
+    propInt32CallbacksLock.unlock();
+    for(const auto& callbackEntry: propInt32Callbacks)
+    {
+        if(callbackEntry.second)
+        {
+            callbackEntry.second(propInt32);
+        }
+    }
+}
+
+long SimpleInterfacePublisher::subscribeToPropInt64Changed(SimpleInterfacePropInt64PropertyCb callback)
+{
+    auto handleId = m_propInt64ChangedCallbackNextId++;
+    std::unique_lock<std::shared_timed_mutex> lock(m_propInt64CallbacksMutex);
+    m_propInt64Callbacks[handleId] = callback;
+    return handleId;
+}
+
+void SimpleInterfacePublisher::unsubscribeFromPropInt64Changed(long handleId)
+{
+    std::unique_lock<std::shared_timed_mutex> lock(m_propInt64CallbacksMutex);
+    m_propInt64Callbacks.erase(handleId);
+}
+
+void SimpleInterfacePublisher::publishPropInt64Changed(int64_t propInt64) const
+{
+    std::shared_lock<std::shared_timed_mutex> allChangesSubscribersLock(m_allChangesSubscribersMutex);
+    const auto allChangesSubscribers = m_allChangesSubscribers;
+    allChangesSubscribersLock.unlock();
+    for(const auto& subscriber: allChangesSubscribers)
+    {
+        subscriber.get().onPropInt64Changed(propInt64);
+    }
+    std::shared_lock<std::shared_timed_mutex> propInt64CallbacksLock(m_propInt64CallbacksMutex);
+    const auto propInt64Callbacks = m_propInt64Callbacks;
+    propInt64CallbacksLock.unlock();
+    for(const auto& callbackEntry: propInt64Callbacks)
+    {
+        if(callbackEntry.second)
+        {
+            callbackEntry.second(propInt64);
+        }
+    }
+}
+
 long SimpleInterfacePublisher::subscribeToPropFloatChanged(SimpleInterfacePropFloatPropertyCb callback)
 {
     auto handleId = m_propFloatChangedCallbackNextId++;
@@ -129,6 +199,76 @@ void SimpleInterfacePublisher::publishPropFloatChanged(float propFloat) const
         if(callbackEntry.second)
         {
             callbackEntry.second(propFloat);
+        }
+    }
+}
+
+long SimpleInterfacePublisher::subscribeToPropFloat32Changed(SimpleInterfacePropFloat32PropertyCb callback)
+{
+    auto handleId = m_propFloat32ChangedCallbackNextId++;
+    std::unique_lock<std::shared_timed_mutex> lock(m_propFloat32CallbacksMutex);
+    m_propFloat32Callbacks[handleId] = callback;
+    return handleId;
+}
+
+void SimpleInterfacePublisher::unsubscribeFromPropFloat32Changed(long handleId)
+{
+    std::unique_lock<std::shared_timed_mutex> lock(m_propFloat32CallbacksMutex);
+    m_propFloat32Callbacks.erase(handleId);
+}
+
+void SimpleInterfacePublisher::publishPropFloat32Changed(float propFloat32) const
+{
+    std::shared_lock<std::shared_timed_mutex> allChangesSubscribersLock(m_allChangesSubscribersMutex);
+    const auto allChangesSubscribers = m_allChangesSubscribers;
+    allChangesSubscribersLock.unlock();
+    for(const auto& subscriber: allChangesSubscribers)
+    {
+        subscriber.get().onPropFloat32Changed(propFloat32);
+    }
+    std::shared_lock<std::shared_timed_mutex> propFloat32CallbacksLock(m_propFloat32CallbacksMutex);
+    const auto propFloat32Callbacks = m_propFloat32Callbacks;
+    propFloat32CallbacksLock.unlock();
+    for(const auto& callbackEntry: propFloat32Callbacks)
+    {
+        if(callbackEntry.second)
+        {
+            callbackEntry.second(propFloat32);
+        }
+    }
+}
+
+long SimpleInterfacePublisher::subscribeToPropFloat64Changed(SimpleInterfacePropFloat64PropertyCb callback)
+{
+    auto handleId = m_propFloat64ChangedCallbackNextId++;
+    std::unique_lock<std::shared_timed_mutex> lock(m_propFloat64CallbacksMutex);
+    m_propFloat64Callbacks[handleId] = callback;
+    return handleId;
+}
+
+void SimpleInterfacePublisher::unsubscribeFromPropFloat64Changed(long handleId)
+{
+    std::unique_lock<std::shared_timed_mutex> lock(m_propFloat64CallbacksMutex);
+    m_propFloat64Callbacks.erase(handleId);
+}
+
+void SimpleInterfacePublisher::publishPropFloat64Changed(double propFloat64) const
+{
+    std::shared_lock<std::shared_timed_mutex> allChangesSubscribersLock(m_allChangesSubscribersMutex);
+    const auto allChangesSubscribers = m_allChangesSubscribers;
+    allChangesSubscribersLock.unlock();
+    for(const auto& subscriber: allChangesSubscribers)
+    {
+        subscriber.get().onPropFloat64Changed(propFloat64);
+    }
+    std::shared_lock<std::shared_timed_mutex> propFloat64CallbacksLock(m_propFloat64CallbacksMutex);
+    const auto propFloat64Callbacks = m_propFloat64Callbacks;
+    propFloat64CallbacksLock.unlock();
+    for(const auto& callbackEntry: propFloat64Callbacks)
+    {
+        if(callbackEntry.second)
+        {
+            callbackEntry.second(propFloat64);
         }
     }
 }
@@ -276,6 +416,78 @@ void SimpleInterfacePublisher::publishSigInt(int paramInt) const
     }
 }
 
+long SimpleInterfacePublisher::subscribeToSigInt32(SimpleInterfaceSigInt32SignalCb callback)
+{
+    // this is a short term workaround - we need a better solution for unique handle identifiers
+    auto handleId = m_sigInt32SignalCallbackNextId++;
+    std::unique_lock<std::shared_timed_mutex> lock(m_sigInt32CallbacksMutex);
+    m_sigInt32Callbacks[handleId] = callback;
+    return handleId;
+}
+
+void SimpleInterfacePublisher::unsubscribeFromSigInt32(long handleId)
+{
+    std::unique_lock<std::shared_timed_mutex> lock(m_sigInt32CallbacksMutex);
+    m_sigInt32Callbacks.erase(handleId);
+}
+
+void SimpleInterfacePublisher::publishSigInt32(int32_t paramInt32) const
+{
+    std::shared_lock<std::shared_timed_mutex> allChangesSubscribersLock(m_allChangesSubscribersMutex);
+    const auto allChangesSubscribers = m_allChangesSubscribers;
+    allChangesSubscribersLock.unlock();
+    for(const auto& subscriber: allChangesSubscribers)
+    {
+        subscriber.get().onSigInt32(paramInt32);
+    }
+    std::shared_lock<std::shared_timed_mutex> sigInt32CallbacksLock(m_sigInt32CallbacksMutex);
+    const auto sigInt32Callbacks = m_sigInt32Callbacks;
+    sigInt32CallbacksLock.unlock();
+    for(const auto& callbackEntry: sigInt32Callbacks)
+    {
+        if(callbackEntry.second)
+        {
+            callbackEntry.second(paramInt32);
+        }
+    }
+}
+
+long SimpleInterfacePublisher::subscribeToSigInt64(SimpleInterfaceSigInt64SignalCb callback)
+{
+    // this is a short term workaround - we need a better solution for unique handle identifiers
+    auto handleId = m_sigInt64SignalCallbackNextId++;
+    std::unique_lock<std::shared_timed_mutex> lock(m_sigInt64CallbacksMutex);
+    m_sigInt64Callbacks[handleId] = callback;
+    return handleId;
+}
+
+void SimpleInterfacePublisher::unsubscribeFromSigInt64(long handleId)
+{
+    std::unique_lock<std::shared_timed_mutex> lock(m_sigInt64CallbacksMutex);
+    m_sigInt64Callbacks.erase(handleId);
+}
+
+void SimpleInterfacePublisher::publishSigInt64(int64_t paramInt64) const
+{
+    std::shared_lock<std::shared_timed_mutex> allChangesSubscribersLock(m_allChangesSubscribersMutex);
+    const auto allChangesSubscribers = m_allChangesSubscribers;
+    allChangesSubscribersLock.unlock();
+    for(const auto& subscriber: allChangesSubscribers)
+    {
+        subscriber.get().onSigInt64(paramInt64);
+    }
+    std::shared_lock<std::shared_timed_mutex> sigInt64CallbacksLock(m_sigInt64CallbacksMutex);
+    const auto sigInt64Callbacks = m_sigInt64Callbacks;
+    sigInt64CallbacksLock.unlock();
+    for(const auto& callbackEntry: sigInt64Callbacks)
+    {
+        if(callbackEntry.second)
+        {
+            callbackEntry.second(paramInt64);
+        }
+    }
+}
+
 long SimpleInterfacePublisher::subscribeToSigFloat(SimpleInterfaceSigFloatSignalCb callback)
 {
     // this is a short term workaround - we need a better solution for unique handle identifiers
@@ -308,6 +520,78 @@ void SimpleInterfacePublisher::publishSigFloat(float paramFloat) const
         if(callbackEntry.second)
         {
             callbackEntry.second(paramFloat);
+        }
+    }
+}
+
+long SimpleInterfacePublisher::subscribeToSigFloat32(SimpleInterfaceSigFloat32SignalCb callback)
+{
+    // this is a short term workaround - we need a better solution for unique handle identifiers
+    auto handleId = m_sigFloat32SignalCallbackNextId++;
+    std::unique_lock<std::shared_timed_mutex> lock(m_sigFloat32CallbacksMutex);
+    m_sigFloat32Callbacks[handleId] = callback;
+    return handleId;
+}
+
+void SimpleInterfacePublisher::unsubscribeFromSigFloat32(long handleId)
+{
+    std::unique_lock<std::shared_timed_mutex> lock(m_sigFloat32CallbacksMutex);
+    m_sigFloat32Callbacks.erase(handleId);
+}
+
+void SimpleInterfacePublisher::publishSigFloat32(float paramFloa32) const
+{
+    std::shared_lock<std::shared_timed_mutex> allChangesSubscribersLock(m_allChangesSubscribersMutex);
+    const auto allChangesSubscribers = m_allChangesSubscribers;
+    allChangesSubscribersLock.unlock();
+    for(const auto& subscriber: allChangesSubscribers)
+    {
+        subscriber.get().onSigFloat32(paramFloa32);
+    }
+    std::shared_lock<std::shared_timed_mutex> sigFloat32CallbacksLock(m_sigFloat32CallbacksMutex);
+    const auto sigFloat32Callbacks = m_sigFloat32Callbacks;
+    sigFloat32CallbacksLock.unlock();
+    for(const auto& callbackEntry: sigFloat32Callbacks)
+    {
+        if(callbackEntry.second)
+        {
+            callbackEntry.second(paramFloa32);
+        }
+    }
+}
+
+long SimpleInterfacePublisher::subscribeToSigFloat64(SimpleInterfaceSigFloat64SignalCb callback)
+{
+    // this is a short term workaround - we need a better solution for unique handle identifiers
+    auto handleId = m_sigFloat64SignalCallbackNextId++;
+    std::unique_lock<std::shared_timed_mutex> lock(m_sigFloat64CallbacksMutex);
+    m_sigFloat64Callbacks[handleId] = callback;
+    return handleId;
+}
+
+void SimpleInterfacePublisher::unsubscribeFromSigFloat64(long handleId)
+{
+    std::unique_lock<std::shared_timed_mutex> lock(m_sigFloat64CallbacksMutex);
+    m_sigFloat64Callbacks.erase(handleId);
+}
+
+void SimpleInterfacePublisher::publishSigFloat64(double paramFloat64) const
+{
+    std::shared_lock<std::shared_timed_mutex> allChangesSubscribersLock(m_allChangesSubscribersMutex);
+    const auto allChangesSubscribers = m_allChangesSubscribers;
+    allChangesSubscribersLock.unlock();
+    for(const auto& subscriber: allChangesSubscribers)
+    {
+        subscriber.get().onSigFloat64(paramFloat64);
+    }
+    std::shared_lock<std::shared_timed_mutex> sigFloat64CallbacksLock(m_sigFloat64CallbacksMutex);
+    const auto sigFloat64Callbacks = m_sigFloat64Callbacks;
+    sigFloat64CallbacksLock.unlock();
+    for(const auto& callbackEntry: sigFloat64Callbacks)
+    {
+        if(callbackEntry.second)
+        {
+            callbackEntry.second(paramFloat64);
         }
     }
 }

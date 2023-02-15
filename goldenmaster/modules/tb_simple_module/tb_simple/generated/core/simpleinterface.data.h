@@ -15,7 +15,11 @@ struct SimpleInterfaceData
 {
     bool m_propBool {false};
     int m_propInt {0};
+    int32_t m_propInt32 {0};
+    int64_t m_propInt64 {0};
     float m_propFloat {0.0};
+    float m_propFloat32 {0.0};
+    double m_propFloat64 {0.0};
     std::string m_propString {std::string()};
 };
 
