@@ -187,7 +187,7 @@ int64_t SimpleInterface::funcInt64(int64_t paramInt64)
 {
     (void) paramInt64; // suppress the 'Unreferenced Formal Parameter' warning.
     // do business logic here
-    return 0;
+    return 0LL;
 }
 
 std::future<int64_t> SimpleInterface::funcInt64Async(int64_t paramInt64)
@@ -204,7 +204,7 @@ float SimpleInterface::funcFloat(float paramFloat)
 {
     (void) paramFloat; // suppress the 'Unreferenced Formal Parameter' warning.
     // do business logic here
-    return 0.0;
+    return 0.0f;
 }
 
 std::future<float> SimpleInterface::funcFloatAsync(float paramFloat)
@@ -221,7 +221,7 @@ float SimpleInterface::funcFloat32(float paramFloat32)
 {
     (void) paramFloat32; // suppress the 'Unreferenced Formal Parameter' warning.
     // do business logic here
-    return 0.0;
+    return 0.0f;
 }
 
 std::future<float> SimpleInterface::funcFloat32Async(float paramFloat32)

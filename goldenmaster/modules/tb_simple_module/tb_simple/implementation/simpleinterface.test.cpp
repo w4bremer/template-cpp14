@@ -24,15 +24,15 @@ TEST_CASE("Testing SimpleInterface", "[SimpleInterface]"){
     }
     SECTION("Test operation funcInt64") {
         // Do implement test here
-        testSimpleInterface->funcInt64(0);
+        testSimpleInterface->funcInt64(0LL);
     }
     SECTION("Test operation funcFloat") {
         // Do implement test here
-        testSimpleInterface->funcFloat(0.0);
+        testSimpleInterface->funcFloat(0.0f);
     }
     SECTION("Test operation funcFloat32") {
         // Do implement test here
-        testSimpleInterface->funcFloat32(0.0);
+        testSimpleInterface->funcFloat32(0.0f);
     }
     SECTION("Test operation funcFloat64") {
         // Do implement test here
@@ -59,18 +59,18 @@ TEST_CASE("Testing SimpleInterface", "[SimpleInterface]"){
     }
     SECTION("Test property propInt64") {
         // Do implement test here
-        testSimpleInterface->setPropInt64(0);
-        REQUIRE( testSimpleInterface->getPropInt64() == 0 );
+        testSimpleInterface->setPropInt64(0LL);
+        REQUIRE( testSimpleInterface->getPropInt64() == 0LL );
     }
     SECTION("Test property propFloat") {
         // Do implement test here
-        testSimpleInterface->setPropFloat(0.0);
-        REQUIRE( testSimpleInterface->getPropFloat() == Approx( 0.0 ) );
+        testSimpleInterface->setPropFloat(0.0f);
+        REQUIRE( testSimpleInterface->getPropFloat() == Approx( 0.0f ) );
     }
     SECTION("Test property propFloat32") {
         // Do implement test here
-        testSimpleInterface->setPropFloat32(0.0);
-        REQUIRE( testSimpleInterface->getPropFloat32() == Approx( 0.0 ) );
+        testSimpleInterface->setPropFloat32(0.0f);
+        REQUIRE( testSimpleInterface->getPropFloat32() == Approx( 0.0f ) );
     }
     SECTION("Test property propFloat64") {
         // Do implement test here

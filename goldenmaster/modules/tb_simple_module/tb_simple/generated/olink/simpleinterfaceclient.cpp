@@ -364,7 +364,7 @@ int64_t SimpleInterfaceClient::funcInt64(int64_t paramInt64)
 {
      if(!m_node) {
         emitLog(ApiGear::Logger::LogLevel::Warning, "Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
-        return 0;
+        return 0LL;
     }
     int64_t value(funcInt64Async(paramInt64).get());
     return value;
@@ -395,7 +395,7 @@ float SimpleInterfaceClient::funcFloat(float paramFloat)
 {
      if(!m_node) {
         emitLog(ApiGear::Logger::LogLevel::Warning, "Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
-        return 0.0;
+        return 0.0f;
     }
     float value(funcFloatAsync(paramFloat).get());
     return value;
@@ -426,7 +426,7 @@ float SimpleInterfaceClient::funcFloat32(float paramFloat32)
 {
      if(!m_node) {
         emitLog(ApiGear::Logger::LogLevel::Warning, "Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
-        return 0.0;
+        return 0.0f;
     }
     float value(funcFloat32Async(paramFloat32).get());
     return value;
