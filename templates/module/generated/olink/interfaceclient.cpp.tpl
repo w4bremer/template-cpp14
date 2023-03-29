@@ -3,7 +3,7 @@
 {{- $interfaceName := Camel .Interface.Name  }}
 {{- $interfaceNameOriginal := .Interface.Name  }}
 {{- $interfaceClass := printf "I%s" $interfaceName }}
-{{- $identifiername := printf "%s.%s" .Module.Name $interfaceName }}
+{{- $identifiername := printf "%s.%s" .Module.Name .Interface.Name }}
 {{- $class := printf "%sClient" .Interface.Name }}
 {{- $pub_interface := printf "I%sPublisher" $interfaceName }}
 {{- $pub_class := printf "%sPublisher" $interfaceName }}

@@ -17,7 +17,7 @@ using namespace {{ Camel .System.Name }}::{{ Camel .Module.Name }}::olink;
 
 namespace 
 {
-const std::string interfaceId = "{{lower1 .Module.Name}}.{{$interface}}";
+const std::string interfaceId = "{{.Module.Name}}.{{$interface}}";
 }
 
 {{$class}}::{{$class}}(std::shared_ptr<I{{$interface}}> {{$interface}}, ApiGear::ObjectLink::RemoteRegistry& registry)
