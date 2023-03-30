@@ -34,14 +34,25 @@ Logger::Logger() {
         auto levelText = "debug";
         switch (level)
         {
-            case LogLevel::Debug : levelText = "debug"; break;
-            case LogLevel::Error : levelText = "error"; break;
-            case LogLevel::Warning: levelText = "warning"; break;
-            case LogLevel::Info: levelText = "info"; break;
-            default: levelText = "debug"; break;
+            case LogLevel::Debug:
+                levelText = "debug";
+                std::clog<< levelText <<" : "<< msg << std::endl;
+                break;
+            case LogLevel::Error:
+                levelText = "error";
+                std::cerr<< levelText <<" : "<< msg << std::endl;
+                break;
+            case LogLevel::Warning:
+                levelText = "warning";
+                std::cerr<< levelText <<" : "<< msg << std::endl;
+                break;
+            case LogLevel::Info:
+                levelText = "info";
+                std::cout<< levelText <<" : "<< msg << std::endl;
+                break;
+            default:
+                break;
         }
-
-        std::cout<< levelText <<" : "<< msg << std::endl;
     };
 }
 

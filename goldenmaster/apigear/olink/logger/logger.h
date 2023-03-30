@@ -58,7 +58,9 @@ using WriteLogFunc = std::function<void(LogLevel level, const std::string& msg)>
 
 
 /**
-* Helper base class enabling consistent logging behavior. By default logs to std::cout.
+* Helper base class enabling consistent logging behavior.
+*
+* Depending on the LogLevel different output streams are used.
 */
 class API_GEAR_LOGGER Logger {
 public:
