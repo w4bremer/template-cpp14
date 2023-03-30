@@ -34,9 +34,11 @@ m_logFunc = [](LogLevel level, const std::string& msg){
     auto levelText = "debug";
     switch (level)
     {
+        case LogLevel::Debug : levelText = "debug"; break;
         case LogLevel::Error : levelText = "error"; break;
         case LogLevel::Warning: levelText = "warning"; break;
         case LogLevel::Info: levelText = "info"; break;
+        default: levelText = "debug"; break;
     }
 
     std::cout<< levelText <<" : "<< msg << std::endl;};
