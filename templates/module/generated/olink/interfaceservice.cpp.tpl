@@ -38,7 +38,7 @@ std::string {{$class}}::olinkObjectName() {
 }
 
 nlohmann::json {{$class}}::olinkInvoke(const std::string& methodId, const nlohmann::json& fcnArgs) {
-    ApiGear::Utilities::logDebug(methodId);
+    AG_LOG_DEBUG(methodId);
     const auto& memberMethod = ApiGear::ObjectLink::Name::getMemberName(methodId);
 {{- range .Interface.Operations}}
 {{- $operation := . }}
@@ -64,7 +64,7 @@ nlohmann::json {{$class}}::olinkInvoke(const std::string& methodId, const nlohma
 }
 
 void {{$class}}::olinkSetProperty(const std::string& propertyId, const nlohmann::json& value) {
-    ApiGear::Utilities::logDebug(propertyId);
+    AG_LOG_DEBUG(propertyId);
     const auto& memberProperty = ApiGear::ObjectLink::Name::getMemberName(propertyId);
 {{- range .Interface.Properties}}
 {{- $property := . }}
@@ -80,11 +80,11 @@ void {{$class}}::olinkSetProperty(const std::string& propertyId, const nlohmann:
 }
 
 void {{$class}}::olinkLinked(const std::string& objectId, ApiGear::ObjectLink::IRemoteNode* /*node*/) {
-    ApiGear::Utilities::logDebug(objectId);
+    AG_LOG_DEBUG(objectId);
 }
 
 void {{$class}}::olinkUnlinked(const std::string& objectId){
-    ApiGear::Utilities::logDebug(objectId);
+    AG_LOG_DEBUG(objectId);
 }
 
 nlohmann::json {{$class}}::olinkCollectProperties()

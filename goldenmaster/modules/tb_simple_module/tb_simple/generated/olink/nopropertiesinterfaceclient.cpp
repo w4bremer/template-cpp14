@@ -28,7 +28,7 @@ void NoPropertiesInterfaceClient::applyState(const nlohmann::json& fields)
 void NoPropertiesInterfaceClient::funcVoid()
 {
      if(!m_node) {
-        ApiGear::Utilities::logWarning("Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
+        AG_LOG_WARNING("Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return;
     }
     ApiGear::ObjectLink::InvokeReplyFunc func = [this](ApiGear::ObjectLink::InvokeReplyArg arg)
@@ -44,7 +44,7 @@ void NoPropertiesInterfaceClient::funcVoid()
 std::future<void> NoPropertiesInterfaceClient::funcVoidAsync()
 {
     if(!m_node) {
-        ApiGear::Utilities::logWarning("Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
+        AG_LOG_WARNING("Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return std::future<void>{};
     }
     return std::async(std::launch::async, [this]()
@@ -64,7 +64,7 @@ std::future<void> NoPropertiesInterfaceClient::funcVoidAsync()
 bool NoPropertiesInterfaceClient::funcBool(bool paramBool)
 {
      if(!m_node) {
-        ApiGear::Utilities::logWarning("Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
+        AG_LOG_WARNING("Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return false;
     }
     bool value(funcBoolAsync(paramBool).get());
@@ -74,7 +74,7 @@ bool NoPropertiesInterfaceClient::funcBool(bool paramBool)
 std::future<bool> NoPropertiesInterfaceClient::funcBoolAsync(bool paramBool)
 {
     if(!m_node) {
-        ApiGear::Utilities::logWarning("Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
+        AG_LOG_WARNING("Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return std::future<bool>{};
     }
     return std::async(std::launch::async, [this,

@@ -48,7 +48,7 @@ void {{$class}}::applyState(const nlohmann::json& fields)
 void {{$class}}::set{{Camel $name}}({{cppParam "" $property}})
 {
     if(!m_node) {
-        ApiGear::Utilities::logWarning("Attempt to set property but " + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
+        AG_LOG_WARNING("Attempt to set property but " + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return;
     }
     const auto& propertyId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "{{$property.Name}}");
@@ -78,7 +78,7 @@ void {{$class}}::set{{Camel $name}}Local({{cppParam "" $property }})
 {{$returnType}} {{$class}}::{{lower1 $operation.Name}}({{cppParams "" $operation.Params}})
 {
      if(!m_node) {
-        ApiGear::Utilities::logWarning("Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
+        AG_LOG_WARNING("Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         {{- if not .Return.IsVoid }}
         return {{cppDefault "" $operation.Return}};
         {{- else }}
@@ -103,7 +103,7 @@ void {{$class}}::set{{Camel $name}}Local({{cppParam "" $property }})
 std::future<{{$returnType}}> {{$class}}::{{$operation.Name| lower1}}Async({{cppParams "" $operation.Params}})
 {
     if(!m_node) {
-        ApiGear::Utilities::logWarning("Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
+        AG_LOG_WARNING("Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return std::future<{{$returnType}}>{};
     }
     return std::async(std::launch::async, [this{{- range $operation.Params -}},

@@ -36,7 +36,7 @@ std::string SimpleArrayInterfaceService::olinkObjectName() {
 }
 
 nlohmann::json SimpleArrayInterfaceService::olinkInvoke(const std::string& methodId, const nlohmann::json& fcnArgs) {
-    ApiGear::Utilities::logDebug(methodId);
+    AG_LOG_DEBUG(methodId);
     const auto& memberMethod = ApiGear::ObjectLink::Name::getMemberName(methodId);
     if(memberMethod == "funcBool") {
         const std::list<bool>& paramBool = fcnArgs.at(0);
@@ -82,7 +82,7 @@ nlohmann::json SimpleArrayInterfaceService::olinkInvoke(const std::string& metho
 }
 
 void SimpleArrayInterfaceService::olinkSetProperty(const std::string& propertyId, const nlohmann::json& value) {
-    ApiGear::Utilities::logDebug(propertyId);
+    AG_LOG_DEBUG(propertyId);
     const auto& memberProperty = ApiGear::ObjectLink::Name::getMemberName(propertyId);
     if(memberProperty == "propBool") {
         std::list<bool> propBool = value.get<std::list<bool>>();
@@ -119,11 +119,11 @@ void SimpleArrayInterfaceService::olinkSetProperty(const std::string& propertyId
 }
 
 void SimpleArrayInterfaceService::olinkLinked(const std::string& objectId, ApiGear::ObjectLink::IRemoteNode* /*node*/) {
-    ApiGear::Utilities::logDebug(objectId);
+    AG_LOG_DEBUG(objectId);
 }
 
 void SimpleArrayInterfaceService::olinkUnlinked(const std::string& objectId){
-    ApiGear::Utilities::logDebug(objectId);
+    AG_LOG_DEBUG(objectId);
 }
 
 nlohmann::json SimpleArrayInterfaceService::olinkCollectProperties()

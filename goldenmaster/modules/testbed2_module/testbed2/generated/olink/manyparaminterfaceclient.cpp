@@ -39,7 +39,7 @@ void ManyParamInterfaceClient::applyState(const nlohmann::json& fields)
 void ManyParamInterfaceClient::setProp1(int prop1)
 {
     if(!m_node) {
-        ApiGear::Utilities::logWarning("Attempt to set property but " + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
+        AG_LOG_WARNING("Attempt to set property but " + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return;
     }
     const auto& propertyId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "prop1");
@@ -62,7 +62,7 @@ int ManyParamInterfaceClient::getProp1() const
 void ManyParamInterfaceClient::setProp2(int prop2)
 {
     if(!m_node) {
-        ApiGear::Utilities::logWarning("Attempt to set property but " + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
+        AG_LOG_WARNING("Attempt to set property but " + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return;
     }
     const auto& propertyId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "prop2");
@@ -85,7 +85,7 @@ int ManyParamInterfaceClient::getProp2() const
 void ManyParamInterfaceClient::setProp3(int prop3)
 {
     if(!m_node) {
-        ApiGear::Utilities::logWarning("Attempt to set property but " + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
+        AG_LOG_WARNING("Attempt to set property but " + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return;
     }
     const auto& propertyId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "prop3");
@@ -108,7 +108,7 @@ int ManyParamInterfaceClient::getProp3() const
 void ManyParamInterfaceClient::setProp4(int prop4)
 {
     if(!m_node) {
-        ApiGear::Utilities::logWarning("Attempt to set property but " + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
+        AG_LOG_WARNING("Attempt to set property but " + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return;
     }
     const auto& propertyId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "prop4");
@@ -131,7 +131,7 @@ int ManyParamInterfaceClient::getProp4() const
 int ManyParamInterfaceClient::func1(int param1)
 {
      if(!m_node) {
-        ApiGear::Utilities::logWarning("Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
+        AG_LOG_WARNING("Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return 0;
     }
     int value(func1Async(param1).get());
@@ -141,7 +141,7 @@ int ManyParamInterfaceClient::func1(int param1)
 std::future<int> ManyParamInterfaceClient::func1Async(int param1)
 {
     if(!m_node) {
-        ApiGear::Utilities::logWarning("Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
+        AG_LOG_WARNING("Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return std::future<int>{};
     }
     return std::async(std::launch::async, [this,
@@ -162,7 +162,7 @@ std::future<int> ManyParamInterfaceClient::func1Async(int param1)
 int ManyParamInterfaceClient::func2(int param1, int param2)
 {
      if(!m_node) {
-        ApiGear::Utilities::logWarning("Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
+        AG_LOG_WARNING("Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return 0;
     }
     int value(func2Async(param1, param2).get());
@@ -172,7 +172,7 @@ int ManyParamInterfaceClient::func2(int param1, int param2)
 std::future<int> ManyParamInterfaceClient::func2Async(int param1, int param2)
 {
     if(!m_node) {
-        ApiGear::Utilities::logWarning("Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
+        AG_LOG_WARNING("Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return std::future<int>{};
     }
     return std::async(std::launch::async, [this,
@@ -194,7 +194,7 @@ std::future<int> ManyParamInterfaceClient::func2Async(int param1, int param2)
 int ManyParamInterfaceClient::func3(int param1, int param2, int param3)
 {
      if(!m_node) {
-        ApiGear::Utilities::logWarning("Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
+        AG_LOG_WARNING("Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return 0;
     }
     int value(func3Async(param1, param2, param3).get());
@@ -204,7 +204,7 @@ int ManyParamInterfaceClient::func3(int param1, int param2, int param3)
 std::future<int> ManyParamInterfaceClient::func3Async(int param1, int param2, int param3)
 {
     if(!m_node) {
-        ApiGear::Utilities::logWarning("Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
+        AG_LOG_WARNING("Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return std::future<int>{};
     }
     return std::async(std::launch::async, [this,
@@ -227,7 +227,7 @@ std::future<int> ManyParamInterfaceClient::func3Async(int param1, int param2, in
 int ManyParamInterfaceClient::func4(int param1, int param2, int param3, int param4)
 {
      if(!m_node) {
-        ApiGear::Utilities::logWarning("Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
+        AG_LOG_WARNING("Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return 0;
     }
     int value(func4Async(param1, param2, param3, param4).get());
@@ -237,7 +237,7 @@ int ManyParamInterfaceClient::func4(int param1, int param2, int param3, int para
 std::future<int> ManyParamInterfaceClient::func4Async(int param1, int param2, int param3, int param4)
 {
     if(!m_node) {
-        ApiGear::Utilities::logWarning("Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
+        AG_LOG_WARNING("Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return std::future<int>{};
     }
     return std::async(std::launch::async, [this,

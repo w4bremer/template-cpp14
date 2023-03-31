@@ -30,7 +30,7 @@ void NestedStruct1InterfaceClient::applyState(const nlohmann::json& fields)
 void NestedStruct1InterfaceClient::setProp1(const NestedStruct1& prop1)
 {
     if(!m_node) {
-        ApiGear::Utilities::logWarning("Attempt to set property but " + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
+        AG_LOG_WARNING("Attempt to set property but " + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return;
     }
     const auto& propertyId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "prop1");
@@ -53,7 +53,7 @@ const NestedStruct1& NestedStruct1InterfaceClient::getProp1() const
 NestedStruct1 NestedStruct1InterfaceClient::func1(const NestedStruct1& param1)
 {
      if(!m_node) {
-        ApiGear::Utilities::logWarning("Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
+        AG_LOG_WARNING("Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return NestedStruct1();
     }
     NestedStruct1 value(func1Async(param1).get());
@@ -63,7 +63,7 @@ NestedStruct1 NestedStruct1InterfaceClient::func1(const NestedStruct1& param1)
 std::future<NestedStruct1> NestedStruct1InterfaceClient::func1Async(const NestedStruct1& param1)
 {
     if(!m_node) {
-        ApiGear::Utilities::logWarning("Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
+        AG_LOG_WARNING("Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return std::future<NestedStruct1>{};
     }
     return std::async(std::launch::async, [this,

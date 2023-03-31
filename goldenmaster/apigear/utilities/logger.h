@@ -93,3 +93,8 @@ void APIGEAR_LOGGER logWarning(const std::string& msg);
 void APIGEAR_LOGGER logError(const std::string& msg);
 
 } } // ApiGear::Utilities
+
+#define AG_LOG_INFO(str) ApiGear::Utilities::logInfo(str)
+#define AG_LOG_DEBUG(str) ApiGear::Utilities::logDebug(str)
+#define AG_LOG_WARNING(str) ApiGear::Utilities::logWarning(str)
+#define AG_LOG_ERROR(str) ApiGear::Utilities::logError(str)

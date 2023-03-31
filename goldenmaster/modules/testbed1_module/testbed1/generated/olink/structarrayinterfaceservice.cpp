@@ -36,7 +36,7 @@ std::string StructArrayInterfaceService::olinkObjectName() {
 }
 
 nlohmann::json StructArrayInterfaceService::olinkInvoke(const std::string& methodId, const nlohmann::json& fcnArgs) {
-    ApiGear::Utilities::logDebug(methodId);
+    AG_LOG_DEBUG(methodId);
     const auto& memberMethod = ApiGear::ObjectLink::Name::getMemberName(methodId);
     if(memberMethod == "funcBool") {
         const std::list<StructBool>& paramBool = fcnArgs.at(0);
@@ -62,7 +62,7 @@ nlohmann::json StructArrayInterfaceService::olinkInvoke(const std::string& metho
 }
 
 void StructArrayInterfaceService::olinkSetProperty(const std::string& propertyId, const nlohmann::json& value) {
-    ApiGear::Utilities::logDebug(propertyId);
+    AG_LOG_DEBUG(propertyId);
     const auto& memberProperty = ApiGear::ObjectLink::Name::getMemberName(propertyId);
     if(memberProperty == "propBool") {
         std::list<StructBool> propBool = value.get<std::list<StructBool>>();
@@ -83,11 +83,11 @@ void StructArrayInterfaceService::olinkSetProperty(const std::string& propertyId
 }
 
 void StructArrayInterfaceService::olinkLinked(const std::string& objectId, ApiGear::ObjectLink::IRemoteNode* /*node*/) {
-    ApiGear::Utilities::logDebug(objectId);
+    AG_LOG_DEBUG(objectId);
 }
 
 void StructArrayInterfaceService::olinkUnlinked(const std::string& objectId){
-    ApiGear::Utilities::logDebug(objectId);
+    AG_LOG_DEBUG(objectId);
 }
 
 nlohmann::json StructArrayInterfaceService::olinkCollectProperties()

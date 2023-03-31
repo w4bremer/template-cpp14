@@ -36,7 +36,7 @@ std::string ManyParamInterfaceService::olinkObjectName() {
 }
 
 nlohmann::json ManyParamInterfaceService::olinkInvoke(const std::string& methodId, const nlohmann::json& fcnArgs) {
-    ApiGear::Utilities::logDebug(methodId);
+    AG_LOG_DEBUG(methodId);
     const auto& memberMethod = ApiGear::ObjectLink::Name::getMemberName(methodId);
     if(memberMethod == "func1") {
         const int& param1 = fcnArgs.at(0);
@@ -68,7 +68,7 @@ nlohmann::json ManyParamInterfaceService::olinkInvoke(const std::string& methodI
 }
 
 void ManyParamInterfaceService::olinkSetProperty(const std::string& propertyId, const nlohmann::json& value) {
-    ApiGear::Utilities::logDebug(propertyId);
+    AG_LOG_DEBUG(propertyId);
     const auto& memberProperty = ApiGear::ObjectLink::Name::getMemberName(propertyId);
     if(memberProperty == "prop1") {
         int prop1 = value.get<int>();
@@ -89,11 +89,11 @@ void ManyParamInterfaceService::olinkSetProperty(const std::string& propertyId, 
 }
 
 void ManyParamInterfaceService::olinkLinked(const std::string& objectId, ApiGear::ObjectLink::IRemoteNode* /*node*/) {
-    ApiGear::Utilities::logDebug(objectId);
+    AG_LOG_DEBUG(objectId);
 }
 
 void ManyParamInterfaceService::olinkUnlinked(const std::string& objectId){
-    ApiGear::Utilities::logDebug(objectId);
+    AG_LOG_DEBUG(objectId);
 }
 
 nlohmann::json ManyParamInterfaceService::olinkCollectProperties()
