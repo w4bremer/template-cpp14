@@ -28,7 +28,7 @@
 
 namespace ApiGear { namespace Utilities {
 
-static WriteLogFunc logFunc = getConsoleLogFunc();
+static WriteLogFunc logFunc = getConsoleLogFunc(LogLevel::Warning);
 
 void emitLog(LogLevel level, const std::string& msg){
     if(logFunc) {
@@ -40,10 +40,15 @@ void setLog(WriteLogFunc func){
     logFunc = func;
 }
 
-WriteLogFunc getConsoleLogFunc(){
-    return [](LogLevel level, const std::string& msg)
+WriteLogFunc getConsoleLogFunc(LogLevel minimumLevel){
+    return [minimumLevel](LogLevel level, const std::string& msg)
     {
         auto levelText = "[debug  ] ";
+
+        if (level < minimumLevel){
+            return;
+        }
+
         switch (level)
         {
             case LogLevel::Debug:

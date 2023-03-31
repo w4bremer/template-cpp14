@@ -47,10 +47,10 @@ namespace ApiGear { namespace Utilities {
 * Logging levels for logs across the application.
 */
 enum APIGEAR_LOGGER LogLevel {
-    Info,
-    Debug,
-    Warning,
-    Error
+    Debug = 0,      // Useful for debugging during development
+    Info = 1,       // Some event happened, usually not important
+    Warning = 2,    // Important to know
+    Error = 3       // Must know - something is wrong
 };
 
 /** A type of function to log*/
@@ -68,9 +68,10 @@ void APIGEAR_LOGGER setLog(WriteLogFunc func);
 /* 
 * Get the default console log function
 *
+* @param minimumLevel report only log events which are at least as severe
 * @return func returns the default console log function
 */
-WriteLogFunc APIGEAR_LOGGER getConsoleLogFunc();
+WriteLogFunc APIGEAR_LOGGER getConsoleLogFunc(LogLevel minimumLevel);
 
 /*
 * Use to log
