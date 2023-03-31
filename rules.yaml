@@ -141,6 +141,12 @@ features:
     scopes:
     - match: system
       documents:
+        - source: "apigear/utilities/logger.cpp"
+          raw: true
+        - source: "apigear/utilities/logger.h"
+          raw: true
+        - source: "apigear/utilities/CMakeLists.txt"
+          raw: true
         - source: "apigear/apigear.test.cpp"
           raw: true
         - source: "apigear/tracer/tracer.h"
@@ -194,10 +200,6 @@ features:
         - source: "apigear/olink/private/socketwrapper.cpp"
           raw: true
         - source: "apigear/olink/private/socketwrapper.h"
-          raw: true
-        - source: "apigear/olink/logger/logger.cpp"
-          raw: true
-        - source: "apigear/olink/logger/logger.h"
           raw: true
         - source: "apigear/olink/tests/CMakeLists.txt"
           raw: true

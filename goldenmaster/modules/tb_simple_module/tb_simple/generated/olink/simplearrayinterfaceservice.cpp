@@ -6,7 +6,7 @@
 
 #include "olink/iremotenode.h"
 #include "olink/remoteregistry.h"
-#include "apigear/olink/logger/logger.h"
+#include "apigear/utilities/logger.h"
 
 #include <iostream>
 
@@ -22,7 +22,7 @@ const std::string interfaceId = "tb.simple.SimpleArrayInterface";
 SimpleArrayInterfaceService::SimpleArrayInterfaceService(std::shared_ptr<ISimpleArrayInterface> SimpleArrayInterface, ApiGear::ObjectLink::RemoteRegistry& registry)
     : m_SimpleArrayInterface(SimpleArrayInterface)
     , m_registry(registry)
-    , m_logger(std::make_unique<ApiGear::Logger::Logger>())
+    , m_logger(std::make_unique<ApiGear::Utilities::Logger>())
 {
     m_SimpleArrayInterface->_getPublisher().subscribeToAllChanges(*this);
 }
@@ -37,7 +37,7 @@ std::string SimpleArrayInterfaceService::olinkObjectName() {
 }
 
 nlohmann::json SimpleArrayInterfaceService::olinkInvoke(const std::string& methodId, const nlohmann::json& fcnArgs) {
-    m_logger->emitLog(ApiGear::Logger::LogLevel::Debug, methodId);
+    m_logger->emitLog(ApiGear::Utilities::LogLevel::Debug, methodId);
     const auto& memberMethod = ApiGear::ObjectLink::Name::getMemberName(methodId);
     if(memberMethod == "funcBool") {
         const std::list<bool>& paramBool = fcnArgs.at(0);
@@ -83,7 +83,7 @@ nlohmann::json SimpleArrayInterfaceService::olinkInvoke(const std::string& metho
 }
 
 void SimpleArrayInterfaceService::olinkSetProperty(const std::string& propertyId, const nlohmann::json& value) {
-    m_logger->emitLog(ApiGear::Logger::LogLevel::Debug, propertyId);
+    m_logger->emitLog(ApiGear::Utilities::LogLevel::Debug, propertyId);
     const auto& memberProperty = ApiGear::ObjectLink::Name::getMemberName(propertyId);
     if(memberProperty == "propBool") {
         std::list<bool> propBool = value.get<std::list<bool>>();
@@ -120,11 +120,11 @@ void SimpleArrayInterfaceService::olinkSetProperty(const std::string& propertyId
 }
 
 void SimpleArrayInterfaceService::olinkLinked(const std::string& objetId, ApiGear::ObjectLink::IRemoteNode* /*node*/) {
-    m_logger->emitLog(ApiGear::Logger::LogLevel::Debug, objetId);
+    m_logger->emitLog(ApiGear::Utilities::LogLevel::Debug, objetId);
 }
 
 void SimpleArrayInterfaceService::olinkUnlinked(const std::string& objetId){
-    m_logger->emitLog(ApiGear::Logger::LogLevel::Debug, objetId);
+    m_logger->emitLog(ApiGear::Utilities::LogLevel::Debug, objetId);
 }
 
 nlohmann::json SimpleArrayInterfaceService::olinkCollectProperties()

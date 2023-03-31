@@ -55,7 +55,7 @@ class apigearConan(ConanFile):
             self.options["poco"].shared = False
 
     def package(self):
-        packages = ["tracer", "olink"]
+        packages = ["utilities", "tracer", "olink"]
         self.copy("**/*.h", dst="include/apigear", src=".")
         self.copy("*.lib", dst="lib", src=".", keep_path=False)
         self.copy("*.dll", dst="bin", src=".", keep_path=False)
@@ -67,9 +67,11 @@ class apigearConan(ConanFile):
 
     def package_info(self):
         self.env_info.path.append(os.path.join(self.package_folder, "bin"))
+        self.cpp_info.components["apgiear-utilities"].libs = ["apigear-utilities"]
+        self.cpp_info.components["apgiear-utilities"].includedirs.append(os.path.join(self.package_folder, "include"))
         self.cpp_info.components["poco-tracer"].libs = ["poco-tracer"]
         self.cpp_info.components["poco-tracer"].includedirs.append(os.path.join(self.package_folder, "include"))
-        self.cpp_info.components["poco-tracer"].requires = ["catch2::catch2", "poco::poco", "nlohmann_json::nlohmann_json"]
+        self.cpp_info.components["poco-tracer"].requires = ["catch2::catch2", "poco::poco", "nlohmann_json::nlohmann_json", "apgiear-utilities"]
         self.cpp_info.components["poco-olink"].libs = ["poco-olink"]
         self.cpp_info.components["poco-olink"].includedirs.append(os.path.join(self.package_folder, "include"))
-        self.cpp_info.components["poco-olink"].requires = ["poco::poco", "nlohmann_json::nlohmann_json"]
+        self.cpp_info.components["poco-olink"].requires = ["poco::poco", "nlohmann_json::nlohmann_json", "apgiear-utilities"]

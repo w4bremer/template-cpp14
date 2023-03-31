@@ -4,7 +4,7 @@
 #include "testbed2/generated/api/testbed2.h"
 #include "testbed2/generated/api/common.h"
 #include "olink/iobjectsource.h"
-#include "apigear/olink/logger/logger.h"
+#include "apigear/utilities/logger.h"
 
 
 namespace ApiGear {
@@ -98,7 +98,7 @@ private:
     ApiGear::ObjectLink::RemoteRegistry& m_registry;
 
     /** The logger */
-    std::unique_ptr<ApiGear::Logger::Logger> m_logger;
+    std::unique_ptr<ApiGear::Utilities::Logger> m_logger;
 };
 } // namespace olink
 } // namespace Testbed2

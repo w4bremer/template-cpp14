@@ -12,6 +12,9 @@ set(INCLUDE_INSTALL_DIR include/apigear/ CACHE FILEPATH "")
 set(LIB_INSTALL_DIR ${CMAKE_CURRENT_BINARY_DIR}/lib/ CACHE FILEPATH "")
 set(InstallDir ${LIB_INSTALL_DIR}/cmake/apigear)
 
+add_subdirectory(utilities)
+list(APPEND apigear_COMPONENTS "utilities")
+
 add_subdirectory(tracer)
 list(APPEND apigear_COMPONENTS "tracer")
 

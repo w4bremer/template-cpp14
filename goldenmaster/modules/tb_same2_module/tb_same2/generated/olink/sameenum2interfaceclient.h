@@ -6,7 +6,7 @@
 #include "tb_same2/generated/core/sameenum2interface.data.h"
 
 #include "apigear/olink/iolinkconnector.h"
-#include "apigear/olink/logger/logger.h"
+#include "apigear/utilities/logger.h"
 #include "olink/iobjectsink.h"
 
 #include <future>
@@ -146,7 +146,7 @@ private:
     std::unique_ptr<ISameEnum2InterfacePublisher> m_publisher;
 
     /** The logger */
-    std::unique_ptr<ApiGear::Logger::Logger> m_logger;
+    std::unique_ptr<ApiGear::Utilities::Logger> m_logger;
 };
 } // namespace olink
 } // namespace TbSame2

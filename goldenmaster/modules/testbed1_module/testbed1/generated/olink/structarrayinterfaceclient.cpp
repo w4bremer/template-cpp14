@@ -6,7 +6,7 @@
 
 #include "olink/iclientnode.h"
 #include "apigear/olink/olinkconnection.h"
-#include "apigear/olink/logger/logger.h"
+#include "apigear/utilities/logger.h"
 
 using namespace Test::Testbed1;
 using namespace Test::Testbed1::olink;
@@ -18,7 +18,7 @@ const std::string interfaceId = "testbed1.StructArrayInterface";
 
 StructArrayInterfaceClient::StructArrayInterfaceClient()
     : m_publisher(std::make_unique<StructArrayInterfacePublisher>())
-    , m_logger(std::make_unique<ApiGear::Logger::Logger>())
+    , m_logger(std::make_unique<ApiGear::Utilities::Logger>())
 {}
 
 void StructArrayInterfaceClient::applyState(const nlohmann::json& fields) 
@@ -40,7 +40,7 @@ void StructArrayInterfaceClient::applyState(const nlohmann::json& fields)
 void StructArrayInterfaceClient::setPropBool(const std::list<StructBool>& propBool)
 {
     if(!m_node) {
-        m_logger->emitLog(ApiGear::Logger::LogLevel::Warning, "Attempt to set property but " + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
+        m_logger->emitLog(ApiGear::Utilities::LogLevel::Warning, "Attempt to set property but " + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return;
     }
     const auto& propertyId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "propBool");
@@ -63,7 +63,7 @@ const std::list<StructBool>& StructArrayInterfaceClient::getPropBool() const
 void StructArrayInterfaceClient::setPropInt(const std::list<StructInt>& propInt)
 {
     if(!m_node) {
-        m_logger->emitLog(ApiGear::Logger::LogLevel::Warning, "Attempt to set property but " + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
+        m_logger->emitLog(ApiGear::Utilities::LogLevel::Warning, "Attempt to set property but " + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return;
     }
     const auto& propertyId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "propInt");
@@ -86,7 +86,7 @@ const std::list<StructInt>& StructArrayInterfaceClient::getPropInt() const
 void StructArrayInterfaceClient::setPropFloat(const std::list<StructFloat>& propFloat)
 {
     if(!m_node) {
-        m_logger->emitLog(ApiGear::Logger::LogLevel::Warning, "Attempt to set property but " + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
+        m_logger->emitLog(ApiGear::Utilities::LogLevel::Warning, "Attempt to set property but " + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return;
     }
     const auto& propertyId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "propFloat");
@@ -109,7 +109,7 @@ const std::list<StructFloat>& StructArrayInterfaceClient::getPropFloat() const
 void StructArrayInterfaceClient::setPropString(const std::list<StructString>& propString)
 {
     if(!m_node) {
-        m_logger->emitLog(ApiGear::Logger::LogLevel::Warning, "Attempt to set property but " + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
+        m_logger->emitLog(ApiGear::Utilities::LogLevel::Warning, "Attempt to set property but " + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return;
     }
     const auto& propertyId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "propString");
@@ -132,7 +132,7 @@ const std::list<StructString>& StructArrayInterfaceClient::getPropString() const
 StructBool StructArrayInterfaceClient::funcBool(const std::list<StructBool>& paramBool)
 {
      if(!m_node) {
-        m_logger->emitLog(ApiGear::Logger::LogLevel::Warning, "Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
+        m_logger->emitLog(ApiGear::Utilities::LogLevel::Warning, "Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return StructBool();
     }
     StructBool value(funcBoolAsync(paramBool).get());
@@ -142,7 +142,7 @@ StructBool StructArrayInterfaceClient::funcBool(const std::list<StructBool>& par
 std::future<StructBool> StructArrayInterfaceClient::funcBoolAsync(const std::list<StructBool>& paramBool)
 {
     if(!m_node) {
-        m_logger->emitLog(ApiGear::Logger::LogLevel::Warning, "Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
+        m_logger->emitLog(ApiGear::Utilities::LogLevel::Warning, "Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return std::future<StructBool>{};
     }
     return std::async(std::launch::async, [this,
@@ -163,7 +163,7 @@ std::future<StructBool> StructArrayInterfaceClient::funcBoolAsync(const std::lis
 StructBool StructArrayInterfaceClient::funcInt(const std::list<StructInt>& paramInt)
 {
      if(!m_node) {
-        m_logger->emitLog(ApiGear::Logger::LogLevel::Warning, "Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
+        m_logger->emitLog(ApiGear::Utilities::LogLevel::Warning, "Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return StructBool();
     }
     StructBool value(funcIntAsync(paramInt).get());
@@ -173,7 +173,7 @@ StructBool StructArrayInterfaceClient::funcInt(const std::list<StructInt>& param
 std::future<StructBool> StructArrayInterfaceClient::funcIntAsync(const std::list<StructInt>& paramInt)
 {
     if(!m_node) {
-        m_logger->emitLog(ApiGear::Logger::LogLevel::Warning, "Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
+        m_logger->emitLog(ApiGear::Utilities::LogLevel::Warning, "Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return std::future<StructBool>{};
     }
     return std::async(std::launch::async, [this,
@@ -194,7 +194,7 @@ std::future<StructBool> StructArrayInterfaceClient::funcIntAsync(const std::list
 StructBool StructArrayInterfaceClient::funcFloat(const std::list<StructFloat>& paramFloat)
 {
      if(!m_node) {
-        m_logger->emitLog(ApiGear::Logger::LogLevel::Warning, "Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
+        m_logger->emitLog(ApiGear::Utilities::LogLevel::Warning, "Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return StructBool();
     }
     StructBool value(funcFloatAsync(paramFloat).get());
@@ -204,7 +204,7 @@ StructBool StructArrayInterfaceClient::funcFloat(const std::list<StructFloat>& p
 std::future<StructBool> StructArrayInterfaceClient::funcFloatAsync(const std::list<StructFloat>& paramFloat)
 {
     if(!m_node) {
-        m_logger->emitLog(ApiGear::Logger::LogLevel::Warning, "Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
+        m_logger->emitLog(ApiGear::Utilities::LogLevel::Warning, "Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return std::future<StructBool>{};
     }
     return std::async(std::launch::async, [this,
@@ -225,7 +225,7 @@ std::future<StructBool> StructArrayInterfaceClient::funcFloatAsync(const std::li
 StructBool StructArrayInterfaceClient::funcString(const std::list<StructString>& paramString)
 {
      if(!m_node) {
-        m_logger->emitLog(ApiGear::Logger::LogLevel::Warning, "Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
+        m_logger->emitLog(ApiGear::Utilities::LogLevel::Warning, "Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return StructBool();
     }
     StructBool value(funcStringAsync(paramString).get());
@@ -235,7 +235,7 @@ StructBool StructArrayInterfaceClient::funcString(const std::list<StructString>&
 std::future<StructBool> StructArrayInterfaceClient::funcStringAsync(const std::list<StructString>& paramString)
 {
     if(!m_node) {
-        m_logger->emitLog(ApiGear::Logger::LogLevel::Warning, "Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
+        m_logger->emitLog(ApiGear::Utilities::LogLevel::Warning, "Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return std::future<StructBool>{};
     }
     return std::async(std::launch::async, [this,

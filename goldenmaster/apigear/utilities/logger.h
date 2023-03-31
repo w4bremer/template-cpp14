@@ -41,7 +41,7 @@
 #endif
 
 
-namespace ApiGear { namespace Logger {
+namespace ApiGear { namespace Utilities {
 
 /**
 * Logging levels for logs across the application.

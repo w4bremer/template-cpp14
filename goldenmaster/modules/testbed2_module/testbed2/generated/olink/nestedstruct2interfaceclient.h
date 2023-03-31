@@ -6,7 +6,7 @@
 #include "testbed2/generated/core/nestedstruct2interface.data.h"
 
 #include "apigear/olink/iolinkconnector.h"
-#include "apigear/olink/logger/logger.h"
+#include "apigear/utilities/logger.h"
 #include "olink/iobjectsink.h"
 
 #include <future>
@@ -146,7 +146,7 @@ private:
     std::unique_ptr<INestedStruct2InterfacePublisher> m_publisher;
 
     /** The logger */
-    std::unique_ptr<ApiGear::Logger::Logger> m_logger;
+    std::unique_ptr<ApiGear::Utilities::Logger> m_logger;
 };
 } // namespace olink
 } // namespace Testbed2

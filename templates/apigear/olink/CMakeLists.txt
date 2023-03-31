@@ -39,7 +39,6 @@ set (SOURCES
     private/requesthandlerfactory.cpp
     private/connectionstorage.cpp
     private/socketwrapper.cpp
-    logger/logger.cpp
 )
 add_library(poco-olink SHARED ${SOURCES})
 add_library(apigear::poco-olink ALIAS poco-olink)
@@ -50,7 +49,7 @@ target_include_directories(poco-olink
     $<INSTALL_INTERFACE:include>
 )
 
-target_link_libraries(poco-olink PUBLIC Poco::Net Poco::Util olink_core)
+target_link_libraries(poco-olink PUBLIC Poco::Net Poco::Util olink_core apigear::utilities)
 
 
 # install binary files

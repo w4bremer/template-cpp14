@@ -6,7 +6,7 @@
 
 #include "olink/iclientnode.h"
 #include "apigear/olink/olinkconnection.h"
-#include "apigear/olink/logger/logger.h"
+#include "apigear/utilities/logger.h"
 
 using namespace Test::TbSimple;
 using namespace Test::TbSimple::olink;
@@ -18,7 +18,7 @@ const std::string interfaceId = "tb.simple.SimpleArrayInterface";
 
 SimpleArrayInterfaceClient::SimpleArrayInterfaceClient()
     : m_publisher(std::make_unique<SimpleArrayInterfacePublisher>())
-    , m_logger(std::make_unique<ApiGear::Logger::Logger>())
+    , m_logger(std::make_unique<ApiGear::Utilities::Logger>())
 {}
 
 void SimpleArrayInterfaceClient::applyState(const nlohmann::json& fields) 
@@ -52,7 +52,7 @@ void SimpleArrayInterfaceClient::applyState(const nlohmann::json& fields)
 void SimpleArrayInterfaceClient::setPropBool(const std::list<bool>& propBool)
 {
     if(!m_node) {
-        m_logger->emitLog(ApiGear::Logger::LogLevel::Warning, "Attempt to set property but " + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
+        m_logger->emitLog(ApiGear::Utilities::LogLevel::Warning, "Attempt to set property but " + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return;
     }
     const auto& propertyId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "propBool");
@@ -75,7 +75,7 @@ const std::list<bool>& SimpleArrayInterfaceClient::getPropBool() const
 void SimpleArrayInterfaceClient::setPropInt(const std::list<int>& propInt)
 {
     if(!m_node) {
-        m_logger->emitLog(ApiGear::Logger::LogLevel::Warning, "Attempt to set property but " + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
+        m_logger->emitLog(ApiGear::Utilities::LogLevel::Warning, "Attempt to set property but " + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return;
     }
     const auto& propertyId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "propInt");
@@ -98,7 +98,7 @@ const std::list<int>& SimpleArrayInterfaceClient::getPropInt() const
 void SimpleArrayInterfaceClient::setPropInt32(const std::list<int32_t>& propInt32)
 {
     if(!m_node) {
-        m_logger->emitLog(ApiGear::Logger::LogLevel::Warning, "Attempt to set property but " + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
+        m_logger->emitLog(ApiGear::Utilities::LogLevel::Warning, "Attempt to set property but " + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return;
     }
     const auto& propertyId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "propInt32");
@@ -121,7 +121,7 @@ const std::list<int32_t>& SimpleArrayInterfaceClient::getPropInt32() const
 void SimpleArrayInterfaceClient::setPropInt64(const std::list<int64_t>& propInt64)
 {
     if(!m_node) {
-        m_logger->emitLog(ApiGear::Logger::LogLevel::Warning, "Attempt to set property but " + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
+        m_logger->emitLog(ApiGear::Utilities::LogLevel::Warning, "Attempt to set property but " + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return;
     }
     const auto& propertyId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "propInt64");
@@ -144,7 +144,7 @@ const std::list<int64_t>& SimpleArrayInterfaceClient::getPropInt64() const
 void SimpleArrayInterfaceClient::setPropFloat(const std::list<float>& propFloat)
 {
     if(!m_node) {
-        m_logger->emitLog(ApiGear::Logger::LogLevel::Warning, "Attempt to set property but " + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
+        m_logger->emitLog(ApiGear::Utilities::LogLevel::Warning, "Attempt to set property but " + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return;
     }
     const auto& propertyId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "propFloat");
@@ -167,7 +167,7 @@ const std::list<float>& SimpleArrayInterfaceClient::getPropFloat() const
 void SimpleArrayInterfaceClient::setPropFloat32(const std::list<float>& propFloat32)
 {
     if(!m_node) {
-        m_logger->emitLog(ApiGear::Logger::LogLevel::Warning, "Attempt to set property but " + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
+        m_logger->emitLog(ApiGear::Utilities::LogLevel::Warning, "Attempt to set property but " + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return;
     }
     const auto& propertyId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "propFloat32");
@@ -190,7 +190,7 @@ const std::list<float>& SimpleArrayInterfaceClient::getPropFloat32() const
 void SimpleArrayInterfaceClient::setPropFloat64(const std::list<double>& propFloat64)
 {
     if(!m_node) {
-        m_logger->emitLog(ApiGear::Logger::LogLevel::Warning, "Attempt to set property but " + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
+        m_logger->emitLog(ApiGear::Utilities::LogLevel::Warning, "Attempt to set property but " + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return;
     }
     const auto& propertyId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "propFloat64");
@@ -213,7 +213,7 @@ const std::list<double>& SimpleArrayInterfaceClient::getPropFloat64() const
 void SimpleArrayInterfaceClient::setPropString(const std::list<std::string>& propString)
 {
     if(!m_node) {
-        m_logger->emitLog(ApiGear::Logger::LogLevel::Warning, "Attempt to set property but " + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
+        m_logger->emitLog(ApiGear::Utilities::LogLevel::Warning, "Attempt to set property but " + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return;
     }
     const auto& propertyId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "propString");
@@ -236,7 +236,7 @@ const std::list<std::string>& SimpleArrayInterfaceClient::getPropString() const
 std::list<bool> SimpleArrayInterfaceClient::funcBool(const std::list<bool>& paramBool)
 {
      if(!m_node) {
-        m_logger->emitLog(ApiGear::Logger::LogLevel::Warning, "Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
+        m_logger->emitLog(ApiGear::Utilities::LogLevel::Warning, "Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return std::list<bool>();
     }
     std::list<bool> value(funcBoolAsync(paramBool).get());
@@ -246,7 +246,7 @@ std::list<bool> SimpleArrayInterfaceClient::funcBool(const std::list<bool>& para
 std::future<std::list<bool>> SimpleArrayInterfaceClient::funcBoolAsync(const std::list<bool>& paramBool)
 {
     if(!m_node) {
-        m_logger->emitLog(ApiGear::Logger::LogLevel::Warning, "Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
+        m_logger->emitLog(ApiGear::Utilities::LogLevel::Warning, "Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return std::future<std::list<bool>>{};
     }
     return std::async(std::launch::async, [this,
@@ -267,7 +267,7 @@ std::future<std::list<bool>> SimpleArrayInterfaceClient::funcBoolAsync(const std
 std::list<int> SimpleArrayInterfaceClient::funcInt(const std::list<int>& paramInt)
 {
      if(!m_node) {
-        m_logger->emitLog(ApiGear::Logger::LogLevel::Warning, "Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
+        m_logger->emitLog(ApiGear::Utilities::LogLevel::Warning, "Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return std::list<int>();
     }
     std::list<int> value(funcIntAsync(paramInt).get());
@@ -277,7 +277,7 @@ std::list<int> SimpleArrayInterfaceClient::funcInt(const std::list<int>& paramIn
 std::future<std::list<int>> SimpleArrayInterfaceClient::funcIntAsync(const std::list<int>& paramInt)
 {
     if(!m_node) {
-        m_logger->emitLog(ApiGear::Logger::LogLevel::Warning, "Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
+        m_logger->emitLog(ApiGear::Utilities::LogLevel::Warning, "Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return std::future<std::list<int>>{};
     }
     return std::async(std::launch::async, [this,
@@ -298,7 +298,7 @@ std::future<std::list<int>> SimpleArrayInterfaceClient::funcIntAsync(const std::
 std::list<int32_t> SimpleArrayInterfaceClient::funcInt32(const std::list<int32_t>& paramInt32)
 {
      if(!m_node) {
-        m_logger->emitLog(ApiGear::Logger::LogLevel::Warning, "Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
+        m_logger->emitLog(ApiGear::Utilities::LogLevel::Warning, "Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return std::list<int32_t>();
     }
     std::list<int32_t> value(funcInt32Async(paramInt32).get());
@@ -308,7 +308,7 @@ std::list<int32_t> SimpleArrayInterfaceClient::funcInt32(const std::list<int32_t
 std::future<std::list<int32_t>> SimpleArrayInterfaceClient::funcInt32Async(const std::list<int32_t>& paramInt32)
 {
     if(!m_node) {
-        m_logger->emitLog(ApiGear::Logger::LogLevel::Warning, "Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
+        m_logger->emitLog(ApiGear::Utilities::LogLevel::Warning, "Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return std::future<std::list<int32_t>>{};
     }
     return std::async(std::launch::async, [this,
@@ -329,7 +329,7 @@ std::future<std::list<int32_t>> SimpleArrayInterfaceClient::funcInt32Async(const
 std::list<int64_t> SimpleArrayInterfaceClient::funcInt64(const std::list<int64_t>& paramInt64)
 {
      if(!m_node) {
-        m_logger->emitLog(ApiGear::Logger::LogLevel::Warning, "Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
+        m_logger->emitLog(ApiGear::Utilities::LogLevel::Warning, "Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return std::list<int64_t>();
     }
     std::list<int64_t> value(funcInt64Async(paramInt64).get());
@@ -339,7 +339,7 @@ std::list<int64_t> SimpleArrayInterfaceClient::funcInt64(const std::list<int64_t
 std::future<std::list<int64_t>> SimpleArrayInterfaceClient::funcInt64Async(const std::list<int64_t>& paramInt64)
 {
     if(!m_node) {
-        m_logger->emitLog(ApiGear::Logger::LogLevel::Warning, "Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
+        m_logger->emitLog(ApiGear::Utilities::LogLevel::Warning, "Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return std::future<std::list<int64_t>>{};
     }
     return std::async(std::launch::async, [this,
@@ -360,7 +360,7 @@ std::future<std::list<int64_t>> SimpleArrayInterfaceClient::funcInt64Async(const
 std::list<float> SimpleArrayInterfaceClient::funcFloat(const std::list<float>& paramFloat)
 {
      if(!m_node) {
-        m_logger->emitLog(ApiGear::Logger::LogLevel::Warning, "Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
+        m_logger->emitLog(ApiGear::Utilities::LogLevel::Warning, "Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return std::list<float>();
     }
     std::list<float> value(funcFloatAsync(paramFloat).get());
@@ -370,7 +370,7 @@ std::list<float> SimpleArrayInterfaceClient::funcFloat(const std::list<float>& p
 std::future<std::list<float>> SimpleArrayInterfaceClient::funcFloatAsync(const std::list<float>& paramFloat)
 {
     if(!m_node) {
-        m_logger->emitLog(ApiGear::Logger::LogLevel::Warning, "Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
+        m_logger->emitLog(ApiGear::Utilities::LogLevel::Warning, "Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return std::future<std::list<float>>{};
     }
     return std::async(std::launch::async, [this,
@@ -391,7 +391,7 @@ std::future<std::list<float>> SimpleArrayInterfaceClient::funcFloatAsync(const s
 std::list<float> SimpleArrayInterfaceClient::funcFloat32(const std::list<float>& paramFloat32)
 {
      if(!m_node) {
-        m_logger->emitLog(ApiGear::Logger::LogLevel::Warning, "Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
+        m_logger->emitLog(ApiGear::Utilities::LogLevel::Warning, "Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return std::list<float>();
     }
     std::list<float> value(funcFloat32Async(paramFloat32).get());
@@ -401,7 +401,7 @@ std::list<float> SimpleArrayInterfaceClient::funcFloat32(const std::list<float>&
 std::future<std::list<float>> SimpleArrayInterfaceClient::funcFloat32Async(const std::list<float>& paramFloat32)
 {
     if(!m_node) {
-        m_logger->emitLog(ApiGear::Logger::LogLevel::Warning, "Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
+        m_logger->emitLog(ApiGear::Utilities::LogLevel::Warning, "Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return std::future<std::list<float>>{};
     }
     return std::async(std::launch::async, [this,
@@ -422,7 +422,7 @@ std::future<std::list<float>> SimpleArrayInterfaceClient::funcFloat32Async(const
 std::list<double> SimpleArrayInterfaceClient::funcFloat64(const std::list<double>& paramFloat)
 {
      if(!m_node) {
-        m_logger->emitLog(ApiGear::Logger::LogLevel::Warning, "Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
+        m_logger->emitLog(ApiGear::Utilities::LogLevel::Warning, "Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return std::list<double>();
     }
     std::list<double> value(funcFloat64Async(paramFloat).get());
@@ -432,7 +432,7 @@ std::list<double> SimpleArrayInterfaceClient::funcFloat64(const std::list<double
 std::future<std::list<double>> SimpleArrayInterfaceClient::funcFloat64Async(const std::list<double>& paramFloat)
 {
     if(!m_node) {
-        m_logger->emitLog(ApiGear::Logger::LogLevel::Warning, "Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
+        m_logger->emitLog(ApiGear::Utilities::LogLevel::Warning, "Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return std::future<std::list<double>>{};
     }
     return std::async(std::launch::async, [this,
@@ -453,7 +453,7 @@ std::future<std::list<double>> SimpleArrayInterfaceClient::funcFloat64Async(cons
 std::list<std::string> SimpleArrayInterfaceClient::funcString(const std::list<std::string>& paramString)
 {
      if(!m_node) {
-        m_logger->emitLog(ApiGear::Logger::LogLevel::Warning, "Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
+        m_logger->emitLog(ApiGear::Utilities::LogLevel::Warning, "Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return std::list<std::string>();
     }
     std::list<std::string> value(funcStringAsync(paramString).get());
@@ -463,7 +463,7 @@ std::list<std::string> SimpleArrayInterfaceClient::funcString(const std::list<st
 std::future<std::list<std::string>> SimpleArrayInterfaceClient::funcStringAsync(const std::list<std::string>& paramString)
 {
     if(!m_node) {
-        m_logger->emitLog(ApiGear::Logger::LogLevel::Warning, "Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
+        m_logger->emitLog(ApiGear::Utilities::LogLevel::Warning, "Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return std::future<std::list<std::string>>{};
     }
     return std::async(std::launch::async, [this,

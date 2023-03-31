@@ -6,7 +6,7 @@
 
 #include "olink/iclientnode.h"
 #include "apigear/olink/olinkconnection.h"
-#include "apigear/olink/logger/logger.h"
+#include "apigear/utilities/logger.h"
 
 using namespace Test::TbEnum;
 using namespace Test::TbEnum::olink;
@@ -18,7 +18,7 @@ const std::string interfaceId = "tb.enum.EnumInterface";
 
 EnumInterfaceClient::EnumInterfaceClient()
     : m_publisher(std::make_unique<EnumInterfacePublisher>())
-    , m_logger(std::make_unique<ApiGear::Logger::Logger>())
+    , m_logger(std::make_unique<ApiGear::Utilities::Logger>())
 {}
 
 void EnumInterfaceClient::applyState(const nlohmann::json& fields) 
@@ -40,7 +40,7 @@ void EnumInterfaceClient::applyState(const nlohmann::json& fields)
 void EnumInterfaceClient::setProp0(Enum0Enum prop0)
 {
     if(!m_node) {
-        m_logger->emitLog(ApiGear::Logger::LogLevel::Warning, "Attempt to set property but " + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
+        m_logger->emitLog(ApiGear::Utilities::LogLevel::Warning, "Attempt to set property but " + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return;
     }
     const auto& propertyId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "prop0");
@@ -63,7 +63,7 @@ Enum0Enum EnumInterfaceClient::getProp0() const
 void EnumInterfaceClient::setProp1(Enum1Enum prop1)
 {
     if(!m_node) {
-        m_logger->emitLog(ApiGear::Logger::LogLevel::Warning, "Attempt to set property but " + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
+        m_logger->emitLog(ApiGear::Utilities::LogLevel::Warning, "Attempt to set property but " + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return;
     }
     const auto& propertyId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "prop1");
@@ -86,7 +86,7 @@ Enum1Enum EnumInterfaceClient::getProp1() const
 void EnumInterfaceClient::setProp2(Enum2Enum prop2)
 {
     if(!m_node) {
-        m_logger->emitLog(ApiGear::Logger::LogLevel::Warning, "Attempt to set property but " + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
+        m_logger->emitLog(ApiGear::Utilities::LogLevel::Warning, "Attempt to set property but " + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return;
     }
     const auto& propertyId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "prop2");
@@ -109,7 +109,7 @@ Enum2Enum EnumInterfaceClient::getProp2() const
 void EnumInterfaceClient::setProp3(Enum3Enum prop3)
 {
     if(!m_node) {
-        m_logger->emitLog(ApiGear::Logger::LogLevel::Warning, "Attempt to set property but " + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
+        m_logger->emitLog(ApiGear::Utilities::LogLevel::Warning, "Attempt to set property but " + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return;
     }
     const auto& propertyId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "prop3");
@@ -132,7 +132,7 @@ Enum3Enum EnumInterfaceClient::getProp3() const
 Enum0Enum EnumInterfaceClient::func0(Enum0Enum param0)
 {
      if(!m_node) {
-        m_logger->emitLog(ApiGear::Logger::LogLevel::Warning, "Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
+        m_logger->emitLog(ApiGear::Utilities::LogLevel::Warning, "Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return Enum0Enum::value0;
     }
     Enum0Enum value(func0Async(param0).get());
@@ -142,7 +142,7 @@ Enum0Enum EnumInterfaceClient::func0(Enum0Enum param0)
 std::future<Enum0Enum> EnumInterfaceClient::func0Async(Enum0Enum param0)
 {
     if(!m_node) {
-        m_logger->emitLog(ApiGear::Logger::LogLevel::Warning, "Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
+        m_logger->emitLog(ApiGear::Utilities::LogLevel::Warning, "Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return std::future<Enum0Enum>{};
     }
     return std::async(std::launch::async, [this,
@@ -163,7 +163,7 @@ std::future<Enum0Enum> EnumInterfaceClient::func0Async(Enum0Enum param0)
 Enum1Enum EnumInterfaceClient::func1(Enum1Enum param1)
 {
      if(!m_node) {
-        m_logger->emitLog(ApiGear::Logger::LogLevel::Warning, "Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
+        m_logger->emitLog(ApiGear::Utilities::LogLevel::Warning, "Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return Enum1Enum::value1;
     }
     Enum1Enum value(func1Async(param1).get());
@@ -173,7 +173,7 @@ Enum1Enum EnumInterfaceClient::func1(Enum1Enum param1)
 std::future<Enum1Enum> EnumInterfaceClient::func1Async(Enum1Enum param1)
 {
     if(!m_node) {
-        m_logger->emitLog(ApiGear::Logger::LogLevel::Warning, "Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
+        m_logger->emitLog(ApiGear::Utilities::LogLevel::Warning, "Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return std::future<Enum1Enum>{};
     }
     return std::async(std::launch::async, [this,
@@ -194,7 +194,7 @@ std::future<Enum1Enum> EnumInterfaceClient::func1Async(Enum1Enum param1)
 Enum2Enum EnumInterfaceClient::func2(Enum2Enum param2)
 {
      if(!m_node) {
-        m_logger->emitLog(ApiGear::Logger::LogLevel::Warning, "Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
+        m_logger->emitLog(ApiGear::Utilities::LogLevel::Warning, "Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return Enum2Enum::value2;
     }
     Enum2Enum value(func2Async(param2).get());
@@ -204,7 +204,7 @@ Enum2Enum EnumInterfaceClient::func2(Enum2Enum param2)
 std::future<Enum2Enum> EnumInterfaceClient::func2Async(Enum2Enum param2)
 {
     if(!m_node) {
-        m_logger->emitLog(ApiGear::Logger::LogLevel::Warning, "Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
+        m_logger->emitLog(ApiGear::Utilities::LogLevel::Warning, "Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return std::future<Enum2Enum>{};
     }
     return std::async(std::launch::async, [this,
@@ -225,7 +225,7 @@ std::future<Enum2Enum> EnumInterfaceClient::func2Async(Enum2Enum param2)
 Enum3Enum EnumInterfaceClient::func3(Enum3Enum param3)
 {
      if(!m_node) {
-        m_logger->emitLog(ApiGear::Logger::LogLevel::Warning, "Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
+        m_logger->emitLog(ApiGear::Utilities::LogLevel::Warning, "Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return Enum3Enum::value3;
     }
     Enum3Enum value(func3Async(param3).get());
@@ -235,7 +235,7 @@ Enum3Enum EnumInterfaceClient::func3(Enum3Enum param3)
 std::future<Enum3Enum> EnumInterfaceClient::func3Async(Enum3Enum param3)
 {
     if(!m_node) {
-        m_logger->emitLog(ApiGear::Logger::LogLevel::Warning, "Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
+        m_logger->emitLog(ApiGear::Utilities::LogLevel::Warning, "Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return std::future<Enum3Enum>{};
     }
     return std::async(std::launch::async, [this,

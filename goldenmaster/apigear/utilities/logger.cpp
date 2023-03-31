@@ -26,7 +26,7 @@
 
 
 
-namespace ApiGear { namespace Logger {
+namespace ApiGear { namespace Utilities {
 
 Logger::Logger() {
     m_logFunc = [](LogLevel level, const std::string& msg)
