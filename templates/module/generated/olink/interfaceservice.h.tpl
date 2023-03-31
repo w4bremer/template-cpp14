@@ -4,7 +4,6 @@
 #include "{{snake .Module.Name}}/generated/api/{{snake .Module.Name}}.h"
 #include "{{snake .Module.Name}}/generated/api/common.h"
 #include "olink/iobjectsource.h"
-#include "apigear/utilities/logger.h"
 {{ $class := printf "%sService" .Interface.Name  }}
 {{ $interface := .Interface.Name  }}
 namespace ApiGear {
@@ -96,9 +95,6 @@ private:
     * A global registry that keeps track of object sources associated with their network layer nodes.
     */
     ApiGear::ObjectLink::RemoteRegistry& m_registry;
-
-    /** The logger */
-    std::unique_ptr<ApiGear::Utilities::Logger> m_logger;
 };
 } // namespace olink
 } // namespace {{ Camel .Module.Name }}

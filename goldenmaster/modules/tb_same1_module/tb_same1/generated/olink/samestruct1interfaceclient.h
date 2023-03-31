@@ -6,7 +6,6 @@
 #include "tb_same1/generated/core/samestruct1interface.data.h"
 
 #include "apigear/olink/iolinkconnector.h"
-#include "apigear/utilities/logger.h"
 #include "olink/iobjectsink.h"
 
 #include <future>
@@ -123,9 +122,6 @@ private:
 
     /** The publisher for SameStruct1Interface */
     std::unique_ptr<ISameStruct1InterfacePublisher> m_publisher;
-
-    /** The logger */
-    std::unique_ptr<ApiGear::Utilities::Logger> m_logger;
 };
 } // namespace olink
 } // namespace TbSame1

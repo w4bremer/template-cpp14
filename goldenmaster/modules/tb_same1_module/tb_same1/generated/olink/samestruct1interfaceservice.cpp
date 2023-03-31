@@ -22,7 +22,6 @@ const std::string interfaceId = "tb.same1.SameStruct1Interface";
 SameStruct1InterfaceService::SameStruct1InterfaceService(std::shared_ptr<ISameStruct1Interface> SameStruct1Interface, ApiGear::ObjectLink::RemoteRegistry& registry)
     : m_SameStruct1Interface(SameStruct1Interface)
     , m_registry(registry)
-    , m_logger(std::make_unique<ApiGear::Utilities::Logger>())
 {
     m_SameStruct1Interface->_getPublisher().subscribeToAllChanges(*this);
 }
@@ -37,7 +36,7 @@ std::string SameStruct1InterfaceService::olinkObjectName() {
 }
 
 nlohmann::json SameStruct1InterfaceService::olinkInvoke(const std::string& methodId, const nlohmann::json& fcnArgs) {
-    m_logger->emitLog(ApiGear::Utilities::LogLevel::Debug, methodId);
+    ApiGear::Utilities::logDebug(methodId);
     const auto& memberMethod = ApiGear::ObjectLink::Name::getMemberName(methodId);
     if(memberMethod == "func1") {
         const Struct1& param1 = fcnArgs.at(0);
@@ -48,7 +47,7 @@ nlohmann::json SameStruct1InterfaceService::olinkInvoke(const std::string& metho
 }
 
 void SameStruct1InterfaceService::olinkSetProperty(const std::string& propertyId, const nlohmann::json& value) {
-    m_logger->emitLog(ApiGear::Utilities::LogLevel::Debug, propertyId);
+    ApiGear::Utilities::logDebug(propertyId);
     const auto& memberProperty = ApiGear::ObjectLink::Name::getMemberName(propertyId);
     if(memberProperty == "prop1") {
         Struct1 prop1 = value.get<Struct1>();
@@ -56,12 +55,12 @@ void SameStruct1InterfaceService::olinkSetProperty(const std::string& propertyId
     } 
 }
 
-void SameStruct1InterfaceService::olinkLinked(const std::string& objetId, ApiGear::ObjectLink::IRemoteNode* /*node*/) {
-    m_logger->emitLog(ApiGear::Utilities::LogLevel::Debug, objetId);
+void SameStruct1InterfaceService::olinkLinked(const std::string& objectId, ApiGear::ObjectLink::IRemoteNode* /*node*/) {
+    ApiGear::Utilities::logDebug(objectId);
 }
 
-void SameStruct1InterfaceService::olinkUnlinked(const std::string& objetId){
-    m_logger->emitLog(ApiGear::Utilities::LogLevel::Debug, objetId);
+void SameStruct1InterfaceService::olinkUnlinked(const std::string& objectId){
+    ApiGear::Utilities::logDebug(objectId);
 }
 
 nlohmann::json SameStruct1InterfaceService::olinkCollectProperties()

@@ -4,7 +4,6 @@
 #include "tb_simple/generated/api/tb_simple.h"
 #include "tb_simple/generated/api/common.h"
 #include "olink/iobjectsource.h"
-#include "apigear/utilities/logger.h"
 
 
 namespace ApiGear {
@@ -144,9 +143,6 @@ private:
     * A global registry that keeps track of object sources associated with their network layer nodes.
     */
     ApiGear::ObjectLink::RemoteRegistry& m_registry;
-
-    /** The logger */
-    std::unique_ptr<ApiGear::Utilities::Logger> m_logger;
 };
 } // namespace olink
 } // namespace TbSimple

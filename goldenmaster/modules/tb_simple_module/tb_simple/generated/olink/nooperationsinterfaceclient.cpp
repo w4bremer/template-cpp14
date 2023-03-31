@@ -18,7 +18,6 @@ const std::string interfaceId = "tb.simple.NoOperationsInterface";
 
 NoOperationsInterfaceClient::NoOperationsInterfaceClient()
     : m_publisher(std::make_unique<NoOperationsInterfacePublisher>())
-    , m_logger(std::make_unique<ApiGear::Utilities::Logger>())
 {}
 
 void NoOperationsInterfaceClient::applyState(const nlohmann::json& fields) 
@@ -34,7 +33,7 @@ void NoOperationsInterfaceClient::applyState(const nlohmann::json& fields)
 void NoOperationsInterfaceClient::setPropBool(bool propBool)
 {
     if(!m_node) {
-        m_logger->emitLog(ApiGear::Utilities::LogLevel::Warning, "Attempt to set property but " + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
+        ApiGear::Utilities::logWarning("Attempt to set property but " + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return;
     }
     const auto& propertyId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "propBool");
@@ -57,7 +56,7 @@ bool NoOperationsInterfaceClient::getPropBool() const
 void NoOperationsInterfaceClient::setPropInt(int propInt)
 {
     if(!m_node) {
-        m_logger->emitLog(ApiGear::Utilities::LogLevel::Warning, "Attempt to set property but " + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
+        ApiGear::Utilities::logWarning("Attempt to set property but " + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return;
     }
     const auto& propertyId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "propInt");

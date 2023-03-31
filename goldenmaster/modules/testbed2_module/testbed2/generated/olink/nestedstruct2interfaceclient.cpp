@@ -18,7 +18,6 @@ const std::string interfaceId = "testbed2.NestedStruct2Interface";
 
 NestedStruct2InterfaceClient::NestedStruct2InterfaceClient()
     : m_publisher(std::make_unique<NestedStruct2InterfacePublisher>())
-    , m_logger(std::make_unique<ApiGear::Utilities::Logger>())
 {}
 
 void NestedStruct2InterfaceClient::applyState(const nlohmann::json& fields) 
@@ -34,7 +33,7 @@ void NestedStruct2InterfaceClient::applyState(const nlohmann::json& fields)
 void NestedStruct2InterfaceClient::setProp1(const NestedStruct1& prop1)
 {
     if(!m_node) {
-        m_logger->emitLog(ApiGear::Utilities::LogLevel::Warning, "Attempt to set property but " + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
+        ApiGear::Utilities::logWarning("Attempt to set property but " + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return;
     }
     const auto& propertyId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "prop1");
@@ -57,7 +56,7 @@ const NestedStruct1& NestedStruct2InterfaceClient::getProp1() const
 void NestedStruct2InterfaceClient::setProp2(const NestedStruct2& prop2)
 {
     if(!m_node) {
-        m_logger->emitLog(ApiGear::Utilities::LogLevel::Warning, "Attempt to set property but " + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
+        ApiGear::Utilities::logWarning("Attempt to set property but " + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return;
     }
     const auto& propertyId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "prop2");
@@ -80,7 +79,7 @@ const NestedStruct2& NestedStruct2InterfaceClient::getProp2() const
 NestedStruct1 NestedStruct2InterfaceClient::func1(const NestedStruct1& param1)
 {
      if(!m_node) {
-        m_logger->emitLog(ApiGear::Utilities::LogLevel::Warning, "Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
+        ApiGear::Utilities::logWarning("Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return NestedStruct1();
     }
     NestedStruct1 value(func1Async(param1).get());
@@ -90,7 +89,7 @@ NestedStruct1 NestedStruct2InterfaceClient::func1(const NestedStruct1& param1)
 std::future<NestedStruct1> NestedStruct2InterfaceClient::func1Async(const NestedStruct1& param1)
 {
     if(!m_node) {
-        m_logger->emitLog(ApiGear::Utilities::LogLevel::Warning, "Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
+        ApiGear::Utilities::logWarning("Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return std::future<NestedStruct1>{};
     }
     return std::async(std::launch::async, [this,
@@ -111,7 +110,7 @@ std::future<NestedStruct1> NestedStruct2InterfaceClient::func1Async(const Nested
 NestedStruct1 NestedStruct2InterfaceClient::func2(const NestedStruct1& param1, const NestedStruct2& param2)
 {
      if(!m_node) {
-        m_logger->emitLog(ApiGear::Utilities::LogLevel::Warning, "Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
+        ApiGear::Utilities::logWarning("Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return NestedStruct1();
     }
     NestedStruct1 value(func2Async(param1, param2).get());
@@ -121,7 +120,7 @@ NestedStruct1 NestedStruct2InterfaceClient::func2(const NestedStruct1& param1, c
 std::future<NestedStruct1> NestedStruct2InterfaceClient::func2Async(const NestedStruct1& param1, const NestedStruct2& param2)
 {
     if(!m_node) {
-        m_logger->emitLog(ApiGear::Utilities::LogLevel::Warning, "Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
+        ApiGear::Utilities::logWarning("Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return std::future<NestedStruct1>{};
     }
     return std::async(std::launch::async, [this,

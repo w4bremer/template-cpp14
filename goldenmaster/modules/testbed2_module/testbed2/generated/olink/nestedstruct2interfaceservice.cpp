@@ -22,7 +22,6 @@ const std::string interfaceId = "testbed2.NestedStruct2Interface";
 NestedStruct2InterfaceService::NestedStruct2InterfaceService(std::shared_ptr<INestedStruct2Interface> NestedStruct2Interface, ApiGear::ObjectLink::RemoteRegistry& registry)
     : m_NestedStruct2Interface(NestedStruct2Interface)
     , m_registry(registry)
-    , m_logger(std::make_unique<ApiGear::Utilities::Logger>())
 {
     m_NestedStruct2Interface->_getPublisher().subscribeToAllChanges(*this);
 }
@@ -37,7 +36,7 @@ std::string NestedStruct2InterfaceService::olinkObjectName() {
 }
 
 nlohmann::json NestedStruct2InterfaceService::olinkInvoke(const std::string& methodId, const nlohmann::json& fcnArgs) {
-    m_logger->emitLog(ApiGear::Utilities::LogLevel::Debug, methodId);
+    ApiGear::Utilities::logDebug(methodId);
     const auto& memberMethod = ApiGear::ObjectLink::Name::getMemberName(methodId);
     if(memberMethod == "func1") {
         const NestedStruct1& param1 = fcnArgs.at(0);
@@ -54,7 +53,7 @@ nlohmann::json NestedStruct2InterfaceService::olinkInvoke(const std::string& met
 }
 
 void NestedStruct2InterfaceService::olinkSetProperty(const std::string& propertyId, const nlohmann::json& value) {
-    m_logger->emitLog(ApiGear::Utilities::LogLevel::Debug, propertyId);
+    ApiGear::Utilities::logDebug(propertyId);
     const auto& memberProperty = ApiGear::ObjectLink::Name::getMemberName(propertyId);
     if(memberProperty == "prop1") {
         NestedStruct1 prop1 = value.get<NestedStruct1>();
@@ -66,12 +65,12 @@ void NestedStruct2InterfaceService::olinkSetProperty(const std::string& property
     } 
 }
 
-void NestedStruct2InterfaceService::olinkLinked(const std::string& objetId, ApiGear::ObjectLink::IRemoteNode* /*node*/) {
-    m_logger->emitLog(ApiGear::Utilities::LogLevel::Debug, objetId);
+void NestedStruct2InterfaceService::olinkLinked(const std::string& objectId, ApiGear::ObjectLink::IRemoteNode* /*node*/) {
+    ApiGear::Utilities::logDebug(objectId);
 }
 
-void NestedStruct2InterfaceService::olinkUnlinked(const std::string& objetId){
-    m_logger->emitLog(ApiGear::Utilities::LogLevel::Debug, objetId);
+void NestedStruct2InterfaceService::olinkUnlinked(const std::string& objectId){
+    ApiGear::Utilities::logDebug(objectId);
 }
 
 nlohmann::json NestedStruct2InterfaceService::olinkCollectProperties()

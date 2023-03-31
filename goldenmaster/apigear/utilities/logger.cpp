@@ -28,8 +28,20 @@
 
 namespace ApiGear { namespace Utilities {
 
-Logger::Logger() {
-    m_logFunc = [](LogLevel level, const std::string& msg)
+static WriteLogFunc logFunc = getConsoleLogFunc();
+
+void emitLog(LogLevel level, const std::string& msg){
+    if(logFunc) {
+        logFunc(level, msg);
+    }
+}
+
+void setLog(WriteLogFunc func){
+    logFunc = func;
+}
+
+WriteLogFunc getConsoleLogFunc(){
+    return [](LogLevel level, const std::string& msg)
     {
         auto levelText = "[debug  ] ";
         switch (level)
@@ -56,17 +68,21 @@ Logger::Logger() {
     };
 }
 
-void Logger::onLog(WriteLogFunc func){
-    m_logFunc = func;
+void logInfo(const std::string& msg){
+    emitLog(LogLevel::Info, msg);
 }
 
-void Logger::emitLog(LogLevel level, const std::string& msg){
-    if(m_logFunc) {
-        m_logFunc(level, msg);
-    }
+void logDebug(const std::string& msg){
+    emitLog(LogLevel::Debug, msg);
 }
 
+void logWarning(const std::string& msg){
+    emitLog(LogLevel::Warning, msg);
+}
 
+void logError(const std::string& msg){
+    emitLog(LogLevel::Error, msg);
+}
 
-} } // ApiGear::ObjectLink
+} } // ApiGear::Utilities
 

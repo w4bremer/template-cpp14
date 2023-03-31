@@ -46,7 +46,7 @@ namespace ApiGear { namespace Utilities {
 /**
 * Logging levels for logs across the application.
 */
-enum LogLevel {
+enum API_GEAR_LOGGER LogLevel {
     Info,
     Debug,
     Warning,
@@ -56,29 +56,40 @@ enum LogLevel {
 /** A type of function to log*/
 using WriteLogFunc = std::function<void(LogLevel level, const std::string& msg)>;
 
-
-/**
-* Helper base class enabling consistent logging behavior.
+/* 
+* Set any log function which implements the WriteLogFunc signature
+* 
+* Can be used to disable logging or to write to a file or database.
 *
-* Depending on the LogLevel different output streams are used.
+* @param func a functions which implements the WriteLogFunc signature
 */
-class API_GEAR_LOGGER Logger {
-public:
-    Logger();
-    virtual ~Logger() = default;
-    /**
-    * Use this function to set a logger writer.
-    */
-    void onLog(WriteLogFunc func);
-    /**
-    * Use this function to log any message using set logger function.
-    */
-    void emitLog(LogLevel level, const std::string& msg);
-private:
-    /**
-    * User provided function that writes a log into user defined endtpoint.
-    */
-    WriteLogFunc m_logFunc = nullptr;
-};
+void API_GEAR_LOGGER setLog(WriteLogFunc func);
 
-} } // ApiGear::ObjectLink
+/* 
+* Get the default console log function
+*
+* @return func returns the default console log function
+*/
+WriteLogFunc API_GEAR_LOGGER getConsoleLogFunc();
+
+/*
+* Use to log on LogLevel::Info
+*/
+void API_GEAR_LOGGER logInfo(const std::string& msg);
+
+/*
+* Use to log on LogLevel::Debug
+*/
+void API_GEAR_LOGGER logDebug(const std::string& msg);
+
+/*
+* Use to log on LogLevel::Warning
+*/
+void API_GEAR_LOGGER logWarning(const std::string& msg);
+
+/*
+* Use to log on LogLevel::Error
+*/
+void API_GEAR_LOGGER logError(const std::string& msg);
+
+} } // ApiGear::Utilities

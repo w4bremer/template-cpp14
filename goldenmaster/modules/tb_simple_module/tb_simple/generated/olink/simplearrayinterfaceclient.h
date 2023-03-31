@@ -6,7 +6,6 @@
 #include "tb_simple/generated/core/simplearrayinterface.data.h"
 
 #include "apigear/olink/iolinkconnector.h"
-#include "apigear/utilities/logger.h"
 #include "olink/iobjectsink.h"
 
 #include <future>
@@ -270,9 +269,6 @@ private:
 
     /** The publisher for SimpleArrayInterface */
     std::unique_ptr<ISimpleArrayInterfacePublisher> m_publisher;
-
-    /** The logger */
-    std::unique_ptr<ApiGear::Utilities::Logger> m_logger;
 };
 } // namespace olink
 } // namespace TbSimple

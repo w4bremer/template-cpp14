@@ -6,7 +6,6 @@
 #include "testbed2/generated/core/manyparaminterface.data.h"
 
 #include "apigear/olink/iolinkconnector.h"
-#include "apigear/utilities/logger.h"
 #include "olink/iobjectsink.h"
 
 #include <future>
@@ -186,9 +185,6 @@ private:
 
     /** The publisher for ManyParamInterface */
     std::unique_ptr<IManyParamInterfacePublisher> m_publisher;
-
-    /** The logger */
-    std::unique_ptr<ApiGear::Utilities::Logger> m_logger;
 };
 } // namespace olink
 } // namespace Testbed2

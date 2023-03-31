@@ -22,7 +22,6 @@ const std::string interfaceId = "tb.simple.NoPropertiesInterface";
 NoPropertiesInterfaceService::NoPropertiesInterfaceService(std::shared_ptr<INoPropertiesInterface> NoPropertiesInterface, ApiGear::ObjectLink::RemoteRegistry& registry)
     : m_NoPropertiesInterface(NoPropertiesInterface)
     , m_registry(registry)
-    , m_logger(std::make_unique<ApiGear::Utilities::Logger>())
 {
     m_NoPropertiesInterface->_getPublisher().subscribeToAllChanges(*this);
 }
@@ -37,7 +36,7 @@ std::string NoPropertiesInterfaceService::olinkObjectName() {
 }
 
 nlohmann::json NoPropertiesInterfaceService::olinkInvoke(const std::string& methodId, const nlohmann::json& fcnArgs) {
-    m_logger->emitLog(ApiGear::Utilities::LogLevel::Debug, methodId);
+    ApiGear::Utilities::logDebug(methodId);
     const auto& memberMethod = ApiGear::ObjectLink::Name::getMemberName(methodId);
     if(memberMethod == "funcVoid") {
         m_NoPropertiesInterface->funcVoid();
@@ -52,19 +51,19 @@ nlohmann::json NoPropertiesInterfaceService::olinkInvoke(const std::string& meth
 }
 
 void NoPropertiesInterfaceService::olinkSetProperty(const std::string& propertyId, const nlohmann::json& value) {
-    m_logger->emitLog(ApiGear::Utilities::LogLevel::Debug, propertyId);
+    ApiGear::Utilities::logDebug(propertyId);
     const auto& memberProperty = ApiGear::ObjectLink::Name::getMemberName(propertyId);
     // no properties to set
     (void) value;
     (void) memberProperty; 
 }
 
-void NoPropertiesInterfaceService::olinkLinked(const std::string& objetId, ApiGear::ObjectLink::IRemoteNode* /*node*/) {
-    m_logger->emitLog(ApiGear::Utilities::LogLevel::Debug, objetId);
+void NoPropertiesInterfaceService::olinkLinked(const std::string& objectId, ApiGear::ObjectLink::IRemoteNode* /*node*/) {
+    ApiGear::Utilities::logDebug(objectId);
 }
 
-void NoPropertiesInterfaceService::olinkUnlinked(const std::string& objetId){
-    m_logger->emitLog(ApiGear::Utilities::LogLevel::Debug, objetId);
+void NoPropertiesInterfaceService::olinkUnlinked(const std::string& objectId){
+    ApiGear::Utilities::logDebug(objectId);
 }
 
 nlohmann::json NoPropertiesInterfaceService::olinkCollectProperties()

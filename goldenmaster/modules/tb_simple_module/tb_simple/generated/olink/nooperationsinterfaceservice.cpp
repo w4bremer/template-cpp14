@@ -22,7 +22,6 @@ const std::string interfaceId = "tb.simple.NoOperationsInterface";
 NoOperationsInterfaceService::NoOperationsInterfaceService(std::shared_ptr<INoOperationsInterface> NoOperationsInterface, ApiGear::ObjectLink::RemoteRegistry& registry)
     : m_NoOperationsInterface(NoOperationsInterface)
     , m_registry(registry)
-    , m_logger(std::make_unique<ApiGear::Utilities::Logger>())
 {
     m_NoOperationsInterface->_getPublisher().subscribeToAllChanges(*this);
 }
@@ -37,7 +36,7 @@ std::string NoOperationsInterfaceService::olinkObjectName() {
 }
 
 nlohmann::json NoOperationsInterfaceService::olinkInvoke(const std::string& methodId, const nlohmann::json& fcnArgs) {
-    m_logger->emitLog(ApiGear::Utilities::LogLevel::Debug, methodId);
+    ApiGear::Utilities::logDebug(methodId);
     const auto& memberMethod = ApiGear::ObjectLink::Name::getMemberName(methodId);
     // no operations to invoke
     (void) fcnArgs;
@@ -46,7 +45,7 @@ nlohmann::json NoOperationsInterfaceService::olinkInvoke(const std::string& meth
 }
 
 void NoOperationsInterfaceService::olinkSetProperty(const std::string& propertyId, const nlohmann::json& value) {
-    m_logger->emitLog(ApiGear::Utilities::LogLevel::Debug, propertyId);
+    ApiGear::Utilities::logDebug(propertyId);
     const auto& memberProperty = ApiGear::ObjectLink::Name::getMemberName(propertyId);
     if(memberProperty == "propBool") {
         bool propBool = value.get<bool>();
@@ -58,12 +57,12 @@ void NoOperationsInterfaceService::olinkSetProperty(const std::string& propertyI
     } 
 }
 
-void NoOperationsInterfaceService::olinkLinked(const std::string& objetId, ApiGear::ObjectLink::IRemoteNode* /*node*/) {
-    m_logger->emitLog(ApiGear::Utilities::LogLevel::Debug, objetId);
+void NoOperationsInterfaceService::olinkLinked(const std::string& objectId, ApiGear::ObjectLink::IRemoteNode* /*node*/) {
+    ApiGear::Utilities::logDebug(objectId);
 }
 
-void NoOperationsInterfaceService::olinkUnlinked(const std::string& objetId){
-    m_logger->emitLog(ApiGear::Utilities::LogLevel::Debug, objetId);
+void NoOperationsInterfaceService::olinkUnlinked(const std::string& objectId){
+    ApiGear::Utilities::logDebug(objectId);
 }
 
 nlohmann::json NoOperationsInterfaceService::olinkCollectProperties()

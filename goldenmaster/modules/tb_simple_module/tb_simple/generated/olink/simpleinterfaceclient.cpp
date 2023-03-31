@@ -18,7 +18,6 @@ const std::string interfaceId = "tb.simple.SimpleInterface";
 
 SimpleInterfaceClient::SimpleInterfaceClient()
     : m_publisher(std::make_unique<SimpleInterfacePublisher>())
-    , m_logger(std::make_unique<ApiGear::Utilities::Logger>())
 {}
 
 void SimpleInterfaceClient::applyState(const nlohmann::json& fields) 
@@ -52,7 +51,7 @@ void SimpleInterfaceClient::applyState(const nlohmann::json& fields)
 void SimpleInterfaceClient::setPropBool(bool propBool)
 {
     if(!m_node) {
-        m_logger->emitLog(ApiGear::Utilities::LogLevel::Warning, "Attempt to set property but " + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
+        ApiGear::Utilities::logWarning("Attempt to set property but " + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return;
     }
     const auto& propertyId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "propBool");
@@ -75,7 +74,7 @@ bool SimpleInterfaceClient::getPropBool() const
 void SimpleInterfaceClient::setPropInt(int propInt)
 {
     if(!m_node) {
-        m_logger->emitLog(ApiGear::Utilities::LogLevel::Warning, "Attempt to set property but " + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
+        ApiGear::Utilities::logWarning("Attempt to set property but " + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return;
     }
     const auto& propertyId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "propInt");
@@ -98,7 +97,7 @@ int SimpleInterfaceClient::getPropInt() const
 void SimpleInterfaceClient::setPropInt32(int32_t propInt32)
 {
     if(!m_node) {
-        m_logger->emitLog(ApiGear::Utilities::LogLevel::Warning, "Attempt to set property but " + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
+        ApiGear::Utilities::logWarning("Attempt to set property but " + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return;
     }
     const auto& propertyId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "propInt32");
@@ -121,7 +120,7 @@ int32_t SimpleInterfaceClient::getPropInt32() const
 void SimpleInterfaceClient::setPropInt64(int64_t propInt64)
 {
     if(!m_node) {
-        m_logger->emitLog(ApiGear::Utilities::LogLevel::Warning, "Attempt to set property but " + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
+        ApiGear::Utilities::logWarning("Attempt to set property but " + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return;
     }
     const auto& propertyId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "propInt64");
@@ -144,7 +143,7 @@ int64_t SimpleInterfaceClient::getPropInt64() const
 void SimpleInterfaceClient::setPropFloat(float propFloat)
 {
     if(!m_node) {
-        m_logger->emitLog(ApiGear::Utilities::LogLevel::Warning, "Attempt to set property but " + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
+        ApiGear::Utilities::logWarning("Attempt to set property but " + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return;
     }
     const auto& propertyId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "propFloat");
@@ -167,7 +166,7 @@ float SimpleInterfaceClient::getPropFloat() const
 void SimpleInterfaceClient::setPropFloat32(float propFloat32)
 {
     if(!m_node) {
-        m_logger->emitLog(ApiGear::Utilities::LogLevel::Warning, "Attempt to set property but " + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
+        ApiGear::Utilities::logWarning("Attempt to set property but " + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return;
     }
     const auto& propertyId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "propFloat32");
@@ -190,7 +189,7 @@ float SimpleInterfaceClient::getPropFloat32() const
 void SimpleInterfaceClient::setPropFloat64(double propFloat64)
 {
     if(!m_node) {
-        m_logger->emitLog(ApiGear::Utilities::LogLevel::Warning, "Attempt to set property but " + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
+        ApiGear::Utilities::logWarning("Attempt to set property but " + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return;
     }
     const auto& propertyId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "propFloat64");
@@ -213,7 +212,7 @@ double SimpleInterfaceClient::getPropFloat64() const
 void SimpleInterfaceClient::setPropString(const std::string& propString)
 {
     if(!m_node) {
-        m_logger->emitLog(ApiGear::Utilities::LogLevel::Warning, "Attempt to set property but " + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
+        ApiGear::Utilities::logWarning("Attempt to set property but " + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return;
     }
     const auto& propertyId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "propString");
@@ -236,7 +235,7 @@ const std::string& SimpleInterfaceClient::getPropString() const
 void SimpleInterfaceClient::funcVoid()
 {
      if(!m_node) {
-        m_logger->emitLog(ApiGear::Utilities::LogLevel::Warning, "Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
+        ApiGear::Utilities::logWarning("Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return;
     }
     ApiGear::ObjectLink::InvokeReplyFunc func = [this](ApiGear::ObjectLink::InvokeReplyArg arg)
@@ -252,7 +251,7 @@ void SimpleInterfaceClient::funcVoid()
 std::future<void> SimpleInterfaceClient::funcVoidAsync()
 {
     if(!m_node) {
-        m_logger->emitLog(ApiGear::Utilities::LogLevel::Warning, "Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
+        ApiGear::Utilities::logWarning("Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return std::future<void>{};
     }
     return std::async(std::launch::async, [this]()
@@ -272,7 +271,7 @@ std::future<void> SimpleInterfaceClient::funcVoidAsync()
 bool SimpleInterfaceClient::funcBool(bool paramBool)
 {
      if(!m_node) {
-        m_logger->emitLog(ApiGear::Utilities::LogLevel::Warning, "Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
+        ApiGear::Utilities::logWarning("Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return false;
     }
     bool value(funcBoolAsync(paramBool).get());
@@ -282,7 +281,7 @@ bool SimpleInterfaceClient::funcBool(bool paramBool)
 std::future<bool> SimpleInterfaceClient::funcBoolAsync(bool paramBool)
 {
     if(!m_node) {
-        m_logger->emitLog(ApiGear::Utilities::LogLevel::Warning, "Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
+        ApiGear::Utilities::logWarning("Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return std::future<bool>{};
     }
     return std::async(std::launch::async, [this,
@@ -303,7 +302,7 @@ std::future<bool> SimpleInterfaceClient::funcBoolAsync(bool paramBool)
 int SimpleInterfaceClient::funcInt(int paramInt)
 {
      if(!m_node) {
-        m_logger->emitLog(ApiGear::Utilities::LogLevel::Warning, "Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
+        ApiGear::Utilities::logWarning("Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return 0;
     }
     int value(funcIntAsync(paramInt).get());
@@ -313,7 +312,7 @@ int SimpleInterfaceClient::funcInt(int paramInt)
 std::future<int> SimpleInterfaceClient::funcIntAsync(int paramInt)
 {
     if(!m_node) {
-        m_logger->emitLog(ApiGear::Utilities::LogLevel::Warning, "Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
+        ApiGear::Utilities::logWarning("Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return std::future<int>{};
     }
     return std::async(std::launch::async, [this,
@@ -334,7 +333,7 @@ std::future<int> SimpleInterfaceClient::funcIntAsync(int paramInt)
 int32_t SimpleInterfaceClient::funcInt32(int32_t paramInt32)
 {
      if(!m_node) {
-        m_logger->emitLog(ApiGear::Utilities::LogLevel::Warning, "Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
+        ApiGear::Utilities::logWarning("Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return 0;
     }
     int32_t value(funcInt32Async(paramInt32).get());
@@ -344,7 +343,7 @@ int32_t SimpleInterfaceClient::funcInt32(int32_t paramInt32)
 std::future<int32_t> SimpleInterfaceClient::funcInt32Async(int32_t paramInt32)
 {
     if(!m_node) {
-        m_logger->emitLog(ApiGear::Utilities::LogLevel::Warning, "Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
+        ApiGear::Utilities::logWarning("Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return std::future<int32_t>{};
     }
     return std::async(std::launch::async, [this,
@@ -365,7 +364,7 @@ std::future<int32_t> SimpleInterfaceClient::funcInt32Async(int32_t paramInt32)
 int64_t SimpleInterfaceClient::funcInt64(int64_t paramInt64)
 {
      if(!m_node) {
-        m_logger->emitLog(ApiGear::Utilities::LogLevel::Warning, "Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
+        ApiGear::Utilities::logWarning("Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return 0LL;
     }
     int64_t value(funcInt64Async(paramInt64).get());
@@ -375,7 +374,7 @@ int64_t SimpleInterfaceClient::funcInt64(int64_t paramInt64)
 std::future<int64_t> SimpleInterfaceClient::funcInt64Async(int64_t paramInt64)
 {
     if(!m_node) {
-        m_logger->emitLog(ApiGear::Utilities::LogLevel::Warning, "Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
+        ApiGear::Utilities::logWarning("Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return std::future<int64_t>{};
     }
     return std::async(std::launch::async, [this,
@@ -396,7 +395,7 @@ std::future<int64_t> SimpleInterfaceClient::funcInt64Async(int64_t paramInt64)
 float SimpleInterfaceClient::funcFloat(float paramFloat)
 {
      if(!m_node) {
-        m_logger->emitLog(ApiGear::Utilities::LogLevel::Warning, "Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
+        ApiGear::Utilities::logWarning("Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return 0.0f;
     }
     float value(funcFloatAsync(paramFloat).get());
@@ -406,7 +405,7 @@ float SimpleInterfaceClient::funcFloat(float paramFloat)
 std::future<float> SimpleInterfaceClient::funcFloatAsync(float paramFloat)
 {
     if(!m_node) {
-        m_logger->emitLog(ApiGear::Utilities::LogLevel::Warning, "Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
+        ApiGear::Utilities::logWarning("Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return std::future<float>{};
     }
     return std::async(std::launch::async, [this,
@@ -427,7 +426,7 @@ std::future<float> SimpleInterfaceClient::funcFloatAsync(float paramFloat)
 float SimpleInterfaceClient::funcFloat32(float paramFloat32)
 {
      if(!m_node) {
-        m_logger->emitLog(ApiGear::Utilities::LogLevel::Warning, "Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
+        ApiGear::Utilities::logWarning("Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return 0.0f;
     }
     float value(funcFloat32Async(paramFloat32).get());
@@ -437,7 +436,7 @@ float SimpleInterfaceClient::funcFloat32(float paramFloat32)
 std::future<float> SimpleInterfaceClient::funcFloat32Async(float paramFloat32)
 {
     if(!m_node) {
-        m_logger->emitLog(ApiGear::Utilities::LogLevel::Warning, "Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
+        ApiGear::Utilities::logWarning("Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return std::future<float>{};
     }
     return std::async(std::launch::async, [this,
@@ -458,7 +457,7 @@ std::future<float> SimpleInterfaceClient::funcFloat32Async(float paramFloat32)
 double SimpleInterfaceClient::funcFloat64(double paramFloat)
 {
      if(!m_node) {
-        m_logger->emitLog(ApiGear::Utilities::LogLevel::Warning, "Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
+        ApiGear::Utilities::logWarning("Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return 0.0;
     }
     double value(funcFloat64Async(paramFloat).get());
@@ -468,7 +467,7 @@ double SimpleInterfaceClient::funcFloat64(double paramFloat)
 std::future<double> SimpleInterfaceClient::funcFloat64Async(double paramFloat)
 {
     if(!m_node) {
-        m_logger->emitLog(ApiGear::Utilities::LogLevel::Warning, "Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
+        ApiGear::Utilities::logWarning("Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return std::future<double>{};
     }
     return std::async(std::launch::async, [this,
@@ -489,7 +488,7 @@ std::future<double> SimpleInterfaceClient::funcFloat64Async(double paramFloat)
 std::string SimpleInterfaceClient::funcString(const std::string& paramString)
 {
      if(!m_node) {
-        m_logger->emitLog(ApiGear::Utilities::LogLevel::Warning, "Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
+        ApiGear::Utilities::logWarning("Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return std::string();
     }
     std::string value(funcStringAsync(paramString).get());
@@ -499,7 +498,7 @@ std::string SimpleInterfaceClient::funcString(const std::string& paramString)
 std::future<std::string> SimpleInterfaceClient::funcStringAsync(const std::string& paramString)
 {
     if(!m_node) {
-        m_logger->emitLog(ApiGear::Utilities::LogLevel::Warning, "Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
+        ApiGear::Utilities::logWarning("Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return std::future<std::string>{};
     }
     return std::async(std::launch::async, [this,
