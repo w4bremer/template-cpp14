@@ -36,7 +36,7 @@ std::string EnumInterfaceService::olinkObjectName() {
 }
 
 nlohmann::json EnumInterfaceService::olinkInvoke(const std::string& methodId, const nlohmann::json& fcnArgs) {
-    AG_LOG_DEBUG(methodId);
+    AG_LOG_DEBUG("EnumInterfaceService invoke " + methodId);
     const auto& memberMethod = ApiGear::ObjectLink::Name::getMemberName(methodId);
     if(memberMethod == "func0") {
         const Enum0Enum& param0 = fcnArgs.at(0);
@@ -62,7 +62,7 @@ nlohmann::json EnumInterfaceService::olinkInvoke(const std::string& methodId, co
 }
 
 void EnumInterfaceService::olinkSetProperty(const std::string& propertyId, const nlohmann::json& value) {
-    AG_LOG_DEBUG(propertyId);
+    AG_LOG_DEBUG("EnumInterfaceService set property " + propertyId);
     const auto& memberProperty = ApiGear::ObjectLink::Name::getMemberName(propertyId);
     if(memberProperty == "prop0") {
         Enum0Enum prop0 = value.get<Enum0Enum>();
@@ -83,11 +83,11 @@ void EnumInterfaceService::olinkSetProperty(const std::string& propertyId, const
 }
 
 void EnumInterfaceService::olinkLinked(const std::string& objectId, ApiGear::ObjectLink::IRemoteNode* /*node*/) {
-    AG_LOG_DEBUG(objectId);
+    AG_LOG_DEBUG("EnumInterfaceService linked " + objectId);
 }
 
 void EnumInterfaceService::olinkUnlinked(const std::string& objectId){
-    AG_LOG_DEBUG(objectId);
+    AG_LOG_DEBUG("EnumInterfaceService unlinked " + objectId);
 }
 
 nlohmann::json EnumInterfaceService::olinkCollectProperties()

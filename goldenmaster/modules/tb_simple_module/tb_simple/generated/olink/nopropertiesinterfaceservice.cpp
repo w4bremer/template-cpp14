@@ -36,7 +36,7 @@ std::string NoPropertiesInterfaceService::olinkObjectName() {
 }
 
 nlohmann::json NoPropertiesInterfaceService::olinkInvoke(const std::string& methodId, const nlohmann::json& fcnArgs) {
-    AG_LOG_DEBUG(methodId);
+    AG_LOG_DEBUG("NoPropertiesInterfaceService invoke " + methodId);
     const auto& memberMethod = ApiGear::ObjectLink::Name::getMemberName(methodId);
     if(memberMethod == "funcVoid") {
         m_NoPropertiesInterface->funcVoid();
@@ -51,7 +51,7 @@ nlohmann::json NoPropertiesInterfaceService::olinkInvoke(const std::string& meth
 }
 
 void NoPropertiesInterfaceService::olinkSetProperty(const std::string& propertyId, const nlohmann::json& value) {
-    AG_LOG_DEBUG(propertyId);
+    AG_LOG_DEBUG("NoPropertiesInterfaceService set property " + propertyId);
     const auto& memberProperty = ApiGear::ObjectLink::Name::getMemberName(propertyId);
     // no properties to set
     (void) value;
@@ -59,11 +59,11 @@ void NoPropertiesInterfaceService::olinkSetProperty(const std::string& propertyI
 }
 
 void NoPropertiesInterfaceService::olinkLinked(const std::string& objectId, ApiGear::ObjectLink::IRemoteNode* /*node*/) {
-    AG_LOG_DEBUG(objectId);
+    AG_LOG_DEBUG("NoPropertiesInterfaceService linked " + objectId);
 }
 
 void NoPropertiesInterfaceService::olinkUnlinked(const std::string& objectId){
-    AG_LOG_DEBUG(objectId);
+    AG_LOG_DEBUG("NoPropertiesInterfaceService unlinked " + objectId);
 }
 
 nlohmann::json NoPropertiesInterfaceService::olinkCollectProperties()

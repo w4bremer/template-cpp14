@@ -36,7 +36,7 @@ std::string SimpleInterfaceService::olinkObjectName() {
 }
 
 nlohmann::json SimpleInterfaceService::olinkInvoke(const std::string& methodId, const nlohmann::json& fcnArgs) {
-    AG_LOG_DEBUG(methodId);
+    AG_LOG_DEBUG("SimpleInterfaceService invoke " + methodId);
     const auto& memberMethod = ApiGear::ObjectLink::Name::getMemberName(methodId);
     if(memberMethod == "funcVoid") {
         m_SimpleInterface->funcVoid();
@@ -86,7 +86,7 @@ nlohmann::json SimpleInterfaceService::olinkInvoke(const std::string& methodId, 
 }
 
 void SimpleInterfaceService::olinkSetProperty(const std::string& propertyId, const nlohmann::json& value) {
-    AG_LOG_DEBUG(propertyId);
+    AG_LOG_DEBUG("SimpleInterfaceService set property " + propertyId);
     const auto& memberProperty = ApiGear::ObjectLink::Name::getMemberName(propertyId);
     if(memberProperty == "propBool") {
         bool propBool = value.get<bool>();
@@ -123,11 +123,11 @@ void SimpleInterfaceService::olinkSetProperty(const std::string& propertyId, con
 }
 
 void SimpleInterfaceService::olinkLinked(const std::string& objectId, ApiGear::ObjectLink::IRemoteNode* /*node*/) {
-    AG_LOG_DEBUG(objectId);
+    AG_LOG_DEBUG("SimpleInterfaceService linked " + objectId);
 }
 
 void SimpleInterfaceService::olinkUnlinked(const std::string& objectId){
-    AG_LOG_DEBUG(objectId);
+    AG_LOG_DEBUG("SimpleInterfaceService unlinked " + objectId);
 }
 
 nlohmann::json SimpleInterfaceService::olinkCollectProperties()

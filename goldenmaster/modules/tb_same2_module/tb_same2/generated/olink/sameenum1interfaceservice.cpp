@@ -36,7 +36,7 @@ std::string SameEnum1InterfaceService::olinkObjectName() {
 }
 
 nlohmann::json SameEnum1InterfaceService::olinkInvoke(const std::string& methodId, const nlohmann::json& fcnArgs) {
-    AG_LOG_DEBUG(methodId);
+    AG_LOG_DEBUG("SameEnum1InterfaceService invoke " + methodId);
     const auto& memberMethod = ApiGear::ObjectLink::Name::getMemberName(methodId);
     if(memberMethod == "func1") {
         const Enum1Enum& param1 = fcnArgs.at(0);
@@ -47,7 +47,7 @@ nlohmann::json SameEnum1InterfaceService::olinkInvoke(const std::string& methodI
 }
 
 void SameEnum1InterfaceService::olinkSetProperty(const std::string& propertyId, const nlohmann::json& value) {
-    AG_LOG_DEBUG(propertyId);
+    AG_LOG_DEBUG("SameEnum1InterfaceService set property " + propertyId);
     const auto& memberProperty = ApiGear::ObjectLink::Name::getMemberName(propertyId);
     if(memberProperty == "prop1") {
         Enum1Enum prop1 = value.get<Enum1Enum>();
@@ -56,11 +56,11 @@ void SameEnum1InterfaceService::olinkSetProperty(const std::string& propertyId, 
 }
 
 void SameEnum1InterfaceService::olinkLinked(const std::string& objectId, ApiGear::ObjectLink::IRemoteNode* /*node*/) {
-    AG_LOG_DEBUG(objectId);
+    AG_LOG_DEBUG("SameEnum1InterfaceService linked " + objectId);
 }
 
 void SameEnum1InterfaceService::olinkUnlinked(const std::string& objectId){
-    AG_LOG_DEBUG(objectId);
+    AG_LOG_DEBUG("SameEnum1InterfaceService unlinked " + objectId);
 }
 
 nlohmann::json SameEnum1InterfaceService::olinkCollectProperties()

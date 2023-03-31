@@ -36,7 +36,7 @@ std::string NestedStruct3InterfaceService::olinkObjectName() {
 }
 
 nlohmann::json NestedStruct3InterfaceService::olinkInvoke(const std::string& methodId, const nlohmann::json& fcnArgs) {
-    AG_LOG_DEBUG(methodId);
+    AG_LOG_DEBUG("NestedStruct3InterfaceService invoke " + methodId);
     const auto& memberMethod = ApiGear::ObjectLink::Name::getMemberName(methodId);
     if(memberMethod == "func1") {
         const NestedStruct1& param1 = fcnArgs.at(0);
@@ -60,7 +60,7 @@ nlohmann::json NestedStruct3InterfaceService::olinkInvoke(const std::string& met
 }
 
 void NestedStruct3InterfaceService::olinkSetProperty(const std::string& propertyId, const nlohmann::json& value) {
-    AG_LOG_DEBUG(propertyId);
+    AG_LOG_DEBUG("NestedStruct3InterfaceService set property " + propertyId);
     const auto& memberProperty = ApiGear::ObjectLink::Name::getMemberName(propertyId);
     if(memberProperty == "prop1") {
         NestedStruct1 prop1 = value.get<NestedStruct1>();
@@ -77,11 +77,11 @@ void NestedStruct3InterfaceService::olinkSetProperty(const std::string& property
 }
 
 void NestedStruct3InterfaceService::olinkLinked(const std::string& objectId, ApiGear::ObjectLink::IRemoteNode* /*node*/) {
-    AG_LOG_DEBUG(objectId);
+    AG_LOG_DEBUG("NestedStruct3InterfaceService linked " + objectId);
 }
 
 void NestedStruct3InterfaceService::olinkUnlinked(const std::string& objectId){
-    AG_LOG_DEBUG(objectId);
+    AG_LOG_DEBUG("NestedStruct3InterfaceService unlinked " + objectId);
 }
 
 nlohmann::json NestedStruct3InterfaceService::olinkCollectProperties()
