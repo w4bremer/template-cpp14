@@ -28,15 +28,15 @@
 
 #if defined _WIN32 || defined __CYGWIN__
 #ifdef __GNUC__
-#define API_GEAR_LOGGER __attribute__ ((dllexport))
+#define APIGEAR_LOGGER __attribute__ ((dllexport))
 #else
-#define API_GEAR_LOGGER __declspec(dllexport)
+#define APIGEAR_LOGGER __declspec(dllexport)
 #endif
 #else
 #if __GNUC__ >= 4
-#define API_GEAR_LOGGER __attribute__ ((visibility ("default")))
+#define APIGEAR_LOGGER __attribute__ ((visibility ("default")))
 #else
-#define API_GEAR_LOGGER
+#define APIGEAR_LOGGER
 #endif
 #endif
 
@@ -46,7 +46,7 @@ namespace ApiGear { namespace Utilities {
 /**
 * Logging levels for logs across the application.
 */
-enum API_GEAR_LOGGER LogLevel {
+enum APIGEAR_LOGGER LogLevel {
     Info,
     Debug,
     Warning,
@@ -63,33 +63,33 @@ using WriteLogFunc = std::function<void(LogLevel level, const std::string& msg)>
 *
 * @param func a functions which implements the WriteLogFunc signature
 */
-void API_GEAR_LOGGER setLog(WriteLogFunc func);
+void APIGEAR_LOGGER setLog(WriteLogFunc func);
 
 /* 
 * Get the default console log function
 *
 * @return func returns the default console log function
 */
-WriteLogFunc API_GEAR_LOGGER getConsoleLogFunc();
+WriteLogFunc APIGEAR_LOGGER getConsoleLogFunc();
 
 /*
 * Use to log on LogLevel::Info
 */
-void API_GEAR_LOGGER logInfo(const std::string& msg);
+void APIGEAR_LOGGER logInfo(const std::string& msg);
 
 /*
 * Use to log on LogLevel::Debug
 */
-void API_GEAR_LOGGER logDebug(const std::string& msg);
+void APIGEAR_LOGGER logDebug(const std::string& msg);
 
 /*
 * Use to log on LogLevel::Warning
 */
-void API_GEAR_LOGGER logWarning(const std::string& msg);
+void APIGEAR_LOGGER logWarning(const std::string& msg);
 
 /*
 * Use to log on LogLevel::Error
 */
-void API_GEAR_LOGGER logError(const std::string& msg);
+void APIGEAR_LOGGER logError(const std::string& msg);
 
 } } // ApiGear::Utilities
