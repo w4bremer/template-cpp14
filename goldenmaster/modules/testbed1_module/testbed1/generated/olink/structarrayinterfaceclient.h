@@ -33,8 +33,7 @@ namespace olink {
 * and to subscribe for the StructArrayInterface changes.
 */
 class TEST_TESTBED1_EXPORT StructArrayInterfaceClient : public IStructArrayInterface,
-    public ApiGear::ObjectLink::IObjectSink,
-    public ApiGear::Logger::Logger
+    public ApiGear::ObjectLink::IObjectSink
 {
 public:
 
@@ -187,6 +186,9 @@ private:
 
     /** The publisher for StructArrayInterface */
     std::unique_ptr<IStructArrayInterfacePublisher> m_publisher;
+
+    /** The logger */
+    std::unique_ptr<ApiGear::Logger::Logger> m_logger;
 };
 } // namespace olink
 } // namespace Testbed1

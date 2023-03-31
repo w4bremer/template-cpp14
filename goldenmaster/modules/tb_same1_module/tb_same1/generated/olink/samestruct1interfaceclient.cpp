@@ -6,6 +6,7 @@
 
 #include "olink/iclientnode.h"
 #include "apigear/olink/olinkconnection.h"
+#include "apigear/olink/logger/logger.h"
 
 using namespace Test::TbSame1;
 using namespace Test::TbSame1::olink;
@@ -17,6 +18,7 @@ const std::string interfaceId = "tb.same1.SameStruct1Interface";
 
 SameStruct1InterfaceClient::SameStruct1InterfaceClient()
     : m_publisher(std::make_unique<SameStruct1InterfacePublisher>())
+    , m_logger(std::make_unique<ApiGear::Logger::Logger>())
 {}
 
 void SameStruct1InterfaceClient::applyState(const nlohmann::json& fields) 
@@ -29,7 +31,7 @@ void SameStruct1InterfaceClient::applyState(const nlohmann::json& fields)
 void SameStruct1InterfaceClient::setProp1(const Struct1& prop1)
 {
     if(!m_node) {
-        emitLog(ApiGear::Logger::LogLevel::Warning, "Attempt to set property but " + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
+        m_logger->emitLog(ApiGear::Logger::LogLevel::Warning, "Attempt to set property but " + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return;
     }
     const auto& propertyId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "prop1");
@@ -52,7 +54,7 @@ const Struct1& SameStruct1InterfaceClient::getProp1() const
 Struct1 SameStruct1InterfaceClient::func1(const Struct1& param1)
 {
      if(!m_node) {
-        emitLog(ApiGear::Logger::LogLevel::Warning, "Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
+        m_logger->emitLog(ApiGear::Logger::LogLevel::Warning, "Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return Struct1();
     }
     Struct1 value(func1Async(param1).get());
@@ -62,7 +64,7 @@ Struct1 SameStruct1InterfaceClient::func1(const Struct1& param1)
 std::future<Struct1> SameStruct1InterfaceClient::func1Async(const Struct1& param1)
 {
     if(!m_node) {
-        emitLog(ApiGear::Logger::LogLevel::Warning, "Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
+        m_logger->emitLog(ApiGear::Logger::LogLevel::Warning, "Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return std::future<Struct1>{};
     }
     return std::async(std::launch::async, [this,

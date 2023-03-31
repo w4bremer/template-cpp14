@@ -39,8 +39,7 @@ namespace olink {
 * and to subscribe for the {{$interfaceNameOriginal}} changes.
 */
 class {{ SNAKE .System.Name  }}_{{ SNAKE .Module.Name  }}_EXPORT {{$class}} : public {{$interfaceClass}},
-    public ApiGear::ObjectLink::IObjectSink,
-    public ApiGear::Logger::Logger
+    public ApiGear::ObjectLink::IObjectSink
 {
 public:
 
@@ -141,6 +140,9 @@ private:
 
     /** The publisher for {{$interfaceNameOriginal}} */
     std::unique_ptr<{{$pub_class}}> m_publisher;
+
+    /** The logger */
+    std::unique_ptr<ApiGear::Logger::Logger> m_logger;
 };
 } // namespace olink
 } // namespace {{ Camel .Module.Name }}

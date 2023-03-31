@@ -4,6 +4,7 @@
 #include "testbed2/generated/api/testbed2.h"
 #include "testbed2/generated/api/common.h"
 #include "olink/iobjectsource.h"
+#include "apigear/olink/logger/logger.h"
 
 
 namespace ApiGear {
@@ -103,6 +104,9 @@ private:
     * A global registry that keeps track of object sources associated with their network layer nodes.
     */
     ApiGear::ObjectLink::RemoteRegistry& m_registry;
+
+    /** The logger */
+    std::unique_ptr<ApiGear::Logger::Logger> m_logger;
 };
 } // namespace olink
 } // namespace Testbed2

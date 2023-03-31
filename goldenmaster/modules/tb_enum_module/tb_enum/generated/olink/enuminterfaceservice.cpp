@@ -6,6 +6,7 @@
 
 #include "olink/iremotenode.h"
 #include "olink/remoteregistry.h"
+#include "apigear/olink/logger/logger.h"
 
 #include <iostream>
 
@@ -21,6 +22,7 @@ const std::string interfaceId = "tb.enum.EnumInterface";
 EnumInterfaceService::EnumInterfaceService(std::shared_ptr<IEnumInterface> EnumInterface, ApiGear::ObjectLink::RemoteRegistry& registry)
     : m_EnumInterface(EnumInterface)
     , m_registry(registry)
+    , m_logger(std::make_unique<ApiGear::Logger::Logger>())
 {
     m_EnumInterface->_getPublisher().subscribeToAllChanges(*this);
 }
@@ -35,7 +37,7 @@ std::string EnumInterfaceService::olinkObjectName() {
 }
 
 nlohmann::json EnumInterfaceService::olinkInvoke(const std::string& methodId, const nlohmann::json& fcnArgs) {
-    std::clog << methodId << std::endl;
+    m_logger->emitLog(ApiGear::Logger::LogLevel::Debug, methodId);
     const auto& memberMethod = ApiGear::ObjectLink::Name::getMemberName(methodId);
     if(memberMethod == "func0") {
         const Enum0Enum& param0 = fcnArgs.at(0);
@@ -61,7 +63,7 @@ nlohmann::json EnumInterfaceService::olinkInvoke(const std::string& methodId, co
 }
 
 void EnumInterfaceService::olinkSetProperty(const std::string& propertyId, const nlohmann::json& value) {
-    std::clog << propertyId << std::endl;
+    m_logger->emitLog(ApiGear::Logger::LogLevel::Debug, propertyId);
     const auto& memberProperty = ApiGear::ObjectLink::Name::getMemberName(propertyId);
     if(memberProperty == "prop0") {
         Enum0Enum prop0 = value.get<Enum0Enum>();
@@ -82,11 +84,11 @@ void EnumInterfaceService::olinkSetProperty(const std::string& propertyId, const
 }
 
 void EnumInterfaceService::olinkLinked(const std::string& objetId, ApiGear::ObjectLink::IRemoteNode* /*node*/) {
-    std::clog << objetId << std::endl;
+    m_logger->emitLog(ApiGear::Logger::LogLevel::Debug, objetId);
 }
 
 void EnumInterfaceService::olinkUnlinked(const std::string& objetId){
-    std::clog << objetId << std::endl;
+    m_logger->emitLog(ApiGear::Logger::LogLevel::Debug, objetId);
 }
 
 nlohmann::json EnumInterfaceService::olinkCollectProperties()

@@ -33,8 +33,7 @@ namespace olink {
 * and to subscribe for the EnumInterface changes.
 */
 class TEST_TB_ENUM_EXPORT EnumInterfaceClient : public IEnumInterface,
-    public ApiGear::ObjectLink::IObjectSink,
-    public ApiGear::Logger::Logger
+    public ApiGear::ObjectLink::IObjectSink
 {
 public:
 
@@ -187,6 +186,9 @@ private:
 
     /** The publisher for EnumInterface */
     std::unique_ptr<IEnumInterfacePublisher> m_publisher;
+
+    /** The logger */
+    std::unique_ptr<ApiGear::Logger::Logger> m_logger;
 };
 } // namespace olink
 } // namespace TbEnum

@@ -33,8 +33,7 @@ namespace olink {
 * and to subscribe for the SameStruct2Interface changes.
 */
 class TEST_TB_SAME1_EXPORT SameStruct2InterfaceClient : public ISameStruct2Interface,
-    public ApiGear::ObjectLink::IObjectSink,
-    public ApiGear::Logger::Logger
+    public ApiGear::ObjectLink::IObjectSink
 {
 public:
 
@@ -145,6 +144,9 @@ private:
 
     /** The publisher for SameStruct2Interface */
     std::unique_ptr<ISameStruct2InterfacePublisher> m_publisher;
+
+    /** The logger */
+    std::unique_ptr<ApiGear::Logger::Logger> m_logger;
 };
 } // namespace olink
 } // namespace TbSame1

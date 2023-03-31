@@ -6,6 +6,7 @@
 
 #include "olink/iremotenode.h"
 #include "olink/remoteregistry.h"
+#include "apigear/olink/logger/logger.h"
 
 #include <iostream>
 
@@ -21,6 +22,7 @@ const std::string interfaceId = "testbed1.StructInterface";
 StructInterfaceService::StructInterfaceService(std::shared_ptr<IStructInterface> StructInterface, ApiGear::ObjectLink::RemoteRegistry& registry)
     : m_StructInterface(StructInterface)
     , m_registry(registry)
+    , m_logger(std::make_unique<ApiGear::Logger::Logger>())
 {
     m_StructInterface->_getPublisher().subscribeToAllChanges(*this);
 }
@@ -35,7 +37,7 @@ std::string StructInterfaceService::olinkObjectName() {
 }
 
 nlohmann::json StructInterfaceService::olinkInvoke(const std::string& methodId, const nlohmann::json& fcnArgs) {
-    std::clog << methodId << std::endl;
+    m_logger->emitLog(ApiGear::Logger::LogLevel::Debug, methodId);
     const auto& memberMethod = ApiGear::ObjectLink::Name::getMemberName(methodId);
     if(memberMethod == "funcBool") {
         const StructBool& paramBool = fcnArgs.at(0);
@@ -61,7 +63,7 @@ nlohmann::json StructInterfaceService::olinkInvoke(const std::string& methodId, 
 }
 
 void StructInterfaceService::olinkSetProperty(const std::string& propertyId, const nlohmann::json& value) {
-    std::clog << propertyId << std::endl;
+    m_logger->emitLog(ApiGear::Logger::LogLevel::Debug, propertyId);
     const auto& memberProperty = ApiGear::ObjectLink::Name::getMemberName(propertyId);
     if(memberProperty == "propBool") {
         StructBool propBool = value.get<StructBool>();
@@ -82,11 +84,11 @@ void StructInterfaceService::olinkSetProperty(const std::string& propertyId, con
 }
 
 void StructInterfaceService::olinkLinked(const std::string& objetId, ApiGear::ObjectLink::IRemoteNode* /*node*/) {
-    std::clog << objetId << std::endl;
+    m_logger->emitLog(ApiGear::Logger::LogLevel::Debug, objetId);
 }
 
 void StructInterfaceService::olinkUnlinked(const std::string& objetId){
-    std::clog << objetId << std::endl;
+    m_logger->emitLog(ApiGear::Logger::LogLevel::Debug, objetId);
 }
 
 nlohmann::json StructInterfaceService::olinkCollectProperties()

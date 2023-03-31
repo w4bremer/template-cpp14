@@ -8,6 +8,7 @@
 
 #include "olink/iremotenode.h"
 #include "olink/remoteregistry.h"
+#include "apigear/olink/logger/logger.h"
 
 #include <iostream>
 
@@ -23,6 +24,7 @@ const std::string interfaceId = "{{.Module.Name}}.{{$interface}}";
 {{$class}}::{{$class}}(std::shared_ptr<I{{$interface}}> {{$interface}}, ApiGear::ObjectLink::RemoteRegistry& registry)
     : m_{{$interface}}({{$interface}})
     , m_registry(registry)
+    , m_logger(std::make_unique<ApiGear::Logger::Logger>())
 {
     m_{{$interface}}->_getPublisher().subscribeToAllChanges(*this);
 }
@@ -37,7 +39,7 @@ std::string {{$class}}::olinkObjectName() {
 }
 
 nlohmann::json {{$class}}::olinkInvoke(const std::string& methodId, const nlohmann::json& fcnArgs) {
-    std::clog << methodId << std::endl;
+    m_logger->emitLog(ApiGear::Logger::LogLevel::Debug, methodId);
     const auto& memberMethod = ApiGear::ObjectLink::Name::getMemberName(methodId);
 {{- range .Interface.Operations}}
 {{- $operation := . }}
@@ -63,7 +65,7 @@ nlohmann::json {{$class}}::olinkInvoke(const std::string& methodId, const nlohma
 }
 
 void {{$class}}::olinkSetProperty(const std::string& propertyId, const nlohmann::json& value) {
-    std::clog << propertyId << std::endl;
+    m_logger->emitLog(ApiGear::Logger::LogLevel::Debug, propertyId);
     const auto& memberProperty = ApiGear::ObjectLink::Name::getMemberName(propertyId);
 {{- range .Interface.Properties}}
 {{- $property := . }}
@@ -79,11 +81,11 @@ void {{$class}}::olinkSetProperty(const std::string& propertyId, const nlohmann:
 }
 
 void {{$class}}::olinkLinked(const std::string& objetId, ApiGear::ObjectLink::IRemoteNode* /*node*/) {
-    std::clog << objetId << std::endl;
+    m_logger->emitLog(ApiGear::Logger::LogLevel::Debug, objetId);
 }
 
 void {{$class}}::olinkUnlinked(const std::string& objetId){
-    std::clog << objetId << std::endl;
+    m_logger->emitLog(ApiGear::Logger::LogLevel::Debug, objetId);
 }
 
 nlohmann::json {{$class}}::olinkCollectProperties()

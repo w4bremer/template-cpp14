@@ -6,6 +6,7 @@
 
 #include "olink/iremotenode.h"
 #include "olink/remoteregistry.h"
+#include "apigear/olink/logger/logger.h"
 
 #include <iostream>
 
@@ -21,6 +22,7 @@ const std::string interfaceId = "tb.same1.SameStruct1Interface";
 SameStruct1InterfaceService::SameStruct1InterfaceService(std::shared_ptr<ISameStruct1Interface> SameStruct1Interface, ApiGear::ObjectLink::RemoteRegistry& registry)
     : m_SameStruct1Interface(SameStruct1Interface)
     , m_registry(registry)
+    , m_logger(std::make_unique<ApiGear::Logger::Logger>())
 {
     m_SameStruct1Interface->_getPublisher().subscribeToAllChanges(*this);
 }
@@ -35,7 +37,7 @@ std::string SameStruct1InterfaceService::olinkObjectName() {
 }
 
 nlohmann::json SameStruct1InterfaceService::olinkInvoke(const std::string& methodId, const nlohmann::json& fcnArgs) {
-    std::clog << methodId << std::endl;
+    m_logger->emitLog(ApiGear::Logger::LogLevel::Debug, methodId);
     const auto& memberMethod = ApiGear::ObjectLink::Name::getMemberName(methodId);
     if(memberMethod == "func1") {
         const Struct1& param1 = fcnArgs.at(0);
@@ -46,7 +48,7 @@ nlohmann::json SameStruct1InterfaceService::olinkInvoke(const std::string& metho
 }
 
 void SameStruct1InterfaceService::olinkSetProperty(const std::string& propertyId, const nlohmann::json& value) {
-    std::clog << propertyId << std::endl;
+    m_logger->emitLog(ApiGear::Logger::LogLevel::Debug, propertyId);
     const auto& memberProperty = ApiGear::ObjectLink::Name::getMemberName(propertyId);
     if(memberProperty == "prop1") {
         Struct1 prop1 = value.get<Struct1>();
@@ -55,11 +57,11 @@ void SameStruct1InterfaceService::olinkSetProperty(const std::string& propertyId
 }
 
 void SameStruct1InterfaceService::olinkLinked(const std::string& objetId, ApiGear::ObjectLink::IRemoteNode* /*node*/) {
-    std::clog << objetId << std::endl;
+    m_logger->emitLog(ApiGear::Logger::LogLevel::Debug, objetId);
 }
 
 void SameStruct1InterfaceService::olinkUnlinked(const std::string& objetId){
-    std::clog << objetId << std::endl;
+    m_logger->emitLog(ApiGear::Logger::LogLevel::Debug, objetId);
 }
 
 nlohmann::json SameStruct1InterfaceService::olinkCollectProperties()

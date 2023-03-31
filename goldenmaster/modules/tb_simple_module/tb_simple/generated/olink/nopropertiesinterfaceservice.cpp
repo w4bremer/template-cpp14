@@ -6,6 +6,7 @@
 
 #include "olink/iremotenode.h"
 #include "olink/remoteregistry.h"
+#include "apigear/olink/logger/logger.h"
 
 #include <iostream>
 
@@ -21,6 +22,7 @@ const std::string interfaceId = "tb.simple.NoPropertiesInterface";
 NoPropertiesInterfaceService::NoPropertiesInterfaceService(std::shared_ptr<INoPropertiesInterface> NoPropertiesInterface, ApiGear::ObjectLink::RemoteRegistry& registry)
     : m_NoPropertiesInterface(NoPropertiesInterface)
     , m_registry(registry)
+    , m_logger(std::make_unique<ApiGear::Logger::Logger>())
 {
     m_NoPropertiesInterface->_getPublisher().subscribeToAllChanges(*this);
 }
@@ -35,7 +37,7 @@ std::string NoPropertiesInterfaceService::olinkObjectName() {
 }
 
 nlohmann::json NoPropertiesInterfaceService::olinkInvoke(const std::string& methodId, const nlohmann::json& fcnArgs) {
-    std::clog << methodId << std::endl;
+    m_logger->emitLog(ApiGear::Logger::LogLevel::Debug, methodId);
     const auto& memberMethod = ApiGear::ObjectLink::Name::getMemberName(methodId);
     if(memberMethod == "funcVoid") {
         m_NoPropertiesInterface->funcVoid();
@@ -50,7 +52,7 @@ nlohmann::json NoPropertiesInterfaceService::olinkInvoke(const std::string& meth
 }
 
 void NoPropertiesInterfaceService::olinkSetProperty(const std::string& propertyId, const nlohmann::json& value) {
-    std::clog << propertyId << std::endl;
+    m_logger->emitLog(ApiGear::Logger::LogLevel::Debug, propertyId);
     const auto& memberProperty = ApiGear::ObjectLink::Name::getMemberName(propertyId);
     // no properties to set
     (void) value;
@@ -58,11 +60,11 @@ void NoPropertiesInterfaceService::olinkSetProperty(const std::string& propertyI
 }
 
 void NoPropertiesInterfaceService::olinkLinked(const std::string& objetId, ApiGear::ObjectLink::IRemoteNode* /*node*/) {
-    std::clog << objetId << std::endl;
+    m_logger->emitLog(ApiGear::Logger::LogLevel::Debug, objetId);
 }
 
 void NoPropertiesInterfaceService::olinkUnlinked(const std::string& objetId){
-    std::clog << objetId << std::endl;
+    m_logger->emitLog(ApiGear::Logger::LogLevel::Debug, objetId);
 }
 
 nlohmann::json NoPropertiesInterfaceService::olinkCollectProperties()

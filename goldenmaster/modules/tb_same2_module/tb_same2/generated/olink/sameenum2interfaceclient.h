@@ -33,8 +33,7 @@ namespace olink {
 * and to subscribe for the SameEnum2Interface changes.
 */
 class TEST_TB_SAME2_EXPORT SameEnum2InterfaceClient : public ISameEnum2Interface,
-    public ApiGear::ObjectLink::IObjectSink,
-    public ApiGear::Logger::Logger
+    public ApiGear::ObjectLink::IObjectSink
 {
 public:
 
@@ -145,6 +144,9 @@ private:
 
     /** The publisher for SameEnum2Interface */
     std::unique_ptr<ISameEnum2InterfacePublisher> m_publisher;
+
+    /** The logger */
+    std::unique_ptr<ApiGear::Logger::Logger> m_logger;
 };
 } // namespace olink
 } // namespace TbSame2

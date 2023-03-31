@@ -33,8 +33,7 @@ namespace olink {
 * and to subscribe for the ManyParamInterface changes.
 */
 class TEST_TESTBED2_EXPORT ManyParamInterfaceClient : public IManyParamInterface,
-    public ApiGear::ObjectLink::IObjectSink,
-    public ApiGear::Logger::Logger
+    public ApiGear::ObjectLink::IObjectSink
 {
 public:
 
@@ -187,6 +186,9 @@ private:
 
     /** The publisher for ManyParamInterface */
     std::unique_ptr<IManyParamInterfacePublisher> m_publisher;
+
+    /** The logger */
+    std::unique_ptr<ApiGear::Logger::Logger> m_logger;
 };
 } // namespace olink
 } // namespace Testbed2

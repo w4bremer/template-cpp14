@@ -6,6 +6,7 @@
 
 #include "olink/iremotenode.h"
 #include "olink/remoteregistry.h"
+#include "apigear/olink/logger/logger.h"
 
 #include <iostream>
 
@@ -21,6 +22,7 @@ const std::string interfaceId = "tb.same2.SameEnum2Interface";
 SameEnum2InterfaceService::SameEnum2InterfaceService(std::shared_ptr<ISameEnum2Interface> SameEnum2Interface, ApiGear::ObjectLink::RemoteRegistry& registry)
     : m_SameEnum2Interface(SameEnum2Interface)
     , m_registry(registry)
+    , m_logger(std::make_unique<ApiGear::Logger::Logger>())
 {
     m_SameEnum2Interface->_getPublisher().subscribeToAllChanges(*this);
 }
@@ -35,7 +37,7 @@ std::string SameEnum2InterfaceService::olinkObjectName() {
 }
 
 nlohmann::json SameEnum2InterfaceService::olinkInvoke(const std::string& methodId, const nlohmann::json& fcnArgs) {
-    std::clog << methodId << std::endl;
+    m_logger->emitLog(ApiGear::Logger::LogLevel::Debug, methodId);
     const auto& memberMethod = ApiGear::ObjectLink::Name::getMemberName(methodId);
     if(memberMethod == "func1") {
         const Enum1Enum& param1 = fcnArgs.at(0);
@@ -52,7 +54,7 @@ nlohmann::json SameEnum2InterfaceService::olinkInvoke(const std::string& methodI
 }
 
 void SameEnum2InterfaceService::olinkSetProperty(const std::string& propertyId, const nlohmann::json& value) {
-    std::clog << propertyId << std::endl;
+    m_logger->emitLog(ApiGear::Logger::LogLevel::Debug, propertyId);
     const auto& memberProperty = ApiGear::ObjectLink::Name::getMemberName(propertyId);
     if(memberProperty == "prop1") {
         Enum1Enum prop1 = value.get<Enum1Enum>();
@@ -65,11 +67,11 @@ void SameEnum2InterfaceService::olinkSetProperty(const std::string& propertyId, 
 }
 
 void SameEnum2InterfaceService::olinkLinked(const std::string& objetId, ApiGear::ObjectLink::IRemoteNode* /*node*/) {
-    std::clog << objetId << std::endl;
+    m_logger->emitLog(ApiGear::Logger::LogLevel::Debug, objetId);
 }
 
 void SameEnum2InterfaceService::olinkUnlinked(const std::string& objetId){
-    std::clog << objetId << std::endl;
+    m_logger->emitLog(ApiGear::Logger::LogLevel::Debug, objetId);
 }
 
 nlohmann::json SameEnum2InterfaceService::olinkCollectProperties()

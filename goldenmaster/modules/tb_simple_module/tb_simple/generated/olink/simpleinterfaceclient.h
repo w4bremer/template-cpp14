@@ -33,8 +33,7 @@ namespace olink {
 * and to subscribe for the SimpleInterface changes.
 */
 class TEST_TB_SIMPLE_EXPORT SimpleInterfaceClient : public ISimpleInterface,
-    public ApiGear::ObjectLink::IObjectSink,
-    public ApiGear::Logger::Logger
+    public ApiGear::ObjectLink::IObjectSink
 {
 public:
 
@@ -280,6 +279,9 @@ private:
 
     /** The publisher for SimpleInterface */
     std::unique_ptr<ISimpleInterfacePublisher> m_publisher;
+
+    /** The logger */
+    std::unique_ptr<ApiGear::Logger::Logger> m_logger;
 };
 } // namespace olink
 } // namespace TbSimple

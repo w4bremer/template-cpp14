@@ -6,6 +6,7 @@
 
 #include "olink/iclientnode.h"
 #include "apigear/olink/olinkconnection.h"
+#include "apigear/olink/logger/logger.h"
 
 using namespace Test::Testbed1;
 using namespace Test::Testbed1::olink;
@@ -17,6 +18,7 @@ const std::string interfaceId = "testbed1.StructInterface";
 
 StructInterfaceClient::StructInterfaceClient()
     : m_publisher(std::make_unique<StructInterfacePublisher>())
+    , m_logger(std::make_unique<ApiGear::Logger::Logger>())
 {}
 
 void StructInterfaceClient::applyState(const nlohmann::json& fields) 
@@ -38,7 +40,7 @@ void StructInterfaceClient::applyState(const nlohmann::json& fields)
 void StructInterfaceClient::setPropBool(const StructBool& propBool)
 {
     if(!m_node) {
-        emitLog(ApiGear::Logger::LogLevel::Warning, "Attempt to set property but " + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
+        m_logger->emitLog(ApiGear::Logger::LogLevel::Warning, "Attempt to set property but " + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return;
     }
     const auto& propertyId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "propBool");
@@ -61,7 +63,7 @@ const StructBool& StructInterfaceClient::getPropBool() const
 void StructInterfaceClient::setPropInt(const StructInt& propInt)
 {
     if(!m_node) {
-        emitLog(ApiGear::Logger::LogLevel::Warning, "Attempt to set property but " + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
+        m_logger->emitLog(ApiGear::Logger::LogLevel::Warning, "Attempt to set property but " + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return;
     }
     const auto& propertyId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "propInt");
@@ -84,7 +86,7 @@ const StructInt& StructInterfaceClient::getPropInt() const
 void StructInterfaceClient::setPropFloat(const StructFloat& propFloat)
 {
     if(!m_node) {
-        emitLog(ApiGear::Logger::LogLevel::Warning, "Attempt to set property but " + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
+        m_logger->emitLog(ApiGear::Logger::LogLevel::Warning, "Attempt to set property but " + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return;
     }
     const auto& propertyId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "propFloat");
@@ -107,7 +109,7 @@ const StructFloat& StructInterfaceClient::getPropFloat() const
 void StructInterfaceClient::setPropString(const StructString& propString)
 {
     if(!m_node) {
-        emitLog(ApiGear::Logger::LogLevel::Warning, "Attempt to set property but " + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
+        m_logger->emitLog(ApiGear::Logger::LogLevel::Warning, "Attempt to set property but " + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return;
     }
     const auto& propertyId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "propString");
@@ -130,7 +132,7 @@ const StructString& StructInterfaceClient::getPropString() const
 StructBool StructInterfaceClient::funcBool(const StructBool& paramBool)
 {
      if(!m_node) {
-        emitLog(ApiGear::Logger::LogLevel::Warning, "Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
+        m_logger->emitLog(ApiGear::Logger::LogLevel::Warning, "Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return StructBool();
     }
     StructBool value(funcBoolAsync(paramBool).get());
@@ -140,7 +142,7 @@ StructBool StructInterfaceClient::funcBool(const StructBool& paramBool)
 std::future<StructBool> StructInterfaceClient::funcBoolAsync(const StructBool& paramBool)
 {
     if(!m_node) {
-        emitLog(ApiGear::Logger::LogLevel::Warning, "Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
+        m_logger->emitLog(ApiGear::Logger::LogLevel::Warning, "Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return std::future<StructBool>{};
     }
     return std::async(std::launch::async, [this,
@@ -161,7 +163,7 @@ std::future<StructBool> StructInterfaceClient::funcBoolAsync(const StructBool& p
 StructBool StructInterfaceClient::funcInt(const StructInt& paramInt)
 {
      if(!m_node) {
-        emitLog(ApiGear::Logger::LogLevel::Warning, "Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
+        m_logger->emitLog(ApiGear::Logger::LogLevel::Warning, "Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return StructBool();
     }
     StructBool value(funcIntAsync(paramInt).get());
@@ -171,7 +173,7 @@ StructBool StructInterfaceClient::funcInt(const StructInt& paramInt)
 std::future<StructBool> StructInterfaceClient::funcIntAsync(const StructInt& paramInt)
 {
     if(!m_node) {
-        emitLog(ApiGear::Logger::LogLevel::Warning, "Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
+        m_logger->emitLog(ApiGear::Logger::LogLevel::Warning, "Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return std::future<StructBool>{};
     }
     return std::async(std::launch::async, [this,
@@ -192,7 +194,7 @@ std::future<StructBool> StructInterfaceClient::funcIntAsync(const StructInt& par
 StructFloat StructInterfaceClient::funcFloat(const StructFloat& paramFloat)
 {
      if(!m_node) {
-        emitLog(ApiGear::Logger::LogLevel::Warning, "Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
+        m_logger->emitLog(ApiGear::Logger::LogLevel::Warning, "Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return StructFloat();
     }
     StructFloat value(funcFloatAsync(paramFloat).get());
@@ -202,7 +204,7 @@ StructFloat StructInterfaceClient::funcFloat(const StructFloat& paramFloat)
 std::future<StructFloat> StructInterfaceClient::funcFloatAsync(const StructFloat& paramFloat)
 {
     if(!m_node) {
-        emitLog(ApiGear::Logger::LogLevel::Warning, "Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
+        m_logger->emitLog(ApiGear::Logger::LogLevel::Warning, "Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return std::future<StructFloat>{};
     }
     return std::async(std::launch::async, [this,
@@ -223,7 +225,7 @@ std::future<StructFloat> StructInterfaceClient::funcFloatAsync(const StructFloat
 StructString StructInterfaceClient::funcString(const StructString& paramString)
 {
      if(!m_node) {
-        emitLog(ApiGear::Logger::LogLevel::Warning, "Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
+        m_logger->emitLog(ApiGear::Logger::LogLevel::Warning, "Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return StructString();
     }
     StructString value(funcStringAsync(paramString).get());
@@ -233,7 +235,7 @@ StructString StructInterfaceClient::funcString(const StructString& paramString)
 std::future<StructString> StructInterfaceClient::funcStringAsync(const StructString& paramString)
 {
     if(!m_node) {
-        emitLog(ApiGear::Logger::LogLevel::Warning, "Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
+        m_logger->emitLog(ApiGear::Logger::LogLevel::Warning, "Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return std::future<StructString>{};
     }
     return std::async(std::launch::async, [this,

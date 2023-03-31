@@ -33,8 +33,7 @@ namespace olink {
 * and to subscribe for the NestedStruct3Interface changes.
 */
 class TEST_TESTBED2_EXPORT NestedStruct3InterfaceClient : public INestedStruct3Interface,
-    public ApiGear::ObjectLink::IObjectSink,
-    public ApiGear::Logger::Logger
+    public ApiGear::ObjectLink::IObjectSink
 {
 public:
 
@@ -166,6 +165,9 @@ private:
 
     /** The publisher for NestedStruct3Interface */
     std::unique_ptr<INestedStruct3InterfacePublisher> m_publisher;
+
+    /** The logger */
+    std::unique_ptr<ApiGear::Logger::Logger> m_logger;
 };
 } // namespace olink
 } // namespace Testbed2

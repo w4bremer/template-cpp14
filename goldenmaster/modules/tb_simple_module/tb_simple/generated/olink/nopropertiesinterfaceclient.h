@@ -33,8 +33,7 @@ namespace olink {
 * and to subscribe for the NoPropertiesInterface changes.
 */
 class TEST_TB_SIMPLE_EXPORT NoPropertiesInterfaceClient : public INoPropertiesInterface,
-    public ApiGear::ObjectLink::IObjectSink,
-    public ApiGear::Logger::Logger
+    public ApiGear::ObjectLink::IObjectSink
 {
 public:
 
@@ -118,6 +117,9 @@ private:
 
     /** The publisher for NoPropertiesInterface */
     std::unique_ptr<INoPropertiesInterfacePublisher> m_publisher;
+
+    /** The logger */
+    std::unique_ptr<ApiGear::Logger::Logger> m_logger;
 };
 } // namespace olink
 } // namespace TbSimple
