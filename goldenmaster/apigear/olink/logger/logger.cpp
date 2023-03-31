@@ -31,24 +31,24 @@ namespace ApiGear { namespace Logger {
 Logger::Logger() {
     m_logFunc = [](LogLevel level, const std::string& msg)
     {
-        auto levelText = "debug";
+        auto levelText = "[debug  ] ";
         switch (level)
         {
             case LogLevel::Debug:
-                levelText = "debug";
-                std::clog<< levelText <<" : "<< msg << std::endl;
+                levelText = "[debug  ] ";
+                std::clog<< levelText << msg << std::endl;
                 break;
             case LogLevel::Error:
-                levelText = "error";
-                std::cerr<< levelText <<" : "<< msg << std::endl;
+                levelText = "[error  ] ";
+                std::cerr<< levelText << msg << std::endl;
                 break;
             case LogLevel::Warning:
-                levelText = "warning";
-                std::cerr<< levelText <<" : "<< msg << std::endl;
+                levelText = "[warning] ";
+                std::cerr<< levelText << msg << std::endl;
                 break;
             case LogLevel::Info:
-                levelText = "info";
-                std::cout<< levelText <<" : "<< msg << std::endl;
+                levelText = "[info   ] ";
+                std::cout<< levelText << msg << std::endl;
                 break;
             default:
                 break;
