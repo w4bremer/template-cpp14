@@ -73,6 +73,14 @@ void APIGEAR_LOGGER setLog(WriteLogFunc func);
 WriteLogFunc APIGEAR_LOGGER getConsoleLogFunc();
 
 /*
+* Use to log
+*
+* @param level specify the LogLevel
+* @param msg content to be logged
+*/
+void APIGEAR_LOGGER emitLog(LogLevel level,const std::string& msg);
+
+/*
 * Use to log on LogLevel::Info
 */
 void APIGEAR_LOGGER logInfo(const std::string& msg);
