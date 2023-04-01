@@ -15,7 +15,7 @@
 {{- if $features.monitor }}
 #include "apigear/tracer/tracer.h"
 {{- end}}
-#include "olink/consolelogger.h"
+#include "apigear/olink/olinklogadapter.h"
 #include "olink/clientregistry.h"
 
 using namespace {{ Camel .System.Name }};
@@ -27,10 +27,9 @@ int main(){
     tracer.connect("http://localhost:5555", "testExampleOLinkApp");
 {{- end}}
     ApiGear::ObjectLink::ClientRegistry registry;
-    ApiGear::ObjectLink::ConsoleLogger logger;
-    registry.onLog(logger.logFunc());
+    registry.onLog(ApiGear::Utilities::logAdapter(ApiGear::Utilities::getConsoleLogFunc(ApiGear::Utilities::Debug)));
     ApiGear::PocoImpl::OlinkConnection clientNetworkEndpoint(registry);
-    clientNetworkEndpoint.node()->onLog(logger.logFunc());
+    clientNetworkEndpoint.node()->onLog(ApiGear::Utilities::logAdapter(ApiGear::Utilities::getConsoleLogFunc(ApiGear::Utilities::Debug)));
 {{- range .System.Modules }}
 {{- $module := . }}
 {{- range $module.Interfaces }}

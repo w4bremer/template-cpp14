@@ -40,7 +40,7 @@
 #include "testbed1/implementation/structarrayinterface.h"
 #include "testbed1/generated/olink/structarrayinterfaceservice.h"
 
-#include "olink/consolelogger.h"
+#include "apigear/olink/olinklogadapter.h"
 #include "olink/remoteregistry.h"
 #include "apigear/olink/olinkhost.h"
 
@@ -50,8 +50,7 @@ using namespace Test;
 
 int main(){
     ApiGear::ObjectLink::RemoteRegistry registry;
-    ApiGear::ObjectLink::ConsoleLogger logger;
-    registry.onLog(logger.logFunc());
+    registry.onLog(ApiGear::Utilities::logAdapter(ApiGear::Utilities::getConsoleLogFunc(ApiGear::Utilities::Debug)));
     
     ApiGear::PocoImpl::OLinkHost testserver(registry);
     auto testbed2ManyParamInterface = std::make_shared<Testbed2::ManyParamInterface>();

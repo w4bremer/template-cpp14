@@ -34,6 +34,7 @@ set(TEST_POCO_OLINK_SOURCES
     test_main.cpp
     olink_connection.test.cpp
     olinkhost.test.cpp
+    olinklogadapter.test.cpp
     test_main.cpp
     private/frame.hpp
     private/sinkobjectmock.hpp

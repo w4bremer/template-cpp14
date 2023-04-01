@@ -7,7 +7,7 @@
 {{- end }}
 {{- end }}
 
-#include "olink/consolelogger.h"
+#include "apigear/olink/olinklogadapter.h"
 #include "olink/remoteregistry.h"
 #include "apigear/olink/olinkhost.h"
 
@@ -17,8 +17,7 @@ using namespace {{ Camel .System.Name }};
 
 int main(){
     ApiGear::ObjectLink::RemoteRegistry registry;
-    ApiGear::ObjectLink::ConsoleLogger logger;
-    registry.onLog(logger.logFunc());
+    registry.onLog(ApiGear::Utilities::logAdapter(ApiGear::Utilities::getConsoleLogFunc(ApiGear::Utilities::Debug)));
     
     ApiGear::PocoImpl::OLinkHost testserver(registry);
 

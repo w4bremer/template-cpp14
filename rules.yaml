@@ -171,6 +171,8 @@ features:
           raw: true
         - source: "apigear/olink/CMakeLists.txt"
           raw: true
+        - source: "apigear/olink/olinklogadapter.h"
+          raw: true
         - source: "apigear/olink/olinkhost.cpp"
           raw: true
         - source: "apigear/olink/olinkhost.h"
@@ -212,6 +214,8 @@ features:
         - source: "apigear/olink/tests/olink_connection.test.cpp"
           raw: true
         - source: "apigear/olink/tests/olinkhost.test.cpp"
+          raw: true
+        - source: "apigear/olink/tests/olinklogadapter.test.cpp"
           raw: true
         - source: "apigear/olink/tests/test_main.cpp"
           raw: true

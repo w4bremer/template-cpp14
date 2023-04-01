@@ -42,7 +42,7 @@
 
 #include "apigear/olink/olinkconnection.h"
 #include "apigear/tracer/tracer.h"
-#include "olink/consolelogger.h"
+#include "apigear/olink/olinklogadapter.h"
 #include "olink/clientregistry.h"
 
 using namespace Test;
@@ -51,10 +51,9 @@ int main(){
     ApiGear::PocoImpl::Tracer tracer;
     tracer.connect("http://localhost:5555", "testExampleOLinkApp");
     ApiGear::ObjectLink::ClientRegistry registry;
-    ApiGear::ObjectLink::ConsoleLogger logger;
-    registry.onLog(logger.logFunc());
+    registry.onLog(ApiGear::Utilities::logAdapter(ApiGear::Utilities::getConsoleLogFunc(ApiGear::Utilities::Debug)));
     ApiGear::PocoImpl::OlinkConnection clientNetworkEndpoint(registry);
-    clientNetworkEndpoint.node()->onLog(logger.logFunc());
+    clientNetworkEndpoint.node()->onLog(ApiGear::Utilities::logAdapter(ApiGear::Utilities::getConsoleLogFunc(ApiGear::Utilities::Debug)));
     auto testbed2ManyParamInterface = std::make_shared<Testbed2::olink::ManyParamInterfaceClient>();
     clientNetworkEndpoint.connectAndLinkObject(testbed2ManyParamInterface);
     std::unique_ptr<Testbed2::IManyParamInterface> testbed2ManyParamInterfaceTraced = Testbed2::ManyParamInterfaceTraceDecorator::connect(*testbed2ManyParamInterface, tracer);
