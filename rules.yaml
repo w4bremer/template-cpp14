@@ -147,6 +147,12 @@ features:
           raw: true
         - source: "apigear/utilities/CMakeLists.txt"
           raw: true
+        - source: "apigear/utilities/tests/CMakeLists.txt"
+          raw: true
+        - source: "apigear/utilities/tests/logger.test.cpp"
+          raw: true
+        - source: "apigear/utilities/tests/test_main.cpp"
+          raw: true
         - source: "apigear/apigear.test.cpp"
           raw: true
         - source: "apigear/tracer/tracer.h"

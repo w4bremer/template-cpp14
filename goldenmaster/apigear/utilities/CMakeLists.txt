@@ -37,3 +37,5 @@ install(EXPORT ApiGearUtilitiesTargets
   DESTINATION ${InstallDir}
   NAMESPACE apigear::
 )
+
+add_subdirectory (tests)
