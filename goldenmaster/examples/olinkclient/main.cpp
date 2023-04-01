@@ -50,7 +50,7 @@
 ApiGear::Utilities::WriteLogFunc getLogging(){
 
     ApiGear::Utilities::WriteLogFunc logConsoleFunc = nullptr;
-    ApiGear::Utilities::LogLevel logLevel = ApiGear::Utilities::LogLevel::Debug;
+    ApiGear::Utilities::LogLevel logLevel = ApiGear::Utilities::LogLevel::Warning;
 
     // check whether logging level is set via env
     if (const char* envLogLevel = std::getenv("LOG_LEVEL"))
