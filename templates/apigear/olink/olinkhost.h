@@ -26,6 +26,7 @@
 
 #include "Poco/Net/HTTPServer.h"
 #include "private/connectionstorage.h"
+#include "olink/core/types.h"
 
 #include <memory>
 
@@ -58,8 +59,9 @@ class APIGEAR_OLINK_EXPORT OLinkHost
 public:
     /** ctor
     * @param registry A global registry to which network endpoints for sources are added.
+    * @param logFunc The function to be used for logging inside the objectlink core remote nodes.
     */
-    explicit OLinkHost(ApiGear::ObjectLink::RemoteRegistry& registry);
+    explicit OLinkHost(ApiGear::ObjectLink::RemoteRegistry& registry, const ApiGear::ObjectLink::WriteLogFunc& logFunc);
     /**dtor*/
     virtual ~OLinkHost();
     /** Starts a server and puts it in a listen state.

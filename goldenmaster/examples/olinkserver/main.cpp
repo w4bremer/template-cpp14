@@ -80,7 +80,7 @@ int main(){
     auto logConsoleFunc = getLogging();
     registry.onLog(ApiGear::Utilities::logAdapter(logConsoleFunc));
 
-    ApiGear::PocoImpl::OLinkHost testserver(registry);
+    ApiGear::PocoImpl::OLinkHost testserver(registry, ApiGear::Utilities::logAdapter(logConsoleFunc));
     auto testbed2ManyParamInterface = std::make_shared<Testbed2::ManyParamInterface>();
     auto testbed2OlinkManyParamInterfaceService = std::make_shared<Testbed2::olink::ManyParamInterfaceService>(testbed2ManyParamInterface, registry);
     registry.addSource(testbed2OlinkManyParamInterfaceService);

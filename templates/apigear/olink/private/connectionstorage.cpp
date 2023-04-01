@@ -14,8 +14,9 @@ namespace ApiGear {
 namespace PocoImpl {
 
 
-ConnectionStorage::ConnectionStorage(ApiGear::ObjectLink::RemoteRegistry& registry)
+ConnectionStorage::ConnectionStorage(ApiGear::ObjectLink::RemoteRegistry& registry, const ApiGear::ObjectLink::WriteLogFunc& logFunc)
   :m_registry(registry)
+  , m_logFunc(logFunc)
 {}
 
 void ConnectionStorage::notifyConnectionClosed()
@@ -36,7 +37,7 @@ void ConnectionStorage::notifyConnectionClosed()
 
 void ConnectionStorage::addConnection(std::unique_ptr<Poco::Net::WebSocket> connectionSocket)
 {
-	auto newConnection = std::make_shared<OLinkRemote>(std::move(connectionSocket), *this, m_registry);
+	auto newConnection = std::make_shared<OLinkRemote>(std::move(connectionSocket), *this, m_registry, m_logFunc);
 	std::unique_lock<std::mutex> lock(m_connectionsMutex);
 	m_connectionNodes.push_back(newConnection);
 	lock.unlock();

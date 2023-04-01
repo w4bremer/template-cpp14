@@ -58,7 +58,7 @@ namespace {
 
         std::string any_payload = "any";
 
-        ApiGear::PocoImpl::OLinkHost testHost(registry);
+        ApiGear::PocoImpl::OLinkHost testHost(registry, [](auto /*level*/, auto msg){ std::cout << msg << std::endl; });
 
         SECTION("Server creates two nodes for link messages from different sessions for same source and sends back init message. Unlink happens before server closes.")
         {

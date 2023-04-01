@@ -47,7 +47,7 @@ int main(){
     auto logConsoleFunc = getLogging();
     registry.onLog(ApiGear::Utilities::logAdapter(logConsoleFunc));
 
-    ApiGear::PocoImpl::OLinkHost testserver(registry);
+    ApiGear::PocoImpl::OLinkHost testserver(registry, ApiGear::Utilities::logAdapter(logConsoleFunc));
 
 {{- range .System.Modules }}
 {{- $module := . }}

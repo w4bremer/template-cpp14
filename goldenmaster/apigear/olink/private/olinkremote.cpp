@@ -14,12 +14,15 @@
 namespace ApiGear {
 namespace PocoImpl {
 
-OLinkRemote::OLinkRemote(std::unique_ptr<Poco::Net::WebSocket> socket, IConnectionStorage& connectionStorage, ApiGear::ObjectLink::RemoteRegistry& registry)
+OLinkRemote::OLinkRemote(std::unique_ptr<Poco::Net::WebSocket> socket,
+                        IConnectionStorage& connectionStorage,
+                        ApiGear::ObjectLink::RemoteRegistry& registry,
+                        const ApiGear::ObjectLink::WriteLogFunc& logFunc)
     : m_socket(*this),
      m_connectionStorage(connectionStorage),
      m_node(ApiGear::ObjectLink::RemoteNode::createRemoteNode(registry))
 {
-    m_node->onLog(m_log.logFunc());
+    m_node->onLog(logFunc);
     m_node->onWrite([this](std::string msg) {
         m_socket.writeMessage(msg, Poco::Net::WebSocket::FRAME_TEXT);
     });

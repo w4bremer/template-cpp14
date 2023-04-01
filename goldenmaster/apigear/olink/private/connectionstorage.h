@@ -1,6 +1,7 @@
 #pragma once
 
 #include "iconnectionstorage.h"
+#include "olink/core/types.h"
 
 #include <Poco/Util/Timer.h>
 #include <Poco/Util/TimerTask.h>
@@ -33,8 +34,9 @@ class ConnectionStorage : public IConnectionStorage
 public:
 	/**ctor
 	* @param registry A global registry to which network endpoints are added for olink objects.
+    * @param logFunc The function to be used for logging inside the objectlink core remote nodes.
 	*/
-	ConnectionStorage(ApiGear::ObjectLink::RemoteRegistry& registry);
+	ConnectionStorage(ApiGear::ObjectLink::RemoteRegistry& registry, const ApiGear::ObjectLink::WriteLogFunc& logFunc);
 	/** Close all connections.*/
 	void closeConnections();
 
@@ -62,6 +64,9 @@ private:
 	Poco::Util::TimerTask::Ptr m_removeConnectionTask;
 	/** A mutex for the process message*/
 	std::mutex m_taskMutex;
+	
+	/** Logging function for nodes */
+	ApiGear::ObjectLink::WriteLogFunc m_logFunc;
 };
 
 }}   //namespace ApiGear::PocoImpl

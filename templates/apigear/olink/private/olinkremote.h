@@ -34,10 +34,12 @@ public:
     * @param socket A socket used for this connection.
     * @param connectionStorage Storage that needs to be informed if client ended the connection.
     * @param registry. A global registry to which network endpoints are added for olink objects.
+    * @param logFunc The function to be used for logging inside the objectlink core remote nodes.
     */
     explicit OLinkRemote(std::unique_ptr<Poco::Net::WebSocket> socket,
                         IConnectionStorage& connectionStorage,
-                        ApiGear::ObjectLink::RemoteRegistry& registry);
+                        ApiGear::ObjectLink::RemoteRegistry& registry,
+                        const ApiGear::ObjectLink::WriteLogFunc& logFunc);
     /**dtor*/
     ~OLinkRemote();
 
@@ -69,8 +71,5 @@ private:
     *   may serve several services associated with this node by the unique objectId given in link message.
     */
     std::shared_ptr<ApiGear::ObjectLink::RemoteNode> m_node;
-
-    /** Logger*/
-    ApiGear::ObjectLink::ConsoleLogger m_log;
 };
 }}   //namespace ApiGear::PocoImpl

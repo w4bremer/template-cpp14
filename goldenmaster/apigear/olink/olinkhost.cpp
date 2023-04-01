@@ -30,9 +30,9 @@
 
 using namespace ApiGear::PocoImpl;
 
-OLinkHost::OLinkHost(ApiGear::ObjectLink::RemoteRegistry& registry)
+OLinkHost::OLinkHost(ApiGear::ObjectLink::RemoteRegistry& registry, const ApiGear::ObjectLink::WriteLogFunc& logFunc)
     :  m_registry(registry),
-    m_connectionStorage(registry)
+    m_connectionStorage(registry, logFunc)
 {}
 
 OLinkHost::~OLinkHost()
