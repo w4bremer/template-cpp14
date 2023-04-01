@@ -13,7 +13,7 @@ if(NOT objectlink-core-cpp_FOUND)
   message(STATUS "objectlink-core-cpp NOT FOUND, fetching the git repository")
   FetchContent_Declare(olink-core
       GIT_REPOSITORY https://github.com/apigear-io/objectlink-core-cpp.git
-      GIT_TAG v0.2.4
+      GIT_TAG v0.2.5
       GIT_SHALLOW TRUE
       EXCLUDE_FROM_ALL FALSE
   )
