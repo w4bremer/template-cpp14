@@ -3,6 +3,7 @@ Tracer
 Copyright (C) 2020 ApiGear UG
 */
 #include "tracer.h"
+#include "../utilities/logger.h"
 #include <Poco/Dynamic/Var.h>
 #include <Poco/Util/TimerTaskAdapter.h>
 #include <Poco/Net/HTTPClientSession.h>
@@ -45,7 +46,7 @@ void Tracer::connect()
             m_session = new Poco::Net::HTTPClientSession(m_traceUrl.getHost(), m_traceUrl.getPort());
         } catch (std::exception &e) {
             m_session = nullptr;
-            std::cerr << "Exception " << e.what() << std::endl;
+            AG_LOG_ERROR("tracer doProcess Exception " + std::string(e.what()));
         }
     }
 }
@@ -91,7 +92,7 @@ void Tracer::process()
 void Tracer::doProcess(Poco::Util::TimerTask& task)
 {
     if(isbusy) {
-        std::cout << "still busy ... skipping";
+        AG_LOG_DEBUG("still busy ... skipping");
         return;
     }
 
@@ -135,7 +136,7 @@ void Tracer::doProcess(Poco::Util::TimerTask& task)
         }
     } catch (std::exception &e) {
         retry = true;
-        std::cerr << "Exception " << e.what() << std::endl;
+        AG_LOG_ERROR("tracer doProcess Exception " + std::string(e.what()));
     }
 
     if(retry) {

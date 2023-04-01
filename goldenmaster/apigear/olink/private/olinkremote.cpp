@@ -7,6 +7,7 @@
 
 #include "olink/remotenode.h"
 #include "olink/remoteregistry.h"
+#include "../utilities/logger.h"
 
 #include <iostream>
 
@@ -35,7 +36,7 @@ OLinkRemote::~OLinkRemote()
 
 void OLinkRemote::handleTextMessage(const std::string& msg)
 {
-    std::cout << msg;
+    AG_LOG_DEBUG("handleTextMessage " + msg);
     if (m_node)
     {
         m_node->handleMessage(msg);

@@ -26,6 +26,7 @@
 #include "olink/remoteregistry.h"
 #include <iostream>
 #include "private/requesthandlerfactory.h"
+#include "../utilities/logger.h"
 
 using namespace ApiGear::PocoImpl;
 
@@ -41,10 +42,9 @@ OLinkHost::~OLinkHost()
 
 void OLinkHost::listen(int port)
 {
-    std::cout << "wss.listen() on ";
     // Poco::Net::HttpServer takes ownership of Request Handler Factory
     m_webserver = std::make_unique<Poco::Net::HTTPServer>(new RequestHandlerFactory(m_connectionStorage), port);
-    std::cout << m_webserver->port() << std::endl;
+    AG_LOG_INFO("wss.listen() on " + std::to_string(m_webserver->port()));
     m_webserver->start();
 }
 
@@ -52,5 +52,5 @@ void OLinkHost::close()
 {
     m_connectionStorage.closeConnections();
     m_webserver->stop();
-    std::cout << "wss.closed()\n";
+    AG_LOG_INFO("wss.closed()");
 }

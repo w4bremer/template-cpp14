@@ -1,5 +1,6 @@
 #include "private/socketwrapper.h"
 #include "private/isocketuser.h"
+#include "../utilities/logger.h"
 
 #include <Poco/Net/WebSocket.h>
 #include "Poco/Buffer.h"
@@ -44,7 +45,7 @@ void SocketWrapper::startReceiving()
                     // handle pong
                 }
                 else if (frameSize == 0 || frameOpCode == Poco::Net::WebSocket::FRAME_OP_CLOSE){
-                    std::cout << "close connection" << std::endl;
+                    AG_LOG_INFO("close connection");
                     closedFromNetwork = true;
                 }
                 else {
@@ -54,7 +55,7 @@ void SocketWrapper::startReceiving()
         }
         catch (Poco::Exception& e) {
             closedFromNetwork = true;
-            std::cout << "connection closed with exception:" << e.what() << std::endl;
+            AG_LOG_ERROR("connection closed with exception: "+ std::string(e.what()));
         }
     } while (!closedFromNetwork && !m_disconnectRequested);
     if (closedFromNetwork)
@@ -76,7 +77,7 @@ bool SocketWrapper::writeMessage(std::string message, int frameOpCode)
         }
     }
     catch (std::exception& e) {
-        std::cerr << "Exception " << e.what() << std::endl;
+        AG_LOG_ERROR("writeMessage Exception: "+ std::string(e.what()));
     }
     return succeed;
 }
@@ -100,7 +101,7 @@ void SocketWrapper::onClosed()
 {
     std::unique_lock<std::timed_mutex> lock(m_socketMutex, std::defer_lock);
     if (!lock.try_lock_for(std::chrono::milliseconds(100))) {
-        std::cout << "Closing socket, some messages may be dropped" << std::endl;
+        AG_LOG_INFO("Closing socket, some messages may be dropped");
     }
     m_socket.reset();
     lock.unlock();

@@ -7,6 +7,7 @@
 #include "olinkconnection.h"
 #include "olink/clientregistry.h"
 #include "olink/iobjectsink.h"
+#include "../utilities/logger.h"
 
 #include <iostream>
 #include <memory>
@@ -59,7 +60,7 @@ OlinkConnection::~OlinkConnection()
 void OlinkConnection::connectAndLinkObject(std::shared_ptr<ApiGear::ObjectLink::IObjectSink> object)
 {
     if (!object){
-        std::cout << "could not link an object, because it is not valid" ;
+        AG_LOG_WARNING("could not link an object, because it is not valid");
         return;
     }
 
@@ -94,13 +95,13 @@ void OlinkConnection::connectToHost(Poco::URI url)
 
     if(url.empty()) {
         m_serverUrl = Poco::URI(defaultGatewayUrl);
-        std::clog << "No host url provided" << std::endl;
+        AG_LOG_DEBUG("No host url provided");
     } else {
         m_serverUrl = url;
     }
     
     if(m_socket.isClosed() && !m_isConnecting) {
-        std::clog << "Connecting to host " << url.toString() << std::endl;
+        AG_LOG_INFO("Connecting to host " + url.toString());
         try {
             m_isConnecting = true;
             Poco::Net::HTTPClientSession session(m_serverUrl.getHost(), m_serverUrl.getPort());
@@ -114,7 +115,7 @@ void OlinkConnection::connectToHost(Poco::URI url)
             
         } catch (std::exception &e) {
             m_socket.close();
-            std::cerr << "Exception " << e.what() << std::endl;
+            AG_LOG_ERROR("Exception " + std::string(e.what()));
         }
         m_isConnecting = false;
     }
@@ -124,7 +125,7 @@ void OlinkConnection::connectToHost(Poco::URI url)
 }
 
 void OlinkConnection::disconnect() {
-    std::clog << " request to disconnect socket" << std::endl;
+    AG_LOG_DEBUG("request to disconnect socket");
     for (auto& object : m_objectLinkStatus){
         if (object.second != LinkStatus::NotLinked){
             m_node->unlinkRemote(object.first);
@@ -151,7 +152,7 @@ std::shared_ptr<ApiGear::ObjectLink::ClientNode> OlinkConnection::node()
 
 void OlinkConnection::onConnected()
 {
-    std::clog << " socket connected" << std::endl;
+    AG_LOG_INFO("socket connected");
     for(auto& object : m_objectLinkStatus)
     {
         m_node->linkRemote(object.first);
@@ -166,7 +167,7 @@ void OlinkConnection::onDisconnected()
     {
         object.second = LinkStatus::NotLinked;
     }
-    std::clog << " socket disconnected" << std::endl;
+    AG_LOG_INFO("socket disconnected");
 }
 
 void OlinkConnection::handleTextMessage(const std::string &message)
@@ -211,7 +212,7 @@ void OlinkConnection::flushMessages()
 
         while (!copyQueue.empty()) {
             auto message = copyQueue.front();
-            std::clog << "write message to socket " << message << std::endl;
+            AG_LOG_DEBUG("write message to socket " + message);
             // if we are using JSON we need to use txt message otherwise binary messages
             auto messageSent = m_socket.writeMessage(message, Poco::Net::WebSocket::FRAME_TEXT);
             if (messageSent){

@@ -1,5 +1,6 @@
 #include "private/olinkwebsockethandler.h"
 #include "private/iconnectionstorage.h"
+#include "../utilities/logger.h"
 
 #include "Poco/Net/HTTPServerRequest.h"
 #include "Poco/Net/HTTPServerResponse.h"
@@ -20,7 +21,7 @@ void OLinkWebsocketHandler::handleRequest(Poco::Net::HTTPServerRequest& request,
 
     if (request.find("Upgrade") != request.end() &&
         Poco::icompare(request["Upgrade"], "websocket") == 0) {
-        std::cout << "wss.newConnection()\n";
+        AG_LOG_INFO("wss.newConnection()");
         try{
             auto socket = std::make_unique<Poco::Net::WebSocket>(request, response);
             m_connectionStorage.addConnection(std::move(socket));

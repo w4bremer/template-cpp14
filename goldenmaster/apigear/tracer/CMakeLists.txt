@@ -22,7 +22,7 @@ target_include_directories(poco-tracer
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../../>
     $<INSTALL_INTERFACE:include>)
-target_link_libraries(poco-tracer Poco::Net Poco::Util nlohmann_json::nlohmann_json)
+target_link_libraries(poco-tracer PUBLIC Poco::Net Poco::Util apigear::utilities nlohmann_json::nlohmann_json)
 
 # add test cases
 if(BUILD_TESTING)
@@ -41,7 +41,7 @@ add_executable(test_tracer EXCLUDE_FROM_ALL
     ${SOURCES_TEST}
 )
 target_include_directories(test_tracer PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
-target_link_libraries(test_tracer apigear::poco-tracer Poco::Net Poco::Util Catch2::Catch2)
+target_link_libraries(test_tracer PRIVATE apigear::poco-tracer Catch2::Catch2)
 
 add_test(test_tracer test_tracer)
 add_dependencies(check test_tracer)
