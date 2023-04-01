@@ -45,13 +45,41 @@
 #include "apigear/olink/olinkhost.h"
 
 #include <iostream>
+#include <sstream>
+#include <cstdlib>
+
+ApiGear::Utilities::WriteLogFunc getLogging(){
+
+    ApiGear::Utilities::WriteLogFunc logConsoleFunc = nullptr;
+    ApiGear::Utilities::LogLevel logLevel = ApiGear::Utilities::LogLevel::Debug;
+
+    // check whether logging level is set via env
+    if (const char* envLogLevel = std::getenv("LOG_LEVEL"))
+    {
+        int logLevelNumber = 255;
+        std::stringstream(envLogLevel) >> logLevelNumber;
+        logLevel = static_cast<ApiGear::Utilities::LogLevel>(logLevelNumber);
+    }
+
+    logConsoleFunc = ApiGear::Utilities::getConsoleLogFunc(logLevel);
+    // check whether logging was disabled
+    if (logLevel > ApiGear::Utilities::LogLevel::Error) {
+        logConsoleFunc = nullptr;
+    }
+
+    // set global log function
+    ApiGear::Utilities::setLog(logConsoleFunc);
+
+    return logConsoleFunc;
+}
 
 using namespace Test;
 
 int main(){
     ApiGear::ObjectLink::RemoteRegistry registry;
-    registry.onLog(ApiGear::Utilities::logAdapter(ApiGear::Utilities::getConsoleLogFunc(ApiGear::Utilities::Debug)));
-    
+    auto logConsoleFunc = getLogging();
+    registry.onLog(ApiGear::Utilities::logAdapter(logConsoleFunc));
+
     ApiGear::PocoImpl::OLinkHost testserver(registry);
     auto testbed2ManyParamInterface = std::make_shared<Testbed2::ManyParamInterface>();
     auto testbed2OlinkManyParamInterfaceService = std::make_shared<Testbed2::olink::ManyParamInterfaceService>(testbed2ManyParamInterface, registry);
