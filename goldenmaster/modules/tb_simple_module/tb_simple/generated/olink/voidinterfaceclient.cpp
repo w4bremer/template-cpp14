@@ -68,6 +68,7 @@ std::string VoidInterfaceClient::olinkObjectName()
 
 void VoidInterfaceClient::olinkOnSignal(const std::string& signalId, const nlohmann::json& args)
 {
+    (void) args;
     const auto& signalName = ApiGear::ObjectLink::Name::getMemberName(signalId);
     if(signalName == "sigVoid") {
         m_publisher->publishSigVoid();   

@@ -136,6 +136,16 @@ std::string {{$class}}::olinkObjectName()
 
 void {{$class}}::olinkOnSignal(const std::string& signalId, const nlohmann::json& args)
 {
+{{- if len .Interface.Signals }}
+{{- $paramsUsed := false}}
+{{- range .Interface.Signals }}
+{{- $signal := . }}
+{{- if len $signal.Params }}{{ $paramsUsed = true }}{{- break }}{{- end }}
+{{- end }}
+{{- if not $paramsUsed}}
+    (void) args;
+{{- end }}
+{{- end }}
     const auto& signalName = ApiGear::ObjectLink::Name::getMemberName(signalId);
 {{- range .Interface.Signals}}
 {{- $signal := . }}
