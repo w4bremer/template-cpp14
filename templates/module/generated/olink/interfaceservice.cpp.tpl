@@ -38,6 +38,16 @@ std::string {{$class}}::olinkObjectName() {
 }
 
 nlohmann::json {{$class}}::olinkInvoke(const std::string& methodId, const nlohmann::json& fcnArgs) {
+{{- if len .Interface.Operations }}
+{{- $paramsUsed := false}}
+{{- range .Interface.Operations }}
+{{- $operation := . }}
+{{- if len $operation.Params }}{{ $paramsUsed = true }}{{- break }}{{- end }}
+{{- end }}
+{{- if not $paramsUsed}}
+    (void) fcnArgs;
+{{- end }}
+{{- end }}
     AG_LOG_DEBUG("{{$class}} invoke " + methodId);
     const auto& memberMethod = ApiGear::ObjectLink::Name::getMemberName(methodId);
 {{- range .Interface.Operations}}

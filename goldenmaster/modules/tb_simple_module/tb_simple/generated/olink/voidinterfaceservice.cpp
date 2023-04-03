@@ -36,6 +36,7 @@ std::string VoidInterfaceService::olinkObjectName() {
 }
 
 nlohmann::json VoidInterfaceService::olinkInvoke(const std::string& methodId, const nlohmann::json& fcnArgs) {
+    (void) fcnArgs;
     AG_LOG_DEBUG("VoidInterfaceService invoke " + methodId);
     const auto& memberMethod = ApiGear::ObjectLink::Name::getMemberName(methodId);
     if(memberMethod == "funcVoid") {
