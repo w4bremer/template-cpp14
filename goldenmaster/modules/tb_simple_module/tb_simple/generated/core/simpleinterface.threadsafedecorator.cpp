@@ -7,15 +7,6 @@ SimpleInterfaceThreadSafeDecorator::SimpleInterfaceThreadSafeDecorator(std::shar
     : m_impl(impl)
 {
 }
-void SimpleInterfaceThreadSafeDecorator::funcVoid()
-{
-    return m_impl->funcVoid();
-}
-
-std::future<void> SimpleInterfaceThreadSafeDecorator::funcVoidAsync()
-{
-    return m_impl->funcVoidAsync();
-}
 bool SimpleInterfaceThreadSafeDecorator::funcBool(bool paramBool)
 {
     return m_impl->funcBool(paramBool);

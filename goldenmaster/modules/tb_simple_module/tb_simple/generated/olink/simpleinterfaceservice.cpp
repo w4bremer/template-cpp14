@@ -38,10 +38,6 @@ std::string SimpleInterfaceService::olinkObjectName() {
 nlohmann::json SimpleInterfaceService::olinkInvoke(const std::string& methodId, const nlohmann::json& fcnArgs) {
     AG_LOG_DEBUG("SimpleInterfaceService invoke " + methodId);
     const auto& memberMethod = ApiGear::ObjectLink::Name::getMemberName(methodId);
-    if(memberMethod == "funcVoid") {
-        m_SimpleInterface->funcVoid();
-        return nlohmann::json{};
-    }
     if(memberMethod == "funcBool") {
         const bool& paramBool = fcnArgs.at(0);
         bool result = m_SimpleInterface->funcBool(paramBool);
@@ -142,17 +138,6 @@ nlohmann::json SimpleInterfaceService::olinkCollectProperties()
         { "propFloat64", m_SimpleInterface->getPropFloat64() },
         { "propString", m_SimpleInterface->getPropString() }
     });
-}
-void SimpleInterfaceService::onSigVoid()
-{
-    const nlohmann::json args = {  };
-    const auto& signalId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "sigVoid");
-    for(auto node: m_registry.getNodes(ApiGear::ObjectLink::Name::getObjectId(signalId))) {
-        auto lockedNode = node.lock();
-        if(lockedNode) {
-            lockedNode->notifySignal(signalId, args);
-        }
-    }
 }
 void SimpleInterfaceService::onSigBool(bool paramBool)
 {

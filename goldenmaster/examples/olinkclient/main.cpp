@@ -25,6 +25,8 @@
 #include "tb_same2/generated/monitor/sameenum1interface.tracedecorator.h"
 #include "tb_same2/generated/olink/sameenum2interfaceclient.h"
 #include "tb_same2/generated/monitor/sameenum2interface.tracedecorator.h"
+#include "tb_simple/generated/olink/voidinterfaceclient.h"
+#include "tb_simple/generated/monitor/voidinterface.tracedecorator.h"
 #include "tb_simple/generated/olink/simpleinterfaceclient.h"
 #include "tb_simple/generated/monitor/simpleinterface.tracedecorator.h"
 #include "tb_simple/generated/olink/simplearrayinterfaceclient.h"
@@ -121,6 +123,9 @@ int main(){
     auto tbSame2SameEnum2Interface = std::make_shared<TbSame2::olink::SameEnum2InterfaceClient>();
     clientNetworkEndpoint.connectAndLinkObject(tbSame2SameEnum2Interface);
     std::unique_ptr<TbSame2::ISameEnum2Interface> tbSame2SameEnum2InterfaceTraced = TbSame2::SameEnum2InterfaceTraceDecorator::connect(*tbSame2SameEnum2Interface, tracer);
+    auto tbSimpleVoidInterface = std::make_shared<TbSimple::olink::VoidInterfaceClient>();
+    clientNetworkEndpoint.connectAndLinkObject(tbSimpleVoidInterface);
+    std::unique_ptr<TbSimple::IVoidInterface> tbSimpleVoidInterfaceTraced = TbSimple::VoidInterfaceTraceDecorator::connect(*tbSimpleVoidInterface, tracer);
     auto tbSimpleSimpleInterface = std::make_shared<TbSimple::olink::SimpleInterfaceClient>();
     clientNetworkEndpoint.connectAndLinkObject(tbSimpleSimpleInterface);
     std::unique_ptr<TbSimple::ISimpleInterface> tbSimpleSimpleInterfaceTraced = TbSimple::SimpleInterfaceTraceDecorator::connect(*tbSimpleSimpleInterface, tracer);
@@ -169,6 +174,7 @@ int main(){
     clientNetworkEndpoint.disconnectAndUnlink(tbSame2SameStruct2Interface->olinkObjectName());
     clientNetworkEndpoint.disconnectAndUnlink(tbSame2SameEnum1Interface->olinkObjectName());
     clientNetworkEndpoint.disconnectAndUnlink(tbSame2SameEnum2Interface->olinkObjectName());
+    clientNetworkEndpoint.disconnectAndUnlink(tbSimpleVoidInterface->olinkObjectName());
     clientNetworkEndpoint.disconnectAndUnlink(tbSimpleSimpleInterface->olinkObjectName());
     clientNetworkEndpoint.disconnectAndUnlink(tbSimpleSimpleArrayInterface->olinkObjectName());
     clientNetworkEndpoint.disconnectAndUnlink(tbSimpleNoPropertiesInterface->olinkObjectName());

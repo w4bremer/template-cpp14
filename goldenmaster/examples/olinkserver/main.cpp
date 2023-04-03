@@ -25,6 +25,8 @@
 #include "tb_same2/generated/olink/sameenum1interfaceservice.h"
 #include "tb_same2/implementation/sameenum2interface.h"
 #include "tb_same2/generated/olink/sameenum2interfaceservice.h"
+#include "tb_simple/implementation/voidinterface.h"
+#include "tb_simple/generated/olink/voidinterfaceservice.h"
 #include "tb_simple/implementation/simpleinterface.h"
 #include "tb_simple/generated/olink/simpleinterfaceservice.h"
 #include "tb_simple/implementation/simplearrayinterface.h"
@@ -120,6 +122,9 @@ int main(){
     auto tbSame2SameEnum2Interface = std::make_shared<TbSame2::SameEnum2Interface>();
     auto tbSame2OlinkSameEnum2InterfaceService = std::make_shared<TbSame2::olink::SameEnum2InterfaceService>(tbSame2SameEnum2Interface, registry);
     registry.addSource(tbSame2OlinkSameEnum2InterfaceService);
+    auto tbSimpleVoidInterface = std::make_shared<TbSimple::VoidInterface>();
+    auto tbSimpleOlinkVoidInterfaceService = std::make_shared<TbSimple::olink::VoidInterfaceService>(tbSimpleVoidInterface, registry);
+    registry.addSource(tbSimpleOlinkVoidInterfaceService);
     auto tbSimpleSimpleInterface = std::make_shared<TbSimple::SimpleInterface>();
     auto tbSimpleOlinkSimpleInterfaceService = std::make_shared<TbSimple::olink::SimpleInterfaceService>(tbSimpleSimpleInterface, registry);
     registry.addSource(tbSimpleOlinkSimpleInterfaceService);
@@ -168,6 +173,7 @@ int main(){
     registry.removeSource(tbSame2OlinkSameStruct2InterfaceService->olinkObjectName());
     registry.removeSource(tbSame2OlinkSameEnum1InterfaceService->olinkObjectName());
     registry.removeSource(tbSame2OlinkSameEnum2InterfaceService->olinkObjectName());
+    registry.removeSource(tbSimpleOlinkVoidInterfaceService->olinkObjectName());
     registry.removeSource(tbSimpleOlinkSimpleInterfaceService->olinkObjectName());
     registry.removeSource(tbSimpleOlinkSimpleArrayInterfaceService->olinkObjectName());
     registry.removeSource(tbSimpleOlinkNoPropertiesInterfaceService->olinkObjectName());

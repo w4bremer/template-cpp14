@@ -25,6 +25,8 @@
 #include "tb_same2/generated/monitor/sameenum1interface.tracedecorator.h"
 #include "tb_same2/implementation/sameenum2interface.h"
 #include "tb_same2/generated/monitor/sameenum2interface.tracedecorator.h"
+#include "tb_simple/implementation/voidinterface.h"
+#include "tb_simple/generated/monitor/voidinterface.tracedecorator.h"
 #include "tb_simple/implementation/simpleinterface.h"
 #include "tb_simple/generated/monitor/simpleinterface.tracedecorator.h"
 #include "tb_simple/implementation/simplearrayinterface.h"
@@ -72,6 +74,8 @@ int main(){
     std::unique_ptr<TbSame2::ISameEnum1Interface> testTbSame2SameEnum1InterfaceTraceDecorator = TbSame2::SameEnum1InterfaceTraceDecorator::connect(*testTbSame2SameEnum1Interface, tracer);
     std::unique_ptr<TbSame2::ISameEnum2Interface> testTbSame2SameEnum2Interface = std::make_unique<TbSame2::SameEnum2Interface>();
     std::unique_ptr<TbSame2::ISameEnum2Interface> testTbSame2SameEnum2InterfaceTraceDecorator = TbSame2::SameEnum2InterfaceTraceDecorator::connect(*testTbSame2SameEnum2Interface, tracer);
+    std::unique_ptr<TbSimple::IVoidInterface> testTbSimpleVoidInterface = std::make_unique<TbSimple::VoidInterface>();
+    std::unique_ptr<TbSimple::IVoidInterface> testTbSimpleVoidInterfaceTraceDecorator = TbSimple::VoidInterfaceTraceDecorator::connect(*testTbSimpleVoidInterface, tracer);
     std::unique_ptr<TbSimple::ISimpleInterface> testTbSimpleSimpleInterface = std::make_unique<TbSimple::SimpleInterface>();
     std::unique_ptr<TbSimple::ISimpleInterface> testTbSimpleSimpleInterfaceTraceDecorator = TbSimple::SimpleInterfaceTraceDecorator::connect(*testTbSimpleSimpleInterface, tracer);
     std::unique_ptr<TbSimple::ISimpleArrayInterface> testTbSimpleSimpleArrayInterface = std::make_unique<TbSimple::SimpleArrayInterface>();

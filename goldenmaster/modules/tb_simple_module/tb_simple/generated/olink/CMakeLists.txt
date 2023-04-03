@@ -3,6 +3,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(apigear QUIET COMPONENTS poco-olink)
 set (SOURCES_OLINK
+    voidinterfaceservice.cpp
+    voidinterfaceclient.cpp
     simpleinterfaceservice.cpp
     simpleinterfaceclient.cpp
     simplearrayinterfaceservice.cpp

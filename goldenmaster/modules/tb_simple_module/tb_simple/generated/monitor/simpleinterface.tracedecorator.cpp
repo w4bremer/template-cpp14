@@ -19,16 +19,6 @@ std::unique_ptr<SimpleInterfaceTraceDecorator> SimpleInterfaceTraceDecorator::co
 {
     return std::unique_ptr<SimpleInterfaceTraceDecorator>(new SimpleInterfaceTraceDecorator(impl, tracer));
 }
-void SimpleInterfaceTraceDecorator::funcVoid()
-{
-    m_tracer->trace_funcVoid();
-    return m_impl.funcVoid();
-}
-std::future<void> SimpleInterfaceTraceDecorator::funcVoidAsync()
-{
-    m_tracer->trace_funcVoid();
-    return m_impl.funcVoidAsync();
-}
 bool SimpleInterfaceTraceDecorator::funcBool(bool paramBool)
 {
     m_tracer->trace_funcBool(paramBool);
@@ -181,11 +171,6 @@ const std::string& SimpleInterfaceTraceDecorator::getPropString() const
 {
     return m_impl.getPropString();
 }
-void SimpleInterfaceTraceDecorator::onSigVoid()
-{
-    m_tracer->trace_sigVoid();
-}
-
 void SimpleInterfaceTraceDecorator::onSigBool(bool paramBool)
 {
     m_tracer->trace_sigBool(paramBool);

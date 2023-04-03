@@ -27,14 +27,6 @@ public:
     virtual ~ISimpleInterface() = default;
 
 
-    virtual void funcVoid() = 0;
-    /**
-    * Asynchronous version of funcVoid()
-    * @return Promise of type void which is set once the function has completed
-    */
-    virtual std::future<void> funcVoidAsync() = 0;
-
-
     virtual bool funcBool(bool paramBool) = 0;
     /**
     * Asynchronous version of funcBool(bool paramBool)
@@ -192,12 +184,6 @@ class TEST_TB_SIMPLE_EXPORT ISimpleInterfaceSubscriber
 public:
     virtual ~ISimpleInterfaceSubscriber() = default;
     /**
-    * Called by the ISimpleInterfacePublisher when the SimpleInterface emits sigVoid, if subscribed for the sigVoid.
-    *
-    * @warning the subscribed function shall not be blocking and must return immediately!
-    */
-    virtual void onSigVoid() = 0;
-    /**
     * Called by the ISimpleInterfacePublisher when the SimpleInterface emits sigBool, if subscribed for the sigBool.
     * @param paramBool 
     *
@@ -319,8 +305,6 @@ using SimpleInterfacePropFloat32PropertyCb = std::function<void(float propFloat3
 using SimpleInterfacePropFloat64PropertyCb = std::function<void(double propFloat64)>;
 /** Callback for changes of propString */
 using SimpleInterfacePropStringPropertyCb = std::function<void(const std::string& propString)>;
-/** Callback for sigVoid signal triggers */
-using SimpleInterfaceSigVoidSignalCb = std::function<void()> ;
 /** Callback for sigBool signal triggers */
 using SimpleInterfaceSigBoolSignalCb = std::function<void(bool paramBool)> ;
 /** Callback for sigInt signal triggers */
@@ -515,21 +499,6 @@ public:
     virtual void unsubscribeFromPropStringChanged(long handleId) = 0;
 
     /**
-    * Use this function to subscribe for sigVoid signal changes.
-    * @param SimpleInterfaceSigVoidSignalCb callback that will be executed on each signal emission.
-    * Make sure to remove subscription before the callback becomes invalid.
-    * @return subscription token for the subscription removal.
-    *
-    * @warning the subscribed function shall not be blocking and must return immediately!
-    */
-    virtual long subscribeToSigVoid(SimpleInterfaceSigVoidSignalCb callback) = 0;
-    /**
-    * Use this function to unsubscribe from sigVoid signal changes.
-    * @param subscription token received on subscription.
-    */
-    virtual void unsubscribeFromSigVoid(long handleId) = 0;
-
-    /**
     * Use this function to subscribe for sigBool signal changes.
     * @param SimpleInterfaceSigBoolSignalCb callback that will be executed on each signal emission.
     * Make sure to remove subscription before the callback becomes invalid.
@@ -697,11 +666,6 @@ public:
     * @param The new value of propString.
     */
     virtual void publishPropStringChanged(const std::string& propString) const = 0;
-    /**
-    * Publishes the emitted signal to all subscribed clients.
-    * Needs to be invoked by the SimpleInterface implementation when sigVoid is emitted.
-    */
-    virtual void publishSigVoid() const = 0;
     /**
     * Publishes the emitted signal to all subscribed clients.
     * Needs to be invoked by the SimpleInterface implementation when sigBool is emitted.

@@ -27,11 +27,6 @@ public:
   */
   void capture_state(ISimpleInterface* obj);
   /**
-  * Prepares information about the funcVoid call in a nlohmann::json format and puts to a tracer.
-  * @param The SimpleInterface object to trace.
-  */
-  void trace_funcVoid();
-  /**
   * Prepares information about the funcBool call in a nlohmann::json format and puts to a tracer.
   * @param The SimpleInterface object to trace.
   */
@@ -71,11 +66,6 @@ public:
   * @param The SimpleInterface object to trace.
   */
   void trace_funcString(const std::string& paramString);
-  /**
-  * Prepares information about the sigVoid call in a nlohmann::json format and puts to a tracer.
-  * @param The SimpleInterface object to trace.
-  */
-  void trace_sigVoid();
   /**
   * Prepares information about the sigBool call in a nlohmann::json format and puts to a tracer.
   * @param The SimpleInterface object to trace.

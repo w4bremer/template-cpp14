@@ -308,42 +308,6 @@ void SimpleInterfacePublisher::publishPropStringChanged(const std::string& propS
     }
 }
 
-long SimpleInterfacePublisher::subscribeToSigVoid(SimpleInterfaceSigVoidSignalCb callback)
-{
-    // this is a short term workaround - we need a better solution for unique handle identifiers
-    auto handleId = m_sigVoidSignalCallbackNextId++;
-    std::unique_lock<std::shared_timed_mutex> lock(m_sigVoidCallbacksMutex);
-    m_sigVoidCallbacks[handleId] = callback;
-    return handleId;
-}
-
-void SimpleInterfacePublisher::unsubscribeFromSigVoid(long handleId)
-{
-    std::unique_lock<std::shared_timed_mutex> lock(m_sigVoidCallbacksMutex);
-    m_sigVoidCallbacks.erase(handleId);
-}
-
-void SimpleInterfacePublisher::publishSigVoid() const
-{
-    std::shared_lock<std::shared_timed_mutex> allChangesSubscribersLock(m_allChangesSubscribersMutex);
-    const auto allChangesSubscribers = m_allChangesSubscribers;
-    allChangesSubscribersLock.unlock();
-    for(const auto& subscriber: allChangesSubscribers)
-    {
-        subscriber.get().onSigVoid();
-    }
-    std::shared_lock<std::shared_timed_mutex> sigVoidCallbacksLock(m_sigVoidCallbacksMutex);
-    const auto sigVoidCallbacks = m_sigVoidCallbacks;
-    sigVoidCallbacksLock.unlock();
-    for(const auto& callbackEntry: sigVoidCallbacks)
-    {
-        if(callbackEntry.second)
-        {
-            callbackEntry.second();
-        }
-    }
-}
-
 long SimpleInterfacePublisher::subscribeToSigBool(SimpleInterfaceSigBoolSignalCb callback)
 {
     // this is a short term workaround - we need a better solution for unique handle identifiers

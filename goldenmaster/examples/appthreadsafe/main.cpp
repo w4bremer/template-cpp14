@@ -25,6 +25,8 @@
 #include "tb_same2/generated/core/sameenum1interface.threadsafedecorator.h"
 #include "tb_same2/implementation/sameenum2interface.h"
 #include "tb_same2/generated/core/sameenum2interface.threadsafedecorator.h"
+#include "tb_simple/implementation/voidinterface.h"
+#include "tb_simple/generated/core/voidinterface.threadsafedecorator.h"
 #include "tb_simple/implementation/simpleinterface.h"
 #include "tb_simple/generated/core/simpleinterface.threadsafedecorator.h"
 #include "tb_simple/implementation/simplearrayinterface.h"
@@ -209,6 +211,15 @@ void testTbSame2SameEnum2Interface()
     testSameEnum2Interface->setProp2(Enum2Enum::value1);
 }
 
+void testTbSimpleVoidInterface()
+{
+    using namespace Test::TbSimple;
+
+    std::unique_ptr<IVoidInterface> testVoidInterface = std::make_unique<VoidInterfaceThreadSafeDecorator>(std::make_shared<VoidInterface>());
+
+    // Thread safe access
+}
+
 void testTbSimpleSimpleInterface()
 {
     using namespace Test::TbSimple;
@@ -343,6 +354,7 @@ int main(){
     testTbSame2SameStruct2Interface();
     testTbSame2SameEnum1Interface();
     testTbSame2SameEnum2Interface();
+    testTbSimpleVoidInterface();
     testTbSimpleSimpleInterface();
     testTbSimpleSimpleArrayInterface();
     testTbSimpleNoPropertiesInterface();

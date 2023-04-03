@@ -7,6 +7,8 @@ find_package(nlohmann_json REQUIRED)
 
 set (SOURCES_CORE_SUPPORT
     tb_simple.json.adapter.cpp
+    voidinterface.publisher.cpp
+    voidinterface.threadsafedecorator.cpp
     simpleinterface.publisher.cpp
     simpleinterface.threadsafedecorator.cpp
     simplearrayinterface.publisher.cpp

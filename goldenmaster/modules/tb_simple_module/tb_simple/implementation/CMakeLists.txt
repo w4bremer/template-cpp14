@@ -7,6 +7,7 @@ set(THREADS_PREFER_PTHREAD_FLAG ON)
 find_package(Threads REQUIRED)
 
 set (SOURCES_CORE_IMPL
+    voidinterface.cpp
     simpleinterface.cpp
     simplearrayinterface.cpp
     nopropertiesinterface.cpp
@@ -40,6 +41,7 @@ endif()
 
 set (SOURCES_TEST
     ${CMAKE_CURRENT_SOURCE_DIR}/../generated/core/tb_simple.test.cpp
+    voidinterface.test.cpp
     simpleinterface.test.cpp
     simplearrayinterface.test.cpp
     nopropertiesinterface.test.cpp
