@@ -33,7 +33,16 @@ endif()
 
 # add test cases
 if(BUILD_TESTING)
-find_package(Catch2 REQUIRED)
+if (NOT Catch2_Found)
+include(FetchContent)
+FetchContent_Declare(
+    Catch2
+    GIT_REPOSITORY https://github.com/catchorg/Catch2.git
+    GIT_TAG        v2.13.8
+    GIT_SHALLOW    TRUE
+    FIND_PACKAGE_ARGS)
+FetchContent_MakeAvailable(Catch2)
+endif()
 set(CMAKE_CTEST_COMMAND ctest -V)
 
 if(NOT TARGET check)
