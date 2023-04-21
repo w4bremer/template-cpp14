@@ -5,7 +5,6 @@
 #include "testbed2/generated/api/testbed2.h"
 #include "testbed2/generated/core/nestedstruct3interface.data.h"
 
-#include "apigear/olink/iolinkconnector.h"
 #include "olink/iobjectsink.h"
 
 #include <future>

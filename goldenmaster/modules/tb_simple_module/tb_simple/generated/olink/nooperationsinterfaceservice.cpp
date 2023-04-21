@@ -75,8 +75,9 @@ nlohmann::json NoOperationsInterfaceService::olinkCollectProperties()
 void NoOperationsInterfaceService::onSigVoid()
 {
     const nlohmann::json args = {  };
-    const auto& signalId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "sigVoid");
-    for(auto node: m_registry.getNodes(ApiGear::ObjectLink::Name::getObjectId(signalId))) {
+    static const auto signalId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "sigVoid");
+    static const auto objectId = olinkObjectName();
+    for(auto node: m_registry.getNodes(objectId)) {
         auto lockedNode = node.lock();
         if(lockedNode) {
             lockedNode->notifySignal(signalId, args);
@@ -86,8 +87,9 @@ void NoOperationsInterfaceService::onSigVoid()
 void NoOperationsInterfaceService::onSigBool(bool paramBool)
 {
     const nlohmann::json args = { paramBool };
-    const auto& signalId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "sigBool");
-    for(auto node: m_registry.getNodes(ApiGear::ObjectLink::Name::getObjectId(signalId))) {
+    static const auto signalId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "sigBool");
+    static const auto objectId = olinkObjectName();
+    for(auto node: m_registry.getNodes(objectId)) {
         auto lockedNode = node.lock();
         if(lockedNode) {
             lockedNode->notifySignal(signalId, args);
@@ -96,8 +98,9 @@ void NoOperationsInterfaceService::onSigBool(bool paramBool)
 }
 void NoOperationsInterfaceService::onPropBoolChanged(bool propBool)
 {
-    const auto& propertyId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "propBool");
-    for(auto node: m_registry.getNodes(ApiGear::ObjectLink::Name::getObjectId(propertyId))) {
+    static const auto propertyId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "propBool");
+    static const auto objectId = olinkObjectName();
+    for(auto node: m_registry.getNodes(objectId)) {
         auto lockedNode = node.lock();
         if(lockedNode) {
             lockedNode->notifyPropertyChange(propertyId, propBool);
@@ -106,8 +109,9 @@ void NoOperationsInterfaceService::onPropBoolChanged(bool propBool)
 }
 void NoOperationsInterfaceService::onPropIntChanged(int propInt)
 {
-    const auto& propertyId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "propInt");
-    for(auto node: m_registry.getNodes(ApiGear::ObjectLink::Name::getObjectId(propertyId))) {
+    static const auto propertyId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "propInt");
+    static const auto objectId = olinkObjectName();
+    for(auto node: m_registry.getNodes(objectId)) {
         auto lockedNode = node.lock();
         if(lockedNode) {
             lockedNode->notifyPropertyChange(propertyId, propInt);

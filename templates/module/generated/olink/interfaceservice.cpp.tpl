@@ -113,8 +113,9 @@ nlohmann::json {{$class}}::olinkCollectProperties()
 void {{$class}}::on{{Camel $signal.Name}}({{cppParams "" $signal.Params}})
 {
     const nlohmann::json args = { {{ cppVars $signal.Params}} };
-    const auto& signalId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "{{$signal.Name}}");
-    for(auto node: m_registry.getNodes(ApiGear::ObjectLink::Name::getObjectId(signalId))) {
+    static const auto signalId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "{{$signal.Name}}");
+    static const auto objectId = olinkObjectName();
+    for(auto node: m_registry.getNodes(objectId)) {
         auto lockedNode = node.lock();
         if(lockedNode) {
             lockedNode->notifySignal(signalId, args);
@@ -127,8 +128,9 @@ void {{$class}}::on{{Camel $signal.Name}}({{cppParams "" $signal.Params}})
 {{- $property := . }}
 void {{$class}}::on{{Camel $property.Name}}Changed({{cppParam "" $property}})
 {
-    const auto& propertyId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "{{$property.Name}}");
-    for(auto node: m_registry.getNodes(ApiGear::ObjectLink::Name::getObjectId(propertyId))) {
+    static const auto propertyId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "{{$property.Name}}");
+    static const auto objectId = olinkObjectName();
+    for(auto node: m_registry.getNodes(objectId)) {
         auto lockedNode = node.lock();
         if(lockedNode) {
             lockedNode->notifyPropertyChange(propertyId, {{$property}});

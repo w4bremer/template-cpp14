@@ -5,7 +5,6 @@
 #include "tb_same2/generated/api/tb_same2.h"
 #include "tb_same2/generated/core/sameenum2interface.data.h"
 
-#include "apigear/olink/iolinkconnector.h"
 #include "olink/iobjectsink.h"
 
 #include <future>

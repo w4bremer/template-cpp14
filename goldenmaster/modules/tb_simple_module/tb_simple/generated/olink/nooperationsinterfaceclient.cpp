@@ -5,7 +5,6 @@
 #include "tb_simple/generated/core/tb_simple.json.adapter.h"
 
 #include "olink/iclientnode.h"
-#include "apigear/olink/olinkconnection.h"
 #include "apigear/utilities/logger.h"
 
 using namespace Test::TbSimple;
@@ -36,7 +35,7 @@ void NoOperationsInterfaceClient::setPropBool(bool propBool)
         AG_LOG_WARNING("Attempt to set property but " + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return;
     }
-    const auto& propertyId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "propBool");
+    static const auto propertyId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "propBool");
     m_node->setRemoteProperty(propertyId, propBool);
 }
 
@@ -59,7 +58,7 @@ void NoOperationsInterfaceClient::setPropInt(int propInt)
         AG_LOG_WARNING("Attempt to set property but " + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return;
     }
-    const auto& propertyId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "propInt");
+    static const auto propertyId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "propInt");
     m_node->setRemoteProperty(propertyId, propInt);
 }
 

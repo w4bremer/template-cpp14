@@ -102,8 +102,9 @@ nlohmann::json StructInterfaceService::olinkCollectProperties()
 void StructInterfaceService::onSigBool(const StructBool& paramBool)
 {
     const nlohmann::json args = { paramBool };
-    const auto& signalId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "sigBool");
-    for(auto node: m_registry.getNodes(ApiGear::ObjectLink::Name::getObjectId(signalId))) {
+    static const auto signalId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "sigBool");
+    static const auto objectId = olinkObjectName();
+    for(auto node: m_registry.getNodes(objectId)) {
         auto lockedNode = node.lock();
         if(lockedNode) {
             lockedNode->notifySignal(signalId, args);
@@ -113,8 +114,9 @@ void StructInterfaceService::onSigBool(const StructBool& paramBool)
 void StructInterfaceService::onSigInt(const StructInt& paramInt)
 {
     const nlohmann::json args = { paramInt };
-    const auto& signalId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "sigInt");
-    for(auto node: m_registry.getNodes(ApiGear::ObjectLink::Name::getObjectId(signalId))) {
+    static const auto signalId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "sigInt");
+    static const auto objectId = olinkObjectName();
+    for(auto node: m_registry.getNodes(objectId)) {
         auto lockedNode = node.lock();
         if(lockedNode) {
             lockedNode->notifySignal(signalId, args);
@@ -124,8 +126,9 @@ void StructInterfaceService::onSigInt(const StructInt& paramInt)
 void StructInterfaceService::onSigFloat(const StructFloat& paramFloat)
 {
     const nlohmann::json args = { paramFloat };
-    const auto& signalId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "sigFloat");
-    for(auto node: m_registry.getNodes(ApiGear::ObjectLink::Name::getObjectId(signalId))) {
+    static const auto signalId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "sigFloat");
+    static const auto objectId = olinkObjectName();
+    for(auto node: m_registry.getNodes(objectId)) {
         auto lockedNode = node.lock();
         if(lockedNode) {
             lockedNode->notifySignal(signalId, args);
@@ -135,8 +138,9 @@ void StructInterfaceService::onSigFloat(const StructFloat& paramFloat)
 void StructInterfaceService::onSigString(const StructString& paramString)
 {
     const nlohmann::json args = { paramString };
-    const auto& signalId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "sigString");
-    for(auto node: m_registry.getNodes(ApiGear::ObjectLink::Name::getObjectId(signalId))) {
+    static const auto signalId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "sigString");
+    static const auto objectId = olinkObjectName();
+    for(auto node: m_registry.getNodes(objectId)) {
         auto lockedNode = node.lock();
         if(lockedNode) {
             lockedNode->notifySignal(signalId, args);
@@ -145,8 +149,9 @@ void StructInterfaceService::onSigString(const StructString& paramString)
 }
 void StructInterfaceService::onPropBoolChanged(const StructBool& propBool)
 {
-    const auto& propertyId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "propBool");
-    for(auto node: m_registry.getNodes(ApiGear::ObjectLink::Name::getObjectId(propertyId))) {
+    static const auto propertyId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "propBool");
+    static const auto objectId = olinkObjectName();
+    for(auto node: m_registry.getNodes(objectId)) {
         auto lockedNode = node.lock();
         if(lockedNode) {
             lockedNode->notifyPropertyChange(propertyId, propBool);
@@ -155,8 +160,9 @@ void StructInterfaceService::onPropBoolChanged(const StructBool& propBool)
 }
 void StructInterfaceService::onPropIntChanged(const StructInt& propInt)
 {
-    const auto& propertyId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "propInt");
-    for(auto node: m_registry.getNodes(ApiGear::ObjectLink::Name::getObjectId(propertyId))) {
+    static const auto propertyId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "propInt");
+    static const auto objectId = olinkObjectName();
+    for(auto node: m_registry.getNodes(objectId)) {
         auto lockedNode = node.lock();
         if(lockedNode) {
             lockedNode->notifyPropertyChange(propertyId, propInt);
@@ -165,8 +171,9 @@ void StructInterfaceService::onPropIntChanged(const StructInt& propInt)
 }
 void StructInterfaceService::onPropFloatChanged(const StructFloat& propFloat)
 {
-    const auto& propertyId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "propFloat");
-    for(auto node: m_registry.getNodes(ApiGear::ObjectLink::Name::getObjectId(propertyId))) {
+    static const auto propertyId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "propFloat");
+    static const auto objectId = olinkObjectName();
+    for(auto node: m_registry.getNodes(objectId)) {
         auto lockedNode = node.lock();
         if(lockedNode) {
             lockedNode->notifyPropertyChange(propertyId, propFloat);
@@ -175,8 +182,9 @@ void StructInterfaceService::onPropFloatChanged(const StructFloat& propFloat)
 }
 void StructInterfaceService::onPropStringChanged(const StructString& propString)
 {
-    const auto& propertyId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "propString");
-    for(auto node: m_registry.getNodes(ApiGear::ObjectLink::Name::getObjectId(propertyId))) {
+    static const auto propertyId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "propString");
+    static const auto objectId = olinkObjectName();
+    for(auto node: m_registry.getNodes(objectId)) {
         auto lockedNode = node.lock();
         if(lockedNode) {
             lockedNode->notifyPropertyChange(propertyId, propString);

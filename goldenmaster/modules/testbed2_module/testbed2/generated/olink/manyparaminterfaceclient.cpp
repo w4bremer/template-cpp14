@@ -5,7 +5,6 @@
 #include "testbed2/generated/core/testbed2.json.adapter.h"
 
 #include "olink/iclientnode.h"
-#include "apigear/olink/olinkconnection.h"
 #include "apigear/utilities/logger.h"
 
 using namespace Test::Testbed2;
@@ -42,7 +41,7 @@ void ManyParamInterfaceClient::setProp1(int prop1)
         AG_LOG_WARNING("Attempt to set property but " + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return;
     }
-    const auto& propertyId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "prop1");
+    static const auto propertyId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "prop1");
     m_node->setRemoteProperty(propertyId, prop1);
 }
 
@@ -65,7 +64,7 @@ void ManyParamInterfaceClient::setProp2(int prop2)
         AG_LOG_WARNING("Attempt to set property but " + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return;
     }
-    const auto& propertyId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "prop2");
+    static const auto propertyId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "prop2");
     m_node->setRemoteProperty(propertyId, prop2);
 }
 
@@ -88,7 +87,7 @@ void ManyParamInterfaceClient::setProp3(int prop3)
         AG_LOG_WARNING("Attempt to set property but " + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return;
     }
-    const auto& propertyId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "prop3");
+    static const auto propertyId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "prop3");
     m_node->setRemoteProperty(propertyId, prop3);
 }
 
@@ -111,7 +110,7 @@ void ManyParamInterfaceClient::setProp4(int prop4)
         AG_LOG_WARNING("Attempt to set property but " + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return;
     }
-    const auto& propertyId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "prop4");
+    static const auto propertyId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "prop4");
     m_node->setRemoteProperty(propertyId, prop4);
 }
 
@@ -148,7 +147,7 @@ std::future<int> ManyParamInterfaceClient::func1Async(int param1)
                     param1]()
         {
             std::promise<int> resultPromise;
-            const auto& operationId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "func1");
+            static const auto operationId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "func1");
             m_node->invokeRemote(operationId,
                 nlohmann::json::array({param1}), [&resultPromise](ApiGear::ObjectLink::InvokeReplyArg arg) {
                     const int& value = arg.value.get<int>();
@@ -180,7 +179,7 @@ std::future<int> ManyParamInterfaceClient::func2Async(int param1, int param2)
                     param2]()
         {
             std::promise<int> resultPromise;
-            const auto& operationId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "func2");
+            static const auto operationId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "func2");
             m_node->invokeRemote(operationId,
                 nlohmann::json::array({param1, param2}), [&resultPromise](ApiGear::ObjectLink::InvokeReplyArg arg) {
                     const int& value = arg.value.get<int>();
@@ -213,7 +212,7 @@ std::future<int> ManyParamInterfaceClient::func3Async(int param1, int param2, in
                     param3]()
         {
             std::promise<int> resultPromise;
-            const auto& operationId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "func3");
+            static const auto operationId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "func3");
             m_node->invokeRemote(operationId,
                 nlohmann::json::array({param1, param2, param3}), [&resultPromise](ApiGear::ObjectLink::InvokeReplyArg arg) {
                     const int& value = arg.value.get<int>();
@@ -247,7 +246,7 @@ std::future<int> ManyParamInterfaceClient::func4Async(int param1, int param2, in
                     param4]()
         {
             std::promise<int> resultPromise;
-            const auto& operationId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "func4");
+            static const auto operationId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "func4");
             m_node->invokeRemote(operationId,
                 nlohmann::json::array({param1, param2, param3, param4}), [&resultPromise](ApiGear::ObjectLink::InvokeReplyArg arg) {
                     const int& value = arg.value.get<int>();

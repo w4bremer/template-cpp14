@@ -5,7 +5,6 @@
 #include "testbed2/generated/core/testbed2.json.adapter.h"
 
 #include "olink/iclientnode.h"
-#include "apigear/olink/olinkconnection.h"
 #include "apigear/utilities/logger.h"
 
 using namespace Test::Testbed2;
@@ -36,7 +35,7 @@ void NestedStruct2InterfaceClient::setProp1(const NestedStruct1& prop1)
         AG_LOG_WARNING("Attempt to set property but " + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return;
     }
-    const auto& propertyId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "prop1");
+    static const auto propertyId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "prop1");
     m_node->setRemoteProperty(propertyId, prop1);
 }
 
@@ -59,7 +58,7 @@ void NestedStruct2InterfaceClient::setProp2(const NestedStruct2& prop2)
         AG_LOG_WARNING("Attempt to set property but " + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return;
     }
-    const auto& propertyId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "prop2");
+    static const auto propertyId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "prop2");
     m_node->setRemoteProperty(propertyId, prop2);
 }
 
@@ -96,7 +95,7 @@ std::future<NestedStruct1> NestedStruct2InterfaceClient::func1Async(const Nested
                     param1]()
         {
             std::promise<NestedStruct1> resultPromise;
-            const auto& operationId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "func1");
+            static const auto operationId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "func1");
             m_node->invokeRemote(operationId,
                 nlohmann::json::array({param1}), [&resultPromise](ApiGear::ObjectLink::InvokeReplyArg arg) {
                     const NestedStruct1& value = arg.value.get<NestedStruct1>();
@@ -128,7 +127,7 @@ std::future<NestedStruct1> NestedStruct2InterfaceClient::func2Async(const Nested
                     param2]()
         {
             std::promise<NestedStruct1> resultPromise;
-            const auto& operationId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "func2");
+            static const auto operationId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "func2");
             m_node->invokeRemote(operationId,
                 nlohmann::json::array({param1, param2}), [&resultPromise](ApiGear::ObjectLink::InvokeReplyArg arg) {
                     const NestedStruct1& value = arg.value.get<NestedStruct1>();

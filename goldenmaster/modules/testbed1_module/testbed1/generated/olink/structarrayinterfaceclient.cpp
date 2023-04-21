@@ -5,7 +5,6 @@
 #include "testbed1/generated/core/testbed1.json.adapter.h"
 
 #include "olink/iclientnode.h"
-#include "apigear/olink/olinkconnection.h"
 #include "apigear/utilities/logger.h"
 
 using namespace Test::Testbed1;
@@ -42,7 +41,7 @@ void StructArrayInterfaceClient::setPropBool(const std::list<StructBool>& propBo
         AG_LOG_WARNING("Attempt to set property but " + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return;
     }
-    const auto& propertyId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "propBool");
+    static const auto propertyId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "propBool");
     m_node->setRemoteProperty(propertyId, propBool);
 }
 
@@ -65,7 +64,7 @@ void StructArrayInterfaceClient::setPropInt(const std::list<StructInt>& propInt)
         AG_LOG_WARNING("Attempt to set property but " + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return;
     }
-    const auto& propertyId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "propInt");
+    static const auto propertyId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "propInt");
     m_node->setRemoteProperty(propertyId, propInt);
 }
 
@@ -88,7 +87,7 @@ void StructArrayInterfaceClient::setPropFloat(const std::list<StructFloat>& prop
         AG_LOG_WARNING("Attempt to set property but " + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return;
     }
-    const auto& propertyId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "propFloat");
+    static const auto propertyId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "propFloat");
     m_node->setRemoteProperty(propertyId, propFloat);
 }
 
@@ -111,7 +110,7 @@ void StructArrayInterfaceClient::setPropString(const std::list<StructString>& pr
         AG_LOG_WARNING("Attempt to set property but " + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return;
     }
-    const auto& propertyId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "propString");
+    static const auto propertyId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "propString");
     m_node->setRemoteProperty(propertyId, propString);
 }
 
@@ -148,7 +147,7 @@ std::future<StructBool> StructArrayInterfaceClient::funcBoolAsync(const std::lis
                     paramBool]()
         {
             std::promise<StructBool> resultPromise;
-            const auto& operationId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "funcBool");
+            static const auto operationId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "funcBool");
             m_node->invokeRemote(operationId,
                 nlohmann::json::array({paramBool}), [&resultPromise](ApiGear::ObjectLink::InvokeReplyArg arg) {
                     const StructBool& value = arg.value.get<StructBool>();
@@ -179,7 +178,7 @@ std::future<StructBool> StructArrayInterfaceClient::funcIntAsync(const std::list
                     paramInt]()
         {
             std::promise<StructBool> resultPromise;
-            const auto& operationId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "funcInt");
+            static const auto operationId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "funcInt");
             m_node->invokeRemote(operationId,
                 nlohmann::json::array({paramInt}), [&resultPromise](ApiGear::ObjectLink::InvokeReplyArg arg) {
                     const StructBool& value = arg.value.get<StructBool>();
@@ -210,7 +209,7 @@ std::future<StructBool> StructArrayInterfaceClient::funcFloatAsync(const std::li
                     paramFloat]()
         {
             std::promise<StructBool> resultPromise;
-            const auto& operationId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "funcFloat");
+            static const auto operationId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "funcFloat");
             m_node->invokeRemote(operationId,
                 nlohmann::json::array({paramFloat}), [&resultPromise](ApiGear::ObjectLink::InvokeReplyArg arg) {
                     const StructBool& value = arg.value.get<StructBool>();
@@ -241,7 +240,7 @@ std::future<StructBool> StructArrayInterfaceClient::funcStringAsync(const std::l
                     paramString]()
         {
             std::promise<StructBool> resultPromise;
-            const auto& operationId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "funcString");
+            static const auto operationId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "funcString");
             m_node->invokeRemote(operationId,
                 nlohmann::json::array({paramString}), [&resultPromise](ApiGear::ObjectLink::InvokeReplyArg arg) {
                     const StructBool& value = arg.value.get<StructBool>();

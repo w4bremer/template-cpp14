@@ -5,7 +5,6 @@
 #include "tb_simple/generated/core/tb_simple.json.adapter.h"
 
 #include "olink/iclientnode.h"
-#include "apigear/olink/olinkconnection.h"
 #include "apigear/utilities/logger.h"
 
 using namespace Test::TbSimple;
@@ -54,7 +53,7 @@ void SimpleInterfaceClient::setPropBool(bool propBool)
         AG_LOG_WARNING("Attempt to set property but " + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return;
     }
-    const auto& propertyId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "propBool");
+    static const auto propertyId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "propBool");
     m_node->setRemoteProperty(propertyId, propBool);
 }
 
@@ -77,7 +76,7 @@ void SimpleInterfaceClient::setPropInt(int propInt)
         AG_LOG_WARNING("Attempt to set property but " + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return;
     }
-    const auto& propertyId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "propInt");
+    static const auto propertyId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "propInt");
     m_node->setRemoteProperty(propertyId, propInt);
 }
 
@@ -100,7 +99,7 @@ void SimpleInterfaceClient::setPropInt32(int32_t propInt32)
         AG_LOG_WARNING("Attempt to set property but " + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return;
     }
-    const auto& propertyId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "propInt32");
+    static const auto propertyId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "propInt32");
     m_node->setRemoteProperty(propertyId, propInt32);
 }
 
@@ -123,7 +122,7 @@ void SimpleInterfaceClient::setPropInt64(int64_t propInt64)
         AG_LOG_WARNING("Attempt to set property but " + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return;
     }
-    const auto& propertyId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "propInt64");
+    static const auto propertyId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "propInt64");
     m_node->setRemoteProperty(propertyId, propInt64);
 }
 
@@ -146,7 +145,7 @@ void SimpleInterfaceClient::setPropFloat(float propFloat)
         AG_LOG_WARNING("Attempt to set property but " + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return;
     }
-    const auto& propertyId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "propFloat");
+    static const auto propertyId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "propFloat");
     m_node->setRemoteProperty(propertyId, propFloat);
 }
 
@@ -169,7 +168,7 @@ void SimpleInterfaceClient::setPropFloat32(float propFloat32)
         AG_LOG_WARNING("Attempt to set property but " + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return;
     }
-    const auto& propertyId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "propFloat32");
+    static const auto propertyId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "propFloat32");
     m_node->setRemoteProperty(propertyId, propFloat32);
 }
 
@@ -192,7 +191,7 @@ void SimpleInterfaceClient::setPropFloat64(double propFloat64)
         AG_LOG_WARNING("Attempt to set property but " + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return;
     }
-    const auto& propertyId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "propFloat64");
+    static const auto propertyId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "propFloat64");
     m_node->setRemoteProperty(propertyId, propFloat64);
 }
 
@@ -215,7 +214,7 @@ void SimpleInterfaceClient::setPropString(const std::string& propString)
         AG_LOG_WARNING("Attempt to set property but " + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return;
     }
-    const auto& propertyId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "propString");
+    static const auto propertyId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "propString");
     m_node->setRemoteProperty(propertyId, propString);
 }
 
@@ -252,7 +251,7 @@ std::future<bool> SimpleInterfaceClient::funcBoolAsync(bool paramBool)
                     paramBool]()
         {
             std::promise<bool> resultPromise;
-            const auto& operationId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "funcBool");
+            static const auto operationId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "funcBool");
             m_node->invokeRemote(operationId,
                 nlohmann::json::array({paramBool}), [&resultPromise](ApiGear::ObjectLink::InvokeReplyArg arg) {
                     const bool& value = arg.value.get<bool>();
@@ -283,7 +282,7 @@ std::future<int> SimpleInterfaceClient::funcIntAsync(int paramInt)
                     paramInt]()
         {
             std::promise<int> resultPromise;
-            const auto& operationId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "funcInt");
+            static const auto operationId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "funcInt");
             m_node->invokeRemote(operationId,
                 nlohmann::json::array({paramInt}), [&resultPromise](ApiGear::ObjectLink::InvokeReplyArg arg) {
                     const int& value = arg.value.get<int>();
@@ -314,7 +313,7 @@ std::future<int32_t> SimpleInterfaceClient::funcInt32Async(int32_t paramInt32)
                     paramInt32]()
         {
             std::promise<int32_t> resultPromise;
-            const auto& operationId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "funcInt32");
+            static const auto operationId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "funcInt32");
             m_node->invokeRemote(operationId,
                 nlohmann::json::array({paramInt32}), [&resultPromise](ApiGear::ObjectLink::InvokeReplyArg arg) {
                     const int32_t& value = arg.value.get<int32_t>();
@@ -345,7 +344,7 @@ std::future<int64_t> SimpleInterfaceClient::funcInt64Async(int64_t paramInt64)
                     paramInt64]()
         {
             std::promise<int64_t> resultPromise;
-            const auto& operationId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "funcInt64");
+            static const auto operationId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "funcInt64");
             m_node->invokeRemote(operationId,
                 nlohmann::json::array({paramInt64}), [&resultPromise](ApiGear::ObjectLink::InvokeReplyArg arg) {
                     const int64_t& value = arg.value.get<int64_t>();
@@ -376,7 +375,7 @@ std::future<float> SimpleInterfaceClient::funcFloatAsync(float paramFloat)
                     paramFloat]()
         {
             std::promise<float> resultPromise;
-            const auto& operationId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "funcFloat");
+            static const auto operationId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "funcFloat");
             m_node->invokeRemote(operationId,
                 nlohmann::json::array({paramFloat}), [&resultPromise](ApiGear::ObjectLink::InvokeReplyArg arg) {
                     const float& value = arg.value.get<float>();
@@ -407,7 +406,7 @@ std::future<float> SimpleInterfaceClient::funcFloat32Async(float paramFloat32)
                     paramFloat32]()
         {
             std::promise<float> resultPromise;
-            const auto& operationId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "funcFloat32");
+            static const auto operationId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "funcFloat32");
             m_node->invokeRemote(operationId,
                 nlohmann::json::array({paramFloat32}), [&resultPromise](ApiGear::ObjectLink::InvokeReplyArg arg) {
                     const float& value = arg.value.get<float>();
@@ -438,7 +437,7 @@ std::future<double> SimpleInterfaceClient::funcFloat64Async(double paramFloat)
                     paramFloat]()
         {
             std::promise<double> resultPromise;
-            const auto& operationId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "funcFloat64");
+            static const auto operationId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "funcFloat64");
             m_node->invokeRemote(operationId,
                 nlohmann::json::array({paramFloat}), [&resultPromise](ApiGear::ObjectLink::InvokeReplyArg arg) {
                     const double& value = arg.value.get<double>();
@@ -469,7 +468,7 @@ std::future<std::string> SimpleInterfaceClient::funcStringAsync(const std::strin
                     paramString]()
         {
             std::promise<std::string> resultPromise;
-            const auto& operationId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "funcString");
+            static const auto operationId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "funcString");
             m_node->invokeRemote(operationId,
                 nlohmann::json::array({paramString}), [&resultPromise](ApiGear::ObjectLink::InvokeReplyArg arg) {
                     const std::string& value = arg.value.get<std::string>();

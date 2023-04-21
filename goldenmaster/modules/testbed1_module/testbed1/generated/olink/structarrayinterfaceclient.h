@@ -5,7 +5,6 @@
 #include "testbed1/generated/api/testbed1.h"
 #include "testbed1/generated/core/structarrayinterface.data.h"
 
-#include "apigear/olink/iolinkconnector.h"
 #include "olink/iobjectsink.h"
 
 #include <future>

@@ -11,7 +11,6 @@
 #include "{{snake .Module.Name}}/generated/api/{{snake .Module.Name}}.h"
 #include "{{snake .Module.Name}}/generated/core/{{lower $interfaceName}}.data.h"
 
-#include "apigear/olink/iolinkconnector.h"
 #include "olink/iobjectsink.h"
 
 #include <future>

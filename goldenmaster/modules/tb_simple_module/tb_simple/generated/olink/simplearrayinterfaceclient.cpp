@@ -5,7 +5,6 @@
 #include "tb_simple/generated/core/tb_simple.json.adapter.h"
 
 #include "olink/iclientnode.h"
-#include "apigear/olink/olinkconnection.h"
 #include "apigear/utilities/logger.h"
 
 using namespace Test::TbSimple;
@@ -54,7 +53,7 @@ void SimpleArrayInterfaceClient::setPropBool(const std::list<bool>& propBool)
         AG_LOG_WARNING("Attempt to set property but " + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return;
     }
-    const auto& propertyId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "propBool");
+    static const auto propertyId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "propBool");
     m_node->setRemoteProperty(propertyId, propBool);
 }
 
@@ -77,7 +76,7 @@ void SimpleArrayInterfaceClient::setPropInt(const std::list<int>& propInt)
         AG_LOG_WARNING("Attempt to set property but " + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return;
     }
-    const auto& propertyId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "propInt");
+    static const auto propertyId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "propInt");
     m_node->setRemoteProperty(propertyId, propInt);
 }
 
@@ -100,7 +99,7 @@ void SimpleArrayInterfaceClient::setPropInt32(const std::list<int32_t>& propInt3
         AG_LOG_WARNING("Attempt to set property but " + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return;
     }
-    const auto& propertyId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "propInt32");
+    static const auto propertyId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "propInt32");
     m_node->setRemoteProperty(propertyId, propInt32);
 }
 
@@ -123,7 +122,7 @@ void SimpleArrayInterfaceClient::setPropInt64(const std::list<int64_t>& propInt6
         AG_LOG_WARNING("Attempt to set property but " + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return;
     }
-    const auto& propertyId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "propInt64");
+    static const auto propertyId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "propInt64");
     m_node->setRemoteProperty(propertyId, propInt64);
 }
 
@@ -146,7 +145,7 @@ void SimpleArrayInterfaceClient::setPropFloat(const std::list<float>& propFloat)
         AG_LOG_WARNING("Attempt to set property but " + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return;
     }
-    const auto& propertyId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "propFloat");
+    static const auto propertyId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "propFloat");
     m_node->setRemoteProperty(propertyId, propFloat);
 }
 
@@ -169,7 +168,7 @@ void SimpleArrayInterfaceClient::setPropFloat32(const std::list<float>& propFloa
         AG_LOG_WARNING("Attempt to set property but " + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return;
     }
-    const auto& propertyId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "propFloat32");
+    static const auto propertyId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "propFloat32");
     m_node->setRemoteProperty(propertyId, propFloat32);
 }
 
@@ -192,7 +191,7 @@ void SimpleArrayInterfaceClient::setPropFloat64(const std::list<double>& propFlo
         AG_LOG_WARNING("Attempt to set property but " + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return;
     }
-    const auto& propertyId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "propFloat64");
+    static const auto propertyId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "propFloat64");
     m_node->setRemoteProperty(propertyId, propFloat64);
 }
 
@@ -215,7 +214,7 @@ void SimpleArrayInterfaceClient::setPropString(const std::list<std::string>& pro
         AG_LOG_WARNING("Attempt to set property but " + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return;
     }
-    const auto& propertyId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "propString");
+    static const auto propertyId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "propString");
     m_node->setRemoteProperty(propertyId, propString);
 }
 
@@ -252,7 +251,7 @@ std::future<std::list<bool>> SimpleArrayInterfaceClient::funcBoolAsync(const std
                     paramBool]()
         {
             std::promise<std::list<bool>> resultPromise;
-            const auto& operationId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "funcBool");
+            static const auto operationId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "funcBool");
             m_node->invokeRemote(operationId,
                 nlohmann::json::array({paramBool}), [&resultPromise](ApiGear::ObjectLink::InvokeReplyArg arg) {
                     const std::list<bool>& value = arg.value.get<std::list<bool>>();
@@ -283,7 +282,7 @@ std::future<std::list<int>> SimpleArrayInterfaceClient::funcIntAsync(const std::
                     paramInt]()
         {
             std::promise<std::list<int>> resultPromise;
-            const auto& operationId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "funcInt");
+            static const auto operationId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "funcInt");
             m_node->invokeRemote(operationId,
                 nlohmann::json::array({paramInt}), [&resultPromise](ApiGear::ObjectLink::InvokeReplyArg arg) {
                     const std::list<int>& value = arg.value.get<std::list<int>>();
@@ -314,7 +313,7 @@ std::future<std::list<int32_t>> SimpleArrayInterfaceClient::funcInt32Async(const
                     paramInt32]()
         {
             std::promise<std::list<int32_t>> resultPromise;
-            const auto& operationId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "funcInt32");
+            static const auto operationId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "funcInt32");
             m_node->invokeRemote(operationId,
                 nlohmann::json::array({paramInt32}), [&resultPromise](ApiGear::ObjectLink::InvokeReplyArg arg) {
                     const std::list<int32_t>& value = arg.value.get<std::list<int32_t>>();
@@ -345,7 +344,7 @@ std::future<std::list<int64_t>> SimpleArrayInterfaceClient::funcInt64Async(const
                     paramInt64]()
         {
             std::promise<std::list<int64_t>> resultPromise;
-            const auto& operationId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "funcInt64");
+            static const auto operationId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "funcInt64");
             m_node->invokeRemote(operationId,
                 nlohmann::json::array({paramInt64}), [&resultPromise](ApiGear::ObjectLink::InvokeReplyArg arg) {
                     const std::list<int64_t>& value = arg.value.get<std::list<int64_t>>();
@@ -376,7 +375,7 @@ std::future<std::list<float>> SimpleArrayInterfaceClient::funcFloatAsync(const s
                     paramFloat]()
         {
             std::promise<std::list<float>> resultPromise;
-            const auto& operationId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "funcFloat");
+            static const auto operationId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "funcFloat");
             m_node->invokeRemote(operationId,
                 nlohmann::json::array({paramFloat}), [&resultPromise](ApiGear::ObjectLink::InvokeReplyArg arg) {
                     const std::list<float>& value = arg.value.get<std::list<float>>();
@@ -407,7 +406,7 @@ std::future<std::list<float>> SimpleArrayInterfaceClient::funcFloat32Async(const
                     paramFloat32]()
         {
             std::promise<std::list<float>> resultPromise;
-            const auto& operationId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "funcFloat32");
+            static const auto operationId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "funcFloat32");
             m_node->invokeRemote(operationId,
                 nlohmann::json::array({paramFloat32}), [&resultPromise](ApiGear::ObjectLink::InvokeReplyArg arg) {
                     const std::list<float>& value = arg.value.get<std::list<float>>();
@@ -438,7 +437,7 @@ std::future<std::list<double>> SimpleArrayInterfaceClient::funcFloat64Async(cons
                     paramFloat]()
         {
             std::promise<std::list<double>> resultPromise;
-            const auto& operationId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "funcFloat64");
+            static const auto operationId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "funcFloat64");
             m_node->invokeRemote(operationId,
                 nlohmann::json::array({paramFloat}), [&resultPromise](ApiGear::ObjectLink::InvokeReplyArg arg) {
                     const std::list<double>& value = arg.value.get<std::list<double>>();
@@ -469,7 +468,7 @@ std::future<std::list<std::string>> SimpleArrayInterfaceClient::funcStringAsync(
                     paramString]()
         {
             std::promise<std::list<std::string>> resultPromise;
-            const auto& operationId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "funcString");
+            static const auto operationId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "funcString");
             m_node->invokeRemote(operationId,
                 nlohmann::json::array({paramString}), [&resultPromise](ApiGear::ObjectLink::InvokeReplyArg arg) {
                     const std::list<std::string>& value = arg.value.get<std::list<std::string>>();

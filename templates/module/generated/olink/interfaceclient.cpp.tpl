@@ -13,7 +13,6 @@
 #include "{{snake .Module.Name}}/generated/core/{{snake .Module.Name}}.json.adapter.h"
 
 #include "olink/iclientnode.h"
-#include "apigear/olink/olinkconnection.h"
 #include "apigear/utilities/logger.h"
 
 using namespace {{ Camel .System.Name }}::{{ Camel .Module.Name }};
@@ -51,7 +50,7 @@ void {{$class}}::set{{Camel $name}}({{cppParam "" $property}})
         AG_LOG_WARNING("Attempt to set property but " + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return;
     }
-    const auto& propertyId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "{{$property.Name}}");
+    static const auto propertyId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "{{$property.Name}}");
     m_node->setRemoteProperty(propertyId, {{$property.Name}});
 }
 
@@ -92,7 +91,7 @@ void {{$class}}::set{{Camel $name}}Local({{cppParam "" $property }})
             (void) arg;
         };
     const nlohmann::json &args = nlohmann::json::array({ {{ cppVars $operation.Params}} });
-    const auto& operationId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "{{$operation.Name}}");
+    static const auto operationId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "{{$operation.Name}}");
     m_node->invokeRemote(operationId, args, func);
     {{- else }}
     {{$returnType}} value({{lower1 $operation.Name}}Async({{ cppVars $operation.Params }}).get());
@@ -111,7 +110,7 @@ std::future<{{$returnType}}> {{$class}}::{{$operation.Name| lower1}}Async({{cppP
                 {{- end -}}]()
         {
             std::promise<{{$returnType}}> resultPromise;
-            const auto& operationId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "{{$operation.Name}}");
+            static const auto operationId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "{{$operation.Name}}");
             m_node->invokeRemote(operationId,
                 nlohmann::json::array({ {{- cppVars $operation.Params -}} }), [&resultPromise](ApiGear::ObjectLink::InvokeReplyArg arg) {        
                     {{- if ( eq (cppReturn "" $operation.Return) "void") }}

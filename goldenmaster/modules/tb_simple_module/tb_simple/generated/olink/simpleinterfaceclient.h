@@ -5,7 +5,6 @@
 #include "tb_simple/generated/api/tb_simple.h"
 #include "tb_simple/generated/core/simpleinterface.data.h"
 
-#include "apigear/olink/iolinkconnector.h"
 #include "olink/iobjectsink.h"
 
 #include <future>

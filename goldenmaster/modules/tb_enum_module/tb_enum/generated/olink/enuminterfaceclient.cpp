@@ -5,7 +5,6 @@
 #include "tb_enum/generated/core/tb_enum.json.adapter.h"
 
 #include "olink/iclientnode.h"
-#include "apigear/olink/olinkconnection.h"
 #include "apigear/utilities/logger.h"
 
 using namespace Test::TbEnum;
@@ -42,7 +41,7 @@ void EnumInterfaceClient::setProp0(Enum0Enum prop0)
         AG_LOG_WARNING("Attempt to set property but " + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return;
     }
-    const auto& propertyId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "prop0");
+    static const auto propertyId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "prop0");
     m_node->setRemoteProperty(propertyId, prop0);
 }
 
@@ -65,7 +64,7 @@ void EnumInterfaceClient::setProp1(Enum1Enum prop1)
         AG_LOG_WARNING("Attempt to set property but " + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return;
     }
-    const auto& propertyId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "prop1");
+    static const auto propertyId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "prop1");
     m_node->setRemoteProperty(propertyId, prop1);
 }
 
@@ -88,7 +87,7 @@ void EnumInterfaceClient::setProp2(Enum2Enum prop2)
         AG_LOG_WARNING("Attempt to set property but " + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return;
     }
-    const auto& propertyId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "prop2");
+    static const auto propertyId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "prop2");
     m_node->setRemoteProperty(propertyId, prop2);
 }
 
@@ -111,7 +110,7 @@ void EnumInterfaceClient::setProp3(Enum3Enum prop3)
         AG_LOG_WARNING("Attempt to set property but " + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
         return;
     }
-    const auto& propertyId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "prop3");
+    static const auto propertyId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "prop3");
     m_node->setRemoteProperty(propertyId, prop3);
 }
 
@@ -148,7 +147,7 @@ std::future<Enum0Enum> EnumInterfaceClient::func0Async(Enum0Enum param0)
                     param0]()
         {
             std::promise<Enum0Enum> resultPromise;
-            const auto& operationId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "func0");
+            static const auto operationId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "func0");
             m_node->invokeRemote(operationId,
                 nlohmann::json::array({param0}), [&resultPromise](ApiGear::ObjectLink::InvokeReplyArg arg) {
                     const Enum0Enum& value = arg.value.get<Enum0Enum>();
@@ -179,7 +178,7 @@ std::future<Enum1Enum> EnumInterfaceClient::func1Async(Enum1Enum param1)
                     param1]()
         {
             std::promise<Enum1Enum> resultPromise;
-            const auto& operationId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "func1");
+            static const auto operationId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "func1");
             m_node->invokeRemote(operationId,
                 nlohmann::json::array({param1}), [&resultPromise](ApiGear::ObjectLink::InvokeReplyArg arg) {
                     const Enum1Enum& value = arg.value.get<Enum1Enum>();
@@ -210,7 +209,7 @@ std::future<Enum2Enum> EnumInterfaceClient::func2Async(Enum2Enum param2)
                     param2]()
         {
             std::promise<Enum2Enum> resultPromise;
-            const auto& operationId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "func2");
+            static const auto operationId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "func2");
             m_node->invokeRemote(operationId,
                 nlohmann::json::array({param2}), [&resultPromise](ApiGear::ObjectLink::InvokeReplyArg arg) {
                     const Enum2Enum& value = arg.value.get<Enum2Enum>();
@@ -241,7 +240,7 @@ std::future<Enum3Enum> EnumInterfaceClient::func3Async(Enum3Enum param3)
                     param3]()
         {
             std::promise<Enum3Enum> resultPromise;
-            const auto& operationId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "func3");
+            static const auto operationId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "func3");
             m_node->invokeRemote(operationId,
                 nlohmann::json::array({param3}), [&resultPromise](ApiGear::ObjectLink::InvokeReplyArg arg) {
                     const Enum3Enum& value = arg.value.get<Enum3Enum>();
