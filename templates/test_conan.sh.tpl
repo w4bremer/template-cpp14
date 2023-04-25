@@ -30,29 +30,31 @@ conan create ../../../modules/{{ snake .Name }}_module
 if [ $? -ne 0 ]; then exit 1; fi;
 popd
 {{- end }}
+# leave build directory
+cd ..
 {{- if $features.examples }}
 # examples app
-mkdir -p examples/app;
+mkdir -p build/examples/app;
 pushd examples/app;
-conan install --build missing ../../../examples/app -g=virtualenv && cmake ../../../examples/app && cmake --build .
+conan install --build missing . --install-folder ../../build/examples/app -g=virtualenv && cmake -S . -B ../../build/examples/app --preset release && cmake --build ../../build/examples/app
 if [ $? -ne 0 ]; then exit 1; fi;
 popd
 # examples appthreadsafe
-mkdir -p examples/appthreadsafe;
+mkdir -p build/examples/appthreadsafe;
 pushd examples/appthreadsafe;
-conan install --build missing ../../../examples/appthreadsafe -g=virtualenv && cmake ../../../examples/appthreadsafe && cmake --build .
+conan install --build missing . --install-folder ../../build/examples/appthreadsafe -g=virtualenv && cmake  -S . -B ../../build/examples/appthreadsafe --preset release && cmake --build ../../build/examples/appthreadsafe
 if [ $? -ne 0 ]; then exit 1; fi;
 popd
 {{- end}}
 {{- if $features.examples_olink }}
-mkdir -p examples/olinkserver;
+mkdir -p build/examples/olinkserver;
 pushd examples/olinkserver;
-conan install --build missing ../../../examples/olinkserver -g=virtualenv && cmake ../../../examples/olinkserver && cmake --build .
+conan install --build missing . --install-folder ../../build/examples/olinkserver -g=virtualenv && cmake -S . -B ../../build/examples/olinkserver --preset release && cmake --build ../../build/examples/olinkserver
 if [ $? -ne 0 ]; then exit 1; fi;
 popd
-mkdir -p examples/olinkclient;
+mkdir -p build/examples/olinkclient;
 pushd examples/olinkclient;
-conan install --build missing ../../../examples/olinkclient -g=virtualenv && cmake ../../../examples/olinkclient && cmake --build .
+conan install --build missing . --install-folder ../../build/examples/olinkclient -g=virtualenv && cmake -S . -B ../../build/examples/olinkclient --preset release && cmake --build ../../build/examples/olinkclient
 if [ $? -ne 0 ]; then exit 1; fi;
 popd
 {{- end}}
