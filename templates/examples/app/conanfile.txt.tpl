@@ -6,4 +6,5 @@
 
 [generators]
 cmake_find_package
+CMakeToolchain
 virtualenv

@@ -43,71 +43,72 @@ conan create ../../../modules/{{snake .Name}}_module
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
 popd
 {{- end }}
+@REM Leave build folder
+cd ..
 {{- if $features.examples }}
 @REM Building examples app
-if not exist examples\app mkdir examples\app
+if not exist build\examples\app mkdir build\examples\app
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
 pushd examples\app
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
-conan install --build missing ../../../examples/app -g=virtualenv
+conan install --build missing . --install-folder ../../build/examples/app -g=virtualenv
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
-cmake ../../../examples/app
+cmake -S . -B ../../build/examples/app --preset default
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
-CALL activate.bat
+CALL ../../build/examples/app/activate.bat
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
-cmake --build .
+cmake --build ../../build/examples/app
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
-CALL deactivate.bat
+CALL ../../build/examples/app/deactivate.bat
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
 popd
 @REM Building examples appthreadsafe
-if not exist examples\appthreadsafe mkdir examples\appthreadsafe
+if not exist build\examples\appthreadsafe mkdir build\examples\appthreadsafe
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
 pushd examples\appthreadsafe
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
-conan install --build missing ../../../examples/appthreadsafe -g=virtualenv
+conan install --build missing . --install-folder ../../build/examples/appthreadsafe -g=virtualenv
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
-cmake ../../../examples/appthreadsafe
+cmake -S . -B ../../build/examples/appthreadsafe --preset default
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
-CALL activate.bat
+CALL ../../build/examples/appthreadsafe/activate.bat
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
-cmake --build .
+cmake --build ../../build/examples/appthreadsafe
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
-CALL deactivate.bat
+CALL ../../build/examples/appthreadsafe/deactivate.bat
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
 popd
 {{- end}}
 {{- if $features.examples_olink }}
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
-if not exist examples\olinkserver mkdir examples\olinkserver
+if not exist build\examples\olinkserver mkdir build\examples\olinkserver
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
 pushd examples\olinkserver
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
-conan install --build missing ../../../examples/olinkserver -g=virtualenv
+conan install --build missing . --install-folder ../../build/examples/olinkserver -g=virtualenv
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
-cmake ../../../examples/olinkserver
+cmake -S . -B ../../build/examples/olinkserver --preset default
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
-CALL activate.bat
+CALL ../../build/examples/olinkserver/activate.bat
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
-cmake --build .
+cmake --build ../../build/examples/olinkserver
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
-CALL deactivate.bat
+CALL ../../build/examples/olinkserver/deactivate.bat
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
 popd
-if not exist examples\olinkclient mkdir examples\olinkclient
+if not exist build\examples\olinkclient mkdir build\examples\olinkclient
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
 pushd examples\olinkclient
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
-conan install --build missing ../../../examples/olinkclient -g=virtualenv
+conan install --build missing . --install-folder ../../build/examples/olinkclient -g=virtualenv
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
-cmake ../../../examples/olinkclient
+cmake -S . -B ../../build/examples/olinkclient --preset default
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
-CALL activate.bat
+CALL ../../build/examples/olinkclient/activate.bat
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
-cmake --build .
+cmake --build ../../build/examples/olinkclient
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
-CALL deactivate.bat
+CALL ../../build/examples/olinkclient/deactivate.bat
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
 popd
 {{- end}}
-cd ..
