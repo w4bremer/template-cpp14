@@ -1,5 +1,5 @@
-project(OLinkServer)
 cmake_minimum_required(VERSION 3.1)
+project(OLinkServer)
 
 # append local binary directory for conan packages to be found
 set(CMAKE_MODULE_PATH ${CMAKE_BINARY_DIR} ${CMAKE_MODULE_PATH})
