@@ -34,7 +34,7 @@ class apigearConan(ConanFile):
                        "poco:enable_redis": False,
                        "poco:enable_sevenzip": False,
                        "poco:enable_util": True,
-                       "poco:enable_xml": True,
+                       "poco:enable_xml": False,
                        "poco:enable_zip": False
                        }
     exports_sources = "*"
