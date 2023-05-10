@@ -40,6 +40,7 @@ OlinkConnection::OlinkConnection(ApiGear::ObjectLink::ClientRegistry& registry)
 void OlinkConnection::onConnectionClosedFromNetwork()
 {
     onDisconnected();
+    scheduleProcessMessages(tryReconnectDelay);
 }
 
 OlinkConnection::~OlinkConnection()
@@ -89,8 +90,11 @@ void OlinkConnection::disconnectAndUnlink(const std::string& objectId)
 
 void OlinkConnection::connectToHost(Poco::URI url)
 {
-    if (m_processMessagesTask){
+    if (m_processMessagesTask) {
+        std::unique_lock<std::timed_mutex> lock(m_taskMutex);
         m_processMessagesTask->cancel();
+        m_processMessagesTask.reset();
+        lock.unlock();
     }
 
     if(url.empty()) {
@@ -112,16 +116,13 @@ void OlinkConnection::connectToHost(Poco::URI url)
             auto socket = std::make_unique<Poco::Net::WebSocket>(session, request, response);
             m_socket.changeSocket(std::move(socket));
             onConnected();
-            
+
         } catch (std::exception &e) {
             m_socket.close();
             AG_LOG_ERROR("Exception " + std::string(e.what()));
         }
         m_isConnecting = false;
     }
-
-    // schedule retry if connection fails
-    scheduleProcessMessages(smallDelay);
 }
 
 void OlinkConnection::disconnect() {
@@ -139,7 +140,10 @@ void OlinkConnection::disconnect() {
 void OlinkConnection::closeQueue()
 {
     if (m_processMessagesTask){
+        std::unique_lock<std::timed_mutex> lock(m_taskMutex);
         m_processMessagesTask->cancel();
+        m_processMessagesTask.reset();
+        lock.unlock();
     }
     flushMessages();
 }
@@ -180,12 +184,11 @@ void OlinkConnection::scheduleProcessMessages(long delayMiliseconds)
     std::unique_lock<std::timed_mutex> lock(m_taskMutex, std::defer_lock);
     if (lock.try_lock()) // else other thread is scheduling a task currently, so the messages would be sent anyway.
     {
-        if(m_processMessagesTask){
-            m_processMessagesTask->cancel();
+        if (!m_processMessagesTask){
+            m_processMessagesTask = new Poco::Util::TimerTaskAdapter<OlinkConnection>(*this, &OlinkConnection::processMessages);
+            m_retryTimer.schedule(m_processMessagesTask, delayMiliseconds, retryInterval);
+            lock.unlock();
         }
-        m_processMessagesTask = new Poco::Util::TimerTaskAdapter<OlinkConnection>(*this, &OlinkConnection::processMessages);
-        lock.unlock();
-        m_retryTimer.schedule(m_processMessagesTask, delayMiliseconds, retryInterval);
     }
 }
 
@@ -196,9 +199,12 @@ void OlinkConnection::processMessages(Poco::Util::TimerTask& /*task*/)
         scheduleProcessMessages(tryReconnectDelay);
         return;
     }
-    
+    std::unique_lock<std::timed_mutex> lock(m_taskMutex);
+    m_processMessagesTask->cancel();
+    m_processMessagesTask.reset();
     m_socket.writeMessage(pingFramePayload, Poco::Net::WebSocket::FRAME_OP_PING);
-    flushMessages();    
+    lock.unlock();
+    flushMessages();
 }
 
 void OlinkConnection::flushMessages()

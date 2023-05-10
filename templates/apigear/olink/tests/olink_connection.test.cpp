@@ -357,10 +357,12 @@ TEST_CASE("OlinkConnection tests")
 
         REQUIRE(checkMessageInContainer(msgs, expectedLinkMessage));
         auto expectedLinkMesageIndex = getMessageIndex(msgs, expectedLinkMessage);
-        // The link message is not first neither the last, so there will be some messages that reach the server before client is linked.
-        // They won't be processed by server.
+        // Currently the Link message is sent when connection is back,
+        // Most probably all the other messages requested to be sent during disconnected time will be already scheduled to send
+        // and Link message will be the last scheduled as a last one.
+        // The effect is that there will be some (all?) messages that reach the server before client is linked.
         REQUIRE(expectedLinkMesageIndex > 0);
-        REQUIRE(expectedLinkMesageIndex < msgs.size()-1);
+        REQUIRE(expectedLinkMesageIndex < msgs.size());
 
         
         // Cleanup
