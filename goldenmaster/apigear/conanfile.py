@@ -78,4 +78,4 @@ class apigearConan(ConanFile):
         self.cpp_info.components["poco-olink"].includedirs.append(os.path.join(self.package_folder, "include"))
         self.cpp_info.components["poco-olink"].requires = ["poco::poco", "nlohmann_json::nlohmann_json", "utilities"]
         self.cpp_info.components["paho-mqtt"].libs = ["paho-mqtt"]
-        self.cpp_info.components["paho-mqtt"].requires = ["nlohmann_json::nlohmann_json"]
+        self.cpp_info.components["paho-mqtt"].requires = ["nlohmann_json::nlohmann_json", "utilities"]
