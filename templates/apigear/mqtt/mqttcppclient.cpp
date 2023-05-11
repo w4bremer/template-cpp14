@@ -1,6 +1,7 @@
 #include <iostream>
 #include "MQTTAsync.h"
 #include "mqttcppclient.h"
+#include "../utilities/logger.h"
 #include <chrono>
 #include <random>
 
@@ -39,7 +40,7 @@ void onSubscribeSuccess(void* context, MQTTAsync_successData5* response)
 void onSubscribeFailure(void* context, MQTTAsync_failureData5* response)
 {
     subscribeTopicContext* ctx = static_cast<subscribeTopicContext*>(context);
-	printf("Subscribe failed, rc %d\n", response->code);
+    AG_LOG_ERROR("Subscribe failed, rc " +  std::to_string(response->code));
     delete ctx;
 }
 
@@ -54,7 +55,7 @@ void onUnsubscribeSuccess(void* context, MQTTAsync_successData5* response)
 void onUnsubscribeFailure(void* context, MQTTAsync_failureData5* response)
 {
     subscribeTopicContext* ctx = static_cast<subscribeTopicContext*>(context);
-	printf("Unsubscribe failed, rc %d\n", response->code);
+    AG_LOG_ERROR("Unsubscribe failed, rc " + std::to_string(response->code));
     delete ctx;
 }
 
@@ -67,7 +68,7 @@ void onConnected(void* context, MQTTAsync_successData5* response)
 void onConnectedFail(void* context,  MQTTAsync_failureData5* response)
 {
     Client* client = static_cast<Client*>(context);
-	printf("Connect failed, rc %d\n", response->code);
+    AG_LOG_ERROR("Connect failed, rc " + std::to_string(response->code));
     client->onDisconnected();
 }
 
@@ -87,19 +88,18 @@ int msgarrvd(void *context, char *topicName, int topicLen, MQTTAsync_message *me
 
     if(MQTTProperties_hasProperty(&(message->properties), MQTTPROPERTY_CODE_RESPONSE_TOPIC))
     {
-        std::clog << " response topic found "<<std::endl;
+        AG_LOG_INFO("response topic found");
         MQTTProperty* responseTopicProperty = MQTTProperties_getProperty(&(message->properties), MQTTPROPERTY_CODE_RESPONSE_TOPIC);
         mqtt_message.responseTopic = Topic(std::string(responseTopicProperty->value.data.data, responseTopicProperty->value.data.len));
     }
 
     if(MQTTProperties_hasProperty(&(message->properties), MQTTPROPERTY_CODE_CORRELATION_DATA))
     {
-        std::clog << " correlation data found "<<std::endl;
+        AG_LOG_INFO("correlation data found");
         MQTTProperty* correlationDataProperty = MQTTProperties_getProperty(&(message->properties), MQTTPROPERTY_CODE_CORRELATION_DATA);
         mqtt_message.correlationData.assign(correlationDataProperty->value.data.data, correlationDataProperty->value.data.len);
     }
 
-    std::clog << "recv msg topic: " << mqtt_message.topic.getEncodedTopic() << " content: " << mqtt_message.content << " retained:" << message->retained << " props count " << message->properties.count << " responseTopic:" << mqtt_message.responseTopic << " correlationData: "<< mqtt_message.correlationData << std::endl;
     MQTTAsync_freeMessage(&message);
     MQTTAsync_free(topicName);
 
@@ -111,7 +111,7 @@ int msgarrvd(void *context, char *topicName, int topicLen, MQTTAsync_message *me
 void connlost(void *context, char *cause)
 {
     Client* client = static_cast<Client*>(context);
-    printf("\nConnection lost\n");
+    AG_LOG_ERROR("Connection lost");
     client->onDisconnected();
 }
 
@@ -167,7 +167,7 @@ void Client::checkForNewSubscriptions()
         opts.context = ctx;
         if ((rc = MQTTAsync_subscribe(*m_client.get(), topic.first.getEncodedTopic().c_str(), QOS, &opts)) != MQTTASYNC_SUCCESS)
         {
-            printf("Failed to start subscribe, return code %d\n", rc);
+            AG_LOG_ERROR("Failed to start subscribe, return code " + std::to_string(rc));
         }
     }
 }
@@ -179,7 +179,7 @@ void Client::checkForOldSubscriptions()
     m_toBeUnsubscribedTopics.clear();
     m_toBeUnsubscribedTopicsMutex.unlock();
     for (const auto& topic : toBeUnsubscribedTopics) {
-        std::cout << "Unsubscribing from " << topic.first.getEncodedTopic() << std::endl;
+        AG_LOG_INFO("Unsubscribing from " + topic.first.getEncodedTopic());
 
         subscribeTopicContext* ctx = new subscribeTopicContext{topic.first, topic.second, this};
         int rc = 0;
@@ -190,7 +190,7 @@ void Client::checkForOldSubscriptions()
         opts.context = ctx;
         if ((rc = MQTTAsync_unsubscribe(*m_client.get(), topic.first.getEncodedTopic().c_str(), &opts)) != MQTTASYNC_SUCCESS)
         {
-            printf("Failed to start unsubscribe, return code %d\n", rc);
+            AG_LOG_WARNING("Failed to start unsubscribe, return code " + std::to_string(rc));
         }
     }
 }
@@ -207,7 +207,7 @@ void Client::unsubscribeAllTopics()
     const auto subscribedTopics { m_subscribedTopics };
     m_subscribedTopicsMutex.unlock();
     for (const auto& topic : subscribedTopics) {
-        std::cout << "Unsubscribing from " << topic.first.getEncodedTopic() << std::endl;
+        AG_LOG_INFO("Unsubscribing from " + topic.first.getEncodedTopic());
 
         subscribeTopicContext* ctx = new subscribeTopicContext{topic.first, topic.second, this};
         int rc = 0;
@@ -218,7 +218,7 @@ void Client::unsubscribeAllTopics()
         opts.context = ctx;
         if ((rc = MQTTAsync_unsubscribe(*m_client.get(), topic.first.getEncodedTopic().c_str(), &opts)) != MQTTASYNC_SUCCESS)
         {
-            printf("Failed to start unsubscribe, return code %d\n", rc);
+            AG_LOG_WARNING("Failed to start unsubscribe, return code " + std::to_string(rc));
         }
     }
 }
@@ -247,7 +247,7 @@ void Client::connectToHost(const std::string& brokerURL)
     } else {
         m_serverUrl = brokerURL;
     }
-    std::clog << "Connecting to host " << m_serverUrl << std::endl;
+    AG_LOG_DEBUG("Connecting to host " + m_serverUrl);
     
     if(m_client == nullptr && !connecting) {
         try {
@@ -267,7 +267,7 @@ void Client::connectToHost(const std::string& brokerURL)
             int rc = -1;
             if ((rc = MQTTAsync_connect(*m_client.get(), &conn_opts)) != MQTTASYNC_SUCCESS)
             {
-                std::cout << "Failed to connect, return code "<< rc << std::endl;
+                AG_LOG_ERROR("Failed to connect, return code " + std::to_string(rc));
                 connecting = false;
                 MQTTAsync_destroy(m_client.get());
                 m_client.reset();
@@ -276,7 +276,7 @@ void Client::connectToHost(const std::string& brokerURL)
 
         } catch (std::exception &e) {
             m_client = nullptr;
-            std::cerr << "Exception " << e.what() << std::endl;
+            AG_LOG_ERROR("Exception " + std::string(e.what()));
         }
         connecting = false;
     }
@@ -307,7 +307,7 @@ void Client::disconnect() {
 void Client::onConnected()
 {
     m_connected = true;
-    std::clog << " socket connected" << std::endl;
+    AG_LOG_DEBUG("socket connected");
     for (auto& object: m_linkedObjects){
         object->onConnected();
     }
@@ -320,7 +320,7 @@ void Client::onDisconnected()
     m_connected = false;
     bool disconnectRequested = m_disconnectRequested;
     m_disconnectRequested = false;
-    std::clog << " socket disconnected" << std::endl;
+    AG_LOG_DEBUG("socket disconnected");
 
     // if we have not waited for our thread to finish, do it now
     if (m_thread.joinable())
@@ -361,11 +361,8 @@ void Client::onDisconnected()
 
 void Client::handleTextMessage(const Message& message)
 {
-    // std::clog << "new msg topic: " << topic << " mqtt_message: " << message << std::endl;
+    AG_LOG_INFO("new msg: topic " + message.topic.getEncodedTopic() + " msg content: " + message.content);
     std::pair<std::multimap<Topic, ISink*, Topic>::iterator, std::multimap<Topic, ISink*, Topic>::iterator> topics = m_subscribedTopics.equal_range(message.topic);
-    // for (auto test: m_subscribedTopics){
-    //     std::cout << "topic " << test.first << " " << test.second << std::endl; 
-    // }
     for (auto iter = topics.first; iter != topics.second; ++iter)
     {
         if(iter->second != nullptr)
@@ -431,7 +428,6 @@ void Client::invokeRemote(const Topic& topic, const std::string& value, InvokeRe
     correlationDataProperty.value.data = { static_cast<int>(correlationData.size()), const_cast<char*>(correlationData.c_str()) };
     MQTTProperties_add(&(opts.properties), &correlationDataProperty);
 
-    std::cout << "corrdata " << correlationData << std::endl;
     opts.onSuccess5 = onSendSuccess;
     opts.onFailure5 = onSendFailure;
     opts.context = this;
@@ -446,7 +442,7 @@ void Client::invokeRemote(const Topic& topic, const std::string& value, InvokeRe
 
     if ((rc = MQTTAsync_sendMessage(*m_client.get(), topic.getEncodedTopic().c_str(), &pubmsg, &opts)) != MQTTASYNC_SUCCESS)
     {
-        printf("Failed to start sendMessage, return code %d\n", rc);
+        AG_LOG_ERROR("Failed to start sendMessage, return code " + std::to_string(rc));
     }
 }
 
@@ -466,7 +462,7 @@ void Client::notifyPropertyChange(const Topic& topic, const std::string& value)
     pubmsg.retained = 1;
     if ((rc = MQTTAsync_sendMessage(*m_client.get(), topic.getEncodedTopic().c_str(), &pubmsg, &opts)) != MQTTASYNC_SUCCESS)
     {
-        printf("Failed to start sendMessage, return code %d\n", rc);
+        AG_LOG_ERROR("Failed to start sendMessage, return code " + std::to_string(rc));
     }
 }
 
@@ -486,7 +482,7 @@ void Client::notifySignal(const Topic& topic, const std::string& args)
 
 	if ((rc = MQTTAsync_sendMessage(*m_client.get(), topic.getEncodedTopic().c_str(), &pubmsg, &opts)) != MQTTASYNC_SUCCESS)
 	{
-		printf("Failed to start sendMessage, return code %d\n", rc);
+        AG_LOG_ERROR("Failed to start sendMessage, return code " + std::to_string(rc));
 	}
 }
 
@@ -505,7 +501,6 @@ void Client::notifyInvokeResponse(const Topic& responseTopic, const std::string&
     opts.onFailure5 = onSendFailure;
     opts.context = this;
     pubmsg.payload = const_cast<void*>(static_cast<const void*>(value.c_str()));
-    std::cout << "payload " << value << std::endl;
     pubmsg.payloadlen = value.size();
     pubmsg.qos = QOS;
     pubmsg.retained = 0;
@@ -514,7 +509,7 @@ void Client::notifyInvokeResponse(const Topic& responseTopic, const std::string&
     pubmsg.properties = opts.properties;
     if ((rc = MQTTAsync_sendMessage(*m_client.get(), responseTopic.getEncodedTopic().c_str(), &pubmsg, &opts)) != MQTTASYNC_SUCCESS)
     {
-        printf("Failed to start sendMessage, return code %d\n", rc);
+        AG_LOG_ERROR("Failed to start sendMessage, return code " + std::to_string(rc));
     }
 }
 
@@ -533,7 +528,7 @@ void Client::setRemoteProperty(const Topic& topic, const std::string& value)
 	pubmsg.retained = 0;
 	if ((rc = MQTTAsync_sendMessage(*m_client.get(), topic.getEncodedTopic().c_str(), &pubmsg, &opts)) != MQTTASYNC_SUCCESS)
 	{
-		printf("Failed to start sendMessage, return code %d\n", rc);
+        AG_LOG_ERROR("Failed to start sendMessage, return code " + std::to_string(rc));
 	}
 }
 

@@ -14,11 +14,13 @@ add_executable(MQTTClient
     ${SOURCES}
 )
 
+find_package(apigear QUIET COMPONENTS utilities)
 {{- range .System.Modules }}
 {{- $module_id := snake .Name }}
 find_package({{$module_id}} QUIET COMPONENTS {{$module_id}}-core {{$module_id}}-mqtt)
 {{- end }}
 target_link_libraries(MQTTClient
+    apigear::utilities
 {{- range .System.Modules }}
 {{- $module_id := snake .Name }}
     {{$module_id}}::{{$module_id}}-core
