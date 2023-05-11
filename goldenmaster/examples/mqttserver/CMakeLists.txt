@@ -13,6 +13,8 @@ set (SOURCES
 add_executable(MQTTServer
     ${SOURCES}
 )
+
+find_package(apigear QUIET COMPONENTS utilities)
 find_package(testbed2 QUIET COMPONENTS testbed2-core testbed2-implementation testbed2-mqtt)
 find_package(tb_enum QUIET COMPONENTS tb_enum-core tb_enum-implementation tb_enum-mqtt)
 find_package(tb_same1 QUIET COMPONENTS tb_same1-core tb_same1-implementation tb_same1-mqtt)
@@ -20,6 +22,7 @@ find_package(tb_same2 QUIET COMPONENTS tb_same2-core tb_same2-implementation tb_
 find_package(tb_simple QUIET COMPONENTS tb_simple-core tb_simple-implementation tb_simple-mqtt)
 find_package(testbed1 QUIET COMPONENTS testbed1-core testbed1-implementation testbed1-mqtt)
 target_link_libraries(MQTTServer
+    apigear::utilities
     testbed2::testbed2-core
     testbed2::testbed2-implementation
     testbed2::testbed2-mqtt
