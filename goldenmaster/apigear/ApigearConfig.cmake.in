@@ -11,4 +11,4 @@ find_dependency(Poco COMPONENTS Foundation Net Util REQUIRED)
 find_dependency(nlohmann_json REQUIRED)
 find_dependency(objectlink-core-cpp REQUIRED)
 
-check_required_components(apigear-utilities poco-olink poco-tracer)
+check_required_components(utilities poco-olink poco-tracer)

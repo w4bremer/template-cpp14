@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.20)
-project(apigear-utilities)
+project(utilities)
 
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -8,9 +8,9 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set (SOURCES
     logger.cpp
 )
-add_library(apigear-utilities SHARED ${SOURCES})
-add_library(apigear::utilities ALIAS apigear-utilities)
-target_include_directories(apigear-utilities
+add_library(utilities SHARED ${SOURCES})
+add_library(apigear::utilities ALIAS utilities)
+target_include_directories(utilities
     PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../../>
@@ -18,7 +18,7 @@ target_include_directories(apigear-utilities
 )
 
 # install binary files
-install(TARGETS apigear-utilities
+install(TARGETS utilities
         EXPORT ApiGearUtilitiesTargets
         RUNTIME DESTINATION bin           COMPONENT Runtime
         LIBRARY DESTINATION lib           COMPONENT Runtime
