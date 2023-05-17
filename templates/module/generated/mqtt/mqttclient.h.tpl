@@ -12,6 +12,7 @@
 #include "{{snake .Module.Name}}/generated/api/{{snake .Module.Name}}.h"
 #include "{{snake .Module.Name}}/generated/core/{{lower $interfaceName}}.data.h"
 #include "apigear/mqtt/mqttcppclient.h"
+#include "mqttisink.h"
 
 namespace {{ Camel .System.Name }} {
 namespace {{ Camel .Module.Name }} {

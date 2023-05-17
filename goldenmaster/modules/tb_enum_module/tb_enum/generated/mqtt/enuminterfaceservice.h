@@ -3,6 +3,7 @@
 #include "tb_enum/generated/api/tb_enum.h"
 #include "tb_enum/generated/api/common.h"
 #include "apigear/mqtt/mqttcppclient.h"
+#include "mqttisink.h"
 
 namespace Test {
 namespace TbEnum {
