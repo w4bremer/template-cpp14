@@ -17,18 +17,10 @@ struct subscribeTopicContext {
     Client* client;
 };
 
-void onSendSuccess(void* context, MQTTAsync_successData5* response)
-{
-    Client* client = static_cast<Client*>(context);
-    // client->confirmSubscription(ctx->topic, *(ctx->sink));
-    // delete ctx;
-}
-
 void onSendFailure(void* context, MQTTAsync_failureData5* response)
 {
     Client* client = static_cast<Client*>(context);
-	// printf("Subscribe failed, rc %d\n", response->code);
-    // delete ctx;
+    AG_LOG_ERROR("Send failed, rc " +  std::to_string(response->code));
 }
 
 void onSubscribeSuccess(void* context, MQTTAsync_successData5* response)
@@ -49,7 +41,6 @@ void onUnsubscribeSuccess(void* context, MQTTAsync_successData5* response)
 {
     subscribeTopicContext* ctx = static_cast<subscribeTopicContext*>(context);
     ctx->client->removeSubscription(ctx->topic);
-	// printf("Unsubscribe successful, rc %d\n", response->reasonCode);
     delete ctx;
 }
 
@@ -312,7 +303,6 @@ void Client::onConnected()
     for (auto& object: m_linkedObjects){
         object->onConnected();
     }
-    // process();
     m_thread = std::thread(&Client::run, this);
 }
 
@@ -429,10 +419,8 @@ void Client::invokeRemote(const Topic& topic, const std::string& value, InvokeRe
     correlationDataProperty.value.data = { static_cast<int>(correlationData.size()), const_cast<char*>(correlationData.c_str()) };
     MQTTProperties_add(&(opts.properties), &correlationDataProperty);
 
-    opts.onSuccess5 = onSendSuccess;
     opts.onFailure5 = onSendFailure;
     opts.context = this;
-    // opts.properties = properties;
     pubmsg.payload = const_cast<void*>(static_cast<const void*>(value.c_str()));
     pubmsg.payloadlen = value.size();
     pubmsg.qos = QOS;
@@ -453,7 +441,6 @@ void Client::notifyPropertyChange(const Topic& topic, const std::string& value)
     MQTTAsync_message pubmsg = MQTTAsync_message_initializer;
     int rc = 0;
 
-    opts.onSuccess5 = onSendSuccess;
     opts.onFailure5 = onSendFailure;
     opts.context = this;
     pubmsg.payload = const_cast<void*>(static_cast<const void*>(value.c_str()));
@@ -473,9 +460,6 @@ void Client::notifySignal(const Topic& topic, const std::string& args)
 	MQTTAsync_message pubmsg = MQTTAsync_message_initializer;
 	int rc = 0;
 
-	// opts.onSuccess = onSend;
-	// opts.onFailure = onSendFailure;
-	// opts.context = client;
 	pubmsg.payload = const_cast<void*>(static_cast<const void*>(args.c_str()));
 	pubmsg.payloadlen = args.size();
 	pubmsg.qos = QOS;
@@ -498,7 +482,6 @@ void Client::notifyInvokeResponse(const Topic& responseTopic, const std::string&
     correlationDataProperty.value.data = { static_cast<int>(correlationData.size()), const_cast<char*>(correlationData.c_str()) };
     MQTTProperties_add(&(opts.properties), &correlationDataProperty);
 
-    opts.onSuccess5 = onSendSuccess;
     opts.onFailure5 = onSendFailure;
     opts.context = this;
     pubmsg.payload = const_cast<void*>(static_cast<const void*>(value.c_str()));
@@ -520,9 +503,6 @@ void Client::setRemoteProperty(const Topic& topic, const std::string& value)
 	MQTTAsync_message pubmsg = MQTTAsync_message_initializer;
 	int rc = 0;
 
-	// opts.onSuccess = onSend;
-	// opts.onFailure = onSendFailure;
-	// opts.context = client;
 	pubmsg.payload = const_cast<void*>(static_cast<const void*>(value.c_str()));
 	pubmsg.payloadlen = value.size();
 	pubmsg.qos = QOS;
