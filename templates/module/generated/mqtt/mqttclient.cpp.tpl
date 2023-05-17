@@ -8,24 +8,24 @@
 #include "{{snake .Module.Name}}/generated/core/{{snake .Module.Name}}.json.adapter.h"
 
 using namespace {{ Camel .System.Name }}::{{ Camel .Module.Name }};
-using namespace {{ Camel .System.Name }}::{{ Camel .Module.Name }}::mqtt;
+using namespace {{ Camel .System.Name }}::{{ Camel .Module.Name }}::MQTT;
 
-{{$class}}::{{$class}}(std::shared_ptr<ApiGear::MQTTImpl::Client> client)
+{{$class}}::{{$class}}(std::shared_ptr<ApiGear::MQTT::Client> client)
     : m_isReady(false)
     , m_client(client)
     , m_publisher(std::make_unique<{{$pub_class}}>())
 {
 {{- range .Interface.Properties}}
 {{- $property := . }}
-    m_client->subscribeTopic(ApiGear::MQTTImpl::Topic("{{$.Module.Name}}","{{$interfaceName}}",ApiGear::MQTTImpl::Topic::TopicType::Property,"{{$property}}"), this);
+    m_client->subscribeTopic(ApiGear::MQTT::Topic("{{$.Module.Name}}","{{$interfaceName}}",ApiGear::MQTT::Topic::TopicType::Property,"{{$property}}"), this);
 {{- end }}
 {{- range .Interface.Signals}}
 {{- $signal := . }}
-    m_client->subscribeTopic(ApiGear::MQTTImpl::Topic("{{$.Module.Name}}","{{$interfaceName}}",ApiGear::MQTTImpl::Topic::TopicType::Signal,"{{$signal}}"), this);
+    m_client->subscribeTopic(ApiGear::MQTT::Topic("{{$.Module.Name}}","{{$interfaceName}}",ApiGear::MQTT::Topic::TopicType::Signal,"{{$signal}}"), this);
 {{- end }}
 {{- range .Interface.Operations}}
 {{- $operation := . }}
-    m_client->subscribeTopic(ApiGear::MQTTImpl::Topic("{{$.Module.Name}}","{{$interfaceName}}",ApiGear::MQTTImpl::Topic::TopicType::Operation,"{{$operation}}",m_client->getClientId()+"/result"), nullptr);
+    m_client->subscribeTopic(ApiGear::MQTT::Topic("{{$.Module.Name}}","{{$interfaceName}}",ApiGear::MQTT::Topic::TopicType::Operation,"{{$operation}}",m_client->getClientId()+"/result"), nullptr);
 {{- end }}
 }
 
@@ -33,15 +33,15 @@ using namespace {{ Camel .System.Name }}::{{ Camel .Module.Name }}::mqtt;
 {
 {{- range .Interface.Properties}}
 {{- $property := . }}
-    m_client->unsubscribeTopic(ApiGear::MQTTImpl::Topic("{{$.Module.Name}}","{{$interfaceName}}",ApiGear::MQTTImpl::Topic::TopicType::Property,"{{$property}}"), this);
+    m_client->unsubscribeTopic(ApiGear::MQTT::Topic("{{$.Module.Name}}","{{$interfaceName}}",ApiGear::MQTT::Topic::TopicType::Property,"{{$property}}"), this);
 {{- end }}
 {{- range .Interface.Signals}}
 {{- $signal := . }}
-    m_client->unsubscribeTopic(ApiGear::MQTTImpl::Topic("{{$.Module.Name}}","{{$interfaceName}}",ApiGear::MQTTImpl::Topic::TopicType::Signal,"{{$signal}}"), this);
+    m_client->unsubscribeTopic(ApiGear::MQTT::Topic("{{$.Module.Name}}","{{$interfaceName}}",ApiGear::MQTT::Topic::TopicType::Signal,"{{$signal}}"), this);
 {{- end }}
 {{- range .Interface.Operations}}
 {{- $operation := . }}
-    m_client->unsubscribeTopic(ApiGear::MQTTImpl::Topic("{{$.Module.Name}}","{{$interfaceName}}",ApiGear::MQTTImpl::Topic::TopicType::Operation,"{{$operation}}",m_client->getClientId()+"/result"), nullptr);
+    m_client->unsubscribeTopic(ApiGear::MQTT::Topic("{{$.Module.Name}}","{{$interfaceName}}",ApiGear::MQTT::Topic::TopicType::Operation,"{{$operation}}",m_client->getClientId()+"/result"), nullptr);
 {{- end }}
 }
 
@@ -67,7 +67,7 @@ void {{$class}}::set{{Camel $name}}({{cppParam "" $property}})
     if(m_client == nullptr) {
         return;
     }
-    static const auto topic = ApiGear::MQTTImpl::Topic("{{.Module.Name}}","{{$interfaceName}}",ApiGear::MQTTImpl::Topic::TopicType::Operation,"_set{{$property}}");
+    static const auto topic = ApiGear::MQTT::Topic("{{.Module.Name}}","{{$interfaceName}}",ApiGear::MQTT::Topic::TopicType::Operation,"_set{{$property}}");
     m_client->setRemoteProperty(topic, nlohmann::json({{$property}}).dump());
 }
 
@@ -116,9 +116,9 @@ std::future<{{$returnType}}> {{$class}}::{{lower1 $operation.Name}}Async({{cppPa
                 {{- end -}}]()
         {
             std::promise<{{$returnType}}> resultPromise;
-            static const auto topic = ApiGear::MQTTImpl::Topic("{{$.Module.Name}}","{{$interfaceName}}",ApiGear::MQTTImpl::Topic::TopicType::Operation,"{{$operation}}");
+            static const auto topic = ApiGear::MQTT::Topic("{{$.Module.Name}}","{{$interfaceName}}",ApiGear::MQTT::Topic::TopicType::Operation,"{{$operation}}");
             m_client->invokeRemote(topic,
-                nlohmann::json::array({ {{- cppVars $operation.Params -}} }).dump(), [&resultPromise](ApiGear::MQTTImpl::InvokeReplyArg arg) {
+                nlohmann::json::array({ {{- cppVars $operation.Params -}} }).dump(), [&resultPromise](ApiGear::MQTT::InvokeReplyArg arg) {
                     {{- if ( eq (cppReturn "" $operation.Return) "void") }}
                     (void) arg;
                     resultPromise.set_value();
@@ -134,7 +134,7 @@ std::future<{{$returnType}}> {{$class}}::{{lower1 $operation.Name}}Async({{cppPa
 
 {{- end }}
 
-void {{$class}}::onSignal(const ApiGear::MQTTImpl::Topic& topic, const std::string& args)
+void {{$class}}::onSignal(const ApiGear::MQTT::Topic& topic, const std::string& args)
 {
     nlohmann::json json_args = nlohmann::json::parse(args);
 {{- range .Interface.Signals}}
@@ -155,7 +155,7 @@ void {{$class}}::onSignal(const ApiGear::MQTTImpl::Topic& topic, const std::stri
 {{- end }}
 }
 
-void {{$class}}::onPropertyChanged(const ApiGear::MQTTImpl::Topic& topic, const std::string& args)
+void {{$class}}::onPropertyChanged(const ApiGear::MQTT::Topic& topic, const std::string& args)
 {
     nlohmann::json json_args = nlohmann::json::parse(args);
     const std::string& name = topic.getEntityName();

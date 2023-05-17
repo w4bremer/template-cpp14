@@ -5,7 +5,7 @@ Copyright (C) 2022 ApiGear UG
 #include "catch2/catch.hpp"
 #include "mqtttopic.h"
 
-using namespace ApiGear::MQTTImpl;
+using namespace ApiGear::MQTT;
 
 TEST_CASE("Testing Topic type conversion", "[TopicType]"){
     std::string topicTypeString { "123" };

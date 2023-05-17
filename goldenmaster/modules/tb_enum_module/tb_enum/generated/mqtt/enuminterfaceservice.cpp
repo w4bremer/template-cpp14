@@ -3,9 +3,9 @@
 #include <iostream>
 
 using namespace Test::TbEnum;
-using namespace Test::TbEnum::mqtt;
+using namespace Test::TbEnum::MQTT;
 
-EnumInterfaceService::EnumInterfaceService(std::shared_ptr<IEnumInterface> impl, std::shared_ptr<ApiGear::MQTTImpl::Client> client)
+EnumInterfaceService::EnumInterfaceService(std::shared_ptr<IEnumInterface> impl, std::shared_ptr<ApiGear::MQTT::Client> client)
     : m_impl(impl)
     , m_client(client)
 {
@@ -13,14 +13,14 @@ EnumInterfaceService::EnumInterfaceService(std::shared_ptr<IEnumInterface> impl,
 
     m_client->registerSink(*this);
     // subscribe to all property change request methods
-    m_client->subscribeTopic(ApiGear::MQTTImpl::Topic("tb.enum","EnumInterface",ApiGear::MQTTImpl::Topic::TopicType::Operation,"_setprop0"), this);
-    m_client->subscribeTopic(ApiGear::MQTTImpl::Topic("tb.enum","EnumInterface",ApiGear::MQTTImpl::Topic::TopicType::Operation,"_setprop1"), this);
-    m_client->subscribeTopic(ApiGear::MQTTImpl::Topic("tb.enum","EnumInterface",ApiGear::MQTTImpl::Topic::TopicType::Operation,"_setprop2"), this);
-    m_client->subscribeTopic(ApiGear::MQTTImpl::Topic("tb.enum","EnumInterface",ApiGear::MQTTImpl::Topic::TopicType::Operation,"_setprop3"), this);
-    m_client->subscribeTopic(ApiGear::MQTTImpl::Topic("tb.enum","EnumInterface",ApiGear::MQTTImpl::Topic::TopicType::Operation,"func0"), this);
-    m_client->subscribeTopic(ApiGear::MQTTImpl::Topic("tb.enum","EnumInterface",ApiGear::MQTTImpl::Topic::TopicType::Operation,"func1"), this);
-    m_client->subscribeTopic(ApiGear::MQTTImpl::Topic("tb.enum","EnumInterface",ApiGear::MQTTImpl::Topic::TopicType::Operation,"func2"), this);
-    m_client->subscribeTopic(ApiGear::MQTTImpl::Topic("tb.enum","EnumInterface",ApiGear::MQTTImpl::Topic::TopicType::Operation,"func3"), this);
+    m_client->subscribeTopic(ApiGear::MQTT::Topic("tb.enum","EnumInterface",ApiGear::MQTT::Topic::TopicType::Operation,"_setprop0"), this);
+    m_client->subscribeTopic(ApiGear::MQTT::Topic("tb.enum","EnumInterface",ApiGear::MQTT::Topic::TopicType::Operation,"_setprop1"), this);
+    m_client->subscribeTopic(ApiGear::MQTT::Topic("tb.enum","EnumInterface",ApiGear::MQTT::Topic::TopicType::Operation,"_setprop2"), this);
+    m_client->subscribeTopic(ApiGear::MQTT::Topic("tb.enum","EnumInterface",ApiGear::MQTT::Topic::TopicType::Operation,"_setprop3"), this);
+    m_client->subscribeTopic(ApiGear::MQTT::Topic("tb.enum","EnumInterface",ApiGear::MQTT::Topic::TopicType::Operation,"func0"), this);
+    m_client->subscribeTopic(ApiGear::MQTT::Topic("tb.enum","EnumInterface",ApiGear::MQTT::Topic::TopicType::Operation,"func1"), this);
+    m_client->subscribeTopic(ApiGear::MQTT::Topic("tb.enum","EnumInterface",ApiGear::MQTT::Topic::TopicType::Operation,"func2"), this);
+    m_client->subscribeTopic(ApiGear::MQTT::Topic("tb.enum","EnumInterface",ApiGear::MQTT::Topic::TopicType::Operation,"func3"), this);
 
 }
 
@@ -29,14 +29,14 @@ EnumInterfaceService::~EnumInterfaceService()
     m_impl->_getPublisher().unsubscribeFromAllChanges(*this);
 
     m_client->unregisterSink(*this);
-    m_client->unsubscribeTopic(ApiGear::MQTTImpl::Topic("tb.enum","EnumInterface",ApiGear::MQTTImpl::Topic::TopicType::Operation,"_setprop0"), this);
-    m_client->unsubscribeTopic(ApiGear::MQTTImpl::Topic("tb.enum","EnumInterface",ApiGear::MQTTImpl::Topic::TopicType::Operation,"_setprop1"), this);
-    m_client->unsubscribeTopic(ApiGear::MQTTImpl::Topic("tb.enum","EnumInterface",ApiGear::MQTTImpl::Topic::TopicType::Operation,"_setprop2"), this);
-    m_client->unsubscribeTopic(ApiGear::MQTTImpl::Topic("tb.enum","EnumInterface",ApiGear::MQTTImpl::Topic::TopicType::Operation,"_setprop3"), this);
-    m_client->unsubscribeTopic(ApiGear::MQTTImpl::Topic("tb.enum","EnumInterface",ApiGear::MQTTImpl::Topic::TopicType::Operation,"func0"), this);
-    m_client->unsubscribeTopic(ApiGear::MQTTImpl::Topic("tb.enum","EnumInterface",ApiGear::MQTTImpl::Topic::TopicType::Operation,"func1"), this);
-    m_client->unsubscribeTopic(ApiGear::MQTTImpl::Topic("tb.enum","EnumInterface",ApiGear::MQTTImpl::Topic::TopicType::Operation,"func2"), this);
-    m_client->unsubscribeTopic(ApiGear::MQTTImpl::Topic("tb.enum","EnumInterface",ApiGear::MQTTImpl::Topic::TopicType::Operation,"func3"), this);
+    m_client->unsubscribeTopic(ApiGear::MQTT::Topic("tb.enum","EnumInterface",ApiGear::MQTT::Topic::TopicType::Operation,"_setprop0"), this);
+    m_client->unsubscribeTopic(ApiGear::MQTT::Topic("tb.enum","EnumInterface",ApiGear::MQTT::Topic::TopicType::Operation,"_setprop1"), this);
+    m_client->unsubscribeTopic(ApiGear::MQTT::Topic("tb.enum","EnumInterface",ApiGear::MQTT::Topic::TopicType::Operation,"_setprop2"), this);
+    m_client->unsubscribeTopic(ApiGear::MQTT::Topic("tb.enum","EnumInterface",ApiGear::MQTT::Topic::TopicType::Operation,"_setprop3"), this);
+    m_client->unsubscribeTopic(ApiGear::MQTT::Topic("tb.enum","EnumInterface",ApiGear::MQTT::Topic::TopicType::Operation,"func0"), this);
+    m_client->unsubscribeTopic(ApiGear::MQTT::Topic("tb.enum","EnumInterface",ApiGear::MQTT::Topic::TopicType::Operation,"func1"), this);
+    m_client->unsubscribeTopic(ApiGear::MQTT::Topic("tb.enum","EnumInterface",ApiGear::MQTT::Topic::TopicType::Operation,"func2"), this);
+    m_client->unsubscribeTopic(ApiGear::MQTT::Topic("tb.enum","EnumInterface",ApiGear::MQTT::Topic::TopicType::Operation,"func3"), this);
 }
 
 void EnumInterfaceService::onConnected()
@@ -48,7 +48,7 @@ void EnumInterfaceService::onConnected()
     onProp3Changed(m_impl->getProp3());
 }
 
-void EnumInterfaceService::onInvoke(const ApiGear::MQTTImpl::Topic& topic, const std::string& args, const ApiGear::MQTTImpl::Topic& responseTopic, const std::string& correlationData)
+void EnumInterfaceService::onInvoke(const ApiGear::MQTT::Topic& topic, const std::string& args, const ApiGear::MQTT::Topic& responseTopic, const std::string& correlationData)
 {
     nlohmann::json json_args = nlohmann::json::parse(args);
     const std::string& name = topic.getEntityName();
@@ -103,7 +103,7 @@ void EnumInterfaceService::onSig0(Enum0Enum param0)
 {
     if(m_client != nullptr) {
         const nlohmann::json& args = { param0 };
-        static const auto topic = ApiGear::MQTTImpl::Topic("tb.enum","EnumInterface",ApiGear::MQTTImpl::Topic::TopicType::Signal,"sig0");
+        static const auto topic = ApiGear::MQTT::Topic("tb.enum","EnumInterface",ApiGear::MQTT::Topic::TopicType::Signal,"sig0");
         m_client->notifySignal(topic, nlohmann::json(args).dump());
     }
 }
@@ -111,7 +111,7 @@ void EnumInterfaceService::onSig1(Enum1Enum param1)
 {
     if(m_client != nullptr) {
         const nlohmann::json& args = { param1 };
-        static const auto topic = ApiGear::MQTTImpl::Topic("tb.enum","EnumInterface",ApiGear::MQTTImpl::Topic::TopicType::Signal,"sig1");
+        static const auto topic = ApiGear::MQTT::Topic("tb.enum","EnumInterface",ApiGear::MQTT::Topic::TopicType::Signal,"sig1");
         m_client->notifySignal(topic, nlohmann::json(args).dump());
     }
 }
@@ -119,7 +119,7 @@ void EnumInterfaceService::onSig2(Enum2Enum param2)
 {
     if(m_client != nullptr) {
         const nlohmann::json& args = { param2 };
-        static const auto topic = ApiGear::MQTTImpl::Topic("tb.enum","EnumInterface",ApiGear::MQTTImpl::Topic::TopicType::Signal,"sig2");
+        static const auto topic = ApiGear::MQTT::Topic("tb.enum","EnumInterface",ApiGear::MQTT::Topic::TopicType::Signal,"sig2");
         m_client->notifySignal(topic, nlohmann::json(args).dump());
     }
 }
@@ -127,35 +127,35 @@ void EnumInterfaceService::onSig3(Enum3Enum param3)
 {
     if(m_client != nullptr) {
         const nlohmann::json& args = { param3 };
-        static const auto topic = ApiGear::MQTTImpl::Topic("tb.enum","EnumInterface",ApiGear::MQTTImpl::Topic::TopicType::Signal,"sig3");
+        static const auto topic = ApiGear::MQTT::Topic("tb.enum","EnumInterface",ApiGear::MQTT::Topic::TopicType::Signal,"sig3");
         m_client->notifySignal(topic, nlohmann::json(args).dump());
     }
 }
 void EnumInterfaceService::onProp0Changed(Enum0Enum prop0)
 {
     if(m_client != nullptr) {
-        static const auto topic = ApiGear::MQTTImpl::Topic("tb.enum","EnumInterface",ApiGear::MQTTImpl::Topic::TopicType::Property,"prop0");
+        static const auto topic = ApiGear::MQTT::Topic("tb.enum","EnumInterface",ApiGear::MQTT::Topic::TopicType::Property,"prop0");
         m_client->notifyPropertyChange(topic, nlohmann::json(prop0).dump());
     }
 }
 void EnumInterfaceService::onProp1Changed(Enum1Enum prop1)
 {
     if(m_client != nullptr) {
-        static const auto topic = ApiGear::MQTTImpl::Topic("tb.enum","EnumInterface",ApiGear::MQTTImpl::Topic::TopicType::Property,"prop1");
+        static const auto topic = ApiGear::MQTT::Topic("tb.enum","EnumInterface",ApiGear::MQTT::Topic::TopicType::Property,"prop1");
         m_client->notifyPropertyChange(topic, nlohmann::json(prop1).dump());
     }
 }
 void EnumInterfaceService::onProp2Changed(Enum2Enum prop2)
 {
     if(m_client != nullptr) {
-        static const auto topic = ApiGear::MQTTImpl::Topic("tb.enum","EnumInterface",ApiGear::MQTTImpl::Topic::TopicType::Property,"prop2");
+        static const auto topic = ApiGear::MQTT::Topic("tb.enum","EnumInterface",ApiGear::MQTT::Topic::TopicType::Property,"prop2");
         m_client->notifyPropertyChange(topic, nlohmann::json(prop2).dump());
     }
 }
 void EnumInterfaceService::onProp3Changed(Enum3Enum prop3)
 {
     if(m_client != nullptr) {
-        static const auto topic = ApiGear::MQTTImpl::Topic("tb.enum","EnumInterface",ApiGear::MQTTImpl::Topic::TopicType::Property,"prop3");
+        static const auto topic = ApiGear::MQTT::Topic("tb.enum","EnumInterface",ApiGear::MQTT::Topic::TopicType::Property,"prop3");
         m_client->notifyPropertyChange(topic, nlohmann::json(prop3).dump());
     }
 }

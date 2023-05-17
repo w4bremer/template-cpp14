@@ -3,9 +3,9 @@
 #include <iostream>
 
 using namespace Test::TbSimple;
-using namespace Test::TbSimple::mqtt;
+using namespace Test::TbSimple::MQTT;
 
-VoidInterfaceService::VoidInterfaceService(std::shared_ptr<IVoidInterface> impl, std::shared_ptr<ApiGear::MQTTImpl::Client> client)
+VoidInterfaceService::VoidInterfaceService(std::shared_ptr<IVoidInterface> impl, std::shared_ptr<ApiGear::MQTT::Client> client)
     : m_impl(impl)
     , m_client(client)
 {
@@ -13,7 +13,7 @@ VoidInterfaceService::VoidInterfaceService(std::shared_ptr<IVoidInterface> impl,
 
     m_client->registerSink(*this);
     // subscribe to all property change request methods
-    m_client->subscribeTopic(ApiGear::MQTTImpl::Topic("tb.simple","VoidInterface",ApiGear::MQTTImpl::Topic::TopicType::Operation,"funcVoid"), this);
+    m_client->subscribeTopic(ApiGear::MQTT::Topic("tb.simple","VoidInterface",ApiGear::MQTT::Topic::TopicType::Operation,"funcVoid"), this);
 
 }
 
@@ -22,7 +22,7 @@ VoidInterfaceService::~VoidInterfaceService()
     m_impl->_getPublisher().unsubscribeFromAllChanges(*this);
 
     m_client->unregisterSink(*this);
-    m_client->unsubscribeTopic(ApiGear::MQTTImpl::Topic("tb.simple","VoidInterface",ApiGear::MQTTImpl::Topic::TopicType::Operation,"funcVoid"), this);
+    m_client->unsubscribeTopic(ApiGear::MQTT::Topic("tb.simple","VoidInterface",ApiGear::MQTT::Topic::TopicType::Operation,"funcVoid"), this);
 }
 
 void VoidInterfaceService::onConnected()
@@ -30,7 +30,7 @@ void VoidInterfaceService::onConnected()
     // send current values
 }
 
-void VoidInterfaceService::onInvoke(const ApiGear::MQTTImpl::Topic& topic, const std::string& args, const ApiGear::MQTTImpl::Topic& responseTopic, const std::string& correlationData)
+void VoidInterfaceService::onInvoke(const ApiGear::MQTT::Topic& topic, const std::string& args, const ApiGear::MQTT::Topic& responseTopic, const std::string& correlationData)
 {
     nlohmann::json json_args = nlohmann::json::parse(args);
     const std::string& name = topic.getEntityName();
@@ -48,7 +48,7 @@ void VoidInterfaceService::onSigVoid()
 {
     if(m_client != nullptr) {
         const nlohmann::json& args = {  };
-        static const auto topic = ApiGear::MQTTImpl::Topic("tb.simple","VoidInterface",ApiGear::MQTTImpl::Topic::TopicType::Signal,"sigVoid");
+        static const auto topic = ApiGear::MQTT::Topic("tb.simple","VoidInterface",ApiGear::MQTT::Topic::TopicType::Signal,"sigVoid");
         m_client->notifySignal(topic, nlohmann::json(args).dump());
     }
 }

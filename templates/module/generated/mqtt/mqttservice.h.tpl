@@ -9,18 +9,18 @@
 
 namespace {{ Camel .System.Name }} {
 namespace {{ Camel .Module.Name }} {
-namespace mqtt {
-class {{ SNAKE .System.Name  }}_{{ SNAKE .Module.Name  }}_EXPORT {{$class}} : public virtual ApiGear::MQTTImpl::ISink, public I{{$interface}}Subscriber
+namespace MQTT {
+class {{ SNAKE .System.Name  }}_{{ SNAKE .Module.Name  }}_EXPORT {{$class}} : public virtual ApiGear::MQTT::ISink, public I{{$interface}}Subscriber
 {
 public:
-    explicit {{$class}}(std::shared_ptr<I{{$interface}}> impl, std::shared_ptr<ApiGear::MQTTImpl::Client> client);
+    explicit {{$class}}(std::shared_ptr<I{{$interface}}> impl, std::shared_ptr<ApiGear::MQTT::Client> client);
     virtual ~{{$class}}() override;
 
     // sink interface
     void onConnected() override;
-    void onSignal(const ApiGear::MQTTImpl::Topic&, const std::string&) override {};
-    void onPropertyChanged(const ApiGear::MQTTImpl::Topic&, const std::string&) override {};
-    void onInvoke(const ApiGear::MQTTImpl::Topic& topic, const std::string& args, const ApiGear::MQTTImpl::Topic& responseTopic, const std::string& correlationData) override;
+    void onSignal(const ApiGear::MQTT::Topic&, const std::string&) override {};
+    void onPropertyChanged(const ApiGear::MQTT::Topic&, const std::string&) override {};
+    void onInvoke(const ApiGear::MQTT::Topic& topic, const std::string& args, const ApiGear::MQTT::Topic& responseTopic, const std::string& correlationData) override;
 
     // I{{$interface}}Subscriber interface
 {{- range .Interface.Signals}}
@@ -35,8 +35,8 @@ public:
 
 private:
     std::shared_ptr<I{{$interface}}> m_impl;
-    std::shared_ptr<ApiGear::MQTTImpl::Client> m_client;
+    std::shared_ptr<ApiGear::MQTT::Client> m_client;
 };
-} // namespace mqtt
+} // namespace MQTT
 } // namespace {{ Camel .Module.Name }}
 } // namespace {{ Camel .System.Name }}

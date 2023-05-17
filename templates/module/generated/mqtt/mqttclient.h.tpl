@@ -15,11 +15,11 @@
 
 namespace {{ Camel .System.Name }} {
 namespace {{ Camel .Module.Name }} {
-namespace mqtt {
-class {{ SNAKE .System.Name  }}_{{ SNAKE .Module.Name  }}_EXPORT {{$class}} : public {{$interfaceClass}}, public virtual ApiGear::MQTTImpl::ISink
+namespace MQTT {
+class {{ SNAKE .System.Name  }}_{{ SNAKE .Module.Name  }}_EXPORT {{$class}} : public {{$interfaceClass}}, public virtual ApiGear::MQTT::ISink
 {
 public:
-    explicit {{$class}}(std::shared_ptr<ApiGear::MQTTImpl::Client> client);
+    explicit {{$class}}(std::shared_ptr<ApiGear::MQTT::Client> client);
     virtual ~{{$class}}() override;
 
 {{- range .Interface.Properties}}
@@ -38,9 +38,9 @@ public:
     bool isReady() const;
 
     void onConnected() override {};
-    void onSignal(const ApiGear::MQTTImpl::Topic& topic, const std::string& args) override;
-    void onPropertyChanged(const ApiGear::MQTTImpl::Topic& topic, const std::string& args) override;
-    void onInvoke(const ApiGear::MQTTImpl::Topic&, const std::string&, const ApiGear::MQTTImpl::Topic&, const std::string&) override {};
+    void onSignal(const ApiGear::MQTT::Topic& topic, const std::string& args) override;
+    void onPropertyChanged(const ApiGear::MQTT::Topic& topic, const std::string& args) override;
+    void onInvoke(const ApiGear::MQTT::Topic&, const std::string&, const ApiGear::MQTT::Topic&, const std::string&) override {};
 
 private:
 {{- range .Interface.Properties}}
@@ -55,11 +55,11 @@ private:
     /** Local storage for properties values. */
     {{$interfaceName}}Data m_data;
 {{- end }}
-    std::shared_ptr<ApiGear::MQTTImpl::Client> m_client;
+    std::shared_ptr<ApiGear::MQTT::Client> m_client;
 
     /** The publisher for {{$interfaceName}} */
     std::unique_ptr<{{$pub_class}}> m_publisher;
 };
-} // namespace mqtt
+} // namespace MQTT
 } // namespace {{ Camel .Module.Name }}
 } // namespace {{ Camel .System.Name }}

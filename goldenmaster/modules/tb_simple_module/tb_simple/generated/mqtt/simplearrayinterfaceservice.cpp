@@ -3,9 +3,9 @@
 #include <iostream>
 
 using namespace Test::TbSimple;
-using namespace Test::TbSimple::mqtt;
+using namespace Test::TbSimple::MQTT;
 
-SimpleArrayInterfaceService::SimpleArrayInterfaceService(std::shared_ptr<ISimpleArrayInterface> impl, std::shared_ptr<ApiGear::MQTTImpl::Client> client)
+SimpleArrayInterfaceService::SimpleArrayInterfaceService(std::shared_ptr<ISimpleArrayInterface> impl, std::shared_ptr<ApiGear::MQTT::Client> client)
     : m_impl(impl)
     , m_client(client)
 {
@@ -13,22 +13,22 @@ SimpleArrayInterfaceService::SimpleArrayInterfaceService(std::shared_ptr<ISimple
 
     m_client->registerSink(*this);
     // subscribe to all property change request methods
-    m_client->subscribeTopic(ApiGear::MQTTImpl::Topic("tb.simple","SimpleArrayInterface",ApiGear::MQTTImpl::Topic::TopicType::Operation,"_setpropBool"), this);
-    m_client->subscribeTopic(ApiGear::MQTTImpl::Topic("tb.simple","SimpleArrayInterface",ApiGear::MQTTImpl::Topic::TopicType::Operation,"_setpropInt"), this);
-    m_client->subscribeTopic(ApiGear::MQTTImpl::Topic("tb.simple","SimpleArrayInterface",ApiGear::MQTTImpl::Topic::TopicType::Operation,"_setpropInt32"), this);
-    m_client->subscribeTopic(ApiGear::MQTTImpl::Topic("tb.simple","SimpleArrayInterface",ApiGear::MQTTImpl::Topic::TopicType::Operation,"_setpropInt64"), this);
-    m_client->subscribeTopic(ApiGear::MQTTImpl::Topic("tb.simple","SimpleArrayInterface",ApiGear::MQTTImpl::Topic::TopicType::Operation,"_setpropFloat"), this);
-    m_client->subscribeTopic(ApiGear::MQTTImpl::Topic("tb.simple","SimpleArrayInterface",ApiGear::MQTTImpl::Topic::TopicType::Operation,"_setpropFloat32"), this);
-    m_client->subscribeTopic(ApiGear::MQTTImpl::Topic("tb.simple","SimpleArrayInterface",ApiGear::MQTTImpl::Topic::TopicType::Operation,"_setpropFloat64"), this);
-    m_client->subscribeTopic(ApiGear::MQTTImpl::Topic("tb.simple","SimpleArrayInterface",ApiGear::MQTTImpl::Topic::TopicType::Operation,"_setpropString"), this);
-    m_client->subscribeTopic(ApiGear::MQTTImpl::Topic("tb.simple","SimpleArrayInterface",ApiGear::MQTTImpl::Topic::TopicType::Operation,"funcBool"), this);
-    m_client->subscribeTopic(ApiGear::MQTTImpl::Topic("tb.simple","SimpleArrayInterface",ApiGear::MQTTImpl::Topic::TopicType::Operation,"funcInt"), this);
-    m_client->subscribeTopic(ApiGear::MQTTImpl::Topic("tb.simple","SimpleArrayInterface",ApiGear::MQTTImpl::Topic::TopicType::Operation,"funcInt32"), this);
-    m_client->subscribeTopic(ApiGear::MQTTImpl::Topic("tb.simple","SimpleArrayInterface",ApiGear::MQTTImpl::Topic::TopicType::Operation,"funcInt64"), this);
-    m_client->subscribeTopic(ApiGear::MQTTImpl::Topic("tb.simple","SimpleArrayInterface",ApiGear::MQTTImpl::Topic::TopicType::Operation,"funcFloat"), this);
-    m_client->subscribeTopic(ApiGear::MQTTImpl::Topic("tb.simple","SimpleArrayInterface",ApiGear::MQTTImpl::Topic::TopicType::Operation,"funcFloat32"), this);
-    m_client->subscribeTopic(ApiGear::MQTTImpl::Topic("tb.simple","SimpleArrayInterface",ApiGear::MQTTImpl::Topic::TopicType::Operation,"funcFloat64"), this);
-    m_client->subscribeTopic(ApiGear::MQTTImpl::Topic("tb.simple","SimpleArrayInterface",ApiGear::MQTTImpl::Topic::TopicType::Operation,"funcString"), this);
+    m_client->subscribeTopic(ApiGear::MQTT::Topic("tb.simple","SimpleArrayInterface",ApiGear::MQTT::Topic::TopicType::Operation,"_setpropBool"), this);
+    m_client->subscribeTopic(ApiGear::MQTT::Topic("tb.simple","SimpleArrayInterface",ApiGear::MQTT::Topic::TopicType::Operation,"_setpropInt"), this);
+    m_client->subscribeTopic(ApiGear::MQTT::Topic("tb.simple","SimpleArrayInterface",ApiGear::MQTT::Topic::TopicType::Operation,"_setpropInt32"), this);
+    m_client->subscribeTopic(ApiGear::MQTT::Topic("tb.simple","SimpleArrayInterface",ApiGear::MQTT::Topic::TopicType::Operation,"_setpropInt64"), this);
+    m_client->subscribeTopic(ApiGear::MQTT::Topic("tb.simple","SimpleArrayInterface",ApiGear::MQTT::Topic::TopicType::Operation,"_setpropFloat"), this);
+    m_client->subscribeTopic(ApiGear::MQTT::Topic("tb.simple","SimpleArrayInterface",ApiGear::MQTT::Topic::TopicType::Operation,"_setpropFloat32"), this);
+    m_client->subscribeTopic(ApiGear::MQTT::Topic("tb.simple","SimpleArrayInterface",ApiGear::MQTT::Topic::TopicType::Operation,"_setpropFloat64"), this);
+    m_client->subscribeTopic(ApiGear::MQTT::Topic("tb.simple","SimpleArrayInterface",ApiGear::MQTT::Topic::TopicType::Operation,"_setpropString"), this);
+    m_client->subscribeTopic(ApiGear::MQTT::Topic("tb.simple","SimpleArrayInterface",ApiGear::MQTT::Topic::TopicType::Operation,"funcBool"), this);
+    m_client->subscribeTopic(ApiGear::MQTT::Topic("tb.simple","SimpleArrayInterface",ApiGear::MQTT::Topic::TopicType::Operation,"funcInt"), this);
+    m_client->subscribeTopic(ApiGear::MQTT::Topic("tb.simple","SimpleArrayInterface",ApiGear::MQTT::Topic::TopicType::Operation,"funcInt32"), this);
+    m_client->subscribeTopic(ApiGear::MQTT::Topic("tb.simple","SimpleArrayInterface",ApiGear::MQTT::Topic::TopicType::Operation,"funcInt64"), this);
+    m_client->subscribeTopic(ApiGear::MQTT::Topic("tb.simple","SimpleArrayInterface",ApiGear::MQTT::Topic::TopicType::Operation,"funcFloat"), this);
+    m_client->subscribeTopic(ApiGear::MQTT::Topic("tb.simple","SimpleArrayInterface",ApiGear::MQTT::Topic::TopicType::Operation,"funcFloat32"), this);
+    m_client->subscribeTopic(ApiGear::MQTT::Topic("tb.simple","SimpleArrayInterface",ApiGear::MQTT::Topic::TopicType::Operation,"funcFloat64"), this);
+    m_client->subscribeTopic(ApiGear::MQTT::Topic("tb.simple","SimpleArrayInterface",ApiGear::MQTT::Topic::TopicType::Operation,"funcString"), this);
 
 }
 
@@ -37,22 +37,22 @@ SimpleArrayInterfaceService::~SimpleArrayInterfaceService()
     m_impl->_getPublisher().unsubscribeFromAllChanges(*this);
 
     m_client->unregisterSink(*this);
-    m_client->unsubscribeTopic(ApiGear::MQTTImpl::Topic("tb.simple","SimpleArrayInterface",ApiGear::MQTTImpl::Topic::TopicType::Operation,"_setpropBool"), this);
-    m_client->unsubscribeTopic(ApiGear::MQTTImpl::Topic("tb.simple","SimpleArrayInterface",ApiGear::MQTTImpl::Topic::TopicType::Operation,"_setpropInt"), this);
-    m_client->unsubscribeTopic(ApiGear::MQTTImpl::Topic("tb.simple","SimpleArrayInterface",ApiGear::MQTTImpl::Topic::TopicType::Operation,"_setpropInt32"), this);
-    m_client->unsubscribeTopic(ApiGear::MQTTImpl::Topic("tb.simple","SimpleArrayInterface",ApiGear::MQTTImpl::Topic::TopicType::Operation,"_setpropInt64"), this);
-    m_client->unsubscribeTopic(ApiGear::MQTTImpl::Topic("tb.simple","SimpleArrayInterface",ApiGear::MQTTImpl::Topic::TopicType::Operation,"_setpropFloat"), this);
-    m_client->unsubscribeTopic(ApiGear::MQTTImpl::Topic("tb.simple","SimpleArrayInterface",ApiGear::MQTTImpl::Topic::TopicType::Operation,"_setpropFloat32"), this);
-    m_client->unsubscribeTopic(ApiGear::MQTTImpl::Topic("tb.simple","SimpleArrayInterface",ApiGear::MQTTImpl::Topic::TopicType::Operation,"_setpropFloat64"), this);
-    m_client->unsubscribeTopic(ApiGear::MQTTImpl::Topic("tb.simple","SimpleArrayInterface",ApiGear::MQTTImpl::Topic::TopicType::Operation,"_setpropString"), this);
-    m_client->unsubscribeTopic(ApiGear::MQTTImpl::Topic("tb.simple","SimpleArrayInterface",ApiGear::MQTTImpl::Topic::TopicType::Operation,"funcBool"), this);
-    m_client->unsubscribeTopic(ApiGear::MQTTImpl::Topic("tb.simple","SimpleArrayInterface",ApiGear::MQTTImpl::Topic::TopicType::Operation,"funcInt"), this);
-    m_client->unsubscribeTopic(ApiGear::MQTTImpl::Topic("tb.simple","SimpleArrayInterface",ApiGear::MQTTImpl::Topic::TopicType::Operation,"funcInt32"), this);
-    m_client->unsubscribeTopic(ApiGear::MQTTImpl::Topic("tb.simple","SimpleArrayInterface",ApiGear::MQTTImpl::Topic::TopicType::Operation,"funcInt64"), this);
-    m_client->unsubscribeTopic(ApiGear::MQTTImpl::Topic("tb.simple","SimpleArrayInterface",ApiGear::MQTTImpl::Topic::TopicType::Operation,"funcFloat"), this);
-    m_client->unsubscribeTopic(ApiGear::MQTTImpl::Topic("tb.simple","SimpleArrayInterface",ApiGear::MQTTImpl::Topic::TopicType::Operation,"funcFloat32"), this);
-    m_client->unsubscribeTopic(ApiGear::MQTTImpl::Topic("tb.simple","SimpleArrayInterface",ApiGear::MQTTImpl::Topic::TopicType::Operation,"funcFloat64"), this);
-    m_client->unsubscribeTopic(ApiGear::MQTTImpl::Topic("tb.simple","SimpleArrayInterface",ApiGear::MQTTImpl::Topic::TopicType::Operation,"funcString"), this);
+    m_client->unsubscribeTopic(ApiGear::MQTT::Topic("tb.simple","SimpleArrayInterface",ApiGear::MQTT::Topic::TopicType::Operation,"_setpropBool"), this);
+    m_client->unsubscribeTopic(ApiGear::MQTT::Topic("tb.simple","SimpleArrayInterface",ApiGear::MQTT::Topic::TopicType::Operation,"_setpropInt"), this);
+    m_client->unsubscribeTopic(ApiGear::MQTT::Topic("tb.simple","SimpleArrayInterface",ApiGear::MQTT::Topic::TopicType::Operation,"_setpropInt32"), this);
+    m_client->unsubscribeTopic(ApiGear::MQTT::Topic("tb.simple","SimpleArrayInterface",ApiGear::MQTT::Topic::TopicType::Operation,"_setpropInt64"), this);
+    m_client->unsubscribeTopic(ApiGear::MQTT::Topic("tb.simple","SimpleArrayInterface",ApiGear::MQTT::Topic::TopicType::Operation,"_setpropFloat"), this);
+    m_client->unsubscribeTopic(ApiGear::MQTT::Topic("tb.simple","SimpleArrayInterface",ApiGear::MQTT::Topic::TopicType::Operation,"_setpropFloat32"), this);
+    m_client->unsubscribeTopic(ApiGear::MQTT::Topic("tb.simple","SimpleArrayInterface",ApiGear::MQTT::Topic::TopicType::Operation,"_setpropFloat64"), this);
+    m_client->unsubscribeTopic(ApiGear::MQTT::Topic("tb.simple","SimpleArrayInterface",ApiGear::MQTT::Topic::TopicType::Operation,"_setpropString"), this);
+    m_client->unsubscribeTopic(ApiGear::MQTT::Topic("tb.simple","SimpleArrayInterface",ApiGear::MQTT::Topic::TopicType::Operation,"funcBool"), this);
+    m_client->unsubscribeTopic(ApiGear::MQTT::Topic("tb.simple","SimpleArrayInterface",ApiGear::MQTT::Topic::TopicType::Operation,"funcInt"), this);
+    m_client->unsubscribeTopic(ApiGear::MQTT::Topic("tb.simple","SimpleArrayInterface",ApiGear::MQTT::Topic::TopicType::Operation,"funcInt32"), this);
+    m_client->unsubscribeTopic(ApiGear::MQTT::Topic("tb.simple","SimpleArrayInterface",ApiGear::MQTT::Topic::TopicType::Operation,"funcInt64"), this);
+    m_client->unsubscribeTopic(ApiGear::MQTT::Topic("tb.simple","SimpleArrayInterface",ApiGear::MQTT::Topic::TopicType::Operation,"funcFloat"), this);
+    m_client->unsubscribeTopic(ApiGear::MQTT::Topic("tb.simple","SimpleArrayInterface",ApiGear::MQTT::Topic::TopicType::Operation,"funcFloat32"), this);
+    m_client->unsubscribeTopic(ApiGear::MQTT::Topic("tb.simple","SimpleArrayInterface",ApiGear::MQTT::Topic::TopicType::Operation,"funcFloat64"), this);
+    m_client->unsubscribeTopic(ApiGear::MQTT::Topic("tb.simple","SimpleArrayInterface",ApiGear::MQTT::Topic::TopicType::Operation,"funcString"), this);
 }
 
 void SimpleArrayInterfaceService::onConnected()
@@ -68,7 +68,7 @@ void SimpleArrayInterfaceService::onConnected()
     onPropStringChanged(m_impl->getPropString());
 }
 
-void SimpleArrayInterfaceService::onInvoke(const ApiGear::MQTTImpl::Topic& topic, const std::string& args, const ApiGear::MQTTImpl::Topic& responseTopic, const std::string& correlationData)
+void SimpleArrayInterfaceService::onInvoke(const ApiGear::MQTT::Topic& topic, const std::string& args, const ApiGear::MQTT::Topic& responseTopic, const std::string& correlationData)
 {
     nlohmann::json json_args = nlohmann::json::parse(args);
     const std::string& name = topic.getEntityName();
@@ -167,7 +167,7 @@ void SimpleArrayInterfaceService::onSigBool(const std::list<bool>& paramBool)
 {
     if(m_client != nullptr) {
         const nlohmann::json& args = { paramBool };
-        static const auto topic = ApiGear::MQTTImpl::Topic("tb.simple","SimpleArrayInterface",ApiGear::MQTTImpl::Topic::TopicType::Signal,"sigBool");
+        static const auto topic = ApiGear::MQTT::Topic("tb.simple","SimpleArrayInterface",ApiGear::MQTT::Topic::TopicType::Signal,"sigBool");
         m_client->notifySignal(topic, nlohmann::json(args).dump());
     }
 }
@@ -175,7 +175,7 @@ void SimpleArrayInterfaceService::onSigInt(const std::list<int>& paramInt)
 {
     if(m_client != nullptr) {
         const nlohmann::json& args = { paramInt };
-        static const auto topic = ApiGear::MQTTImpl::Topic("tb.simple","SimpleArrayInterface",ApiGear::MQTTImpl::Topic::TopicType::Signal,"sigInt");
+        static const auto topic = ApiGear::MQTT::Topic("tb.simple","SimpleArrayInterface",ApiGear::MQTT::Topic::TopicType::Signal,"sigInt");
         m_client->notifySignal(topic, nlohmann::json(args).dump());
     }
 }
@@ -183,7 +183,7 @@ void SimpleArrayInterfaceService::onSigInt32(const std::list<int32_t>& paramInt3
 {
     if(m_client != nullptr) {
         const nlohmann::json& args = { paramInt32 };
-        static const auto topic = ApiGear::MQTTImpl::Topic("tb.simple","SimpleArrayInterface",ApiGear::MQTTImpl::Topic::TopicType::Signal,"sigInt32");
+        static const auto topic = ApiGear::MQTT::Topic("tb.simple","SimpleArrayInterface",ApiGear::MQTT::Topic::TopicType::Signal,"sigInt32");
         m_client->notifySignal(topic, nlohmann::json(args).dump());
     }
 }
@@ -191,7 +191,7 @@ void SimpleArrayInterfaceService::onSigInt64(const std::list<int64_t>& paramInt6
 {
     if(m_client != nullptr) {
         const nlohmann::json& args = { paramInt64 };
-        static const auto topic = ApiGear::MQTTImpl::Topic("tb.simple","SimpleArrayInterface",ApiGear::MQTTImpl::Topic::TopicType::Signal,"sigInt64");
+        static const auto topic = ApiGear::MQTT::Topic("tb.simple","SimpleArrayInterface",ApiGear::MQTT::Topic::TopicType::Signal,"sigInt64");
         m_client->notifySignal(topic, nlohmann::json(args).dump());
     }
 }
@@ -199,7 +199,7 @@ void SimpleArrayInterfaceService::onSigFloat(const std::list<float>& paramFloat)
 {
     if(m_client != nullptr) {
         const nlohmann::json& args = { paramFloat };
-        static const auto topic = ApiGear::MQTTImpl::Topic("tb.simple","SimpleArrayInterface",ApiGear::MQTTImpl::Topic::TopicType::Signal,"sigFloat");
+        static const auto topic = ApiGear::MQTT::Topic("tb.simple","SimpleArrayInterface",ApiGear::MQTT::Topic::TopicType::Signal,"sigFloat");
         m_client->notifySignal(topic, nlohmann::json(args).dump());
     }
 }
@@ -207,7 +207,7 @@ void SimpleArrayInterfaceService::onSigFloat32(const std::list<float>& paramFloa
 {
     if(m_client != nullptr) {
         const nlohmann::json& args = { paramFloa32 };
-        static const auto topic = ApiGear::MQTTImpl::Topic("tb.simple","SimpleArrayInterface",ApiGear::MQTTImpl::Topic::TopicType::Signal,"sigFloat32");
+        static const auto topic = ApiGear::MQTT::Topic("tb.simple","SimpleArrayInterface",ApiGear::MQTT::Topic::TopicType::Signal,"sigFloat32");
         m_client->notifySignal(topic, nlohmann::json(args).dump());
     }
 }
@@ -215,7 +215,7 @@ void SimpleArrayInterfaceService::onSigFloat64(const std::list<double>& paramFlo
 {
     if(m_client != nullptr) {
         const nlohmann::json& args = { paramFloat64 };
-        static const auto topic = ApiGear::MQTTImpl::Topic("tb.simple","SimpleArrayInterface",ApiGear::MQTTImpl::Topic::TopicType::Signal,"sigFloat64");
+        static const auto topic = ApiGear::MQTT::Topic("tb.simple","SimpleArrayInterface",ApiGear::MQTT::Topic::TopicType::Signal,"sigFloat64");
         m_client->notifySignal(topic, nlohmann::json(args).dump());
     }
 }
@@ -223,63 +223,63 @@ void SimpleArrayInterfaceService::onSigString(const std::list<std::string>& para
 {
     if(m_client != nullptr) {
         const nlohmann::json& args = { paramString };
-        static const auto topic = ApiGear::MQTTImpl::Topic("tb.simple","SimpleArrayInterface",ApiGear::MQTTImpl::Topic::TopicType::Signal,"sigString");
+        static const auto topic = ApiGear::MQTT::Topic("tb.simple","SimpleArrayInterface",ApiGear::MQTT::Topic::TopicType::Signal,"sigString");
         m_client->notifySignal(topic, nlohmann::json(args).dump());
     }
 }
 void SimpleArrayInterfaceService::onPropBoolChanged(const std::list<bool>& propBool)
 {
     if(m_client != nullptr) {
-        static const auto topic = ApiGear::MQTTImpl::Topic("tb.simple","SimpleArrayInterface",ApiGear::MQTTImpl::Topic::TopicType::Property,"propBool");
+        static const auto topic = ApiGear::MQTT::Topic("tb.simple","SimpleArrayInterface",ApiGear::MQTT::Topic::TopicType::Property,"propBool");
         m_client->notifyPropertyChange(topic, nlohmann::json(propBool).dump());
     }
 }
 void SimpleArrayInterfaceService::onPropIntChanged(const std::list<int>& propInt)
 {
     if(m_client != nullptr) {
-        static const auto topic = ApiGear::MQTTImpl::Topic("tb.simple","SimpleArrayInterface",ApiGear::MQTTImpl::Topic::TopicType::Property,"propInt");
+        static const auto topic = ApiGear::MQTT::Topic("tb.simple","SimpleArrayInterface",ApiGear::MQTT::Topic::TopicType::Property,"propInt");
         m_client->notifyPropertyChange(topic, nlohmann::json(propInt).dump());
     }
 }
 void SimpleArrayInterfaceService::onPropInt32Changed(const std::list<int32_t>& propInt32)
 {
     if(m_client != nullptr) {
-        static const auto topic = ApiGear::MQTTImpl::Topic("tb.simple","SimpleArrayInterface",ApiGear::MQTTImpl::Topic::TopicType::Property,"propInt32");
+        static const auto topic = ApiGear::MQTT::Topic("tb.simple","SimpleArrayInterface",ApiGear::MQTT::Topic::TopicType::Property,"propInt32");
         m_client->notifyPropertyChange(topic, nlohmann::json(propInt32).dump());
     }
 }
 void SimpleArrayInterfaceService::onPropInt64Changed(const std::list<int64_t>& propInt64)
 {
     if(m_client != nullptr) {
-        static const auto topic = ApiGear::MQTTImpl::Topic("tb.simple","SimpleArrayInterface",ApiGear::MQTTImpl::Topic::TopicType::Property,"propInt64");
+        static const auto topic = ApiGear::MQTT::Topic("tb.simple","SimpleArrayInterface",ApiGear::MQTT::Topic::TopicType::Property,"propInt64");
         m_client->notifyPropertyChange(topic, nlohmann::json(propInt64).dump());
     }
 }
 void SimpleArrayInterfaceService::onPropFloatChanged(const std::list<float>& propFloat)
 {
     if(m_client != nullptr) {
-        static const auto topic = ApiGear::MQTTImpl::Topic("tb.simple","SimpleArrayInterface",ApiGear::MQTTImpl::Topic::TopicType::Property,"propFloat");
+        static const auto topic = ApiGear::MQTT::Topic("tb.simple","SimpleArrayInterface",ApiGear::MQTT::Topic::TopicType::Property,"propFloat");
         m_client->notifyPropertyChange(topic, nlohmann::json(propFloat).dump());
     }
 }
 void SimpleArrayInterfaceService::onPropFloat32Changed(const std::list<float>& propFloat32)
 {
     if(m_client != nullptr) {
-        static const auto topic = ApiGear::MQTTImpl::Topic("tb.simple","SimpleArrayInterface",ApiGear::MQTTImpl::Topic::TopicType::Property,"propFloat32");
+        static const auto topic = ApiGear::MQTT::Topic("tb.simple","SimpleArrayInterface",ApiGear::MQTT::Topic::TopicType::Property,"propFloat32");
         m_client->notifyPropertyChange(topic, nlohmann::json(propFloat32).dump());
     }
 }
 void SimpleArrayInterfaceService::onPropFloat64Changed(const std::list<double>& propFloat64)
 {
     if(m_client != nullptr) {
-        static const auto topic = ApiGear::MQTTImpl::Topic("tb.simple","SimpleArrayInterface",ApiGear::MQTTImpl::Topic::TopicType::Property,"propFloat64");
+        static const auto topic = ApiGear::MQTT::Topic("tb.simple","SimpleArrayInterface",ApiGear::MQTT::Topic::TopicType::Property,"propFloat64");
         m_client->notifyPropertyChange(topic, nlohmann::json(propFloat64).dump());
     }
 }
 void SimpleArrayInterfaceService::onPropStringChanged(const std::list<std::string>& propString)
 {
     if(m_client != nullptr) {
-        static const auto topic = ApiGear::MQTTImpl::Topic("tb.simple","SimpleArrayInterface",ApiGear::MQTTImpl::Topic::TopicType::Property,"propString");
+        static const auto topic = ApiGear::MQTT::Topic("tb.simple","SimpleArrayInterface",ApiGear::MQTT::Topic::TopicType::Property,"propString");
         m_client->notifyPropertyChange(topic, nlohmann::json(propString).dump());
     }
 }

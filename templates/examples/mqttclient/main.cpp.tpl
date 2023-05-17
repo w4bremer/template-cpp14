@@ -47,7 +47,7 @@ int main(){
 
     auto randomId = distribution(randomNumberGenerator);
     // MQTT clients need to have unique identifiers
-    auto mqttclient = std::make_shared<ApiGear::MQTTImpl::Client>("testClient"+std::to_string(randomId));
+    auto mqttclient = std::make_shared<ApiGear::MQTT::Client>("testClient"+std::to_string(randomId));
     mqttclient->connectToHost("");
 
 {{- range .System.Modules }}
@@ -55,7 +55,7 @@ int main(){
 {{- range $module.Interfaces }}
 {{- $interface := . }}
     {{- $class := Camel $interface.Name }}
-    std::unique_ptr<{{Camel $module.Name}}::I{{$class}}> test{{Camel $module.Name}}{{$class}} = std::make_unique<{{Camel $module.Name}}::mqtt::{{$interface.Name}}Client>(mqttclient);
+    std::unique_ptr<{{Camel $module.Name}}::I{{$class}}> test{{Camel $module.Name}}{{$class}} = std::make_unique<{{Camel $module.Name}}::MQTT::{{$interface.Name}}Client>(mqttclient);
 {{- end }}
 {{- end }}
 

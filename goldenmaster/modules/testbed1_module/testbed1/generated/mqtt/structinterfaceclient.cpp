@@ -3,41 +3,41 @@
 #include "testbed1/generated/core/testbed1.json.adapter.h"
 
 using namespace Test::Testbed1;
-using namespace Test::Testbed1::mqtt;
+using namespace Test::Testbed1::MQTT;
 
-StructInterfaceClient::StructInterfaceClient(std::shared_ptr<ApiGear::MQTTImpl::Client> client)
+StructInterfaceClient::StructInterfaceClient(std::shared_ptr<ApiGear::MQTT::Client> client)
     : m_isReady(false)
     , m_client(client)
     , m_publisher(std::make_unique<StructInterfacePublisher>())
 {
-    m_client->subscribeTopic(ApiGear::MQTTImpl::Topic("testbed1","StructInterface",ApiGear::MQTTImpl::Topic::TopicType::Property,"propBool"), this);
-    m_client->subscribeTopic(ApiGear::MQTTImpl::Topic("testbed1","StructInterface",ApiGear::MQTTImpl::Topic::TopicType::Property,"propInt"), this);
-    m_client->subscribeTopic(ApiGear::MQTTImpl::Topic("testbed1","StructInterface",ApiGear::MQTTImpl::Topic::TopicType::Property,"propFloat"), this);
-    m_client->subscribeTopic(ApiGear::MQTTImpl::Topic("testbed1","StructInterface",ApiGear::MQTTImpl::Topic::TopicType::Property,"propString"), this);
-    m_client->subscribeTopic(ApiGear::MQTTImpl::Topic("testbed1","StructInterface",ApiGear::MQTTImpl::Topic::TopicType::Signal,"sigBool"), this);
-    m_client->subscribeTopic(ApiGear::MQTTImpl::Topic("testbed1","StructInterface",ApiGear::MQTTImpl::Topic::TopicType::Signal,"sigInt"), this);
-    m_client->subscribeTopic(ApiGear::MQTTImpl::Topic("testbed1","StructInterface",ApiGear::MQTTImpl::Topic::TopicType::Signal,"sigFloat"), this);
-    m_client->subscribeTopic(ApiGear::MQTTImpl::Topic("testbed1","StructInterface",ApiGear::MQTTImpl::Topic::TopicType::Signal,"sigString"), this);
-    m_client->subscribeTopic(ApiGear::MQTTImpl::Topic("testbed1","StructInterface",ApiGear::MQTTImpl::Topic::TopicType::Operation,"funcBool",m_client->getClientId()+"/result"), nullptr);
-    m_client->subscribeTopic(ApiGear::MQTTImpl::Topic("testbed1","StructInterface",ApiGear::MQTTImpl::Topic::TopicType::Operation,"funcInt",m_client->getClientId()+"/result"), nullptr);
-    m_client->subscribeTopic(ApiGear::MQTTImpl::Topic("testbed1","StructInterface",ApiGear::MQTTImpl::Topic::TopicType::Operation,"funcFloat",m_client->getClientId()+"/result"), nullptr);
-    m_client->subscribeTopic(ApiGear::MQTTImpl::Topic("testbed1","StructInterface",ApiGear::MQTTImpl::Topic::TopicType::Operation,"funcString",m_client->getClientId()+"/result"), nullptr);
+    m_client->subscribeTopic(ApiGear::MQTT::Topic("testbed1","StructInterface",ApiGear::MQTT::Topic::TopicType::Property,"propBool"), this);
+    m_client->subscribeTopic(ApiGear::MQTT::Topic("testbed1","StructInterface",ApiGear::MQTT::Topic::TopicType::Property,"propInt"), this);
+    m_client->subscribeTopic(ApiGear::MQTT::Topic("testbed1","StructInterface",ApiGear::MQTT::Topic::TopicType::Property,"propFloat"), this);
+    m_client->subscribeTopic(ApiGear::MQTT::Topic("testbed1","StructInterface",ApiGear::MQTT::Topic::TopicType::Property,"propString"), this);
+    m_client->subscribeTopic(ApiGear::MQTT::Topic("testbed1","StructInterface",ApiGear::MQTT::Topic::TopicType::Signal,"sigBool"), this);
+    m_client->subscribeTopic(ApiGear::MQTT::Topic("testbed1","StructInterface",ApiGear::MQTT::Topic::TopicType::Signal,"sigInt"), this);
+    m_client->subscribeTopic(ApiGear::MQTT::Topic("testbed1","StructInterface",ApiGear::MQTT::Topic::TopicType::Signal,"sigFloat"), this);
+    m_client->subscribeTopic(ApiGear::MQTT::Topic("testbed1","StructInterface",ApiGear::MQTT::Topic::TopicType::Signal,"sigString"), this);
+    m_client->subscribeTopic(ApiGear::MQTT::Topic("testbed1","StructInterface",ApiGear::MQTT::Topic::TopicType::Operation,"funcBool",m_client->getClientId()+"/result"), nullptr);
+    m_client->subscribeTopic(ApiGear::MQTT::Topic("testbed1","StructInterface",ApiGear::MQTT::Topic::TopicType::Operation,"funcInt",m_client->getClientId()+"/result"), nullptr);
+    m_client->subscribeTopic(ApiGear::MQTT::Topic("testbed1","StructInterface",ApiGear::MQTT::Topic::TopicType::Operation,"funcFloat",m_client->getClientId()+"/result"), nullptr);
+    m_client->subscribeTopic(ApiGear::MQTT::Topic("testbed1","StructInterface",ApiGear::MQTT::Topic::TopicType::Operation,"funcString",m_client->getClientId()+"/result"), nullptr);
 }
 
 StructInterfaceClient::~StructInterfaceClient()
 {
-    m_client->unsubscribeTopic(ApiGear::MQTTImpl::Topic("testbed1","StructInterface",ApiGear::MQTTImpl::Topic::TopicType::Property,"propBool"), this);
-    m_client->unsubscribeTopic(ApiGear::MQTTImpl::Topic("testbed1","StructInterface",ApiGear::MQTTImpl::Topic::TopicType::Property,"propInt"), this);
-    m_client->unsubscribeTopic(ApiGear::MQTTImpl::Topic("testbed1","StructInterface",ApiGear::MQTTImpl::Topic::TopicType::Property,"propFloat"), this);
-    m_client->unsubscribeTopic(ApiGear::MQTTImpl::Topic("testbed1","StructInterface",ApiGear::MQTTImpl::Topic::TopicType::Property,"propString"), this);
-    m_client->unsubscribeTopic(ApiGear::MQTTImpl::Topic("testbed1","StructInterface",ApiGear::MQTTImpl::Topic::TopicType::Signal,"sigBool"), this);
-    m_client->unsubscribeTopic(ApiGear::MQTTImpl::Topic("testbed1","StructInterface",ApiGear::MQTTImpl::Topic::TopicType::Signal,"sigInt"), this);
-    m_client->unsubscribeTopic(ApiGear::MQTTImpl::Topic("testbed1","StructInterface",ApiGear::MQTTImpl::Topic::TopicType::Signal,"sigFloat"), this);
-    m_client->unsubscribeTopic(ApiGear::MQTTImpl::Topic("testbed1","StructInterface",ApiGear::MQTTImpl::Topic::TopicType::Signal,"sigString"), this);
-    m_client->unsubscribeTopic(ApiGear::MQTTImpl::Topic("testbed1","StructInterface",ApiGear::MQTTImpl::Topic::TopicType::Operation,"funcBool",m_client->getClientId()+"/result"), nullptr);
-    m_client->unsubscribeTopic(ApiGear::MQTTImpl::Topic("testbed1","StructInterface",ApiGear::MQTTImpl::Topic::TopicType::Operation,"funcInt",m_client->getClientId()+"/result"), nullptr);
-    m_client->unsubscribeTopic(ApiGear::MQTTImpl::Topic("testbed1","StructInterface",ApiGear::MQTTImpl::Topic::TopicType::Operation,"funcFloat",m_client->getClientId()+"/result"), nullptr);
-    m_client->unsubscribeTopic(ApiGear::MQTTImpl::Topic("testbed1","StructInterface",ApiGear::MQTTImpl::Topic::TopicType::Operation,"funcString",m_client->getClientId()+"/result"), nullptr);
+    m_client->unsubscribeTopic(ApiGear::MQTT::Topic("testbed1","StructInterface",ApiGear::MQTT::Topic::TopicType::Property,"propBool"), this);
+    m_client->unsubscribeTopic(ApiGear::MQTT::Topic("testbed1","StructInterface",ApiGear::MQTT::Topic::TopicType::Property,"propInt"), this);
+    m_client->unsubscribeTopic(ApiGear::MQTT::Topic("testbed1","StructInterface",ApiGear::MQTT::Topic::TopicType::Property,"propFloat"), this);
+    m_client->unsubscribeTopic(ApiGear::MQTT::Topic("testbed1","StructInterface",ApiGear::MQTT::Topic::TopicType::Property,"propString"), this);
+    m_client->unsubscribeTopic(ApiGear::MQTT::Topic("testbed1","StructInterface",ApiGear::MQTT::Topic::TopicType::Signal,"sigBool"), this);
+    m_client->unsubscribeTopic(ApiGear::MQTT::Topic("testbed1","StructInterface",ApiGear::MQTT::Topic::TopicType::Signal,"sigInt"), this);
+    m_client->unsubscribeTopic(ApiGear::MQTT::Topic("testbed1","StructInterface",ApiGear::MQTT::Topic::TopicType::Signal,"sigFloat"), this);
+    m_client->unsubscribeTopic(ApiGear::MQTT::Topic("testbed1","StructInterface",ApiGear::MQTT::Topic::TopicType::Signal,"sigString"), this);
+    m_client->unsubscribeTopic(ApiGear::MQTT::Topic("testbed1","StructInterface",ApiGear::MQTT::Topic::TopicType::Operation,"funcBool",m_client->getClientId()+"/result"), nullptr);
+    m_client->unsubscribeTopic(ApiGear::MQTT::Topic("testbed1","StructInterface",ApiGear::MQTT::Topic::TopicType::Operation,"funcInt",m_client->getClientId()+"/result"), nullptr);
+    m_client->unsubscribeTopic(ApiGear::MQTT::Topic("testbed1","StructInterface",ApiGear::MQTT::Topic::TopicType::Operation,"funcFloat",m_client->getClientId()+"/result"), nullptr);
+    m_client->unsubscribeTopic(ApiGear::MQTT::Topic("testbed1","StructInterface",ApiGear::MQTT::Topic::TopicType::Operation,"funcString",m_client->getClientId()+"/result"), nullptr);
 }
 
 void StructInterfaceClient::applyState(const nlohmann::json& fields) 
@@ -61,7 +61,7 @@ void StructInterfaceClient::setPropBool(const StructBool& propBool)
     if(m_client == nullptr) {
         return;
     }
-    static const auto topic = ApiGear::MQTTImpl::Topic("testbed1","StructInterface",ApiGear::MQTTImpl::Topic::TopicType::Operation,"_setpropBool");
+    static const auto topic = ApiGear::MQTT::Topic("testbed1","StructInterface",ApiGear::MQTT::Topic::TopicType::Operation,"_setpropBool");
     m_client->setRemoteProperty(topic, nlohmann::json(propBool).dump());
 }
 
@@ -83,7 +83,7 @@ void StructInterfaceClient::setPropInt(const StructInt& propInt)
     if(m_client == nullptr) {
         return;
     }
-    static const auto topic = ApiGear::MQTTImpl::Topic("testbed1","StructInterface",ApiGear::MQTTImpl::Topic::TopicType::Operation,"_setpropInt");
+    static const auto topic = ApiGear::MQTT::Topic("testbed1","StructInterface",ApiGear::MQTT::Topic::TopicType::Operation,"_setpropInt");
     m_client->setRemoteProperty(topic, nlohmann::json(propInt).dump());
 }
 
@@ -105,7 +105,7 @@ void StructInterfaceClient::setPropFloat(const StructFloat& propFloat)
     if(m_client == nullptr) {
         return;
     }
-    static const auto topic = ApiGear::MQTTImpl::Topic("testbed1","StructInterface",ApiGear::MQTTImpl::Topic::TopicType::Operation,"_setpropFloat");
+    static const auto topic = ApiGear::MQTT::Topic("testbed1","StructInterface",ApiGear::MQTT::Topic::TopicType::Operation,"_setpropFloat");
     m_client->setRemoteProperty(topic, nlohmann::json(propFloat).dump());
 }
 
@@ -127,7 +127,7 @@ void StructInterfaceClient::setPropString(const StructString& propString)
     if(m_client == nullptr) {
         return;
     }
-    static const auto topic = ApiGear::MQTTImpl::Topic("testbed1","StructInterface",ApiGear::MQTTImpl::Topic::TopicType::Operation,"_setpropString");
+    static const auto topic = ApiGear::MQTT::Topic("testbed1","StructInterface",ApiGear::MQTT::Topic::TopicType::Operation,"_setpropString");
     m_client->setRemoteProperty(topic, nlohmann::json(propString).dump());
 }
 
@@ -162,9 +162,9 @@ std::future<StructBool> StructInterfaceClient::funcBoolAsync(const StructBool& p
                     paramBool]()
         {
             std::promise<StructBool> resultPromise;
-            static const auto topic = ApiGear::MQTTImpl::Topic("testbed1","StructInterface",ApiGear::MQTTImpl::Topic::TopicType::Operation,"funcBool");
+            static const auto topic = ApiGear::MQTT::Topic("testbed1","StructInterface",ApiGear::MQTT::Topic::TopicType::Operation,"funcBool");
             m_client->invokeRemote(topic,
-                nlohmann::json::array({paramBool}).dump(), [&resultPromise](ApiGear::MQTTImpl::InvokeReplyArg arg) {
+                nlohmann::json::array({paramBool}).dump(), [&resultPromise](ApiGear::MQTT::InvokeReplyArg arg) {
                     const StructBool& value = arg.value.get<StructBool>();
                     resultPromise.set_value(value);
                 });
@@ -191,9 +191,9 @@ std::future<StructBool> StructInterfaceClient::funcIntAsync(const StructInt& par
                     paramInt]()
         {
             std::promise<StructBool> resultPromise;
-            static const auto topic = ApiGear::MQTTImpl::Topic("testbed1","StructInterface",ApiGear::MQTTImpl::Topic::TopicType::Operation,"funcInt");
+            static const auto topic = ApiGear::MQTT::Topic("testbed1","StructInterface",ApiGear::MQTT::Topic::TopicType::Operation,"funcInt");
             m_client->invokeRemote(topic,
-                nlohmann::json::array({paramInt}).dump(), [&resultPromise](ApiGear::MQTTImpl::InvokeReplyArg arg) {
+                nlohmann::json::array({paramInt}).dump(), [&resultPromise](ApiGear::MQTT::InvokeReplyArg arg) {
                     const StructBool& value = arg.value.get<StructBool>();
                     resultPromise.set_value(value);
                 });
@@ -220,9 +220,9 @@ std::future<StructFloat> StructInterfaceClient::funcFloatAsync(const StructFloat
                     paramFloat]()
         {
             std::promise<StructFloat> resultPromise;
-            static const auto topic = ApiGear::MQTTImpl::Topic("testbed1","StructInterface",ApiGear::MQTTImpl::Topic::TopicType::Operation,"funcFloat");
+            static const auto topic = ApiGear::MQTT::Topic("testbed1","StructInterface",ApiGear::MQTT::Topic::TopicType::Operation,"funcFloat");
             m_client->invokeRemote(topic,
-                nlohmann::json::array({paramFloat}).dump(), [&resultPromise](ApiGear::MQTTImpl::InvokeReplyArg arg) {
+                nlohmann::json::array({paramFloat}).dump(), [&resultPromise](ApiGear::MQTT::InvokeReplyArg arg) {
                     const StructFloat& value = arg.value.get<StructFloat>();
                     resultPromise.set_value(value);
                 });
@@ -249,9 +249,9 @@ std::future<StructString> StructInterfaceClient::funcStringAsync(const StructStr
                     paramString]()
         {
             std::promise<StructString> resultPromise;
-            static const auto topic = ApiGear::MQTTImpl::Topic("testbed1","StructInterface",ApiGear::MQTTImpl::Topic::TopicType::Operation,"funcString");
+            static const auto topic = ApiGear::MQTT::Topic("testbed1","StructInterface",ApiGear::MQTT::Topic::TopicType::Operation,"funcString");
             m_client->invokeRemote(topic,
-                nlohmann::json::array({paramString}).dump(), [&resultPromise](ApiGear::MQTTImpl::InvokeReplyArg arg) {
+                nlohmann::json::array({paramString}).dump(), [&resultPromise](ApiGear::MQTT::InvokeReplyArg arg) {
                     const StructString& value = arg.value.get<StructString>();
                     resultPromise.set_value(value);
                 });
@@ -260,7 +260,7 @@ std::future<StructString> StructInterfaceClient::funcStringAsync(const StructStr
     );
 }
 
-void StructInterfaceClient::onSignal(const ApiGear::MQTTImpl::Topic& topic, const std::string& args)
+void StructInterfaceClient::onSignal(const ApiGear::MQTT::Topic& topic, const std::string& args)
 {
     nlohmann::json json_args = nlohmann::json::parse(args);
     if(topic.getEntityName() == "sigBool") {
@@ -281,7 +281,7 @@ void StructInterfaceClient::onSignal(const ApiGear::MQTTImpl::Topic& topic, cons
     }
 }
 
-void StructInterfaceClient::onPropertyChanged(const ApiGear::MQTTImpl::Topic& topic, const std::string& args)
+void StructInterfaceClient::onPropertyChanged(const ApiGear::MQTT::Topic& topic, const std::string& args)
 {
     nlohmann::json json_args = nlohmann::json::parse(args);
     const std::string& name = topic.getEntityName();

@@ -3,7 +3,7 @@
 #include "mqtttopic.h"
 
 namespace ApiGear {
-namespace MQTTImpl {
+namespace MQTT {
 
 Topic::Topic(const std::string& rawTopic)
     : m_moduleName("")
@@ -188,5 +188,5 @@ bool Topic::decodeTopicString(const std::string& topicString, Topic& topic)
 
     return success;
 }
-} // namespace MQTTImpl
+} // namespace MQTT
 } // namespace ApiGear

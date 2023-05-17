@@ -6,9 +6,9 @@
 #include <iostream>
 
 using namespace {{ Camel .System.Name }}::{{ Camel .Module.Name }};
-using namespace {{ Camel .System.Name }}::{{ Camel .Module.Name }}::mqtt;
+using namespace {{ Camel .System.Name }}::{{ Camel .Module.Name }}::MQTT;
 
-{{$class}}::{{$class}}(std::shared_ptr<I{{$interface}}> impl, std::shared_ptr<ApiGear::MQTTImpl::Client> client)
+{{$class}}::{{$class}}(std::shared_ptr<I{{$interface}}> impl, std::shared_ptr<ApiGear::MQTT::Client> client)
     : m_impl(impl)
     , m_client(client)
 {
@@ -18,11 +18,11 @@ using namespace {{ Camel .System.Name }}::{{ Camel .Module.Name }}::mqtt;
     // subscribe to all property change request methods
 {{- range .Interface.Properties}}
 {{- $property := . }}
-    m_client->subscribeTopic(ApiGear::MQTTImpl::Topic("{{$.Module.Name}}","{{$interface}}",ApiGear::MQTTImpl::Topic::TopicType::Operation,"_set{{$property}}"), this);
+    m_client->subscribeTopic(ApiGear::MQTT::Topic("{{$.Module.Name}}","{{$interface}}",ApiGear::MQTT::Topic::TopicType::Operation,"_set{{$property}}"), this);
 {{- end }}
 {{- range .Interface.Operations}}
 {{- $operation := . }}
-    m_client->subscribeTopic(ApiGear::MQTTImpl::Topic("{{$.Module.Name}}","{{$interface}}",ApiGear::MQTTImpl::Topic::TopicType::Operation,"{{$operation}}"), this);
+    m_client->subscribeTopic(ApiGear::MQTT::Topic("{{$.Module.Name}}","{{$interface}}",ApiGear::MQTT::Topic::TopicType::Operation,"{{$operation}}"), this);
 {{- end }}
 
 }
@@ -35,11 +35,11 @@ using namespace {{ Camel .System.Name }}::{{ Camel .Module.Name }}::mqtt;
 
 {{- range .Interface.Properties}}
 {{- $property := . }}
-    m_client->unsubscribeTopic(ApiGear::MQTTImpl::Topic("{{$.Module.Name}}","{{$interface}}",ApiGear::MQTTImpl::Topic::TopicType::Operation,"_set{{$property}}"), this);
+    m_client->unsubscribeTopic(ApiGear::MQTT::Topic("{{$.Module.Name}}","{{$interface}}",ApiGear::MQTT::Topic::TopicType::Operation,"_set{{$property}}"), this);
 {{- end }}
 {{- range .Interface.Operations}}
 {{- $operation := . }}
-    m_client->unsubscribeTopic(ApiGear::MQTTImpl::Topic("{{$.Module.Name}}","{{$interface}}",ApiGear::MQTTImpl::Topic::TopicType::Operation,"{{$operation}}"), this);
+    m_client->unsubscribeTopic(ApiGear::MQTT::Topic("{{$.Module.Name}}","{{$interface}}",ApiGear::MQTT::Topic::TopicType::Operation,"{{$operation}}"), this);
 {{- end }}
 }
 
@@ -52,7 +52,7 @@ void {{$class}}::onConnected()
 {{- end }}
 }
 
-void {{$class}}::onInvoke(const ApiGear::MQTTImpl::Topic& topic, const std::string& args, const ApiGear::MQTTImpl::Topic& responseTopic, const std::string& correlationData)
+void {{$class}}::onInvoke(const ApiGear::MQTT::Topic& topic, const std::string& args, const ApiGear::MQTT::Topic& responseTopic, const std::string& correlationData)
 {
     nlohmann::json json_args = nlohmann::json::parse(args);
     const std::string& name = topic.getEntityName();
@@ -103,7 +103,7 @@ void {{$class}}::on{{Camel $signal.Name}}({{cppParams "" $signal.Params}})
 {
     if(m_client != nullptr) {
         const nlohmann::json& args = { {{ cppVars $signal.Params}} };
-        static const auto topic = ApiGear::MQTTImpl::Topic("{{$.Module.Name}}","{{$interface}}",ApiGear::MQTTImpl::Topic::TopicType::Signal,"{{$signal}}");
+        static const auto topic = ApiGear::MQTT::Topic("{{$.Module.Name}}","{{$interface}}",ApiGear::MQTT::Topic::TopicType::Signal,"{{$signal}}");
         m_client->notifySignal(topic, nlohmann::json(args).dump());
     }
 }
@@ -114,7 +114,7 @@ void {{$class}}::on{{Camel $signal.Name}}({{cppParams "" $signal.Params}})
 void {{$class}}::on{{Camel $property.Name}}Changed({{cppParam "" $property}})
 {
     if(m_client != nullptr) {
-        static const auto topic = ApiGear::MQTTImpl::Topic("{{$.Module.Name}}","{{$interface}}",ApiGear::MQTTImpl::Topic::TopicType::Property,"{{$property}}");
+        static const auto topic = ApiGear::MQTT::Topic("{{$.Module.Name}}","{{$interface}}",ApiGear::MQTT::Topic::TopicType::Property,"{{$property}}");
         m_client->notifyPropertyChange(topic, nlohmann::json({{$property}}).dump());
     }
 }
