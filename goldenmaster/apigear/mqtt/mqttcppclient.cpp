@@ -71,7 +71,7 @@ void onDisconnected(void* context, MQTTAsync_successData5* response)
 }
 
 
-int msgarrvd(void *context, char *topicName, int topicLen, MQTTAsync_message *message)
+int OnMessageArrived(void *context, char *topicName, int topicLen, MQTTAsync_message *message)
 {
     Client* client = static_cast<Client*>(context);
     Message mqtt_message {};
@@ -100,7 +100,7 @@ int msgarrvd(void *context, char *topicName, int topicLen, MQTTAsync_message *me
     return 1;
 }
 
-void connlost(void *context, char *cause)
+void OnConnectionLost(void *context, char *cause)
 {
     Client* client = static_cast<Client*>(context);
     AG_LOG_ERROR("Connection lost");
@@ -255,7 +255,7 @@ void Client::connectToHost(const std::string& brokerURL)
             conn_opts.onFailure5 = onConnectedFail;
             conn_opts.context = this;
 
-            MQTTAsync_setCallbacks(*m_client.get(), this, connlost, msgarrvd, NULL);
+            MQTTAsync_setCallbacks(*m_client.get(), this, OnConnectionLost, OnMessageArrived, NULL);
             int rc = -1;
             if ((rc = MQTTAsync_connect(*m_client.get(), &conn_opts)) != MQTTASYNC_SUCCESS)
             {
