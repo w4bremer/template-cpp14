@@ -3,6 +3,7 @@
 #include "tb_same1/generated/api/tb_same1.h"
 #include "tb_same1/generated/api/common.h"
 #include "apigear/mqtt/mqttcppclient.h"
+#include "mqttisink.h"
 
 namespace Test {
 namespace TbSame1 {
