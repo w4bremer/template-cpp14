@@ -3,6 +3,7 @@
 #include "testbed1/generated/api/testbed1.h"
 #include "testbed1/generated/api/common.h"
 #include "apigear/mqtt/mqttcppclient.h"
+#include "mqttisink.h"
 
 namespace Test {
 namespace Testbed1 {

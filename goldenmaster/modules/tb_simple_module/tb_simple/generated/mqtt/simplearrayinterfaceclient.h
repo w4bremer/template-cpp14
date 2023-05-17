@@ -5,6 +5,7 @@
 #include "tb_simple/generated/api/tb_simple.h"
 #include "tb_simple/generated/core/simplearrayinterface.data.h"
 #include "apigear/mqtt/mqttcppclient.h"
+#include "mqttisink.h"
 
 namespace Test {
 namespace TbSimple {

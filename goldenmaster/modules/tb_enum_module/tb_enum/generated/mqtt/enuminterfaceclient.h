@@ -5,6 +5,7 @@
 #include "tb_enum/generated/api/tb_enum.h"
 #include "tb_enum/generated/core/enuminterface.data.h"
 #include "apigear/mqtt/mqttcppclient.h"
+#include "mqttisink.h"
 
 namespace Test {
 namespace TbEnum {

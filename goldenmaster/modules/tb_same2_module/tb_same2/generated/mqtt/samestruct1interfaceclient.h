@@ -5,6 +5,7 @@
 #include "tb_same2/generated/api/tb_same2.h"
 #include "tb_same2/generated/core/samestruct1interface.data.h"
 #include "apigear/mqtt/mqttcppclient.h"
+#include "mqttisink.h"
 
 namespace Test {
 namespace TbSame2 {

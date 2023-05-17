@@ -5,6 +5,7 @@
 #include "testbed2/generated/api/testbed2.h"
 #include "testbed2/generated/core/nestedstruct1interface.data.h"
 #include "apigear/mqtt/mqttcppclient.h"
+#include "mqttisink.h"
 
 namespace Test {
 namespace Testbed2 {

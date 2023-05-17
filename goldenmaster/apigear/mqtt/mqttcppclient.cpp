@@ -4,6 +4,7 @@
 #include "../utilities/logger.h"
 #include <chrono>
 #include <random>
+#include "mqttisink.h"
 
 using namespace ApiGear::MQTT;
 #define QOS         2
