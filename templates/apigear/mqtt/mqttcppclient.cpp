@@ -5,7 +5,7 @@
 #include <chrono>
 #include <random>
 
-using namespace ApiGear::MQTTImpl;
+using namespace ApiGear::MQTT;
 #define QOS         2
 
 std::mt19937 randomNumberGenerator (std::random_device{}());

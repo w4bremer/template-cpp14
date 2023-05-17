@@ -6,18 +6,18 @@
 
 namespace Test {
 namespace TbSame1 {
-namespace mqtt {
-class TEST_TB_SAME1_EXPORT SameEnum1InterfaceService : public virtual ApiGear::MQTTImpl::ISink, public ISameEnum1InterfaceSubscriber
+namespace MQTT {
+class TEST_TB_SAME1_EXPORT SameEnum1InterfaceService : public virtual ApiGear::MQTT::ISink, public ISameEnum1InterfaceSubscriber
 {
 public:
-    explicit SameEnum1InterfaceService(std::shared_ptr<ISameEnum1Interface> impl, std::shared_ptr<ApiGear::MQTTImpl::Client> client);
+    explicit SameEnum1InterfaceService(std::shared_ptr<ISameEnum1Interface> impl, std::shared_ptr<ApiGear::MQTT::Client> client);
     virtual ~SameEnum1InterfaceService() override;
 
     // sink interface
     void onConnected() override;
-    void onSignal(const ApiGear::MQTTImpl::Topic&, const std::string&) override {};
-    void onPropertyChanged(const ApiGear::MQTTImpl::Topic&, const std::string&) override {};
-    void onInvoke(const ApiGear::MQTTImpl::Topic& topic, const std::string& args, const ApiGear::MQTTImpl::Topic& responseTopic, const std::string& correlationData) override;
+    void onSignal(const ApiGear::MQTT::Topic&, const std::string&) override {};
+    void onPropertyChanged(const ApiGear::MQTT::Topic&, const std::string&) override {};
+    void onInvoke(const ApiGear::MQTT::Topic& topic, const std::string& args, const ApiGear::MQTT::Topic& responseTopic, const std::string& correlationData) override;
 
     // ISameEnum1InterfaceSubscriber interface
     void onSig1(Enum1Enum param1) override;
@@ -25,8 +25,8 @@ public:
 
 private:
     std::shared_ptr<ISameEnum1Interface> m_impl;
-    std::shared_ptr<ApiGear::MQTTImpl::Client> m_client;
+    std::shared_ptr<ApiGear::MQTT::Client> m_client;
 };
-} // namespace mqtt
+} // namespace MQTT
 } // namespace TbSame1
 } // namespace Test

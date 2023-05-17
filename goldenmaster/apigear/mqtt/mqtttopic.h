@@ -12,7 +12,7 @@
 #include "mqttcommon.h"
 
 namespace ApiGear {
-namespace MQTTImpl {
+namespace MQTT {
 
 class APIGEAR_MQTT_EXPORT Topic {
 public:
@@ -60,5 +60,5 @@ APIGEAR_MQTT_EXPORT std::ostream& operator<<(std::ostream &, const Topic &);
 bool APIGEAR_MQTT_EXPORT operator==(const Topic &, const Topic &) noexcept;
 bool APIGEAR_MQTT_EXPORT operator!=(const Topic &, const Topic &) noexcept;
 
-} // namespace MQTTImpl
+} // namespace MQTT
 } // namespace ApiGear

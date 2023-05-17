@@ -6,18 +6,18 @@
 
 namespace Test {
 namespace Testbed2 {
-namespace mqtt {
-class TEST_TESTBED2_EXPORT NestedStruct3InterfaceService : public virtual ApiGear::MQTTImpl::ISink, public INestedStruct3InterfaceSubscriber
+namespace MQTT {
+class TEST_TESTBED2_EXPORT NestedStruct3InterfaceService : public virtual ApiGear::MQTT::ISink, public INestedStruct3InterfaceSubscriber
 {
 public:
-    explicit NestedStruct3InterfaceService(std::shared_ptr<INestedStruct3Interface> impl, std::shared_ptr<ApiGear::MQTTImpl::Client> client);
+    explicit NestedStruct3InterfaceService(std::shared_ptr<INestedStruct3Interface> impl, std::shared_ptr<ApiGear::MQTT::Client> client);
     virtual ~NestedStruct3InterfaceService() override;
 
     // sink interface
     void onConnected() override;
-    void onSignal(const ApiGear::MQTTImpl::Topic&, const std::string&) override {};
-    void onPropertyChanged(const ApiGear::MQTTImpl::Topic&, const std::string&) override {};
-    void onInvoke(const ApiGear::MQTTImpl::Topic& topic, const std::string& args, const ApiGear::MQTTImpl::Topic& responseTopic, const std::string& correlationData) override;
+    void onSignal(const ApiGear::MQTT::Topic&, const std::string&) override {};
+    void onPropertyChanged(const ApiGear::MQTT::Topic&, const std::string&) override {};
+    void onInvoke(const ApiGear::MQTT::Topic& topic, const std::string& args, const ApiGear::MQTT::Topic& responseTopic, const std::string& correlationData) override;
 
     // INestedStruct3InterfaceSubscriber interface
     void onSig1(const NestedStruct1& param1) override;
@@ -29,8 +29,8 @@ public:
 
 private:
     std::shared_ptr<INestedStruct3Interface> m_impl;
-    std::shared_ptr<ApiGear::MQTTImpl::Client> m_client;
+    std::shared_ptr<ApiGear::MQTT::Client> m_client;
 };
-} // namespace mqtt
+} // namespace MQTT
 } // namespace Testbed2
 } // namespace Test

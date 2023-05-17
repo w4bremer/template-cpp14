@@ -3,29 +3,29 @@
 #include "tb_same1/generated/core/tb_same1.json.adapter.h"
 
 using namespace Test::TbSame1;
-using namespace Test::TbSame1::mqtt;
+using namespace Test::TbSame1::MQTT;
 
-SameStruct2InterfaceClient::SameStruct2InterfaceClient(std::shared_ptr<ApiGear::MQTTImpl::Client> client)
+SameStruct2InterfaceClient::SameStruct2InterfaceClient(std::shared_ptr<ApiGear::MQTT::Client> client)
     : m_isReady(false)
     , m_client(client)
     , m_publisher(std::make_unique<SameStruct2InterfacePublisher>())
 {
-    m_client->subscribeTopic(ApiGear::MQTTImpl::Topic("tb.same1","SameStruct2Interface",ApiGear::MQTTImpl::Topic::TopicType::Property,"prop1"), this);
-    m_client->subscribeTopic(ApiGear::MQTTImpl::Topic("tb.same1","SameStruct2Interface",ApiGear::MQTTImpl::Topic::TopicType::Property,"prop2"), this);
-    m_client->subscribeTopic(ApiGear::MQTTImpl::Topic("tb.same1","SameStruct2Interface",ApiGear::MQTTImpl::Topic::TopicType::Signal,"sig1"), this);
-    m_client->subscribeTopic(ApiGear::MQTTImpl::Topic("tb.same1","SameStruct2Interface",ApiGear::MQTTImpl::Topic::TopicType::Signal,"sig2"), this);
-    m_client->subscribeTopic(ApiGear::MQTTImpl::Topic("tb.same1","SameStruct2Interface",ApiGear::MQTTImpl::Topic::TopicType::Operation,"func1",m_client->getClientId()+"/result"), nullptr);
-    m_client->subscribeTopic(ApiGear::MQTTImpl::Topic("tb.same1","SameStruct2Interface",ApiGear::MQTTImpl::Topic::TopicType::Operation,"func2",m_client->getClientId()+"/result"), nullptr);
+    m_client->subscribeTopic(ApiGear::MQTT::Topic("tb.same1","SameStruct2Interface",ApiGear::MQTT::Topic::TopicType::Property,"prop1"), this);
+    m_client->subscribeTopic(ApiGear::MQTT::Topic("tb.same1","SameStruct2Interface",ApiGear::MQTT::Topic::TopicType::Property,"prop2"), this);
+    m_client->subscribeTopic(ApiGear::MQTT::Topic("tb.same1","SameStruct2Interface",ApiGear::MQTT::Topic::TopicType::Signal,"sig1"), this);
+    m_client->subscribeTopic(ApiGear::MQTT::Topic("tb.same1","SameStruct2Interface",ApiGear::MQTT::Topic::TopicType::Signal,"sig2"), this);
+    m_client->subscribeTopic(ApiGear::MQTT::Topic("tb.same1","SameStruct2Interface",ApiGear::MQTT::Topic::TopicType::Operation,"func1",m_client->getClientId()+"/result"), nullptr);
+    m_client->subscribeTopic(ApiGear::MQTT::Topic("tb.same1","SameStruct2Interface",ApiGear::MQTT::Topic::TopicType::Operation,"func2",m_client->getClientId()+"/result"), nullptr);
 }
 
 SameStruct2InterfaceClient::~SameStruct2InterfaceClient()
 {
-    m_client->unsubscribeTopic(ApiGear::MQTTImpl::Topic("tb.same1","SameStruct2Interface",ApiGear::MQTTImpl::Topic::TopicType::Property,"prop1"), this);
-    m_client->unsubscribeTopic(ApiGear::MQTTImpl::Topic("tb.same1","SameStruct2Interface",ApiGear::MQTTImpl::Topic::TopicType::Property,"prop2"), this);
-    m_client->unsubscribeTopic(ApiGear::MQTTImpl::Topic("tb.same1","SameStruct2Interface",ApiGear::MQTTImpl::Topic::TopicType::Signal,"sig1"), this);
-    m_client->unsubscribeTopic(ApiGear::MQTTImpl::Topic("tb.same1","SameStruct2Interface",ApiGear::MQTTImpl::Topic::TopicType::Signal,"sig2"), this);
-    m_client->unsubscribeTopic(ApiGear::MQTTImpl::Topic("tb.same1","SameStruct2Interface",ApiGear::MQTTImpl::Topic::TopicType::Operation,"func1",m_client->getClientId()+"/result"), nullptr);
-    m_client->unsubscribeTopic(ApiGear::MQTTImpl::Topic("tb.same1","SameStruct2Interface",ApiGear::MQTTImpl::Topic::TopicType::Operation,"func2",m_client->getClientId()+"/result"), nullptr);
+    m_client->unsubscribeTopic(ApiGear::MQTT::Topic("tb.same1","SameStruct2Interface",ApiGear::MQTT::Topic::TopicType::Property,"prop1"), this);
+    m_client->unsubscribeTopic(ApiGear::MQTT::Topic("tb.same1","SameStruct2Interface",ApiGear::MQTT::Topic::TopicType::Property,"prop2"), this);
+    m_client->unsubscribeTopic(ApiGear::MQTT::Topic("tb.same1","SameStruct2Interface",ApiGear::MQTT::Topic::TopicType::Signal,"sig1"), this);
+    m_client->unsubscribeTopic(ApiGear::MQTT::Topic("tb.same1","SameStruct2Interface",ApiGear::MQTT::Topic::TopicType::Signal,"sig2"), this);
+    m_client->unsubscribeTopic(ApiGear::MQTT::Topic("tb.same1","SameStruct2Interface",ApiGear::MQTT::Topic::TopicType::Operation,"func1",m_client->getClientId()+"/result"), nullptr);
+    m_client->unsubscribeTopic(ApiGear::MQTT::Topic("tb.same1","SameStruct2Interface",ApiGear::MQTT::Topic::TopicType::Operation,"func2",m_client->getClientId()+"/result"), nullptr);
 }
 
 void SameStruct2InterfaceClient::applyState(const nlohmann::json& fields) 
@@ -43,7 +43,7 @@ void SameStruct2InterfaceClient::setProp1(const Struct2& prop1)
     if(m_client == nullptr) {
         return;
     }
-    static const auto topic = ApiGear::MQTTImpl::Topic("tb.same1","SameStruct2Interface",ApiGear::MQTTImpl::Topic::TopicType::Operation,"_setprop1");
+    static const auto topic = ApiGear::MQTT::Topic("tb.same1","SameStruct2Interface",ApiGear::MQTT::Topic::TopicType::Operation,"_setprop1");
     m_client->setRemoteProperty(topic, nlohmann::json(prop1).dump());
 }
 
@@ -65,7 +65,7 @@ void SameStruct2InterfaceClient::setProp2(const Struct2& prop2)
     if(m_client == nullptr) {
         return;
     }
-    static const auto topic = ApiGear::MQTTImpl::Topic("tb.same1","SameStruct2Interface",ApiGear::MQTTImpl::Topic::TopicType::Operation,"_setprop2");
+    static const auto topic = ApiGear::MQTT::Topic("tb.same1","SameStruct2Interface",ApiGear::MQTT::Topic::TopicType::Operation,"_setprop2");
     m_client->setRemoteProperty(topic, nlohmann::json(prop2).dump());
 }
 
@@ -100,9 +100,9 @@ std::future<Struct1> SameStruct2InterfaceClient::func1Async(const Struct1& param
                     param1]()
         {
             std::promise<Struct1> resultPromise;
-            static const auto topic = ApiGear::MQTTImpl::Topic("tb.same1","SameStruct2Interface",ApiGear::MQTTImpl::Topic::TopicType::Operation,"func1");
+            static const auto topic = ApiGear::MQTT::Topic("tb.same1","SameStruct2Interface",ApiGear::MQTT::Topic::TopicType::Operation,"func1");
             m_client->invokeRemote(topic,
-                nlohmann::json::array({param1}).dump(), [&resultPromise](ApiGear::MQTTImpl::InvokeReplyArg arg) {
+                nlohmann::json::array({param1}).dump(), [&resultPromise](ApiGear::MQTT::InvokeReplyArg arg) {
                     const Struct1& value = arg.value.get<Struct1>();
                     resultPromise.set_value(value);
                 });
@@ -130,9 +130,9 @@ std::future<Struct1> SameStruct2InterfaceClient::func2Async(const Struct1& param
                     param2]()
         {
             std::promise<Struct1> resultPromise;
-            static const auto topic = ApiGear::MQTTImpl::Topic("tb.same1","SameStruct2Interface",ApiGear::MQTTImpl::Topic::TopicType::Operation,"func2");
+            static const auto topic = ApiGear::MQTT::Topic("tb.same1","SameStruct2Interface",ApiGear::MQTT::Topic::TopicType::Operation,"func2");
             m_client->invokeRemote(topic,
-                nlohmann::json::array({param1, param2}).dump(), [&resultPromise](ApiGear::MQTTImpl::InvokeReplyArg arg) {
+                nlohmann::json::array({param1, param2}).dump(), [&resultPromise](ApiGear::MQTT::InvokeReplyArg arg) {
                     const Struct1& value = arg.value.get<Struct1>();
                     resultPromise.set_value(value);
                 });
@@ -141,7 +141,7 @@ std::future<Struct1> SameStruct2InterfaceClient::func2Async(const Struct1& param
     );
 }
 
-void SameStruct2InterfaceClient::onSignal(const ApiGear::MQTTImpl::Topic& topic, const std::string& args)
+void SameStruct2InterfaceClient::onSignal(const ApiGear::MQTT::Topic& topic, const std::string& args)
 {
     nlohmann::json json_args = nlohmann::json::parse(args);
     if(topic.getEntityName() == "sig1") {
@@ -154,7 +154,7 @@ void SameStruct2InterfaceClient::onSignal(const ApiGear::MQTTImpl::Topic& topic,
     }
 }
 
-void SameStruct2InterfaceClient::onPropertyChanged(const ApiGear::MQTTImpl::Topic& topic, const std::string& args)
+void SameStruct2InterfaceClient::onPropertyChanged(const ApiGear::MQTT::Topic& topic, const std::string& args)
 {
     nlohmann::json json_args = nlohmann::json::parse(args);
     const std::string& name = topic.getEntityName();

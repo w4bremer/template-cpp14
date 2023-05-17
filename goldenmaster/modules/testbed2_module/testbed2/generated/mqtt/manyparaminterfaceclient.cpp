@@ -3,41 +3,41 @@
 #include "testbed2/generated/core/testbed2.json.adapter.h"
 
 using namespace Test::Testbed2;
-using namespace Test::Testbed2::mqtt;
+using namespace Test::Testbed2::MQTT;
 
-ManyParamInterfaceClient::ManyParamInterfaceClient(std::shared_ptr<ApiGear::MQTTImpl::Client> client)
+ManyParamInterfaceClient::ManyParamInterfaceClient(std::shared_ptr<ApiGear::MQTT::Client> client)
     : m_isReady(false)
     , m_client(client)
     , m_publisher(std::make_unique<ManyParamInterfacePublisher>())
 {
-    m_client->subscribeTopic(ApiGear::MQTTImpl::Topic("testbed2","ManyParamInterface",ApiGear::MQTTImpl::Topic::TopicType::Property,"prop1"), this);
-    m_client->subscribeTopic(ApiGear::MQTTImpl::Topic("testbed2","ManyParamInterface",ApiGear::MQTTImpl::Topic::TopicType::Property,"prop2"), this);
-    m_client->subscribeTopic(ApiGear::MQTTImpl::Topic("testbed2","ManyParamInterface",ApiGear::MQTTImpl::Topic::TopicType::Property,"prop3"), this);
-    m_client->subscribeTopic(ApiGear::MQTTImpl::Topic("testbed2","ManyParamInterface",ApiGear::MQTTImpl::Topic::TopicType::Property,"prop4"), this);
-    m_client->subscribeTopic(ApiGear::MQTTImpl::Topic("testbed2","ManyParamInterface",ApiGear::MQTTImpl::Topic::TopicType::Signal,"sig1"), this);
-    m_client->subscribeTopic(ApiGear::MQTTImpl::Topic("testbed2","ManyParamInterface",ApiGear::MQTTImpl::Topic::TopicType::Signal,"sig2"), this);
-    m_client->subscribeTopic(ApiGear::MQTTImpl::Topic("testbed2","ManyParamInterface",ApiGear::MQTTImpl::Topic::TopicType::Signal,"sig3"), this);
-    m_client->subscribeTopic(ApiGear::MQTTImpl::Topic("testbed2","ManyParamInterface",ApiGear::MQTTImpl::Topic::TopicType::Signal,"sig4"), this);
-    m_client->subscribeTopic(ApiGear::MQTTImpl::Topic("testbed2","ManyParamInterface",ApiGear::MQTTImpl::Topic::TopicType::Operation,"func1",m_client->getClientId()+"/result"), nullptr);
-    m_client->subscribeTopic(ApiGear::MQTTImpl::Topic("testbed2","ManyParamInterface",ApiGear::MQTTImpl::Topic::TopicType::Operation,"func2",m_client->getClientId()+"/result"), nullptr);
-    m_client->subscribeTopic(ApiGear::MQTTImpl::Topic("testbed2","ManyParamInterface",ApiGear::MQTTImpl::Topic::TopicType::Operation,"func3",m_client->getClientId()+"/result"), nullptr);
-    m_client->subscribeTopic(ApiGear::MQTTImpl::Topic("testbed2","ManyParamInterface",ApiGear::MQTTImpl::Topic::TopicType::Operation,"func4",m_client->getClientId()+"/result"), nullptr);
+    m_client->subscribeTopic(ApiGear::MQTT::Topic("testbed2","ManyParamInterface",ApiGear::MQTT::Topic::TopicType::Property,"prop1"), this);
+    m_client->subscribeTopic(ApiGear::MQTT::Topic("testbed2","ManyParamInterface",ApiGear::MQTT::Topic::TopicType::Property,"prop2"), this);
+    m_client->subscribeTopic(ApiGear::MQTT::Topic("testbed2","ManyParamInterface",ApiGear::MQTT::Topic::TopicType::Property,"prop3"), this);
+    m_client->subscribeTopic(ApiGear::MQTT::Topic("testbed2","ManyParamInterface",ApiGear::MQTT::Topic::TopicType::Property,"prop4"), this);
+    m_client->subscribeTopic(ApiGear::MQTT::Topic("testbed2","ManyParamInterface",ApiGear::MQTT::Topic::TopicType::Signal,"sig1"), this);
+    m_client->subscribeTopic(ApiGear::MQTT::Topic("testbed2","ManyParamInterface",ApiGear::MQTT::Topic::TopicType::Signal,"sig2"), this);
+    m_client->subscribeTopic(ApiGear::MQTT::Topic("testbed2","ManyParamInterface",ApiGear::MQTT::Topic::TopicType::Signal,"sig3"), this);
+    m_client->subscribeTopic(ApiGear::MQTT::Topic("testbed2","ManyParamInterface",ApiGear::MQTT::Topic::TopicType::Signal,"sig4"), this);
+    m_client->subscribeTopic(ApiGear::MQTT::Topic("testbed2","ManyParamInterface",ApiGear::MQTT::Topic::TopicType::Operation,"func1",m_client->getClientId()+"/result"), nullptr);
+    m_client->subscribeTopic(ApiGear::MQTT::Topic("testbed2","ManyParamInterface",ApiGear::MQTT::Topic::TopicType::Operation,"func2",m_client->getClientId()+"/result"), nullptr);
+    m_client->subscribeTopic(ApiGear::MQTT::Topic("testbed2","ManyParamInterface",ApiGear::MQTT::Topic::TopicType::Operation,"func3",m_client->getClientId()+"/result"), nullptr);
+    m_client->subscribeTopic(ApiGear::MQTT::Topic("testbed2","ManyParamInterface",ApiGear::MQTT::Topic::TopicType::Operation,"func4",m_client->getClientId()+"/result"), nullptr);
 }
 
 ManyParamInterfaceClient::~ManyParamInterfaceClient()
 {
-    m_client->unsubscribeTopic(ApiGear::MQTTImpl::Topic("testbed2","ManyParamInterface",ApiGear::MQTTImpl::Topic::TopicType::Property,"prop1"), this);
-    m_client->unsubscribeTopic(ApiGear::MQTTImpl::Topic("testbed2","ManyParamInterface",ApiGear::MQTTImpl::Topic::TopicType::Property,"prop2"), this);
-    m_client->unsubscribeTopic(ApiGear::MQTTImpl::Topic("testbed2","ManyParamInterface",ApiGear::MQTTImpl::Topic::TopicType::Property,"prop3"), this);
-    m_client->unsubscribeTopic(ApiGear::MQTTImpl::Topic("testbed2","ManyParamInterface",ApiGear::MQTTImpl::Topic::TopicType::Property,"prop4"), this);
-    m_client->unsubscribeTopic(ApiGear::MQTTImpl::Topic("testbed2","ManyParamInterface",ApiGear::MQTTImpl::Topic::TopicType::Signal,"sig1"), this);
-    m_client->unsubscribeTopic(ApiGear::MQTTImpl::Topic("testbed2","ManyParamInterface",ApiGear::MQTTImpl::Topic::TopicType::Signal,"sig2"), this);
-    m_client->unsubscribeTopic(ApiGear::MQTTImpl::Topic("testbed2","ManyParamInterface",ApiGear::MQTTImpl::Topic::TopicType::Signal,"sig3"), this);
-    m_client->unsubscribeTopic(ApiGear::MQTTImpl::Topic("testbed2","ManyParamInterface",ApiGear::MQTTImpl::Topic::TopicType::Signal,"sig4"), this);
-    m_client->unsubscribeTopic(ApiGear::MQTTImpl::Topic("testbed2","ManyParamInterface",ApiGear::MQTTImpl::Topic::TopicType::Operation,"func1",m_client->getClientId()+"/result"), nullptr);
-    m_client->unsubscribeTopic(ApiGear::MQTTImpl::Topic("testbed2","ManyParamInterface",ApiGear::MQTTImpl::Topic::TopicType::Operation,"func2",m_client->getClientId()+"/result"), nullptr);
-    m_client->unsubscribeTopic(ApiGear::MQTTImpl::Topic("testbed2","ManyParamInterface",ApiGear::MQTTImpl::Topic::TopicType::Operation,"func3",m_client->getClientId()+"/result"), nullptr);
-    m_client->unsubscribeTopic(ApiGear::MQTTImpl::Topic("testbed2","ManyParamInterface",ApiGear::MQTTImpl::Topic::TopicType::Operation,"func4",m_client->getClientId()+"/result"), nullptr);
+    m_client->unsubscribeTopic(ApiGear::MQTT::Topic("testbed2","ManyParamInterface",ApiGear::MQTT::Topic::TopicType::Property,"prop1"), this);
+    m_client->unsubscribeTopic(ApiGear::MQTT::Topic("testbed2","ManyParamInterface",ApiGear::MQTT::Topic::TopicType::Property,"prop2"), this);
+    m_client->unsubscribeTopic(ApiGear::MQTT::Topic("testbed2","ManyParamInterface",ApiGear::MQTT::Topic::TopicType::Property,"prop3"), this);
+    m_client->unsubscribeTopic(ApiGear::MQTT::Topic("testbed2","ManyParamInterface",ApiGear::MQTT::Topic::TopicType::Property,"prop4"), this);
+    m_client->unsubscribeTopic(ApiGear::MQTT::Topic("testbed2","ManyParamInterface",ApiGear::MQTT::Topic::TopicType::Signal,"sig1"), this);
+    m_client->unsubscribeTopic(ApiGear::MQTT::Topic("testbed2","ManyParamInterface",ApiGear::MQTT::Topic::TopicType::Signal,"sig2"), this);
+    m_client->unsubscribeTopic(ApiGear::MQTT::Topic("testbed2","ManyParamInterface",ApiGear::MQTT::Topic::TopicType::Signal,"sig3"), this);
+    m_client->unsubscribeTopic(ApiGear::MQTT::Topic("testbed2","ManyParamInterface",ApiGear::MQTT::Topic::TopicType::Signal,"sig4"), this);
+    m_client->unsubscribeTopic(ApiGear::MQTT::Topic("testbed2","ManyParamInterface",ApiGear::MQTT::Topic::TopicType::Operation,"func1",m_client->getClientId()+"/result"), nullptr);
+    m_client->unsubscribeTopic(ApiGear::MQTT::Topic("testbed2","ManyParamInterface",ApiGear::MQTT::Topic::TopicType::Operation,"func2",m_client->getClientId()+"/result"), nullptr);
+    m_client->unsubscribeTopic(ApiGear::MQTT::Topic("testbed2","ManyParamInterface",ApiGear::MQTT::Topic::TopicType::Operation,"func3",m_client->getClientId()+"/result"), nullptr);
+    m_client->unsubscribeTopic(ApiGear::MQTT::Topic("testbed2","ManyParamInterface",ApiGear::MQTT::Topic::TopicType::Operation,"func4",m_client->getClientId()+"/result"), nullptr);
 }
 
 void ManyParamInterfaceClient::applyState(const nlohmann::json& fields) 
@@ -61,7 +61,7 @@ void ManyParamInterfaceClient::setProp1(int prop1)
     if(m_client == nullptr) {
         return;
     }
-    static const auto topic = ApiGear::MQTTImpl::Topic("testbed2","ManyParamInterface",ApiGear::MQTTImpl::Topic::TopicType::Operation,"_setprop1");
+    static const auto topic = ApiGear::MQTT::Topic("testbed2","ManyParamInterface",ApiGear::MQTT::Topic::TopicType::Operation,"_setprop1");
     m_client->setRemoteProperty(topic, nlohmann::json(prop1).dump());
 }
 
@@ -83,7 +83,7 @@ void ManyParamInterfaceClient::setProp2(int prop2)
     if(m_client == nullptr) {
         return;
     }
-    static const auto topic = ApiGear::MQTTImpl::Topic("testbed2","ManyParamInterface",ApiGear::MQTTImpl::Topic::TopicType::Operation,"_setprop2");
+    static const auto topic = ApiGear::MQTT::Topic("testbed2","ManyParamInterface",ApiGear::MQTT::Topic::TopicType::Operation,"_setprop2");
     m_client->setRemoteProperty(topic, nlohmann::json(prop2).dump());
 }
 
@@ -105,7 +105,7 @@ void ManyParamInterfaceClient::setProp3(int prop3)
     if(m_client == nullptr) {
         return;
     }
-    static const auto topic = ApiGear::MQTTImpl::Topic("testbed2","ManyParamInterface",ApiGear::MQTTImpl::Topic::TopicType::Operation,"_setprop3");
+    static const auto topic = ApiGear::MQTT::Topic("testbed2","ManyParamInterface",ApiGear::MQTT::Topic::TopicType::Operation,"_setprop3");
     m_client->setRemoteProperty(topic, nlohmann::json(prop3).dump());
 }
 
@@ -127,7 +127,7 @@ void ManyParamInterfaceClient::setProp4(int prop4)
     if(m_client == nullptr) {
         return;
     }
-    static const auto topic = ApiGear::MQTTImpl::Topic("testbed2","ManyParamInterface",ApiGear::MQTTImpl::Topic::TopicType::Operation,"_setprop4");
+    static const auto topic = ApiGear::MQTT::Topic("testbed2","ManyParamInterface",ApiGear::MQTT::Topic::TopicType::Operation,"_setprop4");
     m_client->setRemoteProperty(topic, nlohmann::json(prop4).dump());
 }
 
@@ -162,9 +162,9 @@ std::future<int> ManyParamInterfaceClient::func1Async(int param1)
                     param1]()
         {
             std::promise<int> resultPromise;
-            static const auto topic = ApiGear::MQTTImpl::Topic("testbed2","ManyParamInterface",ApiGear::MQTTImpl::Topic::TopicType::Operation,"func1");
+            static const auto topic = ApiGear::MQTT::Topic("testbed2","ManyParamInterface",ApiGear::MQTT::Topic::TopicType::Operation,"func1");
             m_client->invokeRemote(topic,
-                nlohmann::json::array({param1}).dump(), [&resultPromise](ApiGear::MQTTImpl::InvokeReplyArg arg) {
+                nlohmann::json::array({param1}).dump(), [&resultPromise](ApiGear::MQTT::InvokeReplyArg arg) {
                     const int& value = arg.value.get<int>();
                     resultPromise.set_value(value);
                 });
@@ -192,9 +192,9 @@ std::future<int> ManyParamInterfaceClient::func2Async(int param1, int param2)
                     param2]()
         {
             std::promise<int> resultPromise;
-            static const auto topic = ApiGear::MQTTImpl::Topic("testbed2","ManyParamInterface",ApiGear::MQTTImpl::Topic::TopicType::Operation,"func2");
+            static const auto topic = ApiGear::MQTT::Topic("testbed2","ManyParamInterface",ApiGear::MQTT::Topic::TopicType::Operation,"func2");
             m_client->invokeRemote(topic,
-                nlohmann::json::array({param1, param2}).dump(), [&resultPromise](ApiGear::MQTTImpl::InvokeReplyArg arg) {
+                nlohmann::json::array({param1, param2}).dump(), [&resultPromise](ApiGear::MQTT::InvokeReplyArg arg) {
                     const int& value = arg.value.get<int>();
                     resultPromise.set_value(value);
                 });
@@ -223,9 +223,9 @@ std::future<int> ManyParamInterfaceClient::func3Async(int param1, int param2, in
                     param3]()
         {
             std::promise<int> resultPromise;
-            static const auto topic = ApiGear::MQTTImpl::Topic("testbed2","ManyParamInterface",ApiGear::MQTTImpl::Topic::TopicType::Operation,"func3");
+            static const auto topic = ApiGear::MQTT::Topic("testbed2","ManyParamInterface",ApiGear::MQTT::Topic::TopicType::Operation,"func3");
             m_client->invokeRemote(topic,
-                nlohmann::json::array({param1, param2, param3}).dump(), [&resultPromise](ApiGear::MQTTImpl::InvokeReplyArg arg) {
+                nlohmann::json::array({param1, param2, param3}).dump(), [&resultPromise](ApiGear::MQTT::InvokeReplyArg arg) {
                     const int& value = arg.value.get<int>();
                     resultPromise.set_value(value);
                 });
@@ -255,9 +255,9 @@ std::future<int> ManyParamInterfaceClient::func4Async(int param1, int param2, in
                     param4]()
         {
             std::promise<int> resultPromise;
-            static const auto topic = ApiGear::MQTTImpl::Topic("testbed2","ManyParamInterface",ApiGear::MQTTImpl::Topic::TopicType::Operation,"func4");
+            static const auto topic = ApiGear::MQTT::Topic("testbed2","ManyParamInterface",ApiGear::MQTT::Topic::TopicType::Operation,"func4");
             m_client->invokeRemote(topic,
-                nlohmann::json::array({param1, param2, param3, param4}).dump(), [&resultPromise](ApiGear::MQTTImpl::InvokeReplyArg arg) {
+                nlohmann::json::array({param1, param2, param3, param4}).dump(), [&resultPromise](ApiGear::MQTT::InvokeReplyArg arg) {
                     const int& value = arg.value.get<int>();
                     resultPromise.set_value(value);
                 });
@@ -266,7 +266,7 @@ std::future<int> ManyParamInterfaceClient::func4Async(int param1, int param2, in
     );
 }
 
-void ManyParamInterfaceClient::onSignal(const ApiGear::MQTTImpl::Topic& topic, const std::string& args)
+void ManyParamInterfaceClient::onSignal(const ApiGear::MQTT::Topic& topic, const std::string& args)
 {
     nlohmann::json json_args = nlohmann::json::parse(args);
     if(topic.getEntityName() == "sig1") {
@@ -287,7 +287,7 @@ void ManyParamInterfaceClient::onSignal(const ApiGear::MQTTImpl::Topic& topic, c
     }
 }
 
-void ManyParamInterfaceClient::onPropertyChanged(const ApiGear::MQTTImpl::Topic& topic, const std::string& args)
+void ManyParamInterfaceClient::onPropertyChanged(const ApiGear::MQTT::Topic& topic, const std::string& args)
 {
     nlohmann::json json_args = nlohmann::json::parse(args);
     const std::string& name = topic.getEntityName();
