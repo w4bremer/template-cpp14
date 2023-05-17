@@ -8,11 +8,11 @@
 
 namespace Test {
 namespace TbSimple {
-namespace mqtt {
-class TEST_TB_SIMPLE_EXPORT VoidInterfaceClient : public IVoidInterface, public virtual ApiGear::MQTTImpl::ISink
+namespace MQTT {
+class TEST_TB_SIMPLE_EXPORT VoidInterfaceClient : public IVoidInterface, public virtual ApiGear::MQTT::ISink
 {
 public:
-    explicit VoidInterfaceClient(std::shared_ptr<ApiGear::MQTTImpl::Client> client);
+    explicit VoidInterfaceClient(std::shared_ptr<ApiGear::MQTT::Client> client);
     virtual ~VoidInterfaceClient() override;
     void funcVoid() override;
     std::future<void> funcVoidAsync() override;
@@ -21,20 +21,20 @@ public:
     bool isReady() const;
 
     void onConnected() override {};
-    void onSignal(const ApiGear::MQTTImpl::Topic& topic, const std::string& args) override;
-    void onPropertyChanged(const ApiGear::MQTTImpl::Topic& topic, const std::string& args) override;
-    void onInvoke(const ApiGear::MQTTImpl::Topic&, const std::string&, const ApiGear::MQTTImpl::Topic&, const std::string&) override {};
+    void onSignal(const ApiGear::MQTT::Topic& topic, const std::string& args) override;
+    void onPropertyChanged(const ApiGear::MQTT::Topic& topic, const std::string& args) override;
+    void onInvoke(const ApiGear::MQTT::Topic&, const std::string&, const ApiGear::MQTT::Topic&, const std::string&) override {};
 
 private:
 
     void applyState(const nlohmann::json& fields);
 
     bool m_isReady;
-    std::shared_ptr<ApiGear::MQTTImpl::Client> m_client;
+    std::shared_ptr<ApiGear::MQTT::Client> m_client;
 
     /** The publisher for VoidInterface */
     std::unique_ptr<IVoidInterfacePublisher> m_publisher;
 };
-} // namespace mqtt
+} // namespace MQTT
 } // namespace TbSimple
 } // namespace Test

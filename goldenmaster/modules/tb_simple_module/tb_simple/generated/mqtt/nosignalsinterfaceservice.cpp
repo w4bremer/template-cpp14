@@ -3,9 +3,9 @@
 #include <iostream>
 
 using namespace Test::TbSimple;
-using namespace Test::TbSimple::mqtt;
+using namespace Test::TbSimple::MQTT;
 
-NoSignalsInterfaceService::NoSignalsInterfaceService(std::shared_ptr<INoSignalsInterface> impl, std::shared_ptr<ApiGear::MQTTImpl::Client> client)
+NoSignalsInterfaceService::NoSignalsInterfaceService(std::shared_ptr<INoSignalsInterface> impl, std::shared_ptr<ApiGear::MQTT::Client> client)
     : m_impl(impl)
     , m_client(client)
 {
@@ -13,10 +13,10 @@ NoSignalsInterfaceService::NoSignalsInterfaceService(std::shared_ptr<INoSignalsI
 
     m_client->registerSink(*this);
     // subscribe to all property change request methods
-    m_client->subscribeTopic(ApiGear::MQTTImpl::Topic("tb.simple","NoSignalsInterface",ApiGear::MQTTImpl::Topic::TopicType::Operation,"_setpropBool"), this);
-    m_client->subscribeTopic(ApiGear::MQTTImpl::Topic("tb.simple","NoSignalsInterface",ApiGear::MQTTImpl::Topic::TopicType::Operation,"_setpropInt"), this);
-    m_client->subscribeTopic(ApiGear::MQTTImpl::Topic("tb.simple","NoSignalsInterface",ApiGear::MQTTImpl::Topic::TopicType::Operation,"funcVoid"), this);
-    m_client->subscribeTopic(ApiGear::MQTTImpl::Topic("tb.simple","NoSignalsInterface",ApiGear::MQTTImpl::Topic::TopicType::Operation,"funcBool"), this);
+    m_client->subscribeTopic(ApiGear::MQTT::Topic("tb.simple","NoSignalsInterface",ApiGear::MQTT::Topic::TopicType::Operation,"_setpropBool"), this);
+    m_client->subscribeTopic(ApiGear::MQTT::Topic("tb.simple","NoSignalsInterface",ApiGear::MQTT::Topic::TopicType::Operation,"_setpropInt"), this);
+    m_client->subscribeTopic(ApiGear::MQTT::Topic("tb.simple","NoSignalsInterface",ApiGear::MQTT::Topic::TopicType::Operation,"funcVoid"), this);
+    m_client->subscribeTopic(ApiGear::MQTT::Topic("tb.simple","NoSignalsInterface",ApiGear::MQTT::Topic::TopicType::Operation,"funcBool"), this);
 
 }
 
@@ -25,10 +25,10 @@ NoSignalsInterfaceService::~NoSignalsInterfaceService()
     m_impl->_getPublisher().unsubscribeFromAllChanges(*this);
 
     m_client->unregisterSink(*this);
-    m_client->unsubscribeTopic(ApiGear::MQTTImpl::Topic("tb.simple","NoSignalsInterface",ApiGear::MQTTImpl::Topic::TopicType::Operation,"_setpropBool"), this);
-    m_client->unsubscribeTopic(ApiGear::MQTTImpl::Topic("tb.simple","NoSignalsInterface",ApiGear::MQTTImpl::Topic::TopicType::Operation,"_setpropInt"), this);
-    m_client->unsubscribeTopic(ApiGear::MQTTImpl::Topic("tb.simple","NoSignalsInterface",ApiGear::MQTTImpl::Topic::TopicType::Operation,"funcVoid"), this);
-    m_client->unsubscribeTopic(ApiGear::MQTTImpl::Topic("tb.simple","NoSignalsInterface",ApiGear::MQTTImpl::Topic::TopicType::Operation,"funcBool"), this);
+    m_client->unsubscribeTopic(ApiGear::MQTT::Topic("tb.simple","NoSignalsInterface",ApiGear::MQTT::Topic::TopicType::Operation,"_setpropBool"), this);
+    m_client->unsubscribeTopic(ApiGear::MQTT::Topic("tb.simple","NoSignalsInterface",ApiGear::MQTT::Topic::TopicType::Operation,"_setpropInt"), this);
+    m_client->unsubscribeTopic(ApiGear::MQTT::Topic("tb.simple","NoSignalsInterface",ApiGear::MQTT::Topic::TopicType::Operation,"funcVoid"), this);
+    m_client->unsubscribeTopic(ApiGear::MQTT::Topic("tb.simple","NoSignalsInterface",ApiGear::MQTT::Topic::TopicType::Operation,"funcBool"), this);
 }
 
 void NoSignalsInterfaceService::onConnected()
@@ -38,7 +38,7 @@ void NoSignalsInterfaceService::onConnected()
     onPropIntChanged(m_impl->getPropInt());
 }
 
-void NoSignalsInterfaceService::onInvoke(const ApiGear::MQTTImpl::Topic& topic, const std::string& args, const ApiGear::MQTTImpl::Topic& responseTopic, const std::string& correlationData)
+void NoSignalsInterfaceService::onInvoke(const ApiGear::MQTT::Topic& topic, const std::string& args, const ApiGear::MQTT::Topic& responseTopic, const std::string& correlationData)
 {
     nlohmann::json json_args = nlohmann::json::parse(args);
     const std::string& name = topic.getEntityName();
@@ -68,14 +68,14 @@ void NoSignalsInterfaceService::onInvoke(const ApiGear::MQTTImpl::Topic& topic, 
 void NoSignalsInterfaceService::onPropBoolChanged(bool propBool)
 {
     if(m_client != nullptr) {
-        static const auto topic = ApiGear::MQTTImpl::Topic("tb.simple","NoSignalsInterface",ApiGear::MQTTImpl::Topic::TopicType::Property,"propBool");
+        static const auto topic = ApiGear::MQTT::Topic("tb.simple","NoSignalsInterface",ApiGear::MQTT::Topic::TopicType::Property,"propBool");
         m_client->notifyPropertyChange(topic, nlohmann::json(propBool).dump());
     }
 }
 void NoSignalsInterfaceService::onPropIntChanged(int propInt)
 {
     if(m_client != nullptr) {
-        static const auto topic = ApiGear::MQTTImpl::Topic("tb.simple","NoSignalsInterface",ApiGear::MQTTImpl::Topic::TopicType::Property,"propInt");
+        static const auto topic = ApiGear::MQTT::Topic("tb.simple","NoSignalsInterface",ApiGear::MQTT::Topic::TopicType::Property,"propInt");
         m_client->notifyPropertyChange(topic, nlohmann::json(propInt).dump());
     }
 }

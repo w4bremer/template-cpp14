@@ -8,11 +8,11 @@
 
 namespace Test {
 namespace Testbed2 {
-namespace mqtt {
-class TEST_TESTBED2_EXPORT ManyParamInterfaceClient : public IManyParamInterface, public virtual ApiGear::MQTTImpl::ISink
+namespace MQTT {
+class TEST_TESTBED2_EXPORT ManyParamInterfaceClient : public IManyParamInterface, public virtual ApiGear::MQTT::ISink
 {
 public:
-    explicit ManyParamInterfaceClient(std::shared_ptr<ApiGear::MQTTImpl::Client> client);
+    explicit ManyParamInterfaceClient(std::shared_ptr<ApiGear::MQTT::Client> client);
     virtual ~ManyParamInterfaceClient() override;
     int getProp1() const override;
     void setProp1(int prop1) override;
@@ -35,9 +35,9 @@ public:
     bool isReady() const;
 
     void onConnected() override {};
-    void onSignal(const ApiGear::MQTTImpl::Topic& topic, const std::string& args) override;
-    void onPropertyChanged(const ApiGear::MQTTImpl::Topic& topic, const std::string& args) override;
-    void onInvoke(const ApiGear::MQTTImpl::Topic&, const std::string&, const ApiGear::MQTTImpl::Topic&, const std::string&) override {};
+    void onSignal(const ApiGear::MQTT::Topic& topic, const std::string& args) override;
+    void onPropertyChanged(const ApiGear::MQTT::Topic& topic, const std::string& args) override;
+    void onInvoke(const ApiGear::MQTT::Topic&, const std::string&, const ApiGear::MQTT::Topic&, const std::string&) override {};
 
 private:
     void setProp1Local(int prop1);
@@ -50,11 +50,11 @@ private:
     bool m_isReady;
     /** Local storage for properties values. */
     ManyParamInterfaceData m_data;
-    std::shared_ptr<ApiGear::MQTTImpl::Client> m_client;
+    std::shared_ptr<ApiGear::MQTT::Client> m_client;
 
     /** The publisher for ManyParamInterface */
     std::unique_ptr<IManyParamInterfacePublisher> m_publisher;
 };
-} // namespace mqtt
+} // namespace MQTT
 } // namespace Testbed2
 } // namespace Test

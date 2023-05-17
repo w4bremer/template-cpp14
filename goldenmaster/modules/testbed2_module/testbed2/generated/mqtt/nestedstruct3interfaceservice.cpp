@@ -3,9 +3,9 @@
 #include <iostream>
 
 using namespace Test::Testbed2;
-using namespace Test::Testbed2::mqtt;
+using namespace Test::Testbed2::MQTT;
 
-NestedStruct3InterfaceService::NestedStruct3InterfaceService(std::shared_ptr<INestedStruct3Interface> impl, std::shared_ptr<ApiGear::MQTTImpl::Client> client)
+NestedStruct3InterfaceService::NestedStruct3InterfaceService(std::shared_ptr<INestedStruct3Interface> impl, std::shared_ptr<ApiGear::MQTT::Client> client)
     : m_impl(impl)
     , m_client(client)
 {
@@ -13,12 +13,12 @@ NestedStruct3InterfaceService::NestedStruct3InterfaceService(std::shared_ptr<INe
 
     m_client->registerSink(*this);
     // subscribe to all property change request methods
-    m_client->subscribeTopic(ApiGear::MQTTImpl::Topic("testbed2","NestedStruct3Interface",ApiGear::MQTTImpl::Topic::TopicType::Operation,"_setprop1"), this);
-    m_client->subscribeTopic(ApiGear::MQTTImpl::Topic("testbed2","NestedStruct3Interface",ApiGear::MQTTImpl::Topic::TopicType::Operation,"_setprop2"), this);
-    m_client->subscribeTopic(ApiGear::MQTTImpl::Topic("testbed2","NestedStruct3Interface",ApiGear::MQTTImpl::Topic::TopicType::Operation,"_setprop3"), this);
-    m_client->subscribeTopic(ApiGear::MQTTImpl::Topic("testbed2","NestedStruct3Interface",ApiGear::MQTTImpl::Topic::TopicType::Operation,"func1"), this);
-    m_client->subscribeTopic(ApiGear::MQTTImpl::Topic("testbed2","NestedStruct3Interface",ApiGear::MQTTImpl::Topic::TopicType::Operation,"func2"), this);
-    m_client->subscribeTopic(ApiGear::MQTTImpl::Topic("testbed2","NestedStruct3Interface",ApiGear::MQTTImpl::Topic::TopicType::Operation,"func3"), this);
+    m_client->subscribeTopic(ApiGear::MQTT::Topic("testbed2","NestedStruct3Interface",ApiGear::MQTT::Topic::TopicType::Operation,"_setprop1"), this);
+    m_client->subscribeTopic(ApiGear::MQTT::Topic("testbed2","NestedStruct3Interface",ApiGear::MQTT::Topic::TopicType::Operation,"_setprop2"), this);
+    m_client->subscribeTopic(ApiGear::MQTT::Topic("testbed2","NestedStruct3Interface",ApiGear::MQTT::Topic::TopicType::Operation,"_setprop3"), this);
+    m_client->subscribeTopic(ApiGear::MQTT::Topic("testbed2","NestedStruct3Interface",ApiGear::MQTT::Topic::TopicType::Operation,"func1"), this);
+    m_client->subscribeTopic(ApiGear::MQTT::Topic("testbed2","NestedStruct3Interface",ApiGear::MQTT::Topic::TopicType::Operation,"func2"), this);
+    m_client->subscribeTopic(ApiGear::MQTT::Topic("testbed2","NestedStruct3Interface",ApiGear::MQTT::Topic::TopicType::Operation,"func3"), this);
 
 }
 
@@ -27,12 +27,12 @@ NestedStruct3InterfaceService::~NestedStruct3InterfaceService()
     m_impl->_getPublisher().unsubscribeFromAllChanges(*this);
 
     m_client->unregisterSink(*this);
-    m_client->unsubscribeTopic(ApiGear::MQTTImpl::Topic("testbed2","NestedStruct3Interface",ApiGear::MQTTImpl::Topic::TopicType::Operation,"_setprop1"), this);
-    m_client->unsubscribeTopic(ApiGear::MQTTImpl::Topic("testbed2","NestedStruct3Interface",ApiGear::MQTTImpl::Topic::TopicType::Operation,"_setprop2"), this);
-    m_client->unsubscribeTopic(ApiGear::MQTTImpl::Topic("testbed2","NestedStruct3Interface",ApiGear::MQTTImpl::Topic::TopicType::Operation,"_setprop3"), this);
-    m_client->unsubscribeTopic(ApiGear::MQTTImpl::Topic("testbed2","NestedStruct3Interface",ApiGear::MQTTImpl::Topic::TopicType::Operation,"func1"), this);
-    m_client->unsubscribeTopic(ApiGear::MQTTImpl::Topic("testbed2","NestedStruct3Interface",ApiGear::MQTTImpl::Topic::TopicType::Operation,"func2"), this);
-    m_client->unsubscribeTopic(ApiGear::MQTTImpl::Topic("testbed2","NestedStruct3Interface",ApiGear::MQTTImpl::Topic::TopicType::Operation,"func3"), this);
+    m_client->unsubscribeTopic(ApiGear::MQTT::Topic("testbed2","NestedStruct3Interface",ApiGear::MQTT::Topic::TopicType::Operation,"_setprop1"), this);
+    m_client->unsubscribeTopic(ApiGear::MQTT::Topic("testbed2","NestedStruct3Interface",ApiGear::MQTT::Topic::TopicType::Operation,"_setprop2"), this);
+    m_client->unsubscribeTopic(ApiGear::MQTT::Topic("testbed2","NestedStruct3Interface",ApiGear::MQTT::Topic::TopicType::Operation,"_setprop3"), this);
+    m_client->unsubscribeTopic(ApiGear::MQTT::Topic("testbed2","NestedStruct3Interface",ApiGear::MQTT::Topic::TopicType::Operation,"func1"), this);
+    m_client->unsubscribeTopic(ApiGear::MQTT::Topic("testbed2","NestedStruct3Interface",ApiGear::MQTT::Topic::TopicType::Operation,"func2"), this);
+    m_client->unsubscribeTopic(ApiGear::MQTT::Topic("testbed2","NestedStruct3Interface",ApiGear::MQTT::Topic::TopicType::Operation,"func3"), this);
 }
 
 void NestedStruct3InterfaceService::onConnected()
@@ -43,7 +43,7 @@ void NestedStruct3InterfaceService::onConnected()
     onProp3Changed(m_impl->getProp3());
 }
 
-void NestedStruct3InterfaceService::onInvoke(const ApiGear::MQTTImpl::Topic& topic, const std::string& args, const ApiGear::MQTTImpl::Topic& responseTopic, const std::string& correlationData)
+void NestedStruct3InterfaceService::onInvoke(const ApiGear::MQTT::Topic& topic, const std::string& args, const ApiGear::MQTT::Topic& responseTopic, const std::string& correlationData)
 {
     nlohmann::json json_args = nlohmann::json::parse(args);
     const std::string& name = topic.getEntityName();
@@ -90,7 +90,7 @@ void NestedStruct3InterfaceService::onSig1(const NestedStruct1& param1)
 {
     if(m_client != nullptr) {
         const nlohmann::json& args = { param1 };
-        static const auto topic = ApiGear::MQTTImpl::Topic("testbed2","NestedStruct3Interface",ApiGear::MQTTImpl::Topic::TopicType::Signal,"sig1");
+        static const auto topic = ApiGear::MQTT::Topic("testbed2","NestedStruct3Interface",ApiGear::MQTT::Topic::TopicType::Signal,"sig1");
         m_client->notifySignal(topic, nlohmann::json(args).dump());
     }
 }
@@ -98,7 +98,7 @@ void NestedStruct3InterfaceService::onSig2(const NestedStruct1& param1, const Ne
 {
     if(m_client != nullptr) {
         const nlohmann::json& args = { param1, param2 };
-        static const auto topic = ApiGear::MQTTImpl::Topic("testbed2","NestedStruct3Interface",ApiGear::MQTTImpl::Topic::TopicType::Signal,"sig2");
+        static const auto topic = ApiGear::MQTT::Topic("testbed2","NestedStruct3Interface",ApiGear::MQTT::Topic::TopicType::Signal,"sig2");
         m_client->notifySignal(topic, nlohmann::json(args).dump());
     }
 }
@@ -106,28 +106,28 @@ void NestedStruct3InterfaceService::onSig3(const NestedStruct1& param1, const Ne
 {
     if(m_client != nullptr) {
         const nlohmann::json& args = { param1, param2, param3 };
-        static const auto topic = ApiGear::MQTTImpl::Topic("testbed2","NestedStruct3Interface",ApiGear::MQTTImpl::Topic::TopicType::Signal,"sig3");
+        static const auto topic = ApiGear::MQTT::Topic("testbed2","NestedStruct3Interface",ApiGear::MQTT::Topic::TopicType::Signal,"sig3");
         m_client->notifySignal(topic, nlohmann::json(args).dump());
     }
 }
 void NestedStruct3InterfaceService::onProp1Changed(const NestedStruct1& prop1)
 {
     if(m_client != nullptr) {
-        static const auto topic = ApiGear::MQTTImpl::Topic("testbed2","NestedStruct3Interface",ApiGear::MQTTImpl::Topic::TopicType::Property,"prop1");
+        static const auto topic = ApiGear::MQTT::Topic("testbed2","NestedStruct3Interface",ApiGear::MQTT::Topic::TopicType::Property,"prop1");
         m_client->notifyPropertyChange(topic, nlohmann::json(prop1).dump());
     }
 }
 void NestedStruct3InterfaceService::onProp2Changed(const NestedStruct2& prop2)
 {
     if(m_client != nullptr) {
-        static const auto topic = ApiGear::MQTTImpl::Topic("testbed2","NestedStruct3Interface",ApiGear::MQTTImpl::Topic::TopicType::Property,"prop2");
+        static const auto topic = ApiGear::MQTT::Topic("testbed2","NestedStruct3Interface",ApiGear::MQTT::Topic::TopicType::Property,"prop2");
         m_client->notifyPropertyChange(topic, nlohmann::json(prop2).dump());
     }
 }
 void NestedStruct3InterfaceService::onProp3Changed(const NestedStruct3& prop3)
 {
     if(m_client != nullptr) {
-        static const auto topic = ApiGear::MQTTImpl::Topic("testbed2","NestedStruct3Interface",ApiGear::MQTTImpl::Topic::TopicType::Property,"prop3");
+        static const auto topic = ApiGear::MQTT::Topic("testbed2","NestedStruct3Interface",ApiGear::MQTT::Topic::TopicType::Property,"prop3");
         m_client->notifyPropertyChange(topic, nlohmann::json(prop3).dump());
     }
 }

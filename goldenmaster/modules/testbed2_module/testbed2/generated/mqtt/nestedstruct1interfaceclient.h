@@ -8,11 +8,11 @@
 
 namespace Test {
 namespace Testbed2 {
-namespace mqtt {
-class TEST_TESTBED2_EXPORT NestedStruct1InterfaceClient : public INestedStruct1Interface, public virtual ApiGear::MQTTImpl::ISink
+namespace MQTT {
+class TEST_TESTBED2_EXPORT NestedStruct1InterfaceClient : public INestedStruct1Interface, public virtual ApiGear::MQTT::ISink
 {
 public:
-    explicit NestedStruct1InterfaceClient(std::shared_ptr<ApiGear::MQTTImpl::Client> client);
+    explicit NestedStruct1InterfaceClient(std::shared_ptr<ApiGear::MQTT::Client> client);
     virtual ~NestedStruct1InterfaceClient() override;
     const NestedStruct1& getProp1() const override;
     void setProp1(const NestedStruct1& prop1) override;
@@ -23,9 +23,9 @@ public:
     bool isReady() const;
 
     void onConnected() override {};
-    void onSignal(const ApiGear::MQTTImpl::Topic& topic, const std::string& args) override;
-    void onPropertyChanged(const ApiGear::MQTTImpl::Topic& topic, const std::string& args) override;
-    void onInvoke(const ApiGear::MQTTImpl::Topic&, const std::string&, const ApiGear::MQTTImpl::Topic&, const std::string&) override {};
+    void onSignal(const ApiGear::MQTT::Topic& topic, const std::string& args) override;
+    void onPropertyChanged(const ApiGear::MQTT::Topic& topic, const std::string& args) override;
+    void onInvoke(const ApiGear::MQTT::Topic&, const std::string&, const ApiGear::MQTT::Topic&, const std::string&) override {};
 
 private:
     void setProp1Local(const NestedStruct1& prop1);
@@ -35,11 +35,11 @@ private:
     bool m_isReady;
     /** Local storage for properties values. */
     NestedStruct1InterfaceData m_data;
-    std::shared_ptr<ApiGear::MQTTImpl::Client> m_client;
+    std::shared_ptr<ApiGear::MQTT::Client> m_client;
 
     /** The publisher for NestedStruct1Interface */
     std::unique_ptr<INestedStruct1InterfacePublisher> m_publisher;
 };
-} // namespace mqtt
+} // namespace MQTT
 } // namespace Testbed2
 } // namespace Test

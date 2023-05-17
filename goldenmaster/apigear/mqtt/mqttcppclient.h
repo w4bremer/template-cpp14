@@ -16,7 +16,7 @@
 typedef void* MQTTAsync;
 
 namespace ApiGear {
-namespace MQTTImpl {
+namespace MQTT {
 
 class APIGEAR_MQTT_EXPORT InvokeReplyArg {
 public:
@@ -121,5 +121,5 @@ private:
     std::mutex m_toBeUnsubscribedTopicsMutex;
     std::multimap<Topic, ISink*, Topic> m_toBeUnsubscribedTopics;
 };
-} // namespace MQTTImpl
+} // namespace MQTT
 } // namespace ApiGear

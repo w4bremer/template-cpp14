@@ -8,11 +8,11 @@
 
 namespace Test {
 namespace TbEnum {
-namespace mqtt {
-class TEST_TB_ENUM_EXPORT EnumInterfaceClient : public IEnumInterface, public virtual ApiGear::MQTTImpl::ISink
+namespace MQTT {
+class TEST_TB_ENUM_EXPORT EnumInterfaceClient : public IEnumInterface, public virtual ApiGear::MQTT::ISink
 {
 public:
-    explicit EnumInterfaceClient(std::shared_ptr<ApiGear::MQTTImpl::Client> client);
+    explicit EnumInterfaceClient(std::shared_ptr<ApiGear::MQTT::Client> client);
     virtual ~EnumInterfaceClient() override;
     Enum0Enum getProp0() const override;
     void setProp0(Enum0Enum prop0) override;
@@ -35,9 +35,9 @@ public:
     bool isReady() const;
 
     void onConnected() override {};
-    void onSignal(const ApiGear::MQTTImpl::Topic& topic, const std::string& args) override;
-    void onPropertyChanged(const ApiGear::MQTTImpl::Topic& topic, const std::string& args) override;
-    void onInvoke(const ApiGear::MQTTImpl::Topic&, const std::string&, const ApiGear::MQTTImpl::Topic&, const std::string&) override {};
+    void onSignal(const ApiGear::MQTT::Topic& topic, const std::string& args) override;
+    void onPropertyChanged(const ApiGear::MQTT::Topic& topic, const std::string& args) override;
+    void onInvoke(const ApiGear::MQTT::Topic&, const std::string&, const ApiGear::MQTT::Topic&, const std::string&) override {};
 
 private:
     void setProp0Local(Enum0Enum prop0);
@@ -50,11 +50,11 @@ private:
     bool m_isReady;
     /** Local storage for properties values. */
     EnumInterfaceData m_data;
-    std::shared_ptr<ApiGear::MQTTImpl::Client> m_client;
+    std::shared_ptr<ApiGear::MQTT::Client> m_client;
 
     /** The publisher for EnumInterface */
     std::unique_ptr<IEnumInterfacePublisher> m_publisher;
 };
-} // namespace mqtt
+} // namespace MQTT
 } // namespace TbEnum
 } // namespace Test

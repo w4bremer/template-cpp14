@@ -8,11 +8,11 @@
 
 namespace Test {
 namespace TbSimple {
-namespace mqtt {
-class TEST_TB_SIMPLE_EXPORT NoOperationsInterfaceClient : public INoOperationsInterface, public virtual ApiGear::MQTTImpl::ISink
+namespace MQTT {
+class TEST_TB_SIMPLE_EXPORT NoOperationsInterfaceClient : public INoOperationsInterface, public virtual ApiGear::MQTT::ISink
 {
 public:
-    explicit NoOperationsInterfaceClient(std::shared_ptr<ApiGear::MQTTImpl::Client> client);
+    explicit NoOperationsInterfaceClient(std::shared_ptr<ApiGear::MQTT::Client> client);
     virtual ~NoOperationsInterfaceClient() override;
     bool getPropBool() const override;
     void setPropBool(bool propBool) override;
@@ -23,9 +23,9 @@ public:
     bool isReady() const;
 
     void onConnected() override {};
-    void onSignal(const ApiGear::MQTTImpl::Topic& topic, const std::string& args) override;
-    void onPropertyChanged(const ApiGear::MQTTImpl::Topic& topic, const std::string& args) override;
-    void onInvoke(const ApiGear::MQTTImpl::Topic&, const std::string&, const ApiGear::MQTTImpl::Topic&, const std::string&) override {};
+    void onSignal(const ApiGear::MQTT::Topic& topic, const std::string& args) override;
+    void onPropertyChanged(const ApiGear::MQTT::Topic& topic, const std::string& args) override;
+    void onInvoke(const ApiGear::MQTT::Topic&, const std::string&, const ApiGear::MQTT::Topic&, const std::string&) override {};
 
 private:
     void setPropBoolLocal(bool propBool);
@@ -36,11 +36,11 @@ private:
     bool m_isReady;
     /** Local storage for properties values. */
     NoOperationsInterfaceData m_data;
-    std::shared_ptr<ApiGear::MQTTImpl::Client> m_client;
+    std::shared_ptr<ApiGear::MQTT::Client> m_client;
 
     /** The publisher for NoOperationsInterface */
     std::unique_ptr<INoOperationsInterfacePublisher> m_publisher;
 };
-} // namespace mqtt
+} // namespace MQTT
 } // namespace TbSimple
 } // namespace Test
