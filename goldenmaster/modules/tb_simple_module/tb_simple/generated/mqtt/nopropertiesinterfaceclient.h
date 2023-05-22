@@ -23,7 +23,6 @@ public:
 
     bool isReady() const;
 
-    void onConnected() override {};
     void onSignal(const ApiGear::MQTT::Topic& topic, const std::string& args) override;
     void onPropertyChanged(const ApiGear::MQTT::Topic& topic, const std::string& args) override;
     void onInvoke(const ApiGear::MQTT::Topic&, const std::string&, const ApiGear::MQTT::Topic&, const std::string&) override {};

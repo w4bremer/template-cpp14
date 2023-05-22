@@ -11,7 +11,7 @@ SimpleInterfaceService::SimpleInterfaceService(std::shared_ptr<ISimpleInterface>
 {
     m_impl->_getPublisher().subscribeToAllChanges(*this);
 
-    m_client->registerSink(*this);
+    m_connectionStatusRegistrationID = m_client->subscribeToConnectionStatus(std::bind(&SimpleInterfaceService::onConnectionStatusChanged, this, std::placeholders::_1));
     // subscribe to all property change request methods
     m_client->subscribeTopic(ApiGear::MQTT::Topic("tb.simple","SimpleInterface",ApiGear::MQTT::Topic::TopicType::Operation,"_setpropBool"), this);
     m_client->subscribeTopic(ApiGear::MQTT::Topic("tb.simple","SimpleInterface",ApiGear::MQTT::Topic::TopicType::Operation,"_setpropInt"), this);
@@ -36,7 +36,7 @@ SimpleInterfaceService::~SimpleInterfaceService()
 {
     m_impl->_getPublisher().unsubscribeFromAllChanges(*this);
 
-    m_client->unregisterSink(*this);
+    m_client->unsubscribeToConnectionStatus(m_connectionStatusRegistrationID);
     m_client->unsubscribeTopic(ApiGear::MQTT::Topic("tb.simple","SimpleInterface",ApiGear::MQTT::Topic::TopicType::Operation,"_setpropBool"), this);
     m_client->unsubscribeTopic(ApiGear::MQTT::Topic("tb.simple","SimpleInterface",ApiGear::MQTT::Topic::TopicType::Operation,"_setpropInt"), this);
     m_client->unsubscribeTopic(ApiGear::MQTT::Topic("tb.simple","SimpleInterface",ApiGear::MQTT::Topic::TopicType::Operation,"_setpropInt32"), this);
@@ -55,8 +55,13 @@ SimpleInterfaceService::~SimpleInterfaceService()
     m_client->unsubscribeTopic(ApiGear::MQTT::Topic("tb.simple","SimpleInterface",ApiGear::MQTT::Topic::TopicType::Operation,"funcString"), this);
 }
 
-void SimpleInterfaceService::onConnected()
+void SimpleInterfaceService::onConnectionStatusChanged(bool connectionStatus)
 {
+    if(!connectionStatus)
+    {
+        return;
+    }
+
     // send current values
     onPropBoolChanged(m_impl->getPropBool());
     onPropIntChanged(m_impl->getPropInt());

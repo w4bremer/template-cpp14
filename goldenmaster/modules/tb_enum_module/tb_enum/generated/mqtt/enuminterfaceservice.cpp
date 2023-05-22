@@ -11,7 +11,7 @@ EnumInterfaceService::EnumInterfaceService(std::shared_ptr<IEnumInterface> impl,
 {
     m_impl->_getPublisher().subscribeToAllChanges(*this);
 
-    m_client->registerSink(*this);
+    m_connectionStatusRegistrationID = m_client->subscribeToConnectionStatus(std::bind(&EnumInterfaceService::onConnectionStatusChanged, this, std::placeholders::_1));
     // subscribe to all property change request methods
     m_client->subscribeTopic(ApiGear::MQTT::Topic("tb.enum","EnumInterface",ApiGear::MQTT::Topic::TopicType::Operation,"_setprop0"), this);
     m_client->subscribeTopic(ApiGear::MQTT::Topic("tb.enum","EnumInterface",ApiGear::MQTT::Topic::TopicType::Operation,"_setprop1"), this);
@@ -28,7 +28,7 @@ EnumInterfaceService::~EnumInterfaceService()
 {
     m_impl->_getPublisher().unsubscribeFromAllChanges(*this);
 
-    m_client->unregisterSink(*this);
+    m_client->unsubscribeToConnectionStatus(m_connectionStatusRegistrationID);
     m_client->unsubscribeTopic(ApiGear::MQTT::Topic("tb.enum","EnumInterface",ApiGear::MQTT::Topic::TopicType::Operation,"_setprop0"), this);
     m_client->unsubscribeTopic(ApiGear::MQTT::Topic("tb.enum","EnumInterface",ApiGear::MQTT::Topic::TopicType::Operation,"_setprop1"), this);
     m_client->unsubscribeTopic(ApiGear::MQTT::Topic("tb.enum","EnumInterface",ApiGear::MQTT::Topic::TopicType::Operation,"_setprop2"), this);
@@ -39,8 +39,13 @@ EnumInterfaceService::~EnumInterfaceService()
     m_client->unsubscribeTopic(ApiGear::MQTT::Topic("tb.enum","EnumInterface",ApiGear::MQTT::Topic::TopicType::Operation,"func3"), this);
 }
 
-void EnumInterfaceService::onConnected()
+void EnumInterfaceService::onConnectionStatusChanged(bool connectionStatus)
 {
+    if(!connectionStatus)
+    {
+        return;
+    }
+
     // send current values
     onProp0Changed(m_impl->getProp0());
     onProp1Changed(m_impl->getProp1());

@@ -14,8 +14,8 @@ public:
     explicit NoOperationsInterfaceService(std::shared_ptr<INoOperationsInterface> impl, std::shared_ptr<ApiGear::MQTT::Client> client);
     virtual ~NoOperationsInterfaceService() override;
 
+    void onConnectionStatusChanged(bool connectionStatus);
     // sink interface
-    void onConnected() override;
     void onSignal(const ApiGear::MQTT::Topic&, const std::string&) override {};
     void onPropertyChanged(const ApiGear::MQTT::Topic&, const std::string&) override {};
     void onInvoke(const ApiGear::MQTT::Topic& topic, const std::string& args, const ApiGear::MQTT::Topic& responseTopic, const std::string& correlationData) override;
@@ -29,6 +29,8 @@ public:
 private:
     std::shared_ptr<INoOperationsInterface> m_impl;
     std::shared_ptr<ApiGear::MQTT::Client> m_client;
+    // id for connection status registration
+    int m_connectionStatusRegistrationID;
 };
 } // namespace MQTT
 } // namespace TbSimple

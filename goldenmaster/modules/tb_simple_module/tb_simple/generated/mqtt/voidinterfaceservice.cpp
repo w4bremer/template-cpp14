@@ -11,7 +11,7 @@ VoidInterfaceService::VoidInterfaceService(std::shared_ptr<IVoidInterface> impl,
 {
     m_impl->_getPublisher().subscribeToAllChanges(*this);
 
-    m_client->registerSink(*this);
+    m_connectionStatusRegistrationID = m_client->subscribeToConnectionStatus(std::bind(&VoidInterfaceService::onConnectionStatusChanged, this, std::placeholders::_1));
     // subscribe to all property change request methods
     m_client->subscribeTopic(ApiGear::MQTT::Topic("tb.simple","VoidInterface",ApiGear::MQTT::Topic::TopicType::Operation,"funcVoid"), this);
 
@@ -21,12 +21,17 @@ VoidInterfaceService::~VoidInterfaceService()
 {
     m_impl->_getPublisher().unsubscribeFromAllChanges(*this);
 
-    m_client->unregisterSink(*this);
+    m_client->unsubscribeToConnectionStatus(m_connectionStatusRegistrationID);
     m_client->unsubscribeTopic(ApiGear::MQTT::Topic("tb.simple","VoidInterface",ApiGear::MQTT::Topic::TopicType::Operation,"funcVoid"), this);
 }
 
-void VoidInterfaceService::onConnected()
+void VoidInterfaceService::onConnectionStatusChanged(bool connectionStatus)
 {
+    if(!connectionStatus)
+    {
+        return;
+    }
+
     // send current values
 }
 

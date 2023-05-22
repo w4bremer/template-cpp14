@@ -19,6 +19,7 @@ namespace ApiGear {
 namespace MQTT {
 
 class ISink;
+typedef std::function<void(bool connectionStatus)> OnConnectionStatusChangedCallBackFunction;
 
 class APIGEAR_MQTT_EXPORT InvokeReplyArg {
 public:
@@ -61,8 +62,11 @@ public:
     void onDisconnected();
     void handleTextMessage(const Message& message);
 
-    void registerSink(ISink& sink);
-    void unregisterSink(ISink& sink);
+    // subscribe to be notified about connection changes
+    int subscribeToConnectionStatus(OnConnectionStatusChangedCallBackFunction callBack);
+    // unsubscribe from connection changes
+    void unsubscribeToConnectionStatus(int subscriptionID);
+
     // service interface
     void notifyPropertyChange(const Topic& name, const std::string& value);
     void notifySignal(const Topic& name, const std::string& args);
@@ -99,7 +103,8 @@ private:
     std::queue<std::string> m_queue;
     std::atomic<bool> m_disconnectRequested { false };
     std::atomic<bool> m_connected { false };
-    std::set<ISink*> m_linkedObjects;
+    std::mutex m_onConnectionStatusChangedCallbacksMutex;
+    std::map<int, OnConnectionStatusChangedCallBackFunction> m_onConnectionStatusChangedCallbacks;
     std::mutex m_invokeResultsMutex;
     std::map<int, InvokeReplyFunc> m_invokeResults;
     std::mutex m_subscribedTopicsMutex;
