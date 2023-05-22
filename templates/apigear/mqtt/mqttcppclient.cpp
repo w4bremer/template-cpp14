@@ -114,14 +114,28 @@ Client::Client(const std::string& clientID)
 {
 }
 
-void Client::registerSink(ISink& sink)
+int Client::subscribeToConnectionStatus(OnConnectionStatusChangedCallBackFunction callBack)
 {
-    m_linkedObjects.insert(&sink);
+    auto randomId = 0;
+    std::uniform_int_distribution<> distribution (0, 100000);
+    m_onConnectionStatusChangedCallbacksMutex.lock();
+    do {
+        randomId = distribution(randomNumberGenerator);
+    } while (m_onConnectionStatusChangedCallbacks.find(randomId) != m_onConnectionStatusChangedCallbacks.end());
+    m_onConnectionStatusChangedCallbacks.insert(std::pair<int, OnConnectionStatusChangedCallBackFunction>(randomId, callBack));
+    m_onConnectionStatusChangedCallbacksMutex.unlock();
+
+    return randomId;
 }
 
-void Client::unregisterSink(ISink& sink)
+void Client::unsubscribeToConnectionStatus(int subscriptionID)
 {
-    m_linkedObjects.erase(&sink);
+    m_onConnectionStatusChangedCallbacksMutex.lock();
+    if((m_onConnectionStatusChangedCallbacks.find(subscriptionID) != m_onConnectionStatusChangedCallbacks.end()))
+    {
+        m_onConnectionStatusChangedCallbacks.erase(subscriptionID);
+    }
+    m_onConnectionStatusChangedCallbacksMutex.unlock();
 }
 
 void Client::run()
@@ -290,18 +304,24 @@ void Client::disconnect() {
     disconn_opts.context = this;
     disconn_opts.timeout = 10;
     MQTTAsync_disconnect(*m_client.get(), &disconn_opts);
-    for (auto& object: m_linkedObjects){
-        (void) object;
+    m_onConnectionStatusChangedCallbacksMutex.lock();
+    auto onConnectionStatusChangedCallbacks(std::move(m_onConnectionStatusChangedCallbacks));
+    m_onConnectionStatusChangedCallbacks.clear();
+    m_onConnectionStatusChangedCallbacksMutex.unlock();
+    for (auto& callback: onConnectionStatusChangedCallbacks){
+        callback.second(false);
     }
-    m_linkedObjects.clear();
 }
 
 void Client::onConnected()
 {
     m_connected = true;
     AG_LOG_DEBUG("socket connected");
-    for (auto& object: m_linkedObjects){
-        object->onConnected();
+    m_onConnectionStatusChangedCallbacksMutex.lock();
+    auto onConnectionStatusChangedCallbacks { m_onConnectionStatusChangedCallbacks };
+    m_onConnectionStatusChangedCallbacksMutex.unlock();
+    for (auto& callback: onConnectionStatusChangedCallbacks){
+        callback.second(true);
     }
     m_thread = std::thread(&Client::run, this);
 }
