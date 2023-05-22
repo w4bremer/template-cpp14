@@ -14,8 +14,8 @@ public:
     explicit SameEnum1InterfaceService(std::shared_ptr<ISameEnum1Interface> impl, std::shared_ptr<ApiGear::MQTT::Client> client);
     virtual ~SameEnum1InterfaceService() override;
 
+    void onConnectionStatusChanged(bool connectionStatus);
     // sink interface
-    void onConnected() override;
     void onSignal(const ApiGear::MQTT::Topic&, const std::string&) override {};
     void onPropertyChanged(const ApiGear::MQTT::Topic&, const std::string&) override {};
     void onInvoke(const ApiGear::MQTT::Topic& topic, const std::string& args, const ApiGear::MQTT::Topic& responseTopic, const std::string& correlationData) override;
@@ -27,6 +27,8 @@ public:
 private:
     std::shared_ptr<ISameEnum1Interface> m_impl;
     std::shared_ptr<ApiGear::MQTT::Client> m_client;
+    // id for connection status registration
+    int m_connectionStatusRegistrationID;
 };
 } // namespace MQTT
 } // namespace TbSame1

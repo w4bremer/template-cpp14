@@ -14,7 +14,7 @@ using namespace {{ Camel .System.Name }}::{{ Camel .Module.Name }}::MQTT;
 {
     m_impl->_getPublisher().subscribeToAllChanges(*this);
 
-    m_client->registerSink(*this);
+    m_connectionStatusRegistrationID = m_client->subscribeToConnectionStatus(std::bind(&{{$class}}::onConnectionStatusChanged, this, std::placeholders::_1));
     // subscribe to all property change request methods
 {{- range .Interface.Properties}}
 {{- $property := . }}
@@ -31,7 +31,7 @@ using namespace {{ Camel .System.Name }}::{{ Camel .Module.Name }}::MQTT;
 {
     m_impl->_getPublisher().unsubscribeFromAllChanges(*this);
 
-    m_client->unregisterSink(*this);
+    m_client->unsubscribeToConnectionStatus(m_connectionStatusRegistrationID);
 
 {{- range .Interface.Properties}}
 {{- $property := . }}
@@ -43,8 +43,13 @@ using namespace {{ Camel .System.Name }}::{{ Camel .Module.Name }}::MQTT;
 {{- end }}
 }
 
-void {{$class}}::onConnected()
+void {{$class}}::onConnectionStatusChanged(bool connectionStatus)
 {
+    if(!connectionStatus)
+    {
+        return;
+    }
+
     // send current values
 {{- range .Interface.Properties}}
 {{- $property := . }}

@@ -11,7 +11,7 @@ StructArrayInterfaceService::StructArrayInterfaceService(std::shared_ptr<IStruct
 {
     m_impl->_getPublisher().subscribeToAllChanges(*this);
 
-    m_client->registerSink(*this);
+    m_connectionStatusRegistrationID = m_client->subscribeToConnectionStatus(std::bind(&StructArrayInterfaceService::onConnectionStatusChanged, this, std::placeholders::_1));
     // subscribe to all property change request methods
     m_client->subscribeTopic(ApiGear::MQTT::Topic("testbed1","StructArrayInterface",ApiGear::MQTT::Topic::TopicType::Operation,"_setpropBool"), this);
     m_client->subscribeTopic(ApiGear::MQTT::Topic("testbed1","StructArrayInterface",ApiGear::MQTT::Topic::TopicType::Operation,"_setpropInt"), this);
@@ -28,7 +28,7 @@ StructArrayInterfaceService::~StructArrayInterfaceService()
 {
     m_impl->_getPublisher().unsubscribeFromAllChanges(*this);
 
-    m_client->unregisterSink(*this);
+    m_client->unsubscribeToConnectionStatus(m_connectionStatusRegistrationID);
     m_client->unsubscribeTopic(ApiGear::MQTT::Topic("testbed1","StructArrayInterface",ApiGear::MQTT::Topic::TopicType::Operation,"_setpropBool"), this);
     m_client->unsubscribeTopic(ApiGear::MQTT::Topic("testbed1","StructArrayInterface",ApiGear::MQTT::Topic::TopicType::Operation,"_setpropInt"), this);
     m_client->unsubscribeTopic(ApiGear::MQTT::Topic("testbed1","StructArrayInterface",ApiGear::MQTT::Topic::TopicType::Operation,"_setpropFloat"), this);
@@ -39,8 +39,13 @@ StructArrayInterfaceService::~StructArrayInterfaceService()
     m_client->unsubscribeTopic(ApiGear::MQTT::Topic("testbed1","StructArrayInterface",ApiGear::MQTT::Topic::TopicType::Operation,"funcString"), this);
 }
 
-void StructArrayInterfaceService::onConnected()
+void StructArrayInterfaceService::onConnectionStatusChanged(bool connectionStatus)
 {
+    if(!connectionStatus)
+    {
+        return;
+    }
+
     // send current values
     onPropBoolChanged(m_impl->getPropBool());
     onPropIntChanged(m_impl->getPropInt());
