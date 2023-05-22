@@ -146,7 +146,7 @@ void Client::run()
 void Client::checkForNewSubscriptions()
 {
     m_toBeSubscribedTopicsMutex.lock();
-    const auto toBeSubscribedTopics { m_toBeSubscribedTopics };
+    const auto toBeSubscribedTopics(std::move(m_toBeSubscribedTopics));
     m_toBeSubscribedTopics.clear();
     m_toBeSubscribedTopicsMutex.unlock();
     for (const auto& topic : toBeSubscribedTopics) {
@@ -167,7 +167,7 @@ void Client::checkForNewSubscriptions()
 void Client::checkForOldSubscriptions()
 {
     m_toBeUnsubscribedTopicsMutex.lock();
-    const auto toBeUnsubscribedTopics { m_toBeUnsubscribedTopics };
+    const auto toBeUnsubscribedTopics(std::move(m_toBeUnsubscribedTopics));
     m_toBeUnsubscribedTopics.clear();
     m_toBeUnsubscribedTopicsMutex.unlock();
     for (const auto& topic : toBeUnsubscribedTopics) {
