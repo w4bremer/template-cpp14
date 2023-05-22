@@ -20,7 +20,7 @@ struct subscribeTopicContext {
 void onSendFailure(void* context, MQTTAsync_failureData5* response)
 {
     Client* client = static_cast<Client*>(context);
-    AG_LOG_ERROR("Send failed, rc " +  std::to_string(response->code));
+    AG_LOG_ERROR("Send failed, ResponseCode " +  std::to_string(response->code));
 }
 
 void onSubscribeSuccess(void* context, MQTTAsync_successData5* response)
@@ -33,7 +33,7 @@ void onSubscribeSuccess(void* context, MQTTAsync_successData5* response)
 void onSubscribeFailure(void* context, MQTTAsync_failureData5* response)
 {
     subscribeTopicContext* ctx = static_cast<subscribeTopicContext*>(context);
-    AG_LOG_ERROR("Subscribe failed, rc " +  std::to_string(response->code));
+    AG_LOG_ERROR("Subscribe failed, ResponseCode " +  std::to_string(response->code));
     delete ctx;
 }
 
@@ -47,7 +47,7 @@ void onUnsubscribeSuccess(void* context, MQTTAsync_successData5* response)
 void onUnsubscribeFailure(void* context, MQTTAsync_failureData5* response)
 {
     subscribeTopicContext* ctx = static_cast<subscribeTopicContext*>(context);
-    AG_LOG_ERROR("Unsubscribe failed, rc " + std::to_string(response->code));
+    AG_LOG_ERROR("Unsubscribe failed, ResponseCode " + std::to_string(response->code));
     delete ctx;
 }
 
@@ -60,7 +60,7 @@ void onConnected(void* context, MQTTAsync_successData5* response)
 void onConnectedFail(void* context,  MQTTAsync_failureData5* response)
 {
     Client* client = static_cast<Client*>(context);
-    AG_LOG_ERROR("Connect failed, rc " + std::to_string(response->code));
+    AG_LOG_ERROR("Connect failed, ResponseCode " + std::to_string(response->code));
     client->onDisconnected();
 }
 
@@ -151,15 +151,15 @@ void Client::checkForNewSubscriptions()
     m_toBeSubscribedTopicsMutex.unlock();
     for (const auto& topic : toBeSubscribedTopics) {
         subscribeTopicContext* ctx = new subscribeTopicContext{topic.first, topic.second, this};
-        int rc = 0;
 
         MQTTAsync_responseOptions opts = MQTTAsync_responseOptions_initializer;
         opts.onSuccess5 = onSubscribeSuccess;
         opts.onFailure5 = onSubscribeFailure;
         opts.context = ctx;
-        if ((rc = MQTTAsync_subscribe(*m_client.get(), topic.first.getEncodedTopic().c_str(), QOS, &opts)) != MQTTASYNC_SUCCESS)
+        int responseCode = MQTTAsync_subscribe(*m_client.get(), topic.first.getEncodedTopic().c_str(), QOS, &opts);
+        if (responseCode != MQTTASYNC_SUCCESS)
         {
-            AG_LOG_ERROR("Failed to start subscribe, return code " + std::to_string(rc));
+            AG_LOG_ERROR("Failed to start subscribe, return code " + std::to_string(responseCode));
         }
     }
 }
@@ -174,15 +174,15 @@ void Client::checkForOldSubscriptions()
         AG_LOG_INFO("Unsubscribing from " + topic.first.getEncodedTopic());
 
         subscribeTopicContext* ctx = new subscribeTopicContext{topic.first, topic.second, this};
-        int rc = 0;
 
         MQTTAsync_responseOptions opts = MQTTAsync_responseOptions_initializer;
         opts.onSuccess5 = onUnsubscribeSuccess;
         opts.onFailure5 = onUnsubscribeFailure;
         opts.context = ctx;
-        if ((rc = MQTTAsync_unsubscribe(*m_client.get(), topic.first.getEncodedTopic().c_str(), &opts)) != MQTTASYNC_SUCCESS)
+        int responseCode = MQTTAsync_unsubscribe(*m_client.get(), topic.first.getEncodedTopic().c_str(), &opts);
+        if (responseCode != MQTTASYNC_SUCCESS)
         {
-            AG_LOG_WARNING("Failed to start unsubscribe, return code " + std::to_string(rc));
+            AG_LOG_WARNING("Failed to start unsubscribe, return code " + std::to_string(responseCode));
         }
     }
 }
@@ -202,15 +202,15 @@ void Client::unsubscribeAllTopics()
         AG_LOG_INFO("Unsubscribing from " + topic.first.getEncodedTopic());
 
         subscribeTopicContext* ctx = new subscribeTopicContext{topic.first, topic.second, this};
-        int rc = 0;
 
         MQTTAsync_responseOptions opts = MQTTAsync_responseOptions_initializer;
         opts.onSuccess5 = onUnsubscribeSuccess;
         opts.onFailure5 = onUnsubscribeFailure;
         opts.context = ctx;
-        if ((rc = MQTTAsync_unsubscribe(*m_client.get(), topic.first.getEncodedTopic().c_str(), &opts)) != MQTTASYNC_SUCCESS)
+        int responseCode = MQTTAsync_unsubscribe(*m_client.get(), topic.first.getEncodedTopic().c_str(), &opts);
+        if (responseCode != MQTTASYNC_SUCCESS)
         {
-            AG_LOG_WARNING("Failed to start unsubscribe, return code " + std::to_string(rc));
+            AG_LOG_WARNING("Failed to start unsubscribe, return code " + std::to_string(responseCode));
         }
     }
 }
@@ -256,10 +256,10 @@ void Client::connectToHost(const std::string& brokerURL)
             conn_opts.context = this;
 
             MQTTAsync_setCallbacks(*m_client.get(), this, OnConnectionLost, OnMessageArrived, NULL);
-            int rc = -1;
-            if ((rc = MQTTAsync_connect(*m_client.get(), &conn_opts)) != MQTTASYNC_SUCCESS)
+            int responseCode = MQTTAsync_connect(*m_client.get(), &conn_opts);
+            if (responseCode != MQTTASYNC_SUCCESS)
             {
-                AG_LOG_ERROR("Failed to connect, return code " + std::to_string(rc));
+                AG_LOG_ERROR("Failed to connect, return code " + std::to_string(responseCode));
                 connecting = false;
                 MQTTAsync_destroy(m_client.get());
                 m_client.reset();
@@ -397,7 +397,6 @@ void Client::invokeRemote(const Topic& topic, const std::string& value, InvokeRe
 
     MQTTAsync_responseOptions opts = MQTTAsync_responseOptions_initializer;
     MQTTAsync_message pubmsg = MQTTAsync_message_initializer;
-    int rc = 0;
 
     MQTTProperty responseTopicProperty;
     responseTopicProperty.identifier = MQTTPROPERTY_CODE_RESPONSE_TOPIC;
@@ -429,9 +428,10 @@ void Client::invokeRemote(const Topic& topic, const std::string& value, InvokeRe
     // the responseOptions properties do get overwritten by the msg properties later
     pubmsg.properties = opts.properties;
 
-    if ((rc = MQTTAsync_sendMessage(*m_client.get(), topic.getEncodedTopic().c_str(), &pubmsg, &opts)) != MQTTASYNC_SUCCESS)
+    int responseCode = MQTTAsync_sendMessage(*m_client.get(), topic.getEncodedTopic().c_str(), &pubmsg, &opts);
+    if (responseCode != MQTTASYNC_SUCCESS)
     {
-        AG_LOG_ERROR("Failed to start sendMessage, return code " + std::to_string(rc));
+        AG_LOG_ERROR("Failed to start sendMessage, return code " + std::to_string(responseCode));
     }
 }
 
@@ -439,7 +439,6 @@ void Client::notifyPropertyChange(const Topic& topic, const std::string& value)
 {
     MQTTAsync_responseOptions opts = MQTTAsync_responseOptions_initializer;
     MQTTAsync_message pubmsg = MQTTAsync_message_initializer;
-    int rc = 0;
 
     opts.onFailure5 = onSendFailure;
     opts.context = this;
@@ -448,9 +447,10 @@ void Client::notifyPropertyChange(const Topic& topic, const std::string& value)
     pubmsg.qos = QOS;
     // property changes shall be retained and automatically send to new clients
     pubmsg.retained = 1;
-    if ((rc = MQTTAsync_sendMessage(*m_client.get(), topic.getEncodedTopic().c_str(), &pubmsg, &opts)) != MQTTASYNC_SUCCESS)
+    int responseCode = MQTTAsync_sendMessage(*m_client.get(), topic.getEncodedTopic().c_str(), &pubmsg, &opts);
+    if (responseCode != MQTTASYNC_SUCCESS)
     {
-        AG_LOG_ERROR("Failed to start sendMessage, return code " + std::to_string(rc));
+        AG_LOG_ERROR("Failed to start sendMessage, return code " + std::to_string(responseCode));
     }
 }
 
@@ -458,16 +458,16 @@ void Client::notifySignal(const Topic& topic, const std::string& args)
 {
 	MQTTAsync_responseOptions opts = MQTTAsync_responseOptions_initializer;
 	MQTTAsync_message pubmsg = MQTTAsync_message_initializer;
-	int rc = 0;
 
 	pubmsg.payload = const_cast<void*>(static_cast<const void*>(args.c_str()));
 	pubmsg.payloadlen = args.size();
 	pubmsg.qos = QOS;
 	pubmsg.retained = 0;
 
-	if ((rc = MQTTAsync_sendMessage(*m_client.get(), topic.getEncodedTopic().c_str(), &pubmsg, &opts)) != MQTTASYNC_SUCCESS)
+    int responseCode = MQTTAsync_sendMessage(*m_client.get(), topic.getEncodedTopic().c_str(), &pubmsg, &opts);
+	if (responseCode != MQTTASYNC_SUCCESS)
 	{
-        AG_LOG_ERROR("Failed to start sendMessage, return code " + std::to_string(rc));
+        AG_LOG_ERROR("Failed to start sendMessage, return code " + std::to_string(responseCode));
 	}
 }
 
@@ -475,7 +475,6 @@ void Client::notifyInvokeResponse(const Topic& responseTopic, const std::string&
 {
     MQTTAsync_responseOptions opts = MQTTAsync_responseOptions_initializer;
     MQTTAsync_message pubmsg = MQTTAsync_message_initializer;
-    int rc = 0;
 
     MQTTProperty correlationDataProperty;
     correlationDataProperty.identifier = MQTTPROPERTY_CODE_CORRELATION_DATA;
@@ -491,9 +490,10 @@ void Client::notifyInvokeResponse(const Topic& responseTopic, const std::string&
 
     // the responseOptions properties do get overwritten by the msg properties later
     pubmsg.properties = opts.properties;
-    if ((rc = MQTTAsync_sendMessage(*m_client.get(), responseTopic.getEncodedTopic().c_str(), &pubmsg, &opts)) != MQTTASYNC_SUCCESS)
+    int responseCode = MQTTAsync_sendMessage(*m_client.get(), responseTopic.getEncodedTopic().c_str(), &pubmsg, &opts);
+    if (responseCode != MQTTASYNC_SUCCESS)
     {
-        AG_LOG_ERROR("Failed to start sendMessage, return code " + std::to_string(rc));
+        AG_LOG_ERROR("Failed to start sendMessage, return code " + std::to_string(responseCode));
     }
 }
 
@@ -501,15 +501,15 @@ void Client::setRemoteProperty(const Topic& topic, const std::string& value)
 {
 	MQTTAsync_responseOptions opts = MQTTAsync_responseOptions_initializer;
 	MQTTAsync_message pubmsg = MQTTAsync_message_initializer;
-	int rc = 0;
 
 	pubmsg.payload = const_cast<void*>(static_cast<const void*>(value.c_str()));
 	pubmsg.payloadlen = value.size();
 	pubmsg.qos = QOS;
 	pubmsg.retained = 0;
-	if ((rc = MQTTAsync_sendMessage(*m_client.get(), topic.getEncodedTopic().c_str(), &pubmsg, &opts)) != MQTTASYNC_SUCCESS)
+    int responseCode = MQTTAsync_sendMessage(*m_client.get(), topic.getEncodedTopic().c_str(), &pubmsg, &opts);
+	if (responseCode != MQTTASYNC_SUCCESS)
 	{
-        AG_LOG_ERROR("Failed to start sendMessage, return code " + std::to_string(rc));
+        AG_LOG_ERROR("Failed to start sendMessage, return code " + std::to_string(responseCode));
 	}
 }
 
