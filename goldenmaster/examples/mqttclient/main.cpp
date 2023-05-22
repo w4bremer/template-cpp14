@@ -62,7 +62,8 @@ int main(){
     auto randomId = distribution(randomNumberGenerator);
     // MQTT clients need to have unique identifiers
     auto mqttclient = std::make_shared<ApiGear::MQTT::Client>("testClient"+std::to_string(randomId));
-    mqttclient->connectToHost("");
+
+    // set up modules
     std::unique_ptr<Testbed2::IManyParamInterface> testTestbed2ManyParamInterface = std::make_unique<Testbed2::MQTT::ManyParamInterfaceClient>(mqttclient);
     std::unique_ptr<Testbed2::INestedStruct1Interface> testTestbed2NestedStruct1Interface = std::make_unique<Testbed2::MQTT::NestedStruct1InterfaceClient>(mqttclient);
     std::unique_ptr<Testbed2::INestedStruct2Interface> testTestbed2NestedStruct2Interface = std::make_unique<Testbed2::MQTT::NestedStruct2InterfaceClient>(mqttclient);
@@ -84,6 +85,9 @@ int main(){
     std::unique_ptr<TbSimple::INoSignalsInterface> testTbSimpleNoSignalsInterface = std::make_unique<TbSimple::MQTT::NoSignalsInterfaceClient>(mqttclient);
     std::unique_ptr<Testbed1::IStructInterface> testTestbed1StructInterface = std::make_unique<Testbed1::MQTT::StructInterfaceClient>(mqttclient);
     std::unique_ptr<Testbed1::IStructArrayInterface> testTestbed1StructArrayInterface = std::make_unique<Testbed1::MQTT::StructArrayInterfaceClient>(mqttclient);
+
+    // start mqtt connection
+    mqttclient->connectToHost("");
 
     bool keepRunning = true;
     std::string cmd;
