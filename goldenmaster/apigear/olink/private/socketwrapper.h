@@ -8,6 +8,16 @@
 #include <memory>
 #include <future>
 
+
+#include <Poco/URI.h>
+#include <Poco/Util/Timer.h>
+#include <Poco/Util/TimerTask.h>
+
+#include <atomic>
+#include <deque>
+#include <memory>
+#include <map>
+
 namespace ApiGear {
 
 
@@ -19,6 +29,7 @@ class ISocketUser;
 * A helper class for wrapping POCO::WebSocket.
 * Adds receiving message in a separate thread.
 * Adds thread safety for writing and reading through socket.
+* Allows sending messages with sending queue (with some delay up to small number of milliseconds) or sending directly.
 */
 class APIGEAR_OLINK_EXPORT  SocketWrapper
 {
@@ -27,8 +38,11 @@ public:
     /**
     * ctor
     * @param socketUser A user that will be notified about events defined as ISocketUser API.
+    * @param sendPing. Set to true if your socket should send ping each time it sends portion of queued messages.
     */
-    SocketWrapper(ISocketUser& socketUser);
+    SocketWrapper(ISocketUser& socketUser, bool sendPing);
+
+    ~SocketWrapper();
 
     /** 
     * Sends message through the socket.
@@ -38,7 +52,15 @@ public:
     *   see Poco::Net::WebSocket Frame Opcodes for more info.
     * @return true if message was sent, false otherwise.
     */
-    bool writeMessage(std::string message, int frameOpCode);
+    bool writeMessage(const std::string& message, int frameOpCode);
+    /**
+    * Use this method to send pack of messages.
+    * Messages are queued for up to few milliseconds and sent. 
+    * If the connection is not working, message are stored and send when connection is back.
+    * @param message a message in network format to be send as it is. Destined for regular text messages.
+        The opcode is not a parameter.
+    */
+    void writeMessageWithQueue(const std::string& msg);
     /**
     * Checks if connection is in closed state
     * @return true if connection is in closed state, false if it is up and running.
@@ -69,6 +91,25 @@ private:
     /** Helper function to finalize closing socket and cleans up resources. */
     void onClosed();
 
+    /* Sends all queued messages and sends close frame*/
+    void closeQueue();
+    /**
+    * Processes queued messages.
+    * @param task. Parameter is not used. The function uses most recent task stored as a member.
+    */
+    void processMessages(Poco::Util::TimerTask& task);
+    /** Schedules a process messages task.
+        @param delayMiliseconds. A delay with which task is scheduled.
+    */
+    void scheduleProcessMessages(long delayMiliseconds);
+
+    /** 
+    * Sends stored messages
+    * If queue is very long, only part of messages is sent in one loop, and rest is scheduled to be sent with next task.
+    * allowing socket to receive incoming messages in the meantime and sending ping messages.
+    */
+    void flushMessages();
+
     /** The websocket used for connection.*/
     std::unique_ptr<Poco::Net::WebSocket> m_socket;
     /** A mutex for the socket */
@@ -79,6 +120,19 @@ private:
     std::future<void> m_receivingDone;
     /** A user that will be notified about events defined as ISocketUser API. */
     ISocketUser& m_socketUser;
+    /** True if socket should send ping messages. */
+    bool m_addPingMessage;
+
+    /** The timer used for to process messages. */
+    Poco::Util::Timer m_retryTimer;
+    /** Poco Task that handles processing messages */
+    Poco::Util::TimerTask::Ptr m_processMessagesTask;
+    /** A mutex for the process messages task */
+    std::timed_mutex m_taskMutex;
+    /** Messages queue, store messages to send also before the connection is set. */
+    std::deque<std::string> m_queue;
+    /** A mutex for the message queue */
+    std::timed_mutex m_queueMutex;
 };
 
 }}   //namespace ApiGear::PocoImpl

@@ -9,7 +9,6 @@
 #include "olink/iobjectsink.h"
 #include "../utilities/logger.h"
 
-#include <iostream>
 #include <memory>
 
 using namespace ApiGear::PocoImpl;
@@ -17,22 +16,18 @@ using namespace ApiGear::PocoImpl;
 namespace{
     const std::string jsonContentType = "application/json";
     const std::string defaultGatewayUrl = "ws://localhost:8000/ws";
-    const std::string pingFramePayload = "ping";
-    long retryInterval = 500; //Milliseconds
-    long smallDelay = 10; //Milliseconds
+
     long tryReconnectDelay = 500; //Milliseconds
+    long repeatTaskInterval = 10000; //Milliseconds
 }
 
 OlinkConnection::OlinkConnection(ApiGear::ObjectLink::ClientRegistry& registry)
     : m_node(ApiGear::ObjectLink::ClientNode::create(registry)),
-    m_socket(*this),
+    m_socket(*this, true),
     m_isConnecting(false)
 {
     auto writeFunction = [this](const auto& msg) {
-        std::unique_lock<std::timed_mutex> lock(m_queueMutex);
-        m_queue.push_back(msg);
-        lock.unlock();
-        scheduleProcessMessages(smallDelay);
+        m_socket.writeMessageWithQueue(msg);
     };
     m_node->onWrite(writeFunction);
 }
@@ -40,7 +35,27 @@ OlinkConnection::OlinkConnection(ApiGear::ObjectLink::ClientRegistry& registry)
 void OlinkConnection::onConnectionClosedFromNetwork()
 {
     onDisconnected();
-    scheduleProcessMessages(tryReconnectDelay);
+    std::unique_lock<std::mutex> lock(m_reconnectMutex);
+    if (m_reconnectTask) {
+        m_reconnectTask->cancel();
+    }
+    m_reconnectTask = new Poco::Util::TimerTaskAdapter<OlinkConnection>(*this, &OlinkConnection::reconnect);
+    lock.unlock();
+
+    m_reconnectTimer.schedule(m_reconnectTask, tryReconnectDelay, repeatTaskInterval);
+}
+
+void OlinkConnection::onNotifyNoSocket(){
+    std::unique_lock<std::mutex> lock(m_reconnectMutex);
+    if (m_reconnectTask) {
+        m_reconnectTask->cancel();
+    }
+    m_reconnectTask = new Poco::Util::TimerTaskAdapter<OlinkConnection>(*this, &OlinkConnection::reconnect);
+    lock.unlock();
+    // This function is called by socket wrapper, therefore to allow it to finish its function, and to be proceed properly
+    // The  re-connecting is scheduled in 1ms, so it is executed outside this call.
+    long startTaskDelayMilliseconds = 1;
+    m_reconnectTimer.schedule(m_reconnectTask, startTaskDelayMilliseconds, repeatTaskInterval);
 }
 
 OlinkConnection::~OlinkConnection()
@@ -50,9 +65,7 @@ OlinkConnection::~OlinkConnection()
     for(auto& object : copyObjectLinkStatus){
         disconnectAndUnlink(object.first);
     }
-    closeQueue();
-    if (!m_socket.isClosed())
-    {
+    if (!m_socket.isClosed()){
         m_socket.close();
     }
     onDisconnected();
@@ -90,13 +103,6 @@ void OlinkConnection::disconnectAndUnlink(const std::string& objectId)
 
 void OlinkConnection::connectToHost(Poco::URI url)
 {
-    if (m_processMessagesTask) {
-        std::unique_lock<std::timed_mutex> lock(m_taskMutex);
-        m_processMessagesTask->cancel();
-        m_processMessagesTask.reset();
-        lock.unlock();
-    }
-
     if(url.empty()) {
         m_serverUrl = Poco::URI(defaultGatewayUrl);
         AG_LOG_DEBUG("No host url provided");
@@ -127,27 +133,18 @@ void OlinkConnection::connectToHost(Poco::URI url)
 
 void OlinkConnection::disconnect() {
     AG_LOG_DEBUG("request to disconnect socket");
+    if (m_reconnectTask) {
+        m_reconnectTask->cancel();
+    }
     for (auto& object : m_objectLinkStatus){
         if (object.second != LinkStatus::NotLinked){
             m_node->unlinkRemote(object.first);
         }
     }
-    closeQueue();
+
     m_socket.close();
     onDisconnected();
 }
-
-void OlinkConnection::closeQueue()
-{
-    if (m_processMessagesTask){
-        std::unique_lock<std::timed_mutex> lock(m_taskMutex);
-        m_processMessagesTask->cancel();
-        m_processMessagesTask.reset();
-        lock.unlock();
-    }
-    flushMessages();
-}
-
 
 std::shared_ptr<ApiGear::ObjectLink::ClientNode> OlinkConnection::node()
 {
@@ -162,7 +159,6 @@ void OlinkConnection::onConnected()
         m_node->linkRemote(object.first);
         object.second = LinkStatus::Linked;
     }
-    scheduleProcessMessages(smallDelay);
 }
 
 void OlinkConnection::onDisconnected()
@@ -179,61 +175,7 @@ void OlinkConnection::handleTextMessage(const std::string &message)
     m_node->handleMessage(message);
 }
 
-void OlinkConnection::scheduleProcessMessages(long delayMiliseconds)
+void OlinkConnection::reconnect(Poco::Util::TimerTask& /*task*/)
 {
-    std::unique_lock<std::timed_mutex> lock(m_taskMutex, std::defer_lock);
-    if (lock.try_lock()) // else other thread is scheduling a task currently, so the messages would be sent anyway.
-    {
-        if (!m_processMessagesTask){
-            m_processMessagesTask = new Poco::Util::TimerTaskAdapter<OlinkConnection>(*this, &OlinkConnection::processMessages);
-            m_retryTimer.schedule(m_processMessagesTask, delayMiliseconds, retryInterval);
-            lock.unlock();
-        }
-    }
-}
-
-void OlinkConnection::processMessages(Poco::Util::TimerTask& /*task*/)
-{
-    if (m_socket.isClosed()) {
-        connectToHost(m_serverUrl);
-        scheduleProcessMessages(tryReconnectDelay);
-        return;
-    }
-    std::unique_lock<std::timed_mutex> lock(m_taskMutex);
-    m_processMessagesTask->cancel();
-    m_processMessagesTask.reset();
-    m_socket.writeMessage(pingFramePayload, Poco::Net::WebSocket::FRAME_OP_PING);
-    lock.unlock();
-    flushMessages();
-}
-
-void OlinkConnection::flushMessages()
-{
-    if (!m_socket.isClosed())
-    {
-        std::deque<std::string> copyQueue;
-        std::unique_lock<std::timed_mutex> lock(m_queueMutex);
-        std::swap(copyQueue, m_queue);
-        lock.unlock();
-
-        while (!copyQueue.empty()) {
-            auto message = copyQueue.front();
-            AG_LOG_DEBUG("write message to socket " + message);
-            // if we are using JSON we need to use txt message otherwise binary messages
-            auto messageSent = m_socket.writeMessage(message, Poco::Net::WebSocket::FRAME_TEXT);
-            if (messageSent){
-                copyQueue.pop_front();
-            }
-            else {
-                if (!m_socket.isClosed()){
-                    lock.lock();
-                    // push again not sent elements to queue front 
-                    m_queue.insert(m_queue.begin(), copyQueue.begin(), copyQueue.end());
-                    lock.unlock();
-                    scheduleProcessMessages(tryReconnectDelay);
-                }
-                break;
-            }
-        }
-    }
+    connectToHost(m_serverUrl);
 }

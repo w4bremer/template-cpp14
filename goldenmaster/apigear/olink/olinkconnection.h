@@ -12,7 +12,6 @@
 #include <Poco/Util/TimerTask.h>
 
 #include <atomic>
-#include <deque>
 #include <memory>
 #include <map>
 
@@ -76,6 +75,11 @@ public:
     * A callback to inform the socket user that connection was closed with close frame received from network.
     */
     void onConnectionClosedFromNetwork() override;
+    /**
+    * ISocketUser::onNotifyNoSocket implementation
+    * A callback to inform that socket is not available to use and messages cannot be sent.
+    */
+    void onNotifyNoSocket() override;
 
 private:
     /** Sends all the waiting messages when the connection is up. */
@@ -85,23 +89,14 @@ private:
     */
     void onDisconnected();
 
-    /* Sends all queued messages and sends close frame*/
-    void closeQueue();
-    /**
-    * Processes queued messages.
-    * @param task. Parameter is not used. The function uses most recent task stored as a member.
-    */
-    void processMessages(Poco::Util::TimerTask& task);
-    /** Schedules a process messages task.
-        @param delayMiliseconds. A delay with which task is scheduled.
-    */
-    void scheduleProcessMessages(long delayMiliseconds);
-
-    /** Sends all stored messages*/
-    void flushMessages();
-
     /** Client node that separates sinks Objects from created socket, and handles incoming and outgoing messages. */
     std::shared_ptr<ApiGear::ObjectLink::ClientNode> m_node;
+
+    /**
+    * Tries to reconnect.
+    * @param task. Parameter is not used. The most recent task is stored as a member to cancel it if necessary.
+    */
+    void reconnect(Poco::Util::TimerTask& task);
 
     enum class LinkStatus
     {
@@ -118,16 +113,11 @@ private:
     /** Flag to protect against opening a connection from many threads at the same time*/
     std::atomic<bool> m_isConnecting;
 
-    /** The timer used for to process messages. */
-    Poco::Util::Timer m_retryTimer;
-    /** Poco Task that handles processing messages */
-    Poco::Util::TimerTask::Ptr m_processMessagesTask;
-    /** A mutex for the process messages task */
-    std::timed_mutex m_taskMutex;
-    /** Messages queue, store messages to send also before the connection is set. */
-    std::deque<std::string> m_queue;
-    /** A mutex for the message queue */
-    std::timed_mutex m_queueMutex;
-
+    /** The timer used to schedule handle closed connection. */
+    Poco::Util::Timer m_reconnectTimer;
+    /** Poco Task to handle closed connection, stored to be canceled if necessary. */
+    Poco::Util::TimerTask::Ptr m_reconnectTask;
+    /** A mutex for the process message*/
+    std::mutex m_reconnectMutex;
 };
 }} // namespace ApiGear::PocoImpl

@@ -51,6 +51,9 @@ void OLinkHost::listen(int port)
 void OLinkHost::close()
 {
     m_connectionStorage.closeConnections();
-    m_webserver->stop();
+    if (m_webserver)
+    {
+        m_webserver->stop();
+    }
     AG_LOG_INFO("wss.closed()");
 }

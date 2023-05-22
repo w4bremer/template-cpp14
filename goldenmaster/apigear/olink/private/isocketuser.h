@@ -20,6 +20,11 @@ public:
     * A callback to inform the socket user that connection was closed with close frame received from network.
     */
     virtual void onConnectionClosedFromNetwork() = 0;
+
+    /** 
+    * A callback to inform that socket is not available to use and messages cannot be sent.
+    */
+    virtual void onNotifyNoSocket() {};
 };
 
 }}   //namespace ApiGear::PocoImpl

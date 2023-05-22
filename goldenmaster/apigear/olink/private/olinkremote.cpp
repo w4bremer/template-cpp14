@@ -18,13 +18,13 @@ OLinkRemote::OLinkRemote(std::unique_ptr<Poco::Net::WebSocket> socket,
                         IConnectionStorage& connectionStorage,
                         ApiGear::ObjectLink::RemoteRegistry& registry,
                         const ApiGear::ObjectLink::WriteLogFunc& logFunc)
-    : m_socket(*this),
+    : m_socket(*this, false),
      m_connectionStorage(connectionStorage),
      m_node(ApiGear::ObjectLink::RemoteNode::createRemoteNode(registry))
 {
     m_node->onLog(logFunc);
-    m_node->onWrite([this](std::string msg) {
-        m_socket.writeMessage(msg, Poco::Net::WebSocket::FRAME_TEXT);
+    m_node->onWrite([this](const std::string& msg) {
+        m_socket.writeMessageWithQueue(msg);
     });
     m_socket.changeSocket(std::move(socket));
 }
