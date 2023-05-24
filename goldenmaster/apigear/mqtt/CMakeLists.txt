@@ -12,6 +12,7 @@ find_package(eclipse-paho-mqtt-c REQUIRED paho-mqtt3as)
 find_package(OpenSSL REQUIRED SSL Crypto)
 
 set (SOURCES
+  private/mqttcwrapper.cpp
   mqttcppclient.cpp
   mqtttopic.cpp
 )
