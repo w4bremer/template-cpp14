@@ -4,6 +4,7 @@
 #include "private/mqttcwrapper.h"
 #include "mqttcommon.h"
 #include "mqtttopic.h"
+#include "mqtttypes.h"
 
 namespace ApiGear {
 namespace MQTT {
