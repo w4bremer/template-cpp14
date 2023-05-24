@@ -10,7 +10,6 @@
 #include <thread>
 #include <condition_variable>
 #include "nlohmann/json.hpp"
-#include "mqttcommon.h"
 #include "mqtttopic.h"
 #include "mqtttypes.h"
 
@@ -27,11 +26,11 @@ class ISink;
  * Since in MQTT there are only clients connected to a central broker,
  * the service and client side use this class to connect to each other via the broker.
  */
-class APIGEAR_MQTT_EXPORT CWrapper
+class CWrapper
 {
 public:
     explicit CWrapper(const std::string& clientID);
-    virtual ~CWrapper() = default;
+    virtual ~CWrapper();
 public:
     /**
     * Connects to the specified broker brokerURL
