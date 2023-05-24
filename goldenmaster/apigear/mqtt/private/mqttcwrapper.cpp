@@ -114,6 +114,8 @@ CWrapper::CWrapper(const std::string& clientID)
 {
 }
 
+CWrapper::~CWrapper() = default;
+
 int CWrapper::subscribeToConnectionStatus(OnConnectionStatusChangedCallBackFunction callBack)
 {
     auto randomId = 0;
