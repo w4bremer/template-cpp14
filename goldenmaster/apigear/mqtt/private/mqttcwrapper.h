@@ -12,6 +12,7 @@
 #include "nlohmann/json.hpp"
 #include "mqttcommon.h"
 #include "mqtttopic.h"
+#include "mqtttypes.h"
 
 typedef void* MQTTAsync;
 
@@ -19,22 +20,6 @@ namespace ApiGear {
 namespace MQTT {
 
 class ISink;
-typedef std::function<void(bool connectionStatus)> OnConnectionStatusChangedCallBackFunction;
-
-class APIGEAR_MQTT_EXPORT InvokeReplyArg {
-public:
-    nlohmann::json value;
-};
-
-class APIGEAR_MQTT_EXPORT Message {
-public:
-    Topic topic {""};
-    std::string content {""}; //optional
-    Topic responseTopic {""}; //optional
-    std::string correlationData {""}; //optional
-};
-
-typedef std::function<void(InvokeReplyArg)> InvokeReplyFunc;
 
 /**
  * @brief Describes incoming part of messages of the protocol for client side.
