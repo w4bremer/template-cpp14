@@ -252,6 +252,10 @@ features:
           raw: true
         - source: "apigear/mqtt/CMakeLists.txt"
           raw: true
+        - source: "apigear/mqtt/private/mqttcwrapper.cpp"
+          raw: true
+        - source: "apigear/mqtt/private/mqttcwrapper.h"
+          raw: true
         - source: "apigear/mqtt/mqttcppclient.cpp"
           raw: true
         - source: "apigear/mqtt/mqttcppclient.h"
