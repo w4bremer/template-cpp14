@@ -1,4 +1,5 @@
 #include "mqttcppclient.h"
+#include "private/mqttcwrapper.h"
 
 using namespace ApiGear::MQTT;
 
@@ -6,6 +7,8 @@ Client::Client(const std::string& clientID)
 {
     m_cwrapper = std::make_unique<CWrapper>(clientID);
 }
+
+Client::~Client() = default;
 
 const std::string& Client::getClientId() const
 {

@@ -1,7 +1,7 @@
 #pragma once
 
+#include <memory>
 #include "nlohmann/json.hpp"
-#include "private/mqttcwrapper.h"
 #include "mqttcommon.h"
 #include "mqtttopic.h"
 #include "mqtttypes.h"
@@ -21,7 +21,8 @@ class APIGEAR_MQTT_EXPORT Client
 {
 public:
     explicit Client(const std::string& clientID);
-    virtual ~Client() = default;
+    virtual ~Client();
+
 public:
     /**
     * Connects to the specified broker brokerURL
@@ -56,7 +57,7 @@ public:
     const std::string& getClientId() const;
 
 private:
-    std::unique_ptr<CWrapper> m_cwrapper;
+    std::unique_ptr<class CWrapper> m_cwrapper;
 };
 } // namespace MQTT
 } // namespace ApiGear
