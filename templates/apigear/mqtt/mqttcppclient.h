@@ -51,9 +51,6 @@ public:
     void subscribeTopic(const Topic& name, ISink* sink);
     void unsubscribeTopic(const Topic& name, ISink* sink);
 
-    void confirmSubscription(const Topic& name, ISink& sink);
-    void removeSubscription(const Topic& name);
-
     const std::string& getClientId() const;
 
 private:
