@@ -10,20 +10,20 @@ SameStruct2InterfaceClient::SameStruct2InterfaceClient(std::shared_ptr<ApiGear::
     , m_client(client)
     , m_publisher(std::make_unique<SameStruct2InterfacePublisher>())
 {
-    m_client->subscribeTopic(ApiGear::MQTT::Topic("tb.same2","SameStruct2Interface",ApiGear::MQTT::Topic::TopicType::Property,"prop1"), this);
-    m_client->subscribeTopic(ApiGear::MQTT::Topic("tb.same2","SameStruct2Interface",ApiGear::MQTT::Topic::TopicType::Property,"prop2"), this);
-    m_client->subscribeTopic(ApiGear::MQTT::Topic("tb.same2","SameStruct2Interface",ApiGear::MQTT::Topic::TopicType::Signal,"sig1"), this);
-    m_client->subscribeTopic(ApiGear::MQTT::Topic("tb.same2","SameStruct2Interface",ApiGear::MQTT::Topic::TopicType::Signal,"sig2"), this);
+    m_client->subscribeTopic(ApiGear::MQTT::Topic("tb.same2","SameStruct2Interface",ApiGear::MQTT::Topic::TopicType::Property,"prop1"), std::bind(&SameStruct2InterfaceClient::onPropertyChanged, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
+    m_client->subscribeTopic(ApiGear::MQTT::Topic("tb.same2","SameStruct2Interface",ApiGear::MQTT::Topic::TopicType::Property,"prop2"), std::bind(&SameStruct2InterfaceClient::onPropertyChanged, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
+    m_client->subscribeTopic(ApiGear::MQTT::Topic("tb.same2","SameStruct2Interface",ApiGear::MQTT::Topic::TopicType::Signal,"sig1"), std::bind(&SameStruct2InterfaceClient::onSignal, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
+    m_client->subscribeTopic(ApiGear::MQTT::Topic("tb.same2","SameStruct2Interface",ApiGear::MQTT::Topic::TopicType::Signal,"sig2"), std::bind(&SameStruct2InterfaceClient::onSignal, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
     m_client->subscribeTopic(ApiGear::MQTT::Topic("tb.same2","SameStruct2Interface",ApiGear::MQTT::Topic::TopicType::Operation,"func1",m_client->getClientId()+"/result"), nullptr);
     m_client->subscribeTopic(ApiGear::MQTT::Topic("tb.same2","SameStruct2Interface",ApiGear::MQTT::Topic::TopicType::Operation,"func2",m_client->getClientId()+"/result"), nullptr);
 }
 
 SameStruct2InterfaceClient::~SameStruct2InterfaceClient()
 {
-    m_client->unsubscribeTopic(ApiGear::MQTT::Topic("tb.same2","SameStruct2Interface",ApiGear::MQTT::Topic::TopicType::Property,"prop1"), this);
-    m_client->unsubscribeTopic(ApiGear::MQTT::Topic("tb.same2","SameStruct2Interface",ApiGear::MQTT::Topic::TopicType::Property,"prop2"), this);
-    m_client->unsubscribeTopic(ApiGear::MQTT::Topic("tb.same2","SameStruct2Interface",ApiGear::MQTT::Topic::TopicType::Signal,"sig1"), this);
-    m_client->unsubscribeTopic(ApiGear::MQTT::Topic("tb.same2","SameStruct2Interface",ApiGear::MQTT::Topic::TopicType::Signal,"sig2"), this);
+    m_client->unsubscribeTopic(ApiGear::MQTT::Topic("tb.same2","SameStruct2Interface",ApiGear::MQTT::Topic::TopicType::Property,"prop1"), std::bind(&SameStruct2InterfaceClient::onPropertyChanged, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
+    m_client->unsubscribeTopic(ApiGear::MQTT::Topic("tb.same2","SameStruct2Interface",ApiGear::MQTT::Topic::TopicType::Property,"prop2"), std::bind(&SameStruct2InterfaceClient::onPropertyChanged, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
+    m_client->unsubscribeTopic(ApiGear::MQTT::Topic("tb.same2","SameStruct2Interface",ApiGear::MQTT::Topic::TopicType::Signal,"sig1"), std::bind(&SameStruct2InterfaceClient::onSignal, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
+    m_client->unsubscribeTopic(ApiGear::MQTT::Topic("tb.same2","SameStruct2Interface",ApiGear::MQTT::Topic::TopicType::Signal,"sig2"), std::bind(&SameStruct2InterfaceClient::onSignal, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
     m_client->unsubscribeTopic(ApiGear::MQTT::Topic("tb.same2","SameStruct2Interface",ApiGear::MQTT::Topic::TopicType::Operation,"func1",m_client->getClientId()+"/result"), nullptr);
     m_client->unsubscribeTopic(ApiGear::MQTT::Topic("tb.same2","SameStruct2Interface",ApiGear::MQTT::Topic::TopicType::Operation,"func2",m_client->getClientId()+"/result"), nullptr);
 }
@@ -141,7 +141,7 @@ std::future<Struct1> SameStruct2InterfaceClient::func2Async(const Struct1& param
     );
 }
 
-void SameStruct2InterfaceClient::onSignal(const ApiGear::MQTT::Topic& topic, const std::string& args)
+void SameStruct2InterfaceClient::onSignal(const ApiGear::MQTT::Topic& topic, const std::string& args, const ApiGear::MQTT::Topic&, const std::string&)
 {
     nlohmann::json json_args = nlohmann::json::parse(args);
     if(topic.getEntityName() == "sig1") {
@@ -154,7 +154,7 @@ void SameStruct2InterfaceClient::onSignal(const ApiGear::MQTT::Topic& topic, con
     }
 }
 
-void SameStruct2InterfaceClient::onPropertyChanged(const ApiGear::MQTT::Topic& topic, const std::string& args)
+void SameStruct2InterfaceClient::onPropertyChanged(const ApiGear::MQTT::Topic& topic, const std::string& args, const ApiGear::MQTT::Topic&, const std::string&)
 {
     nlohmann::json json_args = nlohmann::json::parse(args);
     const std::string& name = topic.getEntityName();

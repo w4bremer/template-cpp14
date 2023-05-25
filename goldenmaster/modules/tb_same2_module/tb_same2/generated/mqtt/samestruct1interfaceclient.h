@@ -5,12 +5,11 @@
 #include "tb_same2/generated/api/tb_same2.h"
 #include "tb_same2/generated/core/samestruct1interface.data.h"
 #include "apigear/mqtt/mqttclient.h"
-#include "mqttisink.h"
 
 namespace Test {
 namespace TbSame2 {
 namespace MQTT {
-class TEST_TB_SAME2_EXPORT SameStruct1InterfaceClient : public ISameStruct1Interface, public virtual ApiGear::MQTT::ISink
+class TEST_TB_SAME2_EXPORT SameStruct1InterfaceClient : public ISameStruct1Interface
 {
 public:
     explicit SameStruct1InterfaceClient(std::shared_ptr<ApiGear::MQTT::Client> client);
@@ -23,9 +22,8 @@ public:
 
     bool isReady() const;
 
-    void onSignal(const ApiGear::MQTT::Topic& topic, const std::string& args) override;
-    void onPropertyChanged(const ApiGear::MQTT::Topic& topic, const std::string& args) override;
-    void onInvoke(const ApiGear::MQTT::Topic&, const std::string&, const ApiGear::MQTT::Topic&, const std::string&) override {};
+    void onSignal(const ApiGear::MQTT::Topic& topic, const std::string& args, const ApiGear::MQTT::Topic& responseTopic, const std::string& correlationData);
+    void onPropertyChanged(const ApiGear::MQTT::Topic& topic, const std::string& args, const ApiGear::MQTT::Topic& responseTopic, const std::string& correlationData);
 
 private:
     void setProp1Local(const Struct1& prop1);

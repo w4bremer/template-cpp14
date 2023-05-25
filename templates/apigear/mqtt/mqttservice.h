@@ -9,8 +9,6 @@
 namespace ApiGear {
 namespace MQTT {
 
-class ISink;
-
 class APIGEAR_MQTT_EXPORT Service
 {
 public:
@@ -38,8 +36,8 @@ public:
     void notifySignal(const Topic& name, const std::string& args);
     void notifyInvokeResponse(const Topic& responseTopic, const std::string& value, const std::string& correlationData);
 
-    void subscribeTopic(const Topic& name, ISink* sink);
-    void unsubscribeTopic(const Topic& name, ISink* sink);
+    void subscribeTopic(const Topic& name, CallbackFunction func);
+    void unsubscribeTopic(const Topic& name, CallbackFunction func);
 
     const std::string& getClientId() const;
 

@@ -3,22 +3,19 @@
 #include "testbed2/generated/api/testbed2.h"
 #include "testbed2/generated/api/common.h"
 #include "apigear/mqtt/mqttservice.h"
-#include "mqttisink.h"
 
 namespace Test {
 namespace Testbed2 {
 namespace MQTT {
-class TEST_TESTBED2_EXPORT ManyParamInterfaceService : public virtual ApiGear::MQTT::ISink, public IManyParamInterfaceSubscriber
+class TEST_TESTBED2_EXPORT ManyParamInterfaceService : public IManyParamInterfaceSubscriber
 {
 public:
     explicit ManyParamInterfaceService(std::shared_ptr<IManyParamInterface> impl, std::shared_ptr<ApiGear::MQTT::Service> service);
     virtual ~ManyParamInterfaceService() override;
 
     void onConnectionStatusChanged(bool connectionStatus);
-    // sink interface
-    void onSignal(const ApiGear::MQTT::Topic&, const std::string&) override {};
-    void onPropertyChanged(const ApiGear::MQTT::Topic&, const std::string&) override {};
-    void onInvoke(const ApiGear::MQTT::Topic& topic, const std::string& args, const ApiGear::MQTT::Topic& responseTopic, const std::string& correlationData) override;
+
+    void onInvoke(const ApiGear::MQTT::Topic& topic, const std::string& args, const ApiGear::MQTT::Topic& responseTopic, const std::string& correlationData);
 
     // IManyParamInterfaceSubscriber interface
     void onSig1(int param1) override;

@@ -9,8 +9,6 @@
 namespace ApiGear {
 namespace MQTT {
 
-class ISink;
-
 class APIGEAR_MQTT_EXPORT Client
 {
 public:
@@ -37,8 +35,8 @@ public:
     void invokeRemote(const Topic& name, const std::string& value, InvokeReplyFunc func=nullptr);
     void setRemoteProperty(const Topic& name, const std::string& value);
 
-    void subscribeTopic(const Topic& name, ISink* sink);
-    void unsubscribeTopic(const Topic& name, ISink* sink);
+    void subscribeTopic(const Topic& name, CallbackFunction func);
+    void unsubscribeTopic(const Topic& name, CallbackFunction func);
 
     const std::string& getClientId() const;
 

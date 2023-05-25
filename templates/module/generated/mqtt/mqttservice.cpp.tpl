@@ -18,11 +18,11 @@ using namespace {{ Camel .System.Name }}::{{ Camel .Module.Name }}::MQTT;
     // subscribe to all property change request methods
 {{- range .Interface.Properties}}
 {{- $property := . }}
-    m_service->subscribeTopic(ApiGear::MQTT::Topic("{{$.Module.Name}}","{{$interface}}",ApiGear::MQTT::Topic::TopicType::Operation,"_set{{$property}}"), this);
+    m_service->subscribeTopic(ApiGear::MQTT::Topic("{{$.Module.Name}}","{{$interface}}",ApiGear::MQTT::Topic::TopicType::Operation,"_set{{$property}}"), std::bind(&{{$class}}::onInvoke, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
 {{- end }}
 {{- range .Interface.Operations}}
 {{- $operation := . }}
-    m_service->subscribeTopic(ApiGear::MQTT::Topic("{{$.Module.Name}}","{{$interface}}",ApiGear::MQTT::Topic::TopicType::Operation,"{{$operation}}"), this);
+    m_service->subscribeTopic(ApiGear::MQTT::Topic("{{$.Module.Name}}","{{$interface}}",ApiGear::MQTT::Topic::TopicType::Operation,"{{$operation}}"), std::bind(&{{$class}}::onInvoke, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
 {{- end }}
 
 }
@@ -35,11 +35,11 @@ using namespace {{ Camel .System.Name }}::{{ Camel .Module.Name }}::MQTT;
 
 {{- range .Interface.Properties}}
 {{- $property := . }}
-    m_service->unsubscribeTopic(ApiGear::MQTT::Topic("{{$.Module.Name}}","{{$interface}}",ApiGear::MQTT::Topic::TopicType::Operation,"_set{{$property}}"), this);
+    m_service->unsubscribeTopic(ApiGear::MQTT::Topic("{{$.Module.Name}}","{{$interface}}",ApiGear::MQTT::Topic::TopicType::Operation,"_set{{$property}}"), std::bind(&{{$class}}::onInvoke, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
 {{- end }}
 {{- range .Interface.Operations}}
 {{- $operation := . }}
-    m_service->unsubscribeTopic(ApiGear::MQTT::Topic("{{$.Module.Name}}","{{$interface}}",ApiGear::MQTT::Topic::TopicType::Operation,"{{$operation}}"), this);
+    m_service->unsubscribeTopic(ApiGear::MQTT::Topic("{{$.Module.Name}}","{{$interface}}",ApiGear::MQTT::Topic::TopicType::Operation,"{{$operation}}"), std::bind(&{{$class}}::onInvoke, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
 {{- end }}
 }
 
