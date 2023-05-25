@@ -4,7 +4,7 @@
 #include "tb_simple/generated/api/common.h"
 #include "tb_simple/generated/api/tb_simple.h"
 #include "tb_simple/generated/core/nosignalsinterface.data.h"
-#include "apigear/mqtt/mqttcppclient.h"
+#include "apigear/mqtt/mqttclient.h"
 #include "mqttisink.h"
 
 namespace Test {

@@ -2,7 +2,7 @@
 
 #include "tb_enum/generated/api/tb_enum.h"
 #include "tb_enum/generated/api/common.h"
-#include "apigear/mqtt/mqttcppclient.h"
+#include "apigear/mqtt/mqttservice.h"
 #include "mqttisink.h"
 
 namespace Test {
@@ -11,7 +11,7 @@ namespace MQTT {
 class TEST_TB_ENUM_EXPORT EnumInterfaceService : public virtual ApiGear::MQTT::ISink, public IEnumInterfaceSubscriber
 {
 public:
-    explicit EnumInterfaceService(std::shared_ptr<IEnumInterface> impl, std::shared_ptr<ApiGear::MQTT::Client> client);
+    explicit EnumInterfaceService(std::shared_ptr<IEnumInterface> impl, std::shared_ptr<ApiGear::MQTT::Service> service);
     virtual ~EnumInterfaceService() override;
 
     void onConnectionStatusChanged(bool connectionStatus);
@@ -32,7 +32,7 @@ public:
 
 private:
     std::shared_ptr<IEnumInterface> m_impl;
-    std::shared_ptr<ApiGear::MQTT::Client> m_client;
+    std::shared_ptr<ApiGear::MQTT::Service> m_service;
     // id for connection status registration
     int m_connectionStatusRegistrationID;
 };

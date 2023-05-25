@@ -5,18 +5,18 @@
 using namespace Test::TbSame2;
 using namespace Test::TbSame2::MQTT;
 
-SameStruct2InterfaceService::SameStruct2InterfaceService(std::shared_ptr<ISameStruct2Interface> impl, std::shared_ptr<ApiGear::MQTT::Client> client)
+SameStruct2InterfaceService::SameStruct2InterfaceService(std::shared_ptr<ISameStruct2Interface> impl, std::shared_ptr<ApiGear::MQTT::Service> service)
     : m_impl(impl)
-    , m_client(client)
+    , m_service(service)
 {
     m_impl->_getPublisher().subscribeToAllChanges(*this);
 
-    m_connectionStatusRegistrationID = m_client->subscribeToConnectionStatus(std::bind(&SameStruct2InterfaceService::onConnectionStatusChanged, this, std::placeholders::_1));
+    m_connectionStatusRegistrationID = m_service->subscribeToConnectionStatus(std::bind(&SameStruct2InterfaceService::onConnectionStatusChanged, this, std::placeholders::_1));
     // subscribe to all property change request methods
-    m_client->subscribeTopic(ApiGear::MQTT::Topic("tb.same2","SameStruct2Interface",ApiGear::MQTT::Topic::TopicType::Operation,"_setprop1"), this);
-    m_client->subscribeTopic(ApiGear::MQTT::Topic("tb.same2","SameStruct2Interface",ApiGear::MQTT::Topic::TopicType::Operation,"_setprop2"), this);
-    m_client->subscribeTopic(ApiGear::MQTT::Topic("tb.same2","SameStruct2Interface",ApiGear::MQTT::Topic::TopicType::Operation,"func1"), this);
-    m_client->subscribeTopic(ApiGear::MQTT::Topic("tb.same2","SameStruct2Interface",ApiGear::MQTT::Topic::TopicType::Operation,"func2"), this);
+    m_service->subscribeTopic(ApiGear::MQTT::Topic("tb.same2","SameStruct2Interface",ApiGear::MQTT::Topic::TopicType::Operation,"_setprop1"), this);
+    m_service->subscribeTopic(ApiGear::MQTT::Topic("tb.same2","SameStruct2Interface",ApiGear::MQTT::Topic::TopicType::Operation,"_setprop2"), this);
+    m_service->subscribeTopic(ApiGear::MQTT::Topic("tb.same2","SameStruct2Interface",ApiGear::MQTT::Topic::TopicType::Operation,"func1"), this);
+    m_service->subscribeTopic(ApiGear::MQTT::Topic("tb.same2","SameStruct2Interface",ApiGear::MQTT::Topic::TopicType::Operation,"func2"), this);
 
 }
 
@@ -24,11 +24,11 @@ SameStruct2InterfaceService::~SameStruct2InterfaceService()
 {
     m_impl->_getPublisher().unsubscribeFromAllChanges(*this);
 
-    m_client->unsubscribeToConnectionStatus(m_connectionStatusRegistrationID);
-    m_client->unsubscribeTopic(ApiGear::MQTT::Topic("tb.same2","SameStruct2Interface",ApiGear::MQTT::Topic::TopicType::Operation,"_setprop1"), this);
-    m_client->unsubscribeTopic(ApiGear::MQTT::Topic("tb.same2","SameStruct2Interface",ApiGear::MQTT::Topic::TopicType::Operation,"_setprop2"), this);
-    m_client->unsubscribeTopic(ApiGear::MQTT::Topic("tb.same2","SameStruct2Interface",ApiGear::MQTT::Topic::TopicType::Operation,"func1"), this);
-    m_client->unsubscribeTopic(ApiGear::MQTT::Topic("tb.same2","SameStruct2Interface",ApiGear::MQTT::Topic::TopicType::Operation,"func2"), this);
+    m_service->unsubscribeToConnectionStatus(m_connectionStatusRegistrationID);
+    m_service->unsubscribeTopic(ApiGear::MQTT::Topic("tb.same2","SameStruct2Interface",ApiGear::MQTT::Topic::TopicType::Operation,"_setprop1"), this);
+    m_service->unsubscribeTopic(ApiGear::MQTT::Topic("tb.same2","SameStruct2Interface",ApiGear::MQTT::Topic::TopicType::Operation,"_setprop2"), this);
+    m_service->unsubscribeTopic(ApiGear::MQTT::Topic("tb.same2","SameStruct2Interface",ApiGear::MQTT::Topic::TopicType::Operation,"func1"), this);
+    m_service->unsubscribeTopic(ApiGear::MQTT::Topic("tb.same2","SameStruct2Interface",ApiGear::MQTT::Topic::TopicType::Operation,"func2"), this);
 }
 
 void SameStruct2InterfaceService::onConnectionStatusChanged(bool connectionStatus)
@@ -62,44 +62,44 @@ void SameStruct2InterfaceService::onInvoke(const ApiGear::MQTT::Topic& topic, co
     if(name == "func1") {
         const Struct1& param1 = json_args.at(0).get<Struct1>();
         auto result = m_impl->func1(param1);
-        m_client->notifyInvokeResponse(responseTopic, nlohmann::json(result).dump(), correlationData);
+        m_service->notifyInvokeResponse(responseTopic, nlohmann::json(result).dump(), correlationData);
         return;
     }
     if(name == "func2") {
         const Struct1& param1 = json_args.at(0).get<Struct1>();
         const Struct2& param2 = json_args.at(1).get<Struct2>();
         auto result = m_impl->func2(param1, param2);
-        m_client->notifyInvokeResponse(responseTopic, nlohmann::json(result).dump(), correlationData);
+        m_service->notifyInvokeResponse(responseTopic, nlohmann::json(result).dump(), correlationData);
         return;
     }
 }
 void SameStruct2InterfaceService::onSig1(const Struct1& param1)
 {
-    if(m_client != nullptr) {
+    if(m_service != nullptr) {
         const nlohmann::json& args = { param1 };
         static const auto topic = ApiGear::MQTT::Topic("tb.same2","SameStruct2Interface",ApiGear::MQTT::Topic::TopicType::Signal,"sig1");
-        m_client->notifySignal(topic, nlohmann::json(args).dump());
+        m_service->notifySignal(topic, nlohmann::json(args).dump());
     }
 }
 void SameStruct2InterfaceService::onSig2(const Struct1& param1, const Struct2& param2)
 {
-    if(m_client != nullptr) {
+    if(m_service != nullptr) {
         const nlohmann::json& args = { param1, param2 };
         static const auto topic = ApiGear::MQTT::Topic("tb.same2","SameStruct2Interface",ApiGear::MQTT::Topic::TopicType::Signal,"sig2");
-        m_client->notifySignal(topic, nlohmann::json(args).dump());
+        m_service->notifySignal(topic, nlohmann::json(args).dump());
     }
 }
 void SameStruct2InterfaceService::onProp1Changed(const Struct2& prop1)
 {
-    if(m_client != nullptr) {
+    if(m_service != nullptr) {
         static const auto topic = ApiGear::MQTT::Topic("tb.same2","SameStruct2Interface",ApiGear::MQTT::Topic::TopicType::Property,"prop1");
-        m_client->notifyPropertyChange(topic, nlohmann::json(prop1).dump());
+        m_service->notifyPropertyChange(topic, nlohmann::json(prop1).dump());
     }
 }
 void SameStruct2InterfaceService::onProp2Changed(const Struct2& prop2)
 {
-    if(m_client != nullptr) {
+    if(m_service != nullptr) {
         static const auto topic = ApiGear::MQTT::Topic("tb.same2","SameStruct2Interface",ApiGear::MQTT::Topic::TopicType::Property,"prop2");
-        m_client->notifyPropertyChange(topic, nlohmann::json(prop2).dump());
+        m_service->notifyPropertyChange(topic, nlohmann::json(prop2).dump());
     }
 }

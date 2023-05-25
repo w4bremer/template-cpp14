@@ -2,7 +2,7 @@
 
 #include "testbed2/generated/api/testbed2.h"
 #include "testbed2/generated/api/common.h"
-#include "apigear/mqtt/mqttcppclient.h"
+#include "apigear/mqtt/mqttservice.h"
 #include "mqttisink.h"
 
 namespace Test {
@@ -11,7 +11,7 @@ namespace MQTT {
 class TEST_TESTBED2_EXPORT ManyParamInterfaceService : public virtual ApiGear::MQTT::ISink, public IManyParamInterfaceSubscriber
 {
 public:
-    explicit ManyParamInterfaceService(std::shared_ptr<IManyParamInterface> impl, std::shared_ptr<ApiGear::MQTT::Client> client);
+    explicit ManyParamInterfaceService(std::shared_ptr<IManyParamInterface> impl, std::shared_ptr<ApiGear::MQTT::Service> service);
     virtual ~ManyParamInterfaceService() override;
 
     void onConnectionStatusChanged(bool connectionStatus);
@@ -32,7 +32,7 @@ public:
 
 private:
     std::shared_ptr<IManyParamInterface> m_impl;
-    std::shared_ptr<ApiGear::MQTT::Client> m_client;
+    std::shared_ptr<ApiGear::MQTT::Service> m_service;
     // id for connection status registration
     int m_connectionStatusRegistrationID;
 };

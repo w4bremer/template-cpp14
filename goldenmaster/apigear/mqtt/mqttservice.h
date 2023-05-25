@@ -11,17 +11,11 @@ namespace MQTT {
 
 class ISink;
 
-/**
- * @brief Describes incoming part of messages of the protocol for client side.
- * 
- * Since in MQTT there are only clients connected to a central broker,
- * the service and client side use this class to connect to each other via the broker.
- */
-class APIGEAR_MQTT_EXPORT Client
+class APIGEAR_MQTT_EXPORT Service
 {
 public:
-    explicit Client(const std::string& clientID);
-    virtual ~Client();
+    explicit Service(const std::string& clientID);
+    virtual ~Service();
 
 public:
     /**
@@ -43,10 +37,6 @@ public:
     void notifyPropertyChange(const Topic& name, const std::string& value);
     void notifySignal(const Topic& name, const std::string& args);
     void notifyInvokeResponse(const Topic& responseTopic, const std::string& value, const std::string& correlationData);
-
-    // client interface
-    void invokeRemote(const Topic& name, const std::string& value, InvokeReplyFunc func=nullptr);
-    void setRemoteProperty(const Topic& name, const std::string& value);
 
     void subscribeTopic(const Topic& name, ISink* sink);
     void unsubscribeTopic(const Topic& name, ISink* sink);
