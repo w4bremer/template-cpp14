@@ -1,4 +1,4 @@
-#include "mqttcppclient.h"
+#include "mqttclient.h"
 #include "private/mqttcwrapper.h"
 
 using namespace ApiGear::MQTT;
@@ -37,21 +37,6 @@ void Client::disconnect() {
 void Client::invokeRemote(const Topic& topic, const std::string& value, InvokeReplyFunc func)
 {
     m_cwrapper->invokeRemote(topic, value, func);
-}
-
-void Client::notifyPropertyChange(const Topic& topic, const std::string& value)
-{
-    m_cwrapper->notifyPropertyChange(topic, value);
-}
-
-void Client::notifySignal(const Topic& topic, const std::string& args)
-{
-    m_cwrapper->notifySignal(topic, args);
-}
-
-void Client::notifyInvokeResponse(const Topic& responseTopic, const std::string& value, const std::string& correlationData)
-{
-    m_cwrapper->notifyInvokeResponse(responseTopic, value, correlationData);
 }
 
 void Client::setRemoteProperty(const Topic& topic, const std::string& value)

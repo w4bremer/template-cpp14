@@ -4,7 +4,7 @@
 #include "tb_same2/generated/api/common.h"
 #include "tb_same2/generated/api/tb_same2.h"
 #include "tb_same2/generated/core/samestruct1interface.data.h"
-#include "apigear/mqtt/mqttcppclient.h"
+#include "apigear/mqtt/mqttclient.h"
 #include "mqttisink.h"
 
 namespace Test {

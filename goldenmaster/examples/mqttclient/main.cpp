@@ -20,7 +20,7 @@
 #include "tb_simple/generated/mqtt/nosignalsinterfaceclient.h"
 #include "testbed1/generated/mqtt/structinterfaceclient.h"
 #include "testbed1/generated/mqtt/structarrayinterfaceclient.h"
-#include "apigear/mqtt/mqttcppclient.h"
+#include "apigear/mqtt/mqttclient.h"
 #include "apigear/utilities/logger.h"
 #include <iostream>
 #include <sstream>

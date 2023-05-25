@@ -6,7 +6,7 @@
 #include "{{snake $module.Name}}/generated/mqtt/{{ lower ( camel $interface.Name) }}client.h"
 {{- end }}
 {{- end }}
-#include "apigear/mqtt/mqttcppclient.h"
+#include "apigear/mqtt/mqttclient.h"
 #include "apigear/utilities/logger.h"
 #include <iostream>
 #include <sstream>
