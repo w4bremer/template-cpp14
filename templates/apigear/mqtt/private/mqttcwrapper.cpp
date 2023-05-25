@@ -1,5 +1,4 @@
 #include <iostream>
-#include "MQTTAsync.h"
 #include "mqttcwrapper.h"
 #include "../utilities/logger.h"
 #include <chrono>
@@ -450,11 +449,7 @@ void CWrapper::invokeRemote(const Topic& topic, const std::string& value, Invoke
     // the responseOptions properties do get overwritten by the msg properties later
     pubmsg.properties = opts.properties;
 
-    int responseCode = MQTTAsync_sendMessage(*m_client.get(), topic.getEncodedTopic().c_str(), &pubmsg, &opts);
-    if (responseCode != MQTTASYNC_SUCCESS)
-    {
-        AG_LOG_ERROR("Failed to start sendMessage, return code " + std::to_string(responseCode));
-    }
+    int responseCode = sendMessage(topic.getEncodedTopic(), &pubmsg, &opts);
 }
 
 void CWrapper::notifyPropertyChange(const Topic& topic, const std::string& value)
@@ -469,11 +464,7 @@ void CWrapper::notifyPropertyChange(const Topic& topic, const std::string& value
     pubmsg.qos = QOS;
     // property changes shall be retained and automatically send to new clients
     pubmsg.retained = 1;
-    int responseCode = MQTTAsync_sendMessage(*m_client.get(), topic.getEncodedTopic().c_str(), &pubmsg, &opts);
-    if (responseCode != MQTTASYNC_SUCCESS)
-    {
-        AG_LOG_ERROR("Failed to start sendMessage, return code " + std::to_string(responseCode));
-    }
+    int responseCode = sendMessage(topic.getEncodedTopic(), &pubmsg, &opts);
 }
 
 void CWrapper::notifySignal(const Topic& topic, const std::string& args)
@@ -486,11 +477,7 @@ void CWrapper::notifySignal(const Topic& topic, const std::string& args)
 	pubmsg.qos = QOS;
 	pubmsg.retained = 0;
 
-    int responseCode = MQTTAsync_sendMessage(*m_client.get(), topic.getEncodedTopic().c_str(), &pubmsg, &opts);
-	if (responseCode != MQTTASYNC_SUCCESS)
-	{
-        AG_LOG_ERROR("Failed to start sendMessage, return code " + std::to_string(responseCode));
-	}
+    int responseCode = sendMessage(topic.getEncodedTopic(), &pubmsg, &opts);
 }
 
 void CWrapper::notifyInvokeResponse(const Topic& responseTopic, const std::string& value, const std::string& correlationData)
@@ -512,11 +499,7 @@ void CWrapper::notifyInvokeResponse(const Topic& responseTopic, const std::strin
 
     // the responseOptions properties do get overwritten by the msg properties later
     pubmsg.properties = opts.properties;
-    int responseCode = MQTTAsync_sendMessage(*m_client.get(), responseTopic.getEncodedTopic().c_str(), &pubmsg, &opts);
-    if (responseCode != MQTTASYNC_SUCCESS)
-    {
-        AG_LOG_ERROR("Failed to start sendMessage, return code " + std::to_string(responseCode));
-    }
+    int responseCode = sendMessage(responseTopic.getEncodedTopic(), &pubmsg, &opts);
 }
 
 void CWrapper::setRemoteProperty(const Topic& topic, const std::string& value)
@@ -528,11 +511,7 @@ void CWrapper::setRemoteProperty(const Topic& topic, const std::string& value)
 	pubmsg.payloadlen = value.size();
 	pubmsg.qos = QOS;
 	pubmsg.retained = 0;
-    int responseCode = MQTTAsync_sendMessage(*m_client.get(), topic.getEncodedTopic().c_str(), &pubmsg, &opts);
-	if (responseCode != MQTTASYNC_SUCCESS)
-	{
-        AG_LOG_ERROR("Failed to start sendMessage, return code " + std::to_string(responseCode));
-	}
+    int responseCode = sendMessage(topic.getEncodedTopic(), &pubmsg, &opts);
 }
 
 void CWrapper::subscribeTopic(const Topic& topic, ISink* sink)
@@ -573,4 +552,16 @@ void CWrapper::unsubscribeTopic(const Topic& topic, ISink* sink)
         m_waitForWork = false;
     }
     m_conditionVariable.notify_one();
+}
+
+int CWrapper::sendMessage(const std::string& destinationName, const MQTTAsync_message* msg, MQTTAsync_responseOptions* response)
+{
+    int responseCode = 0;
+    responseCode = MQTTAsync_sendMessage(*m_client.get(), destinationName.c_str(), msg, response);
+	if (responseCode != MQTTASYNC_SUCCESS)
+	{
+        AG_LOG_ERROR("Failed to start sendMessage, return code " + std::to_string(responseCode));
+	}
+
+    return responseCode;
 }
