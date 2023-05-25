@@ -49,12 +49,12 @@ void Service::notifyInvokeResponse(const Topic& responseTopic, const std::string
     m_cwrapper->notifyInvokeResponse(responseTopic, value, correlationData);
 }
 
-void Service::subscribeTopic(const Topic& topic, ISink* sink)
+void Service::subscribeTopic(const Topic& topic, CallbackFunction func)
 {
-    m_cwrapper->subscribeTopic(topic, sink);
+    m_cwrapper->subscribeTopic(topic, func);
 }
 
-void Service::unsubscribeTopic(const Topic& topic, ISink* sink)
+void Service::unsubscribeTopic(const Topic& topic, CallbackFunction func)
 {
-    m_cwrapper->unsubscribeTopic(topic, sink);
+    m_cwrapper->unsubscribeTopic(topic, func);
 }

@@ -10,15 +10,15 @@ SameEnum1InterfaceClient::SameEnum1InterfaceClient(std::shared_ptr<ApiGear::MQTT
     , m_client(client)
     , m_publisher(std::make_unique<SameEnum1InterfacePublisher>())
 {
-    m_client->subscribeTopic(ApiGear::MQTT::Topic("tb.same2","SameEnum1Interface",ApiGear::MQTT::Topic::TopicType::Property,"prop1"), this);
-    m_client->subscribeTopic(ApiGear::MQTT::Topic("tb.same2","SameEnum1Interface",ApiGear::MQTT::Topic::TopicType::Signal,"sig1"), this);
+    m_client->subscribeTopic(ApiGear::MQTT::Topic("tb.same2","SameEnum1Interface",ApiGear::MQTT::Topic::TopicType::Property,"prop1"), std::bind(&SameEnum1InterfaceClient::onPropertyChanged, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
+    m_client->subscribeTopic(ApiGear::MQTT::Topic("tb.same2","SameEnum1Interface",ApiGear::MQTT::Topic::TopicType::Signal,"sig1"), std::bind(&SameEnum1InterfaceClient::onSignal, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
     m_client->subscribeTopic(ApiGear::MQTT::Topic("tb.same2","SameEnum1Interface",ApiGear::MQTT::Topic::TopicType::Operation,"func1",m_client->getClientId()+"/result"), nullptr);
 }
 
 SameEnum1InterfaceClient::~SameEnum1InterfaceClient()
 {
-    m_client->unsubscribeTopic(ApiGear::MQTT::Topic("tb.same2","SameEnum1Interface",ApiGear::MQTT::Topic::TopicType::Property,"prop1"), this);
-    m_client->unsubscribeTopic(ApiGear::MQTT::Topic("tb.same2","SameEnum1Interface",ApiGear::MQTT::Topic::TopicType::Signal,"sig1"), this);
+    m_client->unsubscribeTopic(ApiGear::MQTT::Topic("tb.same2","SameEnum1Interface",ApiGear::MQTT::Topic::TopicType::Property,"prop1"), std::bind(&SameEnum1InterfaceClient::onPropertyChanged, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
+    m_client->unsubscribeTopic(ApiGear::MQTT::Topic("tb.same2","SameEnum1Interface",ApiGear::MQTT::Topic::TopicType::Signal,"sig1"), std::bind(&SameEnum1InterfaceClient::onSignal, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
     m_client->unsubscribeTopic(ApiGear::MQTT::Topic("tb.same2","SameEnum1Interface",ApiGear::MQTT::Topic::TopicType::Operation,"func1",m_client->getClientId()+"/result"), nullptr);
 }
 
@@ -80,7 +80,7 @@ std::future<Enum1Enum> SameEnum1InterfaceClient::func1Async(Enum1Enum param1)
     );
 }
 
-void SameEnum1InterfaceClient::onSignal(const ApiGear::MQTT::Topic& topic, const std::string& args)
+void SameEnum1InterfaceClient::onSignal(const ApiGear::MQTT::Topic& topic, const std::string& args, const ApiGear::MQTT::Topic&, const std::string&)
 {
     nlohmann::json json_args = nlohmann::json::parse(args);
     if(topic.getEntityName() == "sig1") {
@@ -89,7 +89,7 @@ void SameEnum1InterfaceClient::onSignal(const ApiGear::MQTT::Topic& topic, const
     }
 }
 
-void SameEnum1InterfaceClient::onPropertyChanged(const ApiGear::MQTT::Topic& topic, const std::string& args)
+void SameEnum1InterfaceClient::onPropertyChanged(const ApiGear::MQTT::Topic& topic, const std::string& args, const ApiGear::MQTT::Topic&, const std::string&)
 {
     nlohmann::json json_args = nlohmann::json::parse(args);
     const std::string& name = topic.getEntityName();

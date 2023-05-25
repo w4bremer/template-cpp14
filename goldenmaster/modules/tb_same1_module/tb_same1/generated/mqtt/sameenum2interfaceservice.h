@@ -3,22 +3,19 @@
 #include "tb_same1/generated/api/tb_same1.h"
 #include "tb_same1/generated/api/common.h"
 #include "apigear/mqtt/mqttservice.h"
-#include "mqttisink.h"
 
 namespace Test {
 namespace TbSame1 {
 namespace MQTT {
-class TEST_TB_SAME1_EXPORT SameEnum2InterfaceService : public virtual ApiGear::MQTT::ISink, public ISameEnum2InterfaceSubscriber
+class TEST_TB_SAME1_EXPORT SameEnum2InterfaceService : public ISameEnum2InterfaceSubscriber
 {
 public:
     explicit SameEnum2InterfaceService(std::shared_ptr<ISameEnum2Interface> impl, std::shared_ptr<ApiGear::MQTT::Service> service);
     virtual ~SameEnum2InterfaceService() override;
 
     void onConnectionStatusChanged(bool connectionStatus);
-    // sink interface
-    void onSignal(const ApiGear::MQTT::Topic&, const std::string&) override {};
-    void onPropertyChanged(const ApiGear::MQTT::Topic&, const std::string&) override {};
-    void onInvoke(const ApiGear::MQTT::Topic& topic, const std::string& args, const ApiGear::MQTT::Topic& responseTopic, const std::string& correlationData) override;
+
+    void onInvoke(const ApiGear::MQTT::Topic& topic, const std::string& args, const ApiGear::MQTT::Topic& responseTopic, const std::string& correlationData);
 
     // ISameEnum2InterfaceSubscriber interface
     void onSig1(Enum1Enum param1) override;

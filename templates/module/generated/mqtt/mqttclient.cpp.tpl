@@ -17,11 +17,11 @@ using namespace {{ Camel .System.Name }}::{{ Camel .Module.Name }}::MQTT;
 {
 {{- range .Interface.Properties}}
 {{- $property := . }}
-    m_client->subscribeTopic(ApiGear::MQTT::Topic("{{$.Module.Name}}","{{$interfaceName}}",ApiGear::MQTT::Topic::TopicType::Property,"{{$property}}"), this);
+    m_client->subscribeTopic(ApiGear::MQTT::Topic("{{$.Module.Name}}","{{$interfaceName}}",ApiGear::MQTT::Topic::TopicType::Property,"{{$property}}"), std::bind(&{{$class}}::onPropertyChanged, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
 {{- end }}
 {{- range .Interface.Signals}}
 {{- $signal := . }}
-    m_client->subscribeTopic(ApiGear::MQTT::Topic("{{$.Module.Name}}","{{$interfaceName}}",ApiGear::MQTT::Topic::TopicType::Signal,"{{$signal}}"), this);
+    m_client->subscribeTopic(ApiGear::MQTT::Topic("{{$.Module.Name}}","{{$interfaceName}}",ApiGear::MQTT::Topic::TopicType::Signal,"{{$signal}}"), std::bind(&{{$class}}::onSignal, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
 {{- end }}
 {{- range .Interface.Operations}}
 {{- $operation := . }}
@@ -33,11 +33,11 @@ using namespace {{ Camel .System.Name }}::{{ Camel .Module.Name }}::MQTT;
 {
 {{- range .Interface.Properties}}
 {{- $property := . }}
-    m_client->unsubscribeTopic(ApiGear::MQTT::Topic("{{$.Module.Name}}","{{$interfaceName}}",ApiGear::MQTT::Topic::TopicType::Property,"{{$property}}"), this);
+    m_client->unsubscribeTopic(ApiGear::MQTT::Topic("{{$.Module.Name}}","{{$interfaceName}}",ApiGear::MQTT::Topic::TopicType::Property,"{{$property}}"), std::bind(&{{$class}}::onPropertyChanged, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
 {{- end }}
 {{- range .Interface.Signals}}
 {{- $signal := . }}
-    m_client->unsubscribeTopic(ApiGear::MQTT::Topic("{{$.Module.Name}}","{{$interfaceName}}",ApiGear::MQTT::Topic::TopicType::Signal,"{{$signal}}"), this);
+    m_client->unsubscribeTopic(ApiGear::MQTT::Topic("{{$.Module.Name}}","{{$interfaceName}}",ApiGear::MQTT::Topic::TopicType::Signal,"{{$signal}}"), std::bind(&{{$class}}::onSignal, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
 {{- end }}
 {{- range .Interface.Operations}}
 {{- $operation := . }}
@@ -134,7 +134,7 @@ std::future<{{$returnType}}> {{$class}}::{{lower1 $operation.Name}}Async({{cppPa
 
 {{- end }}
 
-void {{$class}}::onSignal(const ApiGear::MQTT::Topic& topic, const std::string& args)
+void {{$class}}::onSignal(const ApiGear::MQTT::Topic& topic, const std::string& args, const ApiGear::MQTT::Topic&, const std::string&)
 {
     nlohmann::json json_args = nlohmann::json::parse(args);
 {{- range .Interface.Signals}}
@@ -155,7 +155,7 @@ void {{$class}}::onSignal(const ApiGear::MQTT::Topic& topic, const std::string& 
 {{- end }}
 }
 
-void {{$class}}::onPropertyChanged(const ApiGear::MQTT::Topic& topic, const std::string& args)
+void {{$class}}::onPropertyChanged(const ApiGear::MQTT::Topic& topic, const std::string& args, const ApiGear::MQTT::Topic&, const std::string&)
 {
     nlohmann::json json_args = nlohmann::json::parse(args);
     const std::string& name = topic.getEntityName();

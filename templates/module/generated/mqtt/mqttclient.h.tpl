@@ -12,12 +12,11 @@
 #include "{{snake .Module.Name}}/generated/api/{{snake .Module.Name}}.h"
 #include "{{snake .Module.Name}}/generated/core/{{lower $interfaceName}}.data.h"
 #include "apigear/mqtt/mqttclient.h"
-#include "mqttisink.h"
 
 namespace {{ Camel .System.Name }} {
 namespace {{ Camel .Module.Name }} {
 namespace MQTT {
-class {{ SNAKE .System.Name  }}_{{ SNAKE .Module.Name  }}_EXPORT {{$class}} : public {{$interfaceClass}}, public virtual ApiGear::MQTT::ISink
+class {{ SNAKE .System.Name  }}_{{ SNAKE .Module.Name  }}_EXPORT {{$class}} : public {{$interfaceClass}}
 {
 public:
     explicit {{$class}}(std::shared_ptr<ApiGear::MQTT::Client> client);
@@ -38,9 +37,8 @@ public:
 
     bool isReady() const;
 
-    void onSignal(const ApiGear::MQTT::Topic& topic, const std::string& args) override;
-    void onPropertyChanged(const ApiGear::MQTT::Topic& topic, const std::string& args) override;
-    void onInvoke(const ApiGear::MQTT::Topic&, const std::string&, const ApiGear::MQTT::Topic&, const std::string&) override {};
+    void onSignal(const ApiGear::MQTT::Topic& topic, const std::string& args, const ApiGear::MQTT::Topic& responseTopic, const std::string& correlationData);
+    void onPropertyChanged(const ApiGear::MQTT::Topic& topic, const std::string& args, const ApiGear::MQTT::Topic& responseTopic, const std::string& correlationData);
 
 private:
 {{- range .Interface.Properties}}

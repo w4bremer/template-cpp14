@@ -44,12 +44,12 @@ void Client::setRemoteProperty(const Topic& topic, const std::string& value)
 	m_cwrapper->setRemoteProperty(topic, value);
 }
 
-void Client::subscribeTopic(const Topic& topic, ISink* sink)
+void Client::subscribeTopic(const Topic& topic, CallbackFunction func)
 {
-    m_cwrapper->subscribeTopic(topic, sink);
+    m_cwrapper->subscribeTopic(topic, func);
 }
 
-void Client::unsubscribeTopic(const Topic& topic, ISink* sink)
+void Client::unsubscribeTopic(const Topic& topic, CallbackFunction func)
 {
-    m_cwrapper->unsubscribeTopic(topic, sink);
+    m_cwrapper->unsubscribeTopic(topic, func);
 }

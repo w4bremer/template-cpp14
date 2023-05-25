@@ -5,12 +5,11 @@
 #include "testbed2/generated/api/testbed2.h"
 #include "testbed2/generated/core/manyparaminterface.data.h"
 #include "apigear/mqtt/mqttclient.h"
-#include "mqttisink.h"
 
 namespace Test {
 namespace Testbed2 {
 namespace MQTT {
-class TEST_TESTBED2_EXPORT ManyParamInterfaceClient : public IManyParamInterface, public virtual ApiGear::MQTT::ISink
+class TEST_TESTBED2_EXPORT ManyParamInterfaceClient : public IManyParamInterface
 {
 public:
     explicit ManyParamInterfaceClient(std::shared_ptr<ApiGear::MQTT::Client> client);
@@ -35,9 +34,8 @@ public:
 
     bool isReady() const;
 
-    void onSignal(const ApiGear::MQTT::Topic& topic, const std::string& args) override;
-    void onPropertyChanged(const ApiGear::MQTT::Topic& topic, const std::string& args) override;
-    void onInvoke(const ApiGear::MQTT::Topic&, const std::string&, const ApiGear::MQTT::Topic&, const std::string&) override {};
+    void onSignal(const ApiGear::MQTT::Topic& topic, const std::string& args, const ApiGear::MQTT::Topic& responseTopic, const std::string& correlationData);
+    void onPropertyChanged(const ApiGear::MQTT::Topic& topic, const std::string& args, const ApiGear::MQTT::Topic& responseTopic, const std::string& correlationData);
 
 private:
     void setProp1Local(int prop1);

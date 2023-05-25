@@ -3,22 +3,19 @@
 #include "testbed2/generated/api/testbed2.h"
 #include "testbed2/generated/api/common.h"
 #include "apigear/mqtt/mqttservice.h"
-#include "mqttisink.h"
 
 namespace Test {
 namespace Testbed2 {
 namespace MQTT {
-class TEST_TESTBED2_EXPORT NestedStruct1InterfaceService : public virtual ApiGear::MQTT::ISink, public INestedStruct1InterfaceSubscriber
+class TEST_TESTBED2_EXPORT NestedStruct1InterfaceService : public INestedStruct1InterfaceSubscriber
 {
 public:
     explicit NestedStruct1InterfaceService(std::shared_ptr<INestedStruct1Interface> impl, std::shared_ptr<ApiGear::MQTT::Service> service);
     virtual ~NestedStruct1InterfaceService() override;
 
     void onConnectionStatusChanged(bool connectionStatus);
-    // sink interface
-    void onSignal(const ApiGear::MQTT::Topic&, const std::string&) override {};
-    void onPropertyChanged(const ApiGear::MQTT::Topic&, const std::string&) override {};
-    void onInvoke(const ApiGear::MQTT::Topic& topic, const std::string& args, const ApiGear::MQTT::Topic& responseTopic, const std::string& correlationData) override;
+
+    void onInvoke(const ApiGear::MQTT::Topic& topic, const std::string& args, const ApiGear::MQTT::Topic& responseTopic, const std::string& correlationData);
 
     // INestedStruct1InterfaceSubscriber interface
     void onSig1(const NestedStruct1& param1) override;

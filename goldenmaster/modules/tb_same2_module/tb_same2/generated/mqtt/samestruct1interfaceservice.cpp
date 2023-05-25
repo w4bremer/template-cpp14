@@ -13,8 +13,8 @@ SameStruct1InterfaceService::SameStruct1InterfaceService(std::shared_ptr<ISameSt
 
     m_connectionStatusRegistrationID = m_service->subscribeToConnectionStatus(std::bind(&SameStruct1InterfaceService::onConnectionStatusChanged, this, std::placeholders::_1));
     // subscribe to all property change request methods
-    m_service->subscribeTopic(ApiGear::MQTT::Topic("tb.same2","SameStruct1Interface",ApiGear::MQTT::Topic::TopicType::Operation,"_setprop1"), this);
-    m_service->subscribeTopic(ApiGear::MQTT::Topic("tb.same2","SameStruct1Interface",ApiGear::MQTT::Topic::TopicType::Operation,"func1"), this);
+    m_service->subscribeTopic(ApiGear::MQTT::Topic("tb.same2","SameStruct1Interface",ApiGear::MQTT::Topic::TopicType::Operation,"_setprop1"), std::bind(&SameStruct1InterfaceService::onInvoke, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
+    m_service->subscribeTopic(ApiGear::MQTT::Topic("tb.same2","SameStruct1Interface",ApiGear::MQTT::Topic::TopicType::Operation,"func1"), std::bind(&SameStruct1InterfaceService::onInvoke, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
 
 }
 
@@ -23,8 +23,8 @@ SameStruct1InterfaceService::~SameStruct1InterfaceService()
     m_impl->_getPublisher().unsubscribeFromAllChanges(*this);
 
     m_service->unsubscribeToConnectionStatus(m_connectionStatusRegistrationID);
-    m_service->unsubscribeTopic(ApiGear::MQTT::Topic("tb.same2","SameStruct1Interface",ApiGear::MQTT::Topic::TopicType::Operation,"_setprop1"), this);
-    m_service->unsubscribeTopic(ApiGear::MQTT::Topic("tb.same2","SameStruct1Interface",ApiGear::MQTT::Topic::TopicType::Operation,"func1"), this);
+    m_service->unsubscribeTopic(ApiGear::MQTT::Topic("tb.same2","SameStruct1Interface",ApiGear::MQTT::Topic::TopicType::Operation,"_setprop1"), std::bind(&SameStruct1InterfaceService::onInvoke, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
+    m_service->unsubscribeTopic(ApiGear::MQTT::Topic("tb.same2","SameStruct1Interface",ApiGear::MQTT::Topic::TopicType::Operation,"func1"), std::bind(&SameStruct1InterfaceService::onInvoke, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
 }
 
 void SameStruct1InterfaceService::onConnectionStatusChanged(bool connectionStatus)

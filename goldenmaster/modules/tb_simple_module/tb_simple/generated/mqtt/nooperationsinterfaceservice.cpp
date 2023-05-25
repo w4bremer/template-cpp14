@@ -13,8 +13,8 @@ NoOperationsInterfaceService::NoOperationsInterfaceService(std::shared_ptr<INoOp
 
     m_connectionStatusRegistrationID = m_service->subscribeToConnectionStatus(std::bind(&NoOperationsInterfaceService::onConnectionStatusChanged, this, std::placeholders::_1));
     // subscribe to all property change request methods
-    m_service->subscribeTopic(ApiGear::MQTT::Topic("tb.simple","NoOperationsInterface",ApiGear::MQTT::Topic::TopicType::Operation,"_setpropBool"), this);
-    m_service->subscribeTopic(ApiGear::MQTT::Topic("tb.simple","NoOperationsInterface",ApiGear::MQTT::Topic::TopicType::Operation,"_setpropInt"), this);
+    m_service->subscribeTopic(ApiGear::MQTT::Topic("tb.simple","NoOperationsInterface",ApiGear::MQTT::Topic::TopicType::Operation,"_setpropBool"), std::bind(&NoOperationsInterfaceService::onInvoke, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
+    m_service->subscribeTopic(ApiGear::MQTT::Topic("tb.simple","NoOperationsInterface",ApiGear::MQTT::Topic::TopicType::Operation,"_setpropInt"), std::bind(&NoOperationsInterfaceService::onInvoke, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
 
 }
 
@@ -23,8 +23,8 @@ NoOperationsInterfaceService::~NoOperationsInterfaceService()
     m_impl->_getPublisher().unsubscribeFromAllChanges(*this);
 
     m_service->unsubscribeToConnectionStatus(m_connectionStatusRegistrationID);
-    m_service->unsubscribeTopic(ApiGear::MQTT::Topic("tb.simple","NoOperationsInterface",ApiGear::MQTT::Topic::TopicType::Operation,"_setpropBool"), this);
-    m_service->unsubscribeTopic(ApiGear::MQTT::Topic("tb.simple","NoOperationsInterface",ApiGear::MQTT::Topic::TopicType::Operation,"_setpropInt"), this);
+    m_service->unsubscribeTopic(ApiGear::MQTT::Topic("tb.simple","NoOperationsInterface",ApiGear::MQTT::Topic::TopicType::Operation,"_setpropBool"), std::bind(&NoOperationsInterfaceService::onInvoke, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
+    m_service->unsubscribeTopic(ApiGear::MQTT::Topic("tb.simple","NoOperationsInterface",ApiGear::MQTT::Topic::TopicType::Operation,"_setpropInt"), std::bind(&NoOperationsInterfaceService::onInvoke, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
 }
 
 void NoOperationsInterfaceService::onConnectionStatusChanged(bool connectionStatus)

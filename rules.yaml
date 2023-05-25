@@ -266,8 +266,6 @@ features:
           raw: true
         - source: "apigear/mqtt/mqttservice.h"
           raw: true
-        - source: "apigear/mqtt/mqttisink.h"
-          raw: true
         - source: "apigear/mqtt/mqtttopic.cpp"
           raw: true
         - source: "apigear/mqtt/mqtttopic.h"

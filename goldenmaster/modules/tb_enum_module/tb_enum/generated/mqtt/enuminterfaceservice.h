@@ -3,22 +3,19 @@
 #include "tb_enum/generated/api/tb_enum.h"
 #include "tb_enum/generated/api/common.h"
 #include "apigear/mqtt/mqttservice.h"
-#include "mqttisink.h"
 
 namespace Test {
 namespace TbEnum {
 namespace MQTT {
-class TEST_TB_ENUM_EXPORT EnumInterfaceService : public virtual ApiGear::MQTT::ISink, public IEnumInterfaceSubscriber
+class TEST_TB_ENUM_EXPORT EnumInterfaceService : public IEnumInterfaceSubscriber
 {
 public:
     explicit EnumInterfaceService(std::shared_ptr<IEnumInterface> impl, std::shared_ptr<ApiGear::MQTT::Service> service);
     virtual ~EnumInterfaceService() override;
 
     void onConnectionStatusChanged(bool connectionStatus);
-    // sink interface
-    void onSignal(const ApiGear::MQTT::Topic&, const std::string&) override {};
-    void onPropertyChanged(const ApiGear::MQTT::Topic&, const std::string&) override {};
-    void onInvoke(const ApiGear::MQTT::Topic& topic, const std::string& args, const ApiGear::MQTT::Topic& responseTopic, const std::string& correlationData) override;
+
+    void onInvoke(const ApiGear::MQTT::Topic& topic, const std::string& args, const ApiGear::MQTT::Topic& responseTopic, const std::string& correlationData);
 
     // IEnumInterfaceSubscriber interface
     void onSig0(Enum0Enum param0) override;
