@@ -6,22 +6,19 @@
 #include "{{snake .Module.Name}}/generated/api/{{snake .Module.Name}}.h"
 #include "{{snake .Module.Name}}/generated/api/common.h"
 #include "apigear/mqtt/mqttservice.h"
-#include "mqttisink.h"
 
 namespace {{ Camel .System.Name }} {
 namespace {{ Camel .Module.Name }} {
 namespace MQTT {
-class {{ SNAKE .System.Name  }}_{{ SNAKE .Module.Name  }}_EXPORT {{$class}} : public virtual ApiGear::MQTT::ISink, public I{{$interface}}Subscriber
+class {{ SNAKE .System.Name  }}_{{ SNAKE .Module.Name  }}_EXPORT {{$class}} : public I{{$interface}}Subscriber
 {
 public:
     explicit {{$class}}(std::shared_ptr<I{{$interface}}> impl, std::shared_ptr<ApiGear::MQTT::Service> service);
     virtual ~{{$class}}() override;
 
     void onConnectionStatusChanged(bool connectionStatus);
-    // sink interface
-    void onSignal(const ApiGear::MQTT::Topic&, const std::string&) override {};
-    void onPropertyChanged(const ApiGear::MQTT::Topic&, const std::string&) override {};
-    void onInvoke(const ApiGear::MQTT::Topic& topic, const std::string& args, const ApiGear::MQTT::Topic& responseTopic, const std::string& correlationData) override;
+
+    void onInvoke(const ApiGear::MQTT::Topic& topic, const std::string& args, const ApiGear::MQTT::Topic& responseTopic, const std::string& correlationData);
 
     // I{{$interface}}Subscriber interface
 {{- range .Interface.Signals}}

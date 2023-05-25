@@ -3,7 +3,6 @@
 #include "../utilities/logger.h"
 #include <chrono>
 #include <random>
-#include "mqttisink.h"
 
 using namespace ApiGear::MQTT;
 #define QOS         2
@@ -12,7 +11,7 @@ std::mt19937 randomNumberGenerator (std::random_device{}());
 
 struct subscribeTopicContext {
     Topic topic;
-    ISink* sink;
+    CallbackFunction func;
     CWrapper* client;
 };
 
@@ -25,7 +24,7 @@ void onSendFailure(void* context, MQTTAsync_failureData5* response)
 void onSubscribeSuccess(void* context, MQTTAsync_successData5* response)
 {
     subscribeTopicContext* ctx = static_cast<subscribeTopicContext*>(context);
-    ctx->client->confirmSubscription(ctx->topic, *(ctx->sink));
+    ctx->client->confirmSubscription(ctx->topic, ctx->func);
     delete ctx;
 }
 
@@ -374,23 +373,12 @@ void CWrapper::onDisconnected()
 void CWrapper::handleTextMessage(const Message& message)
 {
     AG_LOG_INFO("new msg: topic " + message.topic.getEncodedTopic() + " msg content: " + message.content);
-    std::pair<std::multimap<Topic, ISink*, Topic>::iterator, std::multimap<Topic, ISink*, Topic>::iterator> topics = m_subscribedTopics.equal_range(message.topic);
+    std::pair<std::multimap<Topic, CallbackFunction, Topic>::iterator, std::multimap<Topic, CallbackFunction, Topic>::iterator> topics = m_subscribedTopics.equal_range(message.topic);
     for (auto iter = topics.first; iter != topics.second; ++iter)
     {
         if(iter->second != nullptr)
         {
-            if(message.topic.getTopicType() == Topic::TopicType::Signal)
-            {
-                iter->second->onSignal(message.topic, message.content);
-            }
-            else if(message.topic.getTopicType() == Topic::TopicType::Property)
-            {
-                iter->second->onPropertyChanged(message.topic, message.content);
-            }
-            else if(message.topic.getTopicType() == Topic::TopicType::Operation)
-            {
-                iter->second->onInvoke(message.topic, message.content, message.responseTopic, message.correlationData);
-            }
+            iter->second(message.topic, message.content, message.responseTopic, message.correlationData);
         }
         else
         {
@@ -514,11 +502,11 @@ void CWrapper::setRemoteProperty(const Topic& topic, const std::string& value)
     int responseCode = sendMessage(topic.getEncodedTopic(), &pubmsg, &opts);
 }
 
-void CWrapper::subscribeTopic(const Topic& topic, ISink* sink)
+void CWrapper::subscribeTopic(const Topic& topic, CallbackFunction func)
 {
     {
         std::lock_guard<std::mutex> guard(m_toBeSubscribedTopicsMutex);
-        m_toBeSubscribedTopics.insert({topic, sink});
+        m_toBeSubscribedTopics.insert({topic, func});
     }
 
     {
@@ -528,10 +516,10 @@ void CWrapper::subscribeTopic(const Topic& topic, ISink* sink)
     m_conditionVariable.notify_one();
 }
 
-void CWrapper::confirmSubscription(const Topic& topic, ISink& sink)
+void CWrapper::confirmSubscription(const Topic& topic, CallbackFunction func)
 {
     std::lock_guard<std::mutex> guard(m_subscribedTopicsMutex);
-    m_subscribedTopics.insert({topic, &sink});
+    m_subscribedTopics.insert({topic, func});
 }
 
 void CWrapper::removeSubscription(const Topic& topic)
@@ -540,11 +528,11 @@ void CWrapper::removeSubscription(const Topic& topic)
     m_subscribedTopics.erase(topic);
 }
 
-void CWrapper::unsubscribeTopic(const Topic& topic, ISink* sink)
+void CWrapper::unsubscribeTopic(const Topic& topic, CallbackFunction func)
 {
     {
         std::lock_guard<std::mutex> guard(m_toBeUnsubscribedTopicsMutex);
-        m_toBeUnsubscribedTopics.insert({topic, sink});
+        m_toBeUnsubscribedTopics.insert({topic, func});
     }
 
     {

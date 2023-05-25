@@ -6,6 +6,7 @@
 namespace ApiGear {
 namespace MQTT {
 
+typedef std::function<void(const Topic& topic, const std::string& args, const Topic& responseTopic, const std::string& correlationData)> CallbackFunction;
 typedef std::function<void(bool connectionStatus)> OnConnectionStatusChangedCallBackFunction;
 
 class APIGEAR_MQTT_EXPORT InvokeReplyArg {

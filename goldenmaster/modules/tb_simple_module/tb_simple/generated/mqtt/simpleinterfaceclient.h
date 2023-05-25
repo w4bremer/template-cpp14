@@ -5,12 +5,11 @@
 #include "tb_simple/generated/api/tb_simple.h"
 #include "tb_simple/generated/core/simpleinterface.data.h"
 #include "apigear/mqtt/mqttclient.h"
-#include "mqttisink.h"
 
 namespace Test {
 namespace TbSimple {
 namespace MQTT {
-class TEST_TB_SIMPLE_EXPORT SimpleInterfaceClient : public ISimpleInterface, public virtual ApiGear::MQTT::ISink
+class TEST_TB_SIMPLE_EXPORT SimpleInterfaceClient : public ISimpleInterface
 {
 public:
     explicit SimpleInterfaceClient(std::shared_ptr<ApiGear::MQTT::Client> client);
@@ -51,9 +50,8 @@ public:
 
     bool isReady() const;
 
-    void onSignal(const ApiGear::MQTT::Topic& topic, const std::string& args) override;
-    void onPropertyChanged(const ApiGear::MQTT::Topic& topic, const std::string& args) override;
-    void onInvoke(const ApiGear::MQTT::Topic&, const std::string&, const ApiGear::MQTT::Topic&, const std::string&) override {};
+    void onSignal(const ApiGear::MQTT::Topic& topic, const std::string& args, const ApiGear::MQTT::Topic& responseTopic, const std::string& correlationData);
+    void onPropertyChanged(const ApiGear::MQTT::Topic& topic, const std::string& args, const ApiGear::MQTT::Topic& responseTopic, const std::string& correlationData);
 
 private:
     void setPropBoolLocal(bool propBool);

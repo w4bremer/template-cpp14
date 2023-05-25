@@ -3,22 +3,19 @@
 #include "testbed1/generated/api/testbed1.h"
 #include "testbed1/generated/api/common.h"
 #include "apigear/mqtt/mqttservice.h"
-#include "mqttisink.h"
 
 namespace Test {
 namespace Testbed1 {
 namespace MQTT {
-class TEST_TESTBED1_EXPORT StructArrayInterfaceService : public virtual ApiGear::MQTT::ISink, public IStructArrayInterfaceSubscriber
+class TEST_TESTBED1_EXPORT StructArrayInterfaceService : public IStructArrayInterfaceSubscriber
 {
 public:
     explicit StructArrayInterfaceService(std::shared_ptr<IStructArrayInterface> impl, std::shared_ptr<ApiGear::MQTT::Service> service);
     virtual ~StructArrayInterfaceService() override;
 
     void onConnectionStatusChanged(bool connectionStatus);
-    // sink interface
-    void onSignal(const ApiGear::MQTT::Topic&, const std::string&) override {};
-    void onPropertyChanged(const ApiGear::MQTT::Topic&, const std::string&) override {};
-    void onInvoke(const ApiGear::MQTT::Topic& topic, const std::string& args, const ApiGear::MQTT::Topic& responseTopic, const std::string& correlationData) override;
+
+    void onInvoke(const ApiGear::MQTT::Topic& topic, const std::string& args, const ApiGear::MQTT::Topic& responseTopic, const std::string& correlationData);
 
     // IStructArrayInterfaceSubscriber interface
     void onSigBool(const std::list<StructBool>& paramBool) override;

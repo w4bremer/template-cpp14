@@ -59,10 +59,10 @@ public:
     // client interface
     void invokeRemote(const Topic& name, const std::string& value, InvokeReplyFunc func=nullptr);
     void setRemoteProperty(const Topic& name, const std::string& value);
-    void subscribeTopic(const Topic& name, ISink* sink);
-    void unsubscribeTopic(const Topic& name, ISink* sink);
+    void subscribeTopic(const Topic& name, CallbackFunction func);
+    void unsubscribeTopic(const Topic& name, CallbackFunction func);
 
-    void confirmSubscription(const Topic& name, ISink& sink);
+    void confirmSubscription(const Topic& name, CallbackFunction func);
     void removeSubscription(const Topic& name);
     
     void run();
@@ -94,11 +94,11 @@ private:
     std::mutex m_invokeResultsMutex;
     std::map<int, InvokeReplyFunc> m_invokeResults;
     std::mutex m_subscribedTopicsMutex;
-    std::multimap<Topic, ISink*, Topic> m_subscribedTopics;
+    std::multimap<Topic, CallbackFunction, Topic> m_subscribedTopics;
     std::mutex m_toBeSubscribedTopicsMutex;
-    std::multimap<Topic, ISink*, Topic> m_toBeSubscribedTopics;
+    std::multimap<Topic, CallbackFunction, Topic> m_toBeSubscribedTopics;
     std::mutex m_toBeUnsubscribedTopicsMutex;
-    std::multimap<Topic, ISink*, Topic> m_toBeUnsubscribedTopics;
+    std::multimap<Topic, CallbackFunction, Topic> m_toBeUnsubscribedTopics;
 };
 } // namespace MQTT
 } // namespace ApiGear

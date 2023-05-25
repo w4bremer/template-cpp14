@@ -5,12 +5,11 @@
 #include "tb_enum/generated/api/tb_enum.h"
 #include "tb_enum/generated/core/enuminterface.data.h"
 #include "apigear/mqtt/mqttclient.h"
-#include "mqttisink.h"
 
 namespace Test {
 namespace TbEnum {
 namespace MQTT {
-class TEST_TB_ENUM_EXPORT EnumInterfaceClient : public IEnumInterface, public virtual ApiGear::MQTT::ISink
+class TEST_TB_ENUM_EXPORT EnumInterfaceClient : public IEnumInterface
 {
 public:
     explicit EnumInterfaceClient(std::shared_ptr<ApiGear::MQTT::Client> client);
@@ -35,9 +34,8 @@ public:
 
     bool isReady() const;
 
-    void onSignal(const ApiGear::MQTT::Topic& topic, const std::string& args) override;
-    void onPropertyChanged(const ApiGear::MQTT::Topic& topic, const std::string& args) override;
-    void onInvoke(const ApiGear::MQTT::Topic&, const std::string&, const ApiGear::MQTT::Topic&, const std::string&) override {};
+    void onSignal(const ApiGear::MQTT::Topic& topic, const std::string& args, const ApiGear::MQTT::Topic& responseTopic, const std::string& correlationData);
+    void onPropertyChanged(const ApiGear::MQTT::Topic& topic, const std::string& args, const ApiGear::MQTT::Topic& responseTopic, const std::string& correlationData);
 
 private:
     void setProp0Local(Enum0Enum prop0);
