@@ -64,16 +64,6 @@ void Client::subscribeTopic(const Topic& topic, ISink* sink)
     m_cwrapper->subscribeTopic(topic, sink);
 }
 
-void Client::confirmSubscription(const Topic& topic, ISink& sink)
-{
-    m_cwrapper->confirmSubscription(topic, sink);
-}
-
-void Client::removeSubscription(const Topic& topic)
-{
-    m_cwrapper->removeSubscription(topic);
-}
-
 void Client::unsubscribeTopic(const Topic& topic, ISink* sink)
 {
     m_cwrapper->unsubscribeTopic(topic, sink);
