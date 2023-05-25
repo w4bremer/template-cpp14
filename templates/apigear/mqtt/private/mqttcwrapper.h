@@ -10,10 +10,10 @@
 #include <thread>
 #include <condition_variable>
 #include "nlohmann/json.hpp"
+#include "MQTTAsync.h"
 #include "mqtttopic.h"
 #include "mqtttypes.h"
 
-typedef void* MQTTAsync;
 
 namespace ApiGear {
 namespace MQTT {
@@ -73,6 +73,8 @@ private:
     void checkForOldSubscriptions();
     void unsubscribeAllTopics();
     void waitForPendingMessages();
+
+    int sendMessage(const std::string& destinationName, const MQTTAsync_message* msg, MQTTAsync_responseOptions* response);
 
 private:
     std::condition_variable m_conditionVariable;
