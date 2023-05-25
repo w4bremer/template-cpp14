@@ -2,7 +2,7 @@
 
 #include "tb_same2/generated/api/tb_same2.h"
 #include "tb_same2/generated/api/common.h"
-#include "apigear/mqtt/mqttcppclient.h"
+#include "apigear/mqtt/mqttservice.h"
 #include "mqttisink.h"
 
 namespace Test {
@@ -11,7 +11,7 @@ namespace MQTT {
 class TEST_TB_SAME2_EXPORT SameEnum1InterfaceService : public virtual ApiGear::MQTT::ISink, public ISameEnum1InterfaceSubscriber
 {
 public:
-    explicit SameEnum1InterfaceService(std::shared_ptr<ISameEnum1Interface> impl, std::shared_ptr<ApiGear::MQTT::Client> client);
+    explicit SameEnum1InterfaceService(std::shared_ptr<ISameEnum1Interface> impl, std::shared_ptr<ApiGear::MQTT::Service> service);
     virtual ~SameEnum1InterfaceService() override;
 
     void onConnectionStatusChanged(bool connectionStatus);
@@ -26,7 +26,7 @@ public:
 
 private:
     std::shared_ptr<ISameEnum1Interface> m_impl;
-    std::shared_ptr<ApiGear::MQTT::Client> m_client;
+    std::shared_ptr<ApiGear::MQTT::Service> m_service;
     // id for connection status registration
     int m_connectionStatusRegistrationID;
 };

@@ -258,9 +258,13 @@ features:
           raw: true
         - source: "apigear/mqtt/private/mqttcwrapper.h"
           raw: true
-        - source: "apigear/mqtt/mqttcppclient.cpp"
+        - source: "apigear/mqtt/mqttclient.cpp"
           raw: true
-        - source: "apigear/mqtt/mqttcppclient.h"
+        - source: "apigear/mqtt/mqttclient.h"
+          raw: true
+        - source: "apigear/mqtt/mqttservice.cpp"
+          raw: true
+        - source: "apigear/mqtt/mqttservice.h"
           raw: true
         - source: "apigear/mqtt/mqttisink.h"
           raw: true

@@ -2,7 +2,7 @@
 
 #include "tb_simple/generated/api/tb_simple.h"
 #include "tb_simple/generated/api/common.h"
-#include "apigear/mqtt/mqttcppclient.h"
+#include "apigear/mqtt/mqttservice.h"
 #include "mqttisink.h"
 
 namespace Test {
@@ -11,7 +11,7 @@ namespace MQTT {
 class TEST_TB_SIMPLE_EXPORT NoOperationsInterfaceService : public virtual ApiGear::MQTT::ISink, public INoOperationsInterfaceSubscriber
 {
 public:
-    explicit NoOperationsInterfaceService(std::shared_ptr<INoOperationsInterface> impl, std::shared_ptr<ApiGear::MQTT::Client> client);
+    explicit NoOperationsInterfaceService(std::shared_ptr<INoOperationsInterface> impl, std::shared_ptr<ApiGear::MQTT::Service> service);
     virtual ~NoOperationsInterfaceService() override;
 
     void onConnectionStatusChanged(bool connectionStatus);
@@ -28,7 +28,7 @@ public:
 
 private:
     std::shared_ptr<INoOperationsInterface> m_impl;
-    std::shared_ptr<ApiGear::MQTT::Client> m_client;
+    std::shared_ptr<ApiGear::MQTT::Service> m_service;
     // id for connection status registration
     int m_connectionStatusRegistrationID;
 };

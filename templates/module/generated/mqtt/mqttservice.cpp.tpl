@@ -8,21 +8,21 @@
 using namespace {{ Camel .System.Name }}::{{ Camel .Module.Name }};
 using namespace {{ Camel .System.Name }}::{{ Camel .Module.Name }}::MQTT;
 
-{{$class}}::{{$class}}(std::shared_ptr<I{{$interface}}> impl, std::shared_ptr<ApiGear::MQTT::Client> client)
+{{$class}}::{{$class}}(std::shared_ptr<I{{$interface}}> impl, std::shared_ptr<ApiGear::MQTT::Service> service)
     : m_impl(impl)
-    , m_client(client)
+    , m_service(service)
 {
     m_impl->_getPublisher().subscribeToAllChanges(*this);
 
-    m_connectionStatusRegistrationID = m_client->subscribeToConnectionStatus(std::bind(&{{$class}}::onConnectionStatusChanged, this, std::placeholders::_1));
+    m_connectionStatusRegistrationID = m_service->subscribeToConnectionStatus(std::bind(&{{$class}}::onConnectionStatusChanged, this, std::placeholders::_1));
     // subscribe to all property change request methods
 {{- range .Interface.Properties}}
 {{- $property := . }}
-    m_client->subscribeTopic(ApiGear::MQTT::Topic("{{$.Module.Name}}","{{$interface}}",ApiGear::MQTT::Topic::TopicType::Operation,"_set{{$property}}"), this);
+    m_service->subscribeTopic(ApiGear::MQTT::Topic("{{$.Module.Name}}","{{$interface}}",ApiGear::MQTT::Topic::TopicType::Operation,"_set{{$property}}"), this);
 {{- end }}
 {{- range .Interface.Operations}}
 {{- $operation := . }}
-    m_client->subscribeTopic(ApiGear::MQTT::Topic("{{$.Module.Name}}","{{$interface}}",ApiGear::MQTT::Topic::TopicType::Operation,"{{$operation}}"), this);
+    m_service->subscribeTopic(ApiGear::MQTT::Topic("{{$.Module.Name}}","{{$interface}}",ApiGear::MQTT::Topic::TopicType::Operation,"{{$operation}}"), this);
 {{- end }}
 
 }
@@ -31,15 +31,15 @@ using namespace {{ Camel .System.Name }}::{{ Camel .Module.Name }}::MQTT;
 {
     m_impl->_getPublisher().unsubscribeFromAllChanges(*this);
 
-    m_client->unsubscribeToConnectionStatus(m_connectionStatusRegistrationID);
+    m_service->unsubscribeToConnectionStatus(m_connectionStatusRegistrationID);
 
 {{- range .Interface.Properties}}
 {{- $property := . }}
-    m_client->unsubscribeTopic(ApiGear::MQTT::Topic("{{$.Module.Name}}","{{$interface}}",ApiGear::MQTT::Topic::TopicType::Operation,"_set{{$property}}"), this);
+    m_service->unsubscribeTopic(ApiGear::MQTT::Topic("{{$.Module.Name}}","{{$interface}}",ApiGear::MQTT::Topic::TopicType::Operation,"_set{{$property}}"), this);
 {{- end }}
 {{- range .Interface.Operations}}
 {{- $operation := . }}
-    m_client->unsubscribeTopic(ApiGear::MQTT::Topic("{{$.Module.Name}}","{{$interface}}",ApiGear::MQTT::Topic::TopicType::Operation,"{{$operation}}"), this);
+    m_service->unsubscribeTopic(ApiGear::MQTT::Topic("{{$.Module.Name}}","{{$interface}}",ApiGear::MQTT::Topic::TopicType::Operation,"{{$operation}}"), this);
 {{- end }}
 }
 
@@ -95,7 +95,7 @@ void {{$class}}::onInvoke(const ApiGear::MQTT::Topic& topic, const std::string& 
         m_impl->{{lower1 $operation.Name}}({{ cppVars $operation.Params }});
     {{- else }}
         auto result = m_impl->{{lower1 $operation.Name}}({{ cppVars $operation.Params }});
-        m_client->notifyInvokeResponse(responseTopic, nlohmann::json(result).dump(), correlationData);
+        m_service->notifyInvokeResponse(responseTopic, nlohmann::json(result).dump(), correlationData);
     {{- end}}
         return;
     }
@@ -106,10 +106,10 @@ void {{$class}}::onInvoke(const ApiGear::MQTT::Topic& topic, const std::string& 
 {{- $signal := . }}
 void {{$class}}::on{{Camel $signal.Name}}({{cppParams "" $signal.Params}})
 {
-    if(m_client != nullptr) {
+    if(m_service != nullptr) {
         const nlohmann::json& args = { {{ cppVars $signal.Params}} };
         static const auto topic = ApiGear::MQTT::Topic("{{$.Module.Name}}","{{$interface}}",ApiGear::MQTT::Topic::TopicType::Signal,"{{$signal}}");
-        m_client->notifySignal(topic, nlohmann::json(args).dump());
+        m_service->notifySignal(topic, nlohmann::json(args).dump());
     }
 }
 {{- end }}
@@ -118,9 +118,9 @@ void {{$class}}::on{{Camel $signal.Name}}({{cppParams "" $signal.Params}})
 {{- $property := . }}
 void {{$class}}::on{{Camel $property.Name}}Changed({{cppParam "" $property}})
 {
-    if(m_client != nullptr) {
+    if(m_service != nullptr) {
         static const auto topic = ApiGear::MQTT::Topic("{{$.Module.Name}}","{{$interface}}",ApiGear::MQTT::Topic::TopicType::Property,"{{$property}}");
-        m_client->notifyPropertyChange(topic, nlohmann::json({{$property}}).dump());
+        m_service->notifyPropertyChange(topic, nlohmann::json({{$property}}).dump());
     }
 }
 {{- end }}

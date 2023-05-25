@@ -7,7 +7,7 @@
 #include "{{snake $module.Name}}/generated/mqtt/{{ lower ( camel $interface.Name) }}service.h"
 {{- end }}
 {{- end }}
-#include "apigear/mqtt/mqttcppclient.h"
+#include "apigear/mqtt/mqttservice.h"
 #include "apigear/utilities/logger.h"
 #include <iostream>
 #include <sstream>
@@ -50,7 +50,7 @@ int main(){
 
     auto randomId = distribution(randomNumberGenerator);
     // MQTT clients need to have unique identifiers
-    auto mqttclient = std::make_shared<ApiGear::MQTT::Client>("testServer"+std::to_string(randomId));
+    auto mqttservice = std::make_shared<ApiGear::MQTT::Service>("testServer"+std::to_string(randomId));
 
     // set up modules
 {{- range .System.Modules }}
@@ -59,12 +59,12 @@ int main(){
 {{- $interface := . }}
     {{- $class := Camel $interface.Name }}
     std::shared_ptr<{{ Camel $module.Name }}::I{{$class}}> test{{ Camel $module.Name }}{{$class}} = std::make_shared<{{ Camel $module.Name }}::{{$class}}>();
-    {{ Camel $module.Name }}::MQTT::{{$interface.Name}}Service test{{ Camel $module.Name }}{{$class}}Service(test{{ Camel $module.Name }}{{$class}}, mqttclient);
+    {{ Camel $module.Name }}::MQTT::{{$interface.Name}}Service test{{ Camel $module.Name }}{{$class}}Service(test{{ Camel $module.Name }}{{$class}}, mqttservice);
 {{- end }}
 {{- end }}
 
     // start mqtt connection
-    mqttclient->connectToHost("");
+    mqttservice->connectToHost("");
 
     bool keepRunning = true;
     std::string cmd;
@@ -73,7 +73,7 @@ int main(){
         getline (std::cin, cmd);
 
         if(cmd == "quit"){
-            mqttclient->disconnect();
+            mqttservice->disconnect();
             keepRunning = false;
         } else {
         }

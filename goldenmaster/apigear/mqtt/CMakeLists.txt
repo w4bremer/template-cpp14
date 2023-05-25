@@ -13,7 +13,8 @@ find_package(OpenSSL REQUIRED SSL Crypto)
 
 set (SOURCES
   private/mqttcwrapper.cpp
-  mqttcppclient.cpp
+  mqttclient.cpp
+  mqttservice.cpp
   mqtttopic.cpp
 )
 add_library(paho-mqtt SHARED ${SOURCES})

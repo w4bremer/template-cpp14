@@ -2,7 +2,7 @@
 
 #include "testbed2/generated/api/testbed2.h"
 #include "testbed2/generated/api/common.h"
-#include "apigear/mqtt/mqttcppclient.h"
+#include "apigear/mqtt/mqttservice.h"
 #include "mqttisink.h"
 
 namespace Test {
@@ -11,7 +11,7 @@ namespace MQTT {
 class TEST_TESTBED2_EXPORT NestedStruct3InterfaceService : public virtual ApiGear::MQTT::ISink, public INestedStruct3InterfaceSubscriber
 {
 public:
-    explicit NestedStruct3InterfaceService(std::shared_ptr<INestedStruct3Interface> impl, std::shared_ptr<ApiGear::MQTT::Client> client);
+    explicit NestedStruct3InterfaceService(std::shared_ptr<INestedStruct3Interface> impl, std::shared_ptr<ApiGear::MQTT::Service> service);
     virtual ~NestedStruct3InterfaceService() override;
 
     void onConnectionStatusChanged(bool connectionStatus);
@@ -30,7 +30,7 @@ public:
 
 private:
     std::shared_ptr<INestedStruct3Interface> m_impl;
-    std::shared_ptr<ApiGear::MQTT::Client> m_client;
+    std::shared_ptr<ApiGear::MQTT::Service> m_service;
     // id for connection status registration
     int m_connectionStatusRegistrationID;
 };
