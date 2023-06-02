@@ -125,7 +125,7 @@ using SameEnum2InterfaceSig2SignalCb = std::function<void(Enum1Enum param1, Enum
  * or a property change.
  * Implement this interface to keep track of clients of your ISameEnum2Interface implementation.
  * The publisher provides two independent methods of subscription
- *  - subscribing with a IISameEnum2InterfaceSubscriber objects - for all of the changes
+ *  - subscribing with a ISameEnum2InterfaceSubscriber objects - for all of the changes
  *  - subscribing any object for single type of change property or a signal
  * The publish functions needs to be called by implementation of the IISameEnum2Interface on each state changed or signal emitted
  * to notify all the subscribers about this change.

@@ -192,7 +192,7 @@ using StructInterfaceSigStringSignalCb = std::function<void(const StructString& 
  * or a property change.
  * Implement this interface to keep track of clients of your IStructInterface implementation.
  * The publisher provides two independent methods of subscription
- *  - subscribing with a IIStructInterfaceSubscriber objects - for all of the changes
+ *  - subscribing with a IStructInterfaceSubscriber objects - for all of the changes
  *  - subscribing any object for single type of change property or a signal
  * The publish functions needs to be called by implementation of the IIStructInterface on each state changed or signal emitted
  * to notify all the subscribers about this change.

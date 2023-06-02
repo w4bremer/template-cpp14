@@ -1,6 +1,9 @@
 {{- /* Copyright (c) ApiGear UG 2020 */ -}}
 {{- $class := printf "%sService" .Interface.Name  }}
-{{- $interface := .Interface.Name  }}
+{{ $interfaceNameOriginal := .Interface.Name  }}
+{{ $interfaceName := Camel .Interface.Name  }}
+{{- $interfaceClass := printf "I%s" $interfaceName -}}
+
 
 #include "{{snake .Module.Name}}/generated/api/datastructs.api.h"
 #include "{{snake .Module.Name}}/generated/olink/{{lower (camel .Interface.Name)}}service.h"
@@ -18,19 +21,19 @@ using namespace {{ Camel .System.Name }}::{{ Camel .Module.Name }}::olink;
 
 namespace 
 {
-const std::string interfaceId = "{{.Module.Name}}.{{$interface}}";
+const std::string interfaceId = "{{.Module.Name}}.{{$interfaceNameOriginal}}";
 }
 
-{{$class}}::{{$class}}(std::shared_ptr<I{{$interface}}> {{$interface}}, ApiGear::ObjectLink::RemoteRegistry& registry)
-    : m_{{$interface}}({{$interface}})
+{{$class}}::{{$class}}(std::shared_ptr<{{$interfaceClass}}> {{$interfaceNameOriginal}}, ApiGear::ObjectLink::RemoteRegistry& registry)
+    : m_{{$interfaceNameOriginal}}({{$interfaceNameOriginal}})
     , m_registry(registry)
 {
-    m_{{$interface}}->_getPublisher().subscribeToAllChanges(*this);
+    m_{{$interfaceNameOriginal}}->_getPublisher().subscribeToAllChanges(*this);
 }
 
 {{$class}}::~{{$class}}()
 {
-    m_{{$interface}}->_getPublisher().unsubscribeFromAllChanges(*this);
+    m_{{$interfaceNameOriginal}}->_getPublisher().unsubscribeFromAllChanges(*this);
 }
 
 std::string {{$class}}::olinkObjectName() {
@@ -58,10 +61,10 @@ nlohmann::json {{$class}}::olinkInvoke(const std::string& methodId, const nlohma
         const {{cppType "" $param}}& {{$param}} = fcnArgs.at({{ $idx}});      
 {{- end }}
     {{- if ( eq (cppReturn "" $operation.Return) "void") }}
-        m_{{$interface}}->{{lower1 $operation.Name}}({{ cppVars $operation.Params }});
+        m_{{$interfaceNameOriginal}}->{{lower1 $operation.Name}}({{ cppVars $operation.Params }});
         return nlohmann::json{};
     {{- else }}
-        {{cppReturn "" $operation.Return}} result = m_{{$interface}}->{{lower1 $operation.Name}}({{ cppVars $operation.Params }});
+        {{cppReturn "" $operation.Return}} result = m_{{$interfaceNameOriginal}}->{{lower1 $operation.Name}}({{ cppVars $operation.Params }});
         return result;
     {{- end}}
     }
@@ -80,7 +83,7 @@ void {{$class}}::olinkSetProperty(const std::string& propertyId, const nlohmann:
 {{- $property := . }}
     if(memberProperty == "{{$property}}") {
         {{cppType "" $property}} {{$property}} = value.get<{{cppType "" $property}}>();
-        m_{{$interface}}->set{{Camel $property.Name}}({{$property}});
+        m_{{$interfaceNameOriginal}}->set{{Camel $property.Name}}({{$property}});
     }
 {{- else }}
     // no properties to set {{- /* we generate anyway for consistency */}}
@@ -103,7 +106,7 @@ nlohmann::json {{$class}}::olinkCollectProperties()
 {{- range $idx, $elem := .Interface.Properties}}
 {{- $property := . }}
 {{- if $idx }},{{- end }}
-        { "{{$property.Name}}", m_{{$interface}}->get{{Camel $property.Name}}() }
+        { "{{$property.Name}}", m_{{$interfaceNameOriginal}}->get{{Camel $property.Name}}() }
 {{- end }}
     });
 }

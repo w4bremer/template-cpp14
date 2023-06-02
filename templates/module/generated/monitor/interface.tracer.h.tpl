@@ -8,9 +8,10 @@ namespace ApiGear { namespace PocoImpl { class Tracer; } }
 namespace {{ Camel .System.Name }} {
 namespace {{ Camel .Module.Name }} {
 
-
-{{- $class := printf "%sTracer" .Interface.Name  }}
-{{ $interfaceNameOriginal := .Interface.Name  }}
+{{ $class := printf "%sTracer" .Interface.Name  }}
+{{- $interfaceNameOriginal := .Interface.Name  }}
+{{- $interfaceName := Camel .Interface.Name  }}
+{{- $interfaceClass := printf "I%s" $interfaceName -}}
 /**
 * A helper class for tracing.
 * Builds the trace info with state and operations specific for {{.Interface.Name}} and pass to PocoImpl::Tracer.
@@ -29,7 +30,7 @@ public:
   * Prepares the {{.Interface.Name}} object state in a nlohmann::json format and puts to a tracer.
   * @param The {{.Interface.Name}} object to trace.
   */
-  void capture_state(I{{.Interface.Name}}* obj);
+  void capture_state({{$interfaceClass}}* obj);
 {{- range .Interface.Operations}}
 {{- $operation := . }}
   /**

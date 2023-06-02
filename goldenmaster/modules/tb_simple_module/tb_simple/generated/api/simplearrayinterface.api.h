@@ -328,7 +328,7 @@ using SimpleArrayInterfaceSigStringSignalCb = std::function<void(const std::list
  * or a property change.
  * Implement this interface to keep track of clients of your ISimpleArrayInterface implementation.
  * The publisher provides two independent methods of subscription
- *  - subscribing with a IISimpleArrayInterfaceSubscriber objects - for all of the changes
+ *  - subscribing with a ISimpleArrayInterfaceSubscriber objects - for all of the changes
  *  - subscribing any object for single type of change property or a signal
  * The publish functions needs to be called by implementation of the IISimpleArrayInterface on each state changed or signal emitted
  * to notify all the subscribers about this change.

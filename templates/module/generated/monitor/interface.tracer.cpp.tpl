@@ -8,13 +8,15 @@ using namespace {{ Camel .System.Name }}::{{ Camel .Module.Name }};
 {{- $class := printf "%sTracer" .Interface.Name  }}
 {{- $interfaceNameOriginal := .Interface.Name  }}
 {{- $modulName := .Module.Name  }}
+{{- $interfaceName := Camel .Interface.Name  }}
+{{- $interfaceClass := printf "I%s" $interfaceName }}
 
 {{$class}}::{{$class}}(ApiGear::PocoImpl::Tracer& tracer)
     : m_tracer(tracer)
 {
 }
 
-void {{$class}}::capture_state(I{{$interfaceNameOriginal}}* obj)
+void {{$class}}::capture_state({{$interfaceClass}}* obj)
 {
     nlohmann::json fields_;
 {{- range .Interface.Properties}}

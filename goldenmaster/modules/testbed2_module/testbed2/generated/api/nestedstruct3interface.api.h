@@ -161,7 +161,7 @@ using NestedStruct3InterfaceSig3SignalCb = std::function<void(const NestedStruct
  * or a property change.
  * Implement this interface to keep track of clients of your INestedStruct3Interface implementation.
  * The publisher provides two independent methods of subscription
- *  - subscribing with a IINestedStruct3InterfaceSubscriber objects - for all of the changes
+ *  - subscribing with a INestedStruct3InterfaceSubscriber objects - for all of the changes
  *  - subscribing any object for single type of change property or a signal
  * The publish functions needs to be called by implementation of the IINestedStruct3Interface on each state changed or signal emitted
  * to notify all the subscribers about this change.

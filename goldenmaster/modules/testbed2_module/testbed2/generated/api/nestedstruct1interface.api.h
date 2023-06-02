@@ -90,7 +90,7 @@ using NestedStruct1InterfaceSig1SignalCb = std::function<void(const NestedStruct
  * or a property change.
  * Implement this interface to keep track of clients of your INestedStruct1Interface implementation.
  * The publisher provides two independent methods of subscription
- *  - subscribing with a IINestedStruct1InterfaceSubscriber objects - for all of the changes
+ *  - subscribing with a INestedStruct1InterfaceSubscriber objects - for all of the changes
  *  - subscribing any object for single type of change property or a signal
  * The publish functions needs to be called by implementation of the IINestedStruct1Interface on each state changed or signal emitted
  * to notify all the subscribers about this change.

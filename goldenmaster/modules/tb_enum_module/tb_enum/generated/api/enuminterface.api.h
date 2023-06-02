@@ -192,7 +192,7 @@ using EnumInterfaceSig3SignalCb = std::function<void(Enum3Enum param3)> ;
  * or a property change.
  * Implement this interface to keep track of clients of your IEnumInterface implementation.
  * The publisher provides two independent methods of subscription
- *  - subscribing with a IIEnumInterfaceSubscriber objects - for all of the changes
+ *  - subscribing with a IEnumInterfaceSubscriber objects - for all of the changes
  *  - subscribing any object for single type of change property or a signal
  * The publish functions needs to be called by implementation of the IIEnumInterface on each state changed or signal emitted
  * to notify all the subscribers about this change.

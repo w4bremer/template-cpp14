@@ -106,7 +106,7 @@ using NoSignalsInterfacePropIntPropertyCb = std::function<void(int propInt)>;
  * or a property change.
  * Implement this interface to keep track of clients of your INoSignalsInterface implementation.
  * The publisher provides two independent methods of subscription
- *  - subscribing with a IINoSignalsInterfaceSubscriber objects - for all of the changes
+ *  - subscribing with a INoSignalsInterfaceSubscriber objects - for all of the changes
  *  - subscribing any object for single type of change property or a signal
  * The publish functions needs to be called by implementation of the IINoSignalsInterface on each state changed or signal emitted
  * to notify all the subscribers about this change.
