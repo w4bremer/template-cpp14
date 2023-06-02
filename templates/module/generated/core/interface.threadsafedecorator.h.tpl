@@ -38,7 +38,7 @@ test{{$interfaceName}}->set{{Camel $property.Name}}({{cppDefault "" $property}})
 {{- end }}
 \endcode
 */
-class {{ SNAKE .System.Name  }}_{{ SNAKE .Module.Name  }}_EXPORT {{$class}} : public I{{.Interface.Name}}
+class {{ SNAKE .System.Name  }}_{{ SNAKE .Module.Name  }}_EXPORT {{$class}} : public {{$interfaceClass}}
 {
 public:
     /** 
