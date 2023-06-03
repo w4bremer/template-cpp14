@@ -132,6 +132,7 @@ int main(){
 
     // start mqtt connection
     mqttservice->connectToHost("");
+    Test::Testbed2::NestedStruct1 struct1;
 
     bool keepRunning = true;
     std::string cmd;
@@ -142,7 +143,10 @@ int main(){
         if(cmd == "quit"){
             mqttservice->disconnect();
             keepRunning = false;
-        } else {
+        } else if(cmd == "s")
+        {
+            struct1.field1.field1 += 1;
+            testTestbed2NestedStruct2Interface->_getPublisher().publishSig1(struct1);
         }
     } while(keepRunning);
 

@@ -42,9 +42,10 @@ const NestedStruct2& NestedStruct2Interface::getProp2() const
 
 NestedStruct1 NestedStruct2Interface::func1(const NestedStruct1& param1)
 {
-    (void) param1; // suppress the 'Unreferenced Formal Parameter' warning.
+    NestedStruct1 out = param1;
     // do business logic here
-    return NestedStruct1();
+    out.field1.field1 += 1;
+    return out;
 }
 
 std::future<NestedStruct1> NestedStruct2Interface::func1Async(const NestedStruct1& param1)

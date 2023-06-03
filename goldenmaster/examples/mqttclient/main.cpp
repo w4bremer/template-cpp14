@@ -89,6 +89,9 @@ int main(){
     // start mqtt connection
     mqttclient->connectToHost("");
 
+    auto prop1 = testTestbed2NestedStruct2Interface->getProp1();
+    Test::Testbed2::NestedStruct1 struct1;
+
     bool keepRunning = true;
     std::string cmd;
     do {
@@ -98,8 +101,13 @@ int main(){
         if(cmd == "quit"){
             mqttclient->disconnect();
             keepRunning = false;
-        } else {
-
+        } else if(cmd == "p")
+        {
+            prop1.field1.field1 += 5;
+            testTestbed2NestedStruct2Interface->setProp1(prop1);
+        } else if(cmd == "f")
+        {
+            struct1 = testTestbed2NestedStruct2Interface->func1(struct1);
         }
     } while(keepRunning);
 
