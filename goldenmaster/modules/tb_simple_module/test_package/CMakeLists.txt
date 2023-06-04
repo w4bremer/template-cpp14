@@ -17,7 +17,7 @@ add_executable(test_tb_simple #EXCLUDE_FROM_ALL
     ${SOURCES_TEST}
 )
 target_link_libraries(test_tb_simple tb_simple::tb_simple-implementation)
-add_test(test_tb_simple test_tb_simple)
+add_test(NAME test_tb_simple COMMAND $<TARGET_FILE:test_tb_simple>)
 add_dependencies(check test_tb_simple)
 # ensure maximum compiler support
 if(NOT MSVC)

@@ -17,7 +17,7 @@ add_executable(test_tb_enum #EXCLUDE_FROM_ALL
     ${SOURCES_TEST}
 )
 target_link_libraries(test_tb_enum tb_enum::tb_enum-implementation)
-add_test(test_tb_enum test_tb_enum)
+add_test(NAME test_tb_enum COMMAND $<TARGET_FILE:test_tb_enum>)
 add_dependencies(check test_tb_enum)
 # ensure maximum compiler support
 if(NOT MSVC)

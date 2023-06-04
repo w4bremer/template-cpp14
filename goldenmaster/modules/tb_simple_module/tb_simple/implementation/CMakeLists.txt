@@ -64,7 +64,7 @@ target_link_libraries(test_tb_simple tb_simple::tb_simple-implementation Catch2:
 target_include_directories(test_tb_simple PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
 
 
-add_test(test_tb_simple test_tb_simple)
+add_test(NAME test_tb_simple COMMAND $<TARGET_FILE:test_tb_simple>)
 add_dependencies(check test_tb_simple)
 endif(BUILD_TESTING)
 

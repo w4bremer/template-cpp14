@@ -33,7 +33,7 @@ set(TEST_APIGEAR_UTILITIES_SOURCES
 add_executable(test_apigear_utilities ${TEST_APIGEAR_UTILITIES_SOURCES})
 
 
-add_test(test_apigear_utilities test_apigear_utilities)
+add_test(NAME test_apigear_utilities COMMAND $<TARGET_FILE:test_apigear_utilities>)
 add_dependencies(check test_apigear_utilities)
 
 target_link_libraries(test_apigear_utilities PRIVATE apigear::utilities Catch2::Catch2)

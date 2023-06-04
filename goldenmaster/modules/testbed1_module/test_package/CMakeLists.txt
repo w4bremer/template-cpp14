@@ -17,7 +17,7 @@ add_executable(test_testbed1 #EXCLUDE_FROM_ALL
     ${SOURCES_TEST}
 )
 target_link_libraries(test_testbed1 testbed1::testbed1-implementation)
-add_test(test_testbed1 test_testbed1)
+add_test(NAME test_testbed1 COMMAND $<TARGET_FILE:test_testbed1>)
 add_dependencies(check test_testbed1)
 # ensure maximum compiler support
 if(NOT MSVC)

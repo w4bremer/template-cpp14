@@ -18,7 +18,7 @@ add_executable(test_{{$module_id}} #EXCLUDE_FROM_ALL
     ${SOURCES_TEST}
 )
 target_link_libraries(test_{{$module_id}} {{$module_id}}::{{$module_id}}-implementation)
-add_test(test_{{$module_id}} test_{{$module_id}})
+add_test(NAME test_{{$module_id}} COMMAND $<TARGET_FILE:test_{{$module_id}}>)
 add_dependencies(check test_{{$module_id}})
 # ensure maximum compiler support
 if(NOT MSVC)

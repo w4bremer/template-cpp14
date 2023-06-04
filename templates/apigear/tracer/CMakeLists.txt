@@ -52,7 +52,7 @@ add_executable(test_tracer EXCLUDE_FROM_ALL
 target_include_directories(test_tracer PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
 target_link_libraries(test_tracer PRIVATE apigear::poco-tracer Catch2::Catch2)
 
-add_test(test_tracer test_tracer)
+add_test(NAME test_tracer COMMAND $<TARGET_FILE:test_tracer>)
 add_dependencies(check test_tracer)
 endif(BUILD_TESTING)
 

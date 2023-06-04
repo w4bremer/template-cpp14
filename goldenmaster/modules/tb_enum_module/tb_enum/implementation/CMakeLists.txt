@@ -54,7 +54,7 @@ target_link_libraries(test_tb_enum tb_enum::tb_enum-implementation Catch2::Catch
 target_include_directories(test_tb_enum PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
 
 
-add_test(test_tb_enum test_tb_enum)
+add_test(NAME test_tb_enum COMMAND $<TARGET_FILE:test_tb_enum>)
 add_dependencies(check test_tb_enum)
 endif(BUILD_TESTING)
 

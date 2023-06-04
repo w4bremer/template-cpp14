@@ -4,6 +4,13 @@ project({{lower1 (camel .System.Name)}})
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+# on Windows it is helpful to have all binary files next to each other
+# it is intentionally not set as part of BUILD_TESTING to have a consistent behavior
+# this can be removed once there is a better option than modifying the PATH env for unit testing
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+
 # this target is a dummy for subprojects to add their dependencies
 if(BUILD_TESTING)
 set(CMAKE_CTEST_COMMAND ctest -V)

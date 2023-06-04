@@ -56,7 +56,7 @@ set(TEST_POCO_OLINK_SOURCES
 add_executable(test_poco_olink ${TEST_POCO_OLINK_SOURCES})
 
 
-add_test(test_poco_olink test_poco_olink)
+add_test(NAME test_poco_olink COMMAND $<TARGET_FILE:test_poco_olink>)
 add_dependencies(check test_poco_olink)
 
 target_link_libraries(test_poco_olink PRIVATE poco-olink Catch2::Catch2 trompeloeil::trompeloeil)

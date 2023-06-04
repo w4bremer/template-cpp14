@@ -63,7 +63,7 @@ target_link_libraries(test_{{$module_id}} {{$module_id}}::{{$module_id}}-impleme
 target_include_directories(test_{{$module_id}} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
 
 
-add_test(test_{{$module_id}} test_{{$module_id}})
+add_test(NAME test_{{$module_id}} COMMAND $<TARGET_FILE:test_{{$module_id}}>)
 add_dependencies(check test_{{$module_id}})
 endif(BUILD_TESTING)
 

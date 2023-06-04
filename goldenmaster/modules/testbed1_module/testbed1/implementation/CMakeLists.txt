@@ -56,7 +56,7 @@ target_link_libraries(test_testbed1 testbed1::testbed1-implementation Catch2::Ca
 target_include_directories(test_testbed1 PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
 
 
-add_test(test_testbed1 test_testbed1)
+add_test(NAME test_testbed1 COMMAND $<TARGET_FILE:test_testbed1>)
 add_dependencies(check test_testbed1)
 endif(BUILD_TESTING)
 

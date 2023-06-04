@@ -60,7 +60,7 @@ target_link_libraries(test_tb_same1 tb_same1::tb_same1-implementation Catch2::Ca
 target_include_directories(test_tb_same1 PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
 
 
-add_test(test_tb_same1 test_tb_same1)
+add_test(NAME test_tb_same1 COMMAND $<TARGET_FILE:test_tb_same1>)
 add_dependencies(check test_tb_same1)
 endif(BUILD_TESTING)
 

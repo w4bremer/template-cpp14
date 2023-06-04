@@ -17,7 +17,7 @@ add_executable(test_tb_same2 #EXCLUDE_FROM_ALL
     ${SOURCES_TEST}
 )
 target_link_libraries(test_tb_same2 tb_same2::tb_same2-implementation)
-add_test(test_tb_same2 test_tb_same2)
+add_test(NAME test_tb_same2 COMMAND $<TARGET_FILE:test_tb_same2>)
 add_dependencies(check test_tb_same2)
 # ensure maximum compiler support
 if(NOT MSVC)
