@@ -40,11 +40,6 @@ FetchContent_Declare(
     FIND_PACKAGE_ARGS)
 FetchContent_MakeAvailable(Catch2)
 endif()
-set(CMAKE_CTEST_COMMAND ctest -V)
-
-if(NOT TARGET check)
-add_custom_target(check COMMAND ${CMAKE_CTEST_COMMAND})
-endif()
 
 set (SOURCES_TEST
     ${CMAKE_CURRENT_SOURCE_DIR}/../generated/core/testbed2.test.cpp
@@ -61,7 +56,6 @@ target_include_directories(test_testbed2 PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
 
 
 add_test(NAME test_testbed2 COMMAND $<TARGET_FILE:test_testbed2>)
-add_dependencies(check test_testbed2)
 endif(BUILD_TESTING)
 
 install(TARGETS testbed2-implementation

@@ -19,12 +19,6 @@ FetchContent_Declare(
 
 FetchContent_MakeAvailable(Catch2)
 
-
-set(CMAKE_CTEST_COMMAND ctest -V)
-if(NOT TARGET check)
-add_custom_target(check COMMAND ${CMAKE_CTEST_COMMAND})
-endif()
-
 set(TEST_APIGEAR_UTILITIES_SOURCES
     test_main.cpp
     logger.test.cpp
@@ -34,7 +28,6 @@ add_executable(test_apigear_utilities ${TEST_APIGEAR_UTILITIES_SOURCES})
 
 
 add_test(NAME test_apigear_utilities COMMAND $<TARGET_FILE:test_apigear_utilities>)
-add_dependencies(check test_apigear_utilities)
 
 target_link_libraries(test_apigear_utilities PRIVATE apigear::utilities Catch2::Catch2)
 

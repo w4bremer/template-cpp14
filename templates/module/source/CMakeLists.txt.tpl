@@ -43,11 +43,6 @@ FetchContent_Declare(
     FIND_PACKAGE_ARGS)
 FetchContent_MakeAvailable(Catch2)
 endif()
-set(CMAKE_CTEST_COMMAND ctest -V)
-
-if(NOT TARGET check)
-add_custom_target(check COMMAND ${CMAKE_CTEST_COMMAND})
-endif()
 
 set (SOURCES_TEST
     ${CMAKE_CURRENT_SOURCE_DIR}/../generated/core/{{$module_id}}.test.cpp
@@ -64,7 +59,6 @@ target_include_directories(test_{{$module_id}} PRIVATE ${CMAKE_CURRENT_SOURCE_DI
 
 
 add_test(NAME test_{{$module_id}} COMMAND $<TARGET_FILE:test_{{$module_id}}>)
-add_dependencies(check test_{{$module_id}})
 endif(BUILD_TESTING)
 
 install(TARGETS {{$module_id}}-implementation

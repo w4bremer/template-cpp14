@@ -13,16 +13,10 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
 option(BUILD_TESTING "Enable this option to build the test targets" OFF)
 
-# this target is a dummy for subprojects to add their dependencies
+# enable testing
 if(BUILD_TESTING)
 include(CTest)
 enable_testing()
-set(CMAKE_CTEST_COMMAND ctest -V)
-
-if(NOT TARGET check)
-add_custom_target(check COMMAND ${CMAKE_CTEST_COMMAND})
-endif()
-
 endif(BUILD_TESTING)
 
 # checks are workaround until generator support feature check properly

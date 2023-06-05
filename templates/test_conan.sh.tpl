@@ -8,7 +8,7 @@ rm -rf build/ && mkdir -p build && cd build;
 conan remove "apigear" -b -f
 mkdir -p apigear;
 pushd apigear;
-conan source ../../apigear && conan install --build missing ../../apigear -g=virtualenv && conan build ../../apigear && cmake ../../apigear && cmake --build . && source activate.sh && cmake --build . --target check && \
+conan source ../../apigear && conan install --build missing ../../apigear -g=virtualenv && conan build ../../apigear && cmake -DBUILD_TESTING=ON ../../apigear && cmake --build . && source activate.sh && cmake --build . --target test && \
 conan install --build missing ../../apigear && conan create ../../apigear
 if [ $? -ne 0 ]; then exit 1; fi;
 popd
@@ -20,10 +20,10 @@ pushd modules/{{ snake .Name }}_module;
 conan source ../../../modules/{{ snake .Name }}_module &&\
 conan install --build missing ../../../modules/{{ snake .Name }}_module -g=virtualenv &&\
 conan build ../../../modules/{{ snake .Name }}_module &&\
-cmake ../../../modules/{{ snake .Name }}_module/{{ snake .Name }} &&\
+cmake -DBUILD_TESTING=ON ../../../modules/{{ snake .Name }}_module/{{ snake .Name }} &&\
 cmake --build . &&\
 source activate.sh &&\
-cmake --build . --target check &&\
+cmake --build . --target test &&\
 source deactivate.sh &&\
 conan install --build missing ../../../modules/{{ snake .Name }}_module &&\
 conan create ../../../modules/{{ snake .Name }}_module

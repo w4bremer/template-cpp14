@@ -40,11 +40,6 @@ FetchContent_Declare(
     FIND_PACKAGE_ARGS)
 FetchContent_MakeAvailable(Catch2)
 endif()
-set(CMAKE_CTEST_COMMAND ctest -V)
-
-if(NOT TARGET check)
-add_custom_target(check COMMAND ${CMAKE_CTEST_COMMAND})
-endif()
 
 set (SOURCES_TEST
     ${CMAKE_CURRENT_SOURCE_DIR}/../generated/core/tb_same1.test.cpp
@@ -61,7 +56,6 @@ target_include_directories(test_tb_same1 PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
 
 
 add_test(NAME test_tb_same1 COMMAND $<TARGET_FILE:test_tb_same1>)
-add_dependencies(check test_tb_same1)
 endif(BUILD_TESTING)
 
 install(TARGETS tb_same1-implementation

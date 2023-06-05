@@ -36,24 +36,18 @@ FetchContent_Declare(
     FIND_PACKAGE_ARGS)
 FetchContent_MakeAvailable(Catch2)
 endif()
-set(CMAKE_CTEST_COMMAND ctest -V)
-
-if(NOT TARGET check)
-add_custom_target(check COMMAND ${CMAKE_CTEST_COMMAND})
-endif()
 
 set (SOURCES_TEST
     ../apigear.test.cpp
     tracer.test.cpp
 )
-add_executable(test_tracer EXCLUDE_FROM_ALL
+add_executable(test_tracer
     ${SOURCES_TEST}
 )
 target_include_directories(test_tracer PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
 target_link_libraries(test_tracer PRIVATE apigear::poco-tracer Catch2::Catch2)
 
 add_test(NAME test_tracer COMMAND $<TARGET_FILE:test_tracer>)
-add_dependencies(check test_tracer)
 endif(BUILD_TESTING)
 
 # install binary files

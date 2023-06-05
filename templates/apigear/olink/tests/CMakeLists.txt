@@ -34,11 +34,6 @@ FetchContent_MakeAvailable(trompeloeil)
 endif()
 
 
-set(CMAKE_CTEST_COMMAND ctest -V)
-if(NOT TARGET check)
-add_custom_target(check COMMAND ${CMAKE_CTEST_COMMAND})
-endif()
-
 set(TEST_POCO_OLINK_SOURCES
     test_main.cpp
     olink_connection.test.cpp
@@ -57,7 +52,6 @@ add_executable(test_poco_olink ${TEST_POCO_OLINK_SOURCES})
 
 
 add_test(NAME test_poco_olink COMMAND $<TARGET_FILE:test_poco_olink>)
-add_dependencies(check test_poco_olink)
 
 target_link_libraries(test_poco_olink PRIVATE poco-olink Catch2::Catch2 trompeloeil::trompeloeil)
 
