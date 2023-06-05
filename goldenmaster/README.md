@@ -80,6 +80,40 @@ The template supports two build methods. Depending on your environment you can c
 If you want to manage and install dependencies manually into the environment, the plain CMakeLists.txt approach will just work fine. 
 [Documentation for CMake](https://cmake.org/)
 
+#### Windows Setup
+
+For ease of use, we use the Conan package manager to install needed dependencies first. [Documentation for Conan](https://conan.io/).
+If you do not want or can use conan, the poco libraries must installed separately.
+
+1. If you have not done before, install conan 1.x and then set up your profile. The default configuration is usually in your home folder at `.conan/profiles/default`. More details on the conan profile can be found [here](https://docs.conan.io/en/latest/reference/profiles.html).
+   This can be set like:
+    ```
+    PS C:\project_source> conan profile new default --detect
+    PS C:\project_source> conan profile update settings.compiler.runtime=MDd default
+    PS C:\project_source> conan profile update settings.build_type=Debug default
+    ```
+2. Use conan to install the Poco libraries
+   This step pulls the poco library from the conan-center index and builds it if necessary. Afterwards, the needed CMake files are generated in this folder for other projects to use the library.
+   We create those CMake files in a dedicated `deps` folder which we need to specify in the next step.
+    ```
+    PS C:\project_source> mkdir deps
+    PS C:\project_source> cd deps
+    PS C:\project_source\deps> conan install poco/1.11.3@ --build missing -o poco:shared=False -o poco:enable_data_mysql=False -o openssl:shared=False -o poco:enable_activerecord=False -o poco:enable_apacheconnector=False -o poco:enable_cppparser=False -o poco:enable_crypto=True -o poco:enable_data=False -o poco:enable_data_odbc=False -o poco:enable_data_postgresql=False -o poco:enable_data_sqlite=False -o poco:enable_encodings=False -o poco:enable_json=False -o poco:enable_jwt=False -o poco:enable_mongodb=False -o poco:enable_net=True -o poco:enable_netssl=True -o poco:enable_pagecompiler=False -o poco:enable_pagecompiler_file2page=False -o poco:enable_pdf=False -o poco:enable_pocodoc=False -o poco:enable_redis=False -o poco:enable_sevenzip=False -o poco:enable_util=True -o poco:enable_xml=False -o poco:enable_zip=False --generator cmake_find_package --generator virtualenv
+    PS C:\project_source\deps> cd ..
+    ```
+3. Build the project
+   First the project sources need to be configured and in a second step they are built. The project will be built in the folder `build`.
+   For CMake to find the dependencies we need to point the `CMAKE_MODULE_PATH` variable to the path used in the previous step.
+   If the files shall be re-used, they can be installed in a location specified by `CMAKE_INSTALL_PREFIX`
+   ```
+   PS C:\project_source> cmake -Bbuild -DCMAKE_INSTALL_PREFIX=tmp -DCMAKE_MODULE_PATH=C:/project_source/deps
+   PS C:\project_source> cmake --build build/
+   ```
+4. Install binaries
+   The last step installs the previously built executables, libraries and headers files in the folder specified `CMAKE_INSTALL_PREFIX` above.
+   ```
+   PS C:\project_source> cmake --build build/ --target install
+   ```
 #### Ubuntu 20.04 Setup
 
 1. Install needed packages
@@ -156,10 +190,15 @@ For ease of use and package distribution we generate all files necessary files t
 Once the build was successful you can easily launch one of the examples applications.
 
 ### CMake
-- Execute one of the examples
+- Execute one of the examples on Linux or Mac
 
     ```
-    $ ./build/examples/olinkserver/OLinkServer
+    $ ./build/bin/OLinkServer
+    ```
+- Execute one of the examples on Windows
+
+    ```
+    $ PS C:\project_source> .\build\bin\Debug\OLinkServer.exe
     ```
 ### Conan
 
