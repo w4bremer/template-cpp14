@@ -9,6 +9,8 @@ include(FetchContent)
 
 find_package(objectlink-core-cpp QUIET)
 if(NOT objectlink-core-cpp_FOUND)
+  # disable olink core tests
+  set(BUILD_TESTING OFF)
   # pull objectlink-core-cpp as dependency
   message(STATUS "objectlink-core-cpp NOT FOUND, fetching the git repository")
   FetchContent_Declare(olink-core
