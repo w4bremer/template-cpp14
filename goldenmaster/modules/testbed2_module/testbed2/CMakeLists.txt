@@ -1,14 +1,18 @@
 cmake_minimum_required(VERSION 3.1)
 project(testbed2)
 
-include(CTest)
-
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set(INCLUDE_INSTALL_DIR include/testbed2/ CACHE FILEPATH "")
 set(LIB_INSTALL_DIR lib/ CACHE FILEPATH "")
 set(InstallDir ${LIB_INSTALL_DIR}/cmake/testbed2)
+
+# enable testing
+if(BUILD_TESTING)
+include(CTest)
+enable_testing()
+endif(BUILD_TESTING)
 
 add_subdirectory(generated/api)
 add_subdirectory(generated/core)

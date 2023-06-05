@@ -4,14 +4,18 @@
 cmake_minimum_required(VERSION 3.1)
 project({{$module_id}})
 
-include(CTest)
-
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set(INCLUDE_INSTALL_DIR include/{{$module_id}}/ CACHE FILEPATH "")
 set(LIB_INSTALL_DIR lib/ CACHE FILEPATH "")
 set(InstallDir ${LIB_INSTALL_DIR}/cmake/{{$module_id}})
+
+# enable testing
+if(BUILD_TESTING)
+include(CTest)
+enable_testing()
+endif(BUILD_TESTING)
 
 add_subdirectory(generated/api)
 {{- if $features.core }}
