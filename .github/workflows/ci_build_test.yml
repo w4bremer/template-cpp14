@@ -140,3 +140,78 @@ jobs:
         run: |
           $Env:GITHUB_WORKSPACE_UNIX = "${{ github.workspace }}" -replace "\\","/"
           cmake -Bbuild -DCMAKE_INSTALL_PREFIX=tmp -DCMAKE_MODULE_PATH="$Env:GITHUB_WORKSPACE_UNIX/deps" -DBUILD_TESTING=ON && cmake --build build/ && cmake --build build/ --target RUN_TESTS && cmake --build build/ --target install
+
+  cmake_release_build:
+    name: ${{ matrix.config.name }}
+    runs-on: ${{ matrix.config.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        config:
+          - { name: "CMake Release Windows Latest MSVC", os: windows-latest }
+          - { name: "CMake Release Ubuntu Latest GCC", os: ubuntu-latest }
+          - { name: "CMake Release macOS Latest Clang", os: macos-latest }
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: recursive
+      - name: Cache conan on Windows
+        uses: actions/cache@v3
+        if: ${{ matrix.config.os == 'windows-latest'}}
+        with:
+          path: |
+            ~\.conan\data
+          key: ${{ matrix.config.os }}-conan4cmake-release-cache-${{ hashFiles('.github/workflows/ci_build_test.yml') }}
+          restore-keys: |
+            ${{ matrix.config.os }}-conan4cmake-release-cache
+      - name: Cache conan on macOS
+        uses: actions/cache@v3
+        if: ${{ matrix.config.os == 'macos-latest'}}
+        with:
+          path: |
+            ~/.conan/data
+          key: ${{ matrix.config.os }}-conan4cmake-release-cache-${{ hashFiles('.github/workflows/ci_build_test.yml') }}
+          restore-keys: |
+            ${{ matrix.config.os }}-conan4cmake-release-cache
+      - name: Set up Python
+        uses: actions/setup-python@v3
+        with:
+          python-version: '3.x'
+          cache: "pip"
+          cache-dependency-path: ".github/workflows/conan-requirements.txt"
+      - name: Install Conan
+        run: pip3 install -r .github/workflows/conan-requirements.txt
+      - name: Create release profile
+        run: conan profile new release --detect
+      - name: Set Release and runtime on Windows
+        if: ${{ matrix.config.os == 'windows-latest'}}
+        run: |
+          conan profile update settings.compiler.runtime=MD release
+          conan profile update settings.build_type=Release release
+      - name: Install dependencies using conan
+        if: ${{ matrix.config.os != 'ubuntu-latest'}}
+        run: |
+          mkdir -p deps && cd deps && conan install --profile release poco/1.11.3@ --build missing -o poco:shared=False -o poco:enable_data_mysql=False -o openssl:shared=False -o poco:enable_activerecord=False -o poco:enable_apacheconnector=False -o poco:enable_cppparser=False -o poco:enable_crypto=True -o poco:enable_data=False -o poco:enable_data_odbc=False -o poco:enable_data_postgresql=False -o poco:enable_data_sqlite=False -o poco:enable_encodings=False -o poco:enable_json=False -o poco:enable_jwt=False -o poco:enable_mongodb=False -o poco:enable_net=True -o poco:enable_netssl=True -o poco:enable_pagecompiler=False -o poco:enable_pagecompiler_file2page=False -o poco:enable_pdf=False -o poco:enable_pocodoc=False -o poco:enable_redis=False -o poco:enable_sevenzip=False -o poco:enable_util=True -o poco:enable_xml=False -o poco:enable_zip=False --generator cmake_find_package --generator virtualenv
+      - name: Install dependencies using apt-get
+        if: ${{ matrix.config.os == 'ubuntu-latest'}}
+        run: sudo apt-get install -y cmake libpoco-dev nlohmann-json3-dev
+      - name: Run cmake on Linux/Mac
+        if: ${{ matrix.config.os != 'windows-latest'}}
+        working-directory: goldenmaster
+        run: cmake -Bbuild -DCMAKE_INSTALL_PREFIX=tmp -DCMAKE_MODULE_PATH=$GITHUB_WORKSPACE/deps -DCMAKE_BUILD_TYPE=Release && cmake --build build/ --config Release && cmake --build build/ --target install --config Release
+      - name: Update path env on Windows for testing
+        if: ${{ matrix.config.os == 'windows-latest'}}
+        run: echo "$GITHUB_WORKSPACE/goldenmaster/build/bin/Debug/" >> $GITHUB_PATH
+      - name: Run cmake on Windows
+        if: ${{ matrix.config.os == 'windows-latest'}}
+        working-directory: goldenmaster
+        run: |
+          $Env:GITHUB_WORKSPACE_UNIX = "${{ github.workspace }}" -replace "\\","/"
+          cmake -Bbuild -DCMAKE_INSTALL_PREFIX=tmp -DCMAKE_MODULE_PATH="$Env:GITHUB_WORKSPACE_UNIX/deps" -DCMAKE_BUILD_TYPE=Release && cmake --build build/ --config Release && cmake --build build/ --target install --config Release
+      - name: Archive goldenmaster release artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: goldenmaster-install-artifacts-${{ matrix.config.os }}
+          path: |
+            goldenmaster/tmp
+          retention-days: 5
