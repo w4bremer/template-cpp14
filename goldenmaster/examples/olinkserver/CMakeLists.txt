@@ -13,6 +13,14 @@ set (SOURCES
 add_executable(OLinkServer
     ${SOURCES}
 )
+
+# ensure maximum compiler support
+if(NOT MSVC)
+  target_compile_options(OLinkServer PRIVATE -Wall -Wextra -Wpedantic -Werror -fvisibility=hidden)
+else()
+  target_compile_options(OLinkServer PRIVATE /W4 /WX /wd4251)
+endif()
+
 find_package(testbed2 QUIET COMPONENTS testbed2-core testbed2-implementation testbed2-olink)
 find_package(tb_enum QUIET COMPONENTS tb_enum-core tb_enum-implementation tb_enum-olink)
 find_package(tb_same1 QUIET COMPONENTS tb_same1-core tb_same1-implementation tb_same1-olink)

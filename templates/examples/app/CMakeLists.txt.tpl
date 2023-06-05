@@ -13,6 +13,15 @@ set (SOURCES
 add_executable(app
     ${SOURCES}
 )
+
+# ensure maximum compiler support
+if(NOT MSVC)
+  target_compile_options(app PRIVATE -Wall -Wextra -Wpedantic -Werror -fvisibility=hidden)
+else()
+  target_compile_options(app PRIVATE /W4 /WX /wd4251)
+endif()
+{{- nl }}
+
 {{- $features := .Features}}
 {{- range .System.Modules }}
 {{- $module_id := snake .Name }}

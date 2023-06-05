@@ -14,6 +14,14 @@ add_executable(appthreadsafe
     ${SOURCES}
 )
 
+# ensure maximum compiler support
+if(NOT MSVC)
+  target_compile_options(appthreadsafe PRIVATE -Wall -Wextra -Wpedantic -Werror -fvisibility=hidden)
+else()
+  target_compile_options(appthreadsafe PRIVATE /W4 /WX /wd4251)
+endif()
+{{- nl }}
+
 {{- range .System.Modules }}
 {{- $module_id := snake .Name }}
 find_package({{$module_id}} QUIET COMPONENTS {{$module_id}}-core {{$module_id}}-implementation)
