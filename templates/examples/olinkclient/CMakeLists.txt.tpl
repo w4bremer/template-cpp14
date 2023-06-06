@@ -19,6 +19,8 @@ if(NOT MSVC)
   target_compile_options(OLinkClient PRIVATE -Wall -Wextra -Wpedantic -Werror -fvisibility=hidden)
 else()
   target_compile_options(OLinkClient PRIVATE /W4 /WX /wd4251)
+  # disable the warning for getenv - needs better cross platform solution
+  target_compile_definitions(OLinkClient PRIVATE -D_CRT_SECURE_NO_WARNINGS)
 endif()
 {{- nl }}
 
