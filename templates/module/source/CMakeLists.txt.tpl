@@ -57,6 +57,12 @@ add_executable(test_{{$module_id}}
 target_link_libraries(test_{{$module_id}} {{$module_id}}::{{$module_id}}-implementation Catch2::Catch2)
 target_include_directories(test_{{$module_id}} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
 
+# ensure maximum compiler support
+if(NOT MSVC)
+  target_compile_options(test_{{$module_id}} PRIVATE -Wall -Wextra -Wpedantic -Werror -fvisibility=hidden)
+else()
+  target_compile_options(test_{{$module_id}} PRIVATE /W4 /WX /wd4251)
+endif()
 
 add_test(NAME test_{{$module_id}} COMMAND $<TARGET_FILE:test_{{$module_id}}>)
 endif(BUILD_TESTING)

@@ -50,6 +50,12 @@ add_executable(test_testbed1
 target_link_libraries(test_testbed1 testbed1::testbed1-implementation Catch2::Catch2)
 target_include_directories(test_testbed1 PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
 
+# ensure maximum compiler support
+if(NOT MSVC)
+  target_compile_options(test_testbed1 PRIVATE -Wall -Wextra -Wpedantic -Werror -fvisibility=hidden)
+else()
+  target_compile_options(test_testbed1 PRIVATE /W4 /WX /wd4251)
+endif()
 
 add_test(NAME test_testbed1 COMMAND $<TARGET_FILE:test_testbed1>)
 endif(BUILD_TESTING)

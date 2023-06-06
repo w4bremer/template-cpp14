@@ -58,6 +58,12 @@ add_executable(test_tb_simple
 target_link_libraries(test_tb_simple tb_simple::tb_simple-implementation Catch2::Catch2)
 target_include_directories(test_tb_simple PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
 
+# ensure maximum compiler support
+if(NOT MSVC)
+  target_compile_options(test_tb_simple PRIVATE -Wall -Wextra -Wpedantic -Werror -fvisibility=hidden)
+else()
+  target_compile_options(test_tb_simple PRIVATE /W4 /WX /wd4251)
+endif()
 
 add_test(NAME test_tb_simple COMMAND $<TARGET_FILE:test_tb_simple>)
 endif(BUILD_TESTING)

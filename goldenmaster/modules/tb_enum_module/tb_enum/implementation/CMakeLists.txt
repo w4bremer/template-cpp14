@@ -48,6 +48,12 @@ add_executable(test_tb_enum
 target_link_libraries(test_tb_enum tb_enum::tb_enum-implementation Catch2::Catch2)
 target_include_directories(test_tb_enum PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
 
+# ensure maximum compiler support
+if(NOT MSVC)
+  target_compile_options(test_tb_enum PRIVATE -Wall -Wextra -Wpedantic -Werror -fvisibility=hidden)
+else()
+  target_compile_options(test_tb_enum PRIVATE /W4 /WX /wd4251)
+endif()
 
 add_test(NAME test_tb_enum COMMAND $<TARGET_FILE:test_tb_enum>)
 endif(BUILD_TESTING)
