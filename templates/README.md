@@ -71,7 +71,7 @@ outputfolder
 				|        | ...
 				└───implementation
 ```
-## Build
+## Build for development
 
 The template supports two build methods. Depending on your environment you can choose between a [pure CMake](#CMake-pure) approach and additional one with [Conan support](#Conan-support).
 
@@ -83,7 +83,7 @@ If you want to manage and install dependencies manually into the environment, th
 #### Windows Setup
 
 For ease of use, we use the Conan package manager to install needed dependencies first. [Documentation for Conan](https://conan.io/).
-If you do not want or can use conan, the poco libraries must installed separately.
+If you do not want or can not use conan, the poco libraries must installed separately.
 
 1. If you have not done before, install conan 1.x and then set up your profile. The default configuration is usually in your home folder at `.conan/profiles/default`. More details on the conan profile can be found [here](https://docs.conan.io/en/latest/reference/profiles.html).
    This can be set like:
@@ -172,7 +172,7 @@ For ease of use and package distribution we generate all files necessary files t
    This can be set like:
 
     ```
-    compiler.libcxx=libstdc++11
+    conan profile update settings.compiler.libcxx=libstdc++11 default
     ```
 2. Execute the test script depending on the host platform. This will build all dependencies and module files, including examples.
    * Or on **Linux, Mac** execute the shell script `test_conan.sh`.
@@ -185,6 +185,76 @@ For ease of use and package distribution we generate all files necessary files t
         ```
         >test_conan.bat
         ```
+
+## Build for distribution
+
+In some cases you may want to share the build artifacts. The easiest approach is to build everything in release mode and link statically against external libraries.
+In general the following steps are similar to the development build. We use conan to build the static version of the poco libraries.
+
+The procedure is almost identical for Windows and Linux, but it is important to use the right path format corresponding to each platform.
+
+1. If you have not done before, install conan 1.x and then set up your release profile. More details on the conan profile can be found [here](https://docs.conan.io/en/latest/reference/profiles.html).
+   
+    A new profile can be created like this:
+    ```
+    $ conan profile new release --detect
+    ```
+
+    And additionally we need to make platform specific changes to the conan configuration:
+    * On **Linux**:
+
+        ```
+        $ conan profile update settings.compiler.libcxx=libstdc++11 release
+        $ conan profile update settings.build_type=Release release
+        ```
+    * On **Windows** 
+
+        ```
+        > conan profile update settings.compiler.runtime=MD release
+        > conan profile update settings.build_type=Release release
+        ```
+
+2. Once conan is set up, we use it to install the necessary dependencies and build them if not available.
+    It is recommended to do this in a new folder, which we later use to configure cmake.
+    For instance, create a folder ` deps` and simply copy the `conan install` line:
+    ```
+    $ mkdir deps
+    $ cd deps
+    $ conan install --profile release poco/1.11.3@ --build missing -o poco:shared=False -o poco:enable_data_mysql=False -o openssl:shared=False -o poco:enable_activerecord=False -o poco:enable_apacheconnector=False -o poco:enable_cppparser=False -o poco:enable_crypto=True -o poco:enable_data=False -o poco:enable_data_odbc=False -o poco:enable_data_postgresql=False -o poco:enable_data_sqlite=False -o poco:enable_encodings=False -o poco:enable_json=False -o poco:enable_jwt=False -o poco:enable_mongodb=False -o poco:enable_net=True -o poco:enable_netssl=True -o poco:enable_pagecompiler=False -o poco:enable_pagecompiler_file2page=False -o poco:enable_pdf=False -o poco:enable_pocodoc=False -o poco:enable_redis=False -o poco:enable_sevenzip=False -o poco:enable_util=True -o poco:enable_xml=False -o poco:enable_zip=False --generator cmake_find_package --generator virtualenv
+    $ cd ..
+    ```
+    The `conan install` step downloads the poco source package, configures it to a minium version and builds it, including its dependencies.
+    Also make sure to use the previously created release profile with `--profile release`.
+3. With poco available in the `deps` folder we can configure our project and build it.
+
+    The `CMAKE_INSTALL_PREFIX` defines the where built files shall be installed. In this example we use `tmp`.
+    The `CMAKE_MODULE_PATH` tells CMake where it can find the necessary dependencies like poco. In the previous step we used `deps` - so we specify the full path to the deps folder here, e.g. "/home/user/project/deps" or "C:/workspace/project/deps".
+    ```
+    $ cmake -Bbuild -DCMAKE_INSTALL_PREFIX=tmp -DCMAKE_MODULE_PATH="/home/user/project/deps" -DCMAKE_BUILD_TYPE=Release
+    ```
+
+    After the configuration step finished successfully we can build the project
+    ```
+    $ cmake --build build/ --config Release
+    ```
+4. The last step is to install the built project files into our previously specified folder("tmp") and package it.
+
+    ```
+    $ cmake --build build/ --target install --config Release
+    ```
+
+    The files are in "tmp/bin", "tmp/lib" and "tmp/include".
+
+5. In order to run the files on Windows it is sufficient to just execute the following command, e.g.:
+    ```
+    > tmp\bin\OLinkServer.exe
+    ```
+
+    For Linux, it is necessary to point to the dynamically linked executables since they are in the "lib" folder.
+    ```
+    $ export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/home/user/project/tmp/lib
+    $ ./tmp/bin/OLinkServer
+    ```
 
 ## Run
 Once the build was successful you can easily launch one of the examples applications.
