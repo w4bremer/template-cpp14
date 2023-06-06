@@ -164,9 +164,9 @@ jobs:
           key: ${{ matrix.config.os }}-conan4cmake-release-cache-${{ hashFiles('.github/workflows/ci_build_test.yml') }}
           restore-keys: |
             ${{ matrix.config.os }}-conan4cmake-release-cache
-      - name: Cache conan on macOS
+      - name: Cache conan on Linux/macOS
         uses: actions/cache@v3
-        if: ${{ matrix.config.os == 'macos-latest'}}
+        if: ${{ matrix.config.os != 'windows-latest'}}
         with:
           path: |
             ~/.conan/data
@@ -183,18 +183,19 @@ jobs:
         run: pip3 install -r .github/workflows/conan-requirements.txt
       - name: Create release profile
         run: conan profile new release --detect
+      - name: Set Release and C++11 on Linux
+        if: ${{ matrix.config.os == 'ubuntu-latest'}}
+        run: |
+            conan profile update settings.compiler.libcxx=libstdc++11 release
+            conan profile update settings.build_type=Release release
       - name: Set Release and runtime on Windows
         if: ${{ matrix.config.os == 'windows-latest'}}
         run: |
           conan profile update settings.compiler.runtime=MD release
           conan profile update settings.build_type=Release release
       - name: Install dependencies using conan
-        if: ${{ matrix.config.os != 'ubuntu-latest'}}
         run: |
           mkdir -p deps && cd deps && conan install --profile release poco/1.11.3@ --build missing -o poco:shared=False -o poco:enable_data_mysql=False -o openssl:shared=False -o poco:enable_activerecord=False -o poco:enable_apacheconnector=False -o poco:enable_cppparser=False -o poco:enable_crypto=True -o poco:enable_data=False -o poco:enable_data_odbc=False -o poco:enable_data_postgresql=False -o poco:enable_data_sqlite=False -o poco:enable_encodings=False -o poco:enable_json=False -o poco:enable_jwt=False -o poco:enable_mongodb=False -o poco:enable_net=True -o poco:enable_netssl=True -o poco:enable_pagecompiler=False -o poco:enable_pagecompiler_file2page=False -o poco:enable_pdf=False -o poco:enable_pocodoc=False -o poco:enable_redis=False -o poco:enable_sevenzip=False -o poco:enable_util=True -o poco:enable_xml=False -o poco:enable_zip=False --generator cmake_find_package --generator virtualenv
-      - name: Install dependencies using apt-get
-        if: ${{ matrix.config.os == 'ubuntu-latest'}}
-        run: sudo apt-get install -y cmake libpoco-dev nlohmann-json3-dev
       - name: Run cmake on Linux/Mac
         if: ${{ matrix.config.os != 'windows-latest'}}
         working-directory: goldenmaster
