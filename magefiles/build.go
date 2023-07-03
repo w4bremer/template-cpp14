@@ -5,12 +5,13 @@ package main
 import (
 	"context"
 	"fmt"
-	"github.com/apigear-io/helper"
-	"github.com/google/go-github/v48/github"
-	"github.com/magefile/mage/sh"
 	"log"
 	"os"
 	"runtime"
+
+	"github.com/apigear-io/helper"
+	"github.com/google/go-github/v48/github"
+	"github.com/magefile/mage/sh"
 )
 
 const (
@@ -58,7 +59,7 @@ func Install() error {
 	}
 
 	gh := github.NewClient(nil)
-	release, _, err := gh.Repositories.GetLatestRelease(context.Background(), "apigear-io", "cli-releases")
+	release, _, err := gh.Repositories.GetLatestRelease(context.Background(), "apigear-io", "cli")
 	if err != nil {
 		return err
 	}
