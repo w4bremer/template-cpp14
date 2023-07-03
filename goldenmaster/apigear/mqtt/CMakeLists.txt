@@ -27,6 +27,12 @@ target_include_directories(paho-mqtt PUBLIC
 )
 target_link_libraries(paho-mqtt PRIVATE eclipse-paho-mqtt-c::paho-mqtt3as PUBLIC nlohmann_json::nlohmann_json utilities)
 
+if(NOT MSVC)
+  target_compile_options(paho-mqtt PRIVATE -Wall -Wextra -Wpedantic -Werror -fvisibility=hidden)
+else()
+  target_compile_options(paho-mqtt PRIVATE /W4 /WX /wd4251)
+endif()
+
 # add test cases
 if(BUILD_TESTING)
 find_package(Catch2 REQUIRED)

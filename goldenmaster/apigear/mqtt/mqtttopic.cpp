@@ -125,9 +125,6 @@ bool Topic::convertTopicTypeStringToType(const std::string& topicTypeString, Top
         topicType = TopicType::None;
         return false;
     }
-
-    topicType = TopicType::None;
-    return false;
 }
 
 bool Topic::decodeTopicString(const std::string& topicString, Topic& topic)
