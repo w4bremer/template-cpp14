@@ -15,13 +15,12 @@ struct subscribeTopicContext {
     CWrapper* client;
 };
 
-void onSendFailure(void* context, MQTTAsync_failureData5* response)
+void onSendFailure(void* /*context*/, MQTTAsync_failureData5* response)
 {
-    CWrapper* client = static_cast<CWrapper*>(context);
     AG_LOG_ERROR("Send failed, ResponseCode " +  std::to_string(response->code));
 }
 
-void onSubscribeSuccess(void* context, MQTTAsync_successData5* response)
+void onSubscribeSuccess(void* context, MQTTAsync_successData5* /*response*/)
 {
     subscribeTopicContext* ctx = static_cast<subscribeTopicContext*>(context);
     ctx->client->confirmSubscription(ctx->topic, ctx->func);
@@ -35,7 +34,7 @@ void onSubscribeFailure(void* context, MQTTAsync_failureData5* response)
     delete ctx;
 }
 
-void onUnsubscribeSuccess(void* context, MQTTAsync_successData5* response)
+void onUnsubscribeSuccess(void* context, MQTTAsync_successData5* /*response*/)
 {
     subscribeTopicContext* ctx = static_cast<subscribeTopicContext*>(context);
     ctx->client->removeSubscription(ctx->topic);
@@ -49,7 +48,7 @@ void onUnsubscribeFailure(void* context, MQTTAsync_failureData5* response)
     delete ctx;
 }
 
-void onConnected(void* context, MQTTAsync_successData5* response)
+void onConnected(void* context, MQTTAsync_successData5* /*response*/)
 {
     CWrapper* client = static_cast<CWrapper*>(context);
     client->onConnected();
@@ -62,7 +61,7 @@ void onConnectedFail(void* context,  MQTTAsync_failureData5* response)
     client->onDisconnected();
 }
 
-void onDisconnected(void* context, MQTTAsync_successData5* response)
+void onDisconnected(void* context, MQTTAsync_successData5* /*response*/)
 {
     CWrapper* client = static_cast<CWrapper*>(context);
     client->onDisconnected();
@@ -98,7 +97,7 @@ int OnMessageArrived(void *context, char *topicName, int topicLen, MQTTAsync_mes
     return 1;
 }
 
-void OnConnectionLost(void *context, char *cause)
+void OnConnectionLost(void *context, char * /*cause*/)
 {
     CWrapper* client = static_cast<CWrapper*>(context);
     AG_LOG_ERROR("Connection lost");
@@ -425,14 +424,14 @@ void CWrapper::invokeRemote(const Topic& topic, const std::string& value, Invoke
     opts.onFailure5 = onSendFailure;
     opts.context = this;
     pubmsg.payload = const_cast<void*>(static_cast<const void*>(value.c_str()));
-    pubmsg.payloadlen = value.size();
+    pubmsg.payloadlen = static_cast<int>(value.size());
     pubmsg.qos = QOS;
     pubmsg.retained = 0;
 
     // the responseOptions properties do get overwritten by the msg properties later
     pubmsg.properties = opts.properties;
 
-    int responseCode = sendMessage(topic.getEncodedTopic(), &pubmsg, &opts);
+    sendMessage(topic.getEncodedTopic(), &pubmsg, &opts);
 }
 
 void CWrapper::notifyPropertyChange(const Topic& topic, const std::string& value)
@@ -443,11 +442,12 @@ void CWrapper::notifyPropertyChange(const Topic& topic, const std::string& value
     opts.onFailure5 = onSendFailure;
     opts.context = this;
     pubmsg.payload = const_cast<void*>(static_cast<const void*>(value.c_str()));
-    pubmsg.payloadlen = value.size();
+    pubmsg.payloadlen = static_cast<int>(value.size());
     pubmsg.qos = QOS;
     // property changes shall be retained and automatically send to new clients
     pubmsg.retained = 1;
-    int responseCode = sendMessage(topic.getEncodedTopic(), &pubmsg, &opts);
+
+    sendMessage(topic.getEncodedTopic(), &pubmsg, &opts);
 }
 
 void CWrapper::notifySignal(const Topic& topic, const std::string& args)
@@ -456,11 +456,11 @@ void CWrapper::notifySignal(const Topic& topic, const std::string& args)
 	MQTTAsync_message pubmsg = MQTTAsync_message_initializer;
 
 	pubmsg.payload = const_cast<void*>(static_cast<const void*>(args.c_str()));
-	pubmsg.payloadlen = args.size();
+	pubmsg.payloadlen = static_cast<int>(args.size());
 	pubmsg.qos = QOS;
 	pubmsg.retained = 0;
 
-    int responseCode = sendMessage(topic.getEncodedTopic(), &pubmsg, &opts);
+    sendMessage(topic.getEncodedTopic(), &pubmsg, &opts);
 }
 
 void CWrapper::notifyInvokeResponse(const Topic& responseTopic, const std::string& value, const std::string& correlationData)
@@ -476,13 +476,14 @@ void CWrapper::notifyInvokeResponse(const Topic& responseTopic, const std::strin
     opts.onFailure5 = onSendFailure;
     opts.context = this;
     pubmsg.payload = const_cast<void*>(static_cast<const void*>(value.c_str()));
-    pubmsg.payloadlen = value.size();
+    pubmsg.payloadlen = static_cast<int>(value.size());
     pubmsg.qos = QOS;
     pubmsg.retained = 0;
 
     // the responseOptions properties do get overwritten by the msg properties later
     pubmsg.properties = opts.properties;
-    int responseCode = sendMessage(responseTopic.getEncodedTopic(), &pubmsg, &opts);
+
+    sendMessage(responseTopic.getEncodedTopic(), &pubmsg, &opts);
 }
 
 void CWrapper::setRemoteProperty(const Topic& topic, const std::string& value)
@@ -491,10 +492,11 @@ void CWrapper::setRemoteProperty(const Topic& topic, const std::string& value)
 	MQTTAsync_message pubmsg = MQTTAsync_message_initializer;
 
 	pubmsg.payload = const_cast<void*>(static_cast<const void*>(value.c_str()));
-	pubmsg.payloadlen = value.size();
+	pubmsg.payloadlen = static_cast<int>(value.size());
 	pubmsg.qos = QOS;
 	pubmsg.retained = 0;
-    int responseCode = sendMessage(topic.getEncodedTopic(), &pubmsg, &opts);
+
+    sendMessage(topic.getEncodedTopic(), &pubmsg, &opts);
 }
 
 void CWrapper::subscribeTopic(const Topic& topic, CallbackFunction func)

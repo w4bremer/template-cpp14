@@ -10,7 +10,9 @@
 #include <thread>
 #include <condition_variable>
 #include "nlohmann/json.hpp"
+#pragma warning (push, 0)
 #include "MQTTAsync.h"
+#pragma warning(pop)
 #include "mqtttopic.h"
 #include "mqtttypes.h"
 
