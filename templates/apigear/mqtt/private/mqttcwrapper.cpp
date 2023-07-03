@@ -164,12 +164,11 @@ void CWrapper::checkForNewSubscriptions()
     m_toBeSubscribedTopics.clear();
     m_toBeSubscribedTopicsMutex.unlock();
     for (const auto& topic : toBeSubscribedTopics) {
-        subscribeTopicContext* ctx = new subscribeTopicContext{topic.first, topic.second, this};
 
         MQTTAsync_responseOptions opts = MQTTAsync_responseOptions_initializer;
         opts.onSuccess5 = onSubscribeSuccess;
         opts.onFailure5 = onSubscribeFailure;
-        opts.context = ctx;
+        opts.context = new subscribeTopicContext{topic.first, topic.second, this};
         int responseCode = MQTTAsync_subscribe(*m_client.get(), topic.first.getEncodedTopic().c_str(), QOS, &opts);
         if (responseCode != MQTTASYNC_SUCCESS)
         {
@@ -187,12 +186,10 @@ void CWrapper::checkForOldSubscriptions()
     for (const auto& topic : toBeUnsubscribedTopics) {
         AG_LOG_INFO("Unsubscribing from " + topic.first.getEncodedTopic());
 
-        subscribeTopicContext* ctx = new subscribeTopicContext{topic.first, topic.second, this};
-
         MQTTAsync_responseOptions opts = MQTTAsync_responseOptions_initializer;
         opts.onSuccess5 = onUnsubscribeSuccess;
         opts.onFailure5 = onUnsubscribeFailure;
-        opts.context = ctx;
+        opts.context = new subscribeTopicContext{topic.first, topic.second, this};
         int responseCode = MQTTAsync_unsubscribe(*m_client.get(), topic.first.getEncodedTopic().c_str(), &opts);
         if (responseCode != MQTTASYNC_SUCCESS)
         {
@@ -215,12 +212,10 @@ void CWrapper::unsubscribeAllTopics()
     for (const auto& topic : subscribedTopics) {
         AG_LOG_INFO("Unsubscribing from " + topic.first.getEncodedTopic());
 
-        subscribeTopicContext* ctx = new subscribeTopicContext{topic.first, topic.second, this};
-
         MQTTAsync_responseOptions opts = MQTTAsync_responseOptions_initializer;
         opts.onSuccess5 = onUnsubscribeSuccess;
         opts.onFailure5 = onUnsubscribeFailure;
-        opts.context = ctx;
+        opts.context = new subscribeTopicContext{topic.first, topic.second, this};
         int responseCode = MQTTAsync_unsubscribe(*m_client.get(), topic.first.getEncodedTopic().c_str(), &opts);
         if (responseCode != MQTTASYNC_SUCCESS)
         {
