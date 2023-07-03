@@ -28,5 +28,10 @@ target_link_libraries(MQTTClient
 {{- end }}
 )
 
+# we assume that the examples are built together with the libraries and thus ignore this warning
+if(MSVC)
+  target_compile_options(MQTTClient PRIVATE /wd4251)
+endif()
+
 install(TARGETS MQTTClient
         RUNTIME DESTINATION bin COMPONENT Runtime)

@@ -29,5 +29,10 @@ target_link_libraries(MQTTServer
 {{- end }}
 )
 
+# we assume that the examples are built together with the libraries and thus ignore this warning
+if(MSVC)
+  target_compile_options(MQTTServer PRIVATE /wd4251)
+endif()
+
 install(TARGETS MQTTServer
         RUNTIME DESTINATION bin COMPONENT Runtime)
