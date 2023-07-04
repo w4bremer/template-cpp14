@@ -29,6 +29,16 @@ void NoOperationsInterfaceClient::applyState(const nlohmann::json& fields)
     }
 }
 
+void NoOperationsInterfaceClient::applyProperty(const std::string& propertyName, const nlohmann::json& value)
+{
+    if ( propertyName == "propBool") {
+        setPropBoolLocal(value.get<bool>());
+    }
+    else if ( propertyName == "propInt") {
+        setPropIntLocal(value.get<int>());
+    }
+}
+
 void NoOperationsInterfaceClient::setPropBool(bool propBool)
 {
     if(!m_node) {
@@ -95,7 +105,7 @@ void NoOperationsInterfaceClient::olinkOnSignal(const std::string& signalId, con
 
 void NoOperationsInterfaceClient::olinkOnPropertyChanged(const std::string& propertyId, const nlohmann::json& value)
 {
-    applyState({ {ApiGear::ObjectLink::Name::getMemberName(propertyId), value} });
+    applyProperty(ApiGear::ObjectLink::Name::getMemberName(propertyId), value);
 }
 void NoOperationsInterfaceClient::olinkOnInit(const std::string& /*name*/, const nlohmann::json& props, ApiGear::ObjectLink::IClientNode *node)
 {

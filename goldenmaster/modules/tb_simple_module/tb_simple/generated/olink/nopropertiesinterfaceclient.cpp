@@ -20,8 +20,15 @@ NoPropertiesInterfaceClient::NoPropertiesInterfaceClient()
 {}
 
 void NoPropertiesInterfaceClient::applyState(const nlohmann::json& fields) 
-{// no properties to apply state
+{
+    // no properties to apply state
     (void) fields;
+}
+
+void NoPropertiesInterfaceClient::applyProperty(const std::string& propertyName, const nlohmann::json& value)
+{// no properties to apply state
+    (void) propertyName;
+    (void) value;
 }
 
 void NoPropertiesInterfaceClient::funcVoid()
@@ -111,7 +118,7 @@ void NoPropertiesInterfaceClient::olinkOnSignal(const std::string& signalId, con
 
 void NoPropertiesInterfaceClient::olinkOnPropertyChanged(const std::string& propertyId, const nlohmann::json& value)
 {
-    applyState({ {ApiGear::ObjectLink::Name::getMemberName(propertyId), value} });
+    applyProperty(ApiGear::ObjectLink::Name::getMemberName(propertyId), value);
 }
 void NoPropertiesInterfaceClient::olinkOnInit(const std::string& /*name*/, const nlohmann::json& props, ApiGear::ObjectLink::IClientNode *node)
 {

@@ -35,6 +35,22 @@ void ManyParamInterfaceClient::applyState(const nlohmann::json& fields)
     }
 }
 
+void ManyParamInterfaceClient::applyProperty(const std::string& propertyName, const nlohmann::json& value)
+{
+    if ( propertyName == "prop1") {
+        setProp1Local(value.get<int>());
+    }
+    else if ( propertyName == "prop2") {
+        setProp2Local(value.get<int>());
+    }
+    else if ( propertyName == "prop3") {
+        setProp3Local(value.get<int>());
+    }
+    else if ( propertyName == "prop4") {
+        setProp4Local(value.get<int>());
+    }
+}
+
 void ManyParamInterfaceClient::setProp1(int prop1)
 {
     if(!m_node) {
@@ -285,7 +301,7 @@ void ManyParamInterfaceClient::olinkOnSignal(const std::string& signalId, const 
 
 void ManyParamInterfaceClient::olinkOnPropertyChanged(const std::string& propertyId, const nlohmann::json& value)
 {
-    applyState({ {ApiGear::ObjectLink::Name::getMemberName(propertyId), value} });
+    applyProperty(ApiGear::ObjectLink::Name::getMemberName(propertyId), value);
 }
 void ManyParamInterfaceClient::olinkOnInit(const std::string& /*name*/, const nlohmann::json& props, ApiGear::ObjectLink::IClientNode *node)
 {

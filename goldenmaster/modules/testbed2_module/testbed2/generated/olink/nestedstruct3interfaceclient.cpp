@@ -32,6 +32,19 @@ void NestedStruct3InterfaceClient::applyState(const nlohmann::json& fields)
     }
 }
 
+void NestedStruct3InterfaceClient::applyProperty(const std::string& propertyName, const nlohmann::json& value)
+{
+    if ( propertyName == "prop1") {
+        setProp1Local(value.get<NestedStruct1>());
+    }
+    else if ( propertyName == "prop2") {
+        setProp2Local(value.get<NestedStruct2>());
+    }
+    else if ( propertyName == "prop3") {
+        setProp3Local(value.get<NestedStruct3>());
+    }
+}
+
 void NestedStruct3InterfaceClient::setProp1(const NestedStruct1& prop1)
 {
     if(!m_node) {
@@ -221,7 +234,7 @@ void NestedStruct3InterfaceClient::olinkOnSignal(const std::string& signalId, co
 
 void NestedStruct3InterfaceClient::olinkOnPropertyChanged(const std::string& propertyId, const nlohmann::json& value)
 {
-    applyState({ {ApiGear::ObjectLink::Name::getMemberName(propertyId), value} });
+    applyProperty(ApiGear::ObjectLink::Name::getMemberName(propertyId), value);
 }
 void NestedStruct3InterfaceClient::olinkOnInit(const std::string& /*name*/, const nlohmann::json& props, ApiGear::ObjectLink::IClientNode *node)
 {

@@ -35,6 +35,22 @@ void EnumInterfaceClient::applyState(const nlohmann::json& fields)
     }
 }
 
+void EnumInterfaceClient::applyProperty(const std::string& propertyName, const nlohmann::json& value)
+{
+    if ( propertyName == "prop0") {
+        setProp0Local(value.get<Enum0Enum>());
+    }
+    else if ( propertyName == "prop1") {
+        setProp1Local(value.get<Enum1Enum>());
+    }
+    else if ( propertyName == "prop2") {
+        setProp2Local(value.get<Enum2Enum>());
+    }
+    else if ( propertyName == "prop3") {
+        setProp3Local(value.get<Enum3Enum>());
+    }
+}
+
 void EnumInterfaceClient::setProp0(Enum0Enum prop0)
 {
     if(!m_node) {
@@ -279,7 +295,7 @@ void EnumInterfaceClient::olinkOnSignal(const std::string& signalId, const nlohm
 
 void EnumInterfaceClient::olinkOnPropertyChanged(const std::string& propertyId, const nlohmann::json& value)
 {
-    applyState({ {ApiGear::ObjectLink::Name::getMemberName(propertyId), value} });
+    applyProperty(ApiGear::ObjectLink::Name::getMemberName(propertyId), value);
 }
 void EnumInterfaceClient::olinkOnInit(const std::string& /*name*/, const nlohmann::json& props, ApiGear::ObjectLink::IClientNode *node)
 {

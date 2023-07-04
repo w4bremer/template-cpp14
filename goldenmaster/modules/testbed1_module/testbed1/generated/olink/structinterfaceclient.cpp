@@ -35,6 +35,22 @@ void StructInterfaceClient::applyState(const nlohmann::json& fields)
     }
 }
 
+void StructInterfaceClient::applyProperty(const std::string& propertyName, const nlohmann::json& value)
+{
+    if ( propertyName == "propBool") {
+        setPropBoolLocal(value.get<StructBool>());
+    }
+    else if ( propertyName == "propInt") {
+        setPropIntLocal(value.get<StructInt>());
+    }
+    else if ( propertyName == "propFloat") {
+        setPropFloatLocal(value.get<StructFloat>());
+    }
+    else if ( propertyName == "propString") {
+        setPropStringLocal(value.get<StructString>());
+    }
+}
+
 void StructInterfaceClient::setPropBool(const StructBool& propBool)
 {
     if(!m_node) {
@@ -279,7 +295,7 @@ void StructInterfaceClient::olinkOnSignal(const std::string& signalId, const nlo
 
 void StructInterfaceClient::olinkOnPropertyChanged(const std::string& propertyId, const nlohmann::json& value)
 {
-    applyState({ {ApiGear::ObjectLink::Name::getMemberName(propertyId), value} });
+    applyProperty(ApiGear::ObjectLink::Name::getMemberName(propertyId), value);
 }
 void StructInterfaceClient::olinkOnInit(const std::string& /*name*/, const nlohmann::json& props, ApiGear::ObjectLink::IClientNode *node)
 {

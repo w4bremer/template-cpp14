@@ -29,6 +29,16 @@ void SameStruct2InterfaceClient::applyState(const nlohmann::json& fields)
     }
 }
 
+void SameStruct2InterfaceClient::applyProperty(const std::string& propertyName, const nlohmann::json& value)
+{
+    if ( propertyName == "prop1") {
+        setProp1Local(value.get<Struct2>());
+    }
+    else if ( propertyName == "prop2") {
+        setProp2Local(value.get<Struct2>());
+    }
+}
+
 void SameStruct2InterfaceClient::setProp1(const Struct2& prop1)
 {
     if(!m_node) {
@@ -158,7 +168,7 @@ void SameStruct2InterfaceClient::olinkOnSignal(const std::string& signalId, cons
 
 void SameStruct2InterfaceClient::olinkOnPropertyChanged(const std::string& propertyId, const nlohmann::json& value)
 {
-    applyState({ {ApiGear::ObjectLink::Name::getMemberName(propertyId), value} });
+    applyProperty(ApiGear::ObjectLink::Name::getMemberName(propertyId), value);
 }
 void SameStruct2InterfaceClient::olinkOnInit(const std::string& /*name*/, const nlohmann::json& props, ApiGear::ObjectLink::IClientNode *node)
 {

@@ -35,6 +35,22 @@ void StructArrayInterfaceClient::applyState(const nlohmann::json& fields)
     }
 }
 
+void StructArrayInterfaceClient::applyProperty(const std::string& propertyName, const nlohmann::json& value)
+{
+    if ( propertyName == "propBool") {
+        setPropBoolLocal(value.get<std::list<StructBool>>());
+    }
+    else if ( propertyName == "propInt") {
+        setPropIntLocal(value.get<std::list<StructInt>>());
+    }
+    else if ( propertyName == "propFloat") {
+        setPropFloatLocal(value.get<std::list<StructFloat>>());
+    }
+    else if ( propertyName == "propString") {
+        setPropStringLocal(value.get<std::list<StructString>>());
+    }
+}
+
 void StructArrayInterfaceClient::setPropBool(const std::list<StructBool>& propBool)
 {
     if(!m_node) {
@@ -279,7 +295,7 @@ void StructArrayInterfaceClient::olinkOnSignal(const std::string& signalId, cons
 
 void StructArrayInterfaceClient::olinkOnPropertyChanged(const std::string& propertyId, const nlohmann::json& value)
 {
-    applyState({ {ApiGear::ObjectLink::Name::getMemberName(propertyId), value} });
+    applyProperty(ApiGear::ObjectLink::Name::getMemberName(propertyId), value);
 }
 void StructArrayInterfaceClient::olinkOnInit(const std::string& /*name*/, const nlohmann::json& props, ApiGear::ObjectLink::IClientNode *node)
 {

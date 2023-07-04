@@ -20,8 +20,15 @@ VoidInterfaceClient::VoidInterfaceClient()
 {}
 
 void VoidInterfaceClient::applyState(const nlohmann::json& fields) 
-{// no properties to apply state
+{
+    // no properties to apply state
     (void) fields;
+}
+
+void VoidInterfaceClient::applyProperty(const std::string& propertyName, const nlohmann::json& value)
+{// no properties to apply state
+    (void) propertyName;
+    (void) value;
 }
 
 void VoidInterfaceClient::funcVoid()
@@ -77,7 +84,7 @@ void VoidInterfaceClient::olinkOnSignal(const std::string& signalId, const nlohm
 
 void VoidInterfaceClient::olinkOnPropertyChanged(const std::string& propertyId, const nlohmann::json& value)
 {
-    applyState({ {ApiGear::ObjectLink::Name::getMemberName(propertyId), value} });
+    applyProperty(ApiGear::ObjectLink::Name::getMemberName(propertyId), value);
 }
 void VoidInterfaceClient::olinkOnInit(const std::string& /*name*/, const nlohmann::json& props, ApiGear::ObjectLink::IClientNode *node)
 {

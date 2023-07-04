@@ -34,9 +34,22 @@ void {{$class}}::applyState(const nlohmann::json& fields)
     if(fields.contains("{{$property.Name}}")) {
         set{{Camel $property.Name}}Local(fields["{{$property.Name}}"].get<{{cppType "" $property}}>());
     }
-{{- else -}}
+{{- else }}
     // no properties to apply state {{- /* we generate anyway for consistency */}}
     (void) fields;
+{{- end }}
+}
+
+void {{$class}}::applyProperty(const std::string& propertyName, const nlohmann::json& value)
+{
+{{- range $idx, $property := .Interface.Properties }}
+    {{ if $idx }}else {{ end -}}if ( propertyName == "{{$property.Name}}") {
+        set{{Camel $property.Name}}Local(value.get<{{cppType "" $property}}>());
+    }
+{{- else -}}
+    // no properties to apply state {{- /* we generate anyway for consistency */}}
+    (void) propertyName;
+    (void) value;
 {{- end }}
 }
 
@@ -166,7 +179,7 @@ void {{$class}}::olinkOnSignal(const std::string& signalId, const nlohmann::json
 
 void {{$class}}::olinkOnPropertyChanged(const std::string& propertyId, const nlohmann::json& value)
 {
-    applyState({ {ApiGear::ObjectLink::Name::getMemberName(propertyId), value} });
+    applyProperty(ApiGear::ObjectLink::Name::getMemberName(propertyId), value);
 }
 void {{$class}}::olinkOnInit(const std::string& /*name*/, const nlohmann::json& props, ApiGear::ObjectLink::IClientNode *node)
 {

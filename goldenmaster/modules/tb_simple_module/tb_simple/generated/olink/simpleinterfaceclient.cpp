@@ -47,6 +47,34 @@ void SimpleInterfaceClient::applyState(const nlohmann::json& fields)
     }
 }
 
+void SimpleInterfaceClient::applyProperty(const std::string& propertyName, const nlohmann::json& value)
+{
+    if ( propertyName == "propBool") {
+        setPropBoolLocal(value.get<bool>());
+    }
+    else if ( propertyName == "propInt") {
+        setPropIntLocal(value.get<int>());
+    }
+    else if ( propertyName == "propInt32") {
+        setPropInt32Local(value.get<int32_t>());
+    }
+    else if ( propertyName == "propInt64") {
+        setPropInt64Local(value.get<int64_t>());
+    }
+    else if ( propertyName == "propFloat") {
+        setPropFloatLocal(value.get<float>());
+    }
+    else if ( propertyName == "propFloat32") {
+        setPropFloat32Local(value.get<float>());
+    }
+    else if ( propertyName == "propFloat64") {
+        setPropFloat64Local(value.get<double>());
+    }
+    else if ( propertyName == "propString") {
+        setPropStringLocal(value.get<std::string>());
+    }
+}
+
 void SimpleInterfaceClient::setPropBool(bool propBool)
 {
     if(!m_node) {
@@ -523,7 +551,7 @@ void SimpleInterfaceClient::olinkOnSignal(const std::string& signalId, const nlo
 
 void SimpleInterfaceClient::olinkOnPropertyChanged(const std::string& propertyId, const nlohmann::json& value)
 {
-    applyState({ {ApiGear::ObjectLink::Name::getMemberName(propertyId), value} });
+    applyProperty(ApiGear::ObjectLink::Name::getMemberName(propertyId), value);
 }
 void SimpleInterfaceClient::olinkOnInit(const std::string& /*name*/, const nlohmann::json& props, ApiGear::ObjectLink::IClientNode *node)
 {

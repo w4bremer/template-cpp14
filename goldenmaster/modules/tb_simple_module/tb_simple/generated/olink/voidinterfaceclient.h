@@ -96,6 +96,12 @@ private:
     * @param the data received from VoidInterface service.
     */
     void applyState(const nlohmann::json& fields);
+    /**
+    * Applies received property value to local state and publishes changes to subscribers.
+    * @param propertyName the name of property to be changed.
+    * @param value The value for property.
+    */
+    void applyProperty(const std::string& propertyName, const nlohmann::json& value);
 
     /** 
     * An abstraction layer over the connection with service for the VoidInterfaceClient.

@@ -47,6 +47,34 @@ void SimpleArrayInterfaceClient::applyState(const nlohmann::json& fields)
     }
 }
 
+void SimpleArrayInterfaceClient::applyProperty(const std::string& propertyName, const nlohmann::json& value)
+{
+    if ( propertyName == "propBool") {
+        setPropBoolLocal(value.get<std::list<bool>>());
+    }
+    else if ( propertyName == "propInt") {
+        setPropIntLocal(value.get<std::list<int>>());
+    }
+    else if ( propertyName == "propInt32") {
+        setPropInt32Local(value.get<std::list<int32_t>>());
+    }
+    else if ( propertyName == "propInt64") {
+        setPropInt64Local(value.get<std::list<int64_t>>());
+    }
+    else if ( propertyName == "propFloat") {
+        setPropFloatLocal(value.get<std::list<float>>());
+    }
+    else if ( propertyName == "propFloat32") {
+        setPropFloat32Local(value.get<std::list<float>>());
+    }
+    else if ( propertyName == "propFloat64") {
+        setPropFloat64Local(value.get<std::list<double>>());
+    }
+    else if ( propertyName == "propString") {
+        setPropStringLocal(value.get<std::list<std::string>>());
+    }
+}
+
 void SimpleArrayInterfaceClient::setPropBool(const std::list<bool>& propBool)
 {
     if(!m_node) {
@@ -523,7 +551,7 @@ void SimpleArrayInterfaceClient::olinkOnSignal(const std::string& signalId, cons
 
 void SimpleArrayInterfaceClient::olinkOnPropertyChanged(const std::string& propertyId, const nlohmann::json& value)
 {
-    applyState({ {ApiGear::ObjectLink::Name::getMemberName(propertyId), value} });
+    applyProperty(ApiGear::ObjectLink::Name::getMemberName(propertyId), value);
 }
 void SimpleArrayInterfaceClient::olinkOnInit(const std::string& /*name*/, const nlohmann::json& props, ApiGear::ObjectLink::IClientNode *node)
 {
