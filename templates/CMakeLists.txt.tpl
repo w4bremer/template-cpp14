@@ -51,7 +51,7 @@ endif()
 add_subdirectory(examples/app)
 add_subdirectory(examples/appthreadsafe)
 {{- end }}
-{{- if .Features.examples }}
+{{- if .Features.examples_olink }}
 add_subdirectory(examples/olinkserver)
 add_subdirectory(examples/olinkclient)
 {{- end }}
