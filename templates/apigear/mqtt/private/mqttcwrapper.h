@@ -20,19 +20,25 @@
 namespace ApiGear {
 namespace MQTT {
 
-class ISink;
-
 /**
  * @brief Describes incoming part of messages of the protocol for client side.
  * 
  * Since in MQTT there are only clients connected to a central broker,
  * the service and client side use this class to connect to each other via the broker.
  */
-class CWrapper
+class CWrapper : public std::enable_shared_from_this<CWrapper>
 {
 public:
-    explicit CWrapper(const std::string& clientID);
+    static std::shared_ptr<CWrapper> create(const std::string& clientID)
+    {
+        return std::shared_ptr<CWrapper>(new CWrapper(clientID));
+    };
     virtual ~CWrapper();
+
+    std::shared_ptr<CWrapper> getPtr()
+    {
+        return shared_from_this();
+    }
 public:
     /**
     * Connects to the specified broker brokerURL
@@ -71,6 +77,8 @@ public:
 
     const std::string& getClientId() const { return m_clientID; }
 private:
+    explicit CWrapper(const std::string& clientID);
+
     void checkForNewSubscriptions();
     void checkForOldSubscriptions();
     void unsubscribeAllTopics();

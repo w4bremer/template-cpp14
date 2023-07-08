@@ -5,7 +5,7 @@ using namespace ApiGear::MQTT;
 
 Client::Client(const std::string& clientID)
 {
-    m_cwrapper = std::make_unique<CWrapper>(clientID);
+    m_cwrapper = CWrapper::create(clientID);
 }
 
 Client::~Client() = default;
