@@ -3,6 +3,7 @@
 #include "../utilities/logger.h"
 #include <chrono>
 #include <random>
+#include <memory>
 
 using namespace ApiGear::MQTT;
 #define QOS         2
@@ -12,7 +13,11 @@ std::mt19937 randomNumberGenerator (std::random_device{}());
 struct subscribeTopicContext {
     Topic topic;
     CallbackFunction func;
-    CWrapper* client;
+    std::weak_ptr<CWrapper> client;
+};
+
+struct genericContext {
+    std::weak_ptr<CWrapper> client;
 };
 
 void onSendFailure(void* /*context*/, MQTTAsync_failureData5* response)
@@ -23,7 +28,10 @@ void onSendFailure(void* /*context*/, MQTTAsync_failureData5* response)
 void onSubscribeSuccess(void* context, MQTTAsync_successData5* /*response*/)
 {
     subscribeTopicContext* ctx = static_cast<subscribeTopicContext*>(context);
-    ctx->client->confirmSubscription(ctx->topic, ctx->func);
+    if (auto client = ctx->client.lock())
+    {
+        client->confirmSubscription(ctx->topic, ctx->func);
+    }
     delete ctx;
 }
 
@@ -37,7 +45,10 @@ void onSubscribeFailure(void* context, MQTTAsync_failureData5* response)
 void onUnsubscribeSuccess(void* context, MQTTAsync_successData5* /*response*/)
 {
     subscribeTopicContext* ctx = static_cast<subscribeTopicContext*>(context);
-    ctx->client->removeSubscription(ctx->topic);
+    if (auto client = ctx->client.lock())
+    {
+        client->removeSubscription(ctx->topic);
+    }
     delete ctx;
 }
 
@@ -50,27 +61,37 @@ void onUnsubscribeFailure(void* context, MQTTAsync_failureData5* response)
 
 void onConnected(void* context, MQTTAsync_successData5* /*response*/)
 {
-    CWrapper* client = static_cast<CWrapper*>(context);
-    client->onConnected();
+    genericContext* ctx = static_cast<genericContext*>(context);
+    if (auto client = ctx->client.lock())
+    {
+        client->onConnected();
+    }
 }
 
 void onConnectedFail(void* context,  MQTTAsync_failureData5* response)
 {
-    CWrapper* client = static_cast<CWrapper*>(context);
+    genericContext* ctx = static_cast<genericContext*>(context);
     AG_LOG_ERROR("Connect failed, ResponseCode " + std::to_string(response->code));
-    client->onDisconnected();
+    if (auto client = ctx->client.lock())
+    {
+        client->onDisconnected();
+    }
+    delete ctx;
 }
 
 void onDisconnected(void* context, MQTTAsync_successData5* /*response*/)
 {
-    CWrapper* client = static_cast<CWrapper*>(context);
-    client->onDisconnected();
+    genericContext* ctx = static_cast<genericContext*>(context);
+    if (auto client = ctx->client.lock())
+    {
+        client->onDisconnected();
+    }
+    delete ctx;
 }
 
 
 int OnMessageArrived(void *context, char *topicName, int topicLen, MQTTAsync_message *message)
 {
-    CWrapper* client = static_cast<CWrapper*>(context);
     Message mqtt_message {};
     mqtt_message.topic = Topic(std::string(topicName, topicLen));
     mqtt_message.content.assign(static_cast<char*>(message->payload), message->payloadlen);
@@ -92,16 +113,24 @@ int OnMessageArrived(void *context, char *topicName, int topicLen, MQTTAsync_mes
     MQTTAsync_freeMessage(&message);
     MQTTAsync_free(topicName);
 
-    client->handleTextMessage(mqtt_message);
+    genericContext* ctx = static_cast<genericContext*>(context);
+    if (auto client = ctx->client.lock())
+    {
+        client->handleTextMessage(mqtt_message);
+    }
 
     return 1;
 }
 
 void OnConnectionLost(void *context, char * /*cause*/)
 {
-    CWrapper* client = static_cast<CWrapper*>(context);
     AG_LOG_ERROR("Connection lost");
-    client->onDisconnected();
+    genericContext* ctx = static_cast<genericContext*>(context);
+    if (auto client = ctx->client.lock())
+    {
+        client->onDisconnected();
+    }
+    delete ctx;
 }
 
 CWrapper::CWrapper(const std::string& clientID)
@@ -167,7 +196,7 @@ void CWrapper::checkForNewSubscriptions()
         MQTTAsync_responseOptions opts = MQTTAsync_responseOptions_initializer;
         opts.onSuccess5 = onSubscribeSuccess;
         opts.onFailure5 = onSubscribeFailure;
-        opts.context = new subscribeTopicContext{topic.first, topic.second, this};
+        opts.context = new subscribeTopicContext{topic.first, topic.second, getPtr()};
         int responseCode = MQTTAsync_subscribe(*m_client.get(), topic.first.getEncodedTopic().c_str(), QOS, &opts);
         if (responseCode != MQTTASYNC_SUCCESS)
         {
@@ -188,7 +217,7 @@ void CWrapper::checkForOldSubscriptions()
         MQTTAsync_responseOptions opts = MQTTAsync_responseOptions_initializer;
         opts.onSuccess5 = onUnsubscribeSuccess;
         opts.onFailure5 = onUnsubscribeFailure;
-        opts.context = new subscribeTopicContext{topic.first, topic.second, this};
+        opts.context = new subscribeTopicContext{topic.first, topic.second, getPtr()};
         int responseCode = MQTTAsync_unsubscribe(*m_client.get(), topic.first.getEncodedTopic().c_str(), &opts);
         if (responseCode != MQTTASYNC_SUCCESS)
         {
@@ -214,7 +243,7 @@ void CWrapper::unsubscribeAllTopics()
         MQTTAsync_responseOptions opts = MQTTAsync_responseOptions_initializer;
         opts.onSuccess5 = onUnsubscribeSuccess;
         opts.onFailure5 = onUnsubscribeFailure;
-        opts.context = new subscribeTopicContext{topic.first, topic.second, this};
+        opts.context = new subscribeTopicContext{topic.first, topic.second, getPtr()};
         int responseCode = MQTTAsync_unsubscribe(*m_client.get(), topic.first.getEncodedTopic().c_str(), &opts);
         if (responseCode != MQTTASYNC_SUCCESS)
         {
@@ -261,9 +290,9 @@ void CWrapper::connectToHost(const std::string& brokerURL)
             conn_opts.keepAliveInterval = 20;
             conn_opts.onSuccess5 = ::onConnected;
             conn_opts.onFailure5 = onConnectedFail;
-            conn_opts.context = this;
+            conn_opts.context = new genericContext{getPtr()};
 
-            MQTTAsync_setCallbacks(*m_client.get(), this, OnConnectionLost, OnMessageArrived, NULL);
+            MQTTAsync_setCallbacks(*m_client.get(), conn_opts.context, OnConnectionLost, OnMessageArrived, NULL);
             int responseCode = MQTTAsync_connect(*m_client.get(), &conn_opts);
             if (responseCode != MQTTASYNC_SUCCESS)
             {
@@ -295,7 +324,7 @@ void CWrapper::disconnect() {
     }
     MQTTAsync_disconnectOptions disconn_opts = MQTTAsync_disconnectOptions_initializer5;
     disconn_opts.onSuccess5 = ::onDisconnected;
-    disconn_opts.context = this;
+    disconn_opts.context = new genericContext{getPtr()};
     disconn_opts.timeout = 10;
     MQTTAsync_disconnect(*m_client.get(), &disconn_opts);
     m_onConnectionStatusChangedCallbacksMutex.lock();
@@ -422,7 +451,7 @@ void CWrapper::invokeRemote(const Topic& topic, const std::string& value, Invoke
     MQTTProperties_add(&(opts.properties), &correlationDataProperty);
 
     opts.onFailure5 = onSendFailure;
-    opts.context = this;
+    opts.context = new genericContext{getPtr()};
     pubmsg.payload = const_cast<void*>(static_cast<const void*>(value.c_str()));
     pubmsg.payloadlen = static_cast<int>(value.size());
     pubmsg.qos = QOS;
@@ -440,7 +469,7 @@ void CWrapper::notifyPropertyChange(const Topic& topic, const std::string& value
     MQTTAsync_message pubmsg = MQTTAsync_message_initializer;
 
     opts.onFailure5 = onSendFailure;
-    opts.context = this;
+    opts.context = new genericContext{getPtr()};
     pubmsg.payload = const_cast<void*>(static_cast<const void*>(value.c_str()));
     pubmsg.payloadlen = static_cast<int>(value.size());
     pubmsg.qos = QOS;
@@ -474,7 +503,7 @@ void CWrapper::notifyInvokeResponse(const Topic& responseTopic, const std::strin
     MQTTProperties_add(&(opts.properties), &correlationDataProperty);
 
     opts.onFailure5 = onSendFailure;
-    opts.context = this;
+    opts.context = new genericContext{getPtr()};
     pubmsg.payload = const_cast<void*>(static_cast<const void*>(value.c_str()));
     pubmsg.payloadlen = static_cast<int>(value.size());
     pubmsg.qos = QOS;
