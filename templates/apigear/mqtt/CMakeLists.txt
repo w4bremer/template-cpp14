@@ -8,7 +8,7 @@ if(NOT nlohmann_json_FOUND)
   FetchContent_MakeAvailable(json)
 endif()
 
-find_package(eclipse-paho-mqtt-c REQUIRED paho-mqtt3as)
+find_package(eclipse-paho-mqtt-c REQUIRED paho-mqtt3as-static)
 find_package(OpenSSL REQUIRED SSL Crypto)
 
 set (SOURCES
@@ -25,7 +25,7 @@ target_include_directories(paho-mqtt PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../../>
     $<INSTALL_INTERFACE:include>
 )
-target_link_libraries(paho-mqtt PRIVATE eclipse-paho-mqtt-c::paho-mqtt3as PUBLIC nlohmann_json::nlohmann_json utilities)
+target_link_libraries(paho-mqtt PRIVATE eclipse-paho-mqtt-c::paho-mqtt3as-static PUBLIC nlohmann_json::nlohmann_json utilities)
 
 if(NOT MSVC)
   target_compile_options(paho-mqtt PRIVATE -Wall -Wextra -Wpedantic -Werror -fvisibility=hidden)
