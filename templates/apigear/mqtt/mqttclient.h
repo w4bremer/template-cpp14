@@ -41,7 +41,7 @@ public:
     const std::string& getClientId() const;
 
 private:
-    std::unique_ptr<class CWrapper> m_cwrapper;
+    std::shared_ptr<class CWrapper> m_cwrapper;
 };
 } // namespace MQTT
 } // namespace ApiGear
