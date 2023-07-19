@@ -8,6 +8,11 @@
 using namespace ApiGear::MQTT;
 #define QOS         2
 
+namespace
+{
+    int timeoutWhileWaitingForUnsubscribe = 7; //Milliseconds
+}
+
 std::mt19937 randomNumberGenerator (std::random_device{}());
 
 struct subscribeTopicContext {
@@ -254,16 +259,14 @@ void CWrapper::unsubscribeAllTopics()
 
 void CWrapper::waitForPendingMessages()
 {
+    bool unsubscribedFromAllTopics = false;
     // wait for unsubscription to complete
-    while(true && m_connected)
+    while(m_connected && !unsubscribedFromAllTopics)
     {
-        std::this_thread::sleep_for(std::chrono::milliseconds(10));
+        std::this_thread::sleep_for(std::chrono::milliseconds(timeoutWhileWaitingForUnsubscribe));
 
         std::lock_guard<std::mutex> guard(m_subscribedTopicsMutex);
-        if(m_subscribedTopics.empty())
-        {
-            break;
-        }
+        unsubscribedFromAllTopics = m_subscribedTopics.empty();
     }
 }
 
