@@ -79,7 +79,7 @@ public:
 private:
     explicit CWrapper(const std::string& clientID);
 
-    void checkForNewSubscriptions();
+    void addNewSubscriptions();
     void checkForOldSubscriptions();
     void unsubscribeAllTopics();
     void waitForPendingMessages();
