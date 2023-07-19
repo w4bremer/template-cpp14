@@ -301,6 +301,7 @@ void CWrapper::connectToHost(const std::string& brokerURL)
             {
                 AG_LOG_ERROR("Failed to connect, return code " + std::to_string(responseCode));
                 connecting = false;
+                // use MQTT function to properly delete the client before resetting the unique ptr
                 MQTTAsync_destroy(m_client.get());
                 m_client.reset();
                 return;
@@ -371,8 +372,10 @@ void CWrapper::onDisconnected()
     }
 
     std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+    // this function is called from within the MQTTAsync client
+    // therefore the client must be reset in a separate thread afterwards
     std::thread([this, disconnectRequested](){
-        // we need to destroy the client outside of its own calling thread
+        // use MQTT function to properly delete the client before resetting the unique ptr
         MQTTAsync_destroy(m_client.get());
         m_client.reset();
 
