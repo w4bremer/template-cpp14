@@ -176,7 +176,7 @@ void CWrapper::run()
         lock.unlock();
 
         addNewSubscriptions();
-        checkForOldSubscriptions();
+        removeOldSubscriptions();
 
     }
     while (m_connected && !m_disconnectRequested);
@@ -205,7 +205,7 @@ void CWrapper::addNewSubscriptions()
     }
 }
 
-void CWrapper::checkForOldSubscriptions()
+void CWrapper::removeOldSubscriptions()
 {
     m_toBeUnsubscribedTopicsMutex.lock();
     const auto toBeUnsubscribedTopics(std::move(m_toBeUnsubscribedTopics));
