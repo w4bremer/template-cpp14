@@ -175,7 +175,7 @@ void CWrapper::run()
         m_waitForWork = true;
         lock.unlock();
 
-        checkForNewSubscriptions();
+        addNewSubscriptions();
         checkForOldSubscriptions();
 
     }
@@ -185,7 +185,7 @@ void CWrapper::run()
     waitForPendingMessages();
 }
 
-void CWrapper::checkForNewSubscriptions()
+void CWrapper::addNewSubscriptions()
 {
     m_toBeSubscribedTopicsMutex.lock();
     const auto toBeSubscribedTopics(std::move(m_toBeSubscribedTopics));
