@@ -80,7 +80,7 @@ private:
     explicit CWrapper(const std::string& clientID);
 
     void addNewSubscriptions();
-    void checkForOldSubscriptions();
+    void removeOldSubscriptions();
     void unsubscribeAllTopics();
     void waitForPendingMessages();
 
