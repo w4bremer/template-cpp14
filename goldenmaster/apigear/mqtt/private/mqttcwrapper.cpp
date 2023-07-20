@@ -353,6 +353,20 @@ void CWrapper::onConnected()
     m_thread = std::thread(&CWrapper::run, this);
 }
 
+void CWrapper::resubscribeAllTopics()
+{
+    m_subscribedTopicsMutex.lock();
+    m_toBeSubscribedTopicsMutex.lock();
+    if(!m_subscribedTopics.empty())
+    {
+        m_subscribedTopics.insert(m_toBeSubscribedTopics.begin(),m_toBeSubscribedTopics.end());
+        m_toBeSubscribedTopics = m_subscribedTopics;
+        m_subscribedTopics.clear();
+    }
+    m_toBeSubscribedTopicsMutex.unlock();
+    m_subscribedTopicsMutex.unlock();
+}
+
 void CWrapper::onDisconnected()
 {
     m_connected = false;
@@ -383,16 +397,7 @@ void CWrapper::onDisconnected()
         if(!disconnectRequested)
         {
             // we need to re-subscribe to all topics on re-connection
-            m_subscribedTopicsMutex.lock();
-            m_toBeSubscribedTopicsMutex.lock();
-            if(!m_subscribedTopics.empty())
-            {
-                m_subscribedTopics.insert(m_toBeSubscribedTopics.begin(),m_toBeSubscribedTopics.end());
-                m_toBeSubscribedTopics = m_subscribedTopics;
-                m_subscribedTopics.clear();
-            }
-            m_toBeSubscribedTopicsMutex.unlock();
-            m_subscribedTopicsMutex.unlock();
+            resubscribeAllTopics();
 
             connectToHost(m_serverUrl);
         }

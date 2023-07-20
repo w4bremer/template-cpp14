@@ -84,6 +84,9 @@ private:
     void unsubscribeAllTopics();
     void waitForPendingMessages();
 
+    // after an unintentional disconnect we need to do the subscription again
+    void resubscribeAllTopics();
+
     int sendMessage(const std::string& destinationName, const MQTTAsync_message* msg, MQTTAsync_responseOptions* response);
 
 private:
