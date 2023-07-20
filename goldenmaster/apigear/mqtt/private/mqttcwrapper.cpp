@@ -394,7 +394,7 @@ void CWrapper::onDisconnected()
             m_toBeSubscribedTopicsMutex.unlock();
             m_subscribedTopicsMutex.unlock();
 
-            connectToHost("");
+            connectToHost(m_serverUrl);
         }
     }).detach();
 }
