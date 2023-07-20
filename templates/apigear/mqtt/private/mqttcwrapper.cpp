@@ -281,7 +281,7 @@ void CWrapper::connectToHost(const std::string& brokerURL)
     }
     AG_LOG_DEBUG("Connecting to host " + m_serverUrl);
     
-    if(m_client == nullptr && !connecting) {
+    if(!m_client && !connecting) {
         try {
             connecting = true;
 
@@ -308,7 +308,7 @@ void CWrapper::connectToHost(const std::string& brokerURL)
             }
 
         } catch (std::exception &e) {
-            m_client = nullptr;
+            m_client.reset();
             AG_LOG_ERROR("Exception " + std::string(e.what()));
         }
         connecting = false;
