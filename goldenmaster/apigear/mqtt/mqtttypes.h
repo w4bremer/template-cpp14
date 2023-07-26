@@ -18,9 +18,9 @@ typedef std::function<void(InvokeReplyArg)> InvokeReplyFunc;
 
 class APIGEAR_MQTT_EXPORT Message {
 public:
-    Topic topic {""};
+    std::string topic {""};
     std::string content {""}; //optional
-    Topic responseTopic {""}; //optional
+    std::string responseTopic {""}; //optional
     std::string correlationData {""}; //optional
 };
 
