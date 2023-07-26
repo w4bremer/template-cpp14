@@ -28,6 +28,7 @@ public:
 
     void onSignal(const ApiGear::MQTT::Topic& topic, const std::string& args, const ApiGear::MQTT::Topic& responseTopic, const std::string& correlationData);
     void onPropertyChanged(const ApiGear::MQTT::Topic& topic, const std::string& args, const ApiGear::MQTT::Topic& responseTopic, const std::string& correlationData);
+    void onInvokeReply(const ApiGear::MQTT::Topic& topic, const std::string& args, const ApiGear::MQTT::Topic& responseTopic, const std::string& correlationData);
 
 private:
     void setProp1Local(const Struct2& prop1);
@@ -42,6 +43,16 @@ private:
 
     /** The publisher for SameStruct2Interface */
     std::unique_ptr<ISameStruct2InterfacePublisher> m_publisher;
+
+    /**
+     * @brief register a response handler for an operation invocation
+     * 
+     * @param handler function to be called on return
+     * @return int unique id of the call
+     */
+    int registerResponseHandler(ApiGear::MQTT::InvokeReplyFunc handler);
+    std::mutex m_responseHandlerMutex;
+    std::map<int, ApiGear::MQTT::InvokeReplyFunc> m_responseHandlerMap;
 };
 } // namespace MQTT
 } // namespace TbSame2

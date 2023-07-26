@@ -39,6 +39,7 @@ public:
 
     void onSignal(const ApiGear::MQTT::Topic& topic, const std::string& args, const ApiGear::MQTT::Topic& responseTopic, const std::string& correlationData);
     void onPropertyChanged(const ApiGear::MQTT::Topic& topic, const std::string& args, const ApiGear::MQTT::Topic& responseTopic, const std::string& correlationData);
+    void onInvokeReply(const ApiGear::MQTT::Topic& topic, const std::string& args, const ApiGear::MQTT::Topic& responseTopic, const std::string& correlationData);
 
 private:
 {{- range .Interface.Properties}}
@@ -57,6 +58,16 @@ private:
 
     /** The publisher for {{$interfaceName}} */
     std::unique_ptr<{{$pub_class}}> m_publisher;
+
+    /**
+     * @brief register a response handler for an operation invocation
+     * 
+     * @param handler function to be called on return
+     * @return int unique id of the call
+     */
+    int registerResponseHandler(ApiGear::MQTT::InvokeReplyFunc handler);
+    std::mutex m_responseHandlerMutex;
+    std::map<int, ApiGear::MQTT::InvokeReplyFunc> m_responseHandlerMap;
 };
 } // namespace MQTT
 } // namespace {{ Camel .Module.Name }}

@@ -34,9 +34,9 @@ void Client::disconnect() {
     m_cwrapper->disconnect();
 }
 
-void Client::invokeRemote(const Topic& topic, const std::string& value, InvokeReplyFunc func)
+void Client::invokeRemote(const Topic& topic, const Topic& responseTopic, const std::string& value, int responseId)
 {
-    m_cwrapper->invokeRemote(topic, value, func);
+    m_cwrapper->invokeRemote(topic, responseTopic, value, responseId);
 }
 
 void Client::setRemoteProperty(const Topic& topic, const std::string& value)
