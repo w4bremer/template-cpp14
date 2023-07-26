@@ -8,7 +8,6 @@
 #include <string>
 #include <atomic>
 #include <thread>
-#include "nlohmann/json.hpp"
 #include "mqttcommon.h"
 
 namespace ApiGear {
@@ -33,6 +32,11 @@ public:
     bool operator()(const Topic& lhs, const Topic& rhs) const noexcept
     {
         return lhs.getEncodedTopic() < rhs.getEncodedTopic();
+    }
+
+    operator std::string() const noexcept
+    {
+        return getEncodedTopic();
     }
 
     const std::string& getEncodedTopic() const { return m_encodedTopic; }
