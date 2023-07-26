@@ -175,9 +175,9 @@ void CWrapper::run()
 {
     do
     {
-        std::unique_lock<std::mutex> lock{m_waitForWorkMutex};
-        m_conditionVariable.wait(lock, [this]() { return !m_waitForWork; });
-        m_waitForWork = true;
+        std::unique_lock<std::mutex> lock{m_waitForSubscriptionChangesMutex};
+        m_synchronizeSubscriptionChanges.wait(lock, [this]() { return !m_waitForSubscriptionChanges; });
+        m_waitForSubscriptionChanges = true;
         lock.unlock();
 
         addNewSubscriptions();
@@ -320,10 +320,10 @@ void CWrapper::disconnect() {
     if (m_mainMQTTThread.joinable())
     {
         {
-            std::lock_guard<std::mutex> l{m_waitForWorkMutex};
-            m_waitForWork = false;
+            std::lock_guard<std::mutex> l{m_waitForSubscriptionChangesMutex};
+            m_waitForSubscriptionChanges = false;
         }
-        m_conditionVariable.notify_one();
+        m_synchronizeSubscriptionChanges.notify_one();
         m_mainMQTTThread.join();
     }
     MQTTAsync_disconnectOptions disconn_opts = MQTTAsync_disconnectOptions_initializer5;
@@ -378,10 +378,10 @@ void CWrapper::onDisconnected()
     if (m_mainMQTTThread.joinable())
     {
         {
-            std::lock_guard<std::mutex> l{m_waitForWorkMutex};
-            m_waitForWork = false;
+            std::lock_guard<std::mutex> l{m_waitForSubscriptionChangesMutex};
+            m_waitForSubscriptionChanges = false;
         }
-        m_conditionVariable.notify_one();
+        m_synchronizeSubscriptionChanges.notify_one();
         m_mainMQTTThread.join();
     }
 
@@ -542,10 +542,10 @@ void CWrapper::subscribeTopic(const Topic& topic, CallbackFunction func)
     }
 
     {
-        std::lock_guard<std::mutex> l{m_waitForWorkMutex};
-        m_waitForWork = false;
+        std::lock_guard<std::mutex> l{m_waitForSubscriptionChangesMutex};
+        m_waitForSubscriptionChanges = false;
     }
-    m_conditionVariable.notify_one();
+    m_synchronizeSubscriptionChanges.notify_one();
 }
 
 void CWrapper::onSubscribed(const Topic& topic, CallbackFunction func)
@@ -568,10 +568,10 @@ void CWrapper::unsubscribeTopic(const Topic& topic, CallbackFunction func)
     }
 
     {
-        std::lock_guard<std::mutex> l{m_waitForWorkMutex};
-        m_waitForWork = false;
+        std::lock_guard<std::mutex> l{m_waitForSubscriptionChangesMutex};
+        m_waitForSubscriptionChanges = false;
     }
-    m_conditionVariable.notify_one();
+    m_synchronizeSubscriptionChanges.notify_one();
 }
 
 int CWrapper::sendMessage(const std::string& destinationName, const MQTTAsync_message* msg, MQTTAsync_responseOptions* response)
