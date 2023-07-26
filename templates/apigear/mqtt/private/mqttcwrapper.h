@@ -91,9 +91,9 @@ private:
     int sendMessage(const std::string& destinationName, const MQTTAsync_message* msg, MQTTAsync_responseOptions* response);
 
 private:
-    std::condition_variable m_conditionVariable;
-    std::mutex m_waitForWorkMutex;
-    bool m_waitForWork { true };
+    std::condition_variable m_synchronizeSubscriptionChanges;
+    std::mutex m_waitForSubscriptionChangesMutex;
+    bool m_waitForSubscriptionChanges { true };
 
     std::unique_ptr<MQTTAsync> m_client;
     std::mutex m_queueMutex;
