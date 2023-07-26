@@ -106,11 +106,11 @@ private:
     std::mutex m_onConnectionStatusChangedCallbacksMutex;
     std::map<int, OnConnectionStatusChangedCallBackFunction> m_onConnectionStatusChangedCallbacks;
     std::mutex m_subscribedTopicsMutex;
-    std::multimap<Topic, CallbackFunction, Topic> m_subscribedTopics;
+    std::multimap<std::string, CallbackFunction> m_subscribedTopics;
     std::mutex m_toBeSubscribedTopicsMutex;
-    std::multimap<Topic, CallbackFunction, Topic> m_toBeSubscribedTopics;
+    std::multimap<std::string, CallbackFunction> m_toBeSubscribedTopics;
     std::mutex m_toBeUnsubscribedTopicsMutex;
-    std::multimap<Topic, CallbackFunction, Topic> m_toBeUnsubscribedTopics;
+    std::multimap<std::string, CallbackFunction> m_toBeUnsubscribedTopics;
 };
 } // namespace MQTT
 } // namespace ApiGear

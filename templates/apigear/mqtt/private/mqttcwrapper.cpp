@@ -98,14 +98,14 @@ void onDisconnected(void* context, MQTTAsync_successData5* /*response*/)
 int OnMessageArrived(void *context, char *topicName, int topicLen, MQTTAsync_message *message)
 {
     Message mqtt_message {};
-    mqtt_message.topic = Topic(std::string(topicName, topicLen));
+    mqtt_message.topic = std::string(topicName, topicLen);
     mqtt_message.content.assign(static_cast<char*>(message->payload), message->payloadlen);
 
     if(MQTTProperties_hasProperty(&(message->properties), MQTTPROPERTY_CODE_RESPONSE_TOPIC))
     {
         AG_LOG_INFO("response topic found");
         MQTTProperty* responseTopicProperty = MQTTProperties_getProperty(&(message->properties), MQTTPROPERTY_CODE_RESPONSE_TOPIC);
-        mqtt_message.responseTopic = Topic(std::string(responseTopicProperty->value.data.data, responseTopicProperty->value.data.len));
+        mqtt_message.responseTopic = std::string(responseTopicProperty->value.data.data, responseTopicProperty->value.data.len);
     }
 
     if(MQTTProperties_hasProperty(&(message->properties), MQTTPROPERTY_CODE_CORRELATION_DATA))
@@ -202,7 +202,7 @@ void CWrapper::addNewSubscriptions()
         opts.onSuccess5 = onSubscribeSuccess;
         opts.onFailure5 = onSubscribeFailure;
         opts.context = new subscribeTopicContext{topic.first, topic.second, getPtr()};
-        int responseCode = MQTTAsync_subscribe(*m_client.get(), topic.first.getEncodedTopic().c_str(), QOS, &opts);
+        int responseCode = MQTTAsync_subscribe(*m_client.get(), topic.first.c_str(), QOS, &opts);
         if (responseCode != MQTTASYNC_SUCCESS)
         {
             AG_LOG_ERROR("Failed to start subscribe, return code " + std::to_string(responseCode));
@@ -217,13 +217,13 @@ void CWrapper::removeOldSubscriptions()
     m_toBeUnsubscribedTopics.clear();
     m_toBeUnsubscribedTopicsMutex.unlock();
     for (const auto& topic : toBeUnsubscribedTopics) {
-        AG_LOG_INFO("Unsubscribing from " + topic.first.getEncodedTopic());
+        AG_LOG_INFO("Unsubscribing from " + topic.first);
 
         MQTTAsync_responseOptions opts = MQTTAsync_responseOptions_initializer;
         opts.onSuccess5 = onUnsubscribeSuccess;
         opts.onFailure5 = onUnsubscribeFailure;
         opts.context = new subscribeTopicContext{topic.first, topic.second, getPtr()};
-        int responseCode = MQTTAsync_unsubscribe(*m_client.get(), topic.first.getEncodedTopic().c_str(), &opts);
+        int responseCode = MQTTAsync_unsubscribe(*m_client.get(), topic.first.c_str(), &opts);
         if (responseCode != MQTTASYNC_SUCCESS)
         {
             AG_LOG_WARNING("Failed to start unsubscribe, return code " + std::to_string(responseCode));
@@ -243,13 +243,13 @@ void CWrapper::unsubscribeAllTopics()
     const auto subscribedTopics { m_subscribedTopics };
     m_subscribedTopicsMutex.unlock();
     for (const auto& topic : subscribedTopics) {
-        AG_LOG_INFO("Unsubscribing from " + topic.first.getEncodedTopic());
+        AG_LOG_INFO("Unsubscribing from " + topic.first);
 
         MQTTAsync_responseOptions opts = MQTTAsync_responseOptions_initializer;
         opts.onSuccess5 = onUnsubscribeSuccess;
         opts.onFailure5 = onUnsubscribeFailure;
         opts.context = new subscribeTopicContext{topic.first, topic.second, getPtr()};
-        int responseCode = MQTTAsync_unsubscribe(*m_client.get(), topic.first.getEncodedTopic().c_str(), &opts);
+        int responseCode = MQTTAsync_unsubscribe(*m_client.get(), topic.first.c_str(), &opts);
         if (responseCode != MQTTASYNC_SUCCESS)
         {
             AG_LOG_WARNING("Failed to start unsubscribe, return code " + std::to_string(responseCode));
@@ -406,9 +406,9 @@ void CWrapper::onDisconnected()
 
 void CWrapper::handleTextMessage(const Message& message)
 {
-    AG_LOG_INFO("new msg: topic " + message.topic.getEncodedTopic() + " msg content: " + message.content);
+    AG_LOG_INFO("new msg: topic " + message.topic + " msg content: " + message.content);
     auto subscribedTopicsRange = m_subscribedTopics.equal_range(message.topic);
-    std::pair<std::multimap<Topic, CallbackFunction, Topic>::iterator, std::multimap<Topic, CallbackFunction, Topic>::iterator> topics = subscribedTopicsRange;
+    std::pair<std::multimap<std::string, CallbackFunction>::iterator, std::multimap<std::string, CallbackFunction>::iterator> topics = subscribedTopicsRange;
     for (auto iter = topics.first; iter != topics.second; ++iter)
     {
         if(iter->second != nullptr)
