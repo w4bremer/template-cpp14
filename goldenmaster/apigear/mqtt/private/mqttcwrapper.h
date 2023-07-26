@@ -67,11 +67,12 @@ public:
     // client interface
     void invokeRemote(const Topic& name, const Topic& responseTopic, const std::string& value, int responseId);
     void setRemoteProperty(const Topic& name, const std::string& value);
+
     void subscribeTopic(const Topic& name, CallbackFunction func);
     void unsubscribeTopic(const Topic& name, CallbackFunction func);
 
-    void confirmSubscription(const Topic& name, CallbackFunction func);
-    void removeSubscription(const Topic& name);
+    void onSubscribed(const Topic& name, CallbackFunction func);
+    void onUnsubscribed(const Topic& name);
 
     void run();
 
@@ -98,7 +99,7 @@ private:
     std::mutex m_queueMutex;
     std::string m_serverUrl;
     std::string m_clientID;
-    std::thread m_thread;
+    std::thread m_mainMQTTThread;
     std::queue<std::string> m_queue;
     std::atomic<bool> m_disconnectRequested { false };
     std::atomic<bool> m_connected { false };
