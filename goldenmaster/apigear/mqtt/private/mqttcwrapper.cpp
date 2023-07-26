@@ -35,7 +35,7 @@ void onSubscribeSuccess(void* context, MQTTAsync_successData5* /*response*/)
     subscribeTopicContext* ctx = static_cast<subscribeTopicContext*>(context);
     if (auto client = ctx->client.lock())
     {
-        client->confirmSubscription(ctx->topic, ctx->func);
+        client->onSubscribed(ctx->topic, ctx->func);
     }
     delete ctx;
 }
@@ -52,7 +52,7 @@ void onUnsubscribeSuccess(void* context, MQTTAsync_successData5* /*response*/)
     subscribeTopicContext* ctx = static_cast<subscribeTopicContext*>(context);
     if (auto client = ctx->client.lock())
     {
-        client->removeSubscription(ctx->topic);
+        client->onUnsubscribed(ctx->topic);
     }
     delete ctx;
 }
@@ -317,14 +317,14 @@ void CWrapper::connectToHost(const std::string& brokerURL)
 
 void CWrapper::disconnect() {
     m_disconnectRequested = true;
-    if (m_thread.joinable())
+    if (m_mainMQTTThread.joinable())
     {
         {
             std::lock_guard<std::mutex> l{m_waitForWorkMutex};
             m_waitForWork = false;
         }
         m_conditionVariable.notify_one();
-        m_thread.join();
+        m_mainMQTTThread.join();
     }
     MQTTAsync_disconnectOptions disconn_opts = MQTTAsync_disconnectOptions_initializer5;
     disconn_opts.onSuccess5 = ::onDisconnected;
@@ -350,7 +350,7 @@ void CWrapper::onConnected()
     for (auto& callback: onConnectionStatusChangedCallbacks){
         callback.second(true);
     }
-    m_thread = std::thread(&CWrapper::run, this);
+    m_mainMQTTThread = std::thread(&CWrapper::run, this);
 }
 
 void CWrapper::resubscribeAllTopics()
@@ -375,14 +375,14 @@ void CWrapper::onDisconnected()
     AG_LOG_DEBUG("socket disconnected");
 
     // if we have not waited for our thread to finish, do it now
-    if (m_thread.joinable())
+    if (m_mainMQTTThread.joinable())
     {
         {
             std::lock_guard<std::mutex> l{m_waitForWorkMutex};
             m_waitForWork = false;
         }
         m_conditionVariable.notify_one();
-        m_thread.join();
+        m_mainMQTTThread.join();
     }
 
     std::this_thread::sleep_for(std::chrono::milliseconds(1000));
@@ -548,13 +548,13 @@ void CWrapper::subscribeTopic(const Topic& topic, CallbackFunction func)
     m_conditionVariable.notify_one();
 }
 
-void CWrapper::confirmSubscription(const Topic& topic, CallbackFunction func)
+void CWrapper::onSubscribed(const Topic& topic, CallbackFunction func)
 {
     std::lock_guard<std::mutex> guard(m_subscribedTopicsMutex);
     m_subscribedTopics.insert({topic, func});
 }
 
-void CWrapper::removeSubscription(const Topic& topic)
+void CWrapper::onUnsubscribed(const Topic& topic)
 {
     std::lock_guard<std::mutex> guard(m_subscribedTopicsMutex);
     m_subscribedTopics.erase(topic);
