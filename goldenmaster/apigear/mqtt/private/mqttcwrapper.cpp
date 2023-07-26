@@ -407,57 +407,32 @@ void CWrapper::onDisconnected()
 void CWrapper::handleTextMessage(const Message& message)
 {
     AG_LOG_INFO("new msg: topic " + message.topic.getEncodedTopic() + " msg content: " + message.content);
-    std::pair<std::multimap<Topic, CallbackFunction, Topic>::iterator, std::multimap<Topic, CallbackFunction, Topic>::iterator> topics = m_subscribedTopics.equal_range(message.topic);
+    auto subscribedTopicsRange = m_subscribedTopics.equal_range(message.topic);
+    std::pair<std::multimap<Topic, CallbackFunction, Topic>::iterator, std::multimap<Topic, CallbackFunction, Topic>::iterator> topics = subscribedTopicsRange;
     for (auto iter = topics.first; iter != topics.second; ++iter)
     {
         if(iter->second != nullptr)
         {
             iter->second(message.topic, message.content, message.responseTopic, message.correlationData);
         }
-        else
-        {
-            // call locally
-            const int randomId = std::stoi(message.correlationData);
-            InvokeReplyFunc func {};
-            m_invokeResultsMutex.lock();
-            if((m_invokeResults.find(randomId) != m_invokeResults.end()))
-            {
-                func = m_invokeResults[randomId];
-                m_invokeResults.erase(randomId);
-            }
-            m_invokeResultsMutex.unlock();
-            if(func) {
-                const InvokeReplyArg arg{nlohmann::json::parse(message.content)};
-                func(arg);
-            }
-        }
     }
 }
 
-void CWrapper::invokeRemote(const Topic& topic, const std::string& value, InvokeReplyFunc func)
+void CWrapper::invokeRemote(const Topic& topic, const Topic& responseTopic, const std::string& value, int responseId)
 {
-    const std::string responseTopic = topic.getEncodedTopic() + "/" + m_clientID + "/result" ;
-
     MQTTAsync_responseOptions opts = MQTTAsync_responseOptions_initializer;
     MQTTAsync_message pubmsg = MQTTAsync_message_initializer;
 
     MQTTProperty responseTopicProperty;
     responseTopicProperty.identifier = MQTTPROPERTY_CODE_RESPONSE_TOPIC;
-    responseTopicProperty.value.data = { static_cast<int>(responseTopic.size()), const_cast<char*>(responseTopic.c_str()) };
+    responseTopicProperty.value.data = { static_cast<int>(responseTopic.getEncodedTopic().size()), const_cast<char*>(responseTopic.getEncodedTopic().c_str()) };
     MQTTProperties_add(&(opts.properties), &responseTopicProperty);
 
     MQTTProperty correlationDataProperty;
     correlationDataProperty.identifier = MQTTPROPERTY_CODE_CORRELATION_DATA;
     std::uniform_int_distribution<> distribution (0, 100000);
 
-    auto randomId = 0;
-    m_invokeResultsMutex.lock();
-    do {
-        randomId = distribution(randomNumberGenerator);
-    } while (m_invokeResults.find(randomId) != m_invokeResults.end());
-    m_invokeResults.insert(std::pair<int, InvokeReplyFunc>(randomId, func));
-    m_invokeResultsMutex.unlock();
-    const std::string correlationData = { std::to_string(randomId) } ;
+    const std::string correlationData = { std::to_string(responseId) } ;
     correlationDataProperty.value.data = { static_cast<int>(correlationData.size()), const_cast<char*>(correlationData.c_str()) };
     MQTTProperties_add(&(opts.properties), &correlationDataProperty);
 

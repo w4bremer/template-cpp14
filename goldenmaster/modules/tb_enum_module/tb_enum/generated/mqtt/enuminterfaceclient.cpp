@@ -1,9 +1,14 @@
 #include "tb_enum/generated/mqtt/enuminterfaceclient.h"
 #include "tb_enum/generated/core/enuminterface.publisher.h"
 #include "tb_enum/generated/core/tb_enum.json.adapter.h"
+#include <random>
 
 using namespace Test::TbEnum;
 using namespace Test::TbEnum::MQTT;
+
+namespace {
+    std::mt19937 randomNumberGenerator (std::random_device{}());
+}
 
 EnumInterfaceClient::EnumInterfaceClient(std::shared_ptr<ApiGear::MQTT::Client> client)
     : m_isReady(false)
@@ -18,10 +23,10 @@ EnumInterfaceClient::EnumInterfaceClient(std::shared_ptr<ApiGear::MQTT::Client> 
     m_client->subscribeTopic(ApiGear::MQTT::Topic("tb.enum","EnumInterface",ApiGear::MQTT::Topic::TopicType::Signal,"sig1"), std::bind(&EnumInterfaceClient::onSignal, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
     m_client->subscribeTopic(ApiGear::MQTT::Topic("tb.enum","EnumInterface",ApiGear::MQTT::Topic::TopicType::Signal,"sig2"), std::bind(&EnumInterfaceClient::onSignal, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
     m_client->subscribeTopic(ApiGear::MQTT::Topic("tb.enum","EnumInterface",ApiGear::MQTT::Topic::TopicType::Signal,"sig3"), std::bind(&EnumInterfaceClient::onSignal, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->subscribeTopic(ApiGear::MQTT::Topic("tb.enum","EnumInterface",ApiGear::MQTT::Topic::TopicType::Operation,"func0",m_client->getClientId()+"/result"), nullptr);
-    m_client->subscribeTopic(ApiGear::MQTT::Topic("tb.enum","EnumInterface",ApiGear::MQTT::Topic::TopicType::Operation,"func1",m_client->getClientId()+"/result"), nullptr);
-    m_client->subscribeTopic(ApiGear::MQTT::Topic("tb.enum","EnumInterface",ApiGear::MQTT::Topic::TopicType::Operation,"func2",m_client->getClientId()+"/result"), nullptr);
-    m_client->subscribeTopic(ApiGear::MQTT::Topic("tb.enum","EnumInterface",ApiGear::MQTT::Topic::TopicType::Operation,"func3",m_client->getClientId()+"/result"), nullptr);
+    m_client->subscribeTopic(ApiGear::MQTT::Topic("tb.enum","EnumInterface",ApiGear::MQTT::Topic::TopicType::Operation,"func0",m_client->getClientId()+"/result"), std::bind(&EnumInterfaceClient::onInvokeReply, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
+    m_client->subscribeTopic(ApiGear::MQTT::Topic("tb.enum","EnumInterface",ApiGear::MQTT::Topic::TopicType::Operation,"func1",m_client->getClientId()+"/result"), std::bind(&EnumInterfaceClient::onInvokeReply, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
+    m_client->subscribeTopic(ApiGear::MQTT::Topic("tb.enum","EnumInterface",ApiGear::MQTT::Topic::TopicType::Operation,"func2",m_client->getClientId()+"/result"), std::bind(&EnumInterfaceClient::onInvokeReply, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
+    m_client->subscribeTopic(ApiGear::MQTT::Topic("tb.enum","EnumInterface",ApiGear::MQTT::Topic::TopicType::Operation,"func3",m_client->getClientId()+"/result"), std::bind(&EnumInterfaceClient::onInvokeReply, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
 }
 
 EnumInterfaceClient::~EnumInterfaceClient()
@@ -34,10 +39,10 @@ EnumInterfaceClient::~EnumInterfaceClient()
     m_client->unsubscribeTopic(ApiGear::MQTT::Topic("tb.enum","EnumInterface",ApiGear::MQTT::Topic::TopicType::Signal,"sig1"), std::bind(&EnumInterfaceClient::onSignal, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
     m_client->unsubscribeTopic(ApiGear::MQTT::Topic("tb.enum","EnumInterface",ApiGear::MQTT::Topic::TopicType::Signal,"sig2"), std::bind(&EnumInterfaceClient::onSignal, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
     m_client->unsubscribeTopic(ApiGear::MQTT::Topic("tb.enum","EnumInterface",ApiGear::MQTT::Topic::TopicType::Signal,"sig3"), std::bind(&EnumInterfaceClient::onSignal, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->unsubscribeTopic(ApiGear::MQTT::Topic("tb.enum","EnumInterface",ApiGear::MQTT::Topic::TopicType::Operation,"func0",m_client->getClientId()+"/result"), nullptr);
-    m_client->unsubscribeTopic(ApiGear::MQTT::Topic("tb.enum","EnumInterface",ApiGear::MQTT::Topic::TopicType::Operation,"func1",m_client->getClientId()+"/result"), nullptr);
-    m_client->unsubscribeTopic(ApiGear::MQTT::Topic("tb.enum","EnumInterface",ApiGear::MQTT::Topic::TopicType::Operation,"func2",m_client->getClientId()+"/result"), nullptr);
-    m_client->unsubscribeTopic(ApiGear::MQTT::Topic("tb.enum","EnumInterface",ApiGear::MQTT::Topic::TopicType::Operation,"func3",m_client->getClientId()+"/result"), nullptr);
+    m_client->unsubscribeTopic(ApiGear::MQTT::Topic("tb.enum","EnumInterface",ApiGear::MQTT::Topic::TopicType::Operation,"func0",m_client->getClientId()+"/result"), std::bind(&EnumInterfaceClient::onInvokeReply, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
+    m_client->unsubscribeTopic(ApiGear::MQTT::Topic("tb.enum","EnumInterface",ApiGear::MQTT::Topic::TopicType::Operation,"func1",m_client->getClientId()+"/result"), std::bind(&EnumInterfaceClient::onInvokeReply, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
+    m_client->unsubscribeTopic(ApiGear::MQTT::Topic("tb.enum","EnumInterface",ApiGear::MQTT::Topic::TopicType::Operation,"func2",m_client->getClientId()+"/result"), std::bind(&EnumInterfaceClient::onInvokeReply, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
+    m_client->unsubscribeTopic(ApiGear::MQTT::Topic("tb.enum","EnumInterface",ApiGear::MQTT::Topic::TopicType::Operation,"func3",m_client->getClientId()+"/result"), std::bind(&EnumInterfaceClient::onInvokeReply, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
 }
 
 void EnumInterfaceClient::applyState(const nlohmann::json& fields) 
@@ -163,11 +168,14 @@ std::future<Enum0Enum> EnumInterfaceClient::func0Async(Enum0Enum param0)
         {
             std::promise<Enum0Enum> resultPromise;
             static const auto topic = ApiGear::MQTT::Topic("tb.enum","EnumInterface",ApiGear::MQTT::Topic::TopicType::Operation,"func0");
-            m_client->invokeRemote(topic,
-                nlohmann::json::array({param0}).dump(), [&resultPromise](ApiGear::MQTT::InvokeReplyArg arg) {
-                    const Enum0Enum& value = arg.value.get<Enum0Enum>();
-                    resultPromise.set_value(value);
-                });
+            static const auto responseTopic = ApiGear::MQTT::Topic(topic.getEncodedTopic() + "/" + m_client->getClientId() + "/result");
+            ApiGear::MQTT::InvokeReplyFunc responseHandler = [&resultPromise](ApiGear::MQTT::InvokeReplyArg arg) {
+                const Enum0Enum& value = arg.value.get<Enum0Enum>();
+                resultPromise.set_value(value);
+            };
+            auto responseId = registerResponseHandler(responseHandler);
+            m_client->invokeRemote(topic, responseTopic,
+                nlohmann::json::array({param0}).dump(), responseId);
             return resultPromise.get_future().get();
         }
     );
@@ -192,11 +200,14 @@ std::future<Enum1Enum> EnumInterfaceClient::func1Async(Enum1Enum param1)
         {
             std::promise<Enum1Enum> resultPromise;
             static const auto topic = ApiGear::MQTT::Topic("tb.enum","EnumInterface",ApiGear::MQTT::Topic::TopicType::Operation,"func1");
-            m_client->invokeRemote(topic,
-                nlohmann::json::array({param1}).dump(), [&resultPromise](ApiGear::MQTT::InvokeReplyArg arg) {
-                    const Enum1Enum& value = arg.value.get<Enum1Enum>();
-                    resultPromise.set_value(value);
-                });
+            static const auto responseTopic = ApiGear::MQTT::Topic(topic.getEncodedTopic() + "/" + m_client->getClientId() + "/result");
+            ApiGear::MQTT::InvokeReplyFunc responseHandler = [&resultPromise](ApiGear::MQTT::InvokeReplyArg arg) {
+                const Enum1Enum& value = arg.value.get<Enum1Enum>();
+                resultPromise.set_value(value);
+            };
+            auto responseId = registerResponseHandler(responseHandler);
+            m_client->invokeRemote(topic, responseTopic,
+                nlohmann::json::array({param1}).dump(), responseId);
             return resultPromise.get_future().get();
         }
     );
@@ -221,11 +232,14 @@ std::future<Enum2Enum> EnumInterfaceClient::func2Async(Enum2Enum param2)
         {
             std::promise<Enum2Enum> resultPromise;
             static const auto topic = ApiGear::MQTT::Topic("tb.enum","EnumInterface",ApiGear::MQTT::Topic::TopicType::Operation,"func2");
-            m_client->invokeRemote(topic,
-                nlohmann::json::array({param2}).dump(), [&resultPromise](ApiGear::MQTT::InvokeReplyArg arg) {
-                    const Enum2Enum& value = arg.value.get<Enum2Enum>();
-                    resultPromise.set_value(value);
-                });
+            static const auto responseTopic = ApiGear::MQTT::Topic(topic.getEncodedTopic() + "/" + m_client->getClientId() + "/result");
+            ApiGear::MQTT::InvokeReplyFunc responseHandler = [&resultPromise](ApiGear::MQTT::InvokeReplyArg arg) {
+                const Enum2Enum& value = arg.value.get<Enum2Enum>();
+                resultPromise.set_value(value);
+            };
+            auto responseId = registerResponseHandler(responseHandler);
+            m_client->invokeRemote(topic, responseTopic,
+                nlohmann::json::array({param2}).dump(), responseId);
             return resultPromise.get_future().get();
         }
     );
@@ -250,11 +264,14 @@ std::future<Enum3Enum> EnumInterfaceClient::func3Async(Enum3Enum param3)
         {
             std::promise<Enum3Enum> resultPromise;
             static const auto topic = ApiGear::MQTT::Topic("tb.enum","EnumInterface",ApiGear::MQTT::Topic::TopicType::Operation,"func3");
-            m_client->invokeRemote(topic,
-                nlohmann::json::array({param3}).dump(), [&resultPromise](ApiGear::MQTT::InvokeReplyArg arg) {
-                    const Enum3Enum& value = arg.value.get<Enum3Enum>();
-                    resultPromise.set_value(value);
-                });
+            static const auto responseTopic = ApiGear::MQTT::Topic(topic.getEncodedTopic() + "/" + m_client->getClientId() + "/result");
+            ApiGear::MQTT::InvokeReplyFunc responseHandler = [&resultPromise](ApiGear::MQTT::InvokeReplyArg arg) {
+                const Enum3Enum& value = arg.value.get<Enum3Enum>();
+                resultPromise.set_value(value);
+            };
+            auto responseId = registerResponseHandler(responseHandler);
+            m_client->invokeRemote(topic, responseTopic,
+                nlohmann::json::array({param3}).dump(), responseId);
             return resultPromise.get_future().get();
         }
     );
@@ -287,6 +304,37 @@ void EnumInterfaceClient::onPropertyChanged(const ApiGear::MQTT::Topic& topic, c
     const std::string& name = topic.getEntityName();
     applyState({ {name, json_args} });
     return;
+}
+
+int EnumInterfaceClient::registerResponseHandler(ApiGear::MQTT::InvokeReplyFunc handler)
+{
+    auto responseId = 0;
+    std::uniform_int_distribution<> distribution (0, 100000);
+    m_responseHandlerMutex.lock();
+    do {
+        responseId = distribution(randomNumberGenerator);
+    } while (m_responseHandlerMap.find(responseId) != m_responseHandlerMap.end());
+    m_responseHandlerMap.insert(std::pair<int, ApiGear::MQTT::InvokeReplyFunc>(responseId, handler));
+    m_responseHandlerMutex.unlock();
+
+    return responseId;
+}
+
+void EnumInterfaceClient::onInvokeReply(const ApiGear::MQTT::Topic& /*topic*/, const std::string& args, const ApiGear::MQTT::Topic& /*responseTopic*/, const std::string& correlationData)
+{
+    const int randomId = std::stoi(correlationData);
+    ApiGear::MQTT::InvokeReplyFunc responseHandler {};
+    m_responseHandlerMutex.lock();
+    if((m_responseHandlerMap.find(randomId) != m_responseHandlerMap.end()))
+    {
+        responseHandler = m_responseHandlerMap[randomId];
+        m_responseHandlerMap.erase(randomId);
+    }
+    m_responseHandlerMutex.unlock();
+    if(responseHandler) {
+        const ApiGear::MQTT::InvokeReplyArg response{nlohmann::json::parse(args)};
+        responseHandler(response);
+    }
 }
 
 bool EnumInterfaceClient::isReady() const

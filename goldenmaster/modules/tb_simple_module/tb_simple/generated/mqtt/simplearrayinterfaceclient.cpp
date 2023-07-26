@@ -1,9 +1,14 @@
 #include "tb_simple/generated/mqtt/simplearrayinterfaceclient.h"
 #include "tb_simple/generated/core/simplearrayinterface.publisher.h"
 #include "tb_simple/generated/core/tb_simple.json.adapter.h"
+#include <random>
 
 using namespace Test::TbSimple;
 using namespace Test::TbSimple::MQTT;
+
+namespace {
+    std::mt19937 randomNumberGenerator (std::random_device{}());
+}
 
 SimpleArrayInterfaceClient::SimpleArrayInterfaceClient(std::shared_ptr<ApiGear::MQTT::Client> client)
     : m_isReady(false)
@@ -26,14 +31,14 @@ SimpleArrayInterfaceClient::SimpleArrayInterfaceClient(std::shared_ptr<ApiGear::
     m_client->subscribeTopic(ApiGear::MQTT::Topic("tb.simple","SimpleArrayInterface",ApiGear::MQTT::Topic::TopicType::Signal,"sigFloat32"), std::bind(&SimpleArrayInterfaceClient::onSignal, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
     m_client->subscribeTopic(ApiGear::MQTT::Topic("tb.simple","SimpleArrayInterface",ApiGear::MQTT::Topic::TopicType::Signal,"sigFloat64"), std::bind(&SimpleArrayInterfaceClient::onSignal, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
     m_client->subscribeTopic(ApiGear::MQTT::Topic("tb.simple","SimpleArrayInterface",ApiGear::MQTT::Topic::TopicType::Signal,"sigString"), std::bind(&SimpleArrayInterfaceClient::onSignal, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->subscribeTopic(ApiGear::MQTT::Topic("tb.simple","SimpleArrayInterface",ApiGear::MQTT::Topic::TopicType::Operation,"funcBool",m_client->getClientId()+"/result"), nullptr);
-    m_client->subscribeTopic(ApiGear::MQTT::Topic("tb.simple","SimpleArrayInterface",ApiGear::MQTT::Topic::TopicType::Operation,"funcInt",m_client->getClientId()+"/result"), nullptr);
-    m_client->subscribeTopic(ApiGear::MQTT::Topic("tb.simple","SimpleArrayInterface",ApiGear::MQTT::Topic::TopicType::Operation,"funcInt32",m_client->getClientId()+"/result"), nullptr);
-    m_client->subscribeTopic(ApiGear::MQTT::Topic("tb.simple","SimpleArrayInterface",ApiGear::MQTT::Topic::TopicType::Operation,"funcInt64",m_client->getClientId()+"/result"), nullptr);
-    m_client->subscribeTopic(ApiGear::MQTT::Topic("tb.simple","SimpleArrayInterface",ApiGear::MQTT::Topic::TopicType::Operation,"funcFloat",m_client->getClientId()+"/result"), nullptr);
-    m_client->subscribeTopic(ApiGear::MQTT::Topic("tb.simple","SimpleArrayInterface",ApiGear::MQTT::Topic::TopicType::Operation,"funcFloat32",m_client->getClientId()+"/result"), nullptr);
-    m_client->subscribeTopic(ApiGear::MQTT::Topic("tb.simple","SimpleArrayInterface",ApiGear::MQTT::Topic::TopicType::Operation,"funcFloat64",m_client->getClientId()+"/result"), nullptr);
-    m_client->subscribeTopic(ApiGear::MQTT::Topic("tb.simple","SimpleArrayInterface",ApiGear::MQTT::Topic::TopicType::Operation,"funcString",m_client->getClientId()+"/result"), nullptr);
+    m_client->subscribeTopic(ApiGear::MQTT::Topic("tb.simple","SimpleArrayInterface",ApiGear::MQTT::Topic::TopicType::Operation,"funcBool",m_client->getClientId()+"/result"), std::bind(&SimpleArrayInterfaceClient::onInvokeReply, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
+    m_client->subscribeTopic(ApiGear::MQTT::Topic("tb.simple","SimpleArrayInterface",ApiGear::MQTT::Topic::TopicType::Operation,"funcInt",m_client->getClientId()+"/result"), std::bind(&SimpleArrayInterfaceClient::onInvokeReply, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
+    m_client->subscribeTopic(ApiGear::MQTT::Topic("tb.simple","SimpleArrayInterface",ApiGear::MQTT::Topic::TopicType::Operation,"funcInt32",m_client->getClientId()+"/result"), std::bind(&SimpleArrayInterfaceClient::onInvokeReply, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
+    m_client->subscribeTopic(ApiGear::MQTT::Topic("tb.simple","SimpleArrayInterface",ApiGear::MQTT::Topic::TopicType::Operation,"funcInt64",m_client->getClientId()+"/result"), std::bind(&SimpleArrayInterfaceClient::onInvokeReply, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
+    m_client->subscribeTopic(ApiGear::MQTT::Topic("tb.simple","SimpleArrayInterface",ApiGear::MQTT::Topic::TopicType::Operation,"funcFloat",m_client->getClientId()+"/result"), std::bind(&SimpleArrayInterfaceClient::onInvokeReply, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
+    m_client->subscribeTopic(ApiGear::MQTT::Topic("tb.simple","SimpleArrayInterface",ApiGear::MQTT::Topic::TopicType::Operation,"funcFloat32",m_client->getClientId()+"/result"), std::bind(&SimpleArrayInterfaceClient::onInvokeReply, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
+    m_client->subscribeTopic(ApiGear::MQTT::Topic("tb.simple","SimpleArrayInterface",ApiGear::MQTT::Topic::TopicType::Operation,"funcFloat64",m_client->getClientId()+"/result"), std::bind(&SimpleArrayInterfaceClient::onInvokeReply, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
+    m_client->subscribeTopic(ApiGear::MQTT::Topic("tb.simple","SimpleArrayInterface",ApiGear::MQTT::Topic::TopicType::Operation,"funcString",m_client->getClientId()+"/result"), std::bind(&SimpleArrayInterfaceClient::onInvokeReply, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
 }
 
 SimpleArrayInterfaceClient::~SimpleArrayInterfaceClient()
@@ -54,14 +59,14 @@ SimpleArrayInterfaceClient::~SimpleArrayInterfaceClient()
     m_client->unsubscribeTopic(ApiGear::MQTT::Topic("tb.simple","SimpleArrayInterface",ApiGear::MQTT::Topic::TopicType::Signal,"sigFloat32"), std::bind(&SimpleArrayInterfaceClient::onSignal, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
     m_client->unsubscribeTopic(ApiGear::MQTT::Topic("tb.simple","SimpleArrayInterface",ApiGear::MQTT::Topic::TopicType::Signal,"sigFloat64"), std::bind(&SimpleArrayInterfaceClient::onSignal, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
     m_client->unsubscribeTopic(ApiGear::MQTT::Topic("tb.simple","SimpleArrayInterface",ApiGear::MQTT::Topic::TopicType::Signal,"sigString"), std::bind(&SimpleArrayInterfaceClient::onSignal, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->unsubscribeTopic(ApiGear::MQTT::Topic("tb.simple","SimpleArrayInterface",ApiGear::MQTT::Topic::TopicType::Operation,"funcBool",m_client->getClientId()+"/result"), nullptr);
-    m_client->unsubscribeTopic(ApiGear::MQTT::Topic("tb.simple","SimpleArrayInterface",ApiGear::MQTT::Topic::TopicType::Operation,"funcInt",m_client->getClientId()+"/result"), nullptr);
-    m_client->unsubscribeTopic(ApiGear::MQTT::Topic("tb.simple","SimpleArrayInterface",ApiGear::MQTT::Topic::TopicType::Operation,"funcInt32",m_client->getClientId()+"/result"), nullptr);
-    m_client->unsubscribeTopic(ApiGear::MQTT::Topic("tb.simple","SimpleArrayInterface",ApiGear::MQTT::Topic::TopicType::Operation,"funcInt64",m_client->getClientId()+"/result"), nullptr);
-    m_client->unsubscribeTopic(ApiGear::MQTT::Topic("tb.simple","SimpleArrayInterface",ApiGear::MQTT::Topic::TopicType::Operation,"funcFloat",m_client->getClientId()+"/result"), nullptr);
-    m_client->unsubscribeTopic(ApiGear::MQTT::Topic("tb.simple","SimpleArrayInterface",ApiGear::MQTT::Topic::TopicType::Operation,"funcFloat32",m_client->getClientId()+"/result"), nullptr);
-    m_client->unsubscribeTopic(ApiGear::MQTT::Topic("tb.simple","SimpleArrayInterface",ApiGear::MQTT::Topic::TopicType::Operation,"funcFloat64",m_client->getClientId()+"/result"), nullptr);
-    m_client->unsubscribeTopic(ApiGear::MQTT::Topic("tb.simple","SimpleArrayInterface",ApiGear::MQTT::Topic::TopicType::Operation,"funcString",m_client->getClientId()+"/result"), nullptr);
+    m_client->unsubscribeTopic(ApiGear::MQTT::Topic("tb.simple","SimpleArrayInterface",ApiGear::MQTT::Topic::TopicType::Operation,"funcBool",m_client->getClientId()+"/result"), std::bind(&SimpleArrayInterfaceClient::onInvokeReply, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
+    m_client->unsubscribeTopic(ApiGear::MQTT::Topic("tb.simple","SimpleArrayInterface",ApiGear::MQTT::Topic::TopicType::Operation,"funcInt",m_client->getClientId()+"/result"), std::bind(&SimpleArrayInterfaceClient::onInvokeReply, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
+    m_client->unsubscribeTopic(ApiGear::MQTT::Topic("tb.simple","SimpleArrayInterface",ApiGear::MQTT::Topic::TopicType::Operation,"funcInt32",m_client->getClientId()+"/result"), std::bind(&SimpleArrayInterfaceClient::onInvokeReply, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
+    m_client->unsubscribeTopic(ApiGear::MQTT::Topic("tb.simple","SimpleArrayInterface",ApiGear::MQTT::Topic::TopicType::Operation,"funcInt64",m_client->getClientId()+"/result"), std::bind(&SimpleArrayInterfaceClient::onInvokeReply, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
+    m_client->unsubscribeTopic(ApiGear::MQTT::Topic("tb.simple","SimpleArrayInterface",ApiGear::MQTT::Topic::TopicType::Operation,"funcFloat",m_client->getClientId()+"/result"), std::bind(&SimpleArrayInterfaceClient::onInvokeReply, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
+    m_client->unsubscribeTopic(ApiGear::MQTT::Topic("tb.simple","SimpleArrayInterface",ApiGear::MQTT::Topic::TopicType::Operation,"funcFloat32",m_client->getClientId()+"/result"), std::bind(&SimpleArrayInterfaceClient::onInvokeReply, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
+    m_client->unsubscribeTopic(ApiGear::MQTT::Topic("tb.simple","SimpleArrayInterface",ApiGear::MQTT::Topic::TopicType::Operation,"funcFloat64",m_client->getClientId()+"/result"), std::bind(&SimpleArrayInterfaceClient::onInvokeReply, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
+    m_client->unsubscribeTopic(ApiGear::MQTT::Topic("tb.simple","SimpleArrayInterface",ApiGear::MQTT::Topic::TopicType::Operation,"funcString",m_client->getClientId()+"/result"), std::bind(&SimpleArrayInterfaceClient::onInvokeReply, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
 }
 
 void SimpleArrayInterfaceClient::applyState(const nlohmann::json& fields) 
@@ -287,11 +292,14 @@ std::future<std::list<bool>> SimpleArrayInterfaceClient::funcBoolAsync(const std
         {
             std::promise<std::list<bool>> resultPromise;
             static const auto topic = ApiGear::MQTT::Topic("tb.simple","SimpleArrayInterface",ApiGear::MQTT::Topic::TopicType::Operation,"funcBool");
-            m_client->invokeRemote(topic,
-                nlohmann::json::array({paramBool}).dump(), [&resultPromise](ApiGear::MQTT::InvokeReplyArg arg) {
-                    const std::list<bool>& value = arg.value.get<std::list<bool>>();
-                    resultPromise.set_value(value);
-                });
+            static const auto responseTopic = ApiGear::MQTT::Topic(topic.getEncodedTopic() + "/" + m_client->getClientId() + "/result");
+            ApiGear::MQTT::InvokeReplyFunc responseHandler = [&resultPromise](ApiGear::MQTT::InvokeReplyArg arg) {
+                const std::list<bool>& value = arg.value.get<std::list<bool>>();
+                resultPromise.set_value(value);
+            };
+            auto responseId = registerResponseHandler(responseHandler);
+            m_client->invokeRemote(topic, responseTopic,
+                nlohmann::json::array({paramBool}).dump(), responseId);
             return resultPromise.get_future().get();
         }
     );
@@ -316,11 +324,14 @@ std::future<std::list<int>> SimpleArrayInterfaceClient::funcIntAsync(const std::
         {
             std::promise<std::list<int>> resultPromise;
             static const auto topic = ApiGear::MQTT::Topic("tb.simple","SimpleArrayInterface",ApiGear::MQTT::Topic::TopicType::Operation,"funcInt");
-            m_client->invokeRemote(topic,
-                nlohmann::json::array({paramInt}).dump(), [&resultPromise](ApiGear::MQTT::InvokeReplyArg arg) {
-                    const std::list<int>& value = arg.value.get<std::list<int>>();
-                    resultPromise.set_value(value);
-                });
+            static const auto responseTopic = ApiGear::MQTT::Topic(topic.getEncodedTopic() + "/" + m_client->getClientId() + "/result");
+            ApiGear::MQTT::InvokeReplyFunc responseHandler = [&resultPromise](ApiGear::MQTT::InvokeReplyArg arg) {
+                const std::list<int>& value = arg.value.get<std::list<int>>();
+                resultPromise.set_value(value);
+            };
+            auto responseId = registerResponseHandler(responseHandler);
+            m_client->invokeRemote(topic, responseTopic,
+                nlohmann::json::array({paramInt}).dump(), responseId);
             return resultPromise.get_future().get();
         }
     );
@@ -345,11 +356,14 @@ std::future<std::list<int32_t>> SimpleArrayInterfaceClient::funcInt32Async(const
         {
             std::promise<std::list<int32_t>> resultPromise;
             static const auto topic = ApiGear::MQTT::Topic("tb.simple","SimpleArrayInterface",ApiGear::MQTT::Topic::TopicType::Operation,"funcInt32");
-            m_client->invokeRemote(topic,
-                nlohmann::json::array({paramInt32}).dump(), [&resultPromise](ApiGear::MQTT::InvokeReplyArg arg) {
-                    const std::list<int32_t>& value = arg.value.get<std::list<int32_t>>();
-                    resultPromise.set_value(value);
-                });
+            static const auto responseTopic = ApiGear::MQTT::Topic(topic.getEncodedTopic() + "/" + m_client->getClientId() + "/result");
+            ApiGear::MQTT::InvokeReplyFunc responseHandler = [&resultPromise](ApiGear::MQTT::InvokeReplyArg arg) {
+                const std::list<int32_t>& value = arg.value.get<std::list<int32_t>>();
+                resultPromise.set_value(value);
+            };
+            auto responseId = registerResponseHandler(responseHandler);
+            m_client->invokeRemote(topic, responseTopic,
+                nlohmann::json::array({paramInt32}).dump(), responseId);
             return resultPromise.get_future().get();
         }
     );
@@ -374,11 +388,14 @@ std::future<std::list<int64_t>> SimpleArrayInterfaceClient::funcInt64Async(const
         {
             std::promise<std::list<int64_t>> resultPromise;
             static const auto topic = ApiGear::MQTT::Topic("tb.simple","SimpleArrayInterface",ApiGear::MQTT::Topic::TopicType::Operation,"funcInt64");
-            m_client->invokeRemote(topic,
-                nlohmann::json::array({paramInt64}).dump(), [&resultPromise](ApiGear::MQTT::InvokeReplyArg arg) {
-                    const std::list<int64_t>& value = arg.value.get<std::list<int64_t>>();
-                    resultPromise.set_value(value);
-                });
+            static const auto responseTopic = ApiGear::MQTT::Topic(topic.getEncodedTopic() + "/" + m_client->getClientId() + "/result");
+            ApiGear::MQTT::InvokeReplyFunc responseHandler = [&resultPromise](ApiGear::MQTT::InvokeReplyArg arg) {
+                const std::list<int64_t>& value = arg.value.get<std::list<int64_t>>();
+                resultPromise.set_value(value);
+            };
+            auto responseId = registerResponseHandler(responseHandler);
+            m_client->invokeRemote(topic, responseTopic,
+                nlohmann::json::array({paramInt64}).dump(), responseId);
             return resultPromise.get_future().get();
         }
     );
@@ -403,11 +420,14 @@ std::future<std::list<float>> SimpleArrayInterfaceClient::funcFloatAsync(const s
         {
             std::promise<std::list<float>> resultPromise;
             static const auto topic = ApiGear::MQTT::Topic("tb.simple","SimpleArrayInterface",ApiGear::MQTT::Topic::TopicType::Operation,"funcFloat");
-            m_client->invokeRemote(topic,
-                nlohmann::json::array({paramFloat}).dump(), [&resultPromise](ApiGear::MQTT::InvokeReplyArg arg) {
-                    const std::list<float>& value = arg.value.get<std::list<float>>();
-                    resultPromise.set_value(value);
-                });
+            static const auto responseTopic = ApiGear::MQTT::Topic(topic.getEncodedTopic() + "/" + m_client->getClientId() + "/result");
+            ApiGear::MQTT::InvokeReplyFunc responseHandler = [&resultPromise](ApiGear::MQTT::InvokeReplyArg arg) {
+                const std::list<float>& value = arg.value.get<std::list<float>>();
+                resultPromise.set_value(value);
+            };
+            auto responseId = registerResponseHandler(responseHandler);
+            m_client->invokeRemote(topic, responseTopic,
+                nlohmann::json::array({paramFloat}).dump(), responseId);
             return resultPromise.get_future().get();
         }
     );
@@ -432,11 +452,14 @@ std::future<std::list<float>> SimpleArrayInterfaceClient::funcFloat32Async(const
         {
             std::promise<std::list<float>> resultPromise;
             static const auto topic = ApiGear::MQTT::Topic("tb.simple","SimpleArrayInterface",ApiGear::MQTT::Topic::TopicType::Operation,"funcFloat32");
-            m_client->invokeRemote(topic,
-                nlohmann::json::array({paramFloat32}).dump(), [&resultPromise](ApiGear::MQTT::InvokeReplyArg arg) {
-                    const std::list<float>& value = arg.value.get<std::list<float>>();
-                    resultPromise.set_value(value);
-                });
+            static const auto responseTopic = ApiGear::MQTT::Topic(topic.getEncodedTopic() + "/" + m_client->getClientId() + "/result");
+            ApiGear::MQTT::InvokeReplyFunc responseHandler = [&resultPromise](ApiGear::MQTT::InvokeReplyArg arg) {
+                const std::list<float>& value = arg.value.get<std::list<float>>();
+                resultPromise.set_value(value);
+            };
+            auto responseId = registerResponseHandler(responseHandler);
+            m_client->invokeRemote(topic, responseTopic,
+                nlohmann::json::array({paramFloat32}).dump(), responseId);
             return resultPromise.get_future().get();
         }
     );
@@ -461,11 +484,14 @@ std::future<std::list<double>> SimpleArrayInterfaceClient::funcFloat64Async(cons
         {
             std::promise<std::list<double>> resultPromise;
             static const auto topic = ApiGear::MQTT::Topic("tb.simple","SimpleArrayInterface",ApiGear::MQTT::Topic::TopicType::Operation,"funcFloat64");
-            m_client->invokeRemote(topic,
-                nlohmann::json::array({paramFloat}).dump(), [&resultPromise](ApiGear::MQTT::InvokeReplyArg arg) {
-                    const std::list<double>& value = arg.value.get<std::list<double>>();
-                    resultPromise.set_value(value);
-                });
+            static const auto responseTopic = ApiGear::MQTT::Topic(topic.getEncodedTopic() + "/" + m_client->getClientId() + "/result");
+            ApiGear::MQTT::InvokeReplyFunc responseHandler = [&resultPromise](ApiGear::MQTT::InvokeReplyArg arg) {
+                const std::list<double>& value = arg.value.get<std::list<double>>();
+                resultPromise.set_value(value);
+            };
+            auto responseId = registerResponseHandler(responseHandler);
+            m_client->invokeRemote(topic, responseTopic,
+                nlohmann::json::array({paramFloat}).dump(), responseId);
             return resultPromise.get_future().get();
         }
     );
@@ -490,11 +516,14 @@ std::future<std::list<std::string>> SimpleArrayInterfaceClient::funcStringAsync(
         {
             std::promise<std::list<std::string>> resultPromise;
             static const auto topic = ApiGear::MQTT::Topic("tb.simple","SimpleArrayInterface",ApiGear::MQTT::Topic::TopicType::Operation,"funcString");
-            m_client->invokeRemote(topic,
-                nlohmann::json::array({paramString}).dump(), [&resultPromise](ApiGear::MQTT::InvokeReplyArg arg) {
-                    const std::list<std::string>& value = arg.value.get<std::list<std::string>>();
-                    resultPromise.set_value(value);
-                });
+            static const auto responseTopic = ApiGear::MQTT::Topic(topic.getEncodedTopic() + "/" + m_client->getClientId() + "/result");
+            ApiGear::MQTT::InvokeReplyFunc responseHandler = [&resultPromise](ApiGear::MQTT::InvokeReplyArg arg) {
+                const std::list<std::string>& value = arg.value.get<std::list<std::string>>();
+                resultPromise.set_value(value);
+            };
+            auto responseId = registerResponseHandler(responseHandler);
+            m_client->invokeRemote(topic, responseTopic,
+                nlohmann::json::array({paramString}).dump(), responseId);
             return resultPromise.get_future().get();
         }
     );
@@ -543,6 +572,37 @@ void SimpleArrayInterfaceClient::onPropertyChanged(const ApiGear::MQTT::Topic& t
     const std::string& name = topic.getEntityName();
     applyState({ {name, json_args} });
     return;
+}
+
+int SimpleArrayInterfaceClient::registerResponseHandler(ApiGear::MQTT::InvokeReplyFunc handler)
+{
+    auto responseId = 0;
+    std::uniform_int_distribution<> distribution (0, 100000);
+    m_responseHandlerMutex.lock();
+    do {
+        responseId = distribution(randomNumberGenerator);
+    } while (m_responseHandlerMap.find(responseId) != m_responseHandlerMap.end());
+    m_responseHandlerMap.insert(std::pair<int, ApiGear::MQTT::InvokeReplyFunc>(responseId, handler));
+    m_responseHandlerMutex.unlock();
+
+    return responseId;
+}
+
+void SimpleArrayInterfaceClient::onInvokeReply(const ApiGear::MQTT::Topic& /*topic*/, const std::string& args, const ApiGear::MQTT::Topic& /*responseTopic*/, const std::string& correlationData)
+{
+    const int randomId = std::stoi(correlationData);
+    ApiGear::MQTT::InvokeReplyFunc responseHandler {};
+    m_responseHandlerMutex.lock();
+    if((m_responseHandlerMap.find(randomId) != m_responseHandlerMap.end()))
+    {
+        responseHandler = m_responseHandlerMap[randomId];
+        m_responseHandlerMap.erase(randomId);
+    }
+    m_responseHandlerMutex.unlock();
+    if(responseHandler) {
+        const ApiGear::MQTT::InvokeReplyArg response{nlohmann::json::parse(args)};
+        responseHandler(response);
+    }
 }
 
 bool SimpleArrayInterfaceClient::isReady() const
