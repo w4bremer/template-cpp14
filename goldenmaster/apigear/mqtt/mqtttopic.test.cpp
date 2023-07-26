@@ -74,6 +74,24 @@ TEST_CASE("Testing Topic comparison operator", "[Topic]"){
     }
 }
 
+TEST_CASE("Testing Topic to string implicit conversion operator", "[Topic]"){
+    std::string moduleName = "tracer.test.org";
+    std::string interfaceName = "tester";
+    std::string topicTypeString = "prop";
+    std::string propertyName = "testProp";
+    const Topic cmpTopic(moduleName, interfaceName, topicTypeString, propertyName);
+
+    SECTION("test bad comparison") {
+        std::string testTopic = Topic(moduleName, interfaceName, propertyName, topicTypeString).getEncodedTopic();
+        REQUIRE(cmpTopic != testTopic);
+    }
+
+    SECTION("test good comparison") {
+        std::string testTopic = Topic(moduleName, interfaceName, topicTypeString, propertyName).getEncodedTopic();
+        REQUIRE(cmpTopic == testTopic);
+    }
+}
+
 TEST_CASE("Testing Topic decoding", "[Topic]"){
     std::string moduleName = "tracer.test.org";
     std::string interfaceName = "tester";
