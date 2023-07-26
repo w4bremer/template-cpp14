@@ -32,7 +32,7 @@ public:
     void unsubscribeToConnectionStatus(int subscriptionID);
 
     // client interface
-    void invokeRemote(const Topic& name, const std::string& value, InvokeReplyFunc func=nullptr);
+    void invokeRemote(const Topic& name, const Topic& responseTopic, const std::string& value, int responseId);
     void setRemoteProperty(const Topic& name, const std::string& value);
 
     void subscribeTopic(const Topic& name, CallbackFunction func);

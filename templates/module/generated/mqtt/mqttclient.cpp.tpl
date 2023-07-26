@@ -6,9 +6,14 @@
 #include "{{snake .Module.Name}}/generated/mqtt/{{lower (camel .Interface.Name)}}client.h"
 #include "{{snake .Module.Name}}/generated/core/{{lower (camel .Interface.Name)}}.publisher.h"
 #include "{{snake .Module.Name}}/generated/core/{{snake .Module.Name}}.json.adapter.h"
+#include <random>
 
 using namespace {{ Camel .System.Name }}::{{ Camel .Module.Name }};
 using namespace {{ Camel .System.Name }}::{{ Camel .Module.Name }}::MQTT;
+
+namespace {
+    std::mt19937 randomNumberGenerator (std::random_device{}());
+}
 
 {{$class}}::{{$class}}(std::shared_ptr<ApiGear::MQTT::Client> client)
     : m_isReady(false)
@@ -25,7 +30,7 @@ using namespace {{ Camel .System.Name }}::{{ Camel .Module.Name }}::MQTT;
 {{- end }}
 {{- range .Interface.Operations}}
 {{- $operation := . }}
-    m_client->subscribeTopic(ApiGear::MQTT::Topic("{{$.Module.Name}}","{{$interfaceName}}",ApiGear::MQTT::Topic::TopicType::Operation,"{{$operation}}",m_client->getClientId()+"/result"), nullptr);
+    m_client->subscribeTopic(ApiGear::MQTT::Topic("{{$.Module.Name}}","{{$interfaceName}}",ApiGear::MQTT::Topic::TopicType::Operation,"{{$operation}}",m_client->getClientId()+"/result"), std::bind(&{{$class}}::onInvokeReply, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
 {{- end }}
 }
 
@@ -41,7 +46,7 @@ using namespace {{ Camel .System.Name }}::{{ Camel .Module.Name }}::MQTT;
 {{- end }}
 {{- range .Interface.Operations}}
 {{- $operation := . }}
-    m_client->unsubscribeTopic(ApiGear::MQTT::Topic("{{$.Module.Name}}","{{$interfaceName}}",ApiGear::MQTT::Topic::TopicType::Operation,"{{$operation}}",m_client->getClientId()+"/result"), nullptr);
+    m_client->unsubscribeTopic(ApiGear::MQTT::Topic("{{$.Module.Name}}","{{$interfaceName}}",ApiGear::MQTT::Topic::TopicType::Operation,"{{$operation}}",m_client->getClientId()+"/result"), std::bind(&{{$class}}::onInvokeReply, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
 {{- end }}
 }
 
@@ -117,16 +122,19 @@ std::future<{{$returnType}}> {{$class}}::{{lower1 $operation.Name}}Async({{cppPa
         {
             std::promise<{{$returnType}}> resultPromise;
             static const auto topic = ApiGear::MQTT::Topic("{{$.Module.Name}}","{{$interfaceName}}",ApiGear::MQTT::Topic::TopicType::Operation,"{{$operation}}");
-            m_client->invokeRemote(topic,
-                nlohmann::json::array({ {{- cppVars $operation.Params -}} }).dump(), [&resultPromise](ApiGear::MQTT::InvokeReplyArg arg) {
-                    {{- if ( eq (cppReturn "" $operation.Return) "void") }}
-                    (void) arg;
-                    resultPromise.set_value();
-                    {{- else }}
-                    const {{$returnType}}& value = arg.value.get<{{$returnType}}>();
-                    resultPromise.set_value(value);
-                    {{- end }}
-                });
+            static const auto responseTopic = ApiGear::MQTT::Topic(topic.getEncodedTopic() + "/" + m_client->getClientId() + "/result");
+            ApiGear::MQTT::InvokeReplyFunc responseHandler = [&resultPromise](ApiGear::MQTT::InvokeReplyArg arg) {
+                {{- if ( eq (cppReturn "" $operation.Return) "void") }}
+                (void) arg;
+                resultPromise.set_value();
+                {{- else }}
+                const {{$returnType}}& value = arg.value.get<{{$returnType}}>();
+                resultPromise.set_value(value);
+                {{- end }}
+            };
+            auto responseId = registerResponseHandler(responseHandler);
+            m_client->invokeRemote(topic, responseTopic,
+                nlohmann::json::array({ {{- cppVars $operation.Params -}} }).dump(), responseId);
             return resultPromise.get_future().get();
         }
     );
@@ -161,6 +169,37 @@ void {{$class}}::onPropertyChanged(const ApiGear::MQTT::Topic& topic, const std:
     const std::string& name = topic.getEntityName();
     applyState({ {name, json_args} });
     return;
+}
+
+int {{$class}}::registerResponseHandler(ApiGear::MQTT::InvokeReplyFunc handler)
+{
+    auto responseId = 0;
+    std::uniform_int_distribution<> distribution (0, 100000);
+    m_responseHandlerMutex.lock();
+    do {
+        responseId = distribution(randomNumberGenerator);
+    } while (m_responseHandlerMap.find(responseId) != m_responseHandlerMap.end());
+    m_responseHandlerMap.insert(std::pair<int, ApiGear::MQTT::InvokeReplyFunc>(responseId, handler));
+    m_responseHandlerMutex.unlock();
+
+    return responseId;
+}
+
+void {{$class}}::onInvokeReply(const ApiGear::MQTT::Topic& /*topic*/, const std::string& args, const ApiGear::MQTT::Topic& /*responseTopic*/, const std::string& correlationData)
+{
+    const int randomId = std::stoi(correlationData);
+    ApiGear::MQTT::InvokeReplyFunc responseHandler {};
+    m_responseHandlerMutex.lock();
+    if((m_responseHandlerMap.find(randomId) != m_responseHandlerMap.end()))
+    {
+        responseHandler = m_responseHandlerMap[randomId];
+        m_responseHandlerMap.erase(randomId);
+    }
+    m_responseHandlerMutex.unlock();
+    if(responseHandler) {
+        const ApiGear::MQTT::InvokeReplyArg response{nlohmann::json::parse(args)};
+        responseHandler(response);
+    }
 }
 
 bool {{$class}}::isReady() const

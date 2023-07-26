@@ -1,9 +1,14 @@
 #include "testbed2/generated/mqtt/nestedstruct1interfaceclient.h"
 #include "testbed2/generated/core/nestedstruct1interface.publisher.h"
 #include "testbed2/generated/core/testbed2.json.adapter.h"
+#include <random>
 
 using namespace Test::Testbed2;
 using namespace Test::Testbed2::MQTT;
+
+namespace {
+    std::mt19937 randomNumberGenerator (std::random_device{}());
+}
 
 NestedStruct1InterfaceClient::NestedStruct1InterfaceClient(std::shared_ptr<ApiGear::MQTT::Client> client)
     : m_isReady(false)
@@ -12,14 +17,14 @@ NestedStruct1InterfaceClient::NestedStruct1InterfaceClient(std::shared_ptr<ApiGe
 {
     m_client->subscribeTopic(ApiGear::MQTT::Topic("testbed2","NestedStruct1Interface",ApiGear::MQTT::Topic::TopicType::Property,"prop1"), std::bind(&NestedStruct1InterfaceClient::onPropertyChanged, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
     m_client->subscribeTopic(ApiGear::MQTT::Topic("testbed2","NestedStruct1Interface",ApiGear::MQTT::Topic::TopicType::Signal,"sig1"), std::bind(&NestedStruct1InterfaceClient::onSignal, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->subscribeTopic(ApiGear::MQTT::Topic("testbed2","NestedStruct1Interface",ApiGear::MQTT::Topic::TopicType::Operation,"func1",m_client->getClientId()+"/result"), nullptr);
+    m_client->subscribeTopic(ApiGear::MQTT::Topic("testbed2","NestedStruct1Interface",ApiGear::MQTT::Topic::TopicType::Operation,"func1",m_client->getClientId()+"/result"), std::bind(&NestedStruct1InterfaceClient::onInvokeReply, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
 }
 
 NestedStruct1InterfaceClient::~NestedStruct1InterfaceClient()
 {
     m_client->unsubscribeTopic(ApiGear::MQTT::Topic("testbed2","NestedStruct1Interface",ApiGear::MQTT::Topic::TopicType::Property,"prop1"), std::bind(&NestedStruct1InterfaceClient::onPropertyChanged, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
     m_client->unsubscribeTopic(ApiGear::MQTT::Topic("testbed2","NestedStruct1Interface",ApiGear::MQTT::Topic::TopicType::Signal,"sig1"), std::bind(&NestedStruct1InterfaceClient::onSignal, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->unsubscribeTopic(ApiGear::MQTT::Topic("testbed2","NestedStruct1Interface",ApiGear::MQTT::Topic::TopicType::Operation,"func1",m_client->getClientId()+"/result"), nullptr);
+    m_client->unsubscribeTopic(ApiGear::MQTT::Topic("testbed2","NestedStruct1Interface",ApiGear::MQTT::Topic::TopicType::Operation,"func1",m_client->getClientId()+"/result"), std::bind(&NestedStruct1InterfaceClient::onInvokeReply, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
 }
 
 void NestedStruct1InterfaceClient::applyState(const nlohmann::json& fields) 
@@ -70,11 +75,14 @@ std::future<NestedStruct1> NestedStruct1InterfaceClient::func1Async(const Nested
         {
             std::promise<NestedStruct1> resultPromise;
             static const auto topic = ApiGear::MQTT::Topic("testbed2","NestedStruct1Interface",ApiGear::MQTT::Topic::TopicType::Operation,"func1");
-            m_client->invokeRemote(topic,
-                nlohmann::json::array({param1}).dump(), [&resultPromise](ApiGear::MQTT::InvokeReplyArg arg) {
-                    const NestedStruct1& value = arg.value.get<NestedStruct1>();
-                    resultPromise.set_value(value);
-                });
+            static const auto responseTopic = ApiGear::MQTT::Topic(topic.getEncodedTopic() + "/" + m_client->getClientId() + "/result");
+            ApiGear::MQTT::InvokeReplyFunc responseHandler = [&resultPromise](ApiGear::MQTT::InvokeReplyArg arg) {
+                const NestedStruct1& value = arg.value.get<NestedStruct1>();
+                resultPromise.set_value(value);
+            };
+            auto responseId = registerResponseHandler(responseHandler);
+            m_client->invokeRemote(topic, responseTopic,
+                nlohmann::json::array({param1}).dump(), responseId);
             return resultPromise.get_future().get();
         }
     );
@@ -95,6 +103,37 @@ void NestedStruct1InterfaceClient::onPropertyChanged(const ApiGear::MQTT::Topic&
     const std::string& name = topic.getEntityName();
     applyState({ {name, json_args} });
     return;
+}
+
+int NestedStruct1InterfaceClient::registerResponseHandler(ApiGear::MQTT::InvokeReplyFunc handler)
+{
+    auto responseId = 0;
+    std::uniform_int_distribution<> distribution (0, 100000);
+    m_responseHandlerMutex.lock();
+    do {
+        responseId = distribution(randomNumberGenerator);
+    } while (m_responseHandlerMap.find(responseId) != m_responseHandlerMap.end());
+    m_responseHandlerMap.insert(std::pair<int, ApiGear::MQTT::InvokeReplyFunc>(responseId, handler));
+    m_responseHandlerMutex.unlock();
+
+    return responseId;
+}
+
+void NestedStruct1InterfaceClient::onInvokeReply(const ApiGear::MQTT::Topic& /*topic*/, const std::string& args, const ApiGear::MQTT::Topic& /*responseTopic*/, const std::string& correlationData)
+{
+    const int randomId = std::stoi(correlationData);
+    ApiGear::MQTT::InvokeReplyFunc responseHandler {};
+    m_responseHandlerMutex.lock();
+    if((m_responseHandlerMap.find(randomId) != m_responseHandlerMap.end()))
+    {
+        responseHandler = m_responseHandlerMap[randomId];
+        m_responseHandlerMap.erase(randomId);
+    }
+    m_responseHandlerMutex.unlock();
+    if(responseHandler) {
+        const ApiGear::MQTT::InvokeReplyArg response{nlohmann::json::parse(args)};
+        responseHandler(response);
+    }
 }
 
 bool NestedStruct1InterfaceClient::isReady() const

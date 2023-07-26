@@ -65,14 +65,14 @@ public:
     void notifyInvokeResponse(const Topic& responseTopic, const std::string& value, const std::string& correlationData);
 
     // client interface
-    void invokeRemote(const Topic& name, const std::string& value, InvokeReplyFunc func=nullptr);
+    void invokeRemote(const Topic& name, const Topic& responseTopic, const std::string& value, int responseId);
     void setRemoteProperty(const Topic& name, const std::string& value);
     void subscribeTopic(const Topic& name, CallbackFunction func);
     void unsubscribeTopic(const Topic& name, CallbackFunction func);
 
     void confirmSubscription(const Topic& name, CallbackFunction func);
     void removeSubscription(const Topic& name);
-    
+
     void run();
 
     const std::string& getClientId() const { return m_clientID; }
@@ -104,8 +104,6 @@ private:
     std::atomic<bool> m_connected { false };
     std::mutex m_onConnectionStatusChangedCallbacksMutex;
     std::map<int, OnConnectionStatusChangedCallBackFunction> m_onConnectionStatusChangedCallbacks;
-    std::mutex m_invokeResultsMutex;
-    std::map<int, InvokeReplyFunc> m_invokeResults;
     std::mutex m_subscribedTopicsMutex;
     std::multimap<Topic, CallbackFunction, Topic> m_subscribedTopics;
     std::mutex m_toBeSubscribedTopicsMutex;
