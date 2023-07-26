@@ -418,23 +418,43 @@ void CWrapper::handleTextMessage(const Message& message)
     }
 }
 
+/**
+ * @brief helper function to wrap the c call
+ * 
+ * @param options reference to the options which where the topic should be added
+ * @param responseTopic the topic which is set as response topic
+ */
+void MQTTProperties_addResponseTopic(MQTTAsync_responseOptions& options, const Topic& responseTopic)
+{
+    MQTTProperty responseTopicProperty;
+    responseTopicProperty.identifier = MQTTPROPERTY_CODE_RESPONSE_TOPIC;
+    responseTopicProperty.value.data = { static_cast<int>(responseTopic.getEncodedTopic().size()), const_cast<char*>(responseTopic.getEncodedTopic().c_str()) };
+    MQTTProperties_add(&(options.properties), &responseTopicProperty);
+}
+
+/**
+ * @brief helper function to wrap the c call
+ * 
+ * @param options reference to the options which where the topic should be added
+ * @param responseId the Id which is used as correlation data
+ */
+void MQTTProperties_addResponseIdAsCorrData(MQTTAsync_responseOptions& options, int responseId)
+{
+    MQTTProperty correlationDataProperty;
+    correlationDataProperty.identifier = MQTTPROPERTY_CODE_CORRELATION_DATA;
+    const std::string correlationData = { std::to_string(responseId) } ;
+    correlationDataProperty.value.data = { static_cast<int>(correlationData.size()), const_cast<char*>(correlationData.c_str()) };
+    MQTTProperties_add(&(options.properties), &correlationDataProperty);
+
+}
+
 void CWrapper::invokeRemote(const Topic& topic, const Topic& responseTopic, const std::string& value, int responseId)
 {
     MQTTAsync_responseOptions opts = MQTTAsync_responseOptions_initializer;
     MQTTAsync_message pubmsg = MQTTAsync_message_initializer;
 
-    MQTTProperty responseTopicProperty;
-    responseTopicProperty.identifier = MQTTPROPERTY_CODE_RESPONSE_TOPIC;
-    responseTopicProperty.value.data = { static_cast<int>(responseTopic.getEncodedTopic().size()), const_cast<char*>(responseTopic.getEncodedTopic().c_str()) };
-    MQTTProperties_add(&(opts.properties), &responseTopicProperty);
-
-    MQTTProperty correlationDataProperty;
-    correlationDataProperty.identifier = MQTTPROPERTY_CODE_CORRELATION_DATA;
-    std::uniform_int_distribution<> distribution (0, 100000);
-
-    const std::string correlationData = { std::to_string(responseId) } ;
-    correlationDataProperty.value.data = { static_cast<int>(correlationData.size()), const_cast<char*>(correlationData.c_str()) };
-    MQTTProperties_add(&(opts.properties), &correlationDataProperty);
+    MQTTProperties_addResponseTopic(opts, responseTopic);
+    MQTTProperties_addResponseIdAsCorrData(opts, responseId);
 
     opts.onFailure5 = onSendFailure;
     opts.context = new genericContext{getPtr()};
