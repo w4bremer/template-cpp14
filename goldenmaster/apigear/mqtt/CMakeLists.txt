@@ -35,25 +35,18 @@ endif()
 
 # add test cases
 if(BUILD_TESTING)
+enable_testing()
 find_package(Catch2 REQUIRED)
-set(CMAKE_CTEST_COMMAND ctest -V)
-
-if(NOT TARGET check)
-add_custom_target(check COMMAND ${CMAKE_CTEST_COMMAND})
-endif()
 
 set (SOURCES_TEST
     ../apigear.test.cpp
     mqtttopic.test.cpp
 )
-add_executable(test_mqtt EXCLUDE_FROM_ALL
-    ${SOURCES_TEST}
-)
+add_executable(test_mqtt ${SOURCES_TEST})
 target_include_directories(test_mqtt PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
 target_link_libraries(test_mqtt paho-mqtt Catch2::Catch2)
 
-add_test(test_mqtt test_mqtt)
-add_dependencies(check test_mqtt)
+add_test(NAME test_mqtt COMMAND $<TARGET_FILE:test_mqtt>)
 endif(BUILD_TESTING)
 
 # install binary files
