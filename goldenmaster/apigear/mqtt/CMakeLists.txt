@@ -28,7 +28,7 @@ target_include_directories(paho-mqtt PUBLIC
 target_link_libraries(paho-mqtt PRIVATE eclipse-paho-mqtt-c::paho-mqtt3as-static PUBLIC nlohmann_json::nlohmann_json utilities)
 
 if(NOT MSVC)
-  target_compile_options(paho-mqtt PRIVATE -Wall -Wextra -Wpedantic -Werror -fvisibility=hidden)
+  target_compile_options(paho-mqtt PRIVATE -Wall -Wextra -Wpedantic -Werror -fvisibility=hidden -Wno-unknown-pragmas)
 else()
   target_compile_options(paho-mqtt PRIVATE /W4 /WX /wd4251)
 endif()
