@@ -6,11 +6,6 @@ namespace ApiGear {
 namespace MQTT {
 
 Topic::Topic(const std::string& rawTopic)
-    : m_moduleName("")
-    , m_interfaceName("")
-    , m_topicType(Topic::TopicType::None)
-    , m_entityName("")
-    , m_encodedTopic("")
 {
     decodeTopicString(rawTopic, *this);
 }
@@ -172,7 +167,7 @@ bool Topic::decodeTopicString(const std::string& topicString, Topic& topic)
     if(splitTopic.size() > 4)
     {
         auto miscInfo = ""s;
-        for(auto cnt = 4; cnt < splitTopic.size(); cnt++)
+        for(auto cnt = 4ul; cnt < splitTopic.size(); cnt++)
         {
             miscInfo.append(splitTopic.at(cnt));
             if(cnt < splitTopic.size()-1)
