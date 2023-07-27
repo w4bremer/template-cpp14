@@ -139,8 +139,8 @@ void OnConnectionLost(void *context, char * /*cause*/)
 }
 
 CWrapper::CWrapper(const std::string& clientID)
-    : m_clientID(clientID)
-    , m_client(nullptr)
+    : m_client(nullptr)
+    , m_clientID(clientID)
     , m_disconnectRequested(false)
 {
 }
