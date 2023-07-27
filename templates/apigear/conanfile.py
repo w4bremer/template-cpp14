@@ -36,7 +36,7 @@ class apigearConan(ConanFile):
                        "poco:enable_util": True,
                        "poco:enable_xml": False,
                        "poco:enable_zip": False,
-                       "paho-mqtt-c:shared": True,
+                       "paho-mqtt-c:shared": False,
                        "paho-mqtt-c:asynchronous": True
                        }
     exports_sources = "*"
