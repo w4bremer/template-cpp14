@@ -1,4 +1,4 @@
-set(TB_SIMPLE_VERSION 1.0)
+set(TB_SIMPLE_VERSION 1.0.0)
 @PACKAGE_INIT@
 INCLUDE("${CMAKE_CURRENT_LIST_DIR}/Tb_simpleApiTargets.cmake")
 INCLUDE("${CMAKE_CURRENT_LIST_DIR}/Tb_simpleCoreTargets.cmake")

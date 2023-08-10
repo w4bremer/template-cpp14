@@ -3,7 +3,7 @@ from pathlib import os
 
 class tb_same2Conan(ConanFile):
     name = "tb_same2"
-    version = "1.0"
+    version = "1.0.0"
     license = "GPL v3"
     author = "ApiGear UG"
     #url = "<Package recipe repository url here, for issues about the package>"

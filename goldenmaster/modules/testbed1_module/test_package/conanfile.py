@@ -6,7 +6,7 @@ from conans import ConanFile, CMake, tools
 class testbed1TestConan(ConanFile):
     settings = "os", "compiler", "build_type", "arch"
     generators = "cmake_find_package"
-    requires = "testbed1/1.0"
+    requires = "testbed1/1.0.0"
 
     def build(self):
         cmake = CMake(self)

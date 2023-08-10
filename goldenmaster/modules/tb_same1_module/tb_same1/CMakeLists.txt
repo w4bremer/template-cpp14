@@ -27,7 +27,7 @@ configure_package_config_file(Tb_same1Config.cmake.in
   PATH_VARS INCLUDE_INSTALL_DIR LIB_INSTALL_DIR)
 write_basic_package_version_file(
   ${CMAKE_CURRENT_BINARY_DIR}/tb_same1ConfigVersion.cmake
-  VERSION 1.0
+  VERSION 1.0.0
   COMPATIBILITY SameMinorVersion )
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/tb_same1Config.cmake
               ${CMAKE_CURRENT_BINARY_DIR}/tb_same1ConfigVersion.cmake

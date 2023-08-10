@@ -6,7 +6,7 @@ from conans import ConanFile, CMake, tools
 class tb_simpleTestConan(ConanFile):
     settings = "os", "compiler", "build_type", "arch"
     generators = "cmake_find_package"
-    requires = "tb_simple/1.0"
+    requires = "tb_simple/1.0.0"
 
     def build(self):
         cmake = CMake(self)

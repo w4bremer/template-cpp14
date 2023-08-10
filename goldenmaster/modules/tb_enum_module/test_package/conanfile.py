@@ -6,7 +6,7 @@ from conans import ConanFile, CMake, tools
 class tb_enumTestConan(ConanFile):
     settings = "os", "compiler", "build_type", "arch"
     generators = "cmake_find_package"
-    requires = "tb_enum/1.0"
+    requires = "tb_enum/1.0.0"
 
     def build(self):
         cmake = CMake(self)
