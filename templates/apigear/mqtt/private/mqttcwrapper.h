@@ -21,10 +21,10 @@ namespace ApiGear {
 namespace MQTT {
 
 /**
- * @brief Describes incoming part of messages of the protocol for client side.
+ * @brief This a simple c++ wrapper for the c MQTT implementation
  * 
  * Since in MQTT there are only clients connected to a central broker,
- * the service and client side use this class to connect to each other via the broker.
+ * the ApiGear service and client side use this class to connect to each other via the broker.
  */
 class CWrapper : public std::enable_shared_from_this<CWrapper>
 {
