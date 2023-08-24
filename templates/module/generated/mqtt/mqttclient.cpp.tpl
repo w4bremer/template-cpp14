@@ -6,6 +6,7 @@
 #include "{{snake .Module.Name}}/generated/mqtt/{{lower (camel .Interface.Name)}}client.h"
 #include "{{snake .Module.Name}}/generated/core/{{lower (camel .Interface.Name)}}.publisher.h"
 #include "{{snake .Module.Name}}/generated/core/{{snake .Module.Name}}.json.adapter.h"
+#include "apigear/mqtt/mqtttopic.h"
 #include <random>
 
 using namespace {{ Camel .System.Name }}::{{ Camel .Module.Name }};
@@ -22,15 +23,15 @@ namespace {
 {
 {{- range .Interface.Properties}}
 {{- $property := . }}
-    m_client->subscribeTopic(ApiGear::MQTT::Topic("{{$.Module.Name}}","{{$interfaceName}}",ApiGear::MQTT::Topic::TopicType::Property,"{{$property}}"), std::bind(&{{$class}}::onPropertyChanged, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
+    m_client->subscribeTopic(std::string("{{$.Module.Name}}/{{$interfaceName}}/prop/{{$property}}"), std::bind(&{{$class}}::onPropertyChanged, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
 {{- end }}
 {{- range .Interface.Signals}}
 {{- $signal := . }}
-    m_client->subscribeTopic(ApiGear::MQTT::Topic("{{$.Module.Name}}","{{$interfaceName}}",ApiGear::MQTT::Topic::TopicType::Signal,"{{$signal}}"), std::bind(&{{$class}}::onSignal, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
+    m_client->subscribeTopic(std::string("{{$.Module.Name}}/{{$interfaceName}}/sig/{{$signal}}"), std::bind(&{{$class}}::onSignal, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
 {{- end }}
 {{- range .Interface.Operations}}
 {{- $operation := . }}
-    m_client->subscribeTopic(ApiGear::MQTT::Topic("{{$.Module.Name}}","{{$interfaceName}}",ApiGear::MQTT::Topic::TopicType::Operation,"{{$operation}}",m_client->getClientId()+"/result"), std::bind(&{{$class}}::onInvokeReply, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
+    m_client->subscribeTopic(std::string("{{$.Module.Name}}/{{$interfaceName}}/rpc/{{$operation}}/"+m_client->getClientId()+"/result"), std::bind(&{{$class}}::onInvokeReply, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
 {{- end }}
 }
 
@@ -38,15 +39,15 @@ namespace {
 {
 {{- range .Interface.Properties}}
 {{- $property := . }}
-    m_client->unsubscribeTopic(ApiGear::MQTT::Topic("{{$.Module.Name}}","{{$interfaceName}}",ApiGear::MQTT::Topic::TopicType::Property,"{{$property}}"), std::bind(&{{$class}}::onPropertyChanged, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
+    m_client->unsubscribeTopic(std::string("{{$.Module.Name}}/{{$interfaceName}}/prop/{{$property}}"), std::bind(&{{$class}}::onPropertyChanged, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
 {{- end }}
 {{- range .Interface.Signals}}
 {{- $signal := . }}
-    m_client->unsubscribeTopic(ApiGear::MQTT::Topic("{{$.Module.Name}}","{{$interfaceName}}",ApiGear::MQTT::Topic::TopicType::Signal,"{{$signal}}"), std::bind(&{{$class}}::onSignal, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
+    m_client->unsubscribeTopic(std::string("{{$.Module.Name}}/{{$interfaceName}}/sig/{{$signal}}"), std::bind(&{{$class}}::onSignal, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
 {{- end }}
 {{- range .Interface.Operations}}
 {{- $operation := . }}
-    m_client->unsubscribeTopic(ApiGear::MQTT::Topic("{{$.Module.Name}}","{{$interfaceName}}",ApiGear::MQTT::Topic::TopicType::Operation,"{{$operation}}",m_client->getClientId()+"/result"), std::bind(&{{$class}}::onInvokeReply, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
+    m_client->unsubscribeTopic(std::string("{{$.Module.Name}}/{{$interfaceName}}/rpc/{{$operation}}/"+m_client->getClientId()+"/result"), std::bind(&{{$class}}::onInvokeReply, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
 {{- end }}
 }
 
@@ -72,7 +73,7 @@ void {{$class}}::set{{Camel $name}}({{cppParam "" $property}})
     if(m_client == nullptr) {
         return;
     }
-    static const auto topic = ApiGear::MQTT::Topic("{{.Module.Name}}","{{$interfaceName}}",ApiGear::MQTT::Topic::TopicType::Operation,"_set{{$property}}");
+    static const auto topic = std::string("{{.Module.Name}}/{{$interfaceName}}/set/{{$property}}");
     m_client->setRemoteProperty(topic, nlohmann::json({{$property}}).dump());
 }
 
@@ -121,8 +122,8 @@ std::future<{{$returnType}}> {{$class}}::{{lower1 $operation.Name}}Async({{cppPa
                 {{- end -}}]()
         {
             std::promise<{{$returnType}}> resultPromise;
-            static const auto topic = ApiGear::MQTT::Topic("{{$.Module.Name}}","{{$interfaceName}}",ApiGear::MQTT::Topic::TopicType::Operation,"{{$operation}}");
-            static const auto responseTopic = ApiGear::MQTT::Topic(topic.getEncodedTopic() + "/" + m_client->getClientId() + "/result");
+            static const auto topic = std::string("{{$.Module.Name}}/{{$interfaceName}}/rpc/{{$operation}}");
+            static const auto responseTopic = std::string(topic + "/" + m_client->getClientId() + "/result");
             ApiGear::MQTT::InvokeReplyFunc responseHandler = [&resultPromise](ApiGear::MQTT::InvokeReplyArg arg) {
                 {{- if ( eq (cppReturn "" $operation.Return) "void") }}
                 (void) arg;
@@ -142,12 +143,13 @@ std::future<{{$returnType}}> {{$class}}::{{lower1 $operation.Name}}Async({{cppPa
 
 {{- end }}
 
-void {{$class}}::onSignal(const ApiGear::MQTT::Topic& topic, const std::string& args, const ApiGear::MQTT::Topic&, const std::string&)
+void {{$class}}::onSignal(const std::string& topic, const std::string& args, const std::string&, const std::string&)
 {
     nlohmann::json json_args = nlohmann::json::parse(args);
+    const std::string entityName = ApiGear::MQTT::Topic(topic).getEntityName();
 {{- range .Interface.Signals}}
 {{- $signal := . }}
-    if(topic.getEntityName() == "{{$signal}}") {
+    if(entityName == "{{$signal}}") {
         m_publisher->publish{{Camel $signal.Name }}(
 {{- range $idx, $elem := $signal.Params }}
 {{- $param := . -}}
@@ -163,10 +165,10 @@ void {{$class}}::onSignal(const ApiGear::MQTT::Topic& topic, const std::string& 
 {{- end }}
 }
 
-void {{$class}}::onPropertyChanged(const ApiGear::MQTT::Topic& topic, const std::string& args, const ApiGear::MQTT::Topic&, const std::string&)
+void {{$class}}::onPropertyChanged(const std::string& topic, const std::string& args, const std::string&, const std::string&)
 {
     nlohmann::json json_args = nlohmann::json::parse(args);
-    const std::string& name = topic.getEntityName();
+    const std::string& name = ApiGear::MQTT::Topic(topic).getEntityName();
     applyState({ {name, json_args} });
     return;
 }
@@ -185,7 +187,7 @@ int {{$class}}::registerResponseHandler(ApiGear::MQTT::InvokeReplyFunc handler)
     return responseId;
 }
 
-void {{$class}}::onInvokeReply(const ApiGear::MQTT::Topic& /*topic*/, const std::string& args, const ApiGear::MQTT::Topic& /*responseTopic*/, const std::string& correlationData)
+void {{$class}}::onInvokeReply(const std::string& /*topic*/, const std::string& args, const std::string& /*responseTopic*/, const std::string& correlationData)
 {
     const int randomId = std::stoi(correlationData);
     ApiGear::MQTT::InvokeReplyFunc responseHandler {};

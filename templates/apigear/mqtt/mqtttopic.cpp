@@ -83,6 +83,11 @@ bool Topic::convertTopicTypeToString(const TopicType& topicType, std::string& to
         topicTypeString = "prop";
         return true;
     }
+    else if(topicType == TopicType::SetProperty)
+    {
+        topicTypeString = "set";
+        return true;
+    }
     else if(topicType == TopicType::Signal)
     {
         topicTypeString = "sig";
@@ -103,6 +108,11 @@ bool Topic::convertTopicTypeStringToType(const std::string& topicTypeString, Top
     if(topicTypeString == "prop")
     {
         topicType = TopicType::Property;
+        return true;
+    }
+    else if(topicTypeString == "set")
+    {
+        topicType = TopicType::SetProperty;
         return true;
     }
     else if(topicTypeString == "sig")

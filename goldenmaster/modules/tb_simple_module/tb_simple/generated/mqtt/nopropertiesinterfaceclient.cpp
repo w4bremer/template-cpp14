@@ -1,6 +1,7 @@
 #include "tb_simple/generated/mqtt/nopropertiesinterfaceclient.h"
 #include "tb_simple/generated/core/nopropertiesinterface.publisher.h"
 #include "tb_simple/generated/core/tb_simple.json.adapter.h"
+#include "apigear/mqtt/mqtttopic.h"
 #include <random>
 
 using namespace Test::TbSimple;
@@ -15,18 +16,18 @@ NoPropertiesInterfaceClient::NoPropertiesInterfaceClient(std::shared_ptr<ApiGear
     , m_client(client)
     , m_publisher(std::make_unique<NoPropertiesInterfacePublisher>())
 {
-    m_client->subscribeTopic(ApiGear::MQTT::Topic("tb.simple","NoPropertiesInterface",ApiGear::MQTT::Topic::TopicType::Signal,"sigVoid"), std::bind(&NoPropertiesInterfaceClient::onSignal, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->subscribeTopic(ApiGear::MQTT::Topic("tb.simple","NoPropertiesInterface",ApiGear::MQTT::Topic::TopicType::Signal,"sigBool"), std::bind(&NoPropertiesInterfaceClient::onSignal, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->subscribeTopic(ApiGear::MQTT::Topic("tb.simple","NoPropertiesInterface",ApiGear::MQTT::Topic::TopicType::Operation,"funcVoid",m_client->getClientId()+"/result"), std::bind(&NoPropertiesInterfaceClient::onInvokeReply, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->subscribeTopic(ApiGear::MQTT::Topic("tb.simple","NoPropertiesInterface",ApiGear::MQTT::Topic::TopicType::Operation,"funcBool",m_client->getClientId()+"/result"), std::bind(&NoPropertiesInterfaceClient::onInvokeReply, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
+    m_client->subscribeTopic(std::string("tb.simple/NoPropertiesInterface/sig/sigVoid"), std::bind(&NoPropertiesInterfaceClient::onSignal, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
+    m_client->subscribeTopic(std::string("tb.simple/NoPropertiesInterface/sig/sigBool"), std::bind(&NoPropertiesInterfaceClient::onSignal, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
+    m_client->subscribeTopic(std::string("tb.simple/NoPropertiesInterface/rpc/funcVoid/"+m_client->getClientId()+"/result"), std::bind(&NoPropertiesInterfaceClient::onInvokeReply, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
+    m_client->subscribeTopic(std::string("tb.simple/NoPropertiesInterface/rpc/funcBool/"+m_client->getClientId()+"/result"), std::bind(&NoPropertiesInterfaceClient::onInvokeReply, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
 }
 
 NoPropertiesInterfaceClient::~NoPropertiesInterfaceClient()
 {
-    m_client->unsubscribeTopic(ApiGear::MQTT::Topic("tb.simple","NoPropertiesInterface",ApiGear::MQTT::Topic::TopicType::Signal,"sigVoid"), std::bind(&NoPropertiesInterfaceClient::onSignal, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->unsubscribeTopic(ApiGear::MQTT::Topic("tb.simple","NoPropertiesInterface",ApiGear::MQTT::Topic::TopicType::Signal,"sigBool"), std::bind(&NoPropertiesInterfaceClient::onSignal, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->unsubscribeTopic(ApiGear::MQTT::Topic("tb.simple","NoPropertiesInterface",ApiGear::MQTT::Topic::TopicType::Operation,"funcVoid",m_client->getClientId()+"/result"), std::bind(&NoPropertiesInterfaceClient::onInvokeReply, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->unsubscribeTopic(ApiGear::MQTT::Topic("tb.simple","NoPropertiesInterface",ApiGear::MQTT::Topic::TopicType::Operation,"funcBool",m_client->getClientId()+"/result"), std::bind(&NoPropertiesInterfaceClient::onInvokeReply, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
+    m_client->unsubscribeTopic(std::string("tb.simple/NoPropertiesInterface/sig/sigVoid"), std::bind(&NoPropertiesInterfaceClient::onSignal, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
+    m_client->unsubscribeTopic(std::string("tb.simple/NoPropertiesInterface/sig/sigBool"), std::bind(&NoPropertiesInterfaceClient::onSignal, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
+    m_client->unsubscribeTopic(std::string("tb.simple/NoPropertiesInterface/rpc/funcVoid/"+m_client->getClientId()+"/result"), std::bind(&NoPropertiesInterfaceClient::onInvokeReply, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
+    m_client->unsubscribeTopic(std::string("tb.simple/NoPropertiesInterface/rpc/funcBool/"+m_client->getClientId()+"/result"), std::bind(&NoPropertiesInterfaceClient::onInvokeReply, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
 }
 
 void NoPropertiesInterfaceClient::applyState(const nlohmann::json& fields) 
@@ -49,8 +50,8 @@ std::future<void> NoPropertiesInterfaceClient::funcVoidAsync()
     return std::async(std::launch::async, [this]()
         {
             std::promise<void> resultPromise;
-            static const auto topic = ApiGear::MQTT::Topic("tb.simple","NoPropertiesInterface",ApiGear::MQTT::Topic::TopicType::Operation,"funcVoid");
-            static const auto responseTopic = ApiGear::MQTT::Topic(topic.getEncodedTopic() + "/" + m_client->getClientId() + "/result");
+            static const auto topic = std::string("tb.simple/NoPropertiesInterface/rpc/funcVoid");
+            static const auto responseTopic = std::string(topic + "/" + m_client->getClientId() + "/result");
             ApiGear::MQTT::InvokeReplyFunc responseHandler = [&resultPromise](ApiGear::MQTT::InvokeReplyArg arg) {
                 (void) arg;
                 resultPromise.set_value();
@@ -81,8 +82,8 @@ std::future<bool> NoPropertiesInterfaceClient::funcBoolAsync(bool paramBool)
                     paramBool]()
         {
             std::promise<bool> resultPromise;
-            static const auto topic = ApiGear::MQTT::Topic("tb.simple","NoPropertiesInterface",ApiGear::MQTT::Topic::TopicType::Operation,"funcBool");
-            static const auto responseTopic = ApiGear::MQTT::Topic(topic.getEncodedTopic() + "/" + m_client->getClientId() + "/result");
+            static const auto topic = std::string("tb.simple/NoPropertiesInterface/rpc/funcBool");
+            static const auto responseTopic = std::string(topic + "/" + m_client->getClientId() + "/result");
             ApiGear::MQTT::InvokeReplyFunc responseHandler = [&resultPromise](ApiGear::MQTT::InvokeReplyArg arg) {
                 const bool& value = arg.value.get<bool>();
                 resultPromise.set_value(value);
@@ -95,23 +96,24 @@ std::future<bool> NoPropertiesInterfaceClient::funcBoolAsync(bool paramBool)
     );
 }
 
-void NoPropertiesInterfaceClient::onSignal(const ApiGear::MQTT::Topic& topic, const std::string& args, const ApiGear::MQTT::Topic&, const std::string&)
+void NoPropertiesInterfaceClient::onSignal(const std::string& topic, const std::string& args, const std::string&, const std::string&)
 {
     nlohmann::json json_args = nlohmann::json::parse(args);
-    if(topic.getEntityName() == "sigVoid") {
+    const std::string entityName = ApiGear::MQTT::Topic(topic).getEntityName();
+    if(entityName == "sigVoid") {
         m_publisher->publishSigVoid();
         return;
     }
-    if(topic.getEntityName() == "sigBool") {
+    if(entityName == "sigBool") {
         m_publisher->publishSigBool(json_args[0].get<bool>());
         return;
     }
 }
 
-void NoPropertiesInterfaceClient::onPropertyChanged(const ApiGear::MQTT::Topic& topic, const std::string& args, const ApiGear::MQTT::Topic&, const std::string&)
+void NoPropertiesInterfaceClient::onPropertyChanged(const std::string& topic, const std::string& args, const std::string&, const std::string&)
 {
     nlohmann::json json_args = nlohmann::json::parse(args);
-    const std::string& name = topic.getEntityName();
+    const std::string& name = ApiGear::MQTT::Topic(topic).getEntityName();
     applyState({ {name, json_args} });
     return;
 }
@@ -130,7 +132,7 @@ int NoPropertiesInterfaceClient::registerResponseHandler(ApiGear::MQTT::InvokeRe
     return responseId;
 }
 
-void NoPropertiesInterfaceClient::onInvokeReply(const ApiGear::MQTT::Topic& /*topic*/, const std::string& args, const ApiGear::MQTT::Topic& /*responseTopic*/, const std::string& correlationData)
+void NoPropertiesInterfaceClient::onInvokeReply(const std::string& /*topic*/, const std::string& args, const std::string& /*responseTopic*/, const std::string& correlationData)
 {
     const int randomId = std::stoi(correlationData);
     ApiGear::MQTT::InvokeReplyFunc responseHandler {};

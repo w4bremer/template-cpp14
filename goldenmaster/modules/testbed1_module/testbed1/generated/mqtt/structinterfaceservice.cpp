@@ -1,5 +1,6 @@
 #include "testbed1/generated/mqtt/structinterfaceservice.h"
 #include "testbed1/generated/core/testbed1.json.adapter.h"
+#include "apigear/mqtt/mqtttopic.h"
 #include <iostream>
 
 using namespace Test::Testbed1;
@@ -13,14 +14,14 @@ StructInterfaceService::StructInterfaceService(std::shared_ptr<IStructInterface>
 
     m_connectionStatusRegistrationID = m_service->subscribeToConnectionStatus(std::bind(&StructInterfaceService::onConnectionStatusChanged, this, std::placeholders::_1));
     // subscribe to all property change request methods
-    m_service->subscribeTopic(ApiGear::MQTT::Topic("testbed1","StructInterface",ApiGear::MQTT::Topic::TopicType::Operation,"_setpropBool"), std::bind(&StructInterfaceService::onInvoke, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_service->subscribeTopic(ApiGear::MQTT::Topic("testbed1","StructInterface",ApiGear::MQTT::Topic::TopicType::Operation,"_setpropInt"), std::bind(&StructInterfaceService::onInvoke, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_service->subscribeTopic(ApiGear::MQTT::Topic("testbed1","StructInterface",ApiGear::MQTT::Topic::TopicType::Operation,"_setpropFloat"), std::bind(&StructInterfaceService::onInvoke, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_service->subscribeTopic(ApiGear::MQTT::Topic("testbed1","StructInterface",ApiGear::MQTT::Topic::TopicType::Operation,"_setpropString"), std::bind(&StructInterfaceService::onInvoke, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_service->subscribeTopic(ApiGear::MQTT::Topic("testbed1","StructInterface",ApiGear::MQTT::Topic::TopicType::Operation,"funcBool"), std::bind(&StructInterfaceService::onInvoke, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_service->subscribeTopic(ApiGear::MQTT::Topic("testbed1","StructInterface",ApiGear::MQTT::Topic::TopicType::Operation,"funcInt"), std::bind(&StructInterfaceService::onInvoke, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_service->subscribeTopic(ApiGear::MQTT::Topic("testbed1","StructInterface",ApiGear::MQTT::Topic::TopicType::Operation,"funcFloat"), std::bind(&StructInterfaceService::onInvoke, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_service->subscribeTopic(ApiGear::MQTT::Topic("testbed1","StructInterface",ApiGear::MQTT::Topic::TopicType::Operation,"funcString"), std::bind(&StructInterfaceService::onInvoke, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
+    m_service->subscribeTopic(std::string("testbed1/StructInterface/set/propBool"), std::bind(&StructInterfaceService::onSetProperty, this, std::placeholders::_1, std::placeholders::_2));
+    m_service->subscribeTopic(std::string("testbed1/StructInterface/set/propInt"), std::bind(&StructInterfaceService::onSetProperty, this, std::placeholders::_1, std::placeholders::_2));
+    m_service->subscribeTopic(std::string("testbed1/StructInterface/set/propFloat"), std::bind(&StructInterfaceService::onSetProperty, this, std::placeholders::_1, std::placeholders::_2));
+    m_service->subscribeTopic(std::string("testbed1/StructInterface/set/propString"), std::bind(&StructInterfaceService::onSetProperty, this, std::placeholders::_1, std::placeholders::_2));
+    m_service->subscribeTopic(std::string("testbed1/StructInterface/rpc/funcBool"), std::bind(&StructInterfaceService::onInvoke, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
+    m_service->subscribeTopic(std::string("testbed1/StructInterface/rpc/funcInt"), std::bind(&StructInterfaceService::onInvoke, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
+    m_service->subscribeTopic(std::string("testbed1/StructInterface/rpc/funcFloat"), std::bind(&StructInterfaceService::onInvoke, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
+    m_service->subscribeTopic(std::string("testbed1/StructInterface/rpc/funcString"), std::bind(&StructInterfaceService::onInvoke, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
 
 }
 
@@ -29,14 +30,14 @@ StructInterfaceService::~StructInterfaceService()
     m_impl->_getPublisher().unsubscribeFromAllChanges(*this);
 
     m_service->unsubscribeToConnectionStatus(m_connectionStatusRegistrationID);
-    m_service->unsubscribeTopic(ApiGear::MQTT::Topic("testbed1","StructInterface",ApiGear::MQTT::Topic::TopicType::Operation,"_setpropBool"), std::bind(&StructInterfaceService::onInvoke, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_service->unsubscribeTopic(ApiGear::MQTT::Topic("testbed1","StructInterface",ApiGear::MQTT::Topic::TopicType::Operation,"_setpropInt"), std::bind(&StructInterfaceService::onInvoke, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_service->unsubscribeTopic(ApiGear::MQTT::Topic("testbed1","StructInterface",ApiGear::MQTT::Topic::TopicType::Operation,"_setpropFloat"), std::bind(&StructInterfaceService::onInvoke, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_service->unsubscribeTopic(ApiGear::MQTT::Topic("testbed1","StructInterface",ApiGear::MQTT::Topic::TopicType::Operation,"_setpropString"), std::bind(&StructInterfaceService::onInvoke, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_service->unsubscribeTopic(ApiGear::MQTT::Topic("testbed1","StructInterface",ApiGear::MQTT::Topic::TopicType::Operation,"funcBool"), std::bind(&StructInterfaceService::onInvoke, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_service->unsubscribeTopic(ApiGear::MQTT::Topic("testbed1","StructInterface",ApiGear::MQTT::Topic::TopicType::Operation,"funcInt"), std::bind(&StructInterfaceService::onInvoke, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_service->unsubscribeTopic(ApiGear::MQTT::Topic("testbed1","StructInterface",ApiGear::MQTT::Topic::TopicType::Operation,"funcFloat"), std::bind(&StructInterfaceService::onInvoke, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_service->unsubscribeTopic(ApiGear::MQTT::Topic("testbed1","StructInterface",ApiGear::MQTT::Topic::TopicType::Operation,"funcString"), std::bind(&StructInterfaceService::onInvoke, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
+    m_service->unsubscribeTopic(std::string("testbed1/StructInterface/set/propBool"), std::bind(&StructInterfaceService::onSetProperty, this, std::placeholders::_1, std::placeholders::_2));
+    m_service->unsubscribeTopic(std::string("testbed1/StructInterface/set/propInt"), std::bind(&StructInterfaceService::onSetProperty, this, std::placeholders::_1, std::placeholders::_2));
+    m_service->unsubscribeTopic(std::string("testbed1/StructInterface/set/propFloat"), std::bind(&StructInterfaceService::onSetProperty, this, std::placeholders::_1, std::placeholders::_2));
+    m_service->unsubscribeTopic(std::string("testbed1/StructInterface/set/propString"), std::bind(&StructInterfaceService::onSetProperty, this, std::placeholders::_1, std::placeholders::_2));
+    m_service->unsubscribeTopic(std::string("testbed1/StructInterface/rpc/funcBool"), std::bind(&StructInterfaceService::onInvoke, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
+    m_service->unsubscribeTopic(std::string("testbed1/StructInterface/rpc/funcInt"), std::bind(&StructInterfaceService::onInvoke, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
+    m_service->unsubscribeTopic(std::string("testbed1/StructInterface/rpc/funcFloat"), std::bind(&StructInterfaceService::onInvoke, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
+    m_service->unsubscribeTopic(std::string("testbed1/StructInterface/rpc/funcString"), std::bind(&StructInterfaceService::onInvoke, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
 }
 
 void StructInterfaceService::onConnectionStatusChanged(bool connectionStatus)
@@ -53,30 +54,36 @@ void StructInterfaceService::onConnectionStatusChanged(bool connectionStatus)
     onPropStringChanged(m_impl->getPropString());
 }
 
-void StructInterfaceService::onInvoke(const ApiGear::MQTT::Topic& topic, const std::string& args, const ApiGear::MQTT::Topic& responseTopic, const std::string& correlationData)
+void StructInterfaceService::onSetProperty(const std::string& topic, const std::string& args)
 {
     nlohmann::json json_args = nlohmann::json::parse(args);
-    const std::string& name = topic.getEntityName();
-    if(name == "_setpropBool") {
+    const std::string& name = ApiGear::MQTT::Topic(topic).getEntityName();
+    if(name == "propBool") {
         auto propBool = json_args.get<StructBool>();
         m_impl->setPropBool(propBool);
         return;
     }
-    if(name == "_setpropInt") {
+    if(name == "propInt") {
         auto propInt = json_args.get<StructInt>();
         m_impl->setPropInt(propInt);
         return;
     }
-    if(name == "_setpropFloat") {
+    if(name == "propFloat") {
         auto propFloat = json_args.get<StructFloat>();
         m_impl->setPropFloat(propFloat);
         return;
     }
-    if(name == "_setpropString") {
+    if(name == "propString") {
         auto propString = json_args.get<StructString>();
         m_impl->setPropString(propString);
         return;
     }
+}
+
+void StructInterfaceService::onInvoke(const std::string& topic, const std::string& args, const std::string& responseTopic, const std::string& correlationData)
+{
+    nlohmann::json json_args = nlohmann::json::parse(args);
+    const std::string& name = ApiGear::MQTT::Topic(topic).getEntityName();
 
 
     if(name == "funcBool") {
@@ -108,7 +115,7 @@ void StructInterfaceService::onSigBool(const StructBool& paramBool)
 {
     if(m_service != nullptr) {
         const nlohmann::json& args = { paramBool };
-        static const auto topic = ApiGear::MQTT::Topic("testbed1","StructInterface",ApiGear::MQTT::Topic::TopicType::Signal,"sigBool");
+        static const auto topic = std::string("testbed1/StructInterface/sig/sigBool");
         m_service->notifySignal(topic, nlohmann::json(args).dump());
     }
 }
@@ -116,7 +123,7 @@ void StructInterfaceService::onSigInt(const StructInt& paramInt)
 {
     if(m_service != nullptr) {
         const nlohmann::json& args = { paramInt };
-        static const auto topic = ApiGear::MQTT::Topic("testbed1","StructInterface",ApiGear::MQTT::Topic::TopicType::Signal,"sigInt");
+        static const auto topic = std::string("testbed1/StructInterface/sig/sigInt");
         m_service->notifySignal(topic, nlohmann::json(args).dump());
     }
 }
@@ -124,7 +131,7 @@ void StructInterfaceService::onSigFloat(const StructFloat& paramFloat)
 {
     if(m_service != nullptr) {
         const nlohmann::json& args = { paramFloat };
-        static const auto topic = ApiGear::MQTT::Topic("testbed1","StructInterface",ApiGear::MQTT::Topic::TopicType::Signal,"sigFloat");
+        static const auto topic = std::string("testbed1/StructInterface/sig/sigFloat");
         m_service->notifySignal(topic, nlohmann::json(args).dump());
     }
 }
@@ -132,35 +139,35 @@ void StructInterfaceService::onSigString(const StructString& paramString)
 {
     if(m_service != nullptr) {
         const nlohmann::json& args = { paramString };
-        static const auto topic = ApiGear::MQTT::Topic("testbed1","StructInterface",ApiGear::MQTT::Topic::TopicType::Signal,"sigString");
+        static const auto topic = std::string("testbed1/StructInterface/sig/sigString");
         m_service->notifySignal(topic, nlohmann::json(args).dump());
     }
 }
 void StructInterfaceService::onPropBoolChanged(const StructBool& propBool)
 {
     if(m_service != nullptr) {
-        static const auto topic = ApiGear::MQTT::Topic("testbed1","StructInterface",ApiGear::MQTT::Topic::TopicType::Property,"propBool");
+        static const auto topic = std::string("testbed1/StructInterface/prop/propBool");
         m_service->notifyPropertyChange(topic, nlohmann::json(propBool).dump());
     }
 }
 void StructInterfaceService::onPropIntChanged(const StructInt& propInt)
 {
     if(m_service != nullptr) {
-        static const auto topic = ApiGear::MQTT::Topic("testbed1","StructInterface",ApiGear::MQTT::Topic::TopicType::Property,"propInt");
+        static const auto topic = std::string("testbed1/StructInterface/prop/propInt");
         m_service->notifyPropertyChange(topic, nlohmann::json(propInt).dump());
     }
 }
 void StructInterfaceService::onPropFloatChanged(const StructFloat& propFloat)
 {
     if(m_service != nullptr) {
-        static const auto topic = ApiGear::MQTT::Topic("testbed1","StructInterface",ApiGear::MQTT::Topic::TopicType::Property,"propFloat");
+        static const auto topic = std::string("testbed1/StructInterface/prop/propFloat");
         m_service->notifyPropertyChange(topic, nlohmann::json(propFloat).dump());
     }
 }
 void StructInterfaceService::onPropStringChanged(const StructString& propString)
 {
     if(m_service != nullptr) {
-        static const auto topic = ApiGear::MQTT::Topic("testbed1","StructInterface",ApiGear::MQTT::Topic::TopicType::Property,"propString");
+        static const auto topic = std::string("testbed1/StructInterface/prop/propString");
         m_service->notifyPropertyChange(topic, nlohmann::json(propString).dump());
     }
 }

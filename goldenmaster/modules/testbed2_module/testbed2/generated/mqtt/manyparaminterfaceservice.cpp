@@ -1,5 +1,6 @@
 #include "testbed2/generated/mqtt/manyparaminterfaceservice.h"
 #include "testbed2/generated/core/testbed2.json.adapter.h"
+#include "apigear/mqtt/mqtttopic.h"
 #include <iostream>
 
 using namespace Test::Testbed2;
@@ -13,14 +14,14 @@ ManyParamInterfaceService::ManyParamInterfaceService(std::shared_ptr<IManyParamI
 
     m_connectionStatusRegistrationID = m_service->subscribeToConnectionStatus(std::bind(&ManyParamInterfaceService::onConnectionStatusChanged, this, std::placeholders::_1));
     // subscribe to all property change request methods
-    m_service->subscribeTopic(ApiGear::MQTT::Topic("testbed2","ManyParamInterface",ApiGear::MQTT::Topic::TopicType::Operation,"_setprop1"), std::bind(&ManyParamInterfaceService::onInvoke, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_service->subscribeTopic(ApiGear::MQTT::Topic("testbed2","ManyParamInterface",ApiGear::MQTT::Topic::TopicType::Operation,"_setprop2"), std::bind(&ManyParamInterfaceService::onInvoke, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_service->subscribeTopic(ApiGear::MQTT::Topic("testbed2","ManyParamInterface",ApiGear::MQTT::Topic::TopicType::Operation,"_setprop3"), std::bind(&ManyParamInterfaceService::onInvoke, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_service->subscribeTopic(ApiGear::MQTT::Topic("testbed2","ManyParamInterface",ApiGear::MQTT::Topic::TopicType::Operation,"_setprop4"), std::bind(&ManyParamInterfaceService::onInvoke, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_service->subscribeTopic(ApiGear::MQTT::Topic("testbed2","ManyParamInterface",ApiGear::MQTT::Topic::TopicType::Operation,"func1"), std::bind(&ManyParamInterfaceService::onInvoke, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_service->subscribeTopic(ApiGear::MQTT::Topic("testbed2","ManyParamInterface",ApiGear::MQTT::Topic::TopicType::Operation,"func2"), std::bind(&ManyParamInterfaceService::onInvoke, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_service->subscribeTopic(ApiGear::MQTT::Topic("testbed2","ManyParamInterface",ApiGear::MQTT::Topic::TopicType::Operation,"func3"), std::bind(&ManyParamInterfaceService::onInvoke, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_service->subscribeTopic(ApiGear::MQTT::Topic("testbed2","ManyParamInterface",ApiGear::MQTT::Topic::TopicType::Operation,"func4"), std::bind(&ManyParamInterfaceService::onInvoke, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
+    m_service->subscribeTopic(std::string("testbed2/ManyParamInterface/set/prop1"), std::bind(&ManyParamInterfaceService::onSetProperty, this, std::placeholders::_1, std::placeholders::_2));
+    m_service->subscribeTopic(std::string("testbed2/ManyParamInterface/set/prop2"), std::bind(&ManyParamInterfaceService::onSetProperty, this, std::placeholders::_1, std::placeholders::_2));
+    m_service->subscribeTopic(std::string("testbed2/ManyParamInterface/set/prop3"), std::bind(&ManyParamInterfaceService::onSetProperty, this, std::placeholders::_1, std::placeholders::_2));
+    m_service->subscribeTopic(std::string("testbed2/ManyParamInterface/set/prop4"), std::bind(&ManyParamInterfaceService::onSetProperty, this, std::placeholders::_1, std::placeholders::_2));
+    m_service->subscribeTopic(std::string("testbed2/ManyParamInterface/rpc/func1"), std::bind(&ManyParamInterfaceService::onInvoke, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
+    m_service->subscribeTopic(std::string("testbed2/ManyParamInterface/rpc/func2"), std::bind(&ManyParamInterfaceService::onInvoke, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
+    m_service->subscribeTopic(std::string("testbed2/ManyParamInterface/rpc/func3"), std::bind(&ManyParamInterfaceService::onInvoke, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
+    m_service->subscribeTopic(std::string("testbed2/ManyParamInterface/rpc/func4"), std::bind(&ManyParamInterfaceService::onInvoke, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
 
 }
 
@@ -29,14 +30,14 @@ ManyParamInterfaceService::~ManyParamInterfaceService()
     m_impl->_getPublisher().unsubscribeFromAllChanges(*this);
 
     m_service->unsubscribeToConnectionStatus(m_connectionStatusRegistrationID);
-    m_service->unsubscribeTopic(ApiGear::MQTT::Topic("testbed2","ManyParamInterface",ApiGear::MQTT::Topic::TopicType::Operation,"_setprop1"), std::bind(&ManyParamInterfaceService::onInvoke, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_service->unsubscribeTopic(ApiGear::MQTT::Topic("testbed2","ManyParamInterface",ApiGear::MQTT::Topic::TopicType::Operation,"_setprop2"), std::bind(&ManyParamInterfaceService::onInvoke, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_service->unsubscribeTopic(ApiGear::MQTT::Topic("testbed2","ManyParamInterface",ApiGear::MQTT::Topic::TopicType::Operation,"_setprop3"), std::bind(&ManyParamInterfaceService::onInvoke, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_service->unsubscribeTopic(ApiGear::MQTT::Topic("testbed2","ManyParamInterface",ApiGear::MQTT::Topic::TopicType::Operation,"_setprop4"), std::bind(&ManyParamInterfaceService::onInvoke, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_service->unsubscribeTopic(ApiGear::MQTT::Topic("testbed2","ManyParamInterface",ApiGear::MQTT::Topic::TopicType::Operation,"func1"), std::bind(&ManyParamInterfaceService::onInvoke, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_service->unsubscribeTopic(ApiGear::MQTT::Topic("testbed2","ManyParamInterface",ApiGear::MQTT::Topic::TopicType::Operation,"func2"), std::bind(&ManyParamInterfaceService::onInvoke, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_service->unsubscribeTopic(ApiGear::MQTT::Topic("testbed2","ManyParamInterface",ApiGear::MQTT::Topic::TopicType::Operation,"func3"), std::bind(&ManyParamInterfaceService::onInvoke, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_service->unsubscribeTopic(ApiGear::MQTT::Topic("testbed2","ManyParamInterface",ApiGear::MQTT::Topic::TopicType::Operation,"func4"), std::bind(&ManyParamInterfaceService::onInvoke, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
+    m_service->unsubscribeTopic(std::string("testbed2/ManyParamInterface/set/prop1"), std::bind(&ManyParamInterfaceService::onSetProperty, this, std::placeholders::_1, std::placeholders::_2));
+    m_service->unsubscribeTopic(std::string("testbed2/ManyParamInterface/set/prop2"), std::bind(&ManyParamInterfaceService::onSetProperty, this, std::placeholders::_1, std::placeholders::_2));
+    m_service->unsubscribeTopic(std::string("testbed2/ManyParamInterface/set/prop3"), std::bind(&ManyParamInterfaceService::onSetProperty, this, std::placeholders::_1, std::placeholders::_2));
+    m_service->unsubscribeTopic(std::string("testbed2/ManyParamInterface/set/prop4"), std::bind(&ManyParamInterfaceService::onSetProperty, this, std::placeholders::_1, std::placeholders::_2));
+    m_service->unsubscribeTopic(std::string("testbed2/ManyParamInterface/rpc/func1"), std::bind(&ManyParamInterfaceService::onInvoke, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
+    m_service->unsubscribeTopic(std::string("testbed2/ManyParamInterface/rpc/func2"), std::bind(&ManyParamInterfaceService::onInvoke, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
+    m_service->unsubscribeTopic(std::string("testbed2/ManyParamInterface/rpc/func3"), std::bind(&ManyParamInterfaceService::onInvoke, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
+    m_service->unsubscribeTopic(std::string("testbed2/ManyParamInterface/rpc/func4"), std::bind(&ManyParamInterfaceService::onInvoke, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
 }
 
 void ManyParamInterfaceService::onConnectionStatusChanged(bool connectionStatus)
@@ -53,30 +54,36 @@ void ManyParamInterfaceService::onConnectionStatusChanged(bool connectionStatus)
     onProp4Changed(m_impl->getProp4());
 }
 
-void ManyParamInterfaceService::onInvoke(const ApiGear::MQTT::Topic& topic, const std::string& args, const ApiGear::MQTT::Topic& responseTopic, const std::string& correlationData)
+void ManyParamInterfaceService::onSetProperty(const std::string& topic, const std::string& args)
 {
     nlohmann::json json_args = nlohmann::json::parse(args);
-    const std::string& name = topic.getEntityName();
-    if(name == "_setprop1") {
+    const std::string& name = ApiGear::MQTT::Topic(topic).getEntityName();
+    if(name == "prop1") {
         auto prop1 = json_args.get<int>();
         m_impl->setProp1(prop1);
         return;
     }
-    if(name == "_setprop2") {
+    if(name == "prop2") {
         auto prop2 = json_args.get<int>();
         m_impl->setProp2(prop2);
         return;
     }
-    if(name == "_setprop3") {
+    if(name == "prop3") {
         auto prop3 = json_args.get<int>();
         m_impl->setProp3(prop3);
         return;
     }
-    if(name == "_setprop4") {
+    if(name == "prop4") {
         auto prop4 = json_args.get<int>();
         m_impl->setProp4(prop4);
         return;
     }
+}
+
+void ManyParamInterfaceService::onInvoke(const std::string& topic, const std::string& args, const std::string& responseTopic, const std::string& correlationData)
+{
+    nlohmann::json json_args = nlohmann::json::parse(args);
+    const std::string& name = ApiGear::MQTT::Topic(topic).getEntityName();
 
 
     if(name == "func1") {
@@ -114,7 +121,7 @@ void ManyParamInterfaceService::onSig1(int param1)
 {
     if(m_service != nullptr) {
         const nlohmann::json& args = { param1 };
-        static const auto topic = ApiGear::MQTT::Topic("testbed2","ManyParamInterface",ApiGear::MQTT::Topic::TopicType::Signal,"sig1");
+        static const auto topic = std::string("testbed2/ManyParamInterface/sig/sig1");
         m_service->notifySignal(topic, nlohmann::json(args).dump());
     }
 }
@@ -122,7 +129,7 @@ void ManyParamInterfaceService::onSig2(int param1, int param2)
 {
     if(m_service != nullptr) {
         const nlohmann::json& args = { param1, param2 };
-        static const auto topic = ApiGear::MQTT::Topic("testbed2","ManyParamInterface",ApiGear::MQTT::Topic::TopicType::Signal,"sig2");
+        static const auto topic = std::string("testbed2/ManyParamInterface/sig/sig2");
         m_service->notifySignal(topic, nlohmann::json(args).dump());
     }
 }
@@ -130,7 +137,7 @@ void ManyParamInterfaceService::onSig3(int param1, int param2, int param3)
 {
     if(m_service != nullptr) {
         const nlohmann::json& args = { param1, param2, param3 };
-        static const auto topic = ApiGear::MQTT::Topic("testbed2","ManyParamInterface",ApiGear::MQTT::Topic::TopicType::Signal,"sig3");
+        static const auto topic = std::string("testbed2/ManyParamInterface/sig/sig3");
         m_service->notifySignal(topic, nlohmann::json(args).dump());
     }
 }
@@ -138,35 +145,35 @@ void ManyParamInterfaceService::onSig4(int param1, int param2, int param3, int p
 {
     if(m_service != nullptr) {
         const nlohmann::json& args = { param1, param2, param3, param4 };
-        static const auto topic = ApiGear::MQTT::Topic("testbed2","ManyParamInterface",ApiGear::MQTT::Topic::TopicType::Signal,"sig4");
+        static const auto topic = std::string("testbed2/ManyParamInterface/sig/sig4");
         m_service->notifySignal(topic, nlohmann::json(args).dump());
     }
 }
 void ManyParamInterfaceService::onProp1Changed(int prop1)
 {
     if(m_service != nullptr) {
-        static const auto topic = ApiGear::MQTT::Topic("testbed2","ManyParamInterface",ApiGear::MQTT::Topic::TopicType::Property,"prop1");
+        static const auto topic = std::string("testbed2/ManyParamInterface/prop/prop1");
         m_service->notifyPropertyChange(topic, nlohmann::json(prop1).dump());
     }
 }
 void ManyParamInterfaceService::onProp2Changed(int prop2)
 {
     if(m_service != nullptr) {
-        static const auto topic = ApiGear::MQTT::Topic("testbed2","ManyParamInterface",ApiGear::MQTT::Topic::TopicType::Property,"prop2");
+        static const auto topic = std::string("testbed2/ManyParamInterface/prop/prop2");
         m_service->notifyPropertyChange(topic, nlohmann::json(prop2).dump());
     }
 }
 void ManyParamInterfaceService::onProp3Changed(int prop3)
 {
     if(m_service != nullptr) {
-        static const auto topic = ApiGear::MQTT::Topic("testbed2","ManyParamInterface",ApiGear::MQTT::Topic::TopicType::Property,"prop3");
+        static const auto topic = std::string("testbed2/ManyParamInterface/prop/prop3");
         m_service->notifyPropertyChange(topic, nlohmann::json(prop3).dump());
     }
 }
 void ManyParamInterfaceService::onProp4Changed(int prop4)
 {
     if(m_service != nullptr) {
-        static const auto topic = ApiGear::MQTT::Topic("testbed2","ManyParamInterface",ApiGear::MQTT::Topic::TopicType::Property,"prop4");
+        static const auto topic = std::string("testbed2/ManyParamInterface/prop/prop4");
         m_service->notifyPropertyChange(topic, nlohmann::json(prop4).dump());
     }
 }

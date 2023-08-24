@@ -13,7 +13,6 @@
 #pragma warning (push, 0)
 #include "MQTTAsync.h"
 #pragma warning(pop)
-#include "mqtttopic.h"
 #include "mqtttypes.h"
 
 
@@ -60,19 +59,19 @@ public:
     void unsubscribeToConnectionStatus(int subscriptionID);
 
     // service interface
-    void notifyPropertyChange(const Topic& name, const std::string& value);
-    void notifySignal(const Topic& name, const std::string& args);
-    void notifyInvokeResponse(const Topic& responseTopic, const std::string& value, const std::string& correlationData);
+    void notifyPropertyChange(const std::string& name, const std::string& value);
+    void notifySignal(const std::string& name, const std::string& args);
+    void notifyInvokeResponse(const std::string& responseTopic, const std::string& value, const std::string& correlationData);
 
     // client interface
-    void invokeRemote(const Topic& name, const Topic& responseTopic, const std::string& value, int responseId);
-    void setRemoteProperty(const Topic& name, const std::string& value);
+    void invokeRemote(const std::string& name, const std::string& responseTopic, const std::string& value, int responseId);
+    void setRemoteProperty(const std::string& name, const std::string& value);
 
-    void subscribeTopic(const Topic& name, CallbackFunction func);
-    void unsubscribeTopic(const Topic& name, CallbackFunction func);
+    void subscribeTopic(const std::string& name, CallbackFunction func);
+    void unsubscribeTopic(const std::string& name, CallbackFunction func);
 
-    void onSubscribed(const Topic& name, CallbackFunction func);
-    void onUnsubscribed(const Topic& name);
+    void onSubscribed(const std::string& name, CallbackFunction func);
+    void onUnsubscribed(const std::string& name);
 
     void run();
 

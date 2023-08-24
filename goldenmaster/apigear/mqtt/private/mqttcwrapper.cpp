@@ -16,7 +16,7 @@ namespace
 std::mt19937 randomNumberGenerator (std::random_device{}());
 
 struct subscribeTopicContext {
-    Topic topic;
+    std::string topic;
     CallbackFunction func;
     std::weak_ptr<CWrapper> client;
 };
@@ -423,11 +423,11 @@ void CWrapper::handleTextMessage(const Message& message)
  * @param options reference to the options which where the topic should be added
  * @param responseTopic the topic which is set as response topic
  */
-void MQTTProperties_addResponseTopic(MQTTAsync_responseOptions& options, const Topic& responseTopic)
+void MQTTProperties_addResponseTopic(MQTTAsync_responseOptions& options, const std::string& responseTopic)
 {
     MQTTProperty responseTopicProperty;
     responseTopicProperty.identifier = MQTTPROPERTY_CODE_RESPONSE_TOPIC;
-    responseTopicProperty.value.data = { static_cast<int>(responseTopic.getEncodedTopic().size()), const_cast<char*>(responseTopic.getEncodedTopic().c_str()) };
+    responseTopicProperty.value.data = { static_cast<int>(responseTopic.size()), const_cast<char*>(responseTopic.c_str()) };
     MQTTProperties_add(&(options.properties), &responseTopicProperty);
 }
 
@@ -447,7 +447,7 @@ void MQTTProperties_addResponseIdAsCorrData(MQTTAsync_responseOptions& options, 
 
 }
 
-void CWrapper::invokeRemote(const Topic& topic, const Topic& responseTopic, const std::string& value, int responseId)
+void CWrapper::invokeRemote(const std::string& topic, const std::string& responseTopic, const std::string& value, int responseId)
 {
     MQTTAsync_responseOptions opts = MQTTAsync_responseOptions_initializer;
     MQTTAsync_message pubmsg = MQTTAsync_message_initializer;
@@ -465,10 +465,10 @@ void CWrapper::invokeRemote(const Topic& topic, const Topic& responseTopic, cons
     // the responseOptions properties do get overwritten by the msg properties later
     pubmsg.properties = opts.properties;
 
-    sendMessage(topic.getEncodedTopic(), &pubmsg, &opts);
+    sendMessage(topic, &pubmsg, &opts);
 }
 
-void CWrapper::notifyPropertyChange(const Topic& topic, const std::string& value)
+void CWrapper::notifyPropertyChange(const std::string& topic, const std::string& value)
 {
     MQTTAsync_responseOptions opts = MQTTAsync_responseOptions_initializer;
     MQTTAsync_message pubmsg = MQTTAsync_message_initializer;
@@ -481,10 +481,10 @@ void CWrapper::notifyPropertyChange(const Topic& topic, const std::string& value
     // property changes shall be retained and automatically send to new clients
     pubmsg.retained = 1;
 
-    sendMessage(topic.getEncodedTopic(), &pubmsg, &opts);
+    sendMessage(topic, &pubmsg, &opts);
 }
 
-void CWrapper::notifySignal(const Topic& topic, const std::string& args)
+void CWrapper::notifySignal(const std::string& topic, const std::string& args)
 {
 	MQTTAsync_responseOptions opts = MQTTAsync_responseOptions_initializer;
 	MQTTAsync_message pubmsg = MQTTAsync_message_initializer;
@@ -494,10 +494,10 @@ void CWrapper::notifySignal(const Topic& topic, const std::string& args)
 	pubmsg.qos = QOS;
 	pubmsg.retained = 0;
 
-    sendMessage(topic.getEncodedTopic(), &pubmsg, &opts);
+    sendMessage(topic, &pubmsg, &opts);
 }
 
-void CWrapper::notifyInvokeResponse(const Topic& responseTopic, const std::string& value, const std::string& correlationData)
+void CWrapper::notifyInvokeResponse(const std::string& responseTopic, const std::string& value, const std::string& correlationData)
 {
     MQTTAsync_responseOptions opts = MQTTAsync_responseOptions_initializer;
     MQTTAsync_message pubmsg = MQTTAsync_message_initializer;
@@ -517,10 +517,10 @@ void CWrapper::notifyInvokeResponse(const Topic& responseTopic, const std::strin
     // the responseOptions properties do get overwritten by the msg properties later
     pubmsg.properties = opts.properties;
 
-    sendMessage(responseTopic.getEncodedTopic(), &pubmsg, &opts);
+    sendMessage(responseTopic, &pubmsg, &opts);
 }
 
-void CWrapper::setRemoteProperty(const Topic& topic, const std::string& value)
+void CWrapper::setRemoteProperty(const std::string& topic, const std::string& value)
 {
 	MQTTAsync_responseOptions opts = MQTTAsync_responseOptions_initializer;
 	MQTTAsync_message pubmsg = MQTTAsync_message_initializer;
@@ -530,10 +530,10 @@ void CWrapper::setRemoteProperty(const Topic& topic, const std::string& value)
 	pubmsg.qos = QOS;
 	pubmsg.retained = 0;
 
-    sendMessage(topic.getEncodedTopic(), &pubmsg, &opts);
+    sendMessage(topic, &pubmsg, &opts);
 }
 
-void CWrapper::subscribeTopic(const Topic& topic, CallbackFunction func)
+void CWrapper::subscribeTopic(const std::string& topic, CallbackFunction func)
 {
     {
         std::lock_guard<std::mutex> guard(m_toBeSubscribedTopicsMutex);
@@ -547,19 +547,19 @@ void CWrapper::subscribeTopic(const Topic& topic, CallbackFunction func)
     m_synchronizeSubscriptionChanges.notify_one();
 }
 
-void CWrapper::onSubscribed(const Topic& topic, CallbackFunction func)
+void CWrapper::onSubscribed(const std::string& topic, CallbackFunction func)
 {
     std::lock_guard<std::mutex> guard(m_subscribedTopicsMutex);
     m_subscribedTopics.insert({topic, func});
 }
 
-void CWrapper::onUnsubscribed(const Topic& topic)
+void CWrapper::onUnsubscribed(const std::string& topic)
 {
     std::lock_guard<std::mutex> guard(m_subscribedTopicsMutex);
     m_subscribedTopics.erase(topic);
 }
 
-void CWrapper::unsubscribeTopic(const Topic& topic, CallbackFunction func)
+void CWrapper::unsubscribeTopic(const std::string& topic, CallbackFunction func)
 {
     {
         std::lock_guard<std::mutex> guard(m_toBeUnsubscribedTopicsMutex);
