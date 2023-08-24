@@ -26,10 +26,10 @@ NestedStruct2InterfaceService::~NestedStruct2InterfaceService()
     m_impl->_getPublisher().unsubscribeFromAllChanges(*this);
 
     m_service->unsubscribeToConnectionStatus(m_connectionStatusRegistrationID);
-    m_service->unsubscribeTopic(std::string("testbed2/NestedStruct2Interface/set/prop1"), std::bind(&NestedStruct2InterfaceService::onSetProperty, this, std::placeholders::_1, std::placeholders::_2));
-    m_service->unsubscribeTopic(std::string("testbed2/NestedStruct2Interface/set/prop2"), std::bind(&NestedStruct2InterfaceService::onSetProperty, this, std::placeholders::_1, std::placeholders::_2));
-    m_service->unsubscribeTopic(std::string("testbed2/NestedStruct2Interface/rpc/func1"), std::bind(&NestedStruct2InterfaceService::onInvoke, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_service->unsubscribeTopic(std::string("testbed2/NestedStruct2Interface/rpc/func2"), std::bind(&NestedStruct2InterfaceService::onInvoke, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
+    m_service->unsubscribeTopic(std::string("testbed2/NestedStruct2Interface/set/prop1"));
+    m_service->unsubscribeTopic(std::string("testbed2/NestedStruct2Interface/set/prop2"));
+    m_service->unsubscribeTopic(std::string("testbed2/NestedStruct2Interface/rpc/func1"));
+    m_service->unsubscribeTopic(std::string("testbed2/NestedStruct2Interface/rpc/func2"));
 }
 
 void NestedStruct2InterfaceService::onConnectionStatusChanged(bool connectionStatus)

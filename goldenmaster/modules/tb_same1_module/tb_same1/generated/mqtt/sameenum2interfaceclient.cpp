@@ -26,12 +26,12 @@ SameEnum2InterfaceClient::SameEnum2InterfaceClient(std::shared_ptr<ApiGear::MQTT
 
 SameEnum2InterfaceClient::~SameEnum2InterfaceClient()
 {
-    m_client->unsubscribeTopic(std::string("tb.same1/SameEnum2Interface/prop/prop1"), std::bind(&SameEnum2InterfaceClient::onPropertyChanged, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->unsubscribeTopic(std::string("tb.same1/SameEnum2Interface/prop/prop2"), std::bind(&SameEnum2InterfaceClient::onPropertyChanged, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->unsubscribeTopic(std::string("tb.same1/SameEnum2Interface/sig/sig1"), std::bind(&SameEnum2InterfaceClient::onSignal, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->unsubscribeTopic(std::string("tb.same1/SameEnum2Interface/sig/sig2"), std::bind(&SameEnum2InterfaceClient::onSignal, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->unsubscribeTopic(std::string("tb.same1/SameEnum2Interface/rpc/func1/"+m_client->getClientId()+"/result"), std::bind(&SameEnum2InterfaceClient::onInvokeReply, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->unsubscribeTopic(std::string("tb.same1/SameEnum2Interface/rpc/func2/"+m_client->getClientId()+"/result"), std::bind(&SameEnum2InterfaceClient::onInvokeReply, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
+    m_client->unsubscribeTopic(std::string("tb.same1/SameEnum2Interface/prop/prop1"));
+    m_client->unsubscribeTopic(std::string("tb.same1/SameEnum2Interface/prop/prop2"));
+    m_client->unsubscribeTopic(std::string("tb.same1/SameEnum2Interface/sig/sig1"));
+    m_client->unsubscribeTopic(std::string("tb.same1/SameEnum2Interface/sig/sig2"));
+    m_client->unsubscribeTopic(std::string("tb.same1/SameEnum2Interface/rpc/func1/"+m_client->getClientId()+"/result"));
+    m_client->unsubscribeTopic(std::string("tb.same1/SameEnum2Interface/rpc/func2/"+m_client->getClientId()+"/result"));
 }
 
 void SameEnum2InterfaceClient::applyState(const nlohmann::json& fields) 

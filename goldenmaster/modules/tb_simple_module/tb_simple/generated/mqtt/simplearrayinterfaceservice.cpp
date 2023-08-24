@@ -38,22 +38,22 @@ SimpleArrayInterfaceService::~SimpleArrayInterfaceService()
     m_impl->_getPublisher().unsubscribeFromAllChanges(*this);
 
     m_service->unsubscribeToConnectionStatus(m_connectionStatusRegistrationID);
-    m_service->unsubscribeTopic(std::string("tb.simple/SimpleArrayInterface/set/propBool"), std::bind(&SimpleArrayInterfaceService::onSetProperty, this, std::placeholders::_1, std::placeholders::_2));
-    m_service->unsubscribeTopic(std::string("tb.simple/SimpleArrayInterface/set/propInt"), std::bind(&SimpleArrayInterfaceService::onSetProperty, this, std::placeholders::_1, std::placeholders::_2));
-    m_service->unsubscribeTopic(std::string("tb.simple/SimpleArrayInterface/set/propInt32"), std::bind(&SimpleArrayInterfaceService::onSetProperty, this, std::placeholders::_1, std::placeholders::_2));
-    m_service->unsubscribeTopic(std::string("tb.simple/SimpleArrayInterface/set/propInt64"), std::bind(&SimpleArrayInterfaceService::onSetProperty, this, std::placeholders::_1, std::placeholders::_2));
-    m_service->unsubscribeTopic(std::string("tb.simple/SimpleArrayInterface/set/propFloat"), std::bind(&SimpleArrayInterfaceService::onSetProperty, this, std::placeholders::_1, std::placeholders::_2));
-    m_service->unsubscribeTopic(std::string("tb.simple/SimpleArrayInterface/set/propFloat32"), std::bind(&SimpleArrayInterfaceService::onSetProperty, this, std::placeholders::_1, std::placeholders::_2));
-    m_service->unsubscribeTopic(std::string("tb.simple/SimpleArrayInterface/set/propFloat64"), std::bind(&SimpleArrayInterfaceService::onSetProperty, this, std::placeholders::_1, std::placeholders::_2));
-    m_service->unsubscribeTopic(std::string("tb.simple/SimpleArrayInterface/set/propString"), std::bind(&SimpleArrayInterfaceService::onSetProperty, this, std::placeholders::_1, std::placeholders::_2));
-    m_service->unsubscribeTopic(std::string("tb.simple/SimpleArrayInterface/rpc/funcBool"), std::bind(&SimpleArrayInterfaceService::onInvoke, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_service->unsubscribeTopic(std::string("tb.simple/SimpleArrayInterface/rpc/funcInt"), std::bind(&SimpleArrayInterfaceService::onInvoke, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_service->unsubscribeTopic(std::string("tb.simple/SimpleArrayInterface/rpc/funcInt32"), std::bind(&SimpleArrayInterfaceService::onInvoke, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_service->unsubscribeTopic(std::string("tb.simple/SimpleArrayInterface/rpc/funcInt64"), std::bind(&SimpleArrayInterfaceService::onInvoke, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_service->unsubscribeTopic(std::string("tb.simple/SimpleArrayInterface/rpc/funcFloat"), std::bind(&SimpleArrayInterfaceService::onInvoke, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_service->unsubscribeTopic(std::string("tb.simple/SimpleArrayInterface/rpc/funcFloat32"), std::bind(&SimpleArrayInterfaceService::onInvoke, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_service->unsubscribeTopic(std::string("tb.simple/SimpleArrayInterface/rpc/funcFloat64"), std::bind(&SimpleArrayInterfaceService::onInvoke, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_service->unsubscribeTopic(std::string("tb.simple/SimpleArrayInterface/rpc/funcString"), std::bind(&SimpleArrayInterfaceService::onInvoke, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
+    m_service->unsubscribeTopic(std::string("tb.simple/SimpleArrayInterface/set/propBool"));
+    m_service->unsubscribeTopic(std::string("tb.simple/SimpleArrayInterface/set/propInt"));
+    m_service->unsubscribeTopic(std::string("tb.simple/SimpleArrayInterface/set/propInt32"));
+    m_service->unsubscribeTopic(std::string("tb.simple/SimpleArrayInterface/set/propInt64"));
+    m_service->unsubscribeTopic(std::string("tb.simple/SimpleArrayInterface/set/propFloat"));
+    m_service->unsubscribeTopic(std::string("tb.simple/SimpleArrayInterface/set/propFloat32"));
+    m_service->unsubscribeTopic(std::string("tb.simple/SimpleArrayInterface/set/propFloat64"));
+    m_service->unsubscribeTopic(std::string("tb.simple/SimpleArrayInterface/set/propString"));
+    m_service->unsubscribeTopic(std::string("tb.simple/SimpleArrayInterface/rpc/funcBool"));
+    m_service->unsubscribeTopic(std::string("tb.simple/SimpleArrayInterface/rpc/funcInt"));
+    m_service->unsubscribeTopic(std::string("tb.simple/SimpleArrayInterface/rpc/funcInt32"));
+    m_service->unsubscribeTopic(std::string("tb.simple/SimpleArrayInterface/rpc/funcInt64"));
+    m_service->unsubscribeTopic(std::string("tb.simple/SimpleArrayInterface/rpc/funcFloat"));
+    m_service->unsubscribeTopic(std::string("tb.simple/SimpleArrayInterface/rpc/funcFloat32"));
+    m_service->unsubscribeTopic(std::string("tb.simple/SimpleArrayInterface/rpc/funcFloat64"));
+    m_service->unsubscribeTopic(std::string("tb.simple/SimpleArrayInterface/rpc/funcString"));
 }
 
 void SimpleArrayInterfaceService::onConnectionStatusChanged(bool connectionStatus)

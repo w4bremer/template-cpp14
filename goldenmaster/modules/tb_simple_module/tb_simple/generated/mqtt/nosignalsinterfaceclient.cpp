@@ -24,10 +24,10 @@ NoSignalsInterfaceClient::NoSignalsInterfaceClient(std::shared_ptr<ApiGear::MQTT
 
 NoSignalsInterfaceClient::~NoSignalsInterfaceClient()
 {
-    m_client->unsubscribeTopic(std::string("tb.simple/NoSignalsInterface/prop/propBool"), std::bind(&NoSignalsInterfaceClient::onPropertyChanged, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->unsubscribeTopic(std::string("tb.simple/NoSignalsInterface/prop/propInt"), std::bind(&NoSignalsInterfaceClient::onPropertyChanged, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->unsubscribeTopic(std::string("tb.simple/NoSignalsInterface/rpc/funcVoid/"+m_client->getClientId()+"/result"), std::bind(&NoSignalsInterfaceClient::onInvokeReply, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->unsubscribeTopic(std::string("tb.simple/NoSignalsInterface/rpc/funcBool/"+m_client->getClientId()+"/result"), std::bind(&NoSignalsInterfaceClient::onInvokeReply, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
+    m_client->unsubscribeTopic(std::string("tb.simple/NoSignalsInterface/prop/propBool"));
+    m_client->unsubscribeTopic(std::string("tb.simple/NoSignalsInterface/prop/propInt"));
+    m_client->unsubscribeTopic(std::string("tb.simple/NoSignalsInterface/rpc/funcVoid/"+m_client->getClientId()+"/result"));
+    m_client->unsubscribeTopic(std::string("tb.simple/NoSignalsInterface/rpc/funcBool/"+m_client->getClientId()+"/result"));
 }
 
 void NoSignalsInterfaceClient::applyState(const nlohmann::json& fields) 

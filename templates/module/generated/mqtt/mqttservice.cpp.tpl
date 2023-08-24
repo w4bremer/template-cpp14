@@ -36,11 +36,11 @@ using namespace {{ Camel .System.Name }}::{{ Camel .Module.Name }}::MQTT;
 
 {{- range .Interface.Properties}}
 {{- $property := . }}
-    m_service->unsubscribeTopic(std::string("{{$.Module.Name}}/{{$interface}}/set/{{$property}}"), std::bind(&{{$class}}::onSetProperty, this, std::placeholders::_1, std::placeholders::_2));
+    m_service->unsubscribeTopic(std::string("{{$.Module.Name}}/{{$interface}}/set/{{$property}}"));
 {{- end }}
 {{- range .Interface.Operations}}
 {{- $operation := . }}
-    m_service->unsubscribeTopic(std::string("{{$.Module.Name}}/{{$interface}}/rpc/{{$operation}}"), std::bind(&{{$class}}::onInvoke, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
+    m_service->unsubscribeTopic(std::string("{{$.Module.Name}}/{{$interface}}/rpc/{{$operation}}"));
 {{- end }}
 }
 

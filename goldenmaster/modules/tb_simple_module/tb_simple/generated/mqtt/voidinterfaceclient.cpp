@@ -22,8 +22,8 @@ VoidInterfaceClient::VoidInterfaceClient(std::shared_ptr<ApiGear::MQTT::Client> 
 
 VoidInterfaceClient::~VoidInterfaceClient()
 {
-    m_client->unsubscribeTopic(std::string("tb.simple/VoidInterface/sig/sigVoid"), std::bind(&VoidInterfaceClient::onSignal, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->unsubscribeTopic(std::string("tb.simple/VoidInterface/rpc/funcVoid/"+m_client->getClientId()+"/result"), std::bind(&VoidInterfaceClient::onInvokeReply, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
+    m_client->unsubscribeTopic(std::string("tb.simple/VoidInterface/sig/sigVoid"));
+    m_client->unsubscribeTopic(std::string("tb.simple/VoidInterface/rpc/funcVoid/"+m_client->getClientId()+"/result"));
 }
 
 void VoidInterfaceClient::applyState(const nlohmann::json& fields) 

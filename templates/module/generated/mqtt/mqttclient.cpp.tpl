@@ -39,15 +39,15 @@ namespace {
 {
 {{- range .Interface.Properties}}
 {{- $property := . }}
-    m_client->unsubscribeTopic(std::string("{{$.Module.Name}}/{{$interfaceName}}/prop/{{$property}}"), std::bind(&{{$class}}::onPropertyChanged, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
+    m_client->unsubscribeTopic(std::string("{{$.Module.Name}}/{{$interfaceName}}/prop/{{$property}}"));
 {{- end }}
 {{- range .Interface.Signals}}
 {{- $signal := . }}
-    m_client->unsubscribeTopic(std::string("{{$.Module.Name}}/{{$interfaceName}}/sig/{{$signal}}"), std::bind(&{{$class}}::onSignal, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
+    m_client->unsubscribeTopic(std::string("{{$.Module.Name}}/{{$interfaceName}}/sig/{{$signal}}"));
 {{- end }}
 {{- range .Interface.Operations}}
 {{- $operation := . }}
-    m_client->unsubscribeTopic(std::string("{{$.Module.Name}}/{{$interfaceName}}/rpc/{{$operation}}/"+m_client->getClientId()+"/result"), std::bind(&{{$class}}::onInvokeReply, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
+    m_client->unsubscribeTopic(std::string("{{$.Module.Name}}/{{$interfaceName}}/rpc/{{$operation}}/"+m_client->getClientId()+"/result"));
 {{- end }}
 }
 

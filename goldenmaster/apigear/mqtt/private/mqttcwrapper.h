@@ -68,7 +68,7 @@ public:
     void setRemoteProperty(const std::string& name, const std::string& value);
 
     void subscribeTopic(const std::string& name, CallbackFunction func);
-    void unsubscribeTopic(const std::string& name, CallbackFunction func);
+    void unsubscribeTopic(const std::string& name);
 
     void onSubscribed(const std::string& name, CallbackFunction func);
     void onUnsubscribed(const std::string& name);
@@ -109,7 +109,7 @@ private:
     std::mutex m_toBeSubscribedTopicsMutex;
     std::multimap<std::string, CallbackFunction> m_toBeSubscribedTopics;
     std::mutex m_toBeUnsubscribedTopicsMutex;
-    std::multimap<std::string, CallbackFunction> m_toBeUnsubscribedTopics;
+    std::set<std::string> m_toBeUnsubscribedTopics;
 };
 } // namespace MQTT
 } // namespace ApiGear

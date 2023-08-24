@@ -32,18 +32,18 @@ ManyParamInterfaceClient::ManyParamInterfaceClient(std::shared_ptr<ApiGear::MQTT
 
 ManyParamInterfaceClient::~ManyParamInterfaceClient()
 {
-    m_client->unsubscribeTopic(std::string("testbed2/ManyParamInterface/prop/prop1"), std::bind(&ManyParamInterfaceClient::onPropertyChanged, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->unsubscribeTopic(std::string("testbed2/ManyParamInterface/prop/prop2"), std::bind(&ManyParamInterfaceClient::onPropertyChanged, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->unsubscribeTopic(std::string("testbed2/ManyParamInterface/prop/prop3"), std::bind(&ManyParamInterfaceClient::onPropertyChanged, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->unsubscribeTopic(std::string("testbed2/ManyParamInterface/prop/prop4"), std::bind(&ManyParamInterfaceClient::onPropertyChanged, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->unsubscribeTopic(std::string("testbed2/ManyParamInterface/sig/sig1"), std::bind(&ManyParamInterfaceClient::onSignal, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->unsubscribeTopic(std::string("testbed2/ManyParamInterface/sig/sig2"), std::bind(&ManyParamInterfaceClient::onSignal, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->unsubscribeTopic(std::string("testbed2/ManyParamInterface/sig/sig3"), std::bind(&ManyParamInterfaceClient::onSignal, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->unsubscribeTopic(std::string("testbed2/ManyParamInterface/sig/sig4"), std::bind(&ManyParamInterfaceClient::onSignal, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->unsubscribeTopic(std::string("testbed2/ManyParamInterface/rpc/func1/"+m_client->getClientId()+"/result"), std::bind(&ManyParamInterfaceClient::onInvokeReply, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->unsubscribeTopic(std::string("testbed2/ManyParamInterface/rpc/func2/"+m_client->getClientId()+"/result"), std::bind(&ManyParamInterfaceClient::onInvokeReply, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->unsubscribeTopic(std::string("testbed2/ManyParamInterface/rpc/func3/"+m_client->getClientId()+"/result"), std::bind(&ManyParamInterfaceClient::onInvokeReply, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->unsubscribeTopic(std::string("testbed2/ManyParamInterface/rpc/func4/"+m_client->getClientId()+"/result"), std::bind(&ManyParamInterfaceClient::onInvokeReply, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
+    m_client->unsubscribeTopic(std::string("testbed2/ManyParamInterface/prop/prop1"));
+    m_client->unsubscribeTopic(std::string("testbed2/ManyParamInterface/prop/prop2"));
+    m_client->unsubscribeTopic(std::string("testbed2/ManyParamInterface/prop/prop3"));
+    m_client->unsubscribeTopic(std::string("testbed2/ManyParamInterface/prop/prop4"));
+    m_client->unsubscribeTopic(std::string("testbed2/ManyParamInterface/sig/sig1"));
+    m_client->unsubscribeTopic(std::string("testbed2/ManyParamInterface/sig/sig2"));
+    m_client->unsubscribeTopic(std::string("testbed2/ManyParamInterface/sig/sig3"));
+    m_client->unsubscribeTopic(std::string("testbed2/ManyParamInterface/sig/sig4"));
+    m_client->unsubscribeTopic(std::string("testbed2/ManyParamInterface/rpc/func1/"+m_client->getClientId()+"/result"));
+    m_client->unsubscribeTopic(std::string("testbed2/ManyParamInterface/rpc/func2/"+m_client->getClientId()+"/result"));
+    m_client->unsubscribeTopic(std::string("testbed2/ManyParamInterface/rpc/func3/"+m_client->getClientId()+"/result"));
+    m_client->unsubscribeTopic(std::string("testbed2/ManyParamInterface/rpc/func4/"+m_client->getClientId()+"/result"));
 }
 
 void ManyParamInterfaceClient::applyState(const nlohmann::json& fields) 

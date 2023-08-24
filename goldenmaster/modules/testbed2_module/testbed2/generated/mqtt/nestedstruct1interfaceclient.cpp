@@ -23,9 +23,9 @@ NestedStruct1InterfaceClient::NestedStruct1InterfaceClient(std::shared_ptr<ApiGe
 
 NestedStruct1InterfaceClient::~NestedStruct1InterfaceClient()
 {
-    m_client->unsubscribeTopic(std::string("testbed2/NestedStruct1Interface/prop/prop1"), std::bind(&NestedStruct1InterfaceClient::onPropertyChanged, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->unsubscribeTopic(std::string("testbed2/NestedStruct1Interface/sig/sig1"), std::bind(&NestedStruct1InterfaceClient::onSignal, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->unsubscribeTopic(std::string("testbed2/NestedStruct1Interface/rpc/func1/"+m_client->getClientId()+"/result"), std::bind(&NestedStruct1InterfaceClient::onInvokeReply, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
+    m_client->unsubscribeTopic(std::string("testbed2/NestedStruct1Interface/prop/prop1"));
+    m_client->unsubscribeTopic(std::string("testbed2/NestedStruct1Interface/sig/sig1"));
+    m_client->unsubscribeTopic(std::string("testbed2/NestedStruct1Interface/rpc/func1/"+m_client->getClientId()+"/result"));
 }
 
 void NestedStruct1InterfaceClient::applyState(const nlohmann::json& fields) 

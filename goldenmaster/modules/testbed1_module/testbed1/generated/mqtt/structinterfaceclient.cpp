@@ -32,18 +32,18 @@ StructInterfaceClient::StructInterfaceClient(std::shared_ptr<ApiGear::MQTT::Clie
 
 StructInterfaceClient::~StructInterfaceClient()
 {
-    m_client->unsubscribeTopic(std::string("testbed1/StructInterface/prop/propBool"), std::bind(&StructInterfaceClient::onPropertyChanged, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->unsubscribeTopic(std::string("testbed1/StructInterface/prop/propInt"), std::bind(&StructInterfaceClient::onPropertyChanged, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->unsubscribeTopic(std::string("testbed1/StructInterface/prop/propFloat"), std::bind(&StructInterfaceClient::onPropertyChanged, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->unsubscribeTopic(std::string("testbed1/StructInterface/prop/propString"), std::bind(&StructInterfaceClient::onPropertyChanged, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->unsubscribeTopic(std::string("testbed1/StructInterface/sig/sigBool"), std::bind(&StructInterfaceClient::onSignal, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->unsubscribeTopic(std::string("testbed1/StructInterface/sig/sigInt"), std::bind(&StructInterfaceClient::onSignal, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->unsubscribeTopic(std::string("testbed1/StructInterface/sig/sigFloat"), std::bind(&StructInterfaceClient::onSignal, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->unsubscribeTopic(std::string("testbed1/StructInterface/sig/sigString"), std::bind(&StructInterfaceClient::onSignal, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->unsubscribeTopic(std::string("testbed1/StructInterface/rpc/funcBool/"+m_client->getClientId()+"/result"), std::bind(&StructInterfaceClient::onInvokeReply, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->unsubscribeTopic(std::string("testbed1/StructInterface/rpc/funcInt/"+m_client->getClientId()+"/result"), std::bind(&StructInterfaceClient::onInvokeReply, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->unsubscribeTopic(std::string("testbed1/StructInterface/rpc/funcFloat/"+m_client->getClientId()+"/result"), std::bind(&StructInterfaceClient::onInvokeReply, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->unsubscribeTopic(std::string("testbed1/StructInterface/rpc/funcString/"+m_client->getClientId()+"/result"), std::bind(&StructInterfaceClient::onInvokeReply, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
+    m_client->unsubscribeTopic(std::string("testbed1/StructInterface/prop/propBool"));
+    m_client->unsubscribeTopic(std::string("testbed1/StructInterface/prop/propInt"));
+    m_client->unsubscribeTopic(std::string("testbed1/StructInterface/prop/propFloat"));
+    m_client->unsubscribeTopic(std::string("testbed1/StructInterface/prop/propString"));
+    m_client->unsubscribeTopic(std::string("testbed1/StructInterface/sig/sigBool"));
+    m_client->unsubscribeTopic(std::string("testbed1/StructInterface/sig/sigInt"));
+    m_client->unsubscribeTopic(std::string("testbed1/StructInterface/sig/sigFloat"));
+    m_client->unsubscribeTopic(std::string("testbed1/StructInterface/sig/sigString"));
+    m_client->unsubscribeTopic(std::string("testbed1/StructInterface/rpc/funcBool/"+m_client->getClientId()+"/result"));
+    m_client->unsubscribeTopic(std::string("testbed1/StructInterface/rpc/funcInt/"+m_client->getClientId()+"/result"));
+    m_client->unsubscribeTopic(std::string("testbed1/StructInterface/rpc/funcFloat/"+m_client->getClientId()+"/result"));
+    m_client->unsubscribeTopic(std::string("testbed1/StructInterface/rpc/funcString/"+m_client->getClientId()+"/result"));
 }
 
 void StructInterfaceClient::applyState(const nlohmann::json& fields) 

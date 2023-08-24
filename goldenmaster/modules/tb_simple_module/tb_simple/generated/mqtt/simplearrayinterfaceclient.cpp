@@ -44,30 +44,30 @@ SimpleArrayInterfaceClient::SimpleArrayInterfaceClient(std::shared_ptr<ApiGear::
 
 SimpleArrayInterfaceClient::~SimpleArrayInterfaceClient()
 {
-    m_client->unsubscribeTopic(std::string("tb.simple/SimpleArrayInterface/prop/propBool"), std::bind(&SimpleArrayInterfaceClient::onPropertyChanged, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->unsubscribeTopic(std::string("tb.simple/SimpleArrayInterface/prop/propInt"), std::bind(&SimpleArrayInterfaceClient::onPropertyChanged, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->unsubscribeTopic(std::string("tb.simple/SimpleArrayInterface/prop/propInt32"), std::bind(&SimpleArrayInterfaceClient::onPropertyChanged, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->unsubscribeTopic(std::string("tb.simple/SimpleArrayInterface/prop/propInt64"), std::bind(&SimpleArrayInterfaceClient::onPropertyChanged, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->unsubscribeTopic(std::string("tb.simple/SimpleArrayInterface/prop/propFloat"), std::bind(&SimpleArrayInterfaceClient::onPropertyChanged, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->unsubscribeTopic(std::string("tb.simple/SimpleArrayInterface/prop/propFloat32"), std::bind(&SimpleArrayInterfaceClient::onPropertyChanged, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->unsubscribeTopic(std::string("tb.simple/SimpleArrayInterface/prop/propFloat64"), std::bind(&SimpleArrayInterfaceClient::onPropertyChanged, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->unsubscribeTopic(std::string("tb.simple/SimpleArrayInterface/prop/propString"), std::bind(&SimpleArrayInterfaceClient::onPropertyChanged, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->unsubscribeTopic(std::string("tb.simple/SimpleArrayInterface/sig/sigBool"), std::bind(&SimpleArrayInterfaceClient::onSignal, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->unsubscribeTopic(std::string("tb.simple/SimpleArrayInterface/sig/sigInt"), std::bind(&SimpleArrayInterfaceClient::onSignal, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->unsubscribeTopic(std::string("tb.simple/SimpleArrayInterface/sig/sigInt32"), std::bind(&SimpleArrayInterfaceClient::onSignal, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->unsubscribeTopic(std::string("tb.simple/SimpleArrayInterface/sig/sigInt64"), std::bind(&SimpleArrayInterfaceClient::onSignal, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->unsubscribeTopic(std::string("tb.simple/SimpleArrayInterface/sig/sigFloat"), std::bind(&SimpleArrayInterfaceClient::onSignal, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->unsubscribeTopic(std::string("tb.simple/SimpleArrayInterface/sig/sigFloat32"), std::bind(&SimpleArrayInterfaceClient::onSignal, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->unsubscribeTopic(std::string("tb.simple/SimpleArrayInterface/sig/sigFloat64"), std::bind(&SimpleArrayInterfaceClient::onSignal, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->unsubscribeTopic(std::string("tb.simple/SimpleArrayInterface/sig/sigString"), std::bind(&SimpleArrayInterfaceClient::onSignal, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->unsubscribeTopic(std::string("tb.simple/SimpleArrayInterface/rpc/funcBool/"+m_client->getClientId()+"/result"), std::bind(&SimpleArrayInterfaceClient::onInvokeReply, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->unsubscribeTopic(std::string("tb.simple/SimpleArrayInterface/rpc/funcInt/"+m_client->getClientId()+"/result"), std::bind(&SimpleArrayInterfaceClient::onInvokeReply, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->unsubscribeTopic(std::string("tb.simple/SimpleArrayInterface/rpc/funcInt32/"+m_client->getClientId()+"/result"), std::bind(&SimpleArrayInterfaceClient::onInvokeReply, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->unsubscribeTopic(std::string("tb.simple/SimpleArrayInterface/rpc/funcInt64/"+m_client->getClientId()+"/result"), std::bind(&SimpleArrayInterfaceClient::onInvokeReply, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->unsubscribeTopic(std::string("tb.simple/SimpleArrayInterface/rpc/funcFloat/"+m_client->getClientId()+"/result"), std::bind(&SimpleArrayInterfaceClient::onInvokeReply, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->unsubscribeTopic(std::string("tb.simple/SimpleArrayInterface/rpc/funcFloat32/"+m_client->getClientId()+"/result"), std::bind(&SimpleArrayInterfaceClient::onInvokeReply, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->unsubscribeTopic(std::string("tb.simple/SimpleArrayInterface/rpc/funcFloat64/"+m_client->getClientId()+"/result"), std::bind(&SimpleArrayInterfaceClient::onInvokeReply, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->unsubscribeTopic(std::string("tb.simple/SimpleArrayInterface/rpc/funcString/"+m_client->getClientId()+"/result"), std::bind(&SimpleArrayInterfaceClient::onInvokeReply, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
+    m_client->unsubscribeTopic(std::string("tb.simple/SimpleArrayInterface/prop/propBool"));
+    m_client->unsubscribeTopic(std::string("tb.simple/SimpleArrayInterface/prop/propInt"));
+    m_client->unsubscribeTopic(std::string("tb.simple/SimpleArrayInterface/prop/propInt32"));
+    m_client->unsubscribeTopic(std::string("tb.simple/SimpleArrayInterface/prop/propInt64"));
+    m_client->unsubscribeTopic(std::string("tb.simple/SimpleArrayInterface/prop/propFloat"));
+    m_client->unsubscribeTopic(std::string("tb.simple/SimpleArrayInterface/prop/propFloat32"));
+    m_client->unsubscribeTopic(std::string("tb.simple/SimpleArrayInterface/prop/propFloat64"));
+    m_client->unsubscribeTopic(std::string("tb.simple/SimpleArrayInterface/prop/propString"));
+    m_client->unsubscribeTopic(std::string("tb.simple/SimpleArrayInterface/sig/sigBool"));
+    m_client->unsubscribeTopic(std::string("tb.simple/SimpleArrayInterface/sig/sigInt"));
+    m_client->unsubscribeTopic(std::string("tb.simple/SimpleArrayInterface/sig/sigInt32"));
+    m_client->unsubscribeTopic(std::string("tb.simple/SimpleArrayInterface/sig/sigInt64"));
+    m_client->unsubscribeTopic(std::string("tb.simple/SimpleArrayInterface/sig/sigFloat"));
+    m_client->unsubscribeTopic(std::string("tb.simple/SimpleArrayInterface/sig/sigFloat32"));
+    m_client->unsubscribeTopic(std::string("tb.simple/SimpleArrayInterface/sig/sigFloat64"));
+    m_client->unsubscribeTopic(std::string("tb.simple/SimpleArrayInterface/sig/sigString"));
+    m_client->unsubscribeTopic(std::string("tb.simple/SimpleArrayInterface/rpc/funcBool/"+m_client->getClientId()+"/result"));
+    m_client->unsubscribeTopic(std::string("tb.simple/SimpleArrayInterface/rpc/funcInt/"+m_client->getClientId()+"/result"));
+    m_client->unsubscribeTopic(std::string("tb.simple/SimpleArrayInterface/rpc/funcInt32/"+m_client->getClientId()+"/result"));
+    m_client->unsubscribeTopic(std::string("tb.simple/SimpleArrayInterface/rpc/funcInt64/"+m_client->getClientId()+"/result"));
+    m_client->unsubscribeTopic(std::string("tb.simple/SimpleArrayInterface/rpc/funcFloat/"+m_client->getClientId()+"/result"));
+    m_client->unsubscribeTopic(std::string("tb.simple/SimpleArrayInterface/rpc/funcFloat32/"+m_client->getClientId()+"/result"));
+    m_client->unsubscribeTopic(std::string("tb.simple/SimpleArrayInterface/rpc/funcFloat64/"+m_client->getClientId()+"/result"));
+    m_client->unsubscribeTopic(std::string("tb.simple/SimpleArrayInterface/rpc/funcString/"+m_client->getClientId()+"/result"));
 }
 
 void SimpleArrayInterfaceClient::applyState(const nlohmann::json& fields) 

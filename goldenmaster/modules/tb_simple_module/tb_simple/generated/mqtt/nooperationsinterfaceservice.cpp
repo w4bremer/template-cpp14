@@ -24,8 +24,8 @@ NoOperationsInterfaceService::~NoOperationsInterfaceService()
     m_impl->_getPublisher().unsubscribeFromAllChanges(*this);
 
     m_service->unsubscribeToConnectionStatus(m_connectionStatusRegistrationID);
-    m_service->unsubscribeTopic(std::string("tb.simple/NoOperationsInterface/set/propBool"), std::bind(&NoOperationsInterfaceService::onSetProperty, this, std::placeholders::_1, std::placeholders::_2));
-    m_service->unsubscribeTopic(std::string("tb.simple/NoOperationsInterface/set/propInt"), std::bind(&NoOperationsInterfaceService::onSetProperty, this, std::placeholders::_1, std::placeholders::_2));
+    m_service->unsubscribeTopic(std::string("tb.simple/NoOperationsInterface/set/propBool"));
+    m_service->unsubscribeTopic(std::string("tb.simple/NoOperationsInterface/set/propInt"));
 }
 
 void NoOperationsInterfaceService::onConnectionStatusChanged(bool connectionStatus)

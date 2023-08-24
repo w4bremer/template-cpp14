@@ -23,7 +23,7 @@ VoidInterfaceService::~VoidInterfaceService()
     m_impl->_getPublisher().unsubscribeFromAllChanges(*this);
 
     m_service->unsubscribeToConnectionStatus(m_connectionStatusRegistrationID);
-    m_service->unsubscribeTopic(std::string("tb.simple/VoidInterface/rpc/funcVoid"), std::bind(&VoidInterfaceService::onInvoke, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
+    m_service->unsubscribeTopic(std::string("tb.simple/VoidInterface/rpc/funcVoid"));
 }
 
 void VoidInterfaceService::onConnectionStatusChanged(bool connectionStatus)

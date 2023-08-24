@@ -24,10 +24,10 @@ NoOperationsInterfaceClient::NoOperationsInterfaceClient(std::shared_ptr<ApiGear
 
 NoOperationsInterfaceClient::~NoOperationsInterfaceClient()
 {
-    m_client->unsubscribeTopic(std::string("tb.simple/NoOperationsInterface/prop/propBool"), std::bind(&NoOperationsInterfaceClient::onPropertyChanged, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->unsubscribeTopic(std::string("tb.simple/NoOperationsInterface/prop/propInt"), std::bind(&NoOperationsInterfaceClient::onPropertyChanged, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->unsubscribeTopic(std::string("tb.simple/NoOperationsInterface/sig/sigVoid"), std::bind(&NoOperationsInterfaceClient::onSignal, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->unsubscribeTopic(std::string("tb.simple/NoOperationsInterface/sig/sigBool"), std::bind(&NoOperationsInterfaceClient::onSignal, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
+    m_client->unsubscribeTopic(std::string("tb.simple/NoOperationsInterface/prop/propBool"));
+    m_client->unsubscribeTopic(std::string("tb.simple/NoOperationsInterface/prop/propInt"));
+    m_client->unsubscribeTopic(std::string("tb.simple/NoOperationsInterface/sig/sigVoid"));
+    m_client->unsubscribeTopic(std::string("tb.simple/NoOperationsInterface/sig/sigBool"));
 }
 
 void NoOperationsInterfaceClient::applyState(const nlohmann::json& fields) 

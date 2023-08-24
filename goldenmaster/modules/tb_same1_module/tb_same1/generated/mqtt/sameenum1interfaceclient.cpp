@@ -23,9 +23,9 @@ SameEnum1InterfaceClient::SameEnum1InterfaceClient(std::shared_ptr<ApiGear::MQTT
 
 SameEnum1InterfaceClient::~SameEnum1InterfaceClient()
 {
-    m_client->unsubscribeTopic(std::string("tb.same1/SameEnum1Interface/prop/prop1"), std::bind(&SameEnum1InterfaceClient::onPropertyChanged, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->unsubscribeTopic(std::string("tb.same1/SameEnum1Interface/sig/sig1"), std::bind(&SameEnum1InterfaceClient::onSignal, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->unsubscribeTopic(std::string("tb.same1/SameEnum1Interface/rpc/func1/"+m_client->getClientId()+"/result"), std::bind(&SameEnum1InterfaceClient::onInvokeReply, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
+    m_client->unsubscribeTopic(std::string("tb.same1/SameEnum1Interface/prop/prop1"));
+    m_client->unsubscribeTopic(std::string("tb.same1/SameEnum1Interface/sig/sig1"));
+    m_client->unsubscribeTopic(std::string("tb.same1/SameEnum1Interface/rpc/func1/"+m_client->getClientId()+"/result"));
 }
 
 void SameEnum1InterfaceClient::applyState(const nlohmann::json& fields) 
