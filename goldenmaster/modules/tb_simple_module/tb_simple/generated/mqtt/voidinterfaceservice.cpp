@@ -6,16 +6,28 @@
 using namespace Test::TbSimple;
 using namespace Test::TbSimple::MQTT;
 
+namespace {
+    std::map<std::string, ApiGear::MQTT::CallbackFunction> createTopicMap(VoidInterfaceService* service)
+    {
+        return {
+            {std::string("tb.simple/VoidInterface/rpc/funcVoid"), [service](const std::string& topic, const std::string& args, const std::string& responseTopic, const std::string& correlationData) { service->onInvoke(topic, args, responseTopic, correlationData); } },
+        };
+    };
+}
+
 VoidInterfaceService::VoidInterfaceService(std::shared_ptr<IVoidInterface> impl, std::shared_ptr<ApiGear::MQTT::Service> service)
     : m_impl(impl)
     , m_service(service)
+    , m_topics(createTopicMap(this))
 {
     m_impl->_getPublisher().subscribeToAllChanges(*this);
 
     m_connectionStatusRegistrationID = m_service->subscribeToConnectionStatus([this](bool connectionStatus){ onConnectionStatusChanged(connectionStatus); });
-    // subscribe to all property change request methods
-    m_service->subscribeTopic(std::string("tb.simple/VoidInterface/rpc/funcVoid"), [this](const std::string& topic, const std::string& args, const std::string& responseTopic, const std::string& correlationData) { onInvoke(topic, args, responseTopic, correlationData); });
 
+    for (const auto& topic: m_topics)
+    {
+        m_service->subscribeTopic(topic. first, topic.second);
+    }
 }
 
 VoidInterfaceService::~VoidInterfaceService()
@@ -23,7 +35,11 @@ VoidInterfaceService::~VoidInterfaceService()
     m_impl->_getPublisher().unsubscribeFromAllChanges(*this);
 
     m_service->unsubscribeToConnectionStatus(m_connectionStatusRegistrationID);
-    m_service->unsubscribeTopic(std::string("tb.simple/VoidInterface/rpc/funcVoid"));
+
+    for (const auto& topic: m_topics)
+    {
+        m_service->unsubscribeTopic(topic. first);
+    }
 }
 
 void VoidInterfaceService::onConnectionStatusChanged(bool connectionStatus)

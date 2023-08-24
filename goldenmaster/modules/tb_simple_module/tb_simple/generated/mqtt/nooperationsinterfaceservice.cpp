@@ -6,17 +6,29 @@
 using namespace Test::TbSimple;
 using namespace Test::TbSimple::MQTT;
 
+namespace {
+    std::map<std::string, ApiGear::MQTT::CallbackFunction> createTopicMap(NoOperationsInterfaceService* service)
+    {
+        return {
+            {std::string("tb.simple/NoOperationsInterface/set/propBool"), [service](const std::string& topic, const std::string& args, const std::string&, const std::string&){ service->onSetProperty(topic, args); } },
+            {std::string("tb.simple/NoOperationsInterface/set/propInt"), [service](const std::string& topic, const std::string& args, const std::string&, const std::string&){ service->onSetProperty(topic, args); } },
+        };
+    };
+}
+
 NoOperationsInterfaceService::NoOperationsInterfaceService(std::shared_ptr<INoOperationsInterface> impl, std::shared_ptr<ApiGear::MQTT::Service> service)
     : m_impl(impl)
     , m_service(service)
+    , m_topics(createTopicMap(this))
 {
     m_impl->_getPublisher().subscribeToAllChanges(*this);
 
     m_connectionStatusRegistrationID = m_service->subscribeToConnectionStatus([this](bool connectionStatus){ onConnectionStatusChanged(connectionStatus); });
-    // subscribe to all property change request methods
-    m_service->subscribeTopic(std::string("tb.simple/NoOperationsInterface/set/propBool"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onSetProperty(topic, args); });
-    m_service->subscribeTopic(std::string("tb.simple/NoOperationsInterface/set/propInt"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onSetProperty(topic, args); });
 
+    for (const auto& topic: m_topics)
+    {
+        m_service->subscribeTopic(topic. first, topic.second);
+    }
 }
 
 NoOperationsInterfaceService::~NoOperationsInterfaceService()
@@ -24,8 +36,11 @@ NoOperationsInterfaceService::~NoOperationsInterfaceService()
     m_impl->_getPublisher().unsubscribeFromAllChanges(*this);
 
     m_service->unsubscribeToConnectionStatus(m_connectionStatusRegistrationID);
-    m_service->unsubscribeTopic(std::string("tb.simple/NoOperationsInterface/set/propBool"));
-    m_service->unsubscribeTopic(std::string("tb.simple/NoOperationsInterface/set/propInt"));
+
+    for (const auto& topic: m_topics)
+    {
+        m_service->unsubscribeTopic(topic. first);
+    }
 }
 
 void NoOperationsInterfaceService::onConnectionStatusChanged(bool connectionStatus)

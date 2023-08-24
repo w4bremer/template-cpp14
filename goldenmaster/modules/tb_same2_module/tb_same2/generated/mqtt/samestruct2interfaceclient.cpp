@@ -9,29 +9,38 @@ using namespace Test::TbSame2::MQTT;
 
 namespace {
     std::mt19937 randomNumberGenerator (std::random_device{}());
+
+    std::map<std::string, ApiGear::MQTT::CallbackFunction> createTopicMap(const std::string&clientId, SameStruct2InterfaceClient* client)
+    {
+        return {
+            { std::string("tb.same2/SameStruct2Interface/prop/prop1"), [client](const std::string& topic, const std::string& args, const std::string&, const std::string&){ client->onPropertyChanged(topic, args); } },
+            { std::string("tb.same2/SameStruct2Interface/prop/prop2"), [client](const std::string& topic, const std::string& args, const std::string&, const std::string&){ client->onPropertyChanged(topic, args); } },
+            { std::string("tb.same2/SameStruct2Interface/sig/sig1"), [client](const std::string& topic, const std::string& args, const std::string&, const std::string&){ client->onSignal(topic, args); } },
+            { std::string("tb.same2/SameStruct2Interface/sig/sig2"), [client](const std::string& topic, const std::string& args, const std::string&, const std::string&){ client->onSignal(topic, args); } },
+            { std::string("tb.same2/SameStruct2Interface/rpc/func1/"+clientId+"/result"), [client](const std::string&, const std::string& args, const std::string&, const std::string& correlationData){ client->onInvokeReply(args, correlationData); } },
+            { std::string("tb.same2/SameStruct2Interface/rpc/func2/"+clientId+"/result"), [client](const std::string&, const std::string& args, const std::string&, const std::string& correlationData){ client->onInvokeReply(args, correlationData); } },
+        };
+    };
 }
 
 SameStruct2InterfaceClient::SameStruct2InterfaceClient(std::shared_ptr<ApiGear::MQTT::Client> client)
     : m_isReady(false)
     , m_client(client)
     , m_publisher(std::make_unique<SameStruct2InterfacePublisher>())
+    , m_topics(createTopicMap(m_client->getClientId(), this))
 {
-    m_client->subscribeTopic(std::string("tb.same2/SameStruct2Interface/prop/prop1"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onPropertyChanged(topic, args); });
-    m_client->subscribeTopic(std::string("tb.same2/SameStruct2Interface/prop/prop2"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onPropertyChanged(topic, args); });
-    m_client->subscribeTopic(std::string("tb.same2/SameStruct2Interface/sig/sig1"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onSignal(topic, args); });
-    m_client->subscribeTopic(std::string("tb.same2/SameStruct2Interface/sig/sig2"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onSignal(topic, args); });
-    m_client->subscribeTopic(std::string("tb.same2/SameStruct2Interface/rpc/func1/"+m_client->getClientId()+"/result"), [this](const std::string&, const std::string& args, const std::string&, const std::string& correlationData){ onInvokeReply(args, correlationData); });
-    m_client->subscribeTopic(std::string("tb.same2/SameStruct2Interface/rpc/func2/"+m_client->getClientId()+"/result"), [this](const std::string&, const std::string& args, const std::string&, const std::string& correlationData){ onInvokeReply(args, correlationData); });
+    for (const auto& topic: m_topics)
+    {
+        m_client->subscribeTopic(topic. first, topic.second);
+    }
 }
 
 SameStruct2InterfaceClient::~SameStruct2InterfaceClient()
 {
-    m_client->unsubscribeTopic(std::string("tb.same2/SameStruct2Interface/prop/prop1"));
-    m_client->unsubscribeTopic(std::string("tb.same2/SameStruct2Interface/prop/prop2"));
-    m_client->unsubscribeTopic(std::string("tb.same2/SameStruct2Interface/sig/sig1"));
-    m_client->unsubscribeTopic(std::string("tb.same2/SameStruct2Interface/sig/sig2"));
-    m_client->unsubscribeTopic(std::string("tb.same2/SameStruct2Interface/rpc/func1/"+m_client->getClientId()+"/result"));
-    m_client->unsubscribeTopic(std::string("tb.same2/SameStruct2Interface/rpc/func2/"+m_client->getClientId()+"/result"));
+    for (const auto& topic: m_topics)
+    {
+        m_client->unsubscribeTopic(topic. first);
+    }
 }
 
 void SameStruct2InterfaceClient::applyState(const nlohmann::json& fields) 

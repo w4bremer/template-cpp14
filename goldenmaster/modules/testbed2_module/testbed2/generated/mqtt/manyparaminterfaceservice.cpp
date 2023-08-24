@@ -6,23 +6,35 @@
 using namespace Test::Testbed2;
 using namespace Test::Testbed2::MQTT;
 
+namespace {
+    std::map<std::string, ApiGear::MQTT::CallbackFunction> createTopicMap(ManyParamInterfaceService* service)
+    {
+        return {
+            {std::string("testbed2/ManyParamInterface/set/prop1"), [service](const std::string& topic, const std::string& args, const std::string&, const std::string&){ service->onSetProperty(topic, args); } },
+            {std::string("testbed2/ManyParamInterface/set/prop2"), [service](const std::string& topic, const std::string& args, const std::string&, const std::string&){ service->onSetProperty(topic, args); } },
+            {std::string("testbed2/ManyParamInterface/set/prop3"), [service](const std::string& topic, const std::string& args, const std::string&, const std::string&){ service->onSetProperty(topic, args); } },
+            {std::string("testbed2/ManyParamInterface/set/prop4"), [service](const std::string& topic, const std::string& args, const std::string&, const std::string&){ service->onSetProperty(topic, args); } },
+            {std::string("testbed2/ManyParamInterface/rpc/func1"), [service](const std::string& topic, const std::string& args, const std::string& responseTopic, const std::string& correlationData) { service->onInvoke(topic, args, responseTopic, correlationData); } },
+            {std::string("testbed2/ManyParamInterface/rpc/func2"), [service](const std::string& topic, const std::string& args, const std::string& responseTopic, const std::string& correlationData) { service->onInvoke(topic, args, responseTopic, correlationData); } },
+            {std::string("testbed2/ManyParamInterface/rpc/func3"), [service](const std::string& topic, const std::string& args, const std::string& responseTopic, const std::string& correlationData) { service->onInvoke(topic, args, responseTopic, correlationData); } },
+            {std::string("testbed2/ManyParamInterface/rpc/func4"), [service](const std::string& topic, const std::string& args, const std::string& responseTopic, const std::string& correlationData) { service->onInvoke(topic, args, responseTopic, correlationData); } },
+        };
+    };
+}
+
 ManyParamInterfaceService::ManyParamInterfaceService(std::shared_ptr<IManyParamInterface> impl, std::shared_ptr<ApiGear::MQTT::Service> service)
     : m_impl(impl)
     , m_service(service)
+    , m_topics(createTopicMap(this))
 {
     m_impl->_getPublisher().subscribeToAllChanges(*this);
 
     m_connectionStatusRegistrationID = m_service->subscribeToConnectionStatus([this](bool connectionStatus){ onConnectionStatusChanged(connectionStatus); });
-    // subscribe to all property change request methods
-    m_service->subscribeTopic(std::string("testbed2/ManyParamInterface/set/prop1"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onSetProperty(topic, args); });
-    m_service->subscribeTopic(std::string("testbed2/ManyParamInterface/set/prop2"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onSetProperty(topic, args); });
-    m_service->subscribeTopic(std::string("testbed2/ManyParamInterface/set/prop3"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onSetProperty(topic, args); });
-    m_service->subscribeTopic(std::string("testbed2/ManyParamInterface/set/prop4"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onSetProperty(topic, args); });
-    m_service->subscribeTopic(std::string("testbed2/ManyParamInterface/rpc/func1"), [this](const std::string& topic, const std::string& args, const std::string& responseTopic, const std::string& correlationData) { onInvoke(topic, args, responseTopic, correlationData); });
-    m_service->subscribeTopic(std::string("testbed2/ManyParamInterface/rpc/func2"), [this](const std::string& topic, const std::string& args, const std::string& responseTopic, const std::string& correlationData) { onInvoke(topic, args, responseTopic, correlationData); });
-    m_service->subscribeTopic(std::string("testbed2/ManyParamInterface/rpc/func3"), [this](const std::string& topic, const std::string& args, const std::string& responseTopic, const std::string& correlationData) { onInvoke(topic, args, responseTopic, correlationData); });
-    m_service->subscribeTopic(std::string("testbed2/ManyParamInterface/rpc/func4"), [this](const std::string& topic, const std::string& args, const std::string& responseTopic, const std::string& correlationData) { onInvoke(topic, args, responseTopic, correlationData); });
 
+    for (const auto& topic: m_topics)
+    {
+        m_service->subscribeTopic(topic. first, topic.second);
+    }
 }
 
 ManyParamInterfaceService::~ManyParamInterfaceService()
@@ -30,14 +42,11 @@ ManyParamInterfaceService::~ManyParamInterfaceService()
     m_impl->_getPublisher().unsubscribeFromAllChanges(*this);
 
     m_service->unsubscribeToConnectionStatus(m_connectionStatusRegistrationID);
-    m_service->unsubscribeTopic(std::string("testbed2/ManyParamInterface/set/prop1"));
-    m_service->unsubscribeTopic(std::string("testbed2/ManyParamInterface/set/prop2"));
-    m_service->unsubscribeTopic(std::string("testbed2/ManyParamInterface/set/prop3"));
-    m_service->unsubscribeTopic(std::string("testbed2/ManyParamInterface/set/prop4"));
-    m_service->unsubscribeTopic(std::string("testbed2/ManyParamInterface/rpc/func1"));
-    m_service->unsubscribeTopic(std::string("testbed2/ManyParamInterface/rpc/func2"));
-    m_service->unsubscribeTopic(std::string("testbed2/ManyParamInterface/rpc/func3"));
-    m_service->unsubscribeTopic(std::string("testbed2/ManyParamInterface/rpc/func4"));
+
+    for (const auto& topic: m_topics)
+    {
+        m_service->unsubscribeTopic(topic. first);
+    }
 }
 
 void ManyParamInterfaceService::onConnectionStatusChanged(bool connectionStatus)

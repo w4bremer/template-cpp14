@@ -6,23 +6,35 @@
 using namespace Test::Testbed1;
 using namespace Test::Testbed1::MQTT;
 
+namespace {
+    std::map<std::string, ApiGear::MQTT::CallbackFunction> createTopicMap(StructArrayInterfaceService* service)
+    {
+        return {
+            {std::string("testbed1/StructArrayInterface/set/propBool"), [service](const std::string& topic, const std::string& args, const std::string&, const std::string&){ service->onSetProperty(topic, args); } },
+            {std::string("testbed1/StructArrayInterface/set/propInt"), [service](const std::string& topic, const std::string& args, const std::string&, const std::string&){ service->onSetProperty(topic, args); } },
+            {std::string("testbed1/StructArrayInterface/set/propFloat"), [service](const std::string& topic, const std::string& args, const std::string&, const std::string&){ service->onSetProperty(topic, args); } },
+            {std::string("testbed1/StructArrayInterface/set/propString"), [service](const std::string& topic, const std::string& args, const std::string&, const std::string&){ service->onSetProperty(topic, args); } },
+            {std::string("testbed1/StructArrayInterface/rpc/funcBool"), [service](const std::string& topic, const std::string& args, const std::string& responseTopic, const std::string& correlationData) { service->onInvoke(topic, args, responseTopic, correlationData); } },
+            {std::string("testbed1/StructArrayInterface/rpc/funcInt"), [service](const std::string& topic, const std::string& args, const std::string& responseTopic, const std::string& correlationData) { service->onInvoke(topic, args, responseTopic, correlationData); } },
+            {std::string("testbed1/StructArrayInterface/rpc/funcFloat"), [service](const std::string& topic, const std::string& args, const std::string& responseTopic, const std::string& correlationData) { service->onInvoke(topic, args, responseTopic, correlationData); } },
+            {std::string("testbed1/StructArrayInterface/rpc/funcString"), [service](const std::string& topic, const std::string& args, const std::string& responseTopic, const std::string& correlationData) { service->onInvoke(topic, args, responseTopic, correlationData); } },
+        };
+    };
+}
+
 StructArrayInterfaceService::StructArrayInterfaceService(std::shared_ptr<IStructArrayInterface> impl, std::shared_ptr<ApiGear::MQTT::Service> service)
     : m_impl(impl)
     , m_service(service)
+    , m_topics(createTopicMap(this))
 {
     m_impl->_getPublisher().subscribeToAllChanges(*this);
 
     m_connectionStatusRegistrationID = m_service->subscribeToConnectionStatus([this](bool connectionStatus){ onConnectionStatusChanged(connectionStatus); });
-    // subscribe to all property change request methods
-    m_service->subscribeTopic(std::string("testbed1/StructArrayInterface/set/propBool"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onSetProperty(topic, args); });
-    m_service->subscribeTopic(std::string("testbed1/StructArrayInterface/set/propInt"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onSetProperty(topic, args); });
-    m_service->subscribeTopic(std::string("testbed1/StructArrayInterface/set/propFloat"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onSetProperty(topic, args); });
-    m_service->subscribeTopic(std::string("testbed1/StructArrayInterface/set/propString"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onSetProperty(topic, args); });
-    m_service->subscribeTopic(std::string("testbed1/StructArrayInterface/rpc/funcBool"), [this](const std::string& topic, const std::string& args, const std::string& responseTopic, const std::string& correlationData) { onInvoke(topic, args, responseTopic, correlationData); });
-    m_service->subscribeTopic(std::string("testbed1/StructArrayInterface/rpc/funcInt"), [this](const std::string& topic, const std::string& args, const std::string& responseTopic, const std::string& correlationData) { onInvoke(topic, args, responseTopic, correlationData); });
-    m_service->subscribeTopic(std::string("testbed1/StructArrayInterface/rpc/funcFloat"), [this](const std::string& topic, const std::string& args, const std::string& responseTopic, const std::string& correlationData) { onInvoke(topic, args, responseTopic, correlationData); });
-    m_service->subscribeTopic(std::string("testbed1/StructArrayInterface/rpc/funcString"), [this](const std::string& topic, const std::string& args, const std::string& responseTopic, const std::string& correlationData) { onInvoke(topic, args, responseTopic, correlationData); });
 
+    for (const auto& topic: m_topics)
+    {
+        m_service->subscribeTopic(topic. first, topic.second);
+    }
 }
 
 StructArrayInterfaceService::~StructArrayInterfaceService()
@@ -30,14 +42,11 @@ StructArrayInterfaceService::~StructArrayInterfaceService()
     m_impl->_getPublisher().unsubscribeFromAllChanges(*this);
 
     m_service->unsubscribeToConnectionStatus(m_connectionStatusRegistrationID);
-    m_service->unsubscribeTopic(std::string("testbed1/StructArrayInterface/set/propBool"));
-    m_service->unsubscribeTopic(std::string("testbed1/StructArrayInterface/set/propInt"));
-    m_service->unsubscribeTopic(std::string("testbed1/StructArrayInterface/set/propFloat"));
-    m_service->unsubscribeTopic(std::string("testbed1/StructArrayInterface/set/propString"));
-    m_service->unsubscribeTopic(std::string("testbed1/StructArrayInterface/rpc/funcBool"));
-    m_service->unsubscribeTopic(std::string("testbed1/StructArrayInterface/rpc/funcInt"));
-    m_service->unsubscribeTopic(std::string("testbed1/StructArrayInterface/rpc/funcFloat"));
-    m_service->unsubscribeTopic(std::string("testbed1/StructArrayInterface/rpc/funcString"));
+
+    for (const auto& topic: m_topics)
+    {
+        m_service->unsubscribeTopic(topic. first);
+    }
 }
 
 void StructArrayInterfaceService::onConnectionStatusChanged(bool connectionStatus)

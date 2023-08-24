@@ -6,17 +6,29 @@
 using namespace Test::Testbed2;
 using namespace Test::Testbed2::MQTT;
 
+namespace {
+    std::map<std::string, ApiGear::MQTT::CallbackFunction> createTopicMap(NestedStruct1InterfaceService* service)
+    {
+        return {
+            {std::string("testbed2/NestedStruct1Interface/set/prop1"), [service](const std::string& topic, const std::string& args, const std::string&, const std::string&){ service->onSetProperty(topic, args); } },
+            {std::string("testbed2/NestedStruct1Interface/rpc/func1"), [service](const std::string& topic, const std::string& args, const std::string& responseTopic, const std::string& correlationData) { service->onInvoke(topic, args, responseTopic, correlationData); } },
+        };
+    };
+}
+
 NestedStruct1InterfaceService::NestedStruct1InterfaceService(std::shared_ptr<INestedStruct1Interface> impl, std::shared_ptr<ApiGear::MQTT::Service> service)
     : m_impl(impl)
     , m_service(service)
+    , m_topics(createTopicMap(this))
 {
     m_impl->_getPublisher().subscribeToAllChanges(*this);
 
     m_connectionStatusRegistrationID = m_service->subscribeToConnectionStatus([this](bool connectionStatus){ onConnectionStatusChanged(connectionStatus); });
-    // subscribe to all property change request methods
-    m_service->subscribeTopic(std::string("testbed2/NestedStruct1Interface/set/prop1"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onSetProperty(topic, args); });
-    m_service->subscribeTopic(std::string("testbed2/NestedStruct1Interface/rpc/func1"), [this](const std::string& topic, const std::string& args, const std::string& responseTopic, const std::string& correlationData) { onInvoke(topic, args, responseTopic, correlationData); });
 
+    for (const auto& topic: m_topics)
+    {
+        m_service->subscribeTopic(topic. first, topic.second);
+    }
 }
 
 NestedStruct1InterfaceService::~NestedStruct1InterfaceService()
@@ -24,8 +36,11 @@ NestedStruct1InterfaceService::~NestedStruct1InterfaceService()
     m_impl->_getPublisher().unsubscribeFromAllChanges(*this);
 
     m_service->unsubscribeToConnectionStatus(m_connectionStatusRegistrationID);
-    m_service->unsubscribeTopic(std::string("testbed2/NestedStruct1Interface/set/prop1"));
-    m_service->unsubscribeTopic(std::string("testbed2/NestedStruct1Interface/rpc/func1"));
+
+    for (const auto& topic: m_topics)
+    {
+        m_service->unsubscribeTopic(topic. first);
+    }
 }
 
 void NestedStruct1InterfaceService::onConnectionStatusChanged(bool connectionStatus)

@@ -9,41 +9,44 @@ using namespace Test::Testbed1::MQTT;
 
 namespace {
     std::mt19937 randomNumberGenerator (std::random_device{}());
+
+    std::map<std::string, ApiGear::MQTT::CallbackFunction> createTopicMap(const std::string&clientId, StructArrayInterfaceClient* client)
+    {
+        return {
+            { std::string("testbed1/StructArrayInterface/prop/propBool"), [client](const std::string& topic, const std::string& args, const std::string&, const std::string&){ client->onPropertyChanged(topic, args); } },
+            { std::string("testbed1/StructArrayInterface/prop/propInt"), [client](const std::string& topic, const std::string& args, const std::string&, const std::string&){ client->onPropertyChanged(topic, args); } },
+            { std::string("testbed1/StructArrayInterface/prop/propFloat"), [client](const std::string& topic, const std::string& args, const std::string&, const std::string&){ client->onPropertyChanged(topic, args); } },
+            { std::string("testbed1/StructArrayInterface/prop/propString"), [client](const std::string& topic, const std::string& args, const std::string&, const std::string&){ client->onPropertyChanged(topic, args); } },
+            { std::string("testbed1/StructArrayInterface/sig/sigBool"), [client](const std::string& topic, const std::string& args, const std::string&, const std::string&){ client->onSignal(topic, args); } },
+            { std::string("testbed1/StructArrayInterface/sig/sigInt"), [client](const std::string& topic, const std::string& args, const std::string&, const std::string&){ client->onSignal(topic, args); } },
+            { std::string("testbed1/StructArrayInterface/sig/sigFloat"), [client](const std::string& topic, const std::string& args, const std::string&, const std::string&){ client->onSignal(topic, args); } },
+            { std::string("testbed1/StructArrayInterface/sig/sigString"), [client](const std::string& topic, const std::string& args, const std::string&, const std::string&){ client->onSignal(topic, args); } },
+            { std::string("testbed1/StructArrayInterface/rpc/funcBool/"+clientId+"/result"), [client](const std::string&, const std::string& args, const std::string&, const std::string& correlationData){ client->onInvokeReply(args, correlationData); } },
+            { std::string("testbed1/StructArrayInterface/rpc/funcInt/"+clientId+"/result"), [client](const std::string&, const std::string& args, const std::string&, const std::string& correlationData){ client->onInvokeReply(args, correlationData); } },
+            { std::string("testbed1/StructArrayInterface/rpc/funcFloat/"+clientId+"/result"), [client](const std::string&, const std::string& args, const std::string&, const std::string& correlationData){ client->onInvokeReply(args, correlationData); } },
+            { std::string("testbed1/StructArrayInterface/rpc/funcString/"+clientId+"/result"), [client](const std::string&, const std::string& args, const std::string&, const std::string& correlationData){ client->onInvokeReply(args, correlationData); } },
+        };
+    };
 }
 
 StructArrayInterfaceClient::StructArrayInterfaceClient(std::shared_ptr<ApiGear::MQTT::Client> client)
     : m_isReady(false)
     , m_client(client)
     , m_publisher(std::make_unique<StructArrayInterfacePublisher>())
+    , m_topics(createTopicMap(m_client->getClientId(), this))
 {
-    m_client->subscribeTopic(std::string("testbed1/StructArrayInterface/prop/propBool"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onPropertyChanged(topic, args); });
-    m_client->subscribeTopic(std::string("testbed1/StructArrayInterface/prop/propInt"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onPropertyChanged(topic, args); });
-    m_client->subscribeTopic(std::string("testbed1/StructArrayInterface/prop/propFloat"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onPropertyChanged(topic, args); });
-    m_client->subscribeTopic(std::string("testbed1/StructArrayInterface/prop/propString"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onPropertyChanged(topic, args); });
-    m_client->subscribeTopic(std::string("testbed1/StructArrayInterface/sig/sigBool"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onSignal(topic, args); });
-    m_client->subscribeTopic(std::string("testbed1/StructArrayInterface/sig/sigInt"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onSignal(topic, args); });
-    m_client->subscribeTopic(std::string("testbed1/StructArrayInterface/sig/sigFloat"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onSignal(topic, args); });
-    m_client->subscribeTopic(std::string("testbed1/StructArrayInterface/sig/sigString"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onSignal(topic, args); });
-    m_client->subscribeTopic(std::string("testbed1/StructArrayInterface/rpc/funcBool/"+m_client->getClientId()+"/result"), [this](const std::string&, const std::string& args, const std::string&, const std::string& correlationData){ onInvokeReply(args, correlationData); });
-    m_client->subscribeTopic(std::string("testbed1/StructArrayInterface/rpc/funcInt/"+m_client->getClientId()+"/result"), [this](const std::string&, const std::string& args, const std::string&, const std::string& correlationData){ onInvokeReply(args, correlationData); });
-    m_client->subscribeTopic(std::string("testbed1/StructArrayInterface/rpc/funcFloat/"+m_client->getClientId()+"/result"), [this](const std::string&, const std::string& args, const std::string&, const std::string& correlationData){ onInvokeReply(args, correlationData); });
-    m_client->subscribeTopic(std::string("testbed1/StructArrayInterface/rpc/funcString/"+m_client->getClientId()+"/result"), [this](const std::string&, const std::string& args, const std::string&, const std::string& correlationData){ onInvokeReply(args, correlationData); });
+    for (const auto& topic: m_topics)
+    {
+        m_client->subscribeTopic(topic. first, topic.second);
+    }
 }
 
 StructArrayInterfaceClient::~StructArrayInterfaceClient()
 {
-    m_client->unsubscribeTopic(std::string("testbed1/StructArrayInterface/prop/propBool"));
-    m_client->unsubscribeTopic(std::string("testbed1/StructArrayInterface/prop/propInt"));
-    m_client->unsubscribeTopic(std::string("testbed1/StructArrayInterface/prop/propFloat"));
-    m_client->unsubscribeTopic(std::string("testbed1/StructArrayInterface/prop/propString"));
-    m_client->unsubscribeTopic(std::string("testbed1/StructArrayInterface/sig/sigBool"));
-    m_client->unsubscribeTopic(std::string("testbed1/StructArrayInterface/sig/sigInt"));
-    m_client->unsubscribeTopic(std::string("testbed1/StructArrayInterface/sig/sigFloat"));
-    m_client->unsubscribeTopic(std::string("testbed1/StructArrayInterface/sig/sigString"));
-    m_client->unsubscribeTopic(std::string("testbed1/StructArrayInterface/rpc/funcBool/"+m_client->getClientId()+"/result"));
-    m_client->unsubscribeTopic(std::string("testbed1/StructArrayInterface/rpc/funcInt/"+m_client->getClientId()+"/result"));
-    m_client->unsubscribeTopic(std::string("testbed1/StructArrayInterface/rpc/funcFloat/"+m_client->getClientId()+"/result"));
-    m_client->unsubscribeTopic(std::string("testbed1/StructArrayInterface/rpc/funcString/"+m_client->getClientId()+"/result"));
+    for (const auto& topic: m_topics)
+    {
+        m_client->unsubscribeTopic(topic. first);
+    }
 }
 
 void StructArrayInterfaceClient::applyState(const nlohmann::json& fields) 
