@@ -16,30 +16,30 @@ SimpleArrayInterfaceClient::SimpleArrayInterfaceClient(std::shared_ptr<ApiGear::
     , m_client(client)
     , m_publisher(std::make_unique<SimpleArrayInterfacePublisher>())
 {
-    m_client->subscribeTopic(std::string("tb.simple/SimpleArrayInterface/prop/propBool"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onPropertyChanged(topic, args, "", ""); });
-    m_client->subscribeTopic(std::string("tb.simple/SimpleArrayInterface/prop/propInt"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onPropertyChanged(topic, args, "", ""); });
-    m_client->subscribeTopic(std::string("tb.simple/SimpleArrayInterface/prop/propInt32"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onPropertyChanged(topic, args, "", ""); });
-    m_client->subscribeTopic(std::string("tb.simple/SimpleArrayInterface/prop/propInt64"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onPropertyChanged(topic, args, "", ""); });
-    m_client->subscribeTopic(std::string("tb.simple/SimpleArrayInterface/prop/propFloat"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onPropertyChanged(topic, args, "", ""); });
-    m_client->subscribeTopic(std::string("tb.simple/SimpleArrayInterface/prop/propFloat32"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onPropertyChanged(topic, args, "", ""); });
-    m_client->subscribeTopic(std::string("tb.simple/SimpleArrayInterface/prop/propFloat64"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onPropertyChanged(topic, args, "", ""); });
-    m_client->subscribeTopic(std::string("tb.simple/SimpleArrayInterface/prop/propString"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onPropertyChanged(topic, args, "", ""); });
-    m_client->subscribeTopic(std::string("tb.simple/SimpleArrayInterface/sig/sigBool"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onSignal(topic, args, "", ""); });
-    m_client->subscribeTopic(std::string("tb.simple/SimpleArrayInterface/sig/sigInt"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onSignal(topic, args, "", ""); });
-    m_client->subscribeTopic(std::string("tb.simple/SimpleArrayInterface/sig/sigInt32"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onSignal(topic, args, "", ""); });
-    m_client->subscribeTopic(std::string("tb.simple/SimpleArrayInterface/sig/sigInt64"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onSignal(topic, args, "", ""); });
-    m_client->subscribeTopic(std::string("tb.simple/SimpleArrayInterface/sig/sigFloat"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onSignal(topic, args, "", ""); });
-    m_client->subscribeTopic(std::string("tb.simple/SimpleArrayInterface/sig/sigFloat32"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onSignal(topic, args, "", ""); });
-    m_client->subscribeTopic(std::string("tb.simple/SimpleArrayInterface/sig/sigFloat64"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onSignal(topic, args, "", ""); });
-    m_client->subscribeTopic(std::string("tb.simple/SimpleArrayInterface/sig/sigString"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onSignal(topic, args, "", ""); });
-    m_client->subscribeTopic(std::string("tb.simple/SimpleArrayInterface/rpc/funcBool/"+m_client->getClientId()+"/result"), [this](const std::string&, const std::string& args, const std::string&, const std::string& correlationData){ onInvokeReply("", args, "", correlationData); });
-    m_client->subscribeTopic(std::string("tb.simple/SimpleArrayInterface/rpc/funcInt/"+m_client->getClientId()+"/result"), [this](const std::string&, const std::string& args, const std::string&, const std::string& correlationData){ onInvokeReply("", args, "", correlationData); });
-    m_client->subscribeTopic(std::string("tb.simple/SimpleArrayInterface/rpc/funcInt32/"+m_client->getClientId()+"/result"), [this](const std::string&, const std::string& args, const std::string&, const std::string& correlationData){ onInvokeReply("", args, "", correlationData); });
-    m_client->subscribeTopic(std::string("tb.simple/SimpleArrayInterface/rpc/funcInt64/"+m_client->getClientId()+"/result"), [this](const std::string&, const std::string& args, const std::string&, const std::string& correlationData){ onInvokeReply("", args, "", correlationData); });
-    m_client->subscribeTopic(std::string("tb.simple/SimpleArrayInterface/rpc/funcFloat/"+m_client->getClientId()+"/result"), [this](const std::string&, const std::string& args, const std::string&, const std::string& correlationData){ onInvokeReply("", args, "", correlationData); });
-    m_client->subscribeTopic(std::string("tb.simple/SimpleArrayInterface/rpc/funcFloat32/"+m_client->getClientId()+"/result"), [this](const std::string&, const std::string& args, const std::string&, const std::string& correlationData){ onInvokeReply("", args, "", correlationData); });
-    m_client->subscribeTopic(std::string("tb.simple/SimpleArrayInterface/rpc/funcFloat64/"+m_client->getClientId()+"/result"), [this](const std::string&, const std::string& args, const std::string&, const std::string& correlationData){ onInvokeReply("", args, "", correlationData); });
-    m_client->subscribeTopic(std::string("tb.simple/SimpleArrayInterface/rpc/funcString/"+m_client->getClientId()+"/result"), [this](const std::string&, const std::string& args, const std::string&, const std::string& correlationData){ onInvokeReply("", args, "", correlationData); });
+    m_client->subscribeTopic(std::string("tb.simple/SimpleArrayInterface/prop/propBool"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onPropertyChanged(topic, args); });
+    m_client->subscribeTopic(std::string("tb.simple/SimpleArrayInterface/prop/propInt"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onPropertyChanged(topic, args); });
+    m_client->subscribeTopic(std::string("tb.simple/SimpleArrayInterface/prop/propInt32"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onPropertyChanged(topic, args); });
+    m_client->subscribeTopic(std::string("tb.simple/SimpleArrayInterface/prop/propInt64"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onPropertyChanged(topic, args); });
+    m_client->subscribeTopic(std::string("tb.simple/SimpleArrayInterface/prop/propFloat"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onPropertyChanged(topic, args); });
+    m_client->subscribeTopic(std::string("tb.simple/SimpleArrayInterface/prop/propFloat32"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onPropertyChanged(topic, args); });
+    m_client->subscribeTopic(std::string("tb.simple/SimpleArrayInterface/prop/propFloat64"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onPropertyChanged(topic, args); });
+    m_client->subscribeTopic(std::string("tb.simple/SimpleArrayInterface/prop/propString"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onPropertyChanged(topic, args); });
+    m_client->subscribeTopic(std::string("tb.simple/SimpleArrayInterface/sig/sigBool"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onSignal(topic, args); });
+    m_client->subscribeTopic(std::string("tb.simple/SimpleArrayInterface/sig/sigInt"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onSignal(topic, args); });
+    m_client->subscribeTopic(std::string("tb.simple/SimpleArrayInterface/sig/sigInt32"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onSignal(topic, args); });
+    m_client->subscribeTopic(std::string("tb.simple/SimpleArrayInterface/sig/sigInt64"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onSignal(topic, args); });
+    m_client->subscribeTopic(std::string("tb.simple/SimpleArrayInterface/sig/sigFloat"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onSignal(topic, args); });
+    m_client->subscribeTopic(std::string("tb.simple/SimpleArrayInterface/sig/sigFloat32"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onSignal(topic, args); });
+    m_client->subscribeTopic(std::string("tb.simple/SimpleArrayInterface/sig/sigFloat64"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onSignal(topic, args); });
+    m_client->subscribeTopic(std::string("tb.simple/SimpleArrayInterface/sig/sigString"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onSignal(topic, args); });
+    m_client->subscribeTopic(std::string("tb.simple/SimpleArrayInterface/rpc/funcBool/"+m_client->getClientId()+"/result"), [this](const std::string&, const std::string& args, const std::string&, const std::string& correlationData){ onInvokeReply(args, correlationData); });
+    m_client->subscribeTopic(std::string("tb.simple/SimpleArrayInterface/rpc/funcInt/"+m_client->getClientId()+"/result"), [this](const std::string&, const std::string& args, const std::string&, const std::string& correlationData){ onInvokeReply(args, correlationData); });
+    m_client->subscribeTopic(std::string("tb.simple/SimpleArrayInterface/rpc/funcInt32/"+m_client->getClientId()+"/result"), [this](const std::string&, const std::string& args, const std::string&, const std::string& correlationData){ onInvokeReply(args, correlationData); });
+    m_client->subscribeTopic(std::string("tb.simple/SimpleArrayInterface/rpc/funcInt64/"+m_client->getClientId()+"/result"), [this](const std::string&, const std::string& args, const std::string&, const std::string& correlationData){ onInvokeReply(args, correlationData); });
+    m_client->subscribeTopic(std::string("tb.simple/SimpleArrayInterface/rpc/funcFloat/"+m_client->getClientId()+"/result"), [this](const std::string&, const std::string& args, const std::string&, const std::string& correlationData){ onInvokeReply(args, correlationData); });
+    m_client->subscribeTopic(std::string("tb.simple/SimpleArrayInterface/rpc/funcFloat32/"+m_client->getClientId()+"/result"), [this](const std::string&, const std::string& args, const std::string&, const std::string& correlationData){ onInvokeReply(args, correlationData); });
+    m_client->subscribeTopic(std::string("tb.simple/SimpleArrayInterface/rpc/funcFloat64/"+m_client->getClientId()+"/result"), [this](const std::string&, const std::string& args, const std::string&, const std::string& correlationData){ onInvokeReply(args, correlationData); });
+    m_client->subscribeTopic(std::string("tb.simple/SimpleArrayInterface/rpc/funcString/"+m_client->getClientId()+"/result"), [this](const std::string&, const std::string& args, const std::string&, const std::string& correlationData){ onInvokeReply(args, correlationData); });
 }
 
 SimpleArrayInterfaceClient::~SimpleArrayInterfaceClient()
@@ -530,7 +530,7 @@ std::future<std::list<std::string>> SimpleArrayInterfaceClient::funcStringAsync(
     );
 }
 
-void SimpleArrayInterfaceClient::onSignal(const std::string& topic, const std::string& args, const std::string&, const std::string&)
+void SimpleArrayInterfaceClient::onSignal(const std::string& topic, const std::string& args)
 {
     nlohmann::json json_args = nlohmann::json::parse(args);
     const std::string entityName = ApiGear::MQTT::Topic(topic).getEntityName();
@@ -568,7 +568,7 @@ void SimpleArrayInterfaceClient::onSignal(const std::string& topic, const std::s
     }
 }
 
-void SimpleArrayInterfaceClient::onPropertyChanged(const std::string& topic, const std::string& args, const std::string&, const std::string&)
+void SimpleArrayInterfaceClient::onPropertyChanged(const std::string& topic, const std::string& args)
 {
     nlohmann::json json_args = nlohmann::json::parse(args);
     const std::string& name = ApiGear::MQTT::Topic(topic).getEntityName();
@@ -590,7 +590,7 @@ int SimpleArrayInterfaceClient::registerResponseHandler(ApiGear::MQTT::InvokeRep
     return responseId;
 }
 
-void SimpleArrayInterfaceClient::onInvokeReply(const std::string& /*topic*/, const std::string& args, const std::string& /*responseTopic*/, const std::string& correlationData)
+void SimpleArrayInterfaceClient::onInvokeReply(const std::string& args, const std::string& correlationData)
 {
     const int randomId = std::stoi(correlationData);
     ApiGear::MQTT::InvokeReplyFunc responseHandler {};

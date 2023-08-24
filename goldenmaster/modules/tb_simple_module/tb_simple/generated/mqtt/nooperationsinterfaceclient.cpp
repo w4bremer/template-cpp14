@@ -16,10 +16,10 @@ NoOperationsInterfaceClient::NoOperationsInterfaceClient(std::shared_ptr<ApiGear
     , m_client(client)
     , m_publisher(std::make_unique<NoOperationsInterfacePublisher>())
 {
-    m_client->subscribeTopic(std::string("tb.simple/NoOperationsInterface/prop/propBool"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onPropertyChanged(topic, args, "", ""); });
-    m_client->subscribeTopic(std::string("tb.simple/NoOperationsInterface/prop/propInt"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onPropertyChanged(topic, args, "", ""); });
-    m_client->subscribeTopic(std::string("tb.simple/NoOperationsInterface/sig/sigVoid"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onSignal(topic, args, "", ""); });
-    m_client->subscribeTopic(std::string("tb.simple/NoOperationsInterface/sig/sigBool"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onSignal(topic, args, "", ""); });
+    m_client->subscribeTopic(std::string("tb.simple/NoOperationsInterface/prop/propBool"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onPropertyChanged(topic, args); });
+    m_client->subscribeTopic(std::string("tb.simple/NoOperationsInterface/prop/propInt"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onPropertyChanged(topic, args); });
+    m_client->subscribeTopic(std::string("tb.simple/NoOperationsInterface/sig/sigVoid"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onSignal(topic, args); });
+    m_client->subscribeTopic(std::string("tb.simple/NoOperationsInterface/sig/sigBool"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onSignal(topic, args); });
 }
 
 NoOperationsInterfaceClient::~NoOperationsInterfaceClient()
@@ -84,7 +84,7 @@ int NoOperationsInterfaceClient::getPropInt() const
     return m_data.m_propInt;
 }
 
-void NoOperationsInterfaceClient::onSignal(const std::string& topic, const std::string& args, const std::string&, const std::string&)
+void NoOperationsInterfaceClient::onSignal(const std::string& topic, const std::string& args)
 {
     nlohmann::json json_args = nlohmann::json::parse(args);
     const std::string entityName = ApiGear::MQTT::Topic(topic).getEntityName();
@@ -98,7 +98,7 @@ void NoOperationsInterfaceClient::onSignal(const std::string& topic, const std::
     }
 }
 
-void NoOperationsInterfaceClient::onPropertyChanged(const std::string& topic, const std::string& args, const std::string&, const std::string&)
+void NoOperationsInterfaceClient::onPropertyChanged(const std::string& topic, const std::string& args)
 {
     nlohmann::json json_args = nlohmann::json::parse(args);
     const std::string& name = ApiGear::MQTT::Topic(topic).getEntityName();
@@ -120,7 +120,7 @@ int NoOperationsInterfaceClient::registerResponseHandler(ApiGear::MQTT::InvokeRe
     return responseId;
 }
 
-void NoOperationsInterfaceClient::onInvokeReply(const std::string& /*topic*/, const std::string& args, const std::string& /*responseTopic*/, const std::string& correlationData)
+void NoOperationsInterfaceClient::onInvokeReply(const std::string& args, const std::string& correlationData)
 {
     const int randomId = std::stoi(correlationData);
     ApiGear::MQTT::InvokeReplyFunc responseHandler {};

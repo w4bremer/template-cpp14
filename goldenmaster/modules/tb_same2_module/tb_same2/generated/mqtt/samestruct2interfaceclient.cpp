@@ -16,12 +16,12 @@ SameStruct2InterfaceClient::SameStruct2InterfaceClient(std::shared_ptr<ApiGear::
     , m_client(client)
     , m_publisher(std::make_unique<SameStruct2InterfacePublisher>())
 {
-    m_client->subscribeTopic(std::string("tb.same2/SameStruct2Interface/prop/prop1"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onPropertyChanged(topic, args, "", ""); });
-    m_client->subscribeTopic(std::string("tb.same2/SameStruct2Interface/prop/prop2"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onPropertyChanged(topic, args, "", ""); });
-    m_client->subscribeTopic(std::string("tb.same2/SameStruct2Interface/sig/sig1"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onSignal(topic, args, "", ""); });
-    m_client->subscribeTopic(std::string("tb.same2/SameStruct2Interface/sig/sig2"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onSignal(topic, args, "", ""); });
-    m_client->subscribeTopic(std::string("tb.same2/SameStruct2Interface/rpc/func1/"+m_client->getClientId()+"/result"), [this](const std::string&, const std::string& args, const std::string&, const std::string& correlationData){ onInvokeReply("", args, "", correlationData); });
-    m_client->subscribeTopic(std::string("tb.same2/SameStruct2Interface/rpc/func2/"+m_client->getClientId()+"/result"), [this](const std::string&, const std::string& args, const std::string&, const std::string& correlationData){ onInvokeReply("", args, "", correlationData); });
+    m_client->subscribeTopic(std::string("tb.same2/SameStruct2Interface/prop/prop1"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onPropertyChanged(topic, args); });
+    m_client->subscribeTopic(std::string("tb.same2/SameStruct2Interface/prop/prop2"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onPropertyChanged(topic, args); });
+    m_client->subscribeTopic(std::string("tb.same2/SameStruct2Interface/sig/sig1"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onSignal(topic, args); });
+    m_client->subscribeTopic(std::string("tb.same2/SameStruct2Interface/sig/sig2"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onSignal(topic, args); });
+    m_client->subscribeTopic(std::string("tb.same2/SameStruct2Interface/rpc/func1/"+m_client->getClientId()+"/result"), [this](const std::string&, const std::string& args, const std::string&, const std::string& correlationData){ onInvokeReply(args, correlationData); });
+    m_client->subscribeTopic(std::string("tb.same2/SameStruct2Interface/rpc/func2/"+m_client->getClientId()+"/result"), [this](const std::string&, const std::string& args, const std::string&, const std::string& correlationData){ onInvokeReply(args, correlationData); });
 }
 
 SameStruct2InterfaceClient::~SameStruct2InterfaceClient()
@@ -153,7 +153,7 @@ std::future<Struct1> SameStruct2InterfaceClient::func2Async(const Struct1& param
     );
 }
 
-void SameStruct2InterfaceClient::onSignal(const std::string& topic, const std::string& args, const std::string&, const std::string&)
+void SameStruct2InterfaceClient::onSignal(const std::string& topic, const std::string& args)
 {
     nlohmann::json json_args = nlohmann::json::parse(args);
     const std::string entityName = ApiGear::MQTT::Topic(topic).getEntityName();
@@ -167,7 +167,7 @@ void SameStruct2InterfaceClient::onSignal(const std::string& topic, const std::s
     }
 }
 
-void SameStruct2InterfaceClient::onPropertyChanged(const std::string& topic, const std::string& args, const std::string&, const std::string&)
+void SameStruct2InterfaceClient::onPropertyChanged(const std::string& topic, const std::string& args)
 {
     nlohmann::json json_args = nlohmann::json::parse(args);
     const std::string& name = ApiGear::MQTT::Topic(topic).getEntityName();
@@ -189,7 +189,7 @@ int SameStruct2InterfaceClient::registerResponseHandler(ApiGear::MQTT::InvokeRep
     return responseId;
 }
 
-void SameStruct2InterfaceClient::onInvokeReply(const std::string& /*topic*/, const std::string& args, const std::string& /*responseTopic*/, const std::string& correlationData)
+void SameStruct2InterfaceClient::onInvokeReply(const std::string& args, const std::string& correlationData)
 {
     const int randomId = std::stoi(correlationData);
     ApiGear::MQTT::InvokeReplyFunc responseHandler {};

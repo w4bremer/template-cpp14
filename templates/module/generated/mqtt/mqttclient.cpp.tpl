@@ -23,15 +23,15 @@ namespace {
 {
 {{- range .Interface.Properties}}
 {{- $property := . }}
-    m_client->subscribeTopic(std::string("{{$.Module.Name}}/{{$interfaceName}}/prop/{{$property}}"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onPropertyChanged(topic, args, "", ""); });
+    m_client->subscribeTopic(std::string("{{$.Module.Name}}/{{$interfaceName}}/prop/{{$property}}"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onPropertyChanged(topic, args); });
 {{- end }}
 {{- range .Interface.Signals}}
 {{- $signal := . }}
-    m_client->subscribeTopic(std::string("{{$.Module.Name}}/{{$interfaceName}}/sig/{{$signal}}"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onSignal(topic, args, "", ""); });
+    m_client->subscribeTopic(std::string("{{$.Module.Name}}/{{$interfaceName}}/sig/{{$signal}}"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onSignal(topic, args); });
 {{- end }}
 {{- range .Interface.Operations}}
 {{- $operation := . }}
-    m_client->subscribeTopic(std::string("{{$.Module.Name}}/{{$interfaceName}}/rpc/{{$operation}}/"+m_client->getClientId()+"/result"), [this](const std::string&, const std::string& args, const std::string&, const std::string& correlationData){ onInvokeReply("", args, "", correlationData); });
+    m_client->subscribeTopic(std::string("{{$.Module.Name}}/{{$interfaceName}}/rpc/{{$operation}}/"+m_client->getClientId()+"/result"), [this](const std::string&, const std::string& args, const std::string&, const std::string& correlationData){ onInvokeReply(args, correlationData); });
 {{- end }}
 }
 
@@ -143,7 +143,7 @@ std::future<{{$returnType}}> {{$class}}::{{lower1 $operation.Name}}Async({{cppPa
 
 {{- end }}
 
-void {{$class}}::onSignal(const std::string& topic, const std::string& args, const std::string&, const std::string&)
+void {{$class}}::onSignal(const std::string& topic, const std::string& args)
 {
     nlohmann::json json_args = nlohmann::json::parse(args);
     const std::string entityName = ApiGear::MQTT::Topic(topic).getEntityName();
@@ -165,7 +165,7 @@ void {{$class}}::onSignal(const std::string& topic, const std::string& args, con
 {{- end }}
 }
 
-void {{$class}}::onPropertyChanged(const std::string& topic, const std::string& args, const std::string&, const std::string&)
+void {{$class}}::onPropertyChanged(const std::string& topic, const std::string& args)
 {
     nlohmann::json json_args = nlohmann::json::parse(args);
     const std::string& name = ApiGear::MQTT::Topic(topic).getEntityName();
@@ -187,7 +187,7 @@ int {{$class}}::registerResponseHandler(ApiGear::MQTT::InvokeReplyFunc handler)
     return responseId;
 }
 
-void {{$class}}::onInvokeReply(const std::string& /*topic*/, const std::string& args, const std::string& /*responseTopic*/, const std::string& correlationData)
+void {{$class}}::onInvokeReply(const std::string& args, const std::string& correlationData)
 {
     const int randomId = std::stoi(correlationData);
     ApiGear::MQTT::InvokeReplyFunc responseHandler {};
