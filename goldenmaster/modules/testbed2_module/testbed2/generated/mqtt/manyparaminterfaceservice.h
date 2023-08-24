@@ -15,7 +15,8 @@ public:
 
     void onConnectionStatusChanged(bool connectionStatus);
 
-    void onInvoke(const ApiGear::MQTT::Topic& topic, const std::string& args, const ApiGear::MQTT::Topic& responseTopic, const std::string& correlationData);
+    void onSetProperty(const std::string& topic, const std::string& args);
+    void onInvoke(const std::string& topic, const std::string& args, const std::string& responseTopic, const std::string& correlationData);
 
     // IManyParamInterfaceSubscriber interface
     void onSig1(int param1) override;

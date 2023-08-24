@@ -1,6 +1,7 @@
 #include "tb_same2/generated/mqtt/sameenum2interfaceclient.h"
 #include "tb_same2/generated/core/sameenum2interface.publisher.h"
 #include "tb_same2/generated/core/tb_same2.json.adapter.h"
+#include "apigear/mqtt/mqtttopic.h"
 #include <random>
 
 using namespace Test::TbSame2;
@@ -15,22 +16,22 @@ SameEnum2InterfaceClient::SameEnum2InterfaceClient(std::shared_ptr<ApiGear::MQTT
     , m_client(client)
     , m_publisher(std::make_unique<SameEnum2InterfacePublisher>())
 {
-    m_client->subscribeTopic(ApiGear::MQTT::Topic("tb.same2","SameEnum2Interface",ApiGear::MQTT::Topic::TopicType::Property,"prop1"), std::bind(&SameEnum2InterfaceClient::onPropertyChanged, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->subscribeTopic(ApiGear::MQTT::Topic("tb.same2","SameEnum2Interface",ApiGear::MQTT::Topic::TopicType::Property,"prop2"), std::bind(&SameEnum2InterfaceClient::onPropertyChanged, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->subscribeTopic(ApiGear::MQTT::Topic("tb.same2","SameEnum2Interface",ApiGear::MQTT::Topic::TopicType::Signal,"sig1"), std::bind(&SameEnum2InterfaceClient::onSignal, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->subscribeTopic(ApiGear::MQTT::Topic("tb.same2","SameEnum2Interface",ApiGear::MQTT::Topic::TopicType::Signal,"sig2"), std::bind(&SameEnum2InterfaceClient::onSignal, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->subscribeTopic(ApiGear::MQTT::Topic("tb.same2","SameEnum2Interface",ApiGear::MQTT::Topic::TopicType::Operation,"func1",m_client->getClientId()+"/result"), std::bind(&SameEnum2InterfaceClient::onInvokeReply, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->subscribeTopic(ApiGear::MQTT::Topic("tb.same2","SameEnum2Interface",ApiGear::MQTT::Topic::TopicType::Operation,"func2",m_client->getClientId()+"/result"), std::bind(&SameEnum2InterfaceClient::onInvokeReply, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
+    m_client->subscribeTopic(std::string("tb.same2/SameEnum2Interface/prop/prop1"), std::bind(&SameEnum2InterfaceClient::onPropertyChanged, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
+    m_client->subscribeTopic(std::string("tb.same2/SameEnum2Interface/prop/prop2"), std::bind(&SameEnum2InterfaceClient::onPropertyChanged, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
+    m_client->subscribeTopic(std::string("tb.same2/SameEnum2Interface/sig/sig1"), std::bind(&SameEnum2InterfaceClient::onSignal, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
+    m_client->subscribeTopic(std::string("tb.same2/SameEnum2Interface/sig/sig2"), std::bind(&SameEnum2InterfaceClient::onSignal, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
+    m_client->subscribeTopic(std::string("tb.same2/SameEnum2Interface/rpc/func1/"+m_client->getClientId()+"/result"), std::bind(&SameEnum2InterfaceClient::onInvokeReply, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
+    m_client->subscribeTopic(std::string("tb.same2/SameEnum2Interface/rpc/func2/"+m_client->getClientId()+"/result"), std::bind(&SameEnum2InterfaceClient::onInvokeReply, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
 }
 
 SameEnum2InterfaceClient::~SameEnum2InterfaceClient()
 {
-    m_client->unsubscribeTopic(ApiGear::MQTT::Topic("tb.same2","SameEnum2Interface",ApiGear::MQTT::Topic::TopicType::Property,"prop1"), std::bind(&SameEnum2InterfaceClient::onPropertyChanged, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->unsubscribeTopic(ApiGear::MQTT::Topic("tb.same2","SameEnum2Interface",ApiGear::MQTT::Topic::TopicType::Property,"prop2"), std::bind(&SameEnum2InterfaceClient::onPropertyChanged, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->unsubscribeTopic(ApiGear::MQTT::Topic("tb.same2","SameEnum2Interface",ApiGear::MQTT::Topic::TopicType::Signal,"sig1"), std::bind(&SameEnum2InterfaceClient::onSignal, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->unsubscribeTopic(ApiGear::MQTT::Topic("tb.same2","SameEnum2Interface",ApiGear::MQTT::Topic::TopicType::Signal,"sig2"), std::bind(&SameEnum2InterfaceClient::onSignal, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->unsubscribeTopic(ApiGear::MQTT::Topic("tb.same2","SameEnum2Interface",ApiGear::MQTT::Topic::TopicType::Operation,"func1",m_client->getClientId()+"/result"), std::bind(&SameEnum2InterfaceClient::onInvokeReply, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->unsubscribeTopic(ApiGear::MQTT::Topic("tb.same2","SameEnum2Interface",ApiGear::MQTT::Topic::TopicType::Operation,"func2",m_client->getClientId()+"/result"), std::bind(&SameEnum2InterfaceClient::onInvokeReply, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
+    m_client->unsubscribeTopic(std::string("tb.same2/SameEnum2Interface/prop/prop1"), std::bind(&SameEnum2InterfaceClient::onPropertyChanged, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
+    m_client->unsubscribeTopic(std::string("tb.same2/SameEnum2Interface/prop/prop2"), std::bind(&SameEnum2InterfaceClient::onPropertyChanged, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
+    m_client->unsubscribeTopic(std::string("tb.same2/SameEnum2Interface/sig/sig1"), std::bind(&SameEnum2InterfaceClient::onSignal, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
+    m_client->unsubscribeTopic(std::string("tb.same2/SameEnum2Interface/sig/sig2"), std::bind(&SameEnum2InterfaceClient::onSignal, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
+    m_client->unsubscribeTopic(std::string("tb.same2/SameEnum2Interface/rpc/func1/"+m_client->getClientId()+"/result"), std::bind(&SameEnum2InterfaceClient::onInvokeReply, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
+    m_client->unsubscribeTopic(std::string("tb.same2/SameEnum2Interface/rpc/func2/"+m_client->getClientId()+"/result"), std::bind(&SameEnum2InterfaceClient::onInvokeReply, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
 }
 
 void SameEnum2InterfaceClient::applyState(const nlohmann::json& fields) 
@@ -48,7 +49,7 @@ void SameEnum2InterfaceClient::setProp1(Enum1Enum prop1)
     if(m_client == nullptr) {
         return;
     }
-    static const auto topic = ApiGear::MQTT::Topic("tb.same2","SameEnum2Interface",ApiGear::MQTT::Topic::TopicType::Operation,"_setprop1");
+    static const auto topic = std::string("tb.same2/SameEnum2Interface/set/prop1");
     m_client->setRemoteProperty(topic, nlohmann::json(prop1).dump());
 }
 
@@ -70,7 +71,7 @@ void SameEnum2InterfaceClient::setProp2(Enum2Enum prop2)
     if(m_client == nullptr) {
         return;
     }
-    static const auto topic = ApiGear::MQTT::Topic("tb.same2","SameEnum2Interface",ApiGear::MQTT::Topic::TopicType::Operation,"_setprop2");
+    static const auto topic = std::string("tb.same2/SameEnum2Interface/set/prop2");
     m_client->setRemoteProperty(topic, nlohmann::json(prop2).dump());
 }
 
@@ -105,8 +106,8 @@ std::future<Enum1Enum> SameEnum2InterfaceClient::func1Async(Enum1Enum param1)
                     param1]()
         {
             std::promise<Enum1Enum> resultPromise;
-            static const auto topic = ApiGear::MQTT::Topic("tb.same2","SameEnum2Interface",ApiGear::MQTT::Topic::TopicType::Operation,"func1");
-            static const auto responseTopic = ApiGear::MQTT::Topic(topic.getEncodedTopic() + "/" + m_client->getClientId() + "/result");
+            static const auto topic = std::string("tb.same2/SameEnum2Interface/rpc/func1");
+            static const auto responseTopic = std::string(topic + "/" + m_client->getClientId() + "/result");
             ApiGear::MQTT::InvokeReplyFunc responseHandler = [&resultPromise](ApiGear::MQTT::InvokeReplyArg arg) {
                 const Enum1Enum& value = arg.value.get<Enum1Enum>();
                 resultPromise.set_value(value);
@@ -138,8 +139,8 @@ std::future<Enum1Enum> SameEnum2InterfaceClient::func2Async(Enum1Enum param1, En
                     param2]()
         {
             std::promise<Enum1Enum> resultPromise;
-            static const auto topic = ApiGear::MQTT::Topic("tb.same2","SameEnum2Interface",ApiGear::MQTT::Topic::TopicType::Operation,"func2");
-            static const auto responseTopic = ApiGear::MQTT::Topic(topic.getEncodedTopic() + "/" + m_client->getClientId() + "/result");
+            static const auto topic = std::string("tb.same2/SameEnum2Interface/rpc/func2");
+            static const auto responseTopic = std::string(topic + "/" + m_client->getClientId() + "/result");
             ApiGear::MQTT::InvokeReplyFunc responseHandler = [&resultPromise](ApiGear::MQTT::InvokeReplyArg arg) {
                 const Enum1Enum& value = arg.value.get<Enum1Enum>();
                 resultPromise.set_value(value);
@@ -152,23 +153,24 @@ std::future<Enum1Enum> SameEnum2InterfaceClient::func2Async(Enum1Enum param1, En
     );
 }
 
-void SameEnum2InterfaceClient::onSignal(const ApiGear::MQTT::Topic& topic, const std::string& args, const ApiGear::MQTT::Topic&, const std::string&)
+void SameEnum2InterfaceClient::onSignal(const std::string& topic, const std::string& args, const std::string&, const std::string&)
 {
     nlohmann::json json_args = nlohmann::json::parse(args);
-    if(topic.getEntityName() == "sig1") {
+    const std::string entityName = ApiGear::MQTT::Topic(topic).getEntityName();
+    if(entityName == "sig1") {
         m_publisher->publishSig1(json_args[0].get<Enum1Enum>());
         return;
     }
-    if(topic.getEntityName() == "sig2") {
+    if(entityName == "sig2") {
         m_publisher->publishSig2(json_args[0].get<Enum1Enum>(),json_args[1].get<Enum2Enum>());
         return;
     }
 }
 
-void SameEnum2InterfaceClient::onPropertyChanged(const ApiGear::MQTT::Topic& topic, const std::string& args, const ApiGear::MQTT::Topic&, const std::string&)
+void SameEnum2InterfaceClient::onPropertyChanged(const std::string& topic, const std::string& args, const std::string&, const std::string&)
 {
     nlohmann::json json_args = nlohmann::json::parse(args);
-    const std::string& name = topic.getEntityName();
+    const std::string& name = ApiGear::MQTT::Topic(topic).getEntityName();
     applyState({ {name, json_args} });
     return;
 }
@@ -187,7 +189,7 @@ int SameEnum2InterfaceClient::registerResponseHandler(ApiGear::MQTT::InvokeReply
     return responseId;
 }
 
-void SameEnum2InterfaceClient::onInvokeReply(const ApiGear::MQTT::Topic& /*topic*/, const std::string& args, const ApiGear::MQTT::Topic& /*responseTopic*/, const std::string& correlationData)
+void SameEnum2InterfaceClient::onInvokeReply(const std::string& /*topic*/, const std::string& args, const std::string& /*responseTopic*/, const std::string& correlationData)
 {
     const int randomId = std::stoi(correlationData);
     ApiGear::MQTT::InvokeReplyFunc responseHandler {};

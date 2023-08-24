@@ -1,6 +1,7 @@
 #include "tb_simple/generated/mqtt/nooperationsinterfaceclient.h"
 #include "tb_simple/generated/core/nooperationsinterface.publisher.h"
 #include "tb_simple/generated/core/tb_simple.json.adapter.h"
+#include "apigear/mqtt/mqtttopic.h"
 #include <random>
 
 using namespace Test::TbSimple;
@@ -15,18 +16,18 @@ NoOperationsInterfaceClient::NoOperationsInterfaceClient(std::shared_ptr<ApiGear
     , m_client(client)
     , m_publisher(std::make_unique<NoOperationsInterfacePublisher>())
 {
-    m_client->subscribeTopic(ApiGear::MQTT::Topic("tb.simple","NoOperationsInterface",ApiGear::MQTT::Topic::TopicType::Property,"propBool"), std::bind(&NoOperationsInterfaceClient::onPropertyChanged, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->subscribeTopic(ApiGear::MQTT::Topic("tb.simple","NoOperationsInterface",ApiGear::MQTT::Topic::TopicType::Property,"propInt"), std::bind(&NoOperationsInterfaceClient::onPropertyChanged, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->subscribeTopic(ApiGear::MQTT::Topic("tb.simple","NoOperationsInterface",ApiGear::MQTT::Topic::TopicType::Signal,"sigVoid"), std::bind(&NoOperationsInterfaceClient::onSignal, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->subscribeTopic(ApiGear::MQTT::Topic("tb.simple","NoOperationsInterface",ApiGear::MQTT::Topic::TopicType::Signal,"sigBool"), std::bind(&NoOperationsInterfaceClient::onSignal, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
+    m_client->subscribeTopic(std::string("tb.simple/NoOperationsInterface/prop/propBool"), std::bind(&NoOperationsInterfaceClient::onPropertyChanged, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
+    m_client->subscribeTopic(std::string("tb.simple/NoOperationsInterface/prop/propInt"), std::bind(&NoOperationsInterfaceClient::onPropertyChanged, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
+    m_client->subscribeTopic(std::string("tb.simple/NoOperationsInterface/sig/sigVoid"), std::bind(&NoOperationsInterfaceClient::onSignal, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
+    m_client->subscribeTopic(std::string("tb.simple/NoOperationsInterface/sig/sigBool"), std::bind(&NoOperationsInterfaceClient::onSignal, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
 }
 
 NoOperationsInterfaceClient::~NoOperationsInterfaceClient()
 {
-    m_client->unsubscribeTopic(ApiGear::MQTT::Topic("tb.simple","NoOperationsInterface",ApiGear::MQTT::Topic::TopicType::Property,"propBool"), std::bind(&NoOperationsInterfaceClient::onPropertyChanged, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->unsubscribeTopic(ApiGear::MQTT::Topic("tb.simple","NoOperationsInterface",ApiGear::MQTT::Topic::TopicType::Property,"propInt"), std::bind(&NoOperationsInterfaceClient::onPropertyChanged, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->unsubscribeTopic(ApiGear::MQTT::Topic("tb.simple","NoOperationsInterface",ApiGear::MQTT::Topic::TopicType::Signal,"sigVoid"), std::bind(&NoOperationsInterfaceClient::onSignal, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->unsubscribeTopic(ApiGear::MQTT::Topic("tb.simple","NoOperationsInterface",ApiGear::MQTT::Topic::TopicType::Signal,"sigBool"), std::bind(&NoOperationsInterfaceClient::onSignal, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
+    m_client->unsubscribeTopic(std::string("tb.simple/NoOperationsInterface/prop/propBool"), std::bind(&NoOperationsInterfaceClient::onPropertyChanged, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
+    m_client->unsubscribeTopic(std::string("tb.simple/NoOperationsInterface/prop/propInt"), std::bind(&NoOperationsInterfaceClient::onPropertyChanged, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
+    m_client->unsubscribeTopic(std::string("tb.simple/NoOperationsInterface/sig/sigVoid"), std::bind(&NoOperationsInterfaceClient::onSignal, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
+    m_client->unsubscribeTopic(std::string("tb.simple/NoOperationsInterface/sig/sigBool"), std::bind(&NoOperationsInterfaceClient::onSignal, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
 }
 
 void NoOperationsInterfaceClient::applyState(const nlohmann::json& fields) 
@@ -44,7 +45,7 @@ void NoOperationsInterfaceClient::setPropBool(bool propBool)
     if(m_client == nullptr) {
         return;
     }
-    static const auto topic = ApiGear::MQTT::Topic("tb.simple","NoOperationsInterface",ApiGear::MQTT::Topic::TopicType::Operation,"_setpropBool");
+    static const auto topic = std::string("tb.simple/NoOperationsInterface/set/propBool");
     m_client->setRemoteProperty(topic, nlohmann::json(propBool).dump());
 }
 
@@ -66,7 +67,7 @@ void NoOperationsInterfaceClient::setPropInt(int propInt)
     if(m_client == nullptr) {
         return;
     }
-    static const auto topic = ApiGear::MQTT::Topic("tb.simple","NoOperationsInterface",ApiGear::MQTT::Topic::TopicType::Operation,"_setpropInt");
+    static const auto topic = std::string("tb.simple/NoOperationsInterface/set/propInt");
     m_client->setRemoteProperty(topic, nlohmann::json(propInt).dump());
 }
 
@@ -83,23 +84,24 @@ int NoOperationsInterfaceClient::getPropInt() const
     return m_data.m_propInt;
 }
 
-void NoOperationsInterfaceClient::onSignal(const ApiGear::MQTT::Topic& topic, const std::string& args, const ApiGear::MQTT::Topic&, const std::string&)
+void NoOperationsInterfaceClient::onSignal(const std::string& topic, const std::string& args, const std::string&, const std::string&)
 {
     nlohmann::json json_args = nlohmann::json::parse(args);
-    if(topic.getEntityName() == "sigVoid") {
+    const std::string entityName = ApiGear::MQTT::Topic(topic).getEntityName();
+    if(entityName == "sigVoid") {
         m_publisher->publishSigVoid();
         return;
     }
-    if(topic.getEntityName() == "sigBool") {
+    if(entityName == "sigBool") {
         m_publisher->publishSigBool(json_args[0].get<bool>());
         return;
     }
 }
 
-void NoOperationsInterfaceClient::onPropertyChanged(const ApiGear::MQTT::Topic& topic, const std::string& args, const ApiGear::MQTT::Topic&, const std::string&)
+void NoOperationsInterfaceClient::onPropertyChanged(const std::string& topic, const std::string& args, const std::string&, const std::string&)
 {
     nlohmann::json json_args = nlohmann::json::parse(args);
-    const std::string& name = topic.getEntityName();
+    const std::string& name = ApiGear::MQTT::Topic(topic).getEntityName();
     applyState({ {name, json_args} });
     return;
 }
@@ -118,7 +120,7 @@ int NoOperationsInterfaceClient::registerResponseHandler(ApiGear::MQTT::InvokeRe
     return responseId;
 }
 
-void NoOperationsInterfaceClient::onInvokeReply(const ApiGear::MQTT::Topic& /*topic*/, const std::string& args, const ApiGear::MQTT::Topic& /*responseTopic*/, const std::string& correlationData)
+void NoOperationsInterfaceClient::onInvokeReply(const std::string& /*topic*/, const std::string& args, const std::string& /*responseTopic*/, const std::string& correlationData)
 {
     const int randomId = std::stoi(correlationData);
     ApiGear::MQTT::InvokeReplyFunc responseHandler {};

@@ -34,9 +34,9 @@ public:
 
     bool isReady() const;
 
-    void onSignal(const ApiGear::MQTT::Topic& topic, const std::string& args, const ApiGear::MQTT::Topic& responseTopic, const std::string& correlationData);
-    void onPropertyChanged(const ApiGear::MQTT::Topic& topic, const std::string& args, const ApiGear::MQTT::Topic& responseTopic, const std::string& correlationData);
-    void onInvokeReply(const ApiGear::MQTT::Topic& topic, const std::string& args, const ApiGear::MQTT::Topic& responseTopic, const std::string& correlationData);
+    void onSignal(const std::string& topic, const std::string& args, const std::string& responseTopic, const std::string& correlationData);
+    void onPropertyChanged(const std::string& topic, const std::string& args, const std::string& responseTopic, const std::string& correlationData);
+    void onInvokeReply(const std::string& topic, const std::string& args, const std::string& responseTopic, const std::string& correlationData);
 
 private:
     void setPropBoolLocal(const StructBool& propBool);

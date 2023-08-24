@@ -34,27 +34,27 @@ void Service::disconnect() {
     m_cwrapper->disconnect();
 }
 
-void Service::notifyPropertyChange(const Topic& topic, const std::string& value)
+void Service::notifyPropertyChange(const std::string& topic, const std::string& value)
 {
     m_cwrapper->notifyPropertyChange(topic, value);
 }
 
-void Service::notifySignal(const Topic& topic, const std::string& args)
+void Service::notifySignal(const std::string& topic, const std::string& args)
 {
     m_cwrapper->notifySignal(topic, args);
 }
 
-void Service::notifyInvokeResponse(const Topic& responseTopic, const std::string& value, const std::string& correlationData)
+void Service::notifyInvokeResponse(const std::string& responseTopic, const std::string& value, const std::string& correlationData)
 {
     m_cwrapper->notifyInvokeResponse(responseTopic, value, correlationData);
 }
 
-void Service::subscribeTopic(const Topic& topic, CallbackFunction func)
+void Service::subscribeTopic(const std::string& topic, CallbackFunction func)
 {
     m_cwrapper->subscribeTopic(topic, func);
 }
 
-void Service::unsubscribeTopic(const Topic& topic, CallbackFunction func)
+void Service::unsubscribeTopic(const std::string& topic, CallbackFunction func)
 {
     m_cwrapper->unsubscribeTopic(topic, func);
 }

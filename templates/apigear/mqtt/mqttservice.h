@@ -3,7 +3,6 @@
 #include <memory>
 #include "nlohmann/json.hpp"
 #include "mqttcommon.h"
-#include "mqtttopic.h"
 #include "mqtttypes.h"
 
 namespace ApiGear {
@@ -32,12 +31,12 @@ public:
     void unsubscribeToConnectionStatus(int subscriptionID);
 
     // service interface
-    void notifyPropertyChange(const Topic& name, const std::string& value);
-    void notifySignal(const Topic& name, const std::string& args);
-    void notifyInvokeResponse(const Topic& responseTopic, const std::string& value, const std::string& correlationData);
+    void notifyPropertyChange(const std::string& name, const std::string& value);
+    void notifySignal(const std::string& name, const std::string& args);
+    void notifyInvokeResponse(const std::string& responseTopic, const std::string& value, const std::string& correlationData);
 
-    void subscribeTopic(const Topic& name, CallbackFunction func);
-    void unsubscribeTopic(const Topic& name, CallbackFunction func);
+    void subscribeTopic(const std::string& name, CallbackFunction func);
+    void unsubscribeTopic(const std::string& name, CallbackFunction func);
 
     const std::string& getClientId() const;
 

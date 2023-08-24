@@ -3,7 +3,6 @@
 #include <memory>
 #include "nlohmann/json.hpp"
 #include "mqttcommon.h"
-#include "mqtttopic.h"
 #include "mqtttypes.h"
 
 namespace ApiGear {
@@ -32,11 +31,11 @@ public:
     void unsubscribeToConnectionStatus(int subscriptionID);
 
     // client interface
-    void invokeRemote(const Topic& name, const Topic& responseTopic, const std::string& value, int responseId);
-    void setRemoteProperty(const Topic& name, const std::string& value);
+    void invokeRemote(const std::string& name, const std::string& responseTopic, const std::string& value, int responseId);
+    void setRemoteProperty(const std::string& name, const std::string& value);
 
-    void subscribeTopic(const Topic& name, CallbackFunction func);
-    void unsubscribeTopic(const Topic& name, CallbackFunction func);
+    void subscribeTopic(const std::string& name, CallbackFunction func);
+    void unsubscribeTopic(const std::string& name, CallbackFunction func);
 
     const std::string& getClientId() const;
 

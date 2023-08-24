@@ -18,6 +18,7 @@ public:
     enum class TopicType{
         None, //< empty/error
         Property, //< prop
+        SetProperty, //< set
         Signal, //< sig
         Operation //< rpc
     };

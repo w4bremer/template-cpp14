@@ -1,6 +1,7 @@
 #include "testbed2/generated/mqtt/nestedstruct1interfaceclient.h"
 #include "testbed2/generated/core/nestedstruct1interface.publisher.h"
 #include "testbed2/generated/core/testbed2.json.adapter.h"
+#include "apigear/mqtt/mqtttopic.h"
 #include <random>
 
 using namespace Test::Testbed2;
@@ -15,16 +16,16 @@ NestedStruct1InterfaceClient::NestedStruct1InterfaceClient(std::shared_ptr<ApiGe
     , m_client(client)
     , m_publisher(std::make_unique<NestedStruct1InterfacePublisher>())
 {
-    m_client->subscribeTopic(ApiGear::MQTT::Topic("testbed2","NestedStruct1Interface",ApiGear::MQTT::Topic::TopicType::Property,"prop1"), std::bind(&NestedStruct1InterfaceClient::onPropertyChanged, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->subscribeTopic(ApiGear::MQTT::Topic("testbed2","NestedStruct1Interface",ApiGear::MQTT::Topic::TopicType::Signal,"sig1"), std::bind(&NestedStruct1InterfaceClient::onSignal, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->subscribeTopic(ApiGear::MQTT::Topic("testbed2","NestedStruct1Interface",ApiGear::MQTT::Topic::TopicType::Operation,"func1",m_client->getClientId()+"/result"), std::bind(&NestedStruct1InterfaceClient::onInvokeReply, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
+    m_client->subscribeTopic(std::string("testbed2/NestedStruct1Interface/prop/prop1"), std::bind(&NestedStruct1InterfaceClient::onPropertyChanged, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
+    m_client->subscribeTopic(std::string("testbed2/NestedStruct1Interface/sig/sig1"), std::bind(&NestedStruct1InterfaceClient::onSignal, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
+    m_client->subscribeTopic(std::string("testbed2/NestedStruct1Interface/rpc/func1/"+m_client->getClientId()+"/result"), std::bind(&NestedStruct1InterfaceClient::onInvokeReply, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
 }
 
 NestedStruct1InterfaceClient::~NestedStruct1InterfaceClient()
 {
-    m_client->unsubscribeTopic(ApiGear::MQTT::Topic("testbed2","NestedStruct1Interface",ApiGear::MQTT::Topic::TopicType::Property,"prop1"), std::bind(&NestedStruct1InterfaceClient::onPropertyChanged, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->unsubscribeTopic(ApiGear::MQTT::Topic("testbed2","NestedStruct1Interface",ApiGear::MQTT::Topic::TopicType::Signal,"sig1"), std::bind(&NestedStruct1InterfaceClient::onSignal, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->unsubscribeTopic(ApiGear::MQTT::Topic("testbed2","NestedStruct1Interface",ApiGear::MQTT::Topic::TopicType::Operation,"func1",m_client->getClientId()+"/result"), std::bind(&NestedStruct1InterfaceClient::onInvokeReply, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
+    m_client->unsubscribeTopic(std::string("testbed2/NestedStruct1Interface/prop/prop1"), std::bind(&NestedStruct1InterfaceClient::onPropertyChanged, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
+    m_client->unsubscribeTopic(std::string("testbed2/NestedStruct1Interface/sig/sig1"), std::bind(&NestedStruct1InterfaceClient::onSignal, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
+    m_client->unsubscribeTopic(std::string("testbed2/NestedStruct1Interface/rpc/func1/"+m_client->getClientId()+"/result"), std::bind(&NestedStruct1InterfaceClient::onInvokeReply, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
 }
 
 void NestedStruct1InterfaceClient::applyState(const nlohmann::json& fields) 
@@ -39,7 +40,7 @@ void NestedStruct1InterfaceClient::setProp1(const NestedStruct1& prop1)
     if(m_client == nullptr) {
         return;
     }
-    static const auto topic = ApiGear::MQTT::Topic("testbed2","NestedStruct1Interface",ApiGear::MQTT::Topic::TopicType::Operation,"_setprop1");
+    static const auto topic = std::string("testbed2/NestedStruct1Interface/set/prop1");
     m_client->setRemoteProperty(topic, nlohmann::json(prop1).dump());
 }
 
@@ -74,8 +75,8 @@ std::future<NestedStruct1> NestedStruct1InterfaceClient::func1Async(const Nested
                     param1]()
         {
             std::promise<NestedStruct1> resultPromise;
-            static const auto topic = ApiGear::MQTT::Topic("testbed2","NestedStruct1Interface",ApiGear::MQTT::Topic::TopicType::Operation,"func1");
-            static const auto responseTopic = ApiGear::MQTT::Topic(topic.getEncodedTopic() + "/" + m_client->getClientId() + "/result");
+            static const auto topic = std::string("testbed2/NestedStruct1Interface/rpc/func1");
+            static const auto responseTopic = std::string(topic + "/" + m_client->getClientId() + "/result");
             ApiGear::MQTT::InvokeReplyFunc responseHandler = [&resultPromise](ApiGear::MQTT::InvokeReplyArg arg) {
                 const NestedStruct1& value = arg.value.get<NestedStruct1>();
                 resultPromise.set_value(value);
@@ -88,19 +89,20 @@ std::future<NestedStruct1> NestedStruct1InterfaceClient::func1Async(const Nested
     );
 }
 
-void NestedStruct1InterfaceClient::onSignal(const ApiGear::MQTT::Topic& topic, const std::string& args, const ApiGear::MQTT::Topic&, const std::string&)
+void NestedStruct1InterfaceClient::onSignal(const std::string& topic, const std::string& args, const std::string&, const std::string&)
 {
     nlohmann::json json_args = nlohmann::json::parse(args);
-    if(topic.getEntityName() == "sig1") {
+    const std::string entityName = ApiGear::MQTT::Topic(topic).getEntityName();
+    if(entityName == "sig1") {
         m_publisher->publishSig1(json_args[0].get<NestedStruct1>());
         return;
     }
 }
 
-void NestedStruct1InterfaceClient::onPropertyChanged(const ApiGear::MQTT::Topic& topic, const std::string& args, const ApiGear::MQTT::Topic&, const std::string&)
+void NestedStruct1InterfaceClient::onPropertyChanged(const std::string& topic, const std::string& args, const std::string&, const std::string&)
 {
     nlohmann::json json_args = nlohmann::json::parse(args);
-    const std::string& name = topic.getEntityName();
+    const std::string& name = ApiGear::MQTT::Topic(topic).getEntityName();
     applyState({ {name, json_args} });
     return;
 }
@@ -119,7 +121,7 @@ int NestedStruct1InterfaceClient::registerResponseHandler(ApiGear::MQTT::InvokeR
     return responseId;
 }
 
-void NestedStruct1InterfaceClient::onInvokeReply(const ApiGear::MQTT::Topic& /*topic*/, const std::string& args, const ApiGear::MQTT::Topic& /*responseTopic*/, const std::string& correlationData)
+void NestedStruct1InterfaceClient::onInvokeReply(const std::string& /*topic*/, const std::string& args, const std::string& /*responseTopic*/, const std::string& correlationData)
 {
     const int randomId = std::stoi(correlationData);
     ApiGear::MQTT::InvokeReplyFunc responseHandler {};
