@@ -16,18 +16,18 @@ ManyParamInterfaceClient::ManyParamInterfaceClient(std::shared_ptr<ApiGear::MQTT
     , m_client(client)
     , m_publisher(std::make_unique<ManyParamInterfacePublisher>())
 {
-    m_client->subscribeTopic(std::string("testbed2/ManyParamInterface/prop/prop1"), std::bind(&ManyParamInterfaceClient::onPropertyChanged, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->subscribeTopic(std::string("testbed2/ManyParamInterface/prop/prop2"), std::bind(&ManyParamInterfaceClient::onPropertyChanged, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->subscribeTopic(std::string("testbed2/ManyParamInterface/prop/prop3"), std::bind(&ManyParamInterfaceClient::onPropertyChanged, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->subscribeTopic(std::string("testbed2/ManyParamInterface/prop/prop4"), std::bind(&ManyParamInterfaceClient::onPropertyChanged, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->subscribeTopic(std::string("testbed2/ManyParamInterface/sig/sig1"), std::bind(&ManyParamInterfaceClient::onSignal, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->subscribeTopic(std::string("testbed2/ManyParamInterface/sig/sig2"), std::bind(&ManyParamInterfaceClient::onSignal, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->subscribeTopic(std::string("testbed2/ManyParamInterface/sig/sig3"), std::bind(&ManyParamInterfaceClient::onSignal, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->subscribeTopic(std::string("testbed2/ManyParamInterface/sig/sig4"), std::bind(&ManyParamInterfaceClient::onSignal, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->subscribeTopic(std::string("testbed2/ManyParamInterface/rpc/func1/"+m_client->getClientId()+"/result"), std::bind(&ManyParamInterfaceClient::onInvokeReply, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->subscribeTopic(std::string("testbed2/ManyParamInterface/rpc/func2/"+m_client->getClientId()+"/result"), std::bind(&ManyParamInterfaceClient::onInvokeReply, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->subscribeTopic(std::string("testbed2/ManyParamInterface/rpc/func3/"+m_client->getClientId()+"/result"), std::bind(&ManyParamInterfaceClient::onInvokeReply, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->subscribeTopic(std::string("testbed2/ManyParamInterface/rpc/func4/"+m_client->getClientId()+"/result"), std::bind(&ManyParamInterfaceClient::onInvokeReply, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
+    m_client->subscribeTopic(std::string("testbed2/ManyParamInterface/prop/prop1"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onPropertyChanged(topic, args, "", ""); });
+    m_client->subscribeTopic(std::string("testbed2/ManyParamInterface/prop/prop2"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onPropertyChanged(topic, args, "", ""); });
+    m_client->subscribeTopic(std::string("testbed2/ManyParamInterface/prop/prop3"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onPropertyChanged(topic, args, "", ""); });
+    m_client->subscribeTopic(std::string("testbed2/ManyParamInterface/prop/prop4"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onPropertyChanged(topic, args, "", ""); });
+    m_client->subscribeTopic(std::string("testbed2/ManyParamInterface/sig/sig1"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onSignal(topic, args, "", ""); });
+    m_client->subscribeTopic(std::string("testbed2/ManyParamInterface/sig/sig2"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onSignal(topic, args, "", ""); });
+    m_client->subscribeTopic(std::string("testbed2/ManyParamInterface/sig/sig3"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onSignal(topic, args, "", ""); });
+    m_client->subscribeTopic(std::string("testbed2/ManyParamInterface/sig/sig4"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onSignal(topic, args, "", ""); });
+    m_client->subscribeTopic(std::string("testbed2/ManyParamInterface/rpc/func1/"+m_client->getClientId()+"/result"), [this](const std::string&, const std::string& args, const std::string&, const std::string& correlationData){ onInvokeReply("", args, "", correlationData); });
+    m_client->subscribeTopic(std::string("testbed2/ManyParamInterface/rpc/func2/"+m_client->getClientId()+"/result"), [this](const std::string&, const std::string& args, const std::string&, const std::string& correlationData){ onInvokeReply("", args, "", correlationData); });
+    m_client->subscribeTopic(std::string("testbed2/ManyParamInterface/rpc/func3/"+m_client->getClientId()+"/result"), [this](const std::string&, const std::string& args, const std::string&, const std::string& correlationData){ onInvokeReply("", args, "", correlationData); });
+    m_client->subscribeTopic(std::string("testbed2/ManyParamInterface/rpc/func4/"+m_client->getClientId()+"/result"), [this](const std::string&, const std::string& args, const std::string&, const std::string& correlationData){ onInvokeReply("", args, "", correlationData); });
 }
 
 ManyParamInterfaceClient::~ManyParamInterfaceClient()

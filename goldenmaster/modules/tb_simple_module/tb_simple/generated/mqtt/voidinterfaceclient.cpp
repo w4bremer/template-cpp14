@@ -16,8 +16,8 @@ VoidInterfaceClient::VoidInterfaceClient(std::shared_ptr<ApiGear::MQTT::Client> 
     , m_client(client)
     , m_publisher(std::make_unique<VoidInterfacePublisher>())
 {
-    m_client->subscribeTopic(std::string("tb.simple/VoidInterface/sig/sigVoid"), std::bind(&VoidInterfaceClient::onSignal, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->subscribeTopic(std::string("tb.simple/VoidInterface/rpc/funcVoid/"+m_client->getClientId()+"/result"), std::bind(&VoidInterfaceClient::onInvokeReply, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
+    m_client->subscribeTopic(std::string("tb.simple/VoidInterface/sig/sigVoid"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onSignal(topic, args, "", ""); });
+    m_client->subscribeTopic(std::string("tb.simple/VoidInterface/rpc/funcVoid/"+m_client->getClientId()+"/result"), [this](const std::string&, const std::string& args, const std::string&, const std::string& correlationData){ onInvokeReply("", args, "", correlationData); });
 }
 
 VoidInterfaceClient::~VoidInterfaceClient()

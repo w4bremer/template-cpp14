@@ -12,10 +12,10 @@ NoPropertiesInterfaceService::NoPropertiesInterfaceService(std::shared_ptr<INoPr
 {
     m_impl->_getPublisher().subscribeToAllChanges(*this);
 
-    m_connectionStatusRegistrationID = m_service->subscribeToConnectionStatus(std::bind(&NoPropertiesInterfaceService::onConnectionStatusChanged, this, std::placeholders::_1));
+    m_connectionStatusRegistrationID = m_service->subscribeToConnectionStatus([this](bool connectionStatus){ onConnectionStatusChanged(connectionStatus); });
     // subscribe to all property change request methods
-    m_service->subscribeTopic(std::string("tb.simple/NoPropertiesInterface/rpc/funcVoid"), std::bind(&NoPropertiesInterfaceService::onInvoke, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_service->subscribeTopic(std::string("tb.simple/NoPropertiesInterface/rpc/funcBool"), std::bind(&NoPropertiesInterfaceService::onInvoke, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
+    m_service->subscribeTopic(std::string("tb.simple/NoPropertiesInterface/rpc/funcVoid"), [this](const std::string& topic, const std::string& args, const std::string& responseTopic, const std::string& correlationData) { onInvoke(topic, args, responseTopic, correlationData); });
+    m_service->subscribeTopic(std::string("tb.simple/NoPropertiesInterface/rpc/funcBool"), [this](const std::string& topic, const std::string& args, const std::string& responseTopic, const std::string& correlationData) { onInvoke(topic, args, responseTopic, correlationData); });
 
 }
 

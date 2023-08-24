@@ -12,10 +12,10 @@ NoOperationsInterfaceService::NoOperationsInterfaceService(std::shared_ptr<INoOp
 {
     m_impl->_getPublisher().subscribeToAllChanges(*this);
 
-    m_connectionStatusRegistrationID = m_service->subscribeToConnectionStatus(std::bind(&NoOperationsInterfaceService::onConnectionStatusChanged, this, std::placeholders::_1));
+    m_connectionStatusRegistrationID = m_service->subscribeToConnectionStatus([this](bool connectionStatus){ onConnectionStatusChanged(connectionStatus); });
     // subscribe to all property change request methods
-    m_service->subscribeTopic(std::string("tb.simple/NoOperationsInterface/set/propBool"), std::bind(&NoOperationsInterfaceService::onSetProperty, this, std::placeholders::_1, std::placeholders::_2));
-    m_service->subscribeTopic(std::string("tb.simple/NoOperationsInterface/set/propInt"), std::bind(&NoOperationsInterfaceService::onSetProperty, this, std::placeholders::_1, std::placeholders::_2));
+    m_service->subscribeTopic(std::string("tb.simple/NoOperationsInterface/set/propBool"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onSetProperty(topic, args); });
+    m_service->subscribeTopic(std::string("tb.simple/NoOperationsInterface/set/propInt"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onSetProperty(topic, args); });
 
 }
 

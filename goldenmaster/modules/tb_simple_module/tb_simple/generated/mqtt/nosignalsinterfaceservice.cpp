@@ -12,12 +12,12 @@ NoSignalsInterfaceService::NoSignalsInterfaceService(std::shared_ptr<INoSignalsI
 {
     m_impl->_getPublisher().subscribeToAllChanges(*this);
 
-    m_connectionStatusRegistrationID = m_service->subscribeToConnectionStatus(std::bind(&NoSignalsInterfaceService::onConnectionStatusChanged, this, std::placeholders::_1));
+    m_connectionStatusRegistrationID = m_service->subscribeToConnectionStatus([this](bool connectionStatus){ onConnectionStatusChanged(connectionStatus); });
     // subscribe to all property change request methods
-    m_service->subscribeTopic(std::string("tb.simple/NoSignalsInterface/set/propBool"), std::bind(&NoSignalsInterfaceService::onSetProperty, this, std::placeholders::_1, std::placeholders::_2));
-    m_service->subscribeTopic(std::string("tb.simple/NoSignalsInterface/set/propInt"), std::bind(&NoSignalsInterfaceService::onSetProperty, this, std::placeholders::_1, std::placeholders::_2));
-    m_service->subscribeTopic(std::string("tb.simple/NoSignalsInterface/rpc/funcVoid"), std::bind(&NoSignalsInterfaceService::onInvoke, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_service->subscribeTopic(std::string("tb.simple/NoSignalsInterface/rpc/funcBool"), std::bind(&NoSignalsInterfaceService::onInvoke, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
+    m_service->subscribeTopic(std::string("tb.simple/NoSignalsInterface/set/propBool"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onSetProperty(topic, args); });
+    m_service->subscribeTopic(std::string("tb.simple/NoSignalsInterface/set/propInt"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onSetProperty(topic, args); });
+    m_service->subscribeTopic(std::string("tb.simple/NoSignalsInterface/rpc/funcVoid"), [this](const std::string& topic, const std::string& args, const std::string& responseTopic, const std::string& correlationData) { onInvoke(topic, args, responseTopic, correlationData); });
+    m_service->subscribeTopic(std::string("tb.simple/NoSignalsInterface/rpc/funcBool"), [this](const std::string& topic, const std::string& args, const std::string& responseTopic, const std::string& correlationData) { onInvoke(topic, args, responseTopic, correlationData); });
 
 }
 

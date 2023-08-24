@@ -12,16 +12,16 @@ StructArrayInterfaceService::StructArrayInterfaceService(std::shared_ptr<IStruct
 {
     m_impl->_getPublisher().subscribeToAllChanges(*this);
 
-    m_connectionStatusRegistrationID = m_service->subscribeToConnectionStatus(std::bind(&StructArrayInterfaceService::onConnectionStatusChanged, this, std::placeholders::_1));
+    m_connectionStatusRegistrationID = m_service->subscribeToConnectionStatus([this](bool connectionStatus){ onConnectionStatusChanged(connectionStatus); });
     // subscribe to all property change request methods
-    m_service->subscribeTopic(std::string("testbed1/StructArrayInterface/set/propBool"), std::bind(&StructArrayInterfaceService::onSetProperty, this, std::placeholders::_1, std::placeholders::_2));
-    m_service->subscribeTopic(std::string("testbed1/StructArrayInterface/set/propInt"), std::bind(&StructArrayInterfaceService::onSetProperty, this, std::placeholders::_1, std::placeholders::_2));
-    m_service->subscribeTopic(std::string("testbed1/StructArrayInterface/set/propFloat"), std::bind(&StructArrayInterfaceService::onSetProperty, this, std::placeholders::_1, std::placeholders::_2));
-    m_service->subscribeTopic(std::string("testbed1/StructArrayInterface/set/propString"), std::bind(&StructArrayInterfaceService::onSetProperty, this, std::placeholders::_1, std::placeholders::_2));
-    m_service->subscribeTopic(std::string("testbed1/StructArrayInterface/rpc/funcBool"), std::bind(&StructArrayInterfaceService::onInvoke, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_service->subscribeTopic(std::string("testbed1/StructArrayInterface/rpc/funcInt"), std::bind(&StructArrayInterfaceService::onInvoke, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_service->subscribeTopic(std::string("testbed1/StructArrayInterface/rpc/funcFloat"), std::bind(&StructArrayInterfaceService::onInvoke, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_service->subscribeTopic(std::string("testbed1/StructArrayInterface/rpc/funcString"), std::bind(&StructArrayInterfaceService::onInvoke, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
+    m_service->subscribeTopic(std::string("testbed1/StructArrayInterface/set/propBool"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onSetProperty(topic, args); });
+    m_service->subscribeTopic(std::string("testbed1/StructArrayInterface/set/propInt"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onSetProperty(topic, args); });
+    m_service->subscribeTopic(std::string("testbed1/StructArrayInterface/set/propFloat"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onSetProperty(topic, args); });
+    m_service->subscribeTopic(std::string("testbed1/StructArrayInterface/set/propString"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onSetProperty(topic, args); });
+    m_service->subscribeTopic(std::string("testbed1/StructArrayInterface/rpc/funcBool"), [this](const std::string& topic, const std::string& args, const std::string& responseTopic, const std::string& correlationData) { onInvoke(topic, args, responseTopic, correlationData); });
+    m_service->subscribeTopic(std::string("testbed1/StructArrayInterface/rpc/funcInt"), [this](const std::string& topic, const std::string& args, const std::string& responseTopic, const std::string& correlationData) { onInvoke(topic, args, responseTopic, correlationData); });
+    m_service->subscribeTopic(std::string("testbed1/StructArrayInterface/rpc/funcFloat"), [this](const std::string& topic, const std::string& args, const std::string& responseTopic, const std::string& correlationData) { onInvoke(topic, args, responseTopic, correlationData); });
+    m_service->subscribeTopic(std::string("testbed1/StructArrayInterface/rpc/funcString"), [this](const std::string& topic, const std::string& args, const std::string& responseTopic, const std::string& correlationData) { onInvoke(topic, args, responseTopic, correlationData); });
 
 }
 

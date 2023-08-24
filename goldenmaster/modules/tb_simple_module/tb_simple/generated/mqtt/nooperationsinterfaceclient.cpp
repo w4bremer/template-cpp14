@@ -16,10 +16,10 @@ NoOperationsInterfaceClient::NoOperationsInterfaceClient(std::shared_ptr<ApiGear
     , m_client(client)
     , m_publisher(std::make_unique<NoOperationsInterfacePublisher>())
 {
-    m_client->subscribeTopic(std::string("tb.simple/NoOperationsInterface/prop/propBool"), std::bind(&NoOperationsInterfaceClient::onPropertyChanged, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->subscribeTopic(std::string("tb.simple/NoOperationsInterface/prop/propInt"), std::bind(&NoOperationsInterfaceClient::onPropertyChanged, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->subscribeTopic(std::string("tb.simple/NoOperationsInterface/sig/sigVoid"), std::bind(&NoOperationsInterfaceClient::onSignal, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->subscribeTopic(std::string("tb.simple/NoOperationsInterface/sig/sigBool"), std::bind(&NoOperationsInterfaceClient::onSignal, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
+    m_client->subscribeTopic(std::string("tb.simple/NoOperationsInterface/prop/propBool"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onPropertyChanged(topic, args, "", ""); });
+    m_client->subscribeTopic(std::string("tb.simple/NoOperationsInterface/prop/propInt"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onPropertyChanged(topic, args, "", ""); });
+    m_client->subscribeTopic(std::string("tb.simple/NoOperationsInterface/sig/sigVoid"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onSignal(topic, args, "", ""); });
+    m_client->subscribeTopic(std::string("tb.simple/NoOperationsInterface/sig/sigBool"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onSignal(topic, args, "", ""); });
 }
 
 NoOperationsInterfaceClient::~NoOperationsInterfaceClient()

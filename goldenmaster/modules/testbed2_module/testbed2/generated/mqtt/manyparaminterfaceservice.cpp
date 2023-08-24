@@ -12,16 +12,16 @@ ManyParamInterfaceService::ManyParamInterfaceService(std::shared_ptr<IManyParamI
 {
     m_impl->_getPublisher().subscribeToAllChanges(*this);
 
-    m_connectionStatusRegistrationID = m_service->subscribeToConnectionStatus(std::bind(&ManyParamInterfaceService::onConnectionStatusChanged, this, std::placeholders::_1));
+    m_connectionStatusRegistrationID = m_service->subscribeToConnectionStatus([this](bool connectionStatus){ onConnectionStatusChanged(connectionStatus); });
     // subscribe to all property change request methods
-    m_service->subscribeTopic(std::string("testbed2/ManyParamInterface/set/prop1"), std::bind(&ManyParamInterfaceService::onSetProperty, this, std::placeholders::_1, std::placeholders::_2));
-    m_service->subscribeTopic(std::string("testbed2/ManyParamInterface/set/prop2"), std::bind(&ManyParamInterfaceService::onSetProperty, this, std::placeholders::_1, std::placeholders::_2));
-    m_service->subscribeTopic(std::string("testbed2/ManyParamInterface/set/prop3"), std::bind(&ManyParamInterfaceService::onSetProperty, this, std::placeholders::_1, std::placeholders::_2));
-    m_service->subscribeTopic(std::string("testbed2/ManyParamInterface/set/prop4"), std::bind(&ManyParamInterfaceService::onSetProperty, this, std::placeholders::_1, std::placeholders::_2));
-    m_service->subscribeTopic(std::string("testbed2/ManyParamInterface/rpc/func1"), std::bind(&ManyParamInterfaceService::onInvoke, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_service->subscribeTopic(std::string("testbed2/ManyParamInterface/rpc/func2"), std::bind(&ManyParamInterfaceService::onInvoke, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_service->subscribeTopic(std::string("testbed2/ManyParamInterface/rpc/func3"), std::bind(&ManyParamInterfaceService::onInvoke, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_service->subscribeTopic(std::string("testbed2/ManyParamInterface/rpc/func4"), std::bind(&ManyParamInterfaceService::onInvoke, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
+    m_service->subscribeTopic(std::string("testbed2/ManyParamInterface/set/prop1"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onSetProperty(topic, args); });
+    m_service->subscribeTopic(std::string("testbed2/ManyParamInterface/set/prop2"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onSetProperty(topic, args); });
+    m_service->subscribeTopic(std::string("testbed2/ManyParamInterface/set/prop3"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onSetProperty(topic, args); });
+    m_service->subscribeTopic(std::string("testbed2/ManyParamInterface/set/prop4"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onSetProperty(topic, args); });
+    m_service->subscribeTopic(std::string("testbed2/ManyParamInterface/rpc/func1"), [this](const std::string& topic, const std::string& args, const std::string& responseTopic, const std::string& correlationData) { onInvoke(topic, args, responseTopic, correlationData); });
+    m_service->subscribeTopic(std::string("testbed2/ManyParamInterface/rpc/func2"), [this](const std::string& topic, const std::string& args, const std::string& responseTopic, const std::string& correlationData) { onInvoke(topic, args, responseTopic, correlationData); });
+    m_service->subscribeTopic(std::string("testbed2/ManyParamInterface/rpc/func3"), [this](const std::string& topic, const std::string& args, const std::string& responseTopic, const std::string& correlationData) { onInvoke(topic, args, responseTopic, correlationData); });
+    m_service->subscribeTopic(std::string("testbed2/ManyParamInterface/rpc/func4"), [this](const std::string& topic, const std::string& args, const std::string& responseTopic, const std::string& correlationData) { onInvoke(topic, args, responseTopic, correlationData); });
 
 }
 
