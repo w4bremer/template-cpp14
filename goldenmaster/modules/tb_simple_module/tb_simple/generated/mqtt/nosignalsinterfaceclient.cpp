@@ -16,10 +16,10 @@ NoSignalsInterfaceClient::NoSignalsInterfaceClient(std::shared_ptr<ApiGear::MQTT
     , m_client(client)
     , m_publisher(std::make_unique<NoSignalsInterfacePublisher>())
 {
-    m_client->subscribeTopic(std::string("tb.simple/NoSignalsInterface/prop/propBool"), std::bind(&NoSignalsInterfaceClient::onPropertyChanged, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->subscribeTopic(std::string("tb.simple/NoSignalsInterface/prop/propInt"), std::bind(&NoSignalsInterfaceClient::onPropertyChanged, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->subscribeTopic(std::string("tb.simple/NoSignalsInterface/rpc/funcVoid/"+m_client->getClientId()+"/result"), std::bind(&NoSignalsInterfaceClient::onInvokeReply, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->subscribeTopic(std::string("tb.simple/NoSignalsInterface/rpc/funcBool/"+m_client->getClientId()+"/result"), std::bind(&NoSignalsInterfaceClient::onInvokeReply, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
+    m_client->subscribeTopic(std::string("tb.simple/NoSignalsInterface/prop/propBool"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onPropertyChanged(topic, args, "", ""); });
+    m_client->subscribeTopic(std::string("tb.simple/NoSignalsInterface/prop/propInt"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onPropertyChanged(topic, args, "", ""); });
+    m_client->subscribeTopic(std::string("tb.simple/NoSignalsInterface/rpc/funcVoid/"+m_client->getClientId()+"/result"), [this](const std::string&, const std::string& args, const std::string&, const std::string& correlationData){ onInvokeReply("", args, "", correlationData); });
+    m_client->subscribeTopic(std::string("tb.simple/NoSignalsInterface/rpc/funcBool/"+m_client->getClientId()+"/result"), [this](const std::string&, const std::string& args, const std::string&, const std::string& correlationData){ onInvokeReply("", args, "", correlationData); });
 }
 
 NoSignalsInterfaceClient::~NoSignalsInterfaceClient()

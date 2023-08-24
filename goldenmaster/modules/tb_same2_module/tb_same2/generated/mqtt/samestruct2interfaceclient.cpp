@@ -16,12 +16,12 @@ SameStruct2InterfaceClient::SameStruct2InterfaceClient(std::shared_ptr<ApiGear::
     , m_client(client)
     , m_publisher(std::make_unique<SameStruct2InterfacePublisher>())
 {
-    m_client->subscribeTopic(std::string("tb.same2/SameStruct2Interface/prop/prop1"), std::bind(&SameStruct2InterfaceClient::onPropertyChanged, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->subscribeTopic(std::string("tb.same2/SameStruct2Interface/prop/prop2"), std::bind(&SameStruct2InterfaceClient::onPropertyChanged, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->subscribeTopic(std::string("tb.same2/SameStruct2Interface/sig/sig1"), std::bind(&SameStruct2InterfaceClient::onSignal, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->subscribeTopic(std::string("tb.same2/SameStruct2Interface/sig/sig2"), std::bind(&SameStruct2InterfaceClient::onSignal, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->subscribeTopic(std::string("tb.same2/SameStruct2Interface/rpc/func1/"+m_client->getClientId()+"/result"), std::bind(&SameStruct2InterfaceClient::onInvokeReply, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->subscribeTopic(std::string("tb.same2/SameStruct2Interface/rpc/func2/"+m_client->getClientId()+"/result"), std::bind(&SameStruct2InterfaceClient::onInvokeReply, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
+    m_client->subscribeTopic(std::string("tb.same2/SameStruct2Interface/prop/prop1"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onPropertyChanged(topic, args, "", ""); });
+    m_client->subscribeTopic(std::string("tb.same2/SameStruct2Interface/prop/prop2"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onPropertyChanged(topic, args, "", ""); });
+    m_client->subscribeTopic(std::string("tb.same2/SameStruct2Interface/sig/sig1"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onSignal(topic, args, "", ""); });
+    m_client->subscribeTopic(std::string("tb.same2/SameStruct2Interface/sig/sig2"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onSignal(topic, args, "", ""); });
+    m_client->subscribeTopic(std::string("tb.same2/SameStruct2Interface/rpc/func1/"+m_client->getClientId()+"/result"), [this](const std::string&, const std::string& args, const std::string&, const std::string& correlationData){ onInvokeReply("", args, "", correlationData); });
+    m_client->subscribeTopic(std::string("tb.same2/SameStruct2Interface/rpc/func2/"+m_client->getClientId()+"/result"), [this](const std::string&, const std::string& args, const std::string&, const std::string& correlationData){ onInvokeReply("", args, "", correlationData); });
 }
 
 SameStruct2InterfaceClient::~SameStruct2InterfaceClient()

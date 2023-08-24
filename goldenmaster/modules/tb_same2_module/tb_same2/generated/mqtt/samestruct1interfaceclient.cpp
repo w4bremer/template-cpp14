@@ -16,9 +16,9 @@ SameStruct1InterfaceClient::SameStruct1InterfaceClient(std::shared_ptr<ApiGear::
     , m_client(client)
     , m_publisher(std::make_unique<SameStruct1InterfacePublisher>())
 {
-    m_client->subscribeTopic(std::string("tb.same2/SameStruct1Interface/prop/prop1"), std::bind(&SameStruct1InterfaceClient::onPropertyChanged, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->subscribeTopic(std::string("tb.same2/SameStruct1Interface/sig/sig1"), std::bind(&SameStruct1InterfaceClient::onSignal, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->subscribeTopic(std::string("tb.same2/SameStruct1Interface/rpc/func1/"+m_client->getClientId()+"/result"), std::bind(&SameStruct1InterfaceClient::onInvokeReply, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
+    m_client->subscribeTopic(std::string("tb.same2/SameStruct1Interface/prop/prop1"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onPropertyChanged(topic, args, "", ""); });
+    m_client->subscribeTopic(std::string("tb.same2/SameStruct1Interface/sig/sig1"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onSignal(topic, args, "", ""); });
+    m_client->subscribeTopic(std::string("tb.same2/SameStruct1Interface/rpc/func1/"+m_client->getClientId()+"/result"), [this](const std::string&, const std::string& args, const std::string&, const std::string& correlationData){ onInvokeReply("", args, "", correlationData); });
 }
 
 SameStruct1InterfaceClient::~SameStruct1InterfaceClient()

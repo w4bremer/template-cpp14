@@ -12,16 +12,16 @@ EnumInterfaceService::EnumInterfaceService(std::shared_ptr<IEnumInterface> impl,
 {
     m_impl->_getPublisher().subscribeToAllChanges(*this);
 
-    m_connectionStatusRegistrationID = m_service->subscribeToConnectionStatus(std::bind(&EnumInterfaceService::onConnectionStatusChanged, this, std::placeholders::_1));
+    m_connectionStatusRegistrationID = m_service->subscribeToConnectionStatus([this](bool connectionStatus){ onConnectionStatusChanged(connectionStatus); });
     // subscribe to all property change request methods
-    m_service->subscribeTopic(std::string("tb.enum/EnumInterface/set/prop0"), std::bind(&EnumInterfaceService::onSetProperty, this, std::placeholders::_1, std::placeholders::_2));
-    m_service->subscribeTopic(std::string("tb.enum/EnumInterface/set/prop1"), std::bind(&EnumInterfaceService::onSetProperty, this, std::placeholders::_1, std::placeholders::_2));
-    m_service->subscribeTopic(std::string("tb.enum/EnumInterface/set/prop2"), std::bind(&EnumInterfaceService::onSetProperty, this, std::placeholders::_1, std::placeholders::_2));
-    m_service->subscribeTopic(std::string("tb.enum/EnumInterface/set/prop3"), std::bind(&EnumInterfaceService::onSetProperty, this, std::placeholders::_1, std::placeholders::_2));
-    m_service->subscribeTopic(std::string("tb.enum/EnumInterface/rpc/func0"), std::bind(&EnumInterfaceService::onInvoke, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_service->subscribeTopic(std::string("tb.enum/EnumInterface/rpc/func1"), std::bind(&EnumInterfaceService::onInvoke, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_service->subscribeTopic(std::string("tb.enum/EnumInterface/rpc/func2"), std::bind(&EnumInterfaceService::onInvoke, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_service->subscribeTopic(std::string("tb.enum/EnumInterface/rpc/func3"), std::bind(&EnumInterfaceService::onInvoke, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
+    m_service->subscribeTopic(std::string("tb.enum/EnumInterface/set/prop0"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onSetProperty(topic, args); });
+    m_service->subscribeTopic(std::string("tb.enum/EnumInterface/set/prop1"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onSetProperty(topic, args); });
+    m_service->subscribeTopic(std::string("tb.enum/EnumInterface/set/prop2"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onSetProperty(topic, args); });
+    m_service->subscribeTopic(std::string("tb.enum/EnumInterface/set/prop3"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onSetProperty(topic, args); });
+    m_service->subscribeTopic(std::string("tb.enum/EnumInterface/rpc/func0"), [this](const std::string& topic, const std::string& args, const std::string& responseTopic, const std::string& correlationData) { onInvoke(topic, args, responseTopic, correlationData); });
+    m_service->subscribeTopic(std::string("tb.enum/EnumInterface/rpc/func1"), [this](const std::string& topic, const std::string& args, const std::string& responseTopic, const std::string& correlationData) { onInvoke(topic, args, responseTopic, correlationData); });
+    m_service->subscribeTopic(std::string("tb.enum/EnumInterface/rpc/func2"), [this](const std::string& topic, const std::string& args, const std::string& responseTopic, const std::string& correlationData) { onInvoke(topic, args, responseTopic, correlationData); });
+    m_service->subscribeTopic(std::string("tb.enum/EnumInterface/rpc/func3"), [this](const std::string& topic, const std::string& args, const std::string& responseTopic, const std::string& correlationData) { onInvoke(topic, args, responseTopic, correlationData); });
 
 }
 
