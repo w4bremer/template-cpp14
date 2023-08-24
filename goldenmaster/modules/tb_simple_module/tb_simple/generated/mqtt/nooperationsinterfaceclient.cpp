@@ -9,25 +9,36 @@ using namespace Test::TbSimple::MQTT;
 
 namespace {
     std::mt19937 randomNumberGenerator (std::random_device{}());
+
+    std::map<std::string, ApiGear::MQTT::CallbackFunction> createTopicMap(const std::string&, NoOperationsInterfaceClient* client)
+    {
+        return {
+            { std::string("tb.simple/NoOperationsInterface/prop/propBool"), [client](const std::string& topic, const std::string& args, const std::string&, const std::string&){ client->onPropertyChanged(topic, args); } },
+            { std::string("tb.simple/NoOperationsInterface/prop/propInt"), [client](const std::string& topic, const std::string& args, const std::string&, const std::string&){ client->onPropertyChanged(topic, args); } },
+            { std::string("tb.simple/NoOperationsInterface/sig/sigVoid"), [client](const std::string& topic, const std::string& args, const std::string&, const std::string&){ client->onSignal(topic, args); } },
+            { std::string("tb.simple/NoOperationsInterface/sig/sigBool"), [client](const std::string& topic, const std::string& args, const std::string&, const std::string&){ client->onSignal(topic, args); } },
+        };
+    };
 }
 
 NoOperationsInterfaceClient::NoOperationsInterfaceClient(std::shared_ptr<ApiGear::MQTT::Client> client)
     : m_isReady(false)
     , m_client(client)
     , m_publisher(std::make_unique<NoOperationsInterfacePublisher>())
+    , m_topics(createTopicMap(m_client->getClientId(), this))
 {
-    m_client->subscribeTopic(std::string("tb.simple/NoOperationsInterface/prop/propBool"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onPropertyChanged(topic, args); });
-    m_client->subscribeTopic(std::string("tb.simple/NoOperationsInterface/prop/propInt"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onPropertyChanged(topic, args); });
-    m_client->subscribeTopic(std::string("tb.simple/NoOperationsInterface/sig/sigVoid"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onSignal(topic, args); });
-    m_client->subscribeTopic(std::string("tb.simple/NoOperationsInterface/sig/sigBool"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onSignal(topic, args); });
+    for (const auto& topic: m_topics)
+    {
+        m_client->subscribeTopic(topic. first, topic.second);
+    }
 }
 
 NoOperationsInterfaceClient::~NoOperationsInterfaceClient()
 {
-    m_client->unsubscribeTopic(std::string("tb.simple/NoOperationsInterface/prop/propBool"));
-    m_client->unsubscribeTopic(std::string("tb.simple/NoOperationsInterface/prop/propInt"));
-    m_client->unsubscribeTopic(std::string("tb.simple/NoOperationsInterface/sig/sigVoid"));
-    m_client->unsubscribeTopic(std::string("tb.simple/NoOperationsInterface/sig/sigBool"));
+    for (const auto& topic: m_topics)
+    {
+        m_client->unsubscribeTopic(topic. first);
+    }
 }
 
 void NoOperationsInterfaceClient::applyState(const nlohmann::json& fields) 

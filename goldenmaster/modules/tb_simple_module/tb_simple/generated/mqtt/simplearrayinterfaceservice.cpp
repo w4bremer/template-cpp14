@@ -6,31 +6,43 @@
 using namespace Test::TbSimple;
 using namespace Test::TbSimple::MQTT;
 
+namespace {
+    std::map<std::string, ApiGear::MQTT::CallbackFunction> createTopicMap(SimpleArrayInterfaceService* service)
+    {
+        return {
+            {std::string("tb.simple/SimpleArrayInterface/set/propBool"), [service](const std::string& topic, const std::string& args, const std::string&, const std::string&){ service->onSetProperty(topic, args); } },
+            {std::string("tb.simple/SimpleArrayInterface/set/propInt"), [service](const std::string& topic, const std::string& args, const std::string&, const std::string&){ service->onSetProperty(topic, args); } },
+            {std::string("tb.simple/SimpleArrayInterface/set/propInt32"), [service](const std::string& topic, const std::string& args, const std::string&, const std::string&){ service->onSetProperty(topic, args); } },
+            {std::string("tb.simple/SimpleArrayInterface/set/propInt64"), [service](const std::string& topic, const std::string& args, const std::string&, const std::string&){ service->onSetProperty(topic, args); } },
+            {std::string("tb.simple/SimpleArrayInterface/set/propFloat"), [service](const std::string& topic, const std::string& args, const std::string&, const std::string&){ service->onSetProperty(topic, args); } },
+            {std::string("tb.simple/SimpleArrayInterface/set/propFloat32"), [service](const std::string& topic, const std::string& args, const std::string&, const std::string&){ service->onSetProperty(topic, args); } },
+            {std::string("tb.simple/SimpleArrayInterface/set/propFloat64"), [service](const std::string& topic, const std::string& args, const std::string&, const std::string&){ service->onSetProperty(topic, args); } },
+            {std::string("tb.simple/SimpleArrayInterface/set/propString"), [service](const std::string& topic, const std::string& args, const std::string&, const std::string&){ service->onSetProperty(topic, args); } },
+            {std::string("tb.simple/SimpleArrayInterface/rpc/funcBool"), [service](const std::string& topic, const std::string& args, const std::string& responseTopic, const std::string& correlationData) { service->onInvoke(topic, args, responseTopic, correlationData); } },
+            {std::string("tb.simple/SimpleArrayInterface/rpc/funcInt"), [service](const std::string& topic, const std::string& args, const std::string& responseTopic, const std::string& correlationData) { service->onInvoke(topic, args, responseTopic, correlationData); } },
+            {std::string("tb.simple/SimpleArrayInterface/rpc/funcInt32"), [service](const std::string& topic, const std::string& args, const std::string& responseTopic, const std::string& correlationData) { service->onInvoke(topic, args, responseTopic, correlationData); } },
+            {std::string("tb.simple/SimpleArrayInterface/rpc/funcInt64"), [service](const std::string& topic, const std::string& args, const std::string& responseTopic, const std::string& correlationData) { service->onInvoke(topic, args, responseTopic, correlationData); } },
+            {std::string("tb.simple/SimpleArrayInterface/rpc/funcFloat"), [service](const std::string& topic, const std::string& args, const std::string& responseTopic, const std::string& correlationData) { service->onInvoke(topic, args, responseTopic, correlationData); } },
+            {std::string("tb.simple/SimpleArrayInterface/rpc/funcFloat32"), [service](const std::string& topic, const std::string& args, const std::string& responseTopic, const std::string& correlationData) { service->onInvoke(topic, args, responseTopic, correlationData); } },
+            {std::string("tb.simple/SimpleArrayInterface/rpc/funcFloat64"), [service](const std::string& topic, const std::string& args, const std::string& responseTopic, const std::string& correlationData) { service->onInvoke(topic, args, responseTopic, correlationData); } },
+            {std::string("tb.simple/SimpleArrayInterface/rpc/funcString"), [service](const std::string& topic, const std::string& args, const std::string& responseTopic, const std::string& correlationData) { service->onInvoke(topic, args, responseTopic, correlationData); } },
+        };
+    };
+}
+
 SimpleArrayInterfaceService::SimpleArrayInterfaceService(std::shared_ptr<ISimpleArrayInterface> impl, std::shared_ptr<ApiGear::MQTT::Service> service)
     : m_impl(impl)
     , m_service(service)
+    , m_topics(createTopicMap(this))
 {
     m_impl->_getPublisher().subscribeToAllChanges(*this);
 
     m_connectionStatusRegistrationID = m_service->subscribeToConnectionStatus([this](bool connectionStatus){ onConnectionStatusChanged(connectionStatus); });
-    // subscribe to all property change request methods
-    m_service->subscribeTopic(std::string("tb.simple/SimpleArrayInterface/set/propBool"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onSetProperty(topic, args); });
-    m_service->subscribeTopic(std::string("tb.simple/SimpleArrayInterface/set/propInt"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onSetProperty(topic, args); });
-    m_service->subscribeTopic(std::string("tb.simple/SimpleArrayInterface/set/propInt32"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onSetProperty(topic, args); });
-    m_service->subscribeTopic(std::string("tb.simple/SimpleArrayInterface/set/propInt64"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onSetProperty(topic, args); });
-    m_service->subscribeTopic(std::string("tb.simple/SimpleArrayInterface/set/propFloat"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onSetProperty(topic, args); });
-    m_service->subscribeTopic(std::string("tb.simple/SimpleArrayInterface/set/propFloat32"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onSetProperty(topic, args); });
-    m_service->subscribeTopic(std::string("tb.simple/SimpleArrayInterface/set/propFloat64"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onSetProperty(topic, args); });
-    m_service->subscribeTopic(std::string("tb.simple/SimpleArrayInterface/set/propString"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onSetProperty(topic, args); });
-    m_service->subscribeTopic(std::string("tb.simple/SimpleArrayInterface/rpc/funcBool"), [this](const std::string& topic, const std::string& args, const std::string& responseTopic, const std::string& correlationData) { onInvoke(topic, args, responseTopic, correlationData); });
-    m_service->subscribeTopic(std::string("tb.simple/SimpleArrayInterface/rpc/funcInt"), [this](const std::string& topic, const std::string& args, const std::string& responseTopic, const std::string& correlationData) { onInvoke(topic, args, responseTopic, correlationData); });
-    m_service->subscribeTopic(std::string("tb.simple/SimpleArrayInterface/rpc/funcInt32"), [this](const std::string& topic, const std::string& args, const std::string& responseTopic, const std::string& correlationData) { onInvoke(topic, args, responseTopic, correlationData); });
-    m_service->subscribeTopic(std::string("tb.simple/SimpleArrayInterface/rpc/funcInt64"), [this](const std::string& topic, const std::string& args, const std::string& responseTopic, const std::string& correlationData) { onInvoke(topic, args, responseTopic, correlationData); });
-    m_service->subscribeTopic(std::string("tb.simple/SimpleArrayInterface/rpc/funcFloat"), [this](const std::string& topic, const std::string& args, const std::string& responseTopic, const std::string& correlationData) { onInvoke(topic, args, responseTopic, correlationData); });
-    m_service->subscribeTopic(std::string("tb.simple/SimpleArrayInterface/rpc/funcFloat32"), [this](const std::string& topic, const std::string& args, const std::string& responseTopic, const std::string& correlationData) { onInvoke(topic, args, responseTopic, correlationData); });
-    m_service->subscribeTopic(std::string("tb.simple/SimpleArrayInterface/rpc/funcFloat64"), [this](const std::string& topic, const std::string& args, const std::string& responseTopic, const std::string& correlationData) { onInvoke(topic, args, responseTopic, correlationData); });
-    m_service->subscribeTopic(std::string("tb.simple/SimpleArrayInterface/rpc/funcString"), [this](const std::string& topic, const std::string& args, const std::string& responseTopic, const std::string& correlationData) { onInvoke(topic, args, responseTopic, correlationData); });
 
+    for (const auto& topic: m_topics)
+    {
+        m_service->subscribeTopic(topic. first, topic.second);
+    }
 }
 
 SimpleArrayInterfaceService::~SimpleArrayInterfaceService()
@@ -38,22 +50,11 @@ SimpleArrayInterfaceService::~SimpleArrayInterfaceService()
     m_impl->_getPublisher().unsubscribeFromAllChanges(*this);
 
     m_service->unsubscribeToConnectionStatus(m_connectionStatusRegistrationID);
-    m_service->unsubscribeTopic(std::string("tb.simple/SimpleArrayInterface/set/propBool"));
-    m_service->unsubscribeTopic(std::string("tb.simple/SimpleArrayInterface/set/propInt"));
-    m_service->unsubscribeTopic(std::string("tb.simple/SimpleArrayInterface/set/propInt32"));
-    m_service->unsubscribeTopic(std::string("tb.simple/SimpleArrayInterface/set/propInt64"));
-    m_service->unsubscribeTopic(std::string("tb.simple/SimpleArrayInterface/set/propFloat"));
-    m_service->unsubscribeTopic(std::string("tb.simple/SimpleArrayInterface/set/propFloat32"));
-    m_service->unsubscribeTopic(std::string("tb.simple/SimpleArrayInterface/set/propFloat64"));
-    m_service->unsubscribeTopic(std::string("tb.simple/SimpleArrayInterface/set/propString"));
-    m_service->unsubscribeTopic(std::string("tb.simple/SimpleArrayInterface/rpc/funcBool"));
-    m_service->unsubscribeTopic(std::string("tb.simple/SimpleArrayInterface/rpc/funcInt"));
-    m_service->unsubscribeTopic(std::string("tb.simple/SimpleArrayInterface/rpc/funcInt32"));
-    m_service->unsubscribeTopic(std::string("tb.simple/SimpleArrayInterface/rpc/funcInt64"));
-    m_service->unsubscribeTopic(std::string("tb.simple/SimpleArrayInterface/rpc/funcFloat"));
-    m_service->unsubscribeTopic(std::string("tb.simple/SimpleArrayInterface/rpc/funcFloat32"));
-    m_service->unsubscribeTopic(std::string("tb.simple/SimpleArrayInterface/rpc/funcFloat64"));
-    m_service->unsubscribeTopic(std::string("tb.simple/SimpleArrayInterface/rpc/funcString"));
+
+    for (const auto& topic: m_topics)
+    {
+        m_service->unsubscribeTopic(topic. first);
+    }
 }
 
 void SimpleArrayInterfaceService::onConnectionStatusChanged(bool connectionStatus)

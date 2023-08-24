@@ -83,6 +83,9 @@ private:
     int registerResponseHandler(ApiGear::MQTT::InvokeReplyFunc handler);
     std::mutex m_responseHandlerMutex;
     std::map<int, ApiGear::MQTT::InvokeReplyFunc> m_responseHandlerMap;
+
+    /// @brief has all the topics of this client and the corresponding function callbacks
+    const std::map<std::string, ApiGear::MQTT::CallbackFunction> m_topics;
 };
 } // namespace MQTT
 } // namespace TbSimple

@@ -27,6 +27,9 @@ private:
     std::shared_ptr<ApiGear::MQTT::Service> m_service;
     // id for connection status registration
     int m_connectionStatusRegistrationID;
+
+    /// @brief has all the topics of this service and the corresponding function callbacks
+    const std::map<std::string, ApiGear::MQTT::CallbackFunction> m_topics;
 };
 } // namespace MQTT
 } // namespace TbSimple

@@ -9,23 +9,35 @@
 using namespace {{ Camel .System.Name }}::{{ Camel .Module.Name }};
 using namespace {{ Camel .System.Name }}::{{ Camel .Module.Name }}::MQTT;
 
+namespace {
+    std::map<std::string, ApiGear::MQTT::CallbackFunction> createTopicMap({{$class}}* service)
+    {
+        return {
+        {{- range .Interface.Properties}}
+        {{- $property := . }}
+            {std::string("{{$.Module.Name}}/{{$interface}}/set/{{$property}}"), [service](const std::string& topic, const std::string& args, const std::string&, const std::string&){ service->onSetProperty(topic, args); } },
+        {{- end }}
+        {{- range .Interface.Operations}}
+        {{- $operation := . }}
+            {std::string("{{$.Module.Name}}/{{$interface}}/rpc/{{$operation}}"), [service](const std::string& topic, const std::string& args, const std::string& responseTopic, const std::string& correlationData) { service->onInvoke(topic, args, responseTopic, correlationData); } },
+        {{- end }}
+        };
+    };
+}
+
 {{$class}}::{{$class}}(std::shared_ptr<I{{$interface}}> impl, std::shared_ptr<ApiGear::MQTT::Service> service)
     : m_impl(impl)
     , m_service(service)
+    , m_topics(createTopicMap(this))
 {
     m_impl->_getPublisher().subscribeToAllChanges(*this);
 
     m_connectionStatusRegistrationID = m_service->subscribeToConnectionStatus([this](bool connectionStatus){ onConnectionStatusChanged(connectionStatus); });
-    // subscribe to all property change request methods
-{{- range .Interface.Properties}}
-{{- $property := . }}
-    m_service->subscribeTopic(std::string("{{$.Module.Name}}/{{$interface}}/set/{{$property}}"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onSetProperty(topic, args); });
-{{- end }}
-{{- range .Interface.Operations}}
-{{- $operation := . }}
-    m_service->subscribeTopic(std::string("{{$.Module.Name}}/{{$interface}}/rpc/{{$operation}}"), [this](const std::string& topic, const std::string& args, const std::string& responseTopic, const std::string& correlationData) { onInvoke(topic, args, responseTopic, correlationData); });
-{{- end }}
 
+    for (const auto& topic: m_topics)
+    {
+        m_service->subscribeTopic(topic. first, topic.second);
+    }
 }
 
 {{$class}}::~{{$class}}()
@@ -34,14 +46,10 @@ using namespace {{ Camel .System.Name }}::{{ Camel .Module.Name }}::MQTT;
 
     m_service->unsubscribeToConnectionStatus(m_connectionStatusRegistrationID);
 
-{{- range .Interface.Properties}}
-{{- $property := . }}
-    m_service->unsubscribeTopic(std::string("{{$.Module.Name}}/{{$interface}}/set/{{$property}}"));
-{{- end }}
-{{- range .Interface.Operations}}
-{{- $operation := . }}
-    m_service->unsubscribeTopic(std::string("{{$.Module.Name}}/{{$interface}}/rpc/{{$operation}}"));
-{{- end }}
+    for (const auto& topic: m_topics)
+    {
+        m_service->unsubscribeTopic(topic. first);
+    }
 }
 
 void {{$class}}::onConnectionStatusChanged(bool connectionStatus)

@@ -9,21 +9,34 @@ using namespace Test::TbSimple::MQTT;
 
 namespace {
     std::mt19937 randomNumberGenerator (std::random_device{}());
+
+    std::map<std::string, ApiGear::MQTT::CallbackFunction> createTopicMap(const std::string&clientId, VoidInterfaceClient* client)
+    {
+        return {
+            { std::string("tb.simple/VoidInterface/sig/sigVoid"), [client](const std::string& topic, const std::string& args, const std::string&, const std::string&){ client->onSignal(topic, args); } },
+            { std::string("tb.simple/VoidInterface/rpc/funcVoid/"+clientId+"/result"), [client](const std::string&, const std::string& args, const std::string&, const std::string& correlationData){ client->onInvokeReply(args, correlationData); } },
+        };
+    };
 }
 
 VoidInterfaceClient::VoidInterfaceClient(std::shared_ptr<ApiGear::MQTT::Client> client)
     : m_isReady(false)
     , m_client(client)
     , m_publisher(std::make_unique<VoidInterfacePublisher>())
+    , m_topics(createTopicMap(m_client->getClientId(), this))
 {
-    m_client->subscribeTopic(std::string("tb.simple/VoidInterface/sig/sigVoid"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onSignal(topic, args); });
-    m_client->subscribeTopic(std::string("tb.simple/VoidInterface/rpc/funcVoid/"+m_client->getClientId()+"/result"), [this](const std::string&, const std::string& args, const std::string&, const std::string& correlationData){ onInvokeReply(args, correlationData); });
+    for (const auto& topic: m_topics)
+    {
+        m_client->subscribeTopic(topic. first, topic.second);
+    }
 }
 
 VoidInterfaceClient::~VoidInterfaceClient()
 {
-    m_client->unsubscribeTopic(std::string("tb.simple/VoidInterface/sig/sigVoid"));
-    m_client->unsubscribeTopic(std::string("tb.simple/VoidInterface/rpc/funcVoid/"+m_client->getClientId()+"/result"));
+    for (const auto& topic: m_topics)
+    {
+        m_client->unsubscribeTopic(topic. first);
+    }
 }
 
 void VoidInterfaceClient::applyState(const nlohmann::json& fields) 

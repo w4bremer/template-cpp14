@@ -9,25 +9,36 @@ using namespace Test::TbSimple::MQTT;
 
 namespace {
     std::mt19937 randomNumberGenerator (std::random_device{}());
+
+    std::map<std::string, ApiGear::MQTT::CallbackFunction> createTopicMap(const std::string&clientId, NoSignalsInterfaceClient* client)
+    {
+        return {
+            { std::string("tb.simple/NoSignalsInterface/prop/propBool"), [client](const std::string& topic, const std::string& args, const std::string&, const std::string&){ client->onPropertyChanged(topic, args); } },
+            { std::string("tb.simple/NoSignalsInterface/prop/propInt"), [client](const std::string& topic, const std::string& args, const std::string&, const std::string&){ client->onPropertyChanged(topic, args); } },
+            { std::string("tb.simple/NoSignalsInterface/rpc/funcVoid/"+clientId+"/result"), [client](const std::string&, const std::string& args, const std::string&, const std::string& correlationData){ client->onInvokeReply(args, correlationData); } },
+            { std::string("tb.simple/NoSignalsInterface/rpc/funcBool/"+clientId+"/result"), [client](const std::string&, const std::string& args, const std::string&, const std::string& correlationData){ client->onInvokeReply(args, correlationData); } },
+        };
+    };
 }
 
 NoSignalsInterfaceClient::NoSignalsInterfaceClient(std::shared_ptr<ApiGear::MQTT::Client> client)
     : m_isReady(false)
     , m_client(client)
     , m_publisher(std::make_unique<NoSignalsInterfacePublisher>())
+    , m_topics(createTopicMap(m_client->getClientId(), this))
 {
-    m_client->subscribeTopic(std::string("tb.simple/NoSignalsInterface/prop/propBool"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onPropertyChanged(topic, args); });
-    m_client->subscribeTopic(std::string("tb.simple/NoSignalsInterface/prop/propInt"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onPropertyChanged(topic, args); });
-    m_client->subscribeTopic(std::string("tb.simple/NoSignalsInterface/rpc/funcVoid/"+m_client->getClientId()+"/result"), [this](const std::string&, const std::string& args, const std::string&, const std::string& correlationData){ onInvokeReply(args, correlationData); });
-    m_client->subscribeTopic(std::string("tb.simple/NoSignalsInterface/rpc/funcBool/"+m_client->getClientId()+"/result"), [this](const std::string&, const std::string& args, const std::string&, const std::string& correlationData){ onInvokeReply(args, correlationData); });
+    for (const auto& topic: m_topics)
+    {
+        m_client->subscribeTopic(topic. first, topic.second);
+    }
 }
 
 NoSignalsInterfaceClient::~NoSignalsInterfaceClient()
 {
-    m_client->unsubscribeTopic(std::string("tb.simple/NoSignalsInterface/prop/propBool"));
-    m_client->unsubscribeTopic(std::string("tb.simple/NoSignalsInterface/prop/propInt"));
-    m_client->unsubscribeTopic(std::string("tb.simple/NoSignalsInterface/rpc/funcVoid/"+m_client->getClientId()+"/result"));
-    m_client->unsubscribeTopic(std::string("tb.simple/NoSignalsInterface/rpc/funcBool/"+m_client->getClientId()+"/result"));
+    for (const auto& topic: m_topics)
+    {
+        m_client->unsubscribeTopic(topic. first);
+    }
 }
 
 void NoSignalsInterfaceClient::applyState(const nlohmann::json& fields) 

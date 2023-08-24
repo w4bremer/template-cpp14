@@ -14,41 +14,45 @@ using namespace {{ Camel .System.Name }}::{{ Camel .Module.Name }}::MQTT;
 
 namespace {
     std::mt19937 randomNumberGenerator (std::random_device{}());
+
+    std::map<std::string, ApiGear::MQTT::CallbackFunction> createTopicMap(const std::string& 
+        {{- if len .Interface.Operations}}clientId{{end}}, {{$class}}* client)
+    {
+        return {
+        {{- range .Interface.Properties}}
+        {{- $property := . }}
+            { std::string("{{$.Module.Name}}/{{$interfaceName}}/prop/{{$property}}"), [client](const std::string& topic, const std::string& args, const std::string&, const std::string&){ client->onPropertyChanged(topic, args); } },
+        {{- end }}
+        {{- range .Interface.Signals}}
+        {{- $signal := . }}
+            { std::string("{{$.Module.Name}}/{{$interfaceName}}/sig/{{$signal}}"), [client](const std::string& topic, const std::string& args, const std::string&, const std::string&){ client->onSignal(topic, args); } },
+        {{- end }}
+        {{- range .Interface.Operations}}
+        {{- $operation := . }}
+            { std::string("{{$.Module.Name}}/{{$interfaceName}}/rpc/{{$operation}}/"+clientId+"/result"), [client](const std::string&, const std::string& args, const std::string&, const std::string& correlationData){ client->onInvokeReply(args, correlationData); } },
+        {{- end }}
+        };
+    };
 }
 
 {{$class}}::{{$class}}(std::shared_ptr<ApiGear::MQTT::Client> client)
     : m_isReady(false)
     , m_client(client)
     , m_publisher(std::make_unique<{{$pub_class}}>())
+    , m_topics(createTopicMap(m_client->getClientId(), this))
 {
-{{- range .Interface.Properties}}
-{{- $property := . }}
-    m_client->subscribeTopic(std::string("{{$.Module.Name}}/{{$interfaceName}}/prop/{{$property}}"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onPropertyChanged(topic, args); });
-{{- end }}
-{{- range .Interface.Signals}}
-{{- $signal := . }}
-    m_client->subscribeTopic(std::string("{{$.Module.Name}}/{{$interfaceName}}/sig/{{$signal}}"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onSignal(topic, args); });
-{{- end }}
-{{- range .Interface.Operations}}
-{{- $operation := . }}
-    m_client->subscribeTopic(std::string("{{$.Module.Name}}/{{$interfaceName}}/rpc/{{$operation}}/"+m_client->getClientId()+"/result"), [this](const std::string&, const std::string& args, const std::string&, const std::string& correlationData){ onInvokeReply(args, correlationData); });
-{{- end }}
+    for (const auto& topic: m_topics)
+    {
+        m_client->subscribeTopic(topic. first, topic.second);
+    }
 }
 
 {{$class}}::~{{$class}}()
 {
-{{- range .Interface.Properties}}
-{{- $property := . }}
-    m_client->unsubscribeTopic(std::string("{{$.Module.Name}}/{{$interfaceName}}/prop/{{$property}}"));
-{{- end }}
-{{- range .Interface.Signals}}
-{{- $signal := . }}
-    m_client->unsubscribeTopic(std::string("{{$.Module.Name}}/{{$interfaceName}}/sig/{{$signal}}"));
-{{- end }}
-{{- range .Interface.Operations}}
-{{- $operation := . }}
-    m_client->unsubscribeTopic(std::string("{{$.Module.Name}}/{{$interfaceName}}/rpc/{{$operation}}/"+m_client->getClientId()+"/result"));
-{{- end }}
+    for (const auto& topic: m_topics)
+    {
+        m_client->unsubscribeTopic(topic. first);
+    }
 }
 
 void {{$class}}::applyState(const nlohmann::json& fields) 
