@@ -406,7 +406,6 @@ void CWrapper::onDisconnected()
 
 void CWrapper::handleTextMessage(const Message& message)
 {
-    AG_LOG_INFO("new msg: topic " + message.topic + " msg content: " + message.content);
     auto subscribedTopicsRange = m_subscribedTopics.equal_range(message.topic);
     std::pair<std::multimap<std::string, CallbackFunction>::iterator, std::multimap<std::string, CallbackFunction>::iterator> topics = subscribedTopicsRange;
     for (auto iter = topics.first; iter != topics.second; ++iter)
