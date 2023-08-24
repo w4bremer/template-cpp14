@@ -36,7 +36,7 @@ public:
     void notifyInvokeResponse(const std::string& responseTopic, const std::string& value, const std::string& correlationData);
 
     void subscribeTopic(const std::string& name, CallbackFunction func);
-    void unsubscribeTopic(const std::string& name, CallbackFunction func);
+    void unsubscribeTopic(const std::string& name);
 
     const std::string& getClientId() const;
 

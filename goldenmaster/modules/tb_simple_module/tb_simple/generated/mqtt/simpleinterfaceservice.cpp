@@ -38,22 +38,22 @@ SimpleInterfaceService::~SimpleInterfaceService()
     m_impl->_getPublisher().unsubscribeFromAllChanges(*this);
 
     m_service->unsubscribeToConnectionStatus(m_connectionStatusRegistrationID);
-    m_service->unsubscribeTopic(std::string("tb.simple/SimpleInterface/set/propBool"), std::bind(&SimpleInterfaceService::onSetProperty, this, std::placeholders::_1, std::placeholders::_2));
-    m_service->unsubscribeTopic(std::string("tb.simple/SimpleInterface/set/propInt"), std::bind(&SimpleInterfaceService::onSetProperty, this, std::placeholders::_1, std::placeholders::_2));
-    m_service->unsubscribeTopic(std::string("tb.simple/SimpleInterface/set/propInt32"), std::bind(&SimpleInterfaceService::onSetProperty, this, std::placeholders::_1, std::placeholders::_2));
-    m_service->unsubscribeTopic(std::string("tb.simple/SimpleInterface/set/propInt64"), std::bind(&SimpleInterfaceService::onSetProperty, this, std::placeholders::_1, std::placeholders::_2));
-    m_service->unsubscribeTopic(std::string("tb.simple/SimpleInterface/set/propFloat"), std::bind(&SimpleInterfaceService::onSetProperty, this, std::placeholders::_1, std::placeholders::_2));
-    m_service->unsubscribeTopic(std::string("tb.simple/SimpleInterface/set/propFloat32"), std::bind(&SimpleInterfaceService::onSetProperty, this, std::placeholders::_1, std::placeholders::_2));
-    m_service->unsubscribeTopic(std::string("tb.simple/SimpleInterface/set/propFloat64"), std::bind(&SimpleInterfaceService::onSetProperty, this, std::placeholders::_1, std::placeholders::_2));
-    m_service->unsubscribeTopic(std::string("tb.simple/SimpleInterface/set/propString"), std::bind(&SimpleInterfaceService::onSetProperty, this, std::placeholders::_1, std::placeholders::_2));
-    m_service->unsubscribeTopic(std::string("tb.simple/SimpleInterface/rpc/funcBool"), std::bind(&SimpleInterfaceService::onInvoke, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_service->unsubscribeTopic(std::string("tb.simple/SimpleInterface/rpc/funcInt"), std::bind(&SimpleInterfaceService::onInvoke, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_service->unsubscribeTopic(std::string("tb.simple/SimpleInterface/rpc/funcInt32"), std::bind(&SimpleInterfaceService::onInvoke, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_service->unsubscribeTopic(std::string("tb.simple/SimpleInterface/rpc/funcInt64"), std::bind(&SimpleInterfaceService::onInvoke, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_service->unsubscribeTopic(std::string("tb.simple/SimpleInterface/rpc/funcFloat"), std::bind(&SimpleInterfaceService::onInvoke, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_service->unsubscribeTopic(std::string("tb.simple/SimpleInterface/rpc/funcFloat32"), std::bind(&SimpleInterfaceService::onInvoke, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_service->unsubscribeTopic(std::string("tb.simple/SimpleInterface/rpc/funcFloat64"), std::bind(&SimpleInterfaceService::onInvoke, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_service->unsubscribeTopic(std::string("tb.simple/SimpleInterface/rpc/funcString"), std::bind(&SimpleInterfaceService::onInvoke, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
+    m_service->unsubscribeTopic(std::string("tb.simple/SimpleInterface/set/propBool"));
+    m_service->unsubscribeTopic(std::string("tb.simple/SimpleInterface/set/propInt"));
+    m_service->unsubscribeTopic(std::string("tb.simple/SimpleInterface/set/propInt32"));
+    m_service->unsubscribeTopic(std::string("tb.simple/SimpleInterface/set/propInt64"));
+    m_service->unsubscribeTopic(std::string("tb.simple/SimpleInterface/set/propFloat"));
+    m_service->unsubscribeTopic(std::string("tb.simple/SimpleInterface/set/propFloat32"));
+    m_service->unsubscribeTopic(std::string("tb.simple/SimpleInterface/set/propFloat64"));
+    m_service->unsubscribeTopic(std::string("tb.simple/SimpleInterface/set/propString"));
+    m_service->unsubscribeTopic(std::string("tb.simple/SimpleInterface/rpc/funcBool"));
+    m_service->unsubscribeTopic(std::string("tb.simple/SimpleInterface/rpc/funcInt"));
+    m_service->unsubscribeTopic(std::string("tb.simple/SimpleInterface/rpc/funcInt32"));
+    m_service->unsubscribeTopic(std::string("tb.simple/SimpleInterface/rpc/funcInt64"));
+    m_service->unsubscribeTopic(std::string("tb.simple/SimpleInterface/rpc/funcFloat"));
+    m_service->unsubscribeTopic(std::string("tb.simple/SimpleInterface/rpc/funcFloat32"));
+    m_service->unsubscribeTopic(std::string("tb.simple/SimpleInterface/rpc/funcFloat64"));
+    m_service->unsubscribeTopic(std::string("tb.simple/SimpleInterface/rpc/funcString"));
 }
 
 void SimpleInterfaceService::onConnectionStatusChanged(bool connectionStatus)

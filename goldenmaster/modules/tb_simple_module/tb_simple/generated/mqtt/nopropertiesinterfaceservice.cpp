@@ -24,8 +24,8 @@ NoPropertiesInterfaceService::~NoPropertiesInterfaceService()
     m_impl->_getPublisher().unsubscribeFromAllChanges(*this);
 
     m_service->unsubscribeToConnectionStatus(m_connectionStatusRegistrationID);
-    m_service->unsubscribeTopic(std::string("tb.simple/NoPropertiesInterface/rpc/funcVoid"), std::bind(&NoPropertiesInterfaceService::onInvoke, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_service->unsubscribeTopic(std::string("tb.simple/NoPropertiesInterface/rpc/funcBool"), std::bind(&NoPropertiesInterfaceService::onInvoke, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
+    m_service->unsubscribeTopic(std::string("tb.simple/NoPropertiesInterface/rpc/funcVoid"));
+    m_service->unsubscribeTopic(std::string("tb.simple/NoPropertiesInterface/rpc/funcBool"));
 }
 
 void NoPropertiesInterfaceService::onConnectionStatusChanged(bool connectionStatus)

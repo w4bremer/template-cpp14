@@ -26,10 +26,10 @@ NoSignalsInterfaceService::~NoSignalsInterfaceService()
     m_impl->_getPublisher().unsubscribeFromAllChanges(*this);
 
     m_service->unsubscribeToConnectionStatus(m_connectionStatusRegistrationID);
-    m_service->unsubscribeTopic(std::string("tb.simple/NoSignalsInterface/set/propBool"), std::bind(&NoSignalsInterfaceService::onSetProperty, this, std::placeholders::_1, std::placeholders::_2));
-    m_service->unsubscribeTopic(std::string("tb.simple/NoSignalsInterface/set/propInt"), std::bind(&NoSignalsInterfaceService::onSetProperty, this, std::placeholders::_1, std::placeholders::_2));
-    m_service->unsubscribeTopic(std::string("tb.simple/NoSignalsInterface/rpc/funcVoid"), std::bind(&NoSignalsInterfaceService::onInvoke, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_service->unsubscribeTopic(std::string("tb.simple/NoSignalsInterface/rpc/funcBool"), std::bind(&NoSignalsInterfaceService::onInvoke, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
+    m_service->unsubscribeTopic(std::string("tb.simple/NoSignalsInterface/set/propBool"));
+    m_service->unsubscribeTopic(std::string("tb.simple/NoSignalsInterface/set/propInt"));
+    m_service->unsubscribeTopic(std::string("tb.simple/NoSignalsInterface/rpc/funcVoid"));
+    m_service->unsubscribeTopic(std::string("tb.simple/NoSignalsInterface/rpc/funcBool"));
 }
 
 void NoSignalsInterfaceService::onConnectionStatusChanged(bool connectionStatus)

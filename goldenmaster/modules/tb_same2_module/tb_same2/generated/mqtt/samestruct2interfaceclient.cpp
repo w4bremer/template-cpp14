@@ -26,12 +26,12 @@ SameStruct2InterfaceClient::SameStruct2InterfaceClient(std::shared_ptr<ApiGear::
 
 SameStruct2InterfaceClient::~SameStruct2InterfaceClient()
 {
-    m_client->unsubscribeTopic(std::string("tb.same2/SameStruct2Interface/prop/prop1"), std::bind(&SameStruct2InterfaceClient::onPropertyChanged, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->unsubscribeTopic(std::string("tb.same2/SameStruct2Interface/prop/prop2"), std::bind(&SameStruct2InterfaceClient::onPropertyChanged, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->unsubscribeTopic(std::string("tb.same2/SameStruct2Interface/sig/sig1"), std::bind(&SameStruct2InterfaceClient::onSignal, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->unsubscribeTopic(std::string("tb.same2/SameStruct2Interface/sig/sig2"), std::bind(&SameStruct2InterfaceClient::onSignal, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->unsubscribeTopic(std::string("tb.same2/SameStruct2Interface/rpc/func1/"+m_client->getClientId()+"/result"), std::bind(&SameStruct2InterfaceClient::onInvokeReply, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->unsubscribeTopic(std::string("tb.same2/SameStruct2Interface/rpc/func2/"+m_client->getClientId()+"/result"), std::bind(&SameStruct2InterfaceClient::onInvokeReply, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
+    m_client->unsubscribeTopic(std::string("tb.same2/SameStruct2Interface/prop/prop1"));
+    m_client->unsubscribeTopic(std::string("tb.same2/SameStruct2Interface/prop/prop2"));
+    m_client->unsubscribeTopic(std::string("tb.same2/SameStruct2Interface/sig/sig1"));
+    m_client->unsubscribeTopic(std::string("tb.same2/SameStruct2Interface/sig/sig2"));
+    m_client->unsubscribeTopic(std::string("tb.same2/SameStruct2Interface/rpc/func1/"+m_client->getClientId()+"/result"));
+    m_client->unsubscribeTopic(std::string("tb.same2/SameStruct2Interface/rpc/func2/"+m_client->getClientId()+"/result"));
 }
 
 void SameStruct2InterfaceClient::applyState(const nlohmann::json& fields) 

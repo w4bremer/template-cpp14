@@ -26,10 +26,10 @@ SameStruct2InterfaceService::~SameStruct2InterfaceService()
     m_impl->_getPublisher().unsubscribeFromAllChanges(*this);
 
     m_service->unsubscribeToConnectionStatus(m_connectionStatusRegistrationID);
-    m_service->unsubscribeTopic(std::string("tb.same2/SameStruct2Interface/set/prop1"), std::bind(&SameStruct2InterfaceService::onSetProperty, this, std::placeholders::_1, std::placeholders::_2));
-    m_service->unsubscribeTopic(std::string("tb.same2/SameStruct2Interface/set/prop2"), std::bind(&SameStruct2InterfaceService::onSetProperty, this, std::placeholders::_1, std::placeholders::_2));
-    m_service->unsubscribeTopic(std::string("tb.same2/SameStruct2Interface/rpc/func1"), std::bind(&SameStruct2InterfaceService::onInvoke, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_service->unsubscribeTopic(std::string("tb.same2/SameStruct2Interface/rpc/func2"), std::bind(&SameStruct2InterfaceService::onInvoke, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
+    m_service->unsubscribeTopic(std::string("tb.same2/SameStruct2Interface/set/prop1"));
+    m_service->unsubscribeTopic(std::string("tb.same2/SameStruct2Interface/set/prop2"));
+    m_service->unsubscribeTopic(std::string("tb.same2/SameStruct2Interface/rpc/func1"));
+    m_service->unsubscribeTopic(std::string("tb.same2/SameStruct2Interface/rpc/func2"));
 }
 
 void SameStruct2InterfaceService::onConnectionStatusChanged(bool connectionStatus)

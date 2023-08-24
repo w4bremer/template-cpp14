@@ -28,12 +28,12 @@ NestedStruct3InterfaceService::~NestedStruct3InterfaceService()
     m_impl->_getPublisher().unsubscribeFromAllChanges(*this);
 
     m_service->unsubscribeToConnectionStatus(m_connectionStatusRegistrationID);
-    m_service->unsubscribeTopic(std::string("testbed2/NestedStruct3Interface/set/prop1"), std::bind(&NestedStruct3InterfaceService::onSetProperty, this, std::placeholders::_1, std::placeholders::_2));
-    m_service->unsubscribeTopic(std::string("testbed2/NestedStruct3Interface/set/prop2"), std::bind(&NestedStruct3InterfaceService::onSetProperty, this, std::placeholders::_1, std::placeholders::_2));
-    m_service->unsubscribeTopic(std::string("testbed2/NestedStruct3Interface/set/prop3"), std::bind(&NestedStruct3InterfaceService::onSetProperty, this, std::placeholders::_1, std::placeholders::_2));
-    m_service->unsubscribeTopic(std::string("testbed2/NestedStruct3Interface/rpc/func1"), std::bind(&NestedStruct3InterfaceService::onInvoke, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_service->unsubscribeTopic(std::string("testbed2/NestedStruct3Interface/rpc/func2"), std::bind(&NestedStruct3InterfaceService::onInvoke, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_service->unsubscribeTopic(std::string("testbed2/NestedStruct3Interface/rpc/func3"), std::bind(&NestedStruct3InterfaceService::onInvoke, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
+    m_service->unsubscribeTopic(std::string("testbed2/NestedStruct3Interface/set/prop1"));
+    m_service->unsubscribeTopic(std::string("testbed2/NestedStruct3Interface/set/prop2"));
+    m_service->unsubscribeTopic(std::string("testbed2/NestedStruct3Interface/set/prop3"));
+    m_service->unsubscribeTopic(std::string("testbed2/NestedStruct3Interface/rpc/func1"));
+    m_service->unsubscribeTopic(std::string("testbed2/NestedStruct3Interface/rpc/func2"));
+    m_service->unsubscribeTopic(std::string("testbed2/NestedStruct3Interface/rpc/func3"));
 }
 
 void NestedStruct3InterfaceService::onConnectionStatusChanged(bool connectionStatus)

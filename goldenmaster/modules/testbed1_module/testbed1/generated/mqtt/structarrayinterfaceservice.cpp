@@ -30,14 +30,14 @@ StructArrayInterfaceService::~StructArrayInterfaceService()
     m_impl->_getPublisher().unsubscribeFromAllChanges(*this);
 
     m_service->unsubscribeToConnectionStatus(m_connectionStatusRegistrationID);
-    m_service->unsubscribeTopic(std::string("testbed1/StructArrayInterface/set/propBool"), std::bind(&StructArrayInterfaceService::onSetProperty, this, std::placeholders::_1, std::placeholders::_2));
-    m_service->unsubscribeTopic(std::string("testbed1/StructArrayInterface/set/propInt"), std::bind(&StructArrayInterfaceService::onSetProperty, this, std::placeholders::_1, std::placeholders::_2));
-    m_service->unsubscribeTopic(std::string("testbed1/StructArrayInterface/set/propFloat"), std::bind(&StructArrayInterfaceService::onSetProperty, this, std::placeholders::_1, std::placeholders::_2));
-    m_service->unsubscribeTopic(std::string("testbed1/StructArrayInterface/set/propString"), std::bind(&StructArrayInterfaceService::onSetProperty, this, std::placeholders::_1, std::placeholders::_2));
-    m_service->unsubscribeTopic(std::string("testbed1/StructArrayInterface/rpc/funcBool"), std::bind(&StructArrayInterfaceService::onInvoke, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_service->unsubscribeTopic(std::string("testbed1/StructArrayInterface/rpc/funcInt"), std::bind(&StructArrayInterfaceService::onInvoke, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_service->unsubscribeTopic(std::string("testbed1/StructArrayInterface/rpc/funcFloat"), std::bind(&StructArrayInterfaceService::onInvoke, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_service->unsubscribeTopic(std::string("testbed1/StructArrayInterface/rpc/funcString"), std::bind(&StructArrayInterfaceService::onInvoke, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
+    m_service->unsubscribeTopic(std::string("testbed1/StructArrayInterface/set/propBool"));
+    m_service->unsubscribeTopic(std::string("testbed1/StructArrayInterface/set/propInt"));
+    m_service->unsubscribeTopic(std::string("testbed1/StructArrayInterface/set/propFloat"));
+    m_service->unsubscribeTopic(std::string("testbed1/StructArrayInterface/set/propString"));
+    m_service->unsubscribeTopic(std::string("testbed1/StructArrayInterface/rpc/funcBool"));
+    m_service->unsubscribeTopic(std::string("testbed1/StructArrayInterface/rpc/funcInt"));
+    m_service->unsubscribeTopic(std::string("testbed1/StructArrayInterface/rpc/funcFloat"));
+    m_service->unsubscribeTopic(std::string("testbed1/StructArrayInterface/rpc/funcString"));
 }
 
 void StructArrayInterfaceService::onConnectionStatusChanged(bool connectionStatus)

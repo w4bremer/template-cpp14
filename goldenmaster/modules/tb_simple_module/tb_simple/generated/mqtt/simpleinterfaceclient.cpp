@@ -44,30 +44,30 @@ SimpleInterfaceClient::SimpleInterfaceClient(std::shared_ptr<ApiGear::MQTT::Clie
 
 SimpleInterfaceClient::~SimpleInterfaceClient()
 {
-    m_client->unsubscribeTopic(std::string("tb.simple/SimpleInterface/prop/propBool"), std::bind(&SimpleInterfaceClient::onPropertyChanged, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->unsubscribeTopic(std::string("tb.simple/SimpleInterface/prop/propInt"), std::bind(&SimpleInterfaceClient::onPropertyChanged, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->unsubscribeTopic(std::string("tb.simple/SimpleInterface/prop/propInt32"), std::bind(&SimpleInterfaceClient::onPropertyChanged, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->unsubscribeTopic(std::string("tb.simple/SimpleInterface/prop/propInt64"), std::bind(&SimpleInterfaceClient::onPropertyChanged, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->unsubscribeTopic(std::string("tb.simple/SimpleInterface/prop/propFloat"), std::bind(&SimpleInterfaceClient::onPropertyChanged, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->unsubscribeTopic(std::string("tb.simple/SimpleInterface/prop/propFloat32"), std::bind(&SimpleInterfaceClient::onPropertyChanged, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->unsubscribeTopic(std::string("tb.simple/SimpleInterface/prop/propFloat64"), std::bind(&SimpleInterfaceClient::onPropertyChanged, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->unsubscribeTopic(std::string("tb.simple/SimpleInterface/prop/propString"), std::bind(&SimpleInterfaceClient::onPropertyChanged, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->unsubscribeTopic(std::string("tb.simple/SimpleInterface/sig/sigBool"), std::bind(&SimpleInterfaceClient::onSignal, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->unsubscribeTopic(std::string("tb.simple/SimpleInterface/sig/sigInt"), std::bind(&SimpleInterfaceClient::onSignal, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->unsubscribeTopic(std::string("tb.simple/SimpleInterface/sig/sigInt32"), std::bind(&SimpleInterfaceClient::onSignal, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->unsubscribeTopic(std::string("tb.simple/SimpleInterface/sig/sigInt64"), std::bind(&SimpleInterfaceClient::onSignal, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->unsubscribeTopic(std::string("tb.simple/SimpleInterface/sig/sigFloat"), std::bind(&SimpleInterfaceClient::onSignal, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->unsubscribeTopic(std::string("tb.simple/SimpleInterface/sig/sigFloat32"), std::bind(&SimpleInterfaceClient::onSignal, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->unsubscribeTopic(std::string("tb.simple/SimpleInterface/sig/sigFloat64"), std::bind(&SimpleInterfaceClient::onSignal, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->unsubscribeTopic(std::string("tb.simple/SimpleInterface/sig/sigString"), std::bind(&SimpleInterfaceClient::onSignal, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->unsubscribeTopic(std::string("tb.simple/SimpleInterface/rpc/funcBool/"+m_client->getClientId()+"/result"), std::bind(&SimpleInterfaceClient::onInvokeReply, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->unsubscribeTopic(std::string("tb.simple/SimpleInterface/rpc/funcInt/"+m_client->getClientId()+"/result"), std::bind(&SimpleInterfaceClient::onInvokeReply, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->unsubscribeTopic(std::string("tb.simple/SimpleInterface/rpc/funcInt32/"+m_client->getClientId()+"/result"), std::bind(&SimpleInterfaceClient::onInvokeReply, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->unsubscribeTopic(std::string("tb.simple/SimpleInterface/rpc/funcInt64/"+m_client->getClientId()+"/result"), std::bind(&SimpleInterfaceClient::onInvokeReply, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->unsubscribeTopic(std::string("tb.simple/SimpleInterface/rpc/funcFloat/"+m_client->getClientId()+"/result"), std::bind(&SimpleInterfaceClient::onInvokeReply, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->unsubscribeTopic(std::string("tb.simple/SimpleInterface/rpc/funcFloat32/"+m_client->getClientId()+"/result"), std::bind(&SimpleInterfaceClient::onInvokeReply, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->unsubscribeTopic(std::string("tb.simple/SimpleInterface/rpc/funcFloat64/"+m_client->getClientId()+"/result"), std::bind(&SimpleInterfaceClient::onInvokeReply, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->unsubscribeTopic(std::string("tb.simple/SimpleInterface/rpc/funcString/"+m_client->getClientId()+"/result"), std::bind(&SimpleInterfaceClient::onInvokeReply, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
+    m_client->unsubscribeTopic(std::string("tb.simple/SimpleInterface/prop/propBool"));
+    m_client->unsubscribeTopic(std::string("tb.simple/SimpleInterface/prop/propInt"));
+    m_client->unsubscribeTopic(std::string("tb.simple/SimpleInterface/prop/propInt32"));
+    m_client->unsubscribeTopic(std::string("tb.simple/SimpleInterface/prop/propInt64"));
+    m_client->unsubscribeTopic(std::string("tb.simple/SimpleInterface/prop/propFloat"));
+    m_client->unsubscribeTopic(std::string("tb.simple/SimpleInterface/prop/propFloat32"));
+    m_client->unsubscribeTopic(std::string("tb.simple/SimpleInterface/prop/propFloat64"));
+    m_client->unsubscribeTopic(std::string("tb.simple/SimpleInterface/prop/propString"));
+    m_client->unsubscribeTopic(std::string("tb.simple/SimpleInterface/sig/sigBool"));
+    m_client->unsubscribeTopic(std::string("tb.simple/SimpleInterface/sig/sigInt"));
+    m_client->unsubscribeTopic(std::string("tb.simple/SimpleInterface/sig/sigInt32"));
+    m_client->unsubscribeTopic(std::string("tb.simple/SimpleInterface/sig/sigInt64"));
+    m_client->unsubscribeTopic(std::string("tb.simple/SimpleInterface/sig/sigFloat"));
+    m_client->unsubscribeTopic(std::string("tb.simple/SimpleInterface/sig/sigFloat32"));
+    m_client->unsubscribeTopic(std::string("tb.simple/SimpleInterface/sig/sigFloat64"));
+    m_client->unsubscribeTopic(std::string("tb.simple/SimpleInterface/sig/sigString"));
+    m_client->unsubscribeTopic(std::string("tb.simple/SimpleInterface/rpc/funcBool/"+m_client->getClientId()+"/result"));
+    m_client->unsubscribeTopic(std::string("tb.simple/SimpleInterface/rpc/funcInt/"+m_client->getClientId()+"/result"));
+    m_client->unsubscribeTopic(std::string("tb.simple/SimpleInterface/rpc/funcInt32/"+m_client->getClientId()+"/result"));
+    m_client->unsubscribeTopic(std::string("tb.simple/SimpleInterface/rpc/funcInt64/"+m_client->getClientId()+"/result"));
+    m_client->unsubscribeTopic(std::string("tb.simple/SimpleInterface/rpc/funcFloat/"+m_client->getClientId()+"/result"));
+    m_client->unsubscribeTopic(std::string("tb.simple/SimpleInterface/rpc/funcFloat32/"+m_client->getClientId()+"/result"));
+    m_client->unsubscribeTopic(std::string("tb.simple/SimpleInterface/rpc/funcFloat64/"+m_client->getClientId()+"/result"));
+    m_client->unsubscribeTopic(std::string("tb.simple/SimpleInterface/rpc/funcString/"+m_client->getClientId()+"/result"));
 }
 
 void SimpleInterfaceClient::applyState(const nlohmann::json& fields) 

@@ -32,18 +32,18 @@ EnumInterfaceClient::EnumInterfaceClient(std::shared_ptr<ApiGear::MQTT::Client> 
 
 EnumInterfaceClient::~EnumInterfaceClient()
 {
-    m_client->unsubscribeTopic(std::string("tb.enum/EnumInterface/prop/prop0"), std::bind(&EnumInterfaceClient::onPropertyChanged, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->unsubscribeTopic(std::string("tb.enum/EnumInterface/prop/prop1"), std::bind(&EnumInterfaceClient::onPropertyChanged, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->unsubscribeTopic(std::string("tb.enum/EnumInterface/prop/prop2"), std::bind(&EnumInterfaceClient::onPropertyChanged, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->unsubscribeTopic(std::string("tb.enum/EnumInterface/prop/prop3"), std::bind(&EnumInterfaceClient::onPropertyChanged, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->unsubscribeTopic(std::string("tb.enum/EnumInterface/sig/sig0"), std::bind(&EnumInterfaceClient::onSignal, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->unsubscribeTopic(std::string("tb.enum/EnumInterface/sig/sig1"), std::bind(&EnumInterfaceClient::onSignal, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->unsubscribeTopic(std::string("tb.enum/EnumInterface/sig/sig2"), std::bind(&EnumInterfaceClient::onSignal, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->unsubscribeTopic(std::string("tb.enum/EnumInterface/sig/sig3"), std::bind(&EnumInterfaceClient::onSignal, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->unsubscribeTopic(std::string("tb.enum/EnumInterface/rpc/func0/"+m_client->getClientId()+"/result"), std::bind(&EnumInterfaceClient::onInvokeReply, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->unsubscribeTopic(std::string("tb.enum/EnumInterface/rpc/func1/"+m_client->getClientId()+"/result"), std::bind(&EnumInterfaceClient::onInvokeReply, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->unsubscribeTopic(std::string("tb.enum/EnumInterface/rpc/func2/"+m_client->getClientId()+"/result"), std::bind(&EnumInterfaceClient::onInvokeReply, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->unsubscribeTopic(std::string("tb.enum/EnumInterface/rpc/func3/"+m_client->getClientId()+"/result"), std::bind(&EnumInterfaceClient::onInvokeReply, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
+    m_client->unsubscribeTopic(std::string("tb.enum/EnumInterface/prop/prop0"));
+    m_client->unsubscribeTopic(std::string("tb.enum/EnumInterface/prop/prop1"));
+    m_client->unsubscribeTopic(std::string("tb.enum/EnumInterface/prop/prop2"));
+    m_client->unsubscribeTopic(std::string("tb.enum/EnumInterface/prop/prop3"));
+    m_client->unsubscribeTopic(std::string("tb.enum/EnumInterface/sig/sig0"));
+    m_client->unsubscribeTopic(std::string("tb.enum/EnumInterface/sig/sig1"));
+    m_client->unsubscribeTopic(std::string("tb.enum/EnumInterface/sig/sig2"));
+    m_client->unsubscribeTopic(std::string("tb.enum/EnumInterface/sig/sig3"));
+    m_client->unsubscribeTopic(std::string("tb.enum/EnumInterface/rpc/func0/"+m_client->getClientId()+"/result"));
+    m_client->unsubscribeTopic(std::string("tb.enum/EnumInterface/rpc/func1/"+m_client->getClientId()+"/result"));
+    m_client->unsubscribeTopic(std::string("tb.enum/EnumInterface/rpc/func2/"+m_client->getClientId()+"/result"));
+    m_client->unsubscribeTopic(std::string("tb.enum/EnumInterface/rpc/func3/"+m_client->getClientId()+"/result"));
 }
 
 void EnumInterfaceClient::applyState(const nlohmann::json& fields) 

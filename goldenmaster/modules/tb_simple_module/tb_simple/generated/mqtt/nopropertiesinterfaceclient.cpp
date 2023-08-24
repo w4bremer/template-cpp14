@@ -24,10 +24,10 @@ NoPropertiesInterfaceClient::NoPropertiesInterfaceClient(std::shared_ptr<ApiGear
 
 NoPropertiesInterfaceClient::~NoPropertiesInterfaceClient()
 {
-    m_client->unsubscribeTopic(std::string("tb.simple/NoPropertiesInterface/sig/sigVoid"), std::bind(&NoPropertiesInterfaceClient::onSignal, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->unsubscribeTopic(std::string("tb.simple/NoPropertiesInterface/sig/sigBool"), std::bind(&NoPropertiesInterfaceClient::onSignal, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->unsubscribeTopic(std::string("tb.simple/NoPropertiesInterface/rpc/funcVoid/"+m_client->getClientId()+"/result"), std::bind(&NoPropertiesInterfaceClient::onInvokeReply, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->unsubscribeTopic(std::string("tb.simple/NoPropertiesInterface/rpc/funcBool/"+m_client->getClientId()+"/result"), std::bind(&NoPropertiesInterfaceClient::onInvokeReply, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
+    m_client->unsubscribeTopic(std::string("tb.simple/NoPropertiesInterface/sig/sigVoid"));
+    m_client->unsubscribeTopic(std::string("tb.simple/NoPropertiesInterface/sig/sigBool"));
+    m_client->unsubscribeTopic(std::string("tb.simple/NoPropertiesInterface/rpc/funcVoid/"+m_client->getClientId()+"/result"));
+    m_client->unsubscribeTopic(std::string("tb.simple/NoPropertiesInterface/rpc/funcBool/"+m_client->getClientId()+"/result"));
 }
 
 void NoPropertiesInterfaceClient::applyState(const nlohmann::json& fields) 

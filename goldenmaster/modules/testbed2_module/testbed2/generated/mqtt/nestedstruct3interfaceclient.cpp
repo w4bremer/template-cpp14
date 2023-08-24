@@ -29,15 +29,15 @@ NestedStruct3InterfaceClient::NestedStruct3InterfaceClient(std::shared_ptr<ApiGe
 
 NestedStruct3InterfaceClient::~NestedStruct3InterfaceClient()
 {
-    m_client->unsubscribeTopic(std::string("testbed2/NestedStruct3Interface/prop/prop1"), std::bind(&NestedStruct3InterfaceClient::onPropertyChanged, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->unsubscribeTopic(std::string("testbed2/NestedStruct3Interface/prop/prop2"), std::bind(&NestedStruct3InterfaceClient::onPropertyChanged, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->unsubscribeTopic(std::string("testbed2/NestedStruct3Interface/prop/prop3"), std::bind(&NestedStruct3InterfaceClient::onPropertyChanged, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->unsubscribeTopic(std::string("testbed2/NestedStruct3Interface/sig/sig1"), std::bind(&NestedStruct3InterfaceClient::onSignal, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->unsubscribeTopic(std::string("testbed2/NestedStruct3Interface/sig/sig2"), std::bind(&NestedStruct3InterfaceClient::onSignal, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->unsubscribeTopic(std::string("testbed2/NestedStruct3Interface/sig/sig3"), std::bind(&NestedStruct3InterfaceClient::onSignal, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->unsubscribeTopic(std::string("testbed2/NestedStruct3Interface/rpc/func1/"+m_client->getClientId()+"/result"), std::bind(&NestedStruct3InterfaceClient::onInvokeReply, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->unsubscribeTopic(std::string("testbed2/NestedStruct3Interface/rpc/func2/"+m_client->getClientId()+"/result"), std::bind(&NestedStruct3InterfaceClient::onInvokeReply, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_client->unsubscribeTopic(std::string("testbed2/NestedStruct3Interface/rpc/func3/"+m_client->getClientId()+"/result"), std::bind(&NestedStruct3InterfaceClient::onInvokeReply, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
+    m_client->unsubscribeTopic(std::string("testbed2/NestedStruct3Interface/prop/prop1"));
+    m_client->unsubscribeTopic(std::string("testbed2/NestedStruct3Interface/prop/prop2"));
+    m_client->unsubscribeTopic(std::string("testbed2/NestedStruct3Interface/prop/prop3"));
+    m_client->unsubscribeTopic(std::string("testbed2/NestedStruct3Interface/sig/sig1"));
+    m_client->unsubscribeTopic(std::string("testbed2/NestedStruct3Interface/sig/sig2"));
+    m_client->unsubscribeTopic(std::string("testbed2/NestedStruct3Interface/sig/sig3"));
+    m_client->unsubscribeTopic(std::string("testbed2/NestedStruct3Interface/rpc/func1/"+m_client->getClientId()+"/result"));
+    m_client->unsubscribeTopic(std::string("testbed2/NestedStruct3Interface/rpc/func2/"+m_client->getClientId()+"/result"));
+    m_client->unsubscribeTopic(std::string("testbed2/NestedStruct3Interface/rpc/func3/"+m_client->getClientId()+"/result"));
 }
 
 void NestedStruct3InterfaceClient::applyState(const nlohmann::json& fields) 

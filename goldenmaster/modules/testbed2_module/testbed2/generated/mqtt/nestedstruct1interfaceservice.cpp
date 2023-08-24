@@ -24,8 +24,8 @@ NestedStruct1InterfaceService::~NestedStruct1InterfaceService()
     m_impl->_getPublisher().unsubscribeFromAllChanges(*this);
 
     m_service->unsubscribeToConnectionStatus(m_connectionStatusRegistrationID);
-    m_service->unsubscribeTopic(std::string("testbed2/NestedStruct1Interface/set/prop1"), std::bind(&NestedStruct1InterfaceService::onSetProperty, this, std::placeholders::_1, std::placeholders::_2));
-    m_service->unsubscribeTopic(std::string("testbed2/NestedStruct1Interface/rpc/func1"), std::bind(&NestedStruct1InterfaceService::onInvoke, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
+    m_service->unsubscribeTopic(std::string("testbed2/NestedStruct1Interface/set/prop1"));
+    m_service->unsubscribeTopic(std::string("testbed2/NestedStruct1Interface/rpc/func1"));
 }
 
 void NestedStruct1InterfaceService::onConnectionStatusChanged(bool connectionStatus)

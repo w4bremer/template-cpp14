@@ -30,14 +30,14 @@ ManyParamInterfaceService::~ManyParamInterfaceService()
     m_impl->_getPublisher().unsubscribeFromAllChanges(*this);
 
     m_service->unsubscribeToConnectionStatus(m_connectionStatusRegistrationID);
-    m_service->unsubscribeTopic(std::string("testbed2/ManyParamInterface/set/prop1"), std::bind(&ManyParamInterfaceService::onSetProperty, this, std::placeholders::_1, std::placeholders::_2));
-    m_service->unsubscribeTopic(std::string("testbed2/ManyParamInterface/set/prop2"), std::bind(&ManyParamInterfaceService::onSetProperty, this, std::placeholders::_1, std::placeholders::_2));
-    m_service->unsubscribeTopic(std::string("testbed2/ManyParamInterface/set/prop3"), std::bind(&ManyParamInterfaceService::onSetProperty, this, std::placeholders::_1, std::placeholders::_2));
-    m_service->unsubscribeTopic(std::string("testbed2/ManyParamInterface/set/prop4"), std::bind(&ManyParamInterfaceService::onSetProperty, this, std::placeholders::_1, std::placeholders::_2));
-    m_service->unsubscribeTopic(std::string("testbed2/ManyParamInterface/rpc/func1"), std::bind(&ManyParamInterfaceService::onInvoke, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_service->unsubscribeTopic(std::string("testbed2/ManyParamInterface/rpc/func2"), std::bind(&ManyParamInterfaceService::onInvoke, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_service->unsubscribeTopic(std::string("testbed2/ManyParamInterface/rpc/func3"), std::bind(&ManyParamInterfaceService::onInvoke, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_service->unsubscribeTopic(std::string("testbed2/ManyParamInterface/rpc/func4"), std::bind(&ManyParamInterfaceService::onInvoke, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
+    m_service->unsubscribeTopic(std::string("testbed2/ManyParamInterface/set/prop1"));
+    m_service->unsubscribeTopic(std::string("testbed2/ManyParamInterface/set/prop2"));
+    m_service->unsubscribeTopic(std::string("testbed2/ManyParamInterface/set/prop3"));
+    m_service->unsubscribeTopic(std::string("testbed2/ManyParamInterface/set/prop4"));
+    m_service->unsubscribeTopic(std::string("testbed2/ManyParamInterface/rpc/func1"));
+    m_service->unsubscribeTopic(std::string("testbed2/ManyParamInterface/rpc/func2"));
+    m_service->unsubscribeTopic(std::string("testbed2/ManyParamInterface/rpc/func3"));
+    m_service->unsubscribeTopic(std::string("testbed2/ManyParamInterface/rpc/func4"));
 }
 
 void ManyParamInterfaceService::onConnectionStatusChanged(bool connectionStatus)

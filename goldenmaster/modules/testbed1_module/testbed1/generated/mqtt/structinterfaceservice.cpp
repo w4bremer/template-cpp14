@@ -30,14 +30,14 @@ StructInterfaceService::~StructInterfaceService()
     m_impl->_getPublisher().unsubscribeFromAllChanges(*this);
 
     m_service->unsubscribeToConnectionStatus(m_connectionStatusRegistrationID);
-    m_service->unsubscribeTopic(std::string("testbed1/StructInterface/set/propBool"), std::bind(&StructInterfaceService::onSetProperty, this, std::placeholders::_1, std::placeholders::_2));
-    m_service->unsubscribeTopic(std::string("testbed1/StructInterface/set/propInt"), std::bind(&StructInterfaceService::onSetProperty, this, std::placeholders::_1, std::placeholders::_2));
-    m_service->unsubscribeTopic(std::string("testbed1/StructInterface/set/propFloat"), std::bind(&StructInterfaceService::onSetProperty, this, std::placeholders::_1, std::placeholders::_2));
-    m_service->unsubscribeTopic(std::string("testbed1/StructInterface/set/propString"), std::bind(&StructInterfaceService::onSetProperty, this, std::placeholders::_1, std::placeholders::_2));
-    m_service->unsubscribeTopic(std::string("testbed1/StructInterface/rpc/funcBool"), std::bind(&StructInterfaceService::onInvoke, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_service->unsubscribeTopic(std::string("testbed1/StructInterface/rpc/funcInt"), std::bind(&StructInterfaceService::onInvoke, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_service->unsubscribeTopic(std::string("testbed1/StructInterface/rpc/funcFloat"), std::bind(&StructInterfaceService::onInvoke, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
-    m_service->unsubscribeTopic(std::string("testbed1/StructInterface/rpc/funcString"), std::bind(&StructInterfaceService::onInvoke, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
+    m_service->unsubscribeTopic(std::string("testbed1/StructInterface/set/propBool"));
+    m_service->unsubscribeTopic(std::string("testbed1/StructInterface/set/propInt"));
+    m_service->unsubscribeTopic(std::string("testbed1/StructInterface/set/propFloat"));
+    m_service->unsubscribeTopic(std::string("testbed1/StructInterface/set/propString"));
+    m_service->unsubscribeTopic(std::string("testbed1/StructInterface/rpc/funcBool"));
+    m_service->unsubscribeTopic(std::string("testbed1/StructInterface/rpc/funcInt"));
+    m_service->unsubscribeTopic(std::string("testbed1/StructInterface/rpc/funcFloat"));
+    m_service->unsubscribeTopic(std::string("testbed1/StructInterface/rpc/funcString"));
 }
 
 void StructInterfaceService::onConnectionStatusChanged(bool connectionStatus)
