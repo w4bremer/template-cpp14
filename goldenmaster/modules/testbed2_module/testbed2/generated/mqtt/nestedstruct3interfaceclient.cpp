@@ -16,15 +16,15 @@ NestedStruct3InterfaceClient::NestedStruct3InterfaceClient(std::shared_ptr<ApiGe
     , m_client(client)
     , m_publisher(std::make_unique<NestedStruct3InterfacePublisher>())
 {
-    m_client->subscribeTopic(std::string("testbed2/NestedStruct3Interface/prop/prop1"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onPropertyChanged(topic, args, "", ""); });
-    m_client->subscribeTopic(std::string("testbed2/NestedStruct3Interface/prop/prop2"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onPropertyChanged(topic, args, "", ""); });
-    m_client->subscribeTopic(std::string("testbed2/NestedStruct3Interface/prop/prop3"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onPropertyChanged(topic, args, "", ""); });
-    m_client->subscribeTopic(std::string("testbed2/NestedStruct3Interface/sig/sig1"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onSignal(topic, args, "", ""); });
-    m_client->subscribeTopic(std::string("testbed2/NestedStruct3Interface/sig/sig2"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onSignal(topic, args, "", ""); });
-    m_client->subscribeTopic(std::string("testbed2/NestedStruct3Interface/sig/sig3"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onSignal(topic, args, "", ""); });
-    m_client->subscribeTopic(std::string("testbed2/NestedStruct3Interface/rpc/func1/"+m_client->getClientId()+"/result"), [this](const std::string&, const std::string& args, const std::string&, const std::string& correlationData){ onInvokeReply("", args, "", correlationData); });
-    m_client->subscribeTopic(std::string("testbed2/NestedStruct3Interface/rpc/func2/"+m_client->getClientId()+"/result"), [this](const std::string&, const std::string& args, const std::string&, const std::string& correlationData){ onInvokeReply("", args, "", correlationData); });
-    m_client->subscribeTopic(std::string("testbed2/NestedStruct3Interface/rpc/func3/"+m_client->getClientId()+"/result"), [this](const std::string&, const std::string& args, const std::string&, const std::string& correlationData){ onInvokeReply("", args, "", correlationData); });
+    m_client->subscribeTopic(std::string("testbed2/NestedStruct3Interface/prop/prop1"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onPropertyChanged(topic, args); });
+    m_client->subscribeTopic(std::string("testbed2/NestedStruct3Interface/prop/prop2"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onPropertyChanged(topic, args); });
+    m_client->subscribeTopic(std::string("testbed2/NestedStruct3Interface/prop/prop3"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onPropertyChanged(topic, args); });
+    m_client->subscribeTopic(std::string("testbed2/NestedStruct3Interface/sig/sig1"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onSignal(topic, args); });
+    m_client->subscribeTopic(std::string("testbed2/NestedStruct3Interface/sig/sig2"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onSignal(topic, args); });
+    m_client->subscribeTopic(std::string("testbed2/NestedStruct3Interface/sig/sig3"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onSignal(topic, args); });
+    m_client->subscribeTopic(std::string("testbed2/NestedStruct3Interface/rpc/func1/"+m_client->getClientId()+"/result"), [this](const std::string&, const std::string& args, const std::string&, const std::string& correlationData){ onInvokeReply(args, correlationData); });
+    m_client->subscribeTopic(std::string("testbed2/NestedStruct3Interface/rpc/func2/"+m_client->getClientId()+"/result"), [this](const std::string&, const std::string& args, const std::string&, const std::string& correlationData){ onInvokeReply(args, correlationData); });
+    m_client->subscribeTopic(std::string("testbed2/NestedStruct3Interface/rpc/func3/"+m_client->getClientId()+"/result"), [this](const std::string&, const std::string& args, const std::string&, const std::string& correlationData){ onInvokeReply(args, correlationData); });
 }
 
 NestedStruct3InterfaceClient::~NestedStruct3InterfaceClient()
@@ -218,7 +218,7 @@ std::future<NestedStruct1> NestedStruct3InterfaceClient::func3Async(const Nested
     );
 }
 
-void NestedStruct3InterfaceClient::onSignal(const std::string& topic, const std::string& args, const std::string&, const std::string&)
+void NestedStruct3InterfaceClient::onSignal(const std::string& topic, const std::string& args)
 {
     nlohmann::json json_args = nlohmann::json::parse(args);
     const std::string entityName = ApiGear::MQTT::Topic(topic).getEntityName();
@@ -236,7 +236,7 @@ void NestedStruct3InterfaceClient::onSignal(const std::string& topic, const std:
     }
 }
 
-void NestedStruct3InterfaceClient::onPropertyChanged(const std::string& topic, const std::string& args, const std::string&, const std::string&)
+void NestedStruct3InterfaceClient::onPropertyChanged(const std::string& topic, const std::string& args)
 {
     nlohmann::json json_args = nlohmann::json::parse(args);
     const std::string& name = ApiGear::MQTT::Topic(topic).getEntityName();
@@ -258,7 +258,7 @@ int NestedStruct3InterfaceClient::registerResponseHandler(ApiGear::MQTT::InvokeR
     return responseId;
 }
 
-void NestedStruct3InterfaceClient::onInvokeReply(const std::string& /*topic*/, const std::string& args, const std::string& /*responseTopic*/, const std::string& correlationData)
+void NestedStruct3InterfaceClient::onInvokeReply(const std::string& args, const std::string& correlationData)
 {
     const int randomId = std::stoi(correlationData);
     ApiGear::MQTT::InvokeReplyFunc responseHandler {};

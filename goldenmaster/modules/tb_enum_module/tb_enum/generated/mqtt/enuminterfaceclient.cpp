@@ -16,18 +16,18 @@ EnumInterfaceClient::EnumInterfaceClient(std::shared_ptr<ApiGear::MQTT::Client> 
     , m_client(client)
     , m_publisher(std::make_unique<EnumInterfacePublisher>())
 {
-    m_client->subscribeTopic(std::string("tb.enum/EnumInterface/prop/prop0"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onPropertyChanged(topic, args, "", ""); });
-    m_client->subscribeTopic(std::string("tb.enum/EnumInterface/prop/prop1"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onPropertyChanged(topic, args, "", ""); });
-    m_client->subscribeTopic(std::string("tb.enum/EnumInterface/prop/prop2"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onPropertyChanged(topic, args, "", ""); });
-    m_client->subscribeTopic(std::string("tb.enum/EnumInterface/prop/prop3"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onPropertyChanged(topic, args, "", ""); });
-    m_client->subscribeTopic(std::string("tb.enum/EnumInterface/sig/sig0"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onSignal(topic, args, "", ""); });
-    m_client->subscribeTopic(std::string("tb.enum/EnumInterface/sig/sig1"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onSignal(topic, args, "", ""); });
-    m_client->subscribeTopic(std::string("tb.enum/EnumInterface/sig/sig2"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onSignal(topic, args, "", ""); });
-    m_client->subscribeTopic(std::string("tb.enum/EnumInterface/sig/sig3"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onSignal(topic, args, "", ""); });
-    m_client->subscribeTopic(std::string("tb.enum/EnumInterface/rpc/func0/"+m_client->getClientId()+"/result"), [this](const std::string&, const std::string& args, const std::string&, const std::string& correlationData){ onInvokeReply("", args, "", correlationData); });
-    m_client->subscribeTopic(std::string("tb.enum/EnumInterface/rpc/func1/"+m_client->getClientId()+"/result"), [this](const std::string&, const std::string& args, const std::string&, const std::string& correlationData){ onInvokeReply("", args, "", correlationData); });
-    m_client->subscribeTopic(std::string("tb.enum/EnumInterface/rpc/func2/"+m_client->getClientId()+"/result"), [this](const std::string&, const std::string& args, const std::string&, const std::string& correlationData){ onInvokeReply("", args, "", correlationData); });
-    m_client->subscribeTopic(std::string("tb.enum/EnumInterface/rpc/func3/"+m_client->getClientId()+"/result"), [this](const std::string&, const std::string& args, const std::string&, const std::string& correlationData){ onInvokeReply("", args, "", correlationData); });
+    m_client->subscribeTopic(std::string("tb.enum/EnumInterface/prop/prop0"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onPropertyChanged(topic, args); });
+    m_client->subscribeTopic(std::string("tb.enum/EnumInterface/prop/prop1"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onPropertyChanged(topic, args); });
+    m_client->subscribeTopic(std::string("tb.enum/EnumInterface/prop/prop2"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onPropertyChanged(topic, args); });
+    m_client->subscribeTopic(std::string("tb.enum/EnumInterface/prop/prop3"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onPropertyChanged(topic, args); });
+    m_client->subscribeTopic(std::string("tb.enum/EnumInterface/sig/sig0"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onSignal(topic, args); });
+    m_client->subscribeTopic(std::string("tb.enum/EnumInterface/sig/sig1"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onSignal(topic, args); });
+    m_client->subscribeTopic(std::string("tb.enum/EnumInterface/sig/sig2"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onSignal(topic, args); });
+    m_client->subscribeTopic(std::string("tb.enum/EnumInterface/sig/sig3"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onSignal(topic, args); });
+    m_client->subscribeTopic(std::string("tb.enum/EnumInterface/rpc/func0/"+m_client->getClientId()+"/result"), [this](const std::string&, const std::string& args, const std::string&, const std::string& correlationData){ onInvokeReply(args, correlationData); });
+    m_client->subscribeTopic(std::string("tb.enum/EnumInterface/rpc/func1/"+m_client->getClientId()+"/result"), [this](const std::string&, const std::string& args, const std::string&, const std::string& correlationData){ onInvokeReply(args, correlationData); });
+    m_client->subscribeTopic(std::string("tb.enum/EnumInterface/rpc/func2/"+m_client->getClientId()+"/result"), [this](const std::string&, const std::string& args, const std::string&, const std::string& correlationData){ onInvokeReply(args, correlationData); });
+    m_client->subscribeTopic(std::string("tb.enum/EnumInterface/rpc/func3/"+m_client->getClientId()+"/result"), [this](const std::string&, const std::string& args, const std::string&, const std::string& correlationData){ onInvokeReply(args, correlationData); });
 }
 
 EnumInterfaceClient::~EnumInterfaceClient()
@@ -278,7 +278,7 @@ std::future<Enum3Enum> EnumInterfaceClient::func3Async(Enum3Enum param3)
     );
 }
 
-void EnumInterfaceClient::onSignal(const std::string& topic, const std::string& args, const std::string&, const std::string&)
+void EnumInterfaceClient::onSignal(const std::string& topic, const std::string& args)
 {
     nlohmann::json json_args = nlohmann::json::parse(args);
     const std::string entityName = ApiGear::MQTT::Topic(topic).getEntityName();
@@ -300,7 +300,7 @@ void EnumInterfaceClient::onSignal(const std::string& topic, const std::string& 
     }
 }
 
-void EnumInterfaceClient::onPropertyChanged(const std::string& topic, const std::string& args, const std::string&, const std::string&)
+void EnumInterfaceClient::onPropertyChanged(const std::string& topic, const std::string& args)
 {
     nlohmann::json json_args = nlohmann::json::parse(args);
     const std::string& name = ApiGear::MQTT::Topic(topic).getEntityName();
@@ -322,7 +322,7 @@ int EnumInterfaceClient::registerResponseHandler(ApiGear::MQTT::InvokeReplyFunc 
     return responseId;
 }
 
-void EnumInterfaceClient::onInvokeReply(const std::string& /*topic*/, const std::string& args, const std::string& /*responseTopic*/, const std::string& correlationData)
+void EnumInterfaceClient::onInvokeReply(const std::string& args, const std::string& correlationData)
 {
     const int randomId = std::stoi(correlationData);
     ApiGear::MQTT::InvokeReplyFunc responseHandler {};

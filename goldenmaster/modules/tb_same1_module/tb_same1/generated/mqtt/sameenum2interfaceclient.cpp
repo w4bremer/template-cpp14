@@ -16,12 +16,12 @@ SameEnum2InterfaceClient::SameEnum2InterfaceClient(std::shared_ptr<ApiGear::MQTT
     , m_client(client)
     , m_publisher(std::make_unique<SameEnum2InterfacePublisher>())
 {
-    m_client->subscribeTopic(std::string("tb.same1/SameEnum2Interface/prop/prop1"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onPropertyChanged(topic, args, "", ""); });
-    m_client->subscribeTopic(std::string("tb.same1/SameEnum2Interface/prop/prop2"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onPropertyChanged(topic, args, "", ""); });
-    m_client->subscribeTopic(std::string("tb.same1/SameEnum2Interface/sig/sig1"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onSignal(topic, args, "", ""); });
-    m_client->subscribeTopic(std::string("tb.same1/SameEnum2Interface/sig/sig2"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onSignal(topic, args, "", ""); });
-    m_client->subscribeTopic(std::string("tb.same1/SameEnum2Interface/rpc/func1/"+m_client->getClientId()+"/result"), [this](const std::string&, const std::string& args, const std::string&, const std::string& correlationData){ onInvokeReply("", args, "", correlationData); });
-    m_client->subscribeTopic(std::string("tb.same1/SameEnum2Interface/rpc/func2/"+m_client->getClientId()+"/result"), [this](const std::string&, const std::string& args, const std::string&, const std::string& correlationData){ onInvokeReply("", args, "", correlationData); });
+    m_client->subscribeTopic(std::string("tb.same1/SameEnum2Interface/prop/prop1"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onPropertyChanged(topic, args); });
+    m_client->subscribeTopic(std::string("tb.same1/SameEnum2Interface/prop/prop2"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onPropertyChanged(topic, args); });
+    m_client->subscribeTopic(std::string("tb.same1/SameEnum2Interface/sig/sig1"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onSignal(topic, args); });
+    m_client->subscribeTopic(std::string("tb.same1/SameEnum2Interface/sig/sig2"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onSignal(topic, args); });
+    m_client->subscribeTopic(std::string("tb.same1/SameEnum2Interface/rpc/func1/"+m_client->getClientId()+"/result"), [this](const std::string&, const std::string& args, const std::string&, const std::string& correlationData){ onInvokeReply(args, correlationData); });
+    m_client->subscribeTopic(std::string("tb.same1/SameEnum2Interface/rpc/func2/"+m_client->getClientId()+"/result"), [this](const std::string&, const std::string& args, const std::string&, const std::string& correlationData){ onInvokeReply(args, correlationData); });
 }
 
 SameEnum2InterfaceClient::~SameEnum2InterfaceClient()
@@ -153,7 +153,7 @@ std::future<Enum1Enum> SameEnum2InterfaceClient::func2Async(Enum1Enum param1, En
     );
 }
 
-void SameEnum2InterfaceClient::onSignal(const std::string& topic, const std::string& args, const std::string&, const std::string&)
+void SameEnum2InterfaceClient::onSignal(const std::string& topic, const std::string& args)
 {
     nlohmann::json json_args = nlohmann::json::parse(args);
     const std::string entityName = ApiGear::MQTT::Topic(topic).getEntityName();
@@ -167,7 +167,7 @@ void SameEnum2InterfaceClient::onSignal(const std::string& topic, const std::str
     }
 }
 
-void SameEnum2InterfaceClient::onPropertyChanged(const std::string& topic, const std::string& args, const std::string&, const std::string&)
+void SameEnum2InterfaceClient::onPropertyChanged(const std::string& topic, const std::string& args)
 {
     nlohmann::json json_args = nlohmann::json::parse(args);
     const std::string& name = ApiGear::MQTT::Topic(topic).getEntityName();
@@ -189,7 +189,7 @@ int SameEnum2InterfaceClient::registerResponseHandler(ApiGear::MQTT::InvokeReply
     return responseId;
 }
 
-void SameEnum2InterfaceClient::onInvokeReply(const std::string& /*topic*/, const std::string& args, const std::string& /*responseTopic*/, const std::string& correlationData)
+void SameEnum2InterfaceClient::onInvokeReply(const std::string& args, const std::string& correlationData)
 {
     const int randomId = std::stoi(correlationData);
     ApiGear::MQTT::InvokeReplyFunc responseHandler {};

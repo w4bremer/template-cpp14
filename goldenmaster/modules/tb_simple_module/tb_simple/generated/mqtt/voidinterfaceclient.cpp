@@ -16,8 +16,8 @@ VoidInterfaceClient::VoidInterfaceClient(std::shared_ptr<ApiGear::MQTT::Client> 
     , m_client(client)
     , m_publisher(std::make_unique<VoidInterfacePublisher>())
 {
-    m_client->subscribeTopic(std::string("tb.simple/VoidInterface/sig/sigVoid"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onSignal(topic, args, "", ""); });
-    m_client->subscribeTopic(std::string("tb.simple/VoidInterface/rpc/funcVoid/"+m_client->getClientId()+"/result"), [this](const std::string&, const std::string& args, const std::string&, const std::string& correlationData){ onInvokeReply("", args, "", correlationData); });
+    m_client->subscribeTopic(std::string("tb.simple/VoidInterface/sig/sigVoid"), [this](const std::string& topic, const std::string& args, const std::string&, const std::string&){ onSignal(topic, args); });
+    m_client->subscribeTopic(std::string("tb.simple/VoidInterface/rpc/funcVoid/"+m_client->getClientId()+"/result"), [this](const std::string&, const std::string& args, const std::string&, const std::string& correlationData){ onInvokeReply(args, correlationData); });
 }
 
 VoidInterfaceClient::~VoidInterfaceClient()
@@ -60,7 +60,7 @@ std::future<void> VoidInterfaceClient::funcVoidAsync()
     );
 }
 
-void VoidInterfaceClient::onSignal(const std::string& topic, const std::string& args, const std::string&, const std::string&)
+void VoidInterfaceClient::onSignal(const std::string& topic, const std::string& args)
 {
     nlohmann::json json_args = nlohmann::json::parse(args);
     const std::string entityName = ApiGear::MQTT::Topic(topic).getEntityName();
@@ -70,7 +70,7 @@ void VoidInterfaceClient::onSignal(const std::string& topic, const std::string& 
     }
 }
 
-void VoidInterfaceClient::onPropertyChanged(const std::string& topic, const std::string& args, const std::string&, const std::string&)
+void VoidInterfaceClient::onPropertyChanged(const std::string& topic, const std::string& args)
 {
     nlohmann::json json_args = nlohmann::json::parse(args);
     const std::string& name = ApiGear::MQTT::Topic(topic).getEntityName();
@@ -92,7 +92,7 @@ int VoidInterfaceClient::registerResponseHandler(ApiGear::MQTT::InvokeReplyFunc 
     return responseId;
 }
 
-void VoidInterfaceClient::onInvokeReply(const std::string& /*topic*/, const std::string& args, const std::string& /*responseTopic*/, const std::string& correlationData)
+void VoidInterfaceClient::onInvokeReply(const std::string& args, const std::string& correlationData)
 {
     const int randomId = std::stoi(correlationData);
     ApiGear::MQTT::InvokeReplyFunc responseHandler {};

@@ -34,9 +34,9 @@ public:
 
     bool isReady() const;
 
-    void onSignal(const std::string& topic, const std::string& args, const std::string& responseTopic, const std::string& correlationData);
-    void onPropertyChanged(const std::string& topic, const std::string& args, const std::string& responseTopic, const std::string& correlationData);
-    void onInvokeReply(const std::string& topic, const std::string& args, const std::string& responseTopic, const std::string& correlationData);
+    void onSignal(const std::string& topic, const std::string& args);
+    void onPropertyChanged(const std::string& topic, const std::string& args);
+    void onInvokeReply(const std::string& args, const std::string& correlationData);
 
 private:
     void setProp0Local(Enum0Enum prop0);
