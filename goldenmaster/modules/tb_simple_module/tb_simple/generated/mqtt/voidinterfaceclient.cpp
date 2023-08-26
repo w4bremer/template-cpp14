@@ -39,11 +39,6 @@ VoidInterfaceClient::~VoidInterfaceClient()
     }
 }
 
-void VoidInterfaceClient::applyState(const nlohmann::json& fields) 
-{// no properties to apply state
-    (void) fields;
-}
-
 void VoidInterfaceClient::funcVoid()
 {
     if(m_client == nullptr) {
@@ -81,14 +76,6 @@ void VoidInterfaceClient::onSignal(const std::string& topic, const std::string& 
         m_publisher->publishSigVoid();
         return;
     }
-}
-
-void VoidInterfaceClient::onPropertyChanged(const std::string& topic, const std::string& args)
-{
-    nlohmann::json json_args = nlohmann::json::parse(args);
-    const std::string& name = ApiGear::MQTT::Topic(topic).getEntityName();
-    applyState({ {name, json_args} });
-    return;
 }
 
 int VoidInterfaceClient::registerResponseHandler(ApiGear::MQTT::InvokeReplyFunc handler)

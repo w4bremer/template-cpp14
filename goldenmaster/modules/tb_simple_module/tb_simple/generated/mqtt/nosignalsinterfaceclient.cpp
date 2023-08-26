@@ -13,8 +13,8 @@ namespace {
     std::map<std::string, ApiGear::MQTT::CallbackFunction> createTopicMap(const std::string&clientId, NoSignalsInterfaceClient* client)
     {
         return {
-            { std::string("tb.simple/NoSignalsInterface/prop/propBool"), [client](const std::string& topic, const std::string& args, const std::string&, const std::string&){ client->onPropertyChanged(topic, args); } },
-            { std::string("tb.simple/NoSignalsInterface/prop/propInt"), [client](const std::string& topic, const std::string& args, const std::string&, const std::string&){ client->onPropertyChanged(topic, args); } },
+            { std::string("tb.simple/NoSignalsInterface/prop/propBool"), [client](const std::string&, const std::string& args, const std::string&, const std::string&){ client->setPropBoolLocal(args); } },
+            { std::string("tb.simple/NoSignalsInterface/prop/propInt"), [client](const std::string&, const std::string& args, const std::string&, const std::string&){ client->setPropIntLocal(args); } },
             { std::string("tb.simple/NoSignalsInterface/rpc/funcVoid/"+clientId+"/result"), [client](const std::string&, const std::string& args, const std::string&, const std::string& correlationData){ client->onInvokeReply(args, correlationData); } },
             { std::string("tb.simple/NoSignalsInterface/rpc/funcBool/"+clientId+"/result"), [client](const std::string&, const std::string& args, const std::string&, const std::string& correlationData){ client->onInvokeReply(args, correlationData); } },
         };
@@ -41,16 +41,6 @@ NoSignalsInterfaceClient::~NoSignalsInterfaceClient()
     }
 }
 
-void NoSignalsInterfaceClient::applyState(const nlohmann::json& fields) 
-{
-    if(fields.contains("propBool")) {
-        setPropBoolLocal(fields["propBool"].get<bool>());
-    }
-    if(fields.contains("propInt")) {
-        setPropIntLocal(fields["propInt"].get<int>());
-    }
-}
-
 void NoSignalsInterfaceClient::setPropBool(bool propBool)
 {
     if(m_client == nullptr) {
@@ -60,8 +50,14 @@ void NoSignalsInterfaceClient::setPropBool(bool propBool)
     m_client->setRemoteProperty(topic, nlohmann::json(propBool).dump());
 }
 
-void NoSignalsInterfaceClient::setPropBoolLocal(bool propBool)
+void NoSignalsInterfaceClient::setPropBoolLocal(const nlohmann::json& fields)
 {
+    if (fields.empty())
+    {
+        return;
+    }
+
+    bool propBool = fields["propBool"].get<bool>();
     if (m_data.m_propBool != propBool) {
         m_data.m_propBool = propBool;
         m_publisher->publishPropBoolChanged(propBool);
@@ -82,8 +78,14 @@ void NoSignalsInterfaceClient::setPropInt(int propInt)
     m_client->setRemoteProperty(topic, nlohmann::json(propInt).dump());
 }
 
-void NoSignalsInterfaceClient::setPropIntLocal(int propInt)
+void NoSignalsInterfaceClient::setPropIntLocal(const nlohmann::json& fields)
 {
+    if (fields.empty())
+    {
+        return;
+    }
+
+    int propInt = fields["propInt"].get<int>();
     if (m_data.m_propInt != propInt) {
         m_data.m_propInt = propInt;
         m_publisher->publishPropIntChanged(propInt);
@@ -162,14 +164,6 @@ void NoSignalsInterfaceClient::onSignal(const std::string& topic, const std::str
     const std::string entityName = ApiGear::MQTT::Topic(topic).getEntityName();
     (void) args;
     (void) topic;
-}
-
-void NoSignalsInterfaceClient::onPropertyChanged(const std::string& topic, const std::string& args)
-{
-    nlohmann::json json_args = nlohmann::json::parse(args);
-    const std::string& name = ApiGear::MQTT::Topic(topic).getEntityName();
-    applyState({ {name, json_args} });
-    return;
 }
 
 int NoSignalsInterfaceClient::registerResponseHandler(ApiGear::MQTT::InvokeReplyFunc handler)
