@@ -15,7 +15,6 @@ public:
 
     void onConnectionStatusChanged(bool connectionStatus);
 
-    void onSetProperty(const std::string& topic, const std::string& args);
     void onInvoke(const std::string& topic, const std::string& args, const std::string& responseTopic, const std::string& correlationData);
 
     // IStructInterfaceSubscriber interface
@@ -24,9 +23,21 @@ public:
     void onSigFloat(const StructFloat& paramFloat) override;
     void onSigString(const StructString& paramString) override;
     void onPropBoolChanged(const StructBool& propBool) override;
+    /// @brief requests to set the value for the property PropBool coming from the client
+    /// @param fields contains the param of the type StructBool
+    void onSetPropBool(const std::string& args) const;
     void onPropIntChanged(const StructInt& propInt) override;
+    /// @brief requests to set the value for the property PropInt coming from the client
+    /// @param fields contains the param of the type StructInt
+    void onSetPropInt(const std::string& args) const;
     void onPropFloatChanged(const StructFloat& propFloat) override;
+    /// @brief requests to set the value for the property PropFloat coming from the client
+    /// @param fields contains the param of the type StructFloat
+    void onSetPropFloat(const std::string& args) const;
     void onPropStringChanged(const StructString& propString) override;
+    /// @brief requests to set the value for the property PropString coming from the client
+    /// @param fields contains the param of the type StructString
+    void onSetPropString(const std::string& args) const;
 
 private:
     std::shared_ptr<IStructInterface> m_impl;

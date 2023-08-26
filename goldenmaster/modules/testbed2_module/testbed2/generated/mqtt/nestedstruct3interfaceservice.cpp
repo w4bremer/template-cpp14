@@ -10,9 +10,9 @@ namespace {
     std::map<std::string, ApiGear::MQTT::CallbackFunction> createTopicMap(NestedStruct3InterfaceService* service)
     {
         return {
-            {std::string("testbed2/NestedStruct3Interface/set/prop1"), [service](const std::string& topic, const std::string& args, const std::string&, const std::string&){ service->onSetProperty(topic, args); } },
-            {std::string("testbed2/NestedStruct3Interface/set/prop2"), [service](const std::string& topic, const std::string& args, const std::string&, const std::string&){ service->onSetProperty(topic, args); } },
-            {std::string("testbed2/NestedStruct3Interface/set/prop3"), [service](const std::string& topic, const std::string& args, const std::string&, const std::string&){ service->onSetProperty(topic, args); } },
+            {std::string("testbed2/NestedStruct3Interface/set/prop1"), [service](const std::string&, const std::string& args, const std::string&, const std::string&){ service->onSetProp1(args); } },
+            {std::string("testbed2/NestedStruct3Interface/set/prop2"), [service](const std::string&, const std::string& args, const std::string&, const std::string&){ service->onSetProp2(args); } },
+            {std::string("testbed2/NestedStruct3Interface/set/prop3"), [service](const std::string&, const std::string& args, const std::string&, const std::string&){ service->onSetProp3(args); } },
             {std::string("testbed2/NestedStruct3Interface/rpc/func1"), [service](const std::string& topic, const std::string& args, const std::string& responseTopic, const std::string& correlationData) { service->onInvoke(topic, args, responseTopic, correlationData); } },
             {std::string("testbed2/NestedStruct3Interface/rpc/func2"), [service](const std::string& topic, const std::string& args, const std::string& responseTopic, const std::string& correlationData) { service->onInvoke(topic, args, responseTopic, correlationData); } },
             {std::string("testbed2/NestedStruct3Interface/rpc/func3"), [service](const std::string& topic, const std::string& args, const std::string& responseTopic, const std::string& correlationData) { service->onInvoke(topic, args, responseTopic, correlationData); } },
@@ -59,26 +59,38 @@ void NestedStruct3InterfaceService::onConnectionStatusChanged(bool connectionSta
     onProp2Changed(m_impl->getProp2());
     onProp3Changed(m_impl->getProp3());
 }
-
-void NestedStruct3InterfaceService::onSetProperty(const std::string& topic, const std::string& args)
+void NestedStruct3InterfaceService::onSetProp1(const std::string& args) const
 {
     nlohmann::json json_args = nlohmann::json::parse(args);
-    const std::string& name = ApiGear::MQTT::Topic(topic).getEntityName();
-    if(name == "prop1") {
-        auto prop1 = json_args.get<NestedStruct1>();
-        m_impl->setProp1(prop1);
+    if (json_args.empty())
+    {
         return;
     }
-    if(name == "prop2") {
-        auto prop2 = json_args.get<NestedStruct2>();
-        m_impl->setProp2(prop2);
+
+    auto prop1 = json_args.get<NestedStruct1>();
+    m_impl->setProp1(prop1);
+}
+void NestedStruct3InterfaceService::onSetProp2(const std::string& args) const
+{
+    nlohmann::json json_args = nlohmann::json::parse(args);
+    if (json_args.empty())
+    {
         return;
     }
-    if(name == "prop3") {
-        auto prop3 = json_args.get<NestedStruct3>();
-        m_impl->setProp3(prop3);
+
+    auto prop2 = json_args.get<NestedStruct2>();
+    m_impl->setProp2(prop2);
+}
+void NestedStruct3InterfaceService::onSetProp3(const std::string& args) const
+{
+    nlohmann::json json_args = nlohmann::json::parse(args);
+    if (json_args.empty())
+    {
         return;
     }
+
+    auto prop3 = json_args.get<NestedStruct3>();
+    m_impl->setProp3(prop3);
 }
 
 void NestedStruct3InterfaceService::onInvoke(const std::string& topic, const std::string& args, const std::string& responseTopic, const std::string& correlationData)

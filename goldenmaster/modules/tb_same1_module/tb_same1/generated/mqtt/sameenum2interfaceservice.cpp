@@ -10,8 +10,8 @@ namespace {
     std::map<std::string, ApiGear::MQTT::CallbackFunction> createTopicMap(SameEnum2InterfaceService* service)
     {
         return {
-            {std::string("tb.same1/SameEnum2Interface/set/prop1"), [service](const std::string& topic, const std::string& args, const std::string&, const std::string&){ service->onSetProperty(topic, args); } },
-            {std::string("tb.same1/SameEnum2Interface/set/prop2"), [service](const std::string& topic, const std::string& args, const std::string&, const std::string&){ service->onSetProperty(topic, args); } },
+            {std::string("tb.same1/SameEnum2Interface/set/prop1"), [service](const std::string&, const std::string& args, const std::string&, const std::string&){ service->onSetProp1(args); } },
+            {std::string("tb.same1/SameEnum2Interface/set/prop2"), [service](const std::string&, const std::string& args, const std::string&, const std::string&){ service->onSetProp2(args); } },
             {std::string("tb.same1/SameEnum2Interface/rpc/func1"), [service](const std::string& topic, const std::string& args, const std::string& responseTopic, const std::string& correlationData) { service->onInvoke(topic, args, responseTopic, correlationData); } },
             {std::string("tb.same1/SameEnum2Interface/rpc/func2"), [service](const std::string& topic, const std::string& args, const std::string& responseTopic, const std::string& correlationData) { service->onInvoke(topic, args, responseTopic, correlationData); } },
         };
@@ -56,21 +56,27 @@ void SameEnum2InterfaceService::onConnectionStatusChanged(bool connectionStatus)
     onProp1Changed(m_impl->getProp1());
     onProp2Changed(m_impl->getProp2());
 }
-
-void SameEnum2InterfaceService::onSetProperty(const std::string& topic, const std::string& args)
+void SameEnum2InterfaceService::onSetProp1(const std::string& args) const
 {
     nlohmann::json json_args = nlohmann::json::parse(args);
-    const std::string& name = ApiGear::MQTT::Topic(topic).getEntityName();
-    if(name == "prop1") {
-        auto prop1 = json_args.get<Enum1Enum>();
-        m_impl->setProp1(prop1);
+    if (json_args.empty())
+    {
         return;
     }
-    if(name == "prop2") {
-        auto prop2 = json_args.get<Enum2Enum>();
-        m_impl->setProp2(prop2);
+
+    auto prop1 = json_args.get<Enum1Enum>();
+    m_impl->setProp1(prop1);
+}
+void SameEnum2InterfaceService::onSetProp2(const std::string& args) const
+{
+    nlohmann::json json_args = nlohmann::json::parse(args);
+    if (json_args.empty())
+    {
         return;
     }
+
+    auto prop2 = json_args.get<Enum2Enum>();
+    m_impl->setProp2(prop2);
 }
 
 void SameEnum2InterfaceService::onInvoke(const std::string& topic, const std::string& args, const std::string& responseTopic, const std::string& correlationData)

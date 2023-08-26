@@ -15,12 +15,14 @@ public:
 
     void onConnectionStatusChanged(bool connectionStatus);
 
-    void onSetProperty(const std::string& topic, const std::string& args);
     void onInvoke(const std::string& topic, const std::string& args, const std::string& responseTopic, const std::string& correlationData);
 
     // ISameStruct1InterfaceSubscriber interface
     void onSig1(const Struct1& param1) override;
     void onProp1Changed(const Struct1& prop1) override;
+    /// @brief requests to set the value for the property Prop1 coming from the client
+    /// @param fields contains the param of the type Struct1
+    void onSetProp1(const std::string& args) const;
 
 private:
     std::shared_ptr<ISameStruct1Interface> m_impl;

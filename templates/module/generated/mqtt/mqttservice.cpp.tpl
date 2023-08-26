@@ -15,7 +15,7 @@ namespace {
         return {
         {{- range .Interface.Properties}}
         {{- $property := . }}
-            {std::string("{{$.Module.Name}}/{{$interface}}/set/{{$property}}"), [service](const std::string& topic, const std::string& args, const std::string&, const std::string&){ service->onSetProperty(topic, args); } },
+            {std::string("{{$.Module.Name}}/{{$interface}}/set/{{$property}}"), [service](const std::string&, const std::string& args, const std::string&, const std::string&){ service->onSet{{Camel $property.Name}}(args); } },
         {{- end }}
         {{- range .Interface.Operations}}
         {{- $operation := . }}
@@ -66,21 +66,20 @@ void {{$class}}::onConnectionStatusChanged(bool connectionStatus)
 {{- end }}
 }
 
-void {{$class}}::onSetProperty(const std::string& topic, const std::string& args)
-{
-    nlohmann::json json_args = nlohmann::json::parse(args);
-    const std::string& name = ApiGear::MQTT::Topic(topic).getEntityName();
 {{- range .Interface.Properties}}
 {{- $property := . }}
-    if(name == "{{$property}}") {
-        auto {{$property}} = json_args.get<{{cppType "" $property}}>();
-        m_impl->set{{Camel $property.Name}}({{$property}});
+void {{$class}}::onSet{{Camel $property.Name}}(const std::string& args) const
+{
+    nlohmann::json json_args = nlohmann::json::parse(args);
+    if (json_args.empty())
+    {
         return;
     }
-{{- else }}
-    (void) name;
-{{- end }}
+
+    auto {{$property}} = json_args.get<{{cppType "" $property}}>();
+    m_impl->set{{Camel $property.Name}}({{$property}});
 }
+{{- end }}
 
 void {{$class}}::onInvoke(const std::string& topic, const std::string& args, const std::string& responseTopic, const std::string& correlationData)
 {

@@ -53,13 +53,6 @@ void NoPropertiesInterfaceService::onConnectionStatusChanged(bool connectionStat
     // send current values
 }
 
-void NoPropertiesInterfaceService::onSetProperty(const std::string& topic, const std::string& args)
-{
-    nlohmann::json json_args = nlohmann::json::parse(args);
-    const std::string& name = ApiGear::MQTT::Topic(topic).getEntityName();
-    (void) name;
-}
-
 void NoPropertiesInterfaceService::onInvoke(const std::string& topic, const std::string& args, const std::string& responseTopic, const std::string& correlationData)
 {
     nlohmann::json json_args = nlohmann::json::parse(args);

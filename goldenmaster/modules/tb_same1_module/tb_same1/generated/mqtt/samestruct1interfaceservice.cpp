@@ -10,7 +10,7 @@ namespace {
     std::map<std::string, ApiGear::MQTT::CallbackFunction> createTopicMap(SameStruct1InterfaceService* service)
     {
         return {
-            {std::string("tb.same1/SameStruct1Interface/set/prop1"), [service](const std::string& topic, const std::string& args, const std::string&, const std::string&){ service->onSetProperty(topic, args); } },
+            {std::string("tb.same1/SameStruct1Interface/set/prop1"), [service](const std::string&, const std::string& args, const std::string&, const std::string&){ service->onSetProp1(args); } },
             {std::string("tb.same1/SameStruct1Interface/rpc/func1"), [service](const std::string& topic, const std::string& args, const std::string& responseTopic, const std::string& correlationData) { service->onInvoke(topic, args, responseTopic, correlationData); } },
         };
     };
@@ -53,16 +53,16 @@ void SameStruct1InterfaceService::onConnectionStatusChanged(bool connectionStatu
     // send current values
     onProp1Changed(m_impl->getProp1());
 }
-
-void SameStruct1InterfaceService::onSetProperty(const std::string& topic, const std::string& args)
+void SameStruct1InterfaceService::onSetProp1(const std::string& args) const
 {
     nlohmann::json json_args = nlohmann::json::parse(args);
-    const std::string& name = ApiGear::MQTT::Topic(topic).getEntityName();
-    if(name == "prop1") {
-        auto prop1 = json_args.get<Struct1>();
-        m_impl->setProp1(prop1);
+    if (json_args.empty())
+    {
         return;
     }
+
+    auto prop1 = json_args.get<Struct1>();
+    m_impl->setProp1(prop1);
 }
 
 void SameStruct1InterfaceService::onInvoke(const std::string& topic, const std::string& args, const std::string& responseTopic, const std::string& correlationData)

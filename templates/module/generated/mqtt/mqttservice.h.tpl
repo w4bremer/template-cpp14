@@ -18,7 +18,6 @@ public:
 
     void onConnectionStatusChanged(bool connectionStatus);
 
-    void onSetProperty(const std::string& topic, const std::string& args);
     void onInvoke(const std::string& topic, const std::string& args, const std::string& responseTopic, const std::string& correlationData);
 
     // I{{$interface}}Subscriber interface
@@ -30,6 +29,9 @@ public:
 {{- range .Interface.Properties}}
 {{- $property := . }}
     void on{{Camel $property.Name}}Changed({{cppParam "" $property}}) override;
+    /// @brief requests to set the value for the property {{Camel $property.Name}} coming from the client
+    /// @param fields contains the param of the type {{cppType "" $property }}
+    void onSet{{Camel $property.Name}}(const std::string& args) const;
 {{- end }}
 
 private:

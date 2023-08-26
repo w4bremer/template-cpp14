@@ -15,7 +15,6 @@ public:
 
     void onConnectionStatusChanged(bool connectionStatus);
 
-    void onSetProperty(const std::string& topic, const std::string& args);
     void onInvoke(const std::string& topic, const std::string& args, const std::string& responseTopic, const std::string& correlationData);
 
     // ISimpleInterfaceSubscriber interface
@@ -28,13 +27,37 @@ public:
     void onSigFloat64(double paramFloat64) override;
     void onSigString(const std::string& paramString) override;
     void onPropBoolChanged(bool propBool) override;
+    /// @brief requests to set the value for the property PropBool coming from the client
+    /// @param fields contains the param of the type bool
+    void onSetPropBool(const std::string& args) const;
     void onPropIntChanged(int propInt) override;
+    /// @brief requests to set the value for the property PropInt coming from the client
+    /// @param fields contains the param of the type int
+    void onSetPropInt(const std::string& args) const;
     void onPropInt32Changed(int32_t propInt32) override;
+    /// @brief requests to set the value for the property PropInt32 coming from the client
+    /// @param fields contains the param of the type int32_t
+    void onSetPropInt32(const std::string& args) const;
     void onPropInt64Changed(int64_t propInt64) override;
+    /// @brief requests to set the value for the property PropInt64 coming from the client
+    /// @param fields contains the param of the type int64_t
+    void onSetPropInt64(const std::string& args) const;
     void onPropFloatChanged(float propFloat) override;
+    /// @brief requests to set the value for the property PropFloat coming from the client
+    /// @param fields contains the param of the type float
+    void onSetPropFloat(const std::string& args) const;
     void onPropFloat32Changed(float propFloat32) override;
+    /// @brief requests to set the value for the property PropFloat32 coming from the client
+    /// @param fields contains the param of the type float
+    void onSetPropFloat32(const std::string& args) const;
     void onPropFloat64Changed(double propFloat64) override;
+    /// @brief requests to set the value for the property PropFloat64 coming from the client
+    /// @param fields contains the param of the type double
+    void onSetPropFloat64(const std::string& args) const;
     void onPropStringChanged(const std::string& propString) override;
+    /// @brief requests to set the value for the property PropString coming from the client
+    /// @param fields contains the param of the type std::string
+    void onSetPropString(const std::string& args) const;
 
 private:
     std::shared_ptr<ISimpleInterface> m_impl;

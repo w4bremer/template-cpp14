@@ -15,12 +15,14 @@ public:
 
     void onConnectionStatusChanged(bool connectionStatus);
 
-    void onSetProperty(const std::string& topic, const std::string& args);
     void onInvoke(const std::string& topic, const std::string& args, const std::string& responseTopic, const std::string& correlationData);
 
     // ISameEnum1InterfaceSubscriber interface
     void onSig1(Enum1Enum param1) override;
     void onProp1Changed(Enum1Enum prop1) override;
+    /// @brief requests to set the value for the property Prop1 coming from the client
+    /// @param fields contains the param of the type Enum1Enum
+    void onSetProp1(const std::string& args) const;
 
 private:
     std::shared_ptr<ISameEnum1Interface> m_impl;
