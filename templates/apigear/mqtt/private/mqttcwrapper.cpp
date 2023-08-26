@@ -147,18 +147,25 @@ CWrapper::CWrapper(const std::string& clientID)
 
 CWrapper::~CWrapper() = default;
 
-int CWrapper::subscribeToConnectionStatus(OnConnectionStatusChangedCallBackFunction callBack)
+int CWrapper::createUniqueConnectionStatusId()
 {
-    auto randomId = 0;
+    auto subscriptionId = 0;
     std::uniform_int_distribution<> distribution (0, 100000);
     m_onConnectionStatusChangedCallbacksMutex.lock();
     do {
-        randomId = distribution(randomNumberGenerator);
-    } while (m_onConnectionStatusChangedCallbacks.find(randomId) != m_onConnectionStatusChangedCallbacks.end());
-    m_onConnectionStatusChangedCallbacks.insert(std::pair<int, OnConnectionStatusChangedCallBackFunction>(randomId, callBack));
+        subscriptionId = distribution(randomNumberGenerator);
+    } while (m_onConnectionStatusChangedCallbacks.find(subscriptionId) != m_onConnectionStatusChangedCallbacks.end());
+
+    return subscriptionId;
+}
+
+int CWrapper::subscribeToConnectionStatus(OnConnectionStatusChangedCallBackFunction callBack)
+{
+    auto subscriptionId = createUniqueConnectionStatusId();
+    m_onConnectionStatusChangedCallbacks.insert(std::pair<int, OnConnectionStatusChangedCallBackFunction>(subscriptionId, callBack));
     m_onConnectionStatusChangedCallbacksMutex.unlock();
 
-    return randomId;
+    return subscriptionId;
 }
 
 void CWrapper::unsubscribeToConnectionStatus(int subscriptionID)

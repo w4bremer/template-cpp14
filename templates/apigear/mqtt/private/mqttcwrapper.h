@@ -89,6 +89,9 @@ private:
 
     int sendMessage(const std::string& destinationName, const MQTTAsync_message* msg, MQTTAsync_responseOptions* response);
 
+    /// @brief create an unique id for the connection status subscription
+    /// @return unique id in the connection status subscription context
+    int createUniqueConnectionStatusId();
 private:
     std::condition_variable m_synchronizeSubscriptionChanges;
     std::mutex m_waitForSubscriptionChangesMutex;
