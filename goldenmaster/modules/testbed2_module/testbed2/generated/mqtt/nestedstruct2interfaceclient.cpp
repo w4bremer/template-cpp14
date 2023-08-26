@@ -1,7 +1,6 @@
 #include "testbed2/generated/mqtt/nestedstruct2interfaceclient.h"
 #include "testbed2/generated/core/nestedstruct2interface.publisher.h"
 #include "testbed2/generated/core/testbed2.json.adapter.h"
-#include "apigear/mqtt/mqtttopic.h"
 #include <random>
 
 using namespace Test::Testbed2;
@@ -15,8 +14,8 @@ namespace {
         return {
             { std::string("testbed2/NestedStruct2Interface/prop/prop1"), [client](const std::string&, const std::string& args, const std::string&, const std::string&){ client->setProp1Local(args); } },
             { std::string("testbed2/NestedStruct2Interface/prop/prop2"), [client](const std::string&, const std::string& args, const std::string&, const std::string&){ client->setProp2Local(args); } },
-            { std::string("testbed2/NestedStruct2Interface/sig/sig1"), [client](const std::string& topic, const std::string& args, const std::string&, const std::string&){ client->onSignal(topic, args); } },
-            { std::string("testbed2/NestedStruct2Interface/sig/sig2"), [client](const std::string& topic, const std::string& args, const std::string&, const std::string&){ client->onSignal(topic, args); } },
+            { std::string("testbed2/NestedStruct2Interface/sig/sig1"), [client](const std::string&, const std::string& args, const std::string&, const std::string&){ client->onSig1(args); } },
+            { std::string("testbed2/NestedStruct2Interface/sig/sig2"), [client](const std::string&, const std::string& args, const std::string&, const std::string&){ client->onSig2(args); } },
             { std::string("testbed2/NestedStruct2Interface/rpc/func1/"+clientId+"/result"), [client](const std::string&, const std::string& args, const std::string&, const std::string& correlationData){ client->onInvokeReply(args, correlationData); } },
             { std::string("testbed2/NestedStruct2Interface/rpc/func2/"+clientId+"/result"), [client](const std::string&, const std::string& args, const std::string&, const std::string& correlationData){ client->onInvokeReply(args, correlationData); } },
         };
@@ -165,19 +164,15 @@ std::future<NestedStruct1> NestedStruct2InterfaceClient::func2Async(const Nested
         }
     );
 }
-
-void NestedStruct2InterfaceClient::onSignal(const std::string& topic, const std::string& args)
+void NestedStruct2InterfaceClient::onSig1(const std::string& args) const
 {
     nlohmann::json json_args = nlohmann::json::parse(args);
-    const std::string entityName = ApiGear::MQTT::Topic(topic).getEntityName();
-    if(entityName == "sig1") {
-        m_publisher->publishSig1(json_args[0].get<NestedStruct1>());
-        return;
-    }
-    if(entityName == "sig2") {
-        m_publisher->publishSig2(json_args[0].get<NestedStruct1>(),json_args[1].get<NestedStruct2>());
-        return;
-    }
+    m_publisher->publishSig1(json_args[0].get<NestedStruct1>());
+}
+void NestedStruct2InterfaceClient::onSig2(const std::string& args) const
+{
+    nlohmann::json json_args = nlohmann::json::parse(args);
+    m_publisher->publishSig2(json_args[0].get<NestedStruct1>(),json_args[1].get<NestedStruct2>());
 }
 
 int NestedStruct2InterfaceClient::registerResponseHandler(ApiGear::MQTT::InvokeReplyFunc handler)

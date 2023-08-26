@@ -34,7 +34,6 @@ public:
 
     bool isReady() const;
 
-    void onSignal(const std::string& topic, const std::string& args);
     void onInvokeReply(const std::string& args, const std::string& correlationData);
     /// @brief sets the value for the property PropBool coming from the service
     /// @param args contains the param of the type std::list<StructBool>
@@ -48,6 +47,18 @@ public:
     /// @brief sets the value for the property PropString coming from the service
     /// @param args contains the param of the type std::list<StructString>
     void setPropStringLocal(const std::string& args);
+    /// @brief publishes the value for the signal SigBool coming from the service
+    /// @param args contains the param(s) of the type(s) const std::list<StructBool>& paramBool
+    void onSigBool(const std::string& args) const;
+    /// @brief publishes the value for the signal SigInt coming from the service
+    /// @param args contains the param(s) of the type(s) const std::list<StructInt>& paramInt
+    void onSigInt(const std::string& args) const;
+    /// @brief publishes the value for the signal SigFloat coming from the service
+    /// @param args contains the param(s) of the type(s) const std::list<StructFloat>& paramFloat
+    void onSigFloat(const std::string& args) const;
+    /// @brief publishes the value for the signal SigString coming from the service
+    /// @param args contains the param(s) of the type(s) const std::list<StructString>& paramString
+    void onSigString(const std::string& args) const;
 
 private:
     bool m_isReady;

@@ -22,8 +22,13 @@ public:
 
     bool isReady() const;
 
-    void onSignal(const std::string& topic, const std::string& args);
     void onInvokeReply(const std::string& args, const std::string& correlationData);
+    /// @brief publishes the value for the signal SigVoid coming from the service
+    /// @param args contains the param(s) of the type(s) 
+    void onSigVoid(const std::string& args) const;
+    /// @brief publishes the value for the signal SigBool coming from the service
+    /// @param args contains the param(s) of the type(s) bool paramBool
+    void onSigBool(const std::string& args) const;
 
 private:
     bool m_isReady;

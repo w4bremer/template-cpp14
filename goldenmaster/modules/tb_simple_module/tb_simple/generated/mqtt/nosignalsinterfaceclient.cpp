@@ -1,7 +1,6 @@
 #include "tb_simple/generated/mqtt/nosignalsinterfaceclient.h"
 #include "tb_simple/generated/core/nosignalsinterface.publisher.h"
 #include "tb_simple/generated/core/tb_simple.json.adapter.h"
-#include "apigear/mqtt/mqtttopic.h"
 #include <random>
 
 using namespace Test::TbSimple;
@@ -158,14 +157,6 @@ std::future<bool> NoSignalsInterfaceClient::funcBoolAsync(bool paramBool)
             return resultPromise.get_future().get();
         }
     );
-}
-
-void NoSignalsInterfaceClient::onSignal(const std::string& topic, const std::string& args)
-{
-    nlohmann::json json_args = nlohmann::json::parse(args);
-    const std::string entityName = ApiGear::MQTT::Topic(topic).getEntityName();
-    (void) args;
-    (void) topic;
 }
 
 int NoSignalsInterfaceClient::registerResponseHandler(ApiGear::MQTT::InvokeReplyFunc handler)

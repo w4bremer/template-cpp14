@@ -1,7 +1,6 @@
 #include "testbed2/generated/mqtt/nestedstruct1interfaceclient.h"
 #include "testbed2/generated/core/nestedstruct1interface.publisher.h"
 #include "testbed2/generated/core/testbed2.json.adapter.h"
-#include "apigear/mqtt/mqtttopic.h"
 #include <random>
 
 using namespace Test::Testbed2;
@@ -14,7 +13,7 @@ namespace {
     {
         return {
             { std::string("testbed2/NestedStruct1Interface/prop/prop1"), [client](const std::string&, const std::string& args, const std::string&, const std::string&){ client->setProp1Local(args); } },
-            { std::string("testbed2/NestedStruct1Interface/sig/sig1"), [client](const std::string& topic, const std::string& args, const std::string&, const std::string&){ client->onSignal(topic, args); } },
+            { std::string("testbed2/NestedStruct1Interface/sig/sig1"), [client](const std::string&, const std::string& args, const std::string&, const std::string&){ client->onSig1(args); } },
             { std::string("testbed2/NestedStruct1Interface/rpc/func1/"+clientId+"/result"), [client](const std::string&, const std::string& args, const std::string&, const std::string& correlationData){ client->onInvokeReply(args, correlationData); } },
         };
     };
@@ -100,15 +99,10 @@ std::future<NestedStruct1> NestedStruct1InterfaceClient::func1Async(const Nested
         }
     );
 }
-
-void NestedStruct1InterfaceClient::onSignal(const std::string& topic, const std::string& args)
+void NestedStruct1InterfaceClient::onSig1(const std::string& args) const
 {
     nlohmann::json json_args = nlohmann::json::parse(args);
-    const std::string entityName = ApiGear::MQTT::Topic(topic).getEntityName();
-    if(entityName == "sig1") {
-        m_publisher->publishSig1(json_args[0].get<NestedStruct1>());
-        return;
-    }
+    m_publisher->publishSig1(json_args[0].get<NestedStruct1>());
 }
 
 int NestedStruct1InterfaceClient::registerResponseHandler(ApiGear::MQTT::InvokeReplyFunc handler)

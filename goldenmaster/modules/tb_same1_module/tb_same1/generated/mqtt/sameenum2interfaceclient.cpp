@@ -1,7 +1,6 @@
 #include "tb_same1/generated/mqtt/sameenum2interfaceclient.h"
 #include "tb_same1/generated/core/sameenum2interface.publisher.h"
 #include "tb_same1/generated/core/tb_same1.json.adapter.h"
-#include "apigear/mqtt/mqtttopic.h"
 #include <random>
 
 using namespace Test::TbSame1;
@@ -15,8 +14,8 @@ namespace {
         return {
             { std::string("tb.same1/SameEnum2Interface/prop/prop1"), [client](const std::string&, const std::string& args, const std::string&, const std::string&){ client->setProp1Local(args); } },
             { std::string("tb.same1/SameEnum2Interface/prop/prop2"), [client](const std::string&, const std::string& args, const std::string&, const std::string&){ client->setProp2Local(args); } },
-            { std::string("tb.same1/SameEnum2Interface/sig/sig1"), [client](const std::string& topic, const std::string& args, const std::string&, const std::string&){ client->onSignal(topic, args); } },
-            { std::string("tb.same1/SameEnum2Interface/sig/sig2"), [client](const std::string& topic, const std::string& args, const std::string&, const std::string&){ client->onSignal(topic, args); } },
+            { std::string("tb.same1/SameEnum2Interface/sig/sig1"), [client](const std::string&, const std::string& args, const std::string&, const std::string&){ client->onSig1(args); } },
+            { std::string("tb.same1/SameEnum2Interface/sig/sig2"), [client](const std::string&, const std::string& args, const std::string&, const std::string&){ client->onSig2(args); } },
             { std::string("tb.same1/SameEnum2Interface/rpc/func1/"+clientId+"/result"), [client](const std::string&, const std::string& args, const std::string&, const std::string& correlationData){ client->onInvokeReply(args, correlationData); } },
             { std::string("tb.same1/SameEnum2Interface/rpc/func2/"+clientId+"/result"), [client](const std::string&, const std::string& args, const std::string&, const std::string& correlationData){ client->onInvokeReply(args, correlationData); } },
         };
@@ -165,19 +164,15 @@ std::future<Enum1Enum> SameEnum2InterfaceClient::func2Async(Enum1Enum param1, En
         }
     );
 }
-
-void SameEnum2InterfaceClient::onSignal(const std::string& topic, const std::string& args)
+void SameEnum2InterfaceClient::onSig1(const std::string& args) const
 {
     nlohmann::json json_args = nlohmann::json::parse(args);
-    const std::string entityName = ApiGear::MQTT::Topic(topic).getEntityName();
-    if(entityName == "sig1") {
-        m_publisher->publishSig1(json_args[0].get<Enum1Enum>());
-        return;
-    }
-    if(entityName == "sig2") {
-        m_publisher->publishSig2(json_args[0].get<Enum1Enum>(),json_args[1].get<Enum2Enum>());
-        return;
-    }
+    m_publisher->publishSig1(json_args[0].get<Enum1Enum>());
+}
+void SameEnum2InterfaceClient::onSig2(const std::string& args) const
+{
+    nlohmann::json json_args = nlohmann::json::parse(args);
+    m_publisher->publishSig2(json_args[0].get<Enum1Enum>(),json_args[1].get<Enum2Enum>());
 }
 
 int SameEnum2InterfaceClient::registerResponseHandler(ApiGear::MQTT::InvokeReplyFunc handler)

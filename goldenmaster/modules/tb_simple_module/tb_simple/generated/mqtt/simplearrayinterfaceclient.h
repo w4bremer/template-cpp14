@@ -50,7 +50,6 @@ public:
 
     bool isReady() const;
 
-    void onSignal(const std::string& topic, const std::string& args);
     void onInvokeReply(const std::string& args, const std::string& correlationData);
     /// @brief sets the value for the property PropBool coming from the service
     /// @param args contains the param of the type std::list<bool>
@@ -76,6 +75,30 @@ public:
     /// @brief sets the value for the property PropString coming from the service
     /// @param args contains the param of the type std::list<std::string>
     void setPropStringLocal(const std::string& args);
+    /// @brief publishes the value for the signal SigBool coming from the service
+    /// @param args contains the param(s) of the type(s) const std::list<bool>& paramBool
+    void onSigBool(const std::string& args) const;
+    /// @brief publishes the value for the signal SigInt coming from the service
+    /// @param args contains the param(s) of the type(s) const std::list<int>& paramInt
+    void onSigInt(const std::string& args) const;
+    /// @brief publishes the value for the signal SigInt32 coming from the service
+    /// @param args contains the param(s) of the type(s) const std::list<int32_t>& paramInt32
+    void onSigInt32(const std::string& args) const;
+    /// @brief publishes the value for the signal SigInt64 coming from the service
+    /// @param args contains the param(s) of the type(s) const std::list<int64_t>& paramInt64
+    void onSigInt64(const std::string& args) const;
+    /// @brief publishes the value for the signal SigFloat coming from the service
+    /// @param args contains the param(s) of the type(s) const std::list<float>& paramFloat
+    void onSigFloat(const std::string& args) const;
+    /// @brief publishes the value for the signal SigFloat32 coming from the service
+    /// @param args contains the param(s) of the type(s) const std::list<float>& paramFloa32
+    void onSigFloat32(const std::string& args) const;
+    /// @brief publishes the value for the signal SigFloat64 coming from the service
+    /// @param args contains the param(s) of the type(s) const std::list<double>& paramFloat64
+    void onSigFloat64(const std::string& args) const;
+    /// @brief publishes the value for the signal SigString coming from the service
+    /// @param args contains the param(s) of the type(s) const std::list<std::string>& paramString
+    void onSigString(const std::string& args) const;
 
 private:
     bool m_isReady;

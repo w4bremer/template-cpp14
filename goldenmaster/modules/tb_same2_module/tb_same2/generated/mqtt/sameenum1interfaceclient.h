@@ -22,11 +22,13 @@ public:
 
     bool isReady() const;
 
-    void onSignal(const std::string& topic, const std::string& args);
     void onInvokeReply(const std::string& args, const std::string& correlationData);
     /// @brief sets the value for the property Prop1 coming from the service
     /// @param args contains the param of the type Enum1Enum
     void setProp1Local(const std::string& args);
+    /// @brief publishes the value for the signal Sig1 coming from the service
+    /// @param args contains the param(s) of the type(s) Enum1Enum param1
+    void onSig1(const std::string& args) const;
 
 private:
     bool m_isReady;

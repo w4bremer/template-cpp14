@@ -1,7 +1,6 @@
 #include "tb_simple/generated/mqtt/simplearrayinterfaceclient.h"
 #include "tb_simple/generated/core/simplearrayinterface.publisher.h"
 #include "tb_simple/generated/core/tb_simple.json.adapter.h"
-#include "apigear/mqtt/mqtttopic.h"
 #include <random>
 
 using namespace Test::TbSimple;
@@ -21,14 +20,14 @@ namespace {
             { std::string("tb.simple/SimpleArrayInterface/prop/propFloat32"), [client](const std::string&, const std::string& args, const std::string&, const std::string&){ client->setPropFloat32Local(args); } },
             { std::string("tb.simple/SimpleArrayInterface/prop/propFloat64"), [client](const std::string&, const std::string& args, const std::string&, const std::string&){ client->setPropFloat64Local(args); } },
             { std::string("tb.simple/SimpleArrayInterface/prop/propString"), [client](const std::string&, const std::string& args, const std::string&, const std::string&){ client->setPropStringLocal(args); } },
-            { std::string("tb.simple/SimpleArrayInterface/sig/sigBool"), [client](const std::string& topic, const std::string& args, const std::string&, const std::string&){ client->onSignal(topic, args); } },
-            { std::string("tb.simple/SimpleArrayInterface/sig/sigInt"), [client](const std::string& topic, const std::string& args, const std::string&, const std::string&){ client->onSignal(topic, args); } },
-            { std::string("tb.simple/SimpleArrayInterface/sig/sigInt32"), [client](const std::string& topic, const std::string& args, const std::string&, const std::string&){ client->onSignal(topic, args); } },
-            { std::string("tb.simple/SimpleArrayInterface/sig/sigInt64"), [client](const std::string& topic, const std::string& args, const std::string&, const std::string&){ client->onSignal(topic, args); } },
-            { std::string("tb.simple/SimpleArrayInterface/sig/sigFloat"), [client](const std::string& topic, const std::string& args, const std::string&, const std::string&){ client->onSignal(topic, args); } },
-            { std::string("tb.simple/SimpleArrayInterface/sig/sigFloat32"), [client](const std::string& topic, const std::string& args, const std::string&, const std::string&){ client->onSignal(topic, args); } },
-            { std::string("tb.simple/SimpleArrayInterface/sig/sigFloat64"), [client](const std::string& topic, const std::string& args, const std::string&, const std::string&){ client->onSignal(topic, args); } },
-            { std::string("tb.simple/SimpleArrayInterface/sig/sigString"), [client](const std::string& topic, const std::string& args, const std::string&, const std::string&){ client->onSignal(topic, args); } },
+            { std::string("tb.simple/SimpleArrayInterface/sig/sigBool"), [client](const std::string&, const std::string& args, const std::string&, const std::string&){ client->onSigBool(args); } },
+            { std::string("tb.simple/SimpleArrayInterface/sig/sigInt"), [client](const std::string&, const std::string& args, const std::string&, const std::string&){ client->onSigInt(args); } },
+            { std::string("tb.simple/SimpleArrayInterface/sig/sigInt32"), [client](const std::string&, const std::string& args, const std::string&, const std::string&){ client->onSigInt32(args); } },
+            { std::string("tb.simple/SimpleArrayInterface/sig/sigInt64"), [client](const std::string&, const std::string& args, const std::string&, const std::string&){ client->onSigInt64(args); } },
+            { std::string("tb.simple/SimpleArrayInterface/sig/sigFloat"), [client](const std::string&, const std::string& args, const std::string&, const std::string&){ client->onSigFloat(args); } },
+            { std::string("tb.simple/SimpleArrayInterface/sig/sigFloat32"), [client](const std::string&, const std::string& args, const std::string&, const std::string&){ client->onSigFloat32(args); } },
+            { std::string("tb.simple/SimpleArrayInterface/sig/sigFloat64"), [client](const std::string&, const std::string& args, const std::string&, const std::string&){ client->onSigFloat64(args); } },
+            { std::string("tb.simple/SimpleArrayInterface/sig/sigString"), [client](const std::string&, const std::string& args, const std::string&, const std::string&){ client->onSigString(args); } },
             { std::string("tb.simple/SimpleArrayInterface/rpc/funcBool/"+clientId+"/result"), [client](const std::string&, const std::string& args, const std::string&, const std::string& correlationData){ client->onInvokeReply(args, correlationData); } },
             { std::string("tb.simple/SimpleArrayInterface/rpc/funcInt/"+clientId+"/result"), [client](const std::string&, const std::string& args, const std::string&, const std::string& correlationData){ client->onInvokeReply(args, correlationData); } },
             { std::string("tb.simple/SimpleArrayInterface/rpc/funcInt32/"+clientId+"/result"), [client](const std::string&, const std::string& args, const std::string&, const std::string& correlationData){ client->onInvokeReply(args, correlationData); } },
@@ -548,43 +547,45 @@ std::future<std::list<std::string>> SimpleArrayInterfaceClient::funcStringAsync(
         }
     );
 }
-
-void SimpleArrayInterfaceClient::onSignal(const std::string& topic, const std::string& args)
+void SimpleArrayInterfaceClient::onSigBool(const std::string& args) const
 {
     nlohmann::json json_args = nlohmann::json::parse(args);
-    const std::string entityName = ApiGear::MQTT::Topic(topic).getEntityName();
-    if(entityName == "sigBool") {
-        m_publisher->publishSigBool(json_args[0].get<std::list<bool>>());
-        return;
-    }
-    if(entityName == "sigInt") {
-        m_publisher->publishSigInt(json_args[0].get<std::list<int>>());
-        return;
-    }
-    if(entityName == "sigInt32") {
-        m_publisher->publishSigInt32(json_args[0].get<std::list<int32_t>>());
-        return;
-    }
-    if(entityName == "sigInt64") {
-        m_publisher->publishSigInt64(json_args[0].get<std::list<int64_t>>());
-        return;
-    }
-    if(entityName == "sigFloat") {
-        m_publisher->publishSigFloat(json_args[0].get<std::list<float>>());
-        return;
-    }
-    if(entityName == "sigFloat32") {
-        m_publisher->publishSigFloat32(json_args[0].get<std::list<float>>());
-        return;
-    }
-    if(entityName == "sigFloat64") {
-        m_publisher->publishSigFloat64(json_args[0].get<std::list<double>>());
-        return;
-    }
-    if(entityName == "sigString") {
-        m_publisher->publishSigString(json_args[0].get<std::list<std::string>>());
-        return;
-    }
+    m_publisher->publishSigBool(json_args[0].get<std::list<bool>>());
+}
+void SimpleArrayInterfaceClient::onSigInt(const std::string& args) const
+{
+    nlohmann::json json_args = nlohmann::json::parse(args);
+    m_publisher->publishSigInt(json_args[0].get<std::list<int>>());
+}
+void SimpleArrayInterfaceClient::onSigInt32(const std::string& args) const
+{
+    nlohmann::json json_args = nlohmann::json::parse(args);
+    m_publisher->publishSigInt32(json_args[0].get<std::list<int32_t>>());
+}
+void SimpleArrayInterfaceClient::onSigInt64(const std::string& args) const
+{
+    nlohmann::json json_args = nlohmann::json::parse(args);
+    m_publisher->publishSigInt64(json_args[0].get<std::list<int64_t>>());
+}
+void SimpleArrayInterfaceClient::onSigFloat(const std::string& args) const
+{
+    nlohmann::json json_args = nlohmann::json::parse(args);
+    m_publisher->publishSigFloat(json_args[0].get<std::list<float>>());
+}
+void SimpleArrayInterfaceClient::onSigFloat32(const std::string& args) const
+{
+    nlohmann::json json_args = nlohmann::json::parse(args);
+    m_publisher->publishSigFloat32(json_args[0].get<std::list<float>>());
+}
+void SimpleArrayInterfaceClient::onSigFloat64(const std::string& args) const
+{
+    nlohmann::json json_args = nlohmann::json::parse(args);
+    m_publisher->publishSigFloat64(json_args[0].get<std::list<double>>());
+}
+void SimpleArrayInterfaceClient::onSigString(const std::string& args) const
+{
+    nlohmann::json json_args = nlohmann::json::parse(args);
+    m_publisher->publishSigString(json_args[0].get<std::list<std::string>>());
 }
 
 int SimpleArrayInterfaceClient::registerResponseHandler(ApiGear::MQTT::InvokeReplyFunc handler)

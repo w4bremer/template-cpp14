@@ -37,7 +37,6 @@ public:
 
     bool isReady() const;
 
-    void onSignal(const std::string& topic, const std::string& args);
     void onInvokeReply(const std::string& args, const std::string& correlationData);
 
 {{- range .Interface.Properties}}
@@ -45,6 +44,13 @@ public:
     /// @brief sets the value for the property {{Camel $property.Name}} coming from the service
     /// @param args contains the param of the type {{cppType "" $property }}
     void set{{Camel $property.Name}}Local(const std::string& args);
+{{- end }}
+
+{{- range .Interface.Signals}}
+{{- $signal := . }}
+    /// @brief publishes the value for the signal {{Camel $signal.Name}} coming from the service
+    /// @param args contains the param(s) of the type(s) {{cppParams "" $signal.Params }}
+    void on{{Camel $signal.Name }}(const std::string& args) const;
 {{- end }}
 
 private:

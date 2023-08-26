@@ -1,7 +1,6 @@
 #include "tb_simple/generated/mqtt/nooperationsinterfaceclient.h"
 #include "tb_simple/generated/core/nooperationsinterface.publisher.h"
 #include "tb_simple/generated/core/tb_simple.json.adapter.h"
-#include "apigear/mqtt/mqtttopic.h"
 #include <random>
 
 using namespace Test::TbSimple;
@@ -15,8 +14,8 @@ namespace {
         return {
             { std::string("tb.simple/NoOperationsInterface/prop/propBool"), [client](const std::string&, const std::string& args, const std::string&, const std::string&){ client->setPropBoolLocal(args); } },
             { std::string("tb.simple/NoOperationsInterface/prop/propInt"), [client](const std::string&, const std::string& args, const std::string&, const std::string&){ client->setPropIntLocal(args); } },
-            { std::string("tb.simple/NoOperationsInterface/sig/sigVoid"), [client](const std::string& topic, const std::string& args, const std::string&, const std::string&){ client->onSignal(topic, args); } },
-            { std::string("tb.simple/NoOperationsInterface/sig/sigBool"), [client](const std::string& topic, const std::string& args, const std::string&, const std::string&){ client->onSignal(topic, args); } },
+            { std::string("tb.simple/NoOperationsInterface/sig/sigVoid"), [client](const std::string&, const std::string& args, const std::string&, const std::string&){ client->onSigVoid(args); } },
+            { std::string("tb.simple/NoOperationsInterface/sig/sigBool"), [client](const std::string&, const std::string& args, const std::string&, const std::string&){ client->onSigBool(args); } },
         };
     };
 }
@@ -98,19 +97,15 @@ int NoOperationsInterfaceClient::getPropInt() const
 {
     return m_data.m_propInt;
 }
-
-void NoOperationsInterfaceClient::onSignal(const std::string& topic, const std::string& args)
+void NoOperationsInterfaceClient::onSigVoid(const std::string& args) const
 {
     nlohmann::json json_args = nlohmann::json::parse(args);
-    const std::string entityName = ApiGear::MQTT::Topic(topic).getEntityName();
-    if(entityName == "sigVoid") {
-        m_publisher->publishSigVoid();
-        return;
-    }
-    if(entityName == "sigBool") {
-        m_publisher->publishSigBool(json_args[0].get<bool>());
-        return;
-    }
+    m_publisher->publishSigVoid();
+}
+void NoOperationsInterfaceClient::onSigBool(const std::string& args) const
+{
+    nlohmann::json json_args = nlohmann::json::parse(args);
+    m_publisher->publishSigBool(json_args[0].get<bool>());
 }
 
 int NoOperationsInterfaceClient::registerResponseHandler(ApiGear::MQTT::InvokeReplyFunc handler)

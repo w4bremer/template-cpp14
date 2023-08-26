@@ -1,7 +1,6 @@
 #include "tb_enum/generated/mqtt/enuminterfaceclient.h"
 #include "tb_enum/generated/core/enuminterface.publisher.h"
 #include "tb_enum/generated/core/tb_enum.json.adapter.h"
-#include "apigear/mqtt/mqtttopic.h"
 #include <random>
 
 using namespace Test::TbEnum;
@@ -17,10 +16,10 @@ namespace {
             { std::string("tb.enum/EnumInterface/prop/prop1"), [client](const std::string&, const std::string& args, const std::string&, const std::string&){ client->setProp1Local(args); } },
             { std::string("tb.enum/EnumInterface/prop/prop2"), [client](const std::string&, const std::string& args, const std::string&, const std::string&){ client->setProp2Local(args); } },
             { std::string("tb.enum/EnumInterface/prop/prop3"), [client](const std::string&, const std::string& args, const std::string&, const std::string&){ client->setProp3Local(args); } },
-            { std::string("tb.enum/EnumInterface/sig/sig0"), [client](const std::string& topic, const std::string& args, const std::string&, const std::string&){ client->onSignal(topic, args); } },
-            { std::string("tb.enum/EnumInterface/sig/sig1"), [client](const std::string& topic, const std::string& args, const std::string&, const std::string&){ client->onSignal(topic, args); } },
-            { std::string("tb.enum/EnumInterface/sig/sig2"), [client](const std::string& topic, const std::string& args, const std::string&, const std::string&){ client->onSignal(topic, args); } },
-            { std::string("tb.enum/EnumInterface/sig/sig3"), [client](const std::string& topic, const std::string& args, const std::string&, const std::string&){ client->onSignal(topic, args); } },
+            { std::string("tb.enum/EnumInterface/sig/sig0"), [client](const std::string&, const std::string& args, const std::string&, const std::string&){ client->onSig0(args); } },
+            { std::string("tb.enum/EnumInterface/sig/sig1"), [client](const std::string&, const std::string& args, const std::string&, const std::string&){ client->onSig1(args); } },
+            { std::string("tb.enum/EnumInterface/sig/sig2"), [client](const std::string&, const std::string& args, const std::string&, const std::string&){ client->onSig2(args); } },
+            { std::string("tb.enum/EnumInterface/sig/sig3"), [client](const std::string&, const std::string& args, const std::string&, const std::string&){ client->onSig3(args); } },
             { std::string("tb.enum/EnumInterface/rpc/func0/"+clientId+"/result"), [client](const std::string&, const std::string& args, const std::string&, const std::string& correlationData){ client->onInvokeReply(args, correlationData); } },
             { std::string("tb.enum/EnumInterface/rpc/func1/"+clientId+"/result"), [client](const std::string&, const std::string& args, const std::string&, const std::string& correlationData){ client->onInvokeReply(args, correlationData); } },
             { std::string("tb.enum/EnumInterface/rpc/func2/"+clientId+"/result"), [client](const std::string&, const std::string& args, const std::string&, const std::string& correlationData){ client->onInvokeReply(args, correlationData); } },
@@ -292,27 +291,25 @@ std::future<Enum3Enum> EnumInterfaceClient::func3Async(Enum3Enum param3)
         }
     );
 }
-
-void EnumInterfaceClient::onSignal(const std::string& topic, const std::string& args)
+void EnumInterfaceClient::onSig0(const std::string& args) const
 {
     nlohmann::json json_args = nlohmann::json::parse(args);
-    const std::string entityName = ApiGear::MQTT::Topic(topic).getEntityName();
-    if(entityName == "sig0") {
-        m_publisher->publishSig0(json_args[0].get<Enum0Enum>());
-        return;
-    }
-    if(entityName == "sig1") {
-        m_publisher->publishSig1(json_args[0].get<Enum1Enum>());
-        return;
-    }
-    if(entityName == "sig2") {
-        m_publisher->publishSig2(json_args[0].get<Enum2Enum>());
-        return;
-    }
-    if(entityName == "sig3") {
-        m_publisher->publishSig3(json_args[0].get<Enum3Enum>());
-        return;
-    }
+    m_publisher->publishSig0(json_args[0].get<Enum0Enum>());
+}
+void EnumInterfaceClient::onSig1(const std::string& args) const
+{
+    nlohmann::json json_args = nlohmann::json::parse(args);
+    m_publisher->publishSig1(json_args[0].get<Enum1Enum>());
+}
+void EnumInterfaceClient::onSig2(const std::string& args) const
+{
+    nlohmann::json json_args = nlohmann::json::parse(args);
+    m_publisher->publishSig2(json_args[0].get<Enum2Enum>());
+}
+void EnumInterfaceClient::onSig3(const std::string& args) const
+{
+    nlohmann::json json_args = nlohmann::json::parse(args);
+    m_publisher->publishSig3(json_args[0].get<Enum3Enum>());
 }
 
 int EnumInterfaceClient::registerResponseHandler(ApiGear::MQTT::InvokeReplyFunc handler)

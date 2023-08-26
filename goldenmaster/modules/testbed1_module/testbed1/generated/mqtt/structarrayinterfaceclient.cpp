@@ -1,7 +1,6 @@
 #include "testbed1/generated/mqtt/structarrayinterfaceclient.h"
 #include "testbed1/generated/core/structarrayinterface.publisher.h"
 #include "testbed1/generated/core/testbed1.json.adapter.h"
-#include "apigear/mqtt/mqtttopic.h"
 #include <random>
 
 using namespace Test::Testbed1;
@@ -17,10 +16,10 @@ namespace {
             { std::string("testbed1/StructArrayInterface/prop/propInt"), [client](const std::string&, const std::string& args, const std::string&, const std::string&){ client->setPropIntLocal(args); } },
             { std::string("testbed1/StructArrayInterface/prop/propFloat"), [client](const std::string&, const std::string& args, const std::string&, const std::string&){ client->setPropFloatLocal(args); } },
             { std::string("testbed1/StructArrayInterface/prop/propString"), [client](const std::string&, const std::string& args, const std::string&, const std::string&){ client->setPropStringLocal(args); } },
-            { std::string("testbed1/StructArrayInterface/sig/sigBool"), [client](const std::string& topic, const std::string& args, const std::string&, const std::string&){ client->onSignal(topic, args); } },
-            { std::string("testbed1/StructArrayInterface/sig/sigInt"), [client](const std::string& topic, const std::string& args, const std::string&, const std::string&){ client->onSignal(topic, args); } },
-            { std::string("testbed1/StructArrayInterface/sig/sigFloat"), [client](const std::string& topic, const std::string& args, const std::string&, const std::string&){ client->onSignal(topic, args); } },
-            { std::string("testbed1/StructArrayInterface/sig/sigString"), [client](const std::string& topic, const std::string& args, const std::string&, const std::string&){ client->onSignal(topic, args); } },
+            { std::string("testbed1/StructArrayInterface/sig/sigBool"), [client](const std::string&, const std::string& args, const std::string&, const std::string&){ client->onSigBool(args); } },
+            { std::string("testbed1/StructArrayInterface/sig/sigInt"), [client](const std::string&, const std::string& args, const std::string&, const std::string&){ client->onSigInt(args); } },
+            { std::string("testbed1/StructArrayInterface/sig/sigFloat"), [client](const std::string&, const std::string& args, const std::string&, const std::string&){ client->onSigFloat(args); } },
+            { std::string("testbed1/StructArrayInterface/sig/sigString"), [client](const std::string&, const std::string& args, const std::string&, const std::string&){ client->onSigString(args); } },
             { std::string("testbed1/StructArrayInterface/rpc/funcBool/"+clientId+"/result"), [client](const std::string&, const std::string& args, const std::string&, const std::string& correlationData){ client->onInvokeReply(args, correlationData); } },
             { std::string("testbed1/StructArrayInterface/rpc/funcInt/"+clientId+"/result"), [client](const std::string&, const std::string& args, const std::string&, const std::string& correlationData){ client->onInvokeReply(args, correlationData); } },
             { std::string("testbed1/StructArrayInterface/rpc/funcFloat/"+clientId+"/result"), [client](const std::string&, const std::string& args, const std::string&, const std::string& correlationData){ client->onInvokeReply(args, correlationData); } },
@@ -292,27 +291,25 @@ std::future<StructBool> StructArrayInterfaceClient::funcStringAsync(const std::l
         }
     );
 }
-
-void StructArrayInterfaceClient::onSignal(const std::string& topic, const std::string& args)
+void StructArrayInterfaceClient::onSigBool(const std::string& args) const
 {
     nlohmann::json json_args = nlohmann::json::parse(args);
-    const std::string entityName = ApiGear::MQTT::Topic(topic).getEntityName();
-    if(entityName == "sigBool") {
-        m_publisher->publishSigBool(json_args[0].get<std::list<StructBool>>());
-        return;
-    }
-    if(entityName == "sigInt") {
-        m_publisher->publishSigInt(json_args[0].get<std::list<StructInt>>());
-        return;
-    }
-    if(entityName == "sigFloat") {
-        m_publisher->publishSigFloat(json_args[0].get<std::list<StructFloat>>());
-        return;
-    }
-    if(entityName == "sigString") {
-        m_publisher->publishSigString(json_args[0].get<std::list<StructString>>());
-        return;
-    }
+    m_publisher->publishSigBool(json_args[0].get<std::list<StructBool>>());
+}
+void StructArrayInterfaceClient::onSigInt(const std::string& args) const
+{
+    nlohmann::json json_args = nlohmann::json::parse(args);
+    m_publisher->publishSigInt(json_args[0].get<std::list<StructInt>>());
+}
+void StructArrayInterfaceClient::onSigFloat(const std::string& args) const
+{
+    nlohmann::json json_args = nlohmann::json::parse(args);
+    m_publisher->publishSigFloat(json_args[0].get<std::list<StructFloat>>());
+}
+void StructArrayInterfaceClient::onSigString(const std::string& args) const
+{
+    nlohmann::json json_args = nlohmann::json::parse(args);
+    m_publisher->publishSigString(json_args[0].get<std::list<StructString>>());
 }
 
 int StructArrayInterfaceClient::registerResponseHandler(ApiGear::MQTT::InvokeReplyFunc handler)

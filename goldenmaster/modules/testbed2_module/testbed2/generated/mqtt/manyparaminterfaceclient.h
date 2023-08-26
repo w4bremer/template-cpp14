@@ -34,7 +34,6 @@ public:
 
     bool isReady() const;
 
-    void onSignal(const std::string& topic, const std::string& args);
     void onInvokeReply(const std::string& args, const std::string& correlationData);
     /// @brief sets the value for the property Prop1 coming from the service
     /// @param args contains the param of the type int
@@ -48,6 +47,18 @@ public:
     /// @brief sets the value for the property Prop4 coming from the service
     /// @param args contains the param of the type int
     void setProp4Local(const std::string& args);
+    /// @brief publishes the value for the signal Sig1 coming from the service
+    /// @param args contains the param(s) of the type(s) int param1
+    void onSig1(const std::string& args) const;
+    /// @brief publishes the value for the signal Sig2 coming from the service
+    /// @param args contains the param(s) of the type(s) int param1, int param2
+    void onSig2(const std::string& args) const;
+    /// @brief publishes the value for the signal Sig3 coming from the service
+    /// @param args contains the param(s) of the type(s) int param1, int param2, int param3
+    void onSig3(const std::string& args) const;
+    /// @brief publishes the value for the signal Sig4 coming from the service
+    /// @param args contains the param(s) of the type(s) int param1, int param2, int param3, int param4
+    void onSig4(const std::string& args) const;
 
 private:
     bool m_isReady;

@@ -1,7 +1,6 @@
 #include "tb_simple/generated/mqtt/nopropertiesinterfaceclient.h"
 #include "tb_simple/generated/core/nopropertiesinterface.publisher.h"
 #include "tb_simple/generated/core/tb_simple.json.adapter.h"
-#include "apigear/mqtt/mqtttopic.h"
 #include <random>
 
 using namespace Test::TbSimple;
@@ -13,8 +12,8 @@ namespace {
     std::map<std::string, ApiGear::MQTT::CallbackFunction> createTopicMap(const std::string&clientId, NoPropertiesInterfaceClient* client)
     {
         return {
-            { std::string("tb.simple/NoPropertiesInterface/sig/sigVoid"), [client](const std::string& topic, const std::string& args, const std::string&, const std::string&){ client->onSignal(topic, args); } },
-            { std::string("tb.simple/NoPropertiesInterface/sig/sigBool"), [client](const std::string& topic, const std::string& args, const std::string&, const std::string&){ client->onSignal(topic, args); } },
+            { std::string("tb.simple/NoPropertiesInterface/sig/sigVoid"), [client](const std::string&, const std::string& args, const std::string&, const std::string&){ client->onSigVoid(args); } },
+            { std::string("tb.simple/NoPropertiesInterface/sig/sigBool"), [client](const std::string&, const std::string& args, const std::string&, const std::string&){ client->onSigBool(args); } },
             { std::string("tb.simple/NoPropertiesInterface/rpc/funcVoid/"+clientId+"/result"), [client](const std::string&, const std::string& args, const std::string&, const std::string& correlationData){ client->onInvokeReply(args, correlationData); } },
             { std::string("tb.simple/NoPropertiesInterface/rpc/funcBool/"+clientId+"/result"), [client](const std::string&, const std::string& args, const std::string&, const std::string& correlationData){ client->onInvokeReply(args, correlationData); } },
         };
@@ -101,19 +100,15 @@ std::future<bool> NoPropertiesInterfaceClient::funcBoolAsync(bool paramBool)
         }
     );
 }
-
-void NoPropertiesInterfaceClient::onSignal(const std::string& topic, const std::string& args)
+void NoPropertiesInterfaceClient::onSigVoid(const std::string& args) const
 {
     nlohmann::json json_args = nlohmann::json::parse(args);
-    const std::string entityName = ApiGear::MQTT::Topic(topic).getEntityName();
-    if(entityName == "sigVoid") {
-        m_publisher->publishSigVoid();
-        return;
-    }
-    if(entityName == "sigBool") {
-        m_publisher->publishSigBool(json_args[0].get<bool>());
-        return;
-    }
+    m_publisher->publishSigVoid();
+}
+void NoPropertiesInterfaceClient::onSigBool(const std::string& args) const
+{
+    nlohmann::json json_args = nlohmann::json::parse(args);
+    m_publisher->publishSigBool(json_args[0].get<bool>());
 }
 
 int NoPropertiesInterfaceClient::registerResponseHandler(ApiGear::MQTT::InvokeReplyFunc handler)

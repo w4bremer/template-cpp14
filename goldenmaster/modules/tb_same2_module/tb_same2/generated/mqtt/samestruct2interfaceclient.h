@@ -26,7 +26,6 @@ public:
 
     bool isReady() const;
 
-    void onSignal(const std::string& topic, const std::string& args);
     void onInvokeReply(const std::string& args, const std::string& correlationData);
     /// @brief sets the value for the property Prop1 coming from the service
     /// @param args contains the param of the type Struct2
@@ -34,6 +33,12 @@ public:
     /// @brief sets the value for the property Prop2 coming from the service
     /// @param args contains the param of the type Struct2
     void setProp2Local(const std::string& args);
+    /// @brief publishes the value for the signal Sig1 coming from the service
+    /// @param args contains the param(s) of the type(s) const Struct1& param1
+    void onSig1(const std::string& args) const;
+    /// @brief publishes the value for the signal Sig2 coming from the service
+    /// @param args contains the param(s) of the type(s) const Struct1& param1, const Struct2& param2
+    void onSig2(const std::string& args) const;
 
 private:
     bool m_isReady;

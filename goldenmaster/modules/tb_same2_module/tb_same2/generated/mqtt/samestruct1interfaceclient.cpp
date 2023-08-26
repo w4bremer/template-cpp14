@@ -1,7 +1,6 @@
 #include "tb_same2/generated/mqtt/samestruct1interfaceclient.h"
 #include "tb_same2/generated/core/samestruct1interface.publisher.h"
 #include "tb_same2/generated/core/tb_same2.json.adapter.h"
-#include "apigear/mqtt/mqtttopic.h"
 #include <random>
 
 using namespace Test::TbSame2;
@@ -14,7 +13,7 @@ namespace {
     {
         return {
             { std::string("tb.same2/SameStruct1Interface/prop/prop1"), [client](const std::string&, const std::string& args, const std::string&, const std::string&){ client->setProp1Local(args); } },
-            { std::string("tb.same2/SameStruct1Interface/sig/sig1"), [client](const std::string& topic, const std::string& args, const std::string&, const std::string&){ client->onSignal(topic, args); } },
+            { std::string("tb.same2/SameStruct1Interface/sig/sig1"), [client](const std::string&, const std::string& args, const std::string&, const std::string&){ client->onSig1(args); } },
             { std::string("tb.same2/SameStruct1Interface/rpc/func1/"+clientId+"/result"), [client](const std::string&, const std::string& args, const std::string&, const std::string& correlationData){ client->onInvokeReply(args, correlationData); } },
         };
     };
@@ -100,15 +99,10 @@ std::future<Struct1> SameStruct1InterfaceClient::func1Async(const Struct1& param
         }
     );
 }
-
-void SameStruct1InterfaceClient::onSignal(const std::string& topic, const std::string& args)
+void SameStruct1InterfaceClient::onSig1(const std::string& args) const
 {
     nlohmann::json json_args = nlohmann::json::parse(args);
-    const std::string entityName = ApiGear::MQTT::Topic(topic).getEntityName();
-    if(entityName == "sig1") {
-        m_publisher->publishSig1(json_args[0].get<Struct1>());
-        return;
-    }
+    m_publisher->publishSig1(json_args[0].get<Struct1>());
 }
 
 int SameStruct1InterfaceClient::registerResponseHandler(ApiGear::MQTT::InvokeReplyFunc handler)

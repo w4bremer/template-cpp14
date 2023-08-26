@@ -6,7 +6,6 @@
 #include "{{snake .Module.Name}}/generated/mqtt/{{lower (camel .Interface.Name)}}client.h"
 #include "{{snake .Module.Name}}/generated/core/{{lower (camel .Interface.Name)}}.publisher.h"
 #include "{{snake .Module.Name}}/generated/core/{{snake .Module.Name}}.json.adapter.h"
-#include "apigear/mqtt/mqtttopic.h"
 #include <random>
 
 using namespace {{ Camel .System.Name }}::{{ Camel .Module.Name }};
@@ -25,7 +24,7 @@ namespace {
         {{- end }}
         {{- range .Interface.Signals}}
         {{- $signal := . }}
-            { std::string("{{$.Module.Name}}/{{$interfaceName}}/sig/{{$signal}}"), [client](const std::string& topic, const std::string& args, const std::string&, const std::string&){ client->onSignal(topic, args); } },
+            { std::string("{{$.Module.Name}}/{{$interfaceName}}/sig/{{$signal}}"), [client](const std::string&, const std::string& args, const std::string&, const std::string&){ client->on{{Camel $signal.Name }}(args); } },
         {{- end }}
         {{- range .Interface.Operations}}
         {{- $operation := . }}
@@ -141,27 +140,20 @@ std::future<{{$returnType}}> {{$class}}::{{lower1 $operation.Name}}Async({{cppPa
 
 {{- end }}
 
-void {{$class}}::onSignal(const std::string& topic, const std::string& args)
-{
-    nlohmann::json json_args = nlohmann::json::parse(args);
-    const std::string entityName = ApiGear::MQTT::Topic(topic).getEntityName();
 {{- range .Interface.Signals}}
 {{- $signal := . }}
-    if(entityName == "{{$signal}}") {
-        m_publisher->publish{{Camel $signal.Name }}(
+void {{$class}}::on{{Camel $signal.Name }}(const std::string& args) const
+{
+    nlohmann::json json_args = nlohmann::json::parse(args);
+    m_publisher->publish{{Camel $signal.Name }}(
 {{- range $idx, $elem := $signal.Params }}
 {{- $param := . -}}
         {{- if $idx }},{{- end -}}
         json_args[{{$idx}}].get<{{cppType "" $param}}>()
 {{- end -}}
-        );
-        return;
-    }
-{{- else }}
-    (void) args;
-    (void) topic;
-{{- end }}
+    );
 }
+{{- end }}
 
 int {{$class}}::registerResponseHandler(ApiGear::MQTT::InvokeReplyFunc handler)
 {
