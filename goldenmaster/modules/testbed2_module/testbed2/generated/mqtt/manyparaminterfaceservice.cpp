@@ -1,6 +1,5 @@
 #include "testbed2/generated/mqtt/manyparaminterfaceservice.h"
 #include "testbed2/generated/core/testbed2.json.adapter.h"
-#include "apigear/mqtt/mqtttopic.h"
 #include <iostream>
 
 using namespace Test::Testbed2;
@@ -14,10 +13,10 @@ namespace {
             {std::string("testbed2/ManyParamInterface/set/prop2"), [service](const std::string&, const std::string& args, const std::string&, const std::string&){ service->onSetProp2(args); } },
             {std::string("testbed2/ManyParamInterface/set/prop3"), [service](const std::string&, const std::string& args, const std::string&, const std::string&){ service->onSetProp3(args); } },
             {std::string("testbed2/ManyParamInterface/set/prop4"), [service](const std::string&, const std::string& args, const std::string&, const std::string&){ service->onSetProp4(args); } },
-            {std::string("testbed2/ManyParamInterface/rpc/func1"), [service](const std::string& topic, const std::string& args, const std::string& responseTopic, const std::string& correlationData) { service->onInvoke(topic, args, responseTopic, correlationData); } },
-            {std::string("testbed2/ManyParamInterface/rpc/func2"), [service](const std::string& topic, const std::string& args, const std::string& responseTopic, const std::string& correlationData) { service->onInvoke(topic, args, responseTopic, correlationData); } },
-            {std::string("testbed2/ManyParamInterface/rpc/func3"), [service](const std::string& topic, const std::string& args, const std::string& responseTopic, const std::string& correlationData) { service->onInvoke(topic, args, responseTopic, correlationData); } },
-            {std::string("testbed2/ManyParamInterface/rpc/func4"), [service](const std::string& topic, const std::string& args, const std::string& responseTopic, const std::string& correlationData) { service->onInvoke(topic, args, responseTopic, correlationData); } },
+            {std::string("testbed2/ManyParamInterface/rpc/func1"), [service](const std::string&, const std::string& args, const std::string& responseTopic, const std::string& correlationData) { service->onInvokeFunc1(args, responseTopic, correlationData); } },
+            {std::string("testbed2/ManyParamInterface/rpc/func2"), [service](const std::string&, const std::string& args, const std::string& responseTopic, const std::string& correlationData) { service->onInvokeFunc2(args, responseTopic, correlationData); } },
+            {std::string("testbed2/ManyParamInterface/rpc/func3"), [service](const std::string&, const std::string& args, const std::string& responseTopic, const std::string& correlationData) { service->onInvokeFunc3(args, responseTopic, correlationData); } },
+            {std::string("testbed2/ManyParamInterface/rpc/func4"), [service](const std::string&, const std::string& args, const std::string& responseTopic, const std::string& correlationData) { service->onInvokeFunc4(args, responseTopic, correlationData); } },
         };
     };
 }
@@ -106,43 +105,39 @@ void ManyParamInterfaceService::onSetProp4(const std::string& args) const
     auto prop4 = json_args.get<int>();
     m_impl->setProp4(prop4);
 }
-
-void ManyParamInterfaceService::onInvoke(const std::string& topic, const std::string& args, const std::string& responseTopic, const std::string& correlationData)
+void ManyParamInterfaceService::onInvokeFunc1(const std::string& args, const std::string& responseTopic, const std::string& correlationData) const
 {
     nlohmann::json json_args = nlohmann::json::parse(args);
-    const std::string& name = ApiGear::MQTT::Topic(topic).getEntityName();
-
-
-    if(name == "func1") {
-        const int& param1 = json_args.at(0).get<int>();
-        auto result = m_impl->func1(param1);
-        m_service->notifyInvokeResponse(responseTopic, nlohmann::json(result).dump(), correlationData);
-        return;
-    }
-    if(name == "func2") {
-        const int& param1 = json_args.at(0).get<int>();
-        const int& param2 = json_args.at(1).get<int>();
-        auto result = m_impl->func2(param1, param2);
-        m_service->notifyInvokeResponse(responseTopic, nlohmann::json(result).dump(), correlationData);
-        return;
-    }
-    if(name == "func3") {
-        const int& param1 = json_args.at(0).get<int>();
-        const int& param2 = json_args.at(1).get<int>();
-        const int& param3 = json_args.at(2).get<int>();
-        auto result = m_impl->func3(param1, param2, param3);
-        m_service->notifyInvokeResponse(responseTopic, nlohmann::json(result).dump(), correlationData);
-        return;
-    }
-    if(name == "func4") {
-        const int& param1 = json_args.at(0).get<int>();
-        const int& param2 = json_args.at(1).get<int>();
-        const int& param3 = json_args.at(2).get<int>();
-        const int& param4 = json_args.at(3).get<int>();
-        auto result = m_impl->func4(param1, param2, param3, param4);
-        m_service->notifyInvokeResponse(responseTopic, nlohmann::json(result).dump(), correlationData);
-        return;
-    }
+    const int& param1 = json_args.at(0).get<int>();
+    auto result = m_impl->func1(param1);
+    m_service->notifyInvokeResponse(responseTopic, nlohmann::json(result).dump(), correlationData);
+}
+void ManyParamInterfaceService::onInvokeFunc2(const std::string& args, const std::string& responseTopic, const std::string& correlationData) const
+{
+    nlohmann::json json_args = nlohmann::json::parse(args);
+    const int& param1 = json_args.at(0).get<int>();
+    const int& param2 = json_args.at(1).get<int>();
+    auto result = m_impl->func2(param1, param2);
+    m_service->notifyInvokeResponse(responseTopic, nlohmann::json(result).dump(), correlationData);
+}
+void ManyParamInterfaceService::onInvokeFunc3(const std::string& args, const std::string& responseTopic, const std::string& correlationData) const
+{
+    nlohmann::json json_args = nlohmann::json::parse(args);
+    const int& param1 = json_args.at(0).get<int>();
+    const int& param2 = json_args.at(1).get<int>();
+    const int& param3 = json_args.at(2).get<int>();
+    auto result = m_impl->func3(param1, param2, param3);
+    m_service->notifyInvokeResponse(responseTopic, nlohmann::json(result).dump(), correlationData);
+}
+void ManyParamInterfaceService::onInvokeFunc4(const std::string& args, const std::string& responseTopic, const std::string& correlationData) const
+{
+    nlohmann::json json_args = nlohmann::json::parse(args);
+    const int& param1 = json_args.at(0).get<int>();
+    const int& param2 = json_args.at(1).get<int>();
+    const int& param3 = json_args.at(2).get<int>();
+    const int& param4 = json_args.at(3).get<int>();
+    auto result = m_impl->func4(param1, param2, param3, param4);
+    m_service->notifyInvokeResponse(responseTopic, nlohmann::json(result).dump(), correlationData);
 }
 void ManyParamInterfaceService::onSig1(int param1)
 {

@@ -1,6 +1,5 @@
 #include "tb_simple/generated/mqtt/simplearrayinterfaceservice.h"
 #include "tb_simple/generated/core/tb_simple.json.adapter.h"
-#include "apigear/mqtt/mqtttopic.h"
 #include <iostream>
 
 using namespace Test::TbSimple;
@@ -18,14 +17,14 @@ namespace {
             {std::string("tb.simple/SimpleArrayInterface/set/propFloat32"), [service](const std::string&, const std::string& args, const std::string&, const std::string&){ service->onSetPropFloat32(args); } },
             {std::string("tb.simple/SimpleArrayInterface/set/propFloat64"), [service](const std::string&, const std::string& args, const std::string&, const std::string&){ service->onSetPropFloat64(args); } },
             {std::string("tb.simple/SimpleArrayInterface/set/propString"), [service](const std::string&, const std::string& args, const std::string&, const std::string&){ service->onSetPropString(args); } },
-            {std::string("tb.simple/SimpleArrayInterface/rpc/funcBool"), [service](const std::string& topic, const std::string& args, const std::string& responseTopic, const std::string& correlationData) { service->onInvoke(topic, args, responseTopic, correlationData); } },
-            {std::string("tb.simple/SimpleArrayInterface/rpc/funcInt"), [service](const std::string& topic, const std::string& args, const std::string& responseTopic, const std::string& correlationData) { service->onInvoke(topic, args, responseTopic, correlationData); } },
-            {std::string("tb.simple/SimpleArrayInterface/rpc/funcInt32"), [service](const std::string& topic, const std::string& args, const std::string& responseTopic, const std::string& correlationData) { service->onInvoke(topic, args, responseTopic, correlationData); } },
-            {std::string("tb.simple/SimpleArrayInterface/rpc/funcInt64"), [service](const std::string& topic, const std::string& args, const std::string& responseTopic, const std::string& correlationData) { service->onInvoke(topic, args, responseTopic, correlationData); } },
-            {std::string("tb.simple/SimpleArrayInterface/rpc/funcFloat"), [service](const std::string& topic, const std::string& args, const std::string& responseTopic, const std::string& correlationData) { service->onInvoke(topic, args, responseTopic, correlationData); } },
-            {std::string("tb.simple/SimpleArrayInterface/rpc/funcFloat32"), [service](const std::string& topic, const std::string& args, const std::string& responseTopic, const std::string& correlationData) { service->onInvoke(topic, args, responseTopic, correlationData); } },
-            {std::string("tb.simple/SimpleArrayInterface/rpc/funcFloat64"), [service](const std::string& topic, const std::string& args, const std::string& responseTopic, const std::string& correlationData) { service->onInvoke(topic, args, responseTopic, correlationData); } },
-            {std::string("tb.simple/SimpleArrayInterface/rpc/funcString"), [service](const std::string& topic, const std::string& args, const std::string& responseTopic, const std::string& correlationData) { service->onInvoke(topic, args, responseTopic, correlationData); } },
+            {std::string("tb.simple/SimpleArrayInterface/rpc/funcBool"), [service](const std::string&, const std::string& args, const std::string& responseTopic, const std::string& correlationData) { service->onInvokeFuncBool(args, responseTopic, correlationData); } },
+            {std::string("tb.simple/SimpleArrayInterface/rpc/funcInt"), [service](const std::string&, const std::string& args, const std::string& responseTopic, const std::string& correlationData) { service->onInvokeFuncInt(args, responseTopic, correlationData); } },
+            {std::string("tb.simple/SimpleArrayInterface/rpc/funcInt32"), [service](const std::string&, const std::string& args, const std::string& responseTopic, const std::string& correlationData) { service->onInvokeFuncInt32(args, responseTopic, correlationData); } },
+            {std::string("tb.simple/SimpleArrayInterface/rpc/funcInt64"), [service](const std::string&, const std::string& args, const std::string& responseTopic, const std::string& correlationData) { service->onInvokeFuncInt64(args, responseTopic, correlationData); } },
+            {std::string("tb.simple/SimpleArrayInterface/rpc/funcFloat"), [service](const std::string&, const std::string& args, const std::string& responseTopic, const std::string& correlationData) { service->onInvokeFuncFloat(args, responseTopic, correlationData); } },
+            {std::string("tb.simple/SimpleArrayInterface/rpc/funcFloat32"), [service](const std::string&, const std::string& args, const std::string& responseTopic, const std::string& correlationData) { service->onInvokeFuncFloat32(args, responseTopic, correlationData); } },
+            {std::string("tb.simple/SimpleArrayInterface/rpc/funcFloat64"), [service](const std::string&, const std::string& args, const std::string& responseTopic, const std::string& correlationData) { service->onInvokeFuncFloat64(args, responseTopic, correlationData); } },
+            {std::string("tb.simple/SimpleArrayInterface/rpc/funcString"), [service](const std::string&, const std::string& args, const std::string& responseTopic, const std::string& correlationData) { service->onInvokeFuncString(args, responseTopic, correlationData); } },
         };
     };
 }
@@ -162,61 +161,61 @@ void SimpleArrayInterfaceService::onSetPropString(const std::string& args) const
     auto propString = json_args.get<std::list<std::string>>();
     m_impl->setPropString(propString);
 }
-
-void SimpleArrayInterfaceService::onInvoke(const std::string& topic, const std::string& args, const std::string& responseTopic, const std::string& correlationData)
+void SimpleArrayInterfaceService::onInvokeFuncBool(const std::string& args, const std::string& responseTopic, const std::string& correlationData) const
 {
     nlohmann::json json_args = nlohmann::json::parse(args);
-    const std::string& name = ApiGear::MQTT::Topic(topic).getEntityName();
-
-
-    if(name == "funcBool") {
-        const std::list<bool>& paramBool = json_args.at(0).get<std::list<bool>>();
-        auto result = m_impl->funcBool(paramBool);
-        m_service->notifyInvokeResponse(responseTopic, nlohmann::json(result).dump(), correlationData);
-        return;
-    }
-    if(name == "funcInt") {
-        const std::list<int>& paramInt = json_args.at(0).get<std::list<int>>();
-        auto result = m_impl->funcInt(paramInt);
-        m_service->notifyInvokeResponse(responseTopic, nlohmann::json(result).dump(), correlationData);
-        return;
-    }
-    if(name == "funcInt32") {
-        const std::list<int32_t>& paramInt32 = json_args.at(0).get<std::list<int32_t>>();
-        auto result = m_impl->funcInt32(paramInt32);
-        m_service->notifyInvokeResponse(responseTopic, nlohmann::json(result).dump(), correlationData);
-        return;
-    }
-    if(name == "funcInt64") {
-        const std::list<int64_t>& paramInt64 = json_args.at(0).get<std::list<int64_t>>();
-        auto result = m_impl->funcInt64(paramInt64);
-        m_service->notifyInvokeResponse(responseTopic, nlohmann::json(result).dump(), correlationData);
-        return;
-    }
-    if(name == "funcFloat") {
-        const std::list<float>& paramFloat = json_args.at(0).get<std::list<float>>();
-        auto result = m_impl->funcFloat(paramFloat);
-        m_service->notifyInvokeResponse(responseTopic, nlohmann::json(result).dump(), correlationData);
-        return;
-    }
-    if(name == "funcFloat32") {
-        const std::list<float>& paramFloat32 = json_args.at(0).get<std::list<float>>();
-        auto result = m_impl->funcFloat32(paramFloat32);
-        m_service->notifyInvokeResponse(responseTopic, nlohmann::json(result).dump(), correlationData);
-        return;
-    }
-    if(name == "funcFloat64") {
-        const std::list<double>& paramFloat = json_args.at(0).get<std::list<double>>();
-        auto result = m_impl->funcFloat64(paramFloat);
-        m_service->notifyInvokeResponse(responseTopic, nlohmann::json(result).dump(), correlationData);
-        return;
-    }
-    if(name == "funcString") {
-        const std::list<std::string>& paramString = json_args.at(0).get<std::list<std::string>>();
-        auto result = m_impl->funcString(paramString);
-        m_service->notifyInvokeResponse(responseTopic, nlohmann::json(result).dump(), correlationData);
-        return;
-    }
+    const std::list<bool>& paramBool = json_args.at(0).get<std::list<bool>>();
+    auto result = m_impl->funcBool(paramBool);
+    m_service->notifyInvokeResponse(responseTopic, nlohmann::json(result).dump(), correlationData);
+}
+void SimpleArrayInterfaceService::onInvokeFuncInt(const std::string& args, const std::string& responseTopic, const std::string& correlationData) const
+{
+    nlohmann::json json_args = nlohmann::json::parse(args);
+    const std::list<int>& paramInt = json_args.at(0).get<std::list<int>>();
+    auto result = m_impl->funcInt(paramInt);
+    m_service->notifyInvokeResponse(responseTopic, nlohmann::json(result).dump(), correlationData);
+}
+void SimpleArrayInterfaceService::onInvokeFuncInt32(const std::string& args, const std::string& responseTopic, const std::string& correlationData) const
+{
+    nlohmann::json json_args = nlohmann::json::parse(args);
+    const std::list<int32_t>& paramInt32 = json_args.at(0).get<std::list<int32_t>>();
+    auto result = m_impl->funcInt32(paramInt32);
+    m_service->notifyInvokeResponse(responseTopic, nlohmann::json(result).dump(), correlationData);
+}
+void SimpleArrayInterfaceService::onInvokeFuncInt64(const std::string& args, const std::string& responseTopic, const std::string& correlationData) const
+{
+    nlohmann::json json_args = nlohmann::json::parse(args);
+    const std::list<int64_t>& paramInt64 = json_args.at(0).get<std::list<int64_t>>();
+    auto result = m_impl->funcInt64(paramInt64);
+    m_service->notifyInvokeResponse(responseTopic, nlohmann::json(result).dump(), correlationData);
+}
+void SimpleArrayInterfaceService::onInvokeFuncFloat(const std::string& args, const std::string& responseTopic, const std::string& correlationData) const
+{
+    nlohmann::json json_args = nlohmann::json::parse(args);
+    const std::list<float>& paramFloat = json_args.at(0).get<std::list<float>>();
+    auto result = m_impl->funcFloat(paramFloat);
+    m_service->notifyInvokeResponse(responseTopic, nlohmann::json(result).dump(), correlationData);
+}
+void SimpleArrayInterfaceService::onInvokeFuncFloat32(const std::string& args, const std::string& responseTopic, const std::string& correlationData) const
+{
+    nlohmann::json json_args = nlohmann::json::parse(args);
+    const std::list<float>& paramFloat32 = json_args.at(0).get<std::list<float>>();
+    auto result = m_impl->funcFloat32(paramFloat32);
+    m_service->notifyInvokeResponse(responseTopic, nlohmann::json(result).dump(), correlationData);
+}
+void SimpleArrayInterfaceService::onInvokeFuncFloat64(const std::string& args, const std::string& responseTopic, const std::string& correlationData) const
+{
+    nlohmann::json json_args = nlohmann::json::parse(args);
+    const std::list<double>& paramFloat = json_args.at(0).get<std::list<double>>();
+    auto result = m_impl->funcFloat64(paramFloat);
+    m_service->notifyInvokeResponse(responseTopic, nlohmann::json(result).dump(), correlationData);
+}
+void SimpleArrayInterfaceService::onInvokeFuncString(const std::string& args, const std::string& responseTopic, const std::string& correlationData) const
+{
+    nlohmann::json json_args = nlohmann::json::parse(args);
+    const std::list<std::string>& paramString = json_args.at(0).get<std::list<std::string>>();
+    auto result = m_impl->funcString(paramString);
+    m_service->notifyInvokeResponse(responseTopic, nlohmann::json(result).dump(), correlationData);
 }
 void SimpleArrayInterfaceService::onSigBool(const std::list<bool>& paramBool)
 {

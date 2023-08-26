@@ -14,8 +14,8 @@ public:
     virtual ~SameEnum2InterfaceService() override;
 
     void onConnectionStatusChanged(bool connectionStatus);
-
-    void onInvoke(const std::string& topic, const std::string& args, const std::string& responseTopic, const std::string& correlationData);
+    void onInvokeFunc1(const std::string& args, const std::string& responseTopic, const std::string& correlationData) const;
+    void onInvokeFunc2(const std::string& args, const std::string& responseTopic, const std::string& correlationData) const;
 
     // ISameEnum2InterfaceSubscriber interface
     void onSig1(Enum1Enum param1) override;

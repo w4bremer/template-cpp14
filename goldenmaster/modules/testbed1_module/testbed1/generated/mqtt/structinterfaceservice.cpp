@@ -1,6 +1,5 @@
 #include "testbed1/generated/mqtt/structinterfaceservice.h"
 #include "testbed1/generated/core/testbed1.json.adapter.h"
-#include "apigear/mqtt/mqtttopic.h"
 #include <iostream>
 
 using namespace Test::Testbed1;
@@ -14,10 +13,10 @@ namespace {
             {std::string("testbed1/StructInterface/set/propInt"), [service](const std::string&, const std::string& args, const std::string&, const std::string&){ service->onSetPropInt(args); } },
             {std::string("testbed1/StructInterface/set/propFloat"), [service](const std::string&, const std::string& args, const std::string&, const std::string&){ service->onSetPropFloat(args); } },
             {std::string("testbed1/StructInterface/set/propString"), [service](const std::string&, const std::string& args, const std::string&, const std::string&){ service->onSetPropString(args); } },
-            {std::string("testbed1/StructInterface/rpc/funcBool"), [service](const std::string& topic, const std::string& args, const std::string& responseTopic, const std::string& correlationData) { service->onInvoke(topic, args, responseTopic, correlationData); } },
-            {std::string("testbed1/StructInterface/rpc/funcInt"), [service](const std::string& topic, const std::string& args, const std::string& responseTopic, const std::string& correlationData) { service->onInvoke(topic, args, responseTopic, correlationData); } },
-            {std::string("testbed1/StructInterface/rpc/funcFloat"), [service](const std::string& topic, const std::string& args, const std::string& responseTopic, const std::string& correlationData) { service->onInvoke(topic, args, responseTopic, correlationData); } },
-            {std::string("testbed1/StructInterface/rpc/funcString"), [service](const std::string& topic, const std::string& args, const std::string& responseTopic, const std::string& correlationData) { service->onInvoke(topic, args, responseTopic, correlationData); } },
+            {std::string("testbed1/StructInterface/rpc/funcBool"), [service](const std::string&, const std::string& args, const std::string& responseTopic, const std::string& correlationData) { service->onInvokeFuncBool(args, responseTopic, correlationData); } },
+            {std::string("testbed1/StructInterface/rpc/funcInt"), [service](const std::string&, const std::string& args, const std::string& responseTopic, const std::string& correlationData) { service->onInvokeFuncInt(args, responseTopic, correlationData); } },
+            {std::string("testbed1/StructInterface/rpc/funcFloat"), [service](const std::string&, const std::string& args, const std::string& responseTopic, const std::string& correlationData) { service->onInvokeFuncFloat(args, responseTopic, correlationData); } },
+            {std::string("testbed1/StructInterface/rpc/funcString"), [service](const std::string&, const std::string& args, const std::string& responseTopic, const std::string& correlationData) { service->onInvokeFuncString(args, responseTopic, correlationData); } },
         };
     };
 }
@@ -106,37 +105,33 @@ void StructInterfaceService::onSetPropString(const std::string& args) const
     auto propString = json_args.get<StructString>();
     m_impl->setPropString(propString);
 }
-
-void StructInterfaceService::onInvoke(const std::string& topic, const std::string& args, const std::string& responseTopic, const std::string& correlationData)
+void StructInterfaceService::onInvokeFuncBool(const std::string& args, const std::string& responseTopic, const std::string& correlationData) const
 {
     nlohmann::json json_args = nlohmann::json::parse(args);
-    const std::string& name = ApiGear::MQTT::Topic(topic).getEntityName();
-
-
-    if(name == "funcBool") {
-        const StructBool& paramBool = json_args.at(0).get<StructBool>();
-        auto result = m_impl->funcBool(paramBool);
-        m_service->notifyInvokeResponse(responseTopic, nlohmann::json(result).dump(), correlationData);
-        return;
-    }
-    if(name == "funcInt") {
-        const StructInt& paramInt = json_args.at(0).get<StructInt>();
-        auto result = m_impl->funcInt(paramInt);
-        m_service->notifyInvokeResponse(responseTopic, nlohmann::json(result).dump(), correlationData);
-        return;
-    }
-    if(name == "funcFloat") {
-        const StructFloat& paramFloat = json_args.at(0).get<StructFloat>();
-        auto result = m_impl->funcFloat(paramFloat);
-        m_service->notifyInvokeResponse(responseTopic, nlohmann::json(result).dump(), correlationData);
-        return;
-    }
-    if(name == "funcString") {
-        const StructString& paramString = json_args.at(0).get<StructString>();
-        auto result = m_impl->funcString(paramString);
-        m_service->notifyInvokeResponse(responseTopic, nlohmann::json(result).dump(), correlationData);
-        return;
-    }
+    const StructBool& paramBool = json_args.at(0).get<StructBool>();
+    auto result = m_impl->funcBool(paramBool);
+    m_service->notifyInvokeResponse(responseTopic, nlohmann::json(result).dump(), correlationData);
+}
+void StructInterfaceService::onInvokeFuncInt(const std::string& args, const std::string& responseTopic, const std::string& correlationData) const
+{
+    nlohmann::json json_args = nlohmann::json::parse(args);
+    const StructInt& paramInt = json_args.at(0).get<StructInt>();
+    auto result = m_impl->funcInt(paramInt);
+    m_service->notifyInvokeResponse(responseTopic, nlohmann::json(result).dump(), correlationData);
+}
+void StructInterfaceService::onInvokeFuncFloat(const std::string& args, const std::string& responseTopic, const std::string& correlationData) const
+{
+    nlohmann::json json_args = nlohmann::json::parse(args);
+    const StructFloat& paramFloat = json_args.at(0).get<StructFloat>();
+    auto result = m_impl->funcFloat(paramFloat);
+    m_service->notifyInvokeResponse(responseTopic, nlohmann::json(result).dump(), correlationData);
+}
+void StructInterfaceService::onInvokeFuncString(const std::string& args, const std::string& responseTopic, const std::string& correlationData) const
+{
+    nlohmann::json json_args = nlohmann::json::parse(args);
+    const StructString& paramString = json_args.at(0).get<StructString>();
+    auto result = m_impl->funcString(paramString);
+    m_service->notifyInvokeResponse(responseTopic, nlohmann::json(result).dump(), correlationData);
 }
 void StructInterfaceService::onSigBool(const StructBool& paramBool)
 {

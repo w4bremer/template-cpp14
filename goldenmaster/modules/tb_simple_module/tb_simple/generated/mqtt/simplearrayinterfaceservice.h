@@ -14,8 +14,14 @@ public:
     virtual ~SimpleArrayInterfaceService() override;
 
     void onConnectionStatusChanged(bool connectionStatus);
-
-    void onInvoke(const std::string& topic, const std::string& args, const std::string& responseTopic, const std::string& correlationData);
+    void onInvokeFuncBool(const std::string& args, const std::string& responseTopic, const std::string& correlationData) const;
+    void onInvokeFuncInt(const std::string& args, const std::string& responseTopic, const std::string& correlationData) const;
+    void onInvokeFuncInt32(const std::string& args, const std::string& responseTopic, const std::string& correlationData) const;
+    void onInvokeFuncInt64(const std::string& args, const std::string& responseTopic, const std::string& correlationData) const;
+    void onInvokeFuncFloat(const std::string& args, const std::string& responseTopic, const std::string& correlationData) const;
+    void onInvokeFuncFloat32(const std::string& args, const std::string& responseTopic, const std::string& correlationData) const;
+    void onInvokeFuncFloat64(const std::string& args, const std::string& responseTopic, const std::string& correlationData) const;
+    void onInvokeFuncString(const std::string& args, const std::string& responseTopic, const std::string& correlationData) const;
 
     // ISimpleArrayInterfaceSubscriber interface
     void onSigBool(const std::list<bool>& paramBool) override;

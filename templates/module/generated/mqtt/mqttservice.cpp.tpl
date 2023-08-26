@@ -3,7 +3,6 @@
 {{- $interface := .Interface.Name -}}
 #include "{{snake .Module.Name}}/generated/mqtt/{{lower (camel .Interface.Name)}}service.h"
 #include "{{snake .Module.Name}}/generated/core/{{snake .Module.Name}}.json.adapter.h"
-#include "apigear/mqtt/mqtttopic.h"
 #include <iostream>
 
 using namespace {{ Camel .System.Name }}::{{ Camel .Module.Name }};
@@ -19,7 +18,7 @@ namespace {
         {{- end }}
         {{- range .Interface.Operations}}
         {{- $operation := . }}
-            {std::string("{{$.Module.Name}}/{{$interface}}/rpc/{{$operation}}"), [service](const std::string& topic, const std::string& args, const std::string& responseTopic, const std::string& correlationData) { service->onInvoke(topic, args, responseTopic, correlationData); } },
+            {std::string("{{$.Module.Name}}/{{$interface}}/rpc/{{$operation}}"), [service](const std::string&, const std::string& args, const std::string& responseTopic, const std::string& correlationData) { service->onInvoke{{ Camel $operation.Name }}(args, responseTopic, correlationData); } },
         {{- end }}
         };
     };
@@ -81,43 +80,29 @@ void {{$class}}::onSet{{Camel $property.Name}}(const std::string& args) const
 }
 {{- end }}
 
-void {{$class}}::onInvoke(const std::string& topic, const std::string& args, const std::string& responseTopic, const std::string& correlationData)
-{
-    nlohmann::json json_args = nlohmann::json::parse(args);
-    const std::string& name = ApiGear::MQTT::Topic(topic).getEntityName();
-
-{{- nl }}
-{{- /* check whether any operation has a return value */}}
-{{- $returnValueNeeded := false}}
-{{- range .Interface.Operations }}
-{{- $operation := . }}
-    {{- if not ( eq (cppReturn "" $operation.Return) "void") }}{{ $returnValueNeeded = true }}{{- break }}{{- end }}
-{{- end }}
-{{- if not $returnValueNeeded}}
-    // no operations with return value {{- /* we generate anyway for consistency */}}
-    (void) responseTopic;
-    (void) correlationData;
-    (void) name;
-{{- end }}
-{{- nl }}
-
 {{- range .Interface.Operations}}
 {{- $operation := . }}
-    if(name == "{{$operation}}") {
+void {{$class}}::onInvoke{{ Camel $operation.Name }}(const std::string& args, const std::string& responseTopic, const std::string& correlationData) const
+{
+    nlohmann::json json_args = nlohmann::json::parse(args);
+
+{{- if .Return.IsVoid }}
+    (void) responseTopic;
+    (void) correlationData;
+{{- end }}
+
 {{- range $idx, $elem := $operation.Params }}
 {{- $param := . }}
-        const {{cppType "" $param}}& {{$param}} = json_args.at({{$idx}}).get<{{cppType "" $param}}>();
+    const {{cppType "" $param}}& {{$param}} = json_args.at({{$idx}}).get<{{cppType "" $param}}>();
 {{- end }}
-    {{- if ( eq (cppReturn "" $operation.Return) "void") }}
-        m_impl->{{lower1 $operation.Name}}({{ cppVars $operation.Params }});
-    {{- else }}
-        auto result = m_impl->{{lower1 $operation.Name}}({{ cppVars $operation.Params }});
-        m_service->notifyInvokeResponse(responseTopic, nlohmann::json(result).dump(), correlationData);
-    {{- end}}
-        return;
-    }
+{{- if ( eq (cppReturn "" $operation.Return) "void") }}
+    m_impl->{{lower1 $operation.Name}}({{ cppVars $operation.Params }});
+{{- else }}
+    auto result = m_impl->{{lower1 $operation.Name}}({{ cppVars $operation.Params }});
+    m_service->notifyInvokeResponse(responseTopic, nlohmann::json(result).dump(), correlationData);
 {{- end }}
 }
+{{- end }}
 
 {{- range .Interface.Signals}}
 {{- $signal := . }}

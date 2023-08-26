@@ -1,6 +1,5 @@
 #include "testbed2/generated/mqtt/nestedstruct3interfaceservice.h"
 #include "testbed2/generated/core/testbed2.json.adapter.h"
-#include "apigear/mqtt/mqtttopic.h"
 #include <iostream>
 
 using namespace Test::Testbed2;
@@ -13,9 +12,9 @@ namespace {
             {std::string("testbed2/NestedStruct3Interface/set/prop1"), [service](const std::string&, const std::string& args, const std::string&, const std::string&){ service->onSetProp1(args); } },
             {std::string("testbed2/NestedStruct3Interface/set/prop2"), [service](const std::string&, const std::string& args, const std::string&, const std::string&){ service->onSetProp2(args); } },
             {std::string("testbed2/NestedStruct3Interface/set/prop3"), [service](const std::string&, const std::string& args, const std::string&, const std::string&){ service->onSetProp3(args); } },
-            {std::string("testbed2/NestedStruct3Interface/rpc/func1"), [service](const std::string& topic, const std::string& args, const std::string& responseTopic, const std::string& correlationData) { service->onInvoke(topic, args, responseTopic, correlationData); } },
-            {std::string("testbed2/NestedStruct3Interface/rpc/func2"), [service](const std::string& topic, const std::string& args, const std::string& responseTopic, const std::string& correlationData) { service->onInvoke(topic, args, responseTopic, correlationData); } },
-            {std::string("testbed2/NestedStruct3Interface/rpc/func3"), [service](const std::string& topic, const std::string& args, const std::string& responseTopic, const std::string& correlationData) { service->onInvoke(topic, args, responseTopic, correlationData); } },
+            {std::string("testbed2/NestedStruct3Interface/rpc/func1"), [service](const std::string&, const std::string& args, const std::string& responseTopic, const std::string& correlationData) { service->onInvokeFunc1(args, responseTopic, correlationData); } },
+            {std::string("testbed2/NestedStruct3Interface/rpc/func2"), [service](const std::string&, const std::string& args, const std::string& responseTopic, const std::string& correlationData) { service->onInvokeFunc2(args, responseTopic, correlationData); } },
+            {std::string("testbed2/NestedStruct3Interface/rpc/func3"), [service](const std::string&, const std::string& args, const std::string& responseTopic, const std::string& correlationData) { service->onInvokeFunc3(args, responseTopic, correlationData); } },
         };
     };
 }
@@ -92,34 +91,29 @@ void NestedStruct3InterfaceService::onSetProp3(const std::string& args) const
     auto prop3 = json_args.get<NestedStruct3>();
     m_impl->setProp3(prop3);
 }
-
-void NestedStruct3InterfaceService::onInvoke(const std::string& topic, const std::string& args, const std::string& responseTopic, const std::string& correlationData)
+void NestedStruct3InterfaceService::onInvokeFunc1(const std::string& args, const std::string& responseTopic, const std::string& correlationData) const
 {
     nlohmann::json json_args = nlohmann::json::parse(args);
-    const std::string& name = ApiGear::MQTT::Topic(topic).getEntityName();
-
-
-    if(name == "func1") {
-        const NestedStruct1& param1 = json_args.at(0).get<NestedStruct1>();
-        auto result = m_impl->func1(param1);
-        m_service->notifyInvokeResponse(responseTopic, nlohmann::json(result).dump(), correlationData);
-        return;
-    }
-    if(name == "func2") {
-        const NestedStruct1& param1 = json_args.at(0).get<NestedStruct1>();
-        const NestedStruct2& param2 = json_args.at(1).get<NestedStruct2>();
-        auto result = m_impl->func2(param1, param2);
-        m_service->notifyInvokeResponse(responseTopic, nlohmann::json(result).dump(), correlationData);
-        return;
-    }
-    if(name == "func3") {
-        const NestedStruct1& param1 = json_args.at(0).get<NestedStruct1>();
-        const NestedStruct2& param2 = json_args.at(1).get<NestedStruct2>();
-        const NestedStruct3& param3 = json_args.at(2).get<NestedStruct3>();
-        auto result = m_impl->func3(param1, param2, param3);
-        m_service->notifyInvokeResponse(responseTopic, nlohmann::json(result).dump(), correlationData);
-        return;
-    }
+    const NestedStruct1& param1 = json_args.at(0).get<NestedStruct1>();
+    auto result = m_impl->func1(param1);
+    m_service->notifyInvokeResponse(responseTopic, nlohmann::json(result).dump(), correlationData);
+}
+void NestedStruct3InterfaceService::onInvokeFunc2(const std::string& args, const std::string& responseTopic, const std::string& correlationData) const
+{
+    nlohmann::json json_args = nlohmann::json::parse(args);
+    const NestedStruct1& param1 = json_args.at(0).get<NestedStruct1>();
+    const NestedStruct2& param2 = json_args.at(1).get<NestedStruct2>();
+    auto result = m_impl->func2(param1, param2);
+    m_service->notifyInvokeResponse(responseTopic, nlohmann::json(result).dump(), correlationData);
+}
+void NestedStruct3InterfaceService::onInvokeFunc3(const std::string& args, const std::string& responseTopic, const std::string& correlationData) const
+{
+    nlohmann::json json_args = nlohmann::json::parse(args);
+    const NestedStruct1& param1 = json_args.at(0).get<NestedStruct1>();
+    const NestedStruct2& param2 = json_args.at(1).get<NestedStruct2>();
+    const NestedStruct3& param3 = json_args.at(2).get<NestedStruct3>();
+    auto result = m_impl->func3(param1, param2, param3);
+    m_service->notifyInvokeResponse(responseTopic, nlohmann::json(result).dump(), correlationData);
 }
 void NestedStruct3InterfaceService::onSig1(const NestedStruct1& param1)
 {

@@ -15,8 +15,6 @@ public:
 
     void onConnectionStatusChanged(bool connectionStatus);
 
-    void onInvoke(const std::string& topic, const std::string& args, const std::string& responseTopic, const std::string& correlationData);
-
     // INoOperationsInterfaceSubscriber interface
     void onSigVoid() override;
     void onSigBool(bool paramBool) override;

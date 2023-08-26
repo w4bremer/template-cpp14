@@ -1,6 +1,5 @@
 #include "testbed1/generated/mqtt/structarrayinterfaceservice.h"
 #include "testbed1/generated/core/testbed1.json.adapter.h"
-#include "apigear/mqtt/mqtttopic.h"
 #include <iostream>
 
 using namespace Test::Testbed1;
@@ -14,10 +13,10 @@ namespace {
             {std::string("testbed1/StructArrayInterface/set/propInt"), [service](const std::string&, const std::string& args, const std::string&, const std::string&){ service->onSetPropInt(args); } },
             {std::string("testbed1/StructArrayInterface/set/propFloat"), [service](const std::string&, const std::string& args, const std::string&, const std::string&){ service->onSetPropFloat(args); } },
             {std::string("testbed1/StructArrayInterface/set/propString"), [service](const std::string&, const std::string& args, const std::string&, const std::string&){ service->onSetPropString(args); } },
-            {std::string("testbed1/StructArrayInterface/rpc/funcBool"), [service](const std::string& topic, const std::string& args, const std::string& responseTopic, const std::string& correlationData) { service->onInvoke(topic, args, responseTopic, correlationData); } },
-            {std::string("testbed1/StructArrayInterface/rpc/funcInt"), [service](const std::string& topic, const std::string& args, const std::string& responseTopic, const std::string& correlationData) { service->onInvoke(topic, args, responseTopic, correlationData); } },
-            {std::string("testbed1/StructArrayInterface/rpc/funcFloat"), [service](const std::string& topic, const std::string& args, const std::string& responseTopic, const std::string& correlationData) { service->onInvoke(topic, args, responseTopic, correlationData); } },
-            {std::string("testbed1/StructArrayInterface/rpc/funcString"), [service](const std::string& topic, const std::string& args, const std::string& responseTopic, const std::string& correlationData) { service->onInvoke(topic, args, responseTopic, correlationData); } },
+            {std::string("testbed1/StructArrayInterface/rpc/funcBool"), [service](const std::string&, const std::string& args, const std::string& responseTopic, const std::string& correlationData) { service->onInvokeFuncBool(args, responseTopic, correlationData); } },
+            {std::string("testbed1/StructArrayInterface/rpc/funcInt"), [service](const std::string&, const std::string& args, const std::string& responseTopic, const std::string& correlationData) { service->onInvokeFuncInt(args, responseTopic, correlationData); } },
+            {std::string("testbed1/StructArrayInterface/rpc/funcFloat"), [service](const std::string&, const std::string& args, const std::string& responseTopic, const std::string& correlationData) { service->onInvokeFuncFloat(args, responseTopic, correlationData); } },
+            {std::string("testbed1/StructArrayInterface/rpc/funcString"), [service](const std::string&, const std::string& args, const std::string& responseTopic, const std::string& correlationData) { service->onInvokeFuncString(args, responseTopic, correlationData); } },
         };
     };
 }
@@ -106,37 +105,33 @@ void StructArrayInterfaceService::onSetPropString(const std::string& args) const
     auto propString = json_args.get<std::list<StructString>>();
     m_impl->setPropString(propString);
 }
-
-void StructArrayInterfaceService::onInvoke(const std::string& topic, const std::string& args, const std::string& responseTopic, const std::string& correlationData)
+void StructArrayInterfaceService::onInvokeFuncBool(const std::string& args, const std::string& responseTopic, const std::string& correlationData) const
 {
     nlohmann::json json_args = nlohmann::json::parse(args);
-    const std::string& name = ApiGear::MQTT::Topic(topic).getEntityName();
-
-
-    if(name == "funcBool") {
-        const std::list<StructBool>& paramBool = json_args.at(0).get<std::list<StructBool>>();
-        auto result = m_impl->funcBool(paramBool);
-        m_service->notifyInvokeResponse(responseTopic, nlohmann::json(result).dump(), correlationData);
-        return;
-    }
-    if(name == "funcInt") {
-        const std::list<StructInt>& paramInt = json_args.at(0).get<std::list<StructInt>>();
-        auto result = m_impl->funcInt(paramInt);
-        m_service->notifyInvokeResponse(responseTopic, nlohmann::json(result).dump(), correlationData);
-        return;
-    }
-    if(name == "funcFloat") {
-        const std::list<StructFloat>& paramFloat = json_args.at(0).get<std::list<StructFloat>>();
-        auto result = m_impl->funcFloat(paramFloat);
-        m_service->notifyInvokeResponse(responseTopic, nlohmann::json(result).dump(), correlationData);
-        return;
-    }
-    if(name == "funcString") {
-        const std::list<StructString>& paramString = json_args.at(0).get<std::list<StructString>>();
-        auto result = m_impl->funcString(paramString);
-        m_service->notifyInvokeResponse(responseTopic, nlohmann::json(result).dump(), correlationData);
-        return;
-    }
+    const std::list<StructBool>& paramBool = json_args.at(0).get<std::list<StructBool>>();
+    auto result = m_impl->funcBool(paramBool);
+    m_service->notifyInvokeResponse(responseTopic, nlohmann::json(result).dump(), correlationData);
+}
+void StructArrayInterfaceService::onInvokeFuncInt(const std::string& args, const std::string& responseTopic, const std::string& correlationData) const
+{
+    nlohmann::json json_args = nlohmann::json::parse(args);
+    const std::list<StructInt>& paramInt = json_args.at(0).get<std::list<StructInt>>();
+    auto result = m_impl->funcInt(paramInt);
+    m_service->notifyInvokeResponse(responseTopic, nlohmann::json(result).dump(), correlationData);
+}
+void StructArrayInterfaceService::onInvokeFuncFloat(const std::string& args, const std::string& responseTopic, const std::string& correlationData) const
+{
+    nlohmann::json json_args = nlohmann::json::parse(args);
+    const std::list<StructFloat>& paramFloat = json_args.at(0).get<std::list<StructFloat>>();
+    auto result = m_impl->funcFloat(paramFloat);
+    m_service->notifyInvokeResponse(responseTopic, nlohmann::json(result).dump(), correlationData);
+}
+void StructArrayInterfaceService::onInvokeFuncString(const std::string& args, const std::string& responseTopic, const std::string& correlationData) const
+{
+    nlohmann::json json_args = nlohmann::json::parse(args);
+    const std::list<StructString>& paramString = json_args.at(0).get<std::list<StructString>>();
+    auto result = m_impl->funcString(paramString);
+    m_service->notifyInvokeResponse(responseTopic, nlohmann::json(result).dump(), correlationData);
 }
 void StructArrayInterfaceService::onSigBool(const std::list<StructBool>& paramBool)
 {

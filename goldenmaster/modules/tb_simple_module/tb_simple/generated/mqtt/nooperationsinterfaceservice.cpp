@@ -1,6 +1,5 @@
 #include "tb_simple/generated/mqtt/nooperationsinterfaceservice.h"
 #include "tb_simple/generated/core/tb_simple.json.adapter.h"
-#include "apigear/mqtt/mqtttopic.h"
 #include <iostream>
 
 using namespace Test::TbSimple;
@@ -75,18 +74,6 @@ void NoOperationsInterfaceService::onSetPropInt(const std::string& args) const
 
     auto propInt = json_args.get<int>();
     m_impl->setPropInt(propInt);
-}
-
-void NoOperationsInterfaceService::onInvoke(const std::string& topic, const std::string& args, const std::string& responseTopic, const std::string& correlationData)
-{
-    nlohmann::json json_args = nlohmann::json::parse(args);
-    const std::string& name = ApiGear::MQTT::Topic(topic).getEntityName();
-
-    // no operations with return value
-    (void) responseTopic;
-    (void) correlationData;
-    (void) name;
-
 }
 void NoOperationsInterfaceService::onSigVoid()
 {

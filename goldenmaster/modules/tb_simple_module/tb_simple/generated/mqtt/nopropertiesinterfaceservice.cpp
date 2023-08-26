@@ -1,6 +1,5 @@
 #include "tb_simple/generated/mqtt/nopropertiesinterfaceservice.h"
 #include "tb_simple/generated/core/tb_simple.json.adapter.h"
-#include "apigear/mqtt/mqtttopic.h"
 #include <iostream>
 
 using namespace Test::TbSimple;
@@ -10,8 +9,8 @@ namespace {
     std::map<std::string, ApiGear::MQTT::CallbackFunction> createTopicMap(NoPropertiesInterfaceService* service)
     {
         return {
-            {std::string("tb.simple/NoPropertiesInterface/rpc/funcVoid"), [service](const std::string& topic, const std::string& args, const std::string& responseTopic, const std::string& correlationData) { service->onInvoke(topic, args, responseTopic, correlationData); } },
-            {std::string("tb.simple/NoPropertiesInterface/rpc/funcBool"), [service](const std::string& topic, const std::string& args, const std::string& responseTopic, const std::string& correlationData) { service->onInvoke(topic, args, responseTopic, correlationData); } },
+            {std::string("tb.simple/NoPropertiesInterface/rpc/funcVoid"), [service](const std::string&, const std::string& args, const std::string& responseTopic, const std::string& correlationData) { service->onInvokeFuncVoid(args, responseTopic, correlationData); } },
+            {std::string("tb.simple/NoPropertiesInterface/rpc/funcBool"), [service](const std::string&, const std::string& args, const std::string& responseTopic, const std::string& correlationData) { service->onInvokeFuncBool(args, responseTopic, correlationData); } },
         };
     };
 }
@@ -52,23 +51,19 @@ void NoPropertiesInterfaceService::onConnectionStatusChanged(bool connectionStat
 
     // send current values
 }
-
-void NoPropertiesInterfaceService::onInvoke(const std::string& topic, const std::string& args, const std::string& responseTopic, const std::string& correlationData)
+void NoPropertiesInterfaceService::onInvokeFuncVoid(const std::string& args, const std::string& responseTopic, const std::string& correlationData) const
 {
     nlohmann::json json_args = nlohmann::json::parse(args);
-    const std::string& name = ApiGear::MQTT::Topic(topic).getEntityName();
-
-
-    if(name == "funcVoid") {
-        m_impl->funcVoid();
-        return;
-    }
-    if(name == "funcBool") {
-        const bool& paramBool = json_args.at(0).get<bool>();
-        auto result = m_impl->funcBool(paramBool);
-        m_service->notifyInvokeResponse(responseTopic, nlohmann::json(result).dump(), correlationData);
-        return;
-    }
+    (void) responseTopic;
+    (void) correlationData;
+    m_impl->funcVoid();
+}
+void NoPropertiesInterfaceService::onInvokeFuncBool(const std::string& args, const std::string& responseTopic, const std::string& correlationData) const
+{
+    nlohmann::json json_args = nlohmann::json::parse(args);
+    const bool& paramBool = json_args.at(0).get<bool>();
+    auto result = m_impl->funcBool(paramBool);
+    m_service->notifyInvokeResponse(responseTopic, nlohmann::json(result).dump(), correlationData);
 }
 void NoPropertiesInterfaceService::onSigVoid()
 {
