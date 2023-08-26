@@ -15,7 +15,6 @@ public:
 
     void onConnectionStatusChanged(bool connectionStatus);
 
-    void onSetProperty(const std::string& topic, const std::string& args);
     void onInvoke(const std::string& topic, const std::string& args, const std::string& responseTopic, const std::string& correlationData);
 
     // IManyParamInterfaceSubscriber interface
@@ -24,9 +23,21 @@ public:
     void onSig3(int param1, int param2, int param3) override;
     void onSig4(int param1, int param2, int param3, int param4) override;
     void onProp1Changed(int prop1) override;
+    /// @brief requests to set the value for the property Prop1 coming from the client
+    /// @param fields contains the param of the type int
+    void onSetProp1(const std::string& args) const;
     void onProp2Changed(int prop2) override;
+    /// @brief requests to set the value for the property Prop2 coming from the client
+    /// @param fields contains the param of the type int
+    void onSetProp2(const std::string& args) const;
     void onProp3Changed(int prop3) override;
+    /// @brief requests to set the value for the property Prop3 coming from the client
+    /// @param fields contains the param of the type int
+    void onSetProp3(const std::string& args) const;
     void onProp4Changed(int prop4) override;
+    /// @brief requests to set the value for the property Prop4 coming from the client
+    /// @param fields contains the param of the type int
+    void onSetProp4(const std::string& args) const;
 
 private:
     std::shared_ptr<IManyParamInterface> m_impl;

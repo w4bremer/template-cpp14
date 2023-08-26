@@ -10,10 +10,10 @@ namespace {
     std::map<std::string, ApiGear::MQTT::CallbackFunction> createTopicMap(StructArrayInterfaceService* service)
     {
         return {
-            {std::string("testbed1/StructArrayInterface/set/propBool"), [service](const std::string& topic, const std::string& args, const std::string&, const std::string&){ service->onSetProperty(topic, args); } },
-            {std::string("testbed1/StructArrayInterface/set/propInt"), [service](const std::string& topic, const std::string& args, const std::string&, const std::string&){ service->onSetProperty(topic, args); } },
-            {std::string("testbed1/StructArrayInterface/set/propFloat"), [service](const std::string& topic, const std::string& args, const std::string&, const std::string&){ service->onSetProperty(topic, args); } },
-            {std::string("testbed1/StructArrayInterface/set/propString"), [service](const std::string& topic, const std::string& args, const std::string&, const std::string&){ service->onSetProperty(topic, args); } },
+            {std::string("testbed1/StructArrayInterface/set/propBool"), [service](const std::string&, const std::string& args, const std::string&, const std::string&){ service->onSetPropBool(args); } },
+            {std::string("testbed1/StructArrayInterface/set/propInt"), [service](const std::string&, const std::string& args, const std::string&, const std::string&){ service->onSetPropInt(args); } },
+            {std::string("testbed1/StructArrayInterface/set/propFloat"), [service](const std::string&, const std::string& args, const std::string&, const std::string&){ service->onSetPropFloat(args); } },
+            {std::string("testbed1/StructArrayInterface/set/propString"), [service](const std::string&, const std::string& args, const std::string&, const std::string&){ service->onSetPropString(args); } },
             {std::string("testbed1/StructArrayInterface/rpc/funcBool"), [service](const std::string& topic, const std::string& args, const std::string& responseTopic, const std::string& correlationData) { service->onInvoke(topic, args, responseTopic, correlationData); } },
             {std::string("testbed1/StructArrayInterface/rpc/funcInt"), [service](const std::string& topic, const std::string& args, const std::string& responseTopic, const std::string& correlationData) { service->onInvoke(topic, args, responseTopic, correlationData); } },
             {std::string("testbed1/StructArrayInterface/rpc/funcFloat"), [service](const std::string& topic, const std::string& args, const std::string& responseTopic, const std::string& correlationData) { service->onInvoke(topic, args, responseTopic, correlationData); } },
@@ -62,31 +62,49 @@ void StructArrayInterfaceService::onConnectionStatusChanged(bool connectionStatu
     onPropFloatChanged(m_impl->getPropFloat());
     onPropStringChanged(m_impl->getPropString());
 }
-
-void StructArrayInterfaceService::onSetProperty(const std::string& topic, const std::string& args)
+void StructArrayInterfaceService::onSetPropBool(const std::string& args) const
 {
     nlohmann::json json_args = nlohmann::json::parse(args);
-    const std::string& name = ApiGear::MQTT::Topic(topic).getEntityName();
-    if(name == "propBool") {
-        auto propBool = json_args.get<std::list<StructBool>>();
-        m_impl->setPropBool(propBool);
+    if (json_args.empty())
+    {
         return;
     }
-    if(name == "propInt") {
-        auto propInt = json_args.get<std::list<StructInt>>();
-        m_impl->setPropInt(propInt);
+
+    auto propBool = json_args.get<std::list<StructBool>>();
+    m_impl->setPropBool(propBool);
+}
+void StructArrayInterfaceService::onSetPropInt(const std::string& args) const
+{
+    nlohmann::json json_args = nlohmann::json::parse(args);
+    if (json_args.empty())
+    {
         return;
     }
-    if(name == "propFloat") {
-        auto propFloat = json_args.get<std::list<StructFloat>>();
-        m_impl->setPropFloat(propFloat);
+
+    auto propInt = json_args.get<std::list<StructInt>>();
+    m_impl->setPropInt(propInt);
+}
+void StructArrayInterfaceService::onSetPropFloat(const std::string& args) const
+{
+    nlohmann::json json_args = nlohmann::json::parse(args);
+    if (json_args.empty())
+    {
         return;
     }
-    if(name == "propString") {
-        auto propString = json_args.get<std::list<StructString>>();
-        m_impl->setPropString(propString);
+
+    auto propFloat = json_args.get<std::list<StructFloat>>();
+    m_impl->setPropFloat(propFloat);
+}
+void StructArrayInterfaceService::onSetPropString(const std::string& args) const
+{
+    nlohmann::json json_args = nlohmann::json::parse(args);
+    if (json_args.empty())
+    {
         return;
     }
+
+    auto propString = json_args.get<std::list<StructString>>();
+    m_impl->setPropString(propString);
 }
 
 void StructArrayInterfaceService::onInvoke(const std::string& topic, const std::string& args, const std::string& responseTopic, const std::string& correlationData)

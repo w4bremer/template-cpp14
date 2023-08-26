@@ -15,12 +15,17 @@ public:
 
     void onConnectionStatusChanged(bool connectionStatus);
 
-    void onSetProperty(const std::string& topic, const std::string& args);
     void onInvoke(const std::string& topic, const std::string& args, const std::string& responseTopic, const std::string& correlationData);
 
     // INoSignalsInterfaceSubscriber interface
     void onPropBoolChanged(bool propBool) override;
+    /// @brief requests to set the value for the property PropBool coming from the client
+    /// @param fields contains the param of the type bool
+    void onSetPropBool(const std::string& args) const;
     void onPropIntChanged(int propInt) override;
+    /// @brief requests to set the value for the property PropInt coming from the client
+    /// @param fields contains the param of the type int
+    void onSetPropInt(const std::string& args) const;
 
 private:
     std::shared_ptr<INoSignalsInterface> m_impl;

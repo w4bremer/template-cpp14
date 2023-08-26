@@ -10,8 +10,8 @@ namespace {
     std::map<std::string, ApiGear::MQTT::CallbackFunction> createTopicMap(NoOperationsInterfaceService* service)
     {
         return {
-            {std::string("tb.simple/NoOperationsInterface/set/propBool"), [service](const std::string& topic, const std::string& args, const std::string&, const std::string&){ service->onSetProperty(topic, args); } },
-            {std::string("tb.simple/NoOperationsInterface/set/propInt"), [service](const std::string& topic, const std::string& args, const std::string&, const std::string&){ service->onSetProperty(topic, args); } },
+            {std::string("tb.simple/NoOperationsInterface/set/propBool"), [service](const std::string&, const std::string& args, const std::string&, const std::string&){ service->onSetPropBool(args); } },
+            {std::string("tb.simple/NoOperationsInterface/set/propInt"), [service](const std::string&, const std::string& args, const std::string&, const std::string&){ service->onSetPropInt(args); } },
         };
     };
 }
@@ -54,21 +54,27 @@ void NoOperationsInterfaceService::onConnectionStatusChanged(bool connectionStat
     onPropBoolChanged(m_impl->getPropBool());
     onPropIntChanged(m_impl->getPropInt());
 }
-
-void NoOperationsInterfaceService::onSetProperty(const std::string& topic, const std::string& args)
+void NoOperationsInterfaceService::onSetPropBool(const std::string& args) const
 {
     nlohmann::json json_args = nlohmann::json::parse(args);
-    const std::string& name = ApiGear::MQTT::Topic(topic).getEntityName();
-    if(name == "propBool") {
-        auto propBool = json_args.get<bool>();
-        m_impl->setPropBool(propBool);
+    if (json_args.empty())
+    {
         return;
     }
-    if(name == "propInt") {
-        auto propInt = json_args.get<int>();
-        m_impl->setPropInt(propInt);
+
+    auto propBool = json_args.get<bool>();
+    m_impl->setPropBool(propBool);
+}
+void NoOperationsInterfaceService::onSetPropInt(const std::string& args) const
+{
+    nlohmann::json json_args = nlohmann::json::parse(args);
+    if (json_args.empty())
+    {
         return;
     }
+
+    auto propInt = json_args.get<int>();
+    m_impl->setPropInt(propInt);
 }
 
 void NoOperationsInterfaceService::onInvoke(const std::string& topic, const std::string& args, const std::string& responseTopic, const std::string& correlationData)

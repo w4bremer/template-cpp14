@@ -15,7 +15,6 @@ public:
 
     void onConnectionStatusChanged(bool connectionStatus);
 
-    void onSetProperty(const std::string& topic, const std::string& args);
     void onInvoke(const std::string& topic, const std::string& args, const std::string& responseTopic, const std::string& correlationData);
 
     // INoPropertiesInterfaceSubscriber interface

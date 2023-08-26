@@ -10,10 +10,10 @@ namespace {
     std::map<std::string, ApiGear::MQTT::CallbackFunction> createTopicMap(EnumInterfaceService* service)
     {
         return {
-            {std::string("tb.enum/EnumInterface/set/prop0"), [service](const std::string& topic, const std::string& args, const std::string&, const std::string&){ service->onSetProperty(topic, args); } },
-            {std::string("tb.enum/EnumInterface/set/prop1"), [service](const std::string& topic, const std::string& args, const std::string&, const std::string&){ service->onSetProperty(topic, args); } },
-            {std::string("tb.enum/EnumInterface/set/prop2"), [service](const std::string& topic, const std::string& args, const std::string&, const std::string&){ service->onSetProperty(topic, args); } },
-            {std::string("tb.enum/EnumInterface/set/prop3"), [service](const std::string& topic, const std::string& args, const std::string&, const std::string&){ service->onSetProperty(topic, args); } },
+            {std::string("tb.enum/EnumInterface/set/prop0"), [service](const std::string&, const std::string& args, const std::string&, const std::string&){ service->onSetProp0(args); } },
+            {std::string("tb.enum/EnumInterface/set/prop1"), [service](const std::string&, const std::string& args, const std::string&, const std::string&){ service->onSetProp1(args); } },
+            {std::string("tb.enum/EnumInterface/set/prop2"), [service](const std::string&, const std::string& args, const std::string&, const std::string&){ service->onSetProp2(args); } },
+            {std::string("tb.enum/EnumInterface/set/prop3"), [service](const std::string&, const std::string& args, const std::string&, const std::string&){ service->onSetProp3(args); } },
             {std::string("tb.enum/EnumInterface/rpc/func0"), [service](const std::string& topic, const std::string& args, const std::string& responseTopic, const std::string& correlationData) { service->onInvoke(topic, args, responseTopic, correlationData); } },
             {std::string("tb.enum/EnumInterface/rpc/func1"), [service](const std::string& topic, const std::string& args, const std::string& responseTopic, const std::string& correlationData) { service->onInvoke(topic, args, responseTopic, correlationData); } },
             {std::string("tb.enum/EnumInterface/rpc/func2"), [service](const std::string& topic, const std::string& args, const std::string& responseTopic, const std::string& correlationData) { service->onInvoke(topic, args, responseTopic, correlationData); } },
@@ -62,31 +62,49 @@ void EnumInterfaceService::onConnectionStatusChanged(bool connectionStatus)
     onProp2Changed(m_impl->getProp2());
     onProp3Changed(m_impl->getProp3());
 }
-
-void EnumInterfaceService::onSetProperty(const std::string& topic, const std::string& args)
+void EnumInterfaceService::onSetProp0(const std::string& args) const
 {
     nlohmann::json json_args = nlohmann::json::parse(args);
-    const std::string& name = ApiGear::MQTT::Topic(topic).getEntityName();
-    if(name == "prop0") {
-        auto prop0 = json_args.get<Enum0Enum>();
-        m_impl->setProp0(prop0);
+    if (json_args.empty())
+    {
         return;
     }
-    if(name == "prop1") {
-        auto prop1 = json_args.get<Enum1Enum>();
-        m_impl->setProp1(prop1);
+
+    auto prop0 = json_args.get<Enum0Enum>();
+    m_impl->setProp0(prop0);
+}
+void EnumInterfaceService::onSetProp1(const std::string& args) const
+{
+    nlohmann::json json_args = nlohmann::json::parse(args);
+    if (json_args.empty())
+    {
         return;
     }
-    if(name == "prop2") {
-        auto prop2 = json_args.get<Enum2Enum>();
-        m_impl->setProp2(prop2);
+
+    auto prop1 = json_args.get<Enum1Enum>();
+    m_impl->setProp1(prop1);
+}
+void EnumInterfaceService::onSetProp2(const std::string& args) const
+{
+    nlohmann::json json_args = nlohmann::json::parse(args);
+    if (json_args.empty())
+    {
         return;
     }
-    if(name == "prop3") {
-        auto prop3 = json_args.get<Enum3Enum>();
-        m_impl->setProp3(prop3);
+
+    auto prop2 = json_args.get<Enum2Enum>();
+    m_impl->setProp2(prop2);
+}
+void EnumInterfaceService::onSetProp3(const std::string& args) const
+{
+    nlohmann::json json_args = nlohmann::json::parse(args);
+    if (json_args.empty())
+    {
         return;
     }
+
+    auto prop3 = json_args.get<Enum3Enum>();
+    m_impl->setProp3(prop3);
 }
 
 void EnumInterfaceService::onInvoke(const std::string& topic, const std::string& args, const std::string& responseTopic, const std::string& correlationData)

@@ -10,14 +10,14 @@ namespace {
     std::map<std::string, ApiGear::MQTT::CallbackFunction> createTopicMap(SimpleArrayInterfaceService* service)
     {
         return {
-            {std::string("tb.simple/SimpleArrayInterface/set/propBool"), [service](const std::string& topic, const std::string& args, const std::string&, const std::string&){ service->onSetProperty(topic, args); } },
-            {std::string("tb.simple/SimpleArrayInterface/set/propInt"), [service](const std::string& topic, const std::string& args, const std::string&, const std::string&){ service->onSetProperty(topic, args); } },
-            {std::string("tb.simple/SimpleArrayInterface/set/propInt32"), [service](const std::string& topic, const std::string& args, const std::string&, const std::string&){ service->onSetProperty(topic, args); } },
-            {std::string("tb.simple/SimpleArrayInterface/set/propInt64"), [service](const std::string& topic, const std::string& args, const std::string&, const std::string&){ service->onSetProperty(topic, args); } },
-            {std::string("tb.simple/SimpleArrayInterface/set/propFloat"), [service](const std::string& topic, const std::string& args, const std::string&, const std::string&){ service->onSetProperty(topic, args); } },
-            {std::string("tb.simple/SimpleArrayInterface/set/propFloat32"), [service](const std::string& topic, const std::string& args, const std::string&, const std::string&){ service->onSetProperty(topic, args); } },
-            {std::string("tb.simple/SimpleArrayInterface/set/propFloat64"), [service](const std::string& topic, const std::string& args, const std::string&, const std::string&){ service->onSetProperty(topic, args); } },
-            {std::string("tb.simple/SimpleArrayInterface/set/propString"), [service](const std::string& topic, const std::string& args, const std::string&, const std::string&){ service->onSetProperty(topic, args); } },
+            {std::string("tb.simple/SimpleArrayInterface/set/propBool"), [service](const std::string&, const std::string& args, const std::string&, const std::string&){ service->onSetPropBool(args); } },
+            {std::string("tb.simple/SimpleArrayInterface/set/propInt"), [service](const std::string&, const std::string& args, const std::string&, const std::string&){ service->onSetPropInt(args); } },
+            {std::string("tb.simple/SimpleArrayInterface/set/propInt32"), [service](const std::string&, const std::string& args, const std::string&, const std::string&){ service->onSetPropInt32(args); } },
+            {std::string("tb.simple/SimpleArrayInterface/set/propInt64"), [service](const std::string&, const std::string& args, const std::string&, const std::string&){ service->onSetPropInt64(args); } },
+            {std::string("tb.simple/SimpleArrayInterface/set/propFloat"), [service](const std::string&, const std::string& args, const std::string&, const std::string&){ service->onSetPropFloat(args); } },
+            {std::string("tb.simple/SimpleArrayInterface/set/propFloat32"), [service](const std::string&, const std::string& args, const std::string&, const std::string&){ service->onSetPropFloat32(args); } },
+            {std::string("tb.simple/SimpleArrayInterface/set/propFloat64"), [service](const std::string&, const std::string& args, const std::string&, const std::string&){ service->onSetPropFloat64(args); } },
+            {std::string("tb.simple/SimpleArrayInterface/set/propString"), [service](const std::string&, const std::string& args, const std::string&, const std::string&){ service->onSetPropString(args); } },
             {std::string("tb.simple/SimpleArrayInterface/rpc/funcBool"), [service](const std::string& topic, const std::string& args, const std::string& responseTopic, const std::string& correlationData) { service->onInvoke(topic, args, responseTopic, correlationData); } },
             {std::string("tb.simple/SimpleArrayInterface/rpc/funcInt"), [service](const std::string& topic, const std::string& args, const std::string& responseTopic, const std::string& correlationData) { service->onInvoke(topic, args, responseTopic, correlationData); } },
             {std::string("tb.simple/SimpleArrayInterface/rpc/funcInt32"), [service](const std::string& topic, const std::string& args, const std::string& responseTopic, const std::string& correlationData) { service->onInvoke(topic, args, responseTopic, correlationData); } },
@@ -74,51 +74,93 @@ void SimpleArrayInterfaceService::onConnectionStatusChanged(bool connectionStatu
     onPropFloat64Changed(m_impl->getPropFloat64());
     onPropStringChanged(m_impl->getPropString());
 }
-
-void SimpleArrayInterfaceService::onSetProperty(const std::string& topic, const std::string& args)
+void SimpleArrayInterfaceService::onSetPropBool(const std::string& args) const
 {
     nlohmann::json json_args = nlohmann::json::parse(args);
-    const std::string& name = ApiGear::MQTT::Topic(topic).getEntityName();
-    if(name == "propBool") {
-        auto propBool = json_args.get<std::list<bool>>();
-        m_impl->setPropBool(propBool);
+    if (json_args.empty())
+    {
         return;
     }
-    if(name == "propInt") {
-        auto propInt = json_args.get<std::list<int>>();
-        m_impl->setPropInt(propInt);
+
+    auto propBool = json_args.get<std::list<bool>>();
+    m_impl->setPropBool(propBool);
+}
+void SimpleArrayInterfaceService::onSetPropInt(const std::string& args) const
+{
+    nlohmann::json json_args = nlohmann::json::parse(args);
+    if (json_args.empty())
+    {
         return;
     }
-    if(name == "propInt32") {
-        auto propInt32 = json_args.get<std::list<int32_t>>();
-        m_impl->setPropInt32(propInt32);
+
+    auto propInt = json_args.get<std::list<int>>();
+    m_impl->setPropInt(propInt);
+}
+void SimpleArrayInterfaceService::onSetPropInt32(const std::string& args) const
+{
+    nlohmann::json json_args = nlohmann::json::parse(args);
+    if (json_args.empty())
+    {
         return;
     }
-    if(name == "propInt64") {
-        auto propInt64 = json_args.get<std::list<int64_t>>();
-        m_impl->setPropInt64(propInt64);
+
+    auto propInt32 = json_args.get<std::list<int32_t>>();
+    m_impl->setPropInt32(propInt32);
+}
+void SimpleArrayInterfaceService::onSetPropInt64(const std::string& args) const
+{
+    nlohmann::json json_args = nlohmann::json::parse(args);
+    if (json_args.empty())
+    {
         return;
     }
-    if(name == "propFloat") {
-        auto propFloat = json_args.get<std::list<float>>();
-        m_impl->setPropFloat(propFloat);
+
+    auto propInt64 = json_args.get<std::list<int64_t>>();
+    m_impl->setPropInt64(propInt64);
+}
+void SimpleArrayInterfaceService::onSetPropFloat(const std::string& args) const
+{
+    nlohmann::json json_args = nlohmann::json::parse(args);
+    if (json_args.empty())
+    {
         return;
     }
-    if(name == "propFloat32") {
-        auto propFloat32 = json_args.get<std::list<float>>();
-        m_impl->setPropFloat32(propFloat32);
+
+    auto propFloat = json_args.get<std::list<float>>();
+    m_impl->setPropFloat(propFloat);
+}
+void SimpleArrayInterfaceService::onSetPropFloat32(const std::string& args) const
+{
+    nlohmann::json json_args = nlohmann::json::parse(args);
+    if (json_args.empty())
+    {
         return;
     }
-    if(name == "propFloat64") {
-        auto propFloat64 = json_args.get<std::list<double>>();
-        m_impl->setPropFloat64(propFloat64);
+
+    auto propFloat32 = json_args.get<std::list<float>>();
+    m_impl->setPropFloat32(propFloat32);
+}
+void SimpleArrayInterfaceService::onSetPropFloat64(const std::string& args) const
+{
+    nlohmann::json json_args = nlohmann::json::parse(args);
+    if (json_args.empty())
+    {
         return;
     }
-    if(name == "propString") {
-        auto propString = json_args.get<std::list<std::string>>();
-        m_impl->setPropString(propString);
+
+    auto propFloat64 = json_args.get<std::list<double>>();
+    m_impl->setPropFloat64(propFloat64);
+}
+void SimpleArrayInterfaceService::onSetPropString(const std::string& args) const
+{
+    nlohmann::json json_args = nlohmann::json::parse(args);
+    if (json_args.empty())
+    {
         return;
     }
+
+    auto propString = json_args.get<std::list<std::string>>();
+    m_impl->setPropString(propString);
 }
 
 void SimpleArrayInterfaceService::onInvoke(const std::string& topic, const std::string& args, const std::string& responseTopic, const std::string& correlationData)
