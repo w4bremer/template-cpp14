@@ -13,8 +13,8 @@ namespace {
     std::map<std::string, ApiGear::MQTT::CallbackFunction> createTopicMap(const std::string&clientId, NestedStruct2InterfaceClient* client)
     {
         return {
-            { std::string("testbed2/NestedStruct2Interface/prop/prop1"), [client](const std::string& topic, const std::string& args, const std::string&, const std::string&){ client->onPropertyChanged(topic, args); } },
-            { std::string("testbed2/NestedStruct2Interface/prop/prop2"), [client](const std::string& topic, const std::string& args, const std::string&, const std::string&){ client->onPropertyChanged(topic, args); } },
+            { std::string("testbed2/NestedStruct2Interface/prop/prop1"), [client](const std::string&, const std::string& args, const std::string&, const std::string&){ client->setProp1Local(args); } },
+            { std::string("testbed2/NestedStruct2Interface/prop/prop2"), [client](const std::string&, const std::string& args, const std::string&, const std::string&){ client->setProp2Local(args); } },
             { std::string("testbed2/NestedStruct2Interface/sig/sig1"), [client](const std::string& topic, const std::string& args, const std::string&, const std::string&){ client->onSignal(topic, args); } },
             { std::string("testbed2/NestedStruct2Interface/sig/sig2"), [client](const std::string& topic, const std::string& args, const std::string&, const std::string&){ client->onSignal(topic, args); } },
             { std::string("testbed2/NestedStruct2Interface/rpc/func1/"+clientId+"/result"), [client](const std::string&, const std::string& args, const std::string&, const std::string& correlationData){ client->onInvokeReply(args, correlationData); } },
@@ -43,16 +43,6 @@ NestedStruct2InterfaceClient::~NestedStruct2InterfaceClient()
     }
 }
 
-void NestedStruct2InterfaceClient::applyState(const nlohmann::json& fields) 
-{
-    if(fields.contains("prop1")) {
-        setProp1Local(fields["prop1"].get<NestedStruct1>());
-    }
-    if(fields.contains("prop2")) {
-        setProp2Local(fields["prop2"].get<NestedStruct2>());
-    }
-}
-
 void NestedStruct2InterfaceClient::setProp1(const NestedStruct1& prop1)
 {
     if(m_client == nullptr) {
@@ -62,8 +52,15 @@ void NestedStruct2InterfaceClient::setProp1(const NestedStruct1& prop1)
     m_client->setRemoteProperty(topic, nlohmann::json(prop1).dump());
 }
 
-void NestedStruct2InterfaceClient::setProp1Local(const NestedStruct1& prop1)
+void NestedStruct2InterfaceClient::setProp1Local(const std::string& args)
 {
+    nlohmann::json fields = nlohmann::json::parse(args);
+    if (fields.empty())
+    {
+        return;
+    }
+
+    const NestedStruct1& prop1 = fields.get<NestedStruct1>();
     if (m_data.m_prop1 != prop1) {
         m_data.m_prop1 = prop1;
         m_publisher->publishProp1Changed(prop1);
@@ -84,8 +81,15 @@ void NestedStruct2InterfaceClient::setProp2(const NestedStruct2& prop2)
     m_client->setRemoteProperty(topic, nlohmann::json(prop2).dump());
 }
 
-void NestedStruct2InterfaceClient::setProp2Local(const NestedStruct2& prop2)
+void NestedStruct2InterfaceClient::setProp2Local(const std::string& args)
 {
+    nlohmann::json fields = nlohmann::json::parse(args);
+    if (fields.empty())
+    {
+        return;
+    }
+
+    const NestedStruct2& prop2 = fields.get<NestedStruct2>();
     if (m_data.m_prop2 != prop2) {
         m_data.m_prop2 = prop2;
         m_publisher->publishProp2Changed(prop2);
@@ -174,14 +178,6 @@ void NestedStruct2InterfaceClient::onSignal(const std::string& topic, const std:
         m_publisher->publishSig2(json_args[0].get<NestedStruct1>(),json_args[1].get<NestedStruct2>());
         return;
     }
-}
-
-void NestedStruct2InterfaceClient::onPropertyChanged(const std::string& topic, const std::string& args)
-{
-    nlohmann::json json_args = nlohmann::json::parse(args);
-    const std::string& name = ApiGear::MQTT::Topic(topic).getEntityName();
-    applyState({ {name, json_args} });
-    return;
 }
 
 int NestedStruct2InterfaceClient::registerResponseHandler(ApiGear::MQTT::InvokeReplyFunc handler)

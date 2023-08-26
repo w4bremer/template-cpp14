@@ -13,7 +13,7 @@ namespace {
     std::map<std::string, ApiGear::MQTT::CallbackFunction> createTopicMap(const std::string&clientId, SameStruct1InterfaceClient* client)
     {
         return {
-            { std::string("tb.same2/SameStruct1Interface/prop/prop1"), [client](const std::string& topic, const std::string& args, const std::string&, const std::string&){ client->onPropertyChanged(topic, args); } },
+            { std::string("tb.same2/SameStruct1Interface/prop/prop1"), [client](const std::string&, const std::string& args, const std::string&, const std::string&){ client->setProp1Local(args); } },
             { std::string("tb.same2/SameStruct1Interface/sig/sig1"), [client](const std::string& topic, const std::string& args, const std::string&, const std::string&){ client->onSignal(topic, args); } },
             { std::string("tb.same2/SameStruct1Interface/rpc/func1/"+clientId+"/result"), [client](const std::string&, const std::string& args, const std::string&, const std::string& correlationData){ client->onInvokeReply(args, correlationData); } },
         };
@@ -40,13 +40,6 @@ SameStruct1InterfaceClient::~SameStruct1InterfaceClient()
     }
 }
 
-void SameStruct1InterfaceClient::applyState(const nlohmann::json& fields) 
-{
-    if(fields.contains("prop1")) {
-        setProp1Local(fields["prop1"].get<Struct1>());
-    }
-}
-
 void SameStruct1InterfaceClient::setProp1(const Struct1& prop1)
 {
     if(m_client == nullptr) {
@@ -56,8 +49,15 @@ void SameStruct1InterfaceClient::setProp1(const Struct1& prop1)
     m_client->setRemoteProperty(topic, nlohmann::json(prop1).dump());
 }
 
-void SameStruct1InterfaceClient::setProp1Local(const Struct1& prop1)
+void SameStruct1InterfaceClient::setProp1Local(const std::string& args)
 {
+    nlohmann::json fields = nlohmann::json::parse(args);
+    if (fields.empty())
+    {
+        return;
+    }
+
+    const Struct1& prop1 = fields.get<Struct1>();
     if (m_data.m_prop1 != prop1) {
         m_data.m_prop1 = prop1;
         m_publisher->publishProp1Changed(prop1);
@@ -109,14 +109,6 @@ void SameStruct1InterfaceClient::onSignal(const std::string& topic, const std::s
         m_publisher->publishSig1(json_args[0].get<Struct1>());
         return;
     }
-}
-
-void SameStruct1InterfaceClient::onPropertyChanged(const std::string& topic, const std::string& args)
-{
-    nlohmann::json json_args = nlohmann::json::parse(args);
-    const std::string& name = ApiGear::MQTT::Topic(topic).getEntityName();
-    applyState({ {name, json_args} });
-    return;
 }
 
 int SameStruct1InterfaceClient::registerResponseHandler(ApiGear::MQTT::InvokeReplyFunc handler)

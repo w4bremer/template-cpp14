@@ -13,10 +13,10 @@ namespace {
     std::map<std::string, ApiGear::MQTT::CallbackFunction> createTopicMap(const std::string&clientId, EnumInterfaceClient* client)
     {
         return {
-            { std::string("tb.enum/EnumInterface/prop/prop0"), [client](const std::string& topic, const std::string& args, const std::string&, const std::string&){ client->onPropertyChanged(topic, args); } },
-            { std::string("tb.enum/EnumInterface/prop/prop1"), [client](const std::string& topic, const std::string& args, const std::string&, const std::string&){ client->onPropertyChanged(topic, args); } },
-            { std::string("tb.enum/EnumInterface/prop/prop2"), [client](const std::string& topic, const std::string& args, const std::string&, const std::string&){ client->onPropertyChanged(topic, args); } },
-            { std::string("tb.enum/EnumInterface/prop/prop3"), [client](const std::string& topic, const std::string& args, const std::string&, const std::string&){ client->onPropertyChanged(topic, args); } },
+            { std::string("tb.enum/EnumInterface/prop/prop0"), [client](const std::string&, const std::string& args, const std::string&, const std::string&){ client->setProp0Local(args); } },
+            { std::string("tb.enum/EnumInterface/prop/prop1"), [client](const std::string&, const std::string& args, const std::string&, const std::string&){ client->setProp1Local(args); } },
+            { std::string("tb.enum/EnumInterface/prop/prop2"), [client](const std::string&, const std::string& args, const std::string&, const std::string&){ client->setProp2Local(args); } },
+            { std::string("tb.enum/EnumInterface/prop/prop3"), [client](const std::string&, const std::string& args, const std::string&, const std::string&){ client->setProp3Local(args); } },
             { std::string("tb.enum/EnumInterface/sig/sig0"), [client](const std::string& topic, const std::string& args, const std::string&, const std::string&){ client->onSignal(topic, args); } },
             { std::string("tb.enum/EnumInterface/sig/sig1"), [client](const std::string& topic, const std::string& args, const std::string&, const std::string&){ client->onSignal(topic, args); } },
             { std::string("tb.enum/EnumInterface/sig/sig2"), [client](const std::string& topic, const std::string& args, const std::string&, const std::string&){ client->onSignal(topic, args); } },
@@ -49,22 +49,6 @@ EnumInterfaceClient::~EnumInterfaceClient()
     }
 }
 
-void EnumInterfaceClient::applyState(const nlohmann::json& fields) 
-{
-    if(fields.contains("prop0")) {
-        setProp0Local(fields["prop0"].get<Enum0Enum>());
-    }
-    if(fields.contains("prop1")) {
-        setProp1Local(fields["prop1"].get<Enum1Enum>());
-    }
-    if(fields.contains("prop2")) {
-        setProp2Local(fields["prop2"].get<Enum2Enum>());
-    }
-    if(fields.contains("prop3")) {
-        setProp3Local(fields["prop3"].get<Enum3Enum>());
-    }
-}
-
 void EnumInterfaceClient::setProp0(Enum0Enum prop0)
 {
     if(m_client == nullptr) {
@@ -74,8 +58,15 @@ void EnumInterfaceClient::setProp0(Enum0Enum prop0)
     m_client->setRemoteProperty(topic, nlohmann::json(prop0).dump());
 }
 
-void EnumInterfaceClient::setProp0Local(Enum0Enum prop0)
+void EnumInterfaceClient::setProp0Local(const std::string& args)
 {
+    nlohmann::json fields = nlohmann::json::parse(args);
+    if (fields.empty())
+    {
+        return;
+    }
+
+    Enum0Enum prop0 = fields.get<Enum0Enum>();
     if (m_data.m_prop0 != prop0) {
         m_data.m_prop0 = prop0;
         m_publisher->publishProp0Changed(prop0);
@@ -96,8 +87,15 @@ void EnumInterfaceClient::setProp1(Enum1Enum prop1)
     m_client->setRemoteProperty(topic, nlohmann::json(prop1).dump());
 }
 
-void EnumInterfaceClient::setProp1Local(Enum1Enum prop1)
+void EnumInterfaceClient::setProp1Local(const std::string& args)
 {
+    nlohmann::json fields = nlohmann::json::parse(args);
+    if (fields.empty())
+    {
+        return;
+    }
+
+    Enum1Enum prop1 = fields.get<Enum1Enum>();
     if (m_data.m_prop1 != prop1) {
         m_data.m_prop1 = prop1;
         m_publisher->publishProp1Changed(prop1);
@@ -118,8 +116,15 @@ void EnumInterfaceClient::setProp2(Enum2Enum prop2)
     m_client->setRemoteProperty(topic, nlohmann::json(prop2).dump());
 }
 
-void EnumInterfaceClient::setProp2Local(Enum2Enum prop2)
+void EnumInterfaceClient::setProp2Local(const std::string& args)
 {
+    nlohmann::json fields = nlohmann::json::parse(args);
+    if (fields.empty())
+    {
+        return;
+    }
+
+    Enum2Enum prop2 = fields.get<Enum2Enum>();
     if (m_data.m_prop2 != prop2) {
         m_data.m_prop2 = prop2;
         m_publisher->publishProp2Changed(prop2);
@@ -140,8 +145,15 @@ void EnumInterfaceClient::setProp3(Enum3Enum prop3)
     m_client->setRemoteProperty(topic, nlohmann::json(prop3).dump());
 }
 
-void EnumInterfaceClient::setProp3Local(Enum3Enum prop3)
+void EnumInterfaceClient::setProp3Local(const std::string& args)
 {
+    nlohmann::json fields = nlohmann::json::parse(args);
+    if (fields.empty())
+    {
+        return;
+    }
+
+    Enum3Enum prop3 = fields.get<Enum3Enum>();
     if (m_data.m_prop3 != prop3) {
         m_data.m_prop3 = prop3;
         m_publisher->publishProp3Changed(prop3);
@@ -301,14 +313,6 @@ void EnumInterfaceClient::onSignal(const std::string& topic, const std::string& 
         m_publisher->publishSig3(json_args[0].get<Enum3Enum>());
         return;
     }
-}
-
-void EnumInterfaceClient::onPropertyChanged(const std::string& topic, const std::string& args)
-{
-    nlohmann::json json_args = nlohmann::json::parse(args);
-    const std::string& name = ApiGear::MQTT::Topic(topic).getEntityName();
-    applyState({ {name, json_args} });
-    return;
 }
 
 int EnumInterfaceClient::registerResponseHandler(ApiGear::MQTT::InvokeReplyFunc handler)

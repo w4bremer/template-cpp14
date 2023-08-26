@@ -13,10 +13,10 @@ namespace {
     std::map<std::string, ApiGear::MQTT::CallbackFunction> createTopicMap(const std::string&clientId, ManyParamInterfaceClient* client)
     {
         return {
-            { std::string("testbed2/ManyParamInterface/prop/prop1"), [client](const std::string& topic, const std::string& args, const std::string&, const std::string&){ client->onPropertyChanged(topic, args); } },
-            { std::string("testbed2/ManyParamInterface/prop/prop2"), [client](const std::string& topic, const std::string& args, const std::string&, const std::string&){ client->onPropertyChanged(topic, args); } },
-            { std::string("testbed2/ManyParamInterface/prop/prop3"), [client](const std::string& topic, const std::string& args, const std::string&, const std::string&){ client->onPropertyChanged(topic, args); } },
-            { std::string("testbed2/ManyParamInterface/prop/prop4"), [client](const std::string& topic, const std::string& args, const std::string&, const std::string&){ client->onPropertyChanged(topic, args); } },
+            { std::string("testbed2/ManyParamInterface/prop/prop1"), [client](const std::string&, const std::string& args, const std::string&, const std::string&){ client->setProp1Local(args); } },
+            { std::string("testbed2/ManyParamInterface/prop/prop2"), [client](const std::string&, const std::string& args, const std::string&, const std::string&){ client->setProp2Local(args); } },
+            { std::string("testbed2/ManyParamInterface/prop/prop3"), [client](const std::string&, const std::string& args, const std::string&, const std::string&){ client->setProp3Local(args); } },
+            { std::string("testbed2/ManyParamInterface/prop/prop4"), [client](const std::string&, const std::string& args, const std::string&, const std::string&){ client->setProp4Local(args); } },
             { std::string("testbed2/ManyParamInterface/sig/sig1"), [client](const std::string& topic, const std::string& args, const std::string&, const std::string&){ client->onSignal(topic, args); } },
             { std::string("testbed2/ManyParamInterface/sig/sig2"), [client](const std::string& topic, const std::string& args, const std::string&, const std::string&){ client->onSignal(topic, args); } },
             { std::string("testbed2/ManyParamInterface/sig/sig3"), [client](const std::string& topic, const std::string& args, const std::string&, const std::string&){ client->onSignal(topic, args); } },
@@ -49,22 +49,6 @@ ManyParamInterfaceClient::~ManyParamInterfaceClient()
     }
 }
 
-void ManyParamInterfaceClient::applyState(const nlohmann::json& fields) 
-{
-    if(fields.contains("prop1")) {
-        setProp1Local(fields["prop1"].get<int>());
-    }
-    if(fields.contains("prop2")) {
-        setProp2Local(fields["prop2"].get<int>());
-    }
-    if(fields.contains("prop3")) {
-        setProp3Local(fields["prop3"].get<int>());
-    }
-    if(fields.contains("prop4")) {
-        setProp4Local(fields["prop4"].get<int>());
-    }
-}
-
 void ManyParamInterfaceClient::setProp1(int prop1)
 {
     if(m_client == nullptr) {
@@ -74,8 +58,15 @@ void ManyParamInterfaceClient::setProp1(int prop1)
     m_client->setRemoteProperty(topic, nlohmann::json(prop1).dump());
 }
 
-void ManyParamInterfaceClient::setProp1Local(int prop1)
+void ManyParamInterfaceClient::setProp1Local(const std::string& args)
 {
+    nlohmann::json fields = nlohmann::json::parse(args);
+    if (fields.empty())
+    {
+        return;
+    }
+
+    int prop1 = fields.get<int>();
     if (m_data.m_prop1 != prop1) {
         m_data.m_prop1 = prop1;
         m_publisher->publishProp1Changed(prop1);
@@ -96,8 +87,15 @@ void ManyParamInterfaceClient::setProp2(int prop2)
     m_client->setRemoteProperty(topic, nlohmann::json(prop2).dump());
 }
 
-void ManyParamInterfaceClient::setProp2Local(int prop2)
+void ManyParamInterfaceClient::setProp2Local(const std::string& args)
 {
+    nlohmann::json fields = nlohmann::json::parse(args);
+    if (fields.empty())
+    {
+        return;
+    }
+
+    int prop2 = fields.get<int>();
     if (m_data.m_prop2 != prop2) {
         m_data.m_prop2 = prop2;
         m_publisher->publishProp2Changed(prop2);
@@ -118,8 +116,15 @@ void ManyParamInterfaceClient::setProp3(int prop3)
     m_client->setRemoteProperty(topic, nlohmann::json(prop3).dump());
 }
 
-void ManyParamInterfaceClient::setProp3Local(int prop3)
+void ManyParamInterfaceClient::setProp3Local(const std::string& args)
 {
+    nlohmann::json fields = nlohmann::json::parse(args);
+    if (fields.empty())
+    {
+        return;
+    }
+
+    int prop3 = fields.get<int>();
     if (m_data.m_prop3 != prop3) {
         m_data.m_prop3 = prop3;
         m_publisher->publishProp3Changed(prop3);
@@ -140,8 +145,15 @@ void ManyParamInterfaceClient::setProp4(int prop4)
     m_client->setRemoteProperty(topic, nlohmann::json(prop4).dump());
 }
 
-void ManyParamInterfaceClient::setProp4Local(int prop4)
+void ManyParamInterfaceClient::setProp4Local(const std::string& args)
 {
+    nlohmann::json fields = nlohmann::json::parse(args);
+    if (fields.empty())
+    {
+        return;
+    }
+
+    int prop4 = fields.get<int>();
     if (m_data.m_prop4 != prop4) {
         m_data.m_prop4 = prop4;
         m_publisher->publishProp4Changed(prop4);
@@ -307,14 +319,6 @@ void ManyParamInterfaceClient::onSignal(const std::string& topic, const std::str
         m_publisher->publishSig4(json_args[0].get<int>(),json_args[1].get<int>(),json_args[2].get<int>(),json_args[3].get<int>());
         return;
     }
-}
-
-void ManyParamInterfaceClient::onPropertyChanged(const std::string& topic, const std::string& args)
-{
-    nlohmann::json json_args = nlohmann::json::parse(args);
-    const std::string& name = ApiGear::MQTT::Topic(topic).getEntityName();
-    applyState({ {name, json_args} });
-    return;
 }
 
 int ManyParamInterfaceClient::registerResponseHandler(ApiGear::MQTT::InvokeReplyFunc handler)

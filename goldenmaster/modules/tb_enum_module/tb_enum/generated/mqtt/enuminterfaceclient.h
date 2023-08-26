@@ -35,17 +35,21 @@ public:
     bool isReady() const;
 
     void onSignal(const std::string& topic, const std::string& args);
-    void onPropertyChanged(const std::string& topic, const std::string& args);
     void onInvokeReply(const std::string& args, const std::string& correlationData);
+    /// @brief sets the value for the property Prop0 coming from the service
+    /// @param args contains the param of the type Enum0Enum
+    void setProp0Local(const std::string& args);
+    /// @brief sets the value for the property Prop1 coming from the service
+    /// @param args contains the param of the type Enum1Enum
+    void setProp1Local(const std::string& args);
+    /// @brief sets the value for the property Prop2 coming from the service
+    /// @param args contains the param of the type Enum2Enum
+    void setProp2Local(const std::string& args);
+    /// @brief sets the value for the property Prop3 coming from the service
+    /// @param args contains the param of the type Enum3Enum
+    void setProp3Local(const std::string& args);
 
 private:
-    void setProp0Local(Enum0Enum prop0);
-    void setProp1Local(Enum1Enum prop1);
-    void setProp2Local(Enum2Enum prop2);
-    void setProp3Local(Enum3Enum prop3);
-
-    void applyState(const nlohmann::json& fields);
-
     bool m_isReady;
     /** Local storage for properties values. */
     EnumInterfaceData m_data;

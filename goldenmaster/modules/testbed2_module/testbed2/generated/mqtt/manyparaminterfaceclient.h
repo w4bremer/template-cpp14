@@ -35,17 +35,21 @@ public:
     bool isReady() const;
 
     void onSignal(const std::string& topic, const std::string& args);
-    void onPropertyChanged(const std::string& topic, const std::string& args);
     void onInvokeReply(const std::string& args, const std::string& correlationData);
+    /// @brief sets the value for the property Prop1 coming from the service
+    /// @param args contains the param of the type int
+    void setProp1Local(const std::string& args);
+    /// @brief sets the value for the property Prop2 coming from the service
+    /// @param args contains the param of the type int
+    void setProp2Local(const std::string& args);
+    /// @brief sets the value for the property Prop3 coming from the service
+    /// @param args contains the param of the type int
+    void setProp3Local(const std::string& args);
+    /// @brief sets the value for the property Prop4 coming from the service
+    /// @param args contains the param of the type int
+    void setProp4Local(const std::string& args);
 
 private:
-    void setProp1Local(int prop1);
-    void setProp2Local(int prop2);
-    void setProp3Local(int prop3);
-    void setProp4Local(int prop4);
-
-    void applyState(const nlohmann::json& fields);
-
     bool m_isReady;
     /** Local storage for properties values. */
     ManyParamInterfaceData m_data;

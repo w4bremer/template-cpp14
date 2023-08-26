@@ -13,14 +13,14 @@ namespace {
     std::map<std::string, ApiGear::MQTT::CallbackFunction> createTopicMap(const std::string&clientId, SimpleInterfaceClient* client)
     {
         return {
-            { std::string("tb.simple/SimpleInterface/prop/propBool"), [client](const std::string& topic, const std::string& args, const std::string&, const std::string&){ client->onPropertyChanged(topic, args); } },
-            { std::string("tb.simple/SimpleInterface/prop/propInt"), [client](const std::string& topic, const std::string& args, const std::string&, const std::string&){ client->onPropertyChanged(topic, args); } },
-            { std::string("tb.simple/SimpleInterface/prop/propInt32"), [client](const std::string& topic, const std::string& args, const std::string&, const std::string&){ client->onPropertyChanged(topic, args); } },
-            { std::string("tb.simple/SimpleInterface/prop/propInt64"), [client](const std::string& topic, const std::string& args, const std::string&, const std::string&){ client->onPropertyChanged(topic, args); } },
-            { std::string("tb.simple/SimpleInterface/prop/propFloat"), [client](const std::string& topic, const std::string& args, const std::string&, const std::string&){ client->onPropertyChanged(topic, args); } },
-            { std::string("tb.simple/SimpleInterface/prop/propFloat32"), [client](const std::string& topic, const std::string& args, const std::string&, const std::string&){ client->onPropertyChanged(topic, args); } },
-            { std::string("tb.simple/SimpleInterface/prop/propFloat64"), [client](const std::string& topic, const std::string& args, const std::string&, const std::string&){ client->onPropertyChanged(topic, args); } },
-            { std::string("tb.simple/SimpleInterface/prop/propString"), [client](const std::string& topic, const std::string& args, const std::string&, const std::string&){ client->onPropertyChanged(topic, args); } },
+            { std::string("tb.simple/SimpleInterface/prop/propBool"), [client](const std::string&, const std::string& args, const std::string&, const std::string&){ client->setPropBoolLocal(args); } },
+            { std::string("tb.simple/SimpleInterface/prop/propInt"), [client](const std::string&, const std::string& args, const std::string&, const std::string&){ client->setPropIntLocal(args); } },
+            { std::string("tb.simple/SimpleInterface/prop/propInt32"), [client](const std::string&, const std::string& args, const std::string&, const std::string&){ client->setPropInt32Local(args); } },
+            { std::string("tb.simple/SimpleInterface/prop/propInt64"), [client](const std::string&, const std::string& args, const std::string&, const std::string&){ client->setPropInt64Local(args); } },
+            { std::string("tb.simple/SimpleInterface/prop/propFloat"), [client](const std::string&, const std::string& args, const std::string&, const std::string&){ client->setPropFloatLocal(args); } },
+            { std::string("tb.simple/SimpleInterface/prop/propFloat32"), [client](const std::string&, const std::string& args, const std::string&, const std::string&){ client->setPropFloat32Local(args); } },
+            { std::string("tb.simple/SimpleInterface/prop/propFloat64"), [client](const std::string&, const std::string& args, const std::string&, const std::string&){ client->setPropFloat64Local(args); } },
+            { std::string("tb.simple/SimpleInterface/prop/propString"), [client](const std::string&, const std::string& args, const std::string&, const std::string&){ client->setPropStringLocal(args); } },
             { std::string("tb.simple/SimpleInterface/sig/sigBool"), [client](const std::string& topic, const std::string& args, const std::string&, const std::string&){ client->onSignal(topic, args); } },
             { std::string("tb.simple/SimpleInterface/sig/sigInt"), [client](const std::string& topic, const std::string& args, const std::string&, const std::string&){ client->onSignal(topic, args); } },
             { std::string("tb.simple/SimpleInterface/sig/sigInt32"), [client](const std::string& topic, const std::string& args, const std::string&, const std::string&){ client->onSignal(topic, args); } },
@@ -61,34 +61,6 @@ SimpleInterfaceClient::~SimpleInterfaceClient()
     }
 }
 
-void SimpleInterfaceClient::applyState(const nlohmann::json& fields) 
-{
-    if(fields.contains("propBool")) {
-        setPropBoolLocal(fields["propBool"].get<bool>());
-    }
-    if(fields.contains("propInt")) {
-        setPropIntLocal(fields["propInt"].get<int>());
-    }
-    if(fields.contains("propInt32")) {
-        setPropInt32Local(fields["propInt32"].get<int32_t>());
-    }
-    if(fields.contains("propInt64")) {
-        setPropInt64Local(fields["propInt64"].get<int64_t>());
-    }
-    if(fields.contains("propFloat")) {
-        setPropFloatLocal(fields["propFloat"].get<float>());
-    }
-    if(fields.contains("propFloat32")) {
-        setPropFloat32Local(fields["propFloat32"].get<float>());
-    }
-    if(fields.contains("propFloat64")) {
-        setPropFloat64Local(fields["propFloat64"].get<double>());
-    }
-    if(fields.contains("propString")) {
-        setPropStringLocal(fields["propString"].get<std::string>());
-    }
-}
-
 void SimpleInterfaceClient::setPropBool(bool propBool)
 {
     if(m_client == nullptr) {
@@ -98,8 +70,15 @@ void SimpleInterfaceClient::setPropBool(bool propBool)
     m_client->setRemoteProperty(topic, nlohmann::json(propBool).dump());
 }
 
-void SimpleInterfaceClient::setPropBoolLocal(bool propBool)
+void SimpleInterfaceClient::setPropBoolLocal(const std::string& args)
 {
+    nlohmann::json fields = nlohmann::json::parse(args);
+    if (fields.empty())
+    {
+        return;
+    }
+
+    bool propBool = fields.get<bool>();
     if (m_data.m_propBool != propBool) {
         m_data.m_propBool = propBool;
         m_publisher->publishPropBoolChanged(propBool);
@@ -120,8 +99,15 @@ void SimpleInterfaceClient::setPropInt(int propInt)
     m_client->setRemoteProperty(topic, nlohmann::json(propInt).dump());
 }
 
-void SimpleInterfaceClient::setPropIntLocal(int propInt)
+void SimpleInterfaceClient::setPropIntLocal(const std::string& args)
 {
+    nlohmann::json fields = nlohmann::json::parse(args);
+    if (fields.empty())
+    {
+        return;
+    }
+
+    int propInt = fields.get<int>();
     if (m_data.m_propInt != propInt) {
         m_data.m_propInt = propInt;
         m_publisher->publishPropIntChanged(propInt);
@@ -142,8 +128,15 @@ void SimpleInterfaceClient::setPropInt32(int32_t propInt32)
     m_client->setRemoteProperty(topic, nlohmann::json(propInt32).dump());
 }
 
-void SimpleInterfaceClient::setPropInt32Local(int32_t propInt32)
+void SimpleInterfaceClient::setPropInt32Local(const std::string& args)
 {
+    nlohmann::json fields = nlohmann::json::parse(args);
+    if (fields.empty())
+    {
+        return;
+    }
+
+    int32_t propInt32 = fields.get<int32_t>();
     if (m_data.m_propInt32 != propInt32) {
         m_data.m_propInt32 = propInt32;
         m_publisher->publishPropInt32Changed(propInt32);
@@ -164,8 +157,15 @@ void SimpleInterfaceClient::setPropInt64(int64_t propInt64)
     m_client->setRemoteProperty(topic, nlohmann::json(propInt64).dump());
 }
 
-void SimpleInterfaceClient::setPropInt64Local(int64_t propInt64)
+void SimpleInterfaceClient::setPropInt64Local(const std::string& args)
 {
+    nlohmann::json fields = nlohmann::json::parse(args);
+    if (fields.empty())
+    {
+        return;
+    }
+
+    int64_t propInt64 = fields.get<int64_t>();
     if (m_data.m_propInt64 != propInt64) {
         m_data.m_propInt64 = propInt64;
         m_publisher->publishPropInt64Changed(propInt64);
@@ -186,8 +186,15 @@ void SimpleInterfaceClient::setPropFloat(float propFloat)
     m_client->setRemoteProperty(topic, nlohmann::json(propFloat).dump());
 }
 
-void SimpleInterfaceClient::setPropFloatLocal(float propFloat)
+void SimpleInterfaceClient::setPropFloatLocal(const std::string& args)
 {
+    nlohmann::json fields = nlohmann::json::parse(args);
+    if (fields.empty())
+    {
+        return;
+    }
+
+    float propFloat = fields.get<float>();
     if (m_data.m_propFloat != propFloat) {
         m_data.m_propFloat = propFloat;
         m_publisher->publishPropFloatChanged(propFloat);
@@ -208,8 +215,15 @@ void SimpleInterfaceClient::setPropFloat32(float propFloat32)
     m_client->setRemoteProperty(topic, nlohmann::json(propFloat32).dump());
 }
 
-void SimpleInterfaceClient::setPropFloat32Local(float propFloat32)
+void SimpleInterfaceClient::setPropFloat32Local(const std::string& args)
 {
+    nlohmann::json fields = nlohmann::json::parse(args);
+    if (fields.empty())
+    {
+        return;
+    }
+
+    float propFloat32 = fields.get<float>();
     if (m_data.m_propFloat32 != propFloat32) {
         m_data.m_propFloat32 = propFloat32;
         m_publisher->publishPropFloat32Changed(propFloat32);
@@ -230,8 +244,15 @@ void SimpleInterfaceClient::setPropFloat64(double propFloat64)
     m_client->setRemoteProperty(topic, nlohmann::json(propFloat64).dump());
 }
 
-void SimpleInterfaceClient::setPropFloat64Local(double propFloat64)
+void SimpleInterfaceClient::setPropFloat64Local(const std::string& args)
 {
+    nlohmann::json fields = nlohmann::json::parse(args);
+    if (fields.empty())
+    {
+        return;
+    }
+
+    double propFloat64 = fields.get<double>();
     if (m_data.m_propFloat64 != propFloat64) {
         m_data.m_propFloat64 = propFloat64;
         m_publisher->publishPropFloat64Changed(propFloat64);
@@ -252,8 +273,15 @@ void SimpleInterfaceClient::setPropString(const std::string& propString)
     m_client->setRemoteProperty(topic, nlohmann::json(propString).dump());
 }
 
-void SimpleInterfaceClient::setPropStringLocal(const std::string& propString)
+void SimpleInterfaceClient::setPropStringLocal(const std::string& args)
 {
+    nlohmann::json fields = nlohmann::json::parse(args);
+    if (fields.empty())
+    {
+        return;
+    }
+
+    const std::string& propString = fields.get<std::string>();
     if (m_data.m_propString != propString) {
         m_data.m_propString = propString;
         m_publisher->publishPropStringChanged(propString);
@@ -557,14 +585,6 @@ void SimpleInterfaceClient::onSignal(const std::string& topic, const std::string
         m_publisher->publishSigString(json_args[0].get<std::string>());
         return;
     }
-}
-
-void SimpleInterfaceClient::onPropertyChanged(const std::string& topic, const std::string& args)
-{
-    nlohmann::json json_args = nlohmann::json::parse(args);
-    const std::string& name = ApiGear::MQTT::Topic(topic).getEntityName();
-    applyState({ {name, json_args} });
-    return;
 }
 
 int SimpleInterfaceClient::registerResponseHandler(ApiGear::MQTT::InvokeReplyFunc handler)

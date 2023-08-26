@@ -13,10 +13,10 @@ namespace {
     std::map<std::string, ApiGear::MQTT::CallbackFunction> createTopicMap(const std::string&clientId, StructInterfaceClient* client)
     {
         return {
-            { std::string("testbed1/StructInterface/prop/propBool"), [client](const std::string& topic, const std::string& args, const std::string&, const std::string&){ client->onPropertyChanged(topic, args); } },
-            { std::string("testbed1/StructInterface/prop/propInt"), [client](const std::string& topic, const std::string& args, const std::string&, const std::string&){ client->onPropertyChanged(topic, args); } },
-            { std::string("testbed1/StructInterface/prop/propFloat"), [client](const std::string& topic, const std::string& args, const std::string&, const std::string&){ client->onPropertyChanged(topic, args); } },
-            { std::string("testbed1/StructInterface/prop/propString"), [client](const std::string& topic, const std::string& args, const std::string&, const std::string&){ client->onPropertyChanged(topic, args); } },
+            { std::string("testbed1/StructInterface/prop/propBool"), [client](const std::string&, const std::string& args, const std::string&, const std::string&){ client->setPropBoolLocal(args); } },
+            { std::string("testbed1/StructInterface/prop/propInt"), [client](const std::string&, const std::string& args, const std::string&, const std::string&){ client->setPropIntLocal(args); } },
+            { std::string("testbed1/StructInterface/prop/propFloat"), [client](const std::string&, const std::string& args, const std::string&, const std::string&){ client->setPropFloatLocal(args); } },
+            { std::string("testbed1/StructInterface/prop/propString"), [client](const std::string&, const std::string& args, const std::string&, const std::string&){ client->setPropStringLocal(args); } },
             { std::string("testbed1/StructInterface/sig/sigBool"), [client](const std::string& topic, const std::string& args, const std::string&, const std::string&){ client->onSignal(topic, args); } },
             { std::string("testbed1/StructInterface/sig/sigInt"), [client](const std::string& topic, const std::string& args, const std::string&, const std::string&){ client->onSignal(topic, args); } },
             { std::string("testbed1/StructInterface/sig/sigFloat"), [client](const std::string& topic, const std::string& args, const std::string&, const std::string&){ client->onSignal(topic, args); } },
@@ -49,22 +49,6 @@ StructInterfaceClient::~StructInterfaceClient()
     }
 }
 
-void StructInterfaceClient::applyState(const nlohmann::json& fields) 
-{
-    if(fields.contains("propBool")) {
-        setPropBoolLocal(fields["propBool"].get<StructBool>());
-    }
-    if(fields.contains("propInt")) {
-        setPropIntLocal(fields["propInt"].get<StructInt>());
-    }
-    if(fields.contains("propFloat")) {
-        setPropFloatLocal(fields["propFloat"].get<StructFloat>());
-    }
-    if(fields.contains("propString")) {
-        setPropStringLocal(fields["propString"].get<StructString>());
-    }
-}
-
 void StructInterfaceClient::setPropBool(const StructBool& propBool)
 {
     if(m_client == nullptr) {
@@ -74,8 +58,15 @@ void StructInterfaceClient::setPropBool(const StructBool& propBool)
     m_client->setRemoteProperty(topic, nlohmann::json(propBool).dump());
 }
 
-void StructInterfaceClient::setPropBoolLocal(const StructBool& propBool)
+void StructInterfaceClient::setPropBoolLocal(const std::string& args)
 {
+    nlohmann::json fields = nlohmann::json::parse(args);
+    if (fields.empty())
+    {
+        return;
+    }
+
+    const StructBool& propBool = fields.get<StructBool>();
     if (m_data.m_propBool != propBool) {
         m_data.m_propBool = propBool;
         m_publisher->publishPropBoolChanged(propBool);
@@ -96,8 +87,15 @@ void StructInterfaceClient::setPropInt(const StructInt& propInt)
     m_client->setRemoteProperty(topic, nlohmann::json(propInt).dump());
 }
 
-void StructInterfaceClient::setPropIntLocal(const StructInt& propInt)
+void StructInterfaceClient::setPropIntLocal(const std::string& args)
 {
+    nlohmann::json fields = nlohmann::json::parse(args);
+    if (fields.empty())
+    {
+        return;
+    }
+
+    const StructInt& propInt = fields.get<StructInt>();
     if (m_data.m_propInt != propInt) {
         m_data.m_propInt = propInt;
         m_publisher->publishPropIntChanged(propInt);
@@ -118,8 +116,15 @@ void StructInterfaceClient::setPropFloat(const StructFloat& propFloat)
     m_client->setRemoteProperty(topic, nlohmann::json(propFloat).dump());
 }
 
-void StructInterfaceClient::setPropFloatLocal(const StructFloat& propFloat)
+void StructInterfaceClient::setPropFloatLocal(const std::string& args)
 {
+    nlohmann::json fields = nlohmann::json::parse(args);
+    if (fields.empty())
+    {
+        return;
+    }
+
+    const StructFloat& propFloat = fields.get<StructFloat>();
     if (m_data.m_propFloat != propFloat) {
         m_data.m_propFloat = propFloat;
         m_publisher->publishPropFloatChanged(propFloat);
@@ -140,8 +145,15 @@ void StructInterfaceClient::setPropString(const StructString& propString)
     m_client->setRemoteProperty(topic, nlohmann::json(propString).dump());
 }
 
-void StructInterfaceClient::setPropStringLocal(const StructString& propString)
+void StructInterfaceClient::setPropStringLocal(const std::string& args)
 {
+    nlohmann::json fields = nlohmann::json::parse(args);
+    if (fields.empty())
+    {
+        return;
+    }
+
+    const StructString& propString = fields.get<StructString>();
     if (m_data.m_propString != propString) {
         m_data.m_propString = propString;
         m_publisher->publishPropStringChanged(propString);
@@ -301,14 +313,6 @@ void StructInterfaceClient::onSignal(const std::string& topic, const std::string
         m_publisher->publishSigString(json_args[0].get<StructString>());
         return;
     }
-}
-
-void StructInterfaceClient::onPropertyChanged(const std::string& topic, const std::string& args)
-{
-    nlohmann::json json_args = nlohmann::json::parse(args);
-    const std::string& name = ApiGear::MQTT::Topic(topic).getEntityName();
-    applyState({ {name, json_args} });
-    return;
 }
 
 int StructInterfaceClient::registerResponseHandler(ApiGear::MQTT::InvokeReplyFunc handler)

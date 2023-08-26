@@ -23,15 +23,15 @@ public:
     bool isReady() const;
 
     void onSignal(const std::string& topic, const std::string& args);
-    void onPropertyChanged(const std::string& topic, const std::string& args);
     void onInvokeReply(const std::string& args, const std::string& correlationData);
+    /// @brief sets the value for the property PropBool coming from the service
+    /// @param args contains the param of the type bool
+    void setPropBoolLocal(const std::string& args);
+    /// @brief sets the value for the property PropInt coming from the service
+    /// @param args contains the param of the type int
+    void setPropIntLocal(const std::string& args);
 
 private:
-    void setPropBoolLocal(bool propBool);
-    void setPropIntLocal(int propInt);
-
-    void applyState(const nlohmann::json& fields);
-
     bool m_isReady;
     /** Local storage for properties values. */
     NoOperationsInterfaceData m_data;

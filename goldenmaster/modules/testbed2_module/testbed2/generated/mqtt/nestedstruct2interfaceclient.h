@@ -27,15 +27,15 @@ public:
     bool isReady() const;
 
     void onSignal(const std::string& topic, const std::string& args);
-    void onPropertyChanged(const std::string& topic, const std::string& args);
     void onInvokeReply(const std::string& args, const std::string& correlationData);
+    /// @brief sets the value for the property Prop1 coming from the service
+    /// @param args contains the param of the type NestedStruct1
+    void setProp1Local(const std::string& args);
+    /// @brief sets the value for the property Prop2 coming from the service
+    /// @param args contains the param of the type NestedStruct2
+    void setProp2Local(const std::string& args);
 
 private:
-    void setProp1Local(const NestedStruct1& prop1);
-    void setProp2Local(const NestedStruct2& prop2);
-
-    void applyState(const nlohmann::json& fields);
-
     bool m_isReady;
     /** Local storage for properties values. */
     NestedStruct2InterfaceData m_data;

@@ -21,13 +21,9 @@ public:
     bool isReady() const;
 
     void onSignal(const std::string& topic, const std::string& args);
-    void onPropertyChanged(const std::string& topic, const std::string& args);
     void onInvokeReply(const std::string& args, const std::string& correlationData);
 
 private:
-
-    void applyState(const nlohmann::json& fields);
-
     bool m_isReady;
     std::shared_ptr<ApiGear::MQTT::Client> m_client;
 

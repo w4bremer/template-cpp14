@@ -38,17 +38,16 @@ public:
     bool isReady() const;
 
     void onSignal(const std::string& topic, const std::string& args);
-    void onPropertyChanged(const std::string& topic, const std::string& args);
     void onInvokeReply(const std::string& args, const std::string& correlationData);
 
-private:
 {{- range .Interface.Properties}}
 {{- $property := . }}
-    void set{{Camel $property.Name}}Local({{cppParam "" $property}});
+    /// @brief sets the value for the property {{Camel $property.Name}} coming from the service
+    /// @param args contains the param of the type {{cppType "" $property }}
+    void set{{Camel $property.Name}}Local(const std::string& args);
 {{- end }}
 
-    void applyState(const nlohmann::json& fields);
-
+private:
     bool m_isReady;
 {{- if len .Interface.Properties}}
     /** Local storage for properties values. */

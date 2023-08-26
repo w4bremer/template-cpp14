@@ -21,7 +21,7 @@ namespace {
         return {
         {{- range .Interface.Properties}}
         {{- $property := . }}
-            { std::string("{{$.Module.Name}}/{{$interfaceName}}/prop/{{$property}}"), [client](const std::string& topic, const std::string& args, const std::string&, const std::string&){ client->onPropertyChanged(topic, args); } },
+            { std::string("{{$.Module.Name}}/{{$interfaceName}}/prop/{{$property}}"), [client](const std::string&, const std::string& args, const std::string&, const std::string&){ client->set{{Camel $property.Name}}Local(args); } },
         {{- end }}
         {{- range .Interface.Signals}}
         {{- $signal := . }}
@@ -55,19 +55,6 @@ namespace {
     }
 }
 
-void {{$class}}::applyState(const nlohmann::json& fields) 
-{
-{{- range .Interface.Properties}}
-{{- $property := . }}
-    if(fields.contains("{{$property.Name}}")) {
-        set{{Camel $property.Name}}Local(fields["{{$property.Name}}"].get<{{cppType "" $property}}>());
-    }
-{{- else -}}
-    // no properties to apply state {{- /* we generate anyway for consistency */}}
-    (void) fields;
-{{- end }}
-}
-
 {{- range .Interface.Properties}}
 {{- $property := . }}
 {{- $name := $property.Name }}
@@ -81,8 +68,15 @@ void {{$class}}::set{{Camel $name}}({{cppParam "" $property}})
     m_client->setRemoteProperty(topic, nlohmann::json({{$property}}).dump());
 }
 
-void {{$class}}::set{{Camel $name}}Local({{cppParam "" $property }})
+void {{$class}}::set{{Camel $name}}Local(const std::string& args)
 {
+    nlohmann::json fields = nlohmann::json::parse(args);
+    if (fields.empty())
+    {
+        return;
+    }
+
+    {{ cppParam "" $property }} = fields.get<{{cppType "" $property}}>();
     if (m_data.m_{{$name}} != {{$name}}) {
         m_data.m_{{$name}} = {{$name}};
         m_publisher->publish{{Camel $name}}Changed({{$name}});
@@ -167,14 +161,6 @@ void {{$class}}::onSignal(const std::string& topic, const std::string& args)
     (void) args;
     (void) topic;
 {{- end }}
-}
-
-void {{$class}}::onPropertyChanged(const std::string& topic, const std::string& args)
-{
-    nlohmann::json json_args = nlohmann::json::parse(args);
-    const std::string& name = ApiGear::MQTT::Topic(topic).getEntityName();
-    applyState({ {name, json_args} });
-    return;
 }
 
 int {{$class}}::registerResponseHandler(ApiGear::MQTT::InvokeReplyFunc handler)

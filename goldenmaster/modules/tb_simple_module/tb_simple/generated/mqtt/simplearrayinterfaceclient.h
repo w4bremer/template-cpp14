@@ -51,21 +51,33 @@ public:
     bool isReady() const;
 
     void onSignal(const std::string& topic, const std::string& args);
-    void onPropertyChanged(const std::string& topic, const std::string& args);
     void onInvokeReply(const std::string& args, const std::string& correlationData);
+    /// @brief sets the value for the property PropBool coming from the service
+    /// @param args contains the param of the type std::list<bool>
+    void setPropBoolLocal(const std::string& args);
+    /// @brief sets the value for the property PropInt coming from the service
+    /// @param args contains the param of the type std::list<int>
+    void setPropIntLocal(const std::string& args);
+    /// @brief sets the value for the property PropInt32 coming from the service
+    /// @param args contains the param of the type std::list<int32_t>
+    void setPropInt32Local(const std::string& args);
+    /// @brief sets the value for the property PropInt64 coming from the service
+    /// @param args contains the param of the type std::list<int64_t>
+    void setPropInt64Local(const std::string& args);
+    /// @brief sets the value for the property PropFloat coming from the service
+    /// @param args contains the param of the type std::list<float>
+    void setPropFloatLocal(const std::string& args);
+    /// @brief sets the value for the property PropFloat32 coming from the service
+    /// @param args contains the param of the type std::list<float>
+    void setPropFloat32Local(const std::string& args);
+    /// @brief sets the value for the property PropFloat64 coming from the service
+    /// @param args contains the param of the type std::list<double>
+    void setPropFloat64Local(const std::string& args);
+    /// @brief sets the value for the property PropString coming from the service
+    /// @param args contains the param of the type std::list<std::string>
+    void setPropStringLocal(const std::string& args);
 
 private:
-    void setPropBoolLocal(const std::list<bool>& propBool);
-    void setPropIntLocal(const std::list<int>& propInt);
-    void setPropInt32Local(const std::list<int32_t>& propInt32);
-    void setPropInt64Local(const std::list<int64_t>& propInt64);
-    void setPropFloatLocal(const std::list<float>& propFloat);
-    void setPropFloat32Local(const std::list<float>& propFloat32);
-    void setPropFloat64Local(const std::list<double>& propFloat64);
-    void setPropStringLocal(const std::list<std::string>& propString);
-
-    void applyState(const nlohmann::json& fields);
-
     bool m_isReady;
     /** Local storage for properties values. */
     SimpleArrayInterfaceData m_data;

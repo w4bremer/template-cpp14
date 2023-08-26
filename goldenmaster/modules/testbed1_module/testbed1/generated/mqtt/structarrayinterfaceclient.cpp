@@ -13,10 +13,10 @@ namespace {
     std::map<std::string, ApiGear::MQTT::CallbackFunction> createTopicMap(const std::string&clientId, StructArrayInterfaceClient* client)
     {
         return {
-            { std::string("testbed1/StructArrayInterface/prop/propBool"), [client](const std::string& topic, const std::string& args, const std::string&, const std::string&){ client->onPropertyChanged(topic, args); } },
-            { std::string("testbed1/StructArrayInterface/prop/propInt"), [client](const std::string& topic, const std::string& args, const std::string&, const std::string&){ client->onPropertyChanged(topic, args); } },
-            { std::string("testbed1/StructArrayInterface/prop/propFloat"), [client](const std::string& topic, const std::string& args, const std::string&, const std::string&){ client->onPropertyChanged(topic, args); } },
-            { std::string("testbed1/StructArrayInterface/prop/propString"), [client](const std::string& topic, const std::string& args, const std::string&, const std::string&){ client->onPropertyChanged(topic, args); } },
+            { std::string("testbed1/StructArrayInterface/prop/propBool"), [client](const std::string&, const std::string& args, const std::string&, const std::string&){ client->setPropBoolLocal(args); } },
+            { std::string("testbed1/StructArrayInterface/prop/propInt"), [client](const std::string&, const std::string& args, const std::string&, const std::string&){ client->setPropIntLocal(args); } },
+            { std::string("testbed1/StructArrayInterface/prop/propFloat"), [client](const std::string&, const std::string& args, const std::string&, const std::string&){ client->setPropFloatLocal(args); } },
+            { std::string("testbed1/StructArrayInterface/prop/propString"), [client](const std::string&, const std::string& args, const std::string&, const std::string&){ client->setPropStringLocal(args); } },
             { std::string("testbed1/StructArrayInterface/sig/sigBool"), [client](const std::string& topic, const std::string& args, const std::string&, const std::string&){ client->onSignal(topic, args); } },
             { std::string("testbed1/StructArrayInterface/sig/sigInt"), [client](const std::string& topic, const std::string& args, const std::string&, const std::string&){ client->onSignal(topic, args); } },
             { std::string("testbed1/StructArrayInterface/sig/sigFloat"), [client](const std::string& topic, const std::string& args, const std::string&, const std::string&){ client->onSignal(topic, args); } },
@@ -49,22 +49,6 @@ StructArrayInterfaceClient::~StructArrayInterfaceClient()
     }
 }
 
-void StructArrayInterfaceClient::applyState(const nlohmann::json& fields) 
-{
-    if(fields.contains("propBool")) {
-        setPropBoolLocal(fields["propBool"].get<std::list<StructBool>>());
-    }
-    if(fields.contains("propInt")) {
-        setPropIntLocal(fields["propInt"].get<std::list<StructInt>>());
-    }
-    if(fields.contains("propFloat")) {
-        setPropFloatLocal(fields["propFloat"].get<std::list<StructFloat>>());
-    }
-    if(fields.contains("propString")) {
-        setPropStringLocal(fields["propString"].get<std::list<StructString>>());
-    }
-}
-
 void StructArrayInterfaceClient::setPropBool(const std::list<StructBool>& propBool)
 {
     if(m_client == nullptr) {
@@ -74,8 +58,15 @@ void StructArrayInterfaceClient::setPropBool(const std::list<StructBool>& propBo
     m_client->setRemoteProperty(topic, nlohmann::json(propBool).dump());
 }
 
-void StructArrayInterfaceClient::setPropBoolLocal(const std::list<StructBool>& propBool)
+void StructArrayInterfaceClient::setPropBoolLocal(const std::string& args)
 {
+    nlohmann::json fields = nlohmann::json::parse(args);
+    if (fields.empty())
+    {
+        return;
+    }
+
+    const std::list<StructBool>& propBool = fields.get<std::list<StructBool>>();
     if (m_data.m_propBool != propBool) {
         m_data.m_propBool = propBool;
         m_publisher->publishPropBoolChanged(propBool);
@@ -96,8 +87,15 @@ void StructArrayInterfaceClient::setPropInt(const std::list<StructInt>& propInt)
     m_client->setRemoteProperty(topic, nlohmann::json(propInt).dump());
 }
 
-void StructArrayInterfaceClient::setPropIntLocal(const std::list<StructInt>& propInt)
+void StructArrayInterfaceClient::setPropIntLocal(const std::string& args)
 {
+    nlohmann::json fields = nlohmann::json::parse(args);
+    if (fields.empty())
+    {
+        return;
+    }
+
+    const std::list<StructInt>& propInt = fields.get<std::list<StructInt>>();
     if (m_data.m_propInt != propInt) {
         m_data.m_propInt = propInt;
         m_publisher->publishPropIntChanged(propInt);
@@ -118,8 +116,15 @@ void StructArrayInterfaceClient::setPropFloat(const std::list<StructFloat>& prop
     m_client->setRemoteProperty(topic, nlohmann::json(propFloat).dump());
 }
 
-void StructArrayInterfaceClient::setPropFloatLocal(const std::list<StructFloat>& propFloat)
+void StructArrayInterfaceClient::setPropFloatLocal(const std::string& args)
 {
+    nlohmann::json fields = nlohmann::json::parse(args);
+    if (fields.empty())
+    {
+        return;
+    }
+
+    const std::list<StructFloat>& propFloat = fields.get<std::list<StructFloat>>();
     if (m_data.m_propFloat != propFloat) {
         m_data.m_propFloat = propFloat;
         m_publisher->publishPropFloatChanged(propFloat);
@@ -140,8 +145,15 @@ void StructArrayInterfaceClient::setPropString(const std::list<StructString>& pr
     m_client->setRemoteProperty(topic, nlohmann::json(propString).dump());
 }
 
-void StructArrayInterfaceClient::setPropStringLocal(const std::list<StructString>& propString)
+void StructArrayInterfaceClient::setPropStringLocal(const std::string& args)
 {
+    nlohmann::json fields = nlohmann::json::parse(args);
+    if (fields.empty())
+    {
+        return;
+    }
+
+    const std::list<StructString>& propString = fields.get<std::list<StructString>>();
     if (m_data.m_propString != propString) {
         m_data.m_propString = propString;
         m_publisher->publishPropStringChanged(propString);
@@ -301,14 +313,6 @@ void StructArrayInterfaceClient::onSignal(const std::string& topic, const std::s
         m_publisher->publishSigString(json_args[0].get<std::list<StructString>>());
         return;
     }
-}
-
-void StructArrayInterfaceClient::onPropertyChanged(const std::string& topic, const std::string& args)
-{
-    nlohmann::json json_args = nlohmann::json::parse(args);
-    const std::string& name = ApiGear::MQTT::Topic(topic).getEntityName();
-    applyState({ {name, json_args} });
-    return;
 }
 
 int StructArrayInterfaceClient::registerResponseHandler(ApiGear::MQTT::InvokeReplyFunc handler)

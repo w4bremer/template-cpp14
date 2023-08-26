@@ -41,11 +41,6 @@ NoPropertiesInterfaceClient::~NoPropertiesInterfaceClient()
     }
 }
 
-void NoPropertiesInterfaceClient::applyState(const nlohmann::json& fields) 
-{// no properties to apply state
-    (void) fields;
-}
-
 void NoPropertiesInterfaceClient::funcVoid()
 {
     if(m_client == nullptr) {
@@ -119,14 +114,6 @@ void NoPropertiesInterfaceClient::onSignal(const std::string& topic, const std::
         m_publisher->publishSigBool(json_args[0].get<bool>());
         return;
     }
-}
-
-void NoPropertiesInterfaceClient::onPropertyChanged(const std::string& topic, const std::string& args)
-{
-    nlohmann::json json_args = nlohmann::json::parse(args);
-    const std::string& name = ApiGear::MQTT::Topic(topic).getEntityName();
-    applyState({ {name, json_args} });
-    return;
 }
 
 int NoPropertiesInterfaceClient::registerResponseHandler(ApiGear::MQTT::InvokeReplyFunc handler)

@@ -35,17 +35,21 @@ public:
     bool isReady() const;
 
     void onSignal(const std::string& topic, const std::string& args);
-    void onPropertyChanged(const std::string& topic, const std::string& args);
     void onInvokeReply(const std::string& args, const std::string& correlationData);
+    /// @brief sets the value for the property PropBool coming from the service
+    /// @param args contains the param of the type StructBool
+    void setPropBoolLocal(const std::string& args);
+    /// @brief sets the value for the property PropInt coming from the service
+    /// @param args contains the param of the type StructInt
+    void setPropIntLocal(const std::string& args);
+    /// @brief sets the value for the property PropFloat coming from the service
+    /// @param args contains the param of the type StructFloat
+    void setPropFloatLocal(const std::string& args);
+    /// @brief sets the value for the property PropString coming from the service
+    /// @param args contains the param of the type StructString
+    void setPropStringLocal(const std::string& args);
 
 private:
-    void setPropBoolLocal(const StructBool& propBool);
-    void setPropIntLocal(const StructInt& propInt);
-    void setPropFloatLocal(const StructFloat& propFloat);
-    void setPropStringLocal(const StructString& propString);
-
-    void applyState(const nlohmann::json& fields);
-
     bool m_isReady;
     /** Local storage for properties values. */
     StructInterfaceData m_data;
