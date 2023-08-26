@@ -1,6 +1,5 @@
 #include "tb_same2/generated/mqtt/sameenum1interfaceservice.h"
 #include "tb_same2/generated/core/tb_same2.json.adapter.h"
-#include "apigear/mqtt/mqtttopic.h"
 #include <iostream>
 
 using namespace Test::TbSame2;
@@ -11,7 +10,7 @@ namespace {
     {
         return {
             {std::string("tb.same2/SameEnum1Interface/set/prop1"), [service](const std::string&, const std::string& args, const std::string&, const std::string&){ service->onSetProp1(args); } },
-            {std::string("tb.same2/SameEnum1Interface/rpc/func1"), [service](const std::string& topic, const std::string& args, const std::string& responseTopic, const std::string& correlationData) { service->onInvoke(topic, args, responseTopic, correlationData); } },
+            {std::string("tb.same2/SameEnum1Interface/rpc/func1"), [service](const std::string&, const std::string& args, const std::string& responseTopic, const std::string& correlationData) { service->onInvokeFunc1(args, responseTopic, correlationData); } },
         };
     };
 }
@@ -64,19 +63,12 @@ void SameEnum1InterfaceService::onSetProp1(const std::string& args) const
     auto prop1 = json_args.get<Enum1Enum>();
     m_impl->setProp1(prop1);
 }
-
-void SameEnum1InterfaceService::onInvoke(const std::string& topic, const std::string& args, const std::string& responseTopic, const std::string& correlationData)
+void SameEnum1InterfaceService::onInvokeFunc1(const std::string& args, const std::string& responseTopic, const std::string& correlationData) const
 {
     nlohmann::json json_args = nlohmann::json::parse(args);
-    const std::string& name = ApiGear::MQTT::Topic(topic).getEntityName();
-
-
-    if(name == "func1") {
-        const Enum1Enum& param1 = json_args.at(0).get<Enum1Enum>();
-        auto result = m_impl->func1(param1);
-        m_service->notifyInvokeResponse(responseTopic, nlohmann::json(result).dump(), correlationData);
-        return;
-    }
+    const Enum1Enum& param1 = json_args.at(0).get<Enum1Enum>();
+    auto result = m_impl->func1(param1);
+    m_service->notifyInvokeResponse(responseTopic, nlohmann::json(result).dump(), correlationData);
 }
 void SameEnum1InterfaceService::onSig1(Enum1Enum param1)
 {

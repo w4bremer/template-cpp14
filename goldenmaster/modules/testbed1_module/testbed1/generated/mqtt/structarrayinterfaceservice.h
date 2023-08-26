@@ -14,8 +14,10 @@ public:
     virtual ~StructArrayInterfaceService() override;
 
     void onConnectionStatusChanged(bool connectionStatus);
-
-    void onInvoke(const std::string& topic, const std::string& args, const std::string& responseTopic, const std::string& correlationData);
+    void onInvokeFuncBool(const std::string& args, const std::string& responseTopic, const std::string& correlationData) const;
+    void onInvokeFuncInt(const std::string& args, const std::string& responseTopic, const std::string& correlationData) const;
+    void onInvokeFuncFloat(const std::string& args, const std::string& responseTopic, const std::string& correlationData) const;
+    void onInvokeFuncString(const std::string& args, const std::string& responseTopic, const std::string& correlationData) const;
 
     // IStructArrayInterfaceSubscriber interface
     void onSigBool(const std::list<StructBool>& paramBool) override;

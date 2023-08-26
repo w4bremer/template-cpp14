@@ -1,6 +1,5 @@
 #include "tb_simple/generated/mqtt/voidinterfaceservice.h"
 #include "tb_simple/generated/core/tb_simple.json.adapter.h"
-#include "apigear/mqtt/mqtttopic.h"
 #include <iostream>
 
 using namespace Test::TbSimple;
@@ -10,7 +9,7 @@ namespace {
     std::map<std::string, ApiGear::MQTT::CallbackFunction> createTopicMap(VoidInterfaceService* service)
     {
         return {
-            {std::string("tb.simple/VoidInterface/rpc/funcVoid"), [service](const std::string& topic, const std::string& args, const std::string& responseTopic, const std::string& correlationData) { service->onInvoke(topic, args, responseTopic, correlationData); } },
+            {std::string("tb.simple/VoidInterface/rpc/funcVoid"), [service](const std::string&, const std::string& args, const std::string& responseTopic, const std::string& correlationData) { service->onInvokeFuncVoid(args, responseTopic, correlationData); } },
         };
     };
 }
@@ -51,21 +50,12 @@ void VoidInterfaceService::onConnectionStatusChanged(bool connectionStatus)
 
     // send current values
 }
-
-void VoidInterfaceService::onInvoke(const std::string& topic, const std::string& args, const std::string& responseTopic, const std::string& correlationData)
+void VoidInterfaceService::onInvokeFuncVoid(const std::string& args, const std::string& responseTopic, const std::string& correlationData) const
 {
     nlohmann::json json_args = nlohmann::json::parse(args);
-    const std::string& name = ApiGear::MQTT::Topic(topic).getEntityName();
-
-    // no operations with return value
     (void) responseTopic;
     (void) correlationData;
-    (void) name;
-
-    if(name == "funcVoid") {
-        m_impl->funcVoid();
-        return;
-    }
+    m_impl->funcVoid();
 }
 void VoidInterfaceService::onSigVoid()
 {

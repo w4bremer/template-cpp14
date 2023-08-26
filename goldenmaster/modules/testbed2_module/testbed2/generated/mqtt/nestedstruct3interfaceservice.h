@@ -14,8 +14,9 @@ public:
     virtual ~NestedStruct3InterfaceService() override;
 
     void onConnectionStatusChanged(bool connectionStatus);
-
-    void onInvoke(const std::string& topic, const std::string& args, const std::string& responseTopic, const std::string& correlationData);
+    void onInvokeFunc1(const std::string& args, const std::string& responseTopic, const std::string& correlationData) const;
+    void onInvokeFunc2(const std::string& args, const std::string& responseTopic, const std::string& correlationData) const;
+    void onInvokeFunc3(const std::string& args, const std::string& responseTopic, const std::string& correlationData) const;
 
     // INestedStruct3InterfaceSubscriber interface
     void onSig1(const NestedStruct1& param1) override;

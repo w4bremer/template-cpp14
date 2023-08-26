@@ -18,7 +18,10 @@ public:
 
     void onConnectionStatusChanged(bool connectionStatus);
 
-    void onInvoke(const std::string& topic, const std::string& args, const std::string& responseTopic, const std::string& correlationData);
+{{- range .Interface.Operations}}
+{{- $operation := . }}
+    void onInvoke{{ Camel $operation.Name }}(const std::string& args, const std::string& responseTopic, const std::string& correlationData) const;
+{{- end }}
 
     // I{{$interface}}Subscriber interface
 {{- range .Interface.Signals}}

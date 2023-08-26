@@ -1,6 +1,5 @@
 #include "tb_enum/generated/mqtt/enuminterfaceservice.h"
 #include "tb_enum/generated/core/tb_enum.json.adapter.h"
-#include "apigear/mqtt/mqtttopic.h"
 #include <iostream>
 
 using namespace Test::TbEnum;
@@ -14,10 +13,10 @@ namespace {
             {std::string("tb.enum/EnumInterface/set/prop1"), [service](const std::string&, const std::string& args, const std::string&, const std::string&){ service->onSetProp1(args); } },
             {std::string("tb.enum/EnumInterface/set/prop2"), [service](const std::string&, const std::string& args, const std::string&, const std::string&){ service->onSetProp2(args); } },
             {std::string("tb.enum/EnumInterface/set/prop3"), [service](const std::string&, const std::string& args, const std::string&, const std::string&){ service->onSetProp3(args); } },
-            {std::string("tb.enum/EnumInterface/rpc/func0"), [service](const std::string& topic, const std::string& args, const std::string& responseTopic, const std::string& correlationData) { service->onInvoke(topic, args, responseTopic, correlationData); } },
-            {std::string("tb.enum/EnumInterface/rpc/func1"), [service](const std::string& topic, const std::string& args, const std::string& responseTopic, const std::string& correlationData) { service->onInvoke(topic, args, responseTopic, correlationData); } },
-            {std::string("tb.enum/EnumInterface/rpc/func2"), [service](const std::string& topic, const std::string& args, const std::string& responseTopic, const std::string& correlationData) { service->onInvoke(topic, args, responseTopic, correlationData); } },
-            {std::string("tb.enum/EnumInterface/rpc/func3"), [service](const std::string& topic, const std::string& args, const std::string& responseTopic, const std::string& correlationData) { service->onInvoke(topic, args, responseTopic, correlationData); } },
+            {std::string("tb.enum/EnumInterface/rpc/func0"), [service](const std::string&, const std::string& args, const std::string& responseTopic, const std::string& correlationData) { service->onInvokeFunc0(args, responseTopic, correlationData); } },
+            {std::string("tb.enum/EnumInterface/rpc/func1"), [service](const std::string&, const std::string& args, const std::string& responseTopic, const std::string& correlationData) { service->onInvokeFunc1(args, responseTopic, correlationData); } },
+            {std::string("tb.enum/EnumInterface/rpc/func2"), [service](const std::string&, const std::string& args, const std::string& responseTopic, const std::string& correlationData) { service->onInvokeFunc2(args, responseTopic, correlationData); } },
+            {std::string("tb.enum/EnumInterface/rpc/func3"), [service](const std::string&, const std::string& args, const std::string& responseTopic, const std::string& correlationData) { service->onInvokeFunc3(args, responseTopic, correlationData); } },
         };
     };
 }
@@ -106,37 +105,33 @@ void EnumInterfaceService::onSetProp3(const std::string& args) const
     auto prop3 = json_args.get<Enum3Enum>();
     m_impl->setProp3(prop3);
 }
-
-void EnumInterfaceService::onInvoke(const std::string& topic, const std::string& args, const std::string& responseTopic, const std::string& correlationData)
+void EnumInterfaceService::onInvokeFunc0(const std::string& args, const std::string& responseTopic, const std::string& correlationData) const
 {
     nlohmann::json json_args = nlohmann::json::parse(args);
-    const std::string& name = ApiGear::MQTT::Topic(topic).getEntityName();
-
-
-    if(name == "func0") {
-        const Enum0Enum& param0 = json_args.at(0).get<Enum0Enum>();
-        auto result = m_impl->func0(param0);
-        m_service->notifyInvokeResponse(responseTopic, nlohmann::json(result).dump(), correlationData);
-        return;
-    }
-    if(name == "func1") {
-        const Enum1Enum& param1 = json_args.at(0).get<Enum1Enum>();
-        auto result = m_impl->func1(param1);
-        m_service->notifyInvokeResponse(responseTopic, nlohmann::json(result).dump(), correlationData);
-        return;
-    }
-    if(name == "func2") {
-        const Enum2Enum& param2 = json_args.at(0).get<Enum2Enum>();
-        auto result = m_impl->func2(param2);
-        m_service->notifyInvokeResponse(responseTopic, nlohmann::json(result).dump(), correlationData);
-        return;
-    }
-    if(name == "func3") {
-        const Enum3Enum& param3 = json_args.at(0).get<Enum3Enum>();
-        auto result = m_impl->func3(param3);
-        m_service->notifyInvokeResponse(responseTopic, nlohmann::json(result).dump(), correlationData);
-        return;
-    }
+    const Enum0Enum& param0 = json_args.at(0).get<Enum0Enum>();
+    auto result = m_impl->func0(param0);
+    m_service->notifyInvokeResponse(responseTopic, nlohmann::json(result).dump(), correlationData);
+}
+void EnumInterfaceService::onInvokeFunc1(const std::string& args, const std::string& responseTopic, const std::string& correlationData) const
+{
+    nlohmann::json json_args = nlohmann::json::parse(args);
+    const Enum1Enum& param1 = json_args.at(0).get<Enum1Enum>();
+    auto result = m_impl->func1(param1);
+    m_service->notifyInvokeResponse(responseTopic, nlohmann::json(result).dump(), correlationData);
+}
+void EnumInterfaceService::onInvokeFunc2(const std::string& args, const std::string& responseTopic, const std::string& correlationData) const
+{
+    nlohmann::json json_args = nlohmann::json::parse(args);
+    const Enum2Enum& param2 = json_args.at(0).get<Enum2Enum>();
+    auto result = m_impl->func2(param2);
+    m_service->notifyInvokeResponse(responseTopic, nlohmann::json(result).dump(), correlationData);
+}
+void EnumInterfaceService::onInvokeFunc3(const std::string& args, const std::string& responseTopic, const std::string& correlationData) const
+{
+    nlohmann::json json_args = nlohmann::json::parse(args);
+    const Enum3Enum& param3 = json_args.at(0).get<Enum3Enum>();
+    auto result = m_impl->func3(param3);
+    m_service->notifyInvokeResponse(responseTopic, nlohmann::json(result).dump(), correlationData);
 }
 void EnumInterfaceService::onSig0(Enum0Enum param0)
 {

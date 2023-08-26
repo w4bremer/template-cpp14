@@ -14,8 +14,8 @@ public:
     virtual ~NoPropertiesInterfaceService() override;
 
     void onConnectionStatusChanged(bool connectionStatus);
-
-    void onInvoke(const std::string& topic, const std::string& args, const std::string& responseTopic, const std::string& correlationData);
+    void onInvokeFuncVoid(const std::string& args, const std::string& responseTopic, const std::string& correlationData) const;
+    void onInvokeFuncBool(const std::string& args, const std::string& responseTopic, const std::string& correlationData) const;
 
     // INoPropertiesInterfaceSubscriber interface
     void onSigVoid() override;
