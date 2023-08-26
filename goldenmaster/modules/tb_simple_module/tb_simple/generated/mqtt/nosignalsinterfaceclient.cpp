@@ -8,23 +8,13 @@ using namespace Test::TbSimple::MQTT;
 
 namespace {
     std::mt19937 randomNumberGenerator (std::random_device{}());
-
-    std::map<std::string, ApiGear::MQTT::CallbackFunction> createTopicMap(const std::string&clientId, NoSignalsInterfaceClient* client)
-    {
-        return {
-            { std::string("tb.simple/NoSignalsInterface/prop/propBool"), [client](const std::string& args, const std::string&, const std::string&){ client->setPropBoolLocal(args); } },
-            { std::string("tb.simple/NoSignalsInterface/prop/propInt"), [client](const std::string& args, const std::string&, const std::string&){ client->setPropIntLocal(args); } },
-            { std::string("tb.simple/NoSignalsInterface/rpc/funcVoid/"+clientId+"/result"), [client](const std::string& args, const std::string&, const std::string& correlationData){ client->onInvokeReply(args, correlationData); } },
-            { std::string("tb.simple/NoSignalsInterface/rpc/funcBool/"+clientId+"/result"), [client](const std::string& args, const std::string&, const std::string& correlationData){ client->onInvokeReply(args, correlationData); } },
-        };
-    };
 }
 
 NoSignalsInterfaceClient::NoSignalsInterfaceClient(std::shared_ptr<ApiGear::MQTT::Client> client)
     : m_isReady(false)
     , m_client(client)
     , m_publisher(std::make_unique<NoSignalsInterfacePublisher>())
-    , m_topics(createTopicMap(m_client->getClientId(), this))
+    , m_topics(createTopicMap(m_client->getClientId()))
 {
     for (const auto& topic: m_topics)
     {
@@ -39,6 +29,16 @@ NoSignalsInterfaceClient::~NoSignalsInterfaceClient()
         m_client->unsubscribeTopic(topic. first);
     }
 }
+
+std::map<std::string, ApiGear::MQTT::CallbackFunction> NoSignalsInterfaceClient::createTopicMap(const std::string& clientId)
+{
+    return {
+        { std::string("tb.simple/NoSignalsInterface/prop/propBool"), [this](const std::string& args, const std::string&, const std::string&){ this->setPropBoolLocal(args); } },
+        { std::string("tb.simple/NoSignalsInterface/prop/propInt"), [this](const std::string& args, const std::string&, const std::string&){ this->setPropIntLocal(args); } },
+        { std::string("tb.simple/NoSignalsInterface/rpc/funcVoid/"+clientId+"/result"), [this](const std::string& args, const std::string&, const std::string& correlationData){ this->onInvokeReply(args, correlationData); } },
+        { std::string("tb.simple/NoSignalsInterface/rpc/funcBool/"+clientId+"/result"), [this](const std::string& args, const std::string&, const std::string& correlationData){ this->onInvokeReply(args, correlationData); } },
+    };
+};
 
 void NoSignalsInterfaceClient::setPropBool(bool propBool)
 {

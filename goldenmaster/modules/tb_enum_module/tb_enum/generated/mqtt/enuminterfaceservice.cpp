@@ -5,26 +5,10 @@
 using namespace Test::TbEnum;
 using namespace Test::TbEnum::MQTT;
 
-namespace {
-    std::map<std::string, ApiGear::MQTT::CallbackFunction> createTopicMap(EnumInterfaceService* service)
-    {
-        return {
-            {std::string("tb.enum/EnumInterface/set/prop0"), [service](const std::string& args, const std::string&, const std::string&){ service->onSetProp0(args); } },
-            {std::string("tb.enum/EnumInterface/set/prop1"), [service](const std::string& args, const std::string&, const std::string&){ service->onSetProp1(args); } },
-            {std::string("tb.enum/EnumInterface/set/prop2"), [service](const std::string& args, const std::string&, const std::string&){ service->onSetProp2(args); } },
-            {std::string("tb.enum/EnumInterface/set/prop3"), [service](const std::string& args, const std::string&, const std::string&){ service->onSetProp3(args); } },
-            {std::string("tb.enum/EnumInterface/rpc/func0"), [service](const std::string& args, const std::string& responseTopic, const std::string& correlationData) { service->onInvokeFunc0(args, responseTopic, correlationData); } },
-            {std::string("tb.enum/EnumInterface/rpc/func1"), [service](const std::string& args, const std::string& responseTopic, const std::string& correlationData) { service->onInvokeFunc1(args, responseTopic, correlationData); } },
-            {std::string("tb.enum/EnumInterface/rpc/func2"), [service](const std::string& args, const std::string& responseTopic, const std::string& correlationData) { service->onInvokeFunc2(args, responseTopic, correlationData); } },
-            {std::string("tb.enum/EnumInterface/rpc/func3"), [service](const std::string& args, const std::string& responseTopic, const std::string& correlationData) { service->onInvokeFunc3(args, responseTopic, correlationData); } },
-        };
-    };
-}
-
 EnumInterfaceService::EnumInterfaceService(std::shared_ptr<IEnumInterface> impl, std::shared_ptr<ApiGear::MQTT::Service> service)
     : m_impl(impl)
     , m_service(service)
-    , m_topics(createTopicMap(this))
+    , m_topics(createTopicMap())
 {
     m_impl->_getPublisher().subscribeToAllChanges(*this);
 
@@ -46,6 +30,20 @@ EnumInterfaceService::~EnumInterfaceService()
     {
         m_service->unsubscribeTopic(topic. first);
     }
+}
+
+std::map<std::string, ApiGear::MQTT::CallbackFunction> EnumInterfaceService::createTopicMap()
+{
+    return {
+        {std::string("tb.enum/EnumInterface/set/prop0"), [this](const std::string& args, const std::string&, const std::string&){ this->onSetProp0(args); } },
+        {std::string("tb.enum/EnumInterface/set/prop1"), [this](const std::string& args, const std::string&, const std::string&){ this->onSetProp1(args); } },
+        {std::string("tb.enum/EnumInterface/set/prop2"), [this](const std::string& args, const std::string&, const std::string&){ this->onSetProp2(args); } },
+        {std::string("tb.enum/EnumInterface/set/prop3"), [this](const std::string& args, const std::string&, const std::string&){ this->onSetProp3(args); } },
+        {std::string("tb.enum/EnumInterface/rpc/func0"), [this](const std::string& args, const std::string& responseTopic, const std::string& correlationData) { this->onInvokeFunc0(args, responseTopic, correlationData); } },
+        {std::string("tb.enum/EnumInterface/rpc/func1"), [this](const std::string& args, const std::string& responseTopic, const std::string& correlationData) { this->onInvokeFunc1(args, responseTopic, correlationData); } },
+        {std::string("tb.enum/EnumInterface/rpc/func2"), [this](const std::string& args, const std::string& responseTopic, const std::string& correlationData) { this->onInvokeFunc2(args, responseTopic, correlationData); } },
+        {std::string("tb.enum/EnumInterface/rpc/func3"), [this](const std::string& args, const std::string& responseTopic, const std::string& correlationData) { this->onInvokeFunc3(args, responseTopic, correlationData); } },
+    };
 }
 
 void EnumInterfaceService::onConnectionStatusChanged(bool connectionStatus)

@@ -5,20 +5,10 @@
 using namespace Test::Testbed2;
 using namespace Test::Testbed2::MQTT;
 
-namespace {
-    std::map<std::string, ApiGear::MQTT::CallbackFunction> createTopicMap(NestedStruct1InterfaceService* service)
-    {
-        return {
-            {std::string("testbed2/NestedStruct1Interface/set/prop1"), [service](const std::string& args, const std::string&, const std::string&){ service->onSetProp1(args); } },
-            {std::string("testbed2/NestedStruct1Interface/rpc/func1"), [service](const std::string& args, const std::string& responseTopic, const std::string& correlationData) { service->onInvokeFunc1(args, responseTopic, correlationData); } },
-        };
-    };
-}
-
 NestedStruct1InterfaceService::NestedStruct1InterfaceService(std::shared_ptr<INestedStruct1Interface> impl, std::shared_ptr<ApiGear::MQTT::Service> service)
     : m_impl(impl)
     , m_service(service)
-    , m_topics(createTopicMap(this))
+    , m_topics(createTopicMap())
 {
     m_impl->_getPublisher().subscribeToAllChanges(*this);
 
@@ -40,6 +30,14 @@ NestedStruct1InterfaceService::~NestedStruct1InterfaceService()
     {
         m_service->unsubscribeTopic(topic. first);
     }
+}
+
+std::map<std::string, ApiGear::MQTT::CallbackFunction> NestedStruct1InterfaceService::createTopicMap()
+{
+    return {
+        {std::string("testbed2/NestedStruct1Interface/set/prop1"), [this](const std::string& args, const std::string&, const std::string&){ this->onSetProp1(args); } },
+        {std::string("testbed2/NestedStruct1Interface/rpc/func1"), [this](const std::string& args, const std::string& responseTopic, const std::string& correlationData) { this->onInvokeFunc1(args, responseTopic, correlationData); } },
+    };
 }
 
 void NestedStruct1InterfaceService::onConnectionStatusChanged(bool connectionStatus)

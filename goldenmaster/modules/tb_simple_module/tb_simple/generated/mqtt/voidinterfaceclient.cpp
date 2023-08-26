@@ -8,21 +8,13 @@ using namespace Test::TbSimple::MQTT;
 
 namespace {
     std::mt19937 randomNumberGenerator (std::random_device{}());
-
-    std::map<std::string, ApiGear::MQTT::CallbackFunction> createTopicMap(const std::string&clientId, VoidInterfaceClient* client)
-    {
-        return {
-            { std::string("tb.simple/VoidInterface/sig/sigVoid"), [client](const std::string& args, const std::string&, const std::string&){ client->onSigVoid(args); } },
-            { std::string("tb.simple/VoidInterface/rpc/funcVoid/"+clientId+"/result"), [client](const std::string& args, const std::string&, const std::string& correlationData){ client->onInvokeReply(args, correlationData); } },
-        };
-    };
 }
 
 VoidInterfaceClient::VoidInterfaceClient(std::shared_ptr<ApiGear::MQTT::Client> client)
     : m_isReady(false)
     , m_client(client)
     , m_publisher(std::make_unique<VoidInterfacePublisher>())
-    , m_topics(createTopicMap(m_client->getClientId(), this))
+    , m_topics(createTopicMap(m_client->getClientId()))
 {
     for (const auto& topic: m_topics)
     {
@@ -37,6 +29,14 @@ VoidInterfaceClient::~VoidInterfaceClient()
         m_client->unsubscribeTopic(topic. first);
     }
 }
+
+std::map<std::string, ApiGear::MQTT::CallbackFunction> VoidInterfaceClient::createTopicMap(const std::string& clientId)
+{
+    return {
+        { std::string("tb.simple/VoidInterface/sig/sigVoid"), [this](const std::string& args, const std::string&, const std::string&){ this->onSigVoid(args); } },
+        { std::string("tb.simple/VoidInterface/rpc/funcVoid/"+clientId+"/result"), [this](const std::string& args, const std::string&, const std::string& correlationData){ this->onInvokeReply(args, correlationData); } },
+    };
+};
 
 void VoidInterfaceClient::funcVoid()
 {

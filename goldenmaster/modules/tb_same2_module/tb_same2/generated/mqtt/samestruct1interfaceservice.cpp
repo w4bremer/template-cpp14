@@ -5,20 +5,10 @@
 using namespace Test::TbSame2;
 using namespace Test::TbSame2::MQTT;
 
-namespace {
-    std::map<std::string, ApiGear::MQTT::CallbackFunction> createTopicMap(SameStruct1InterfaceService* service)
-    {
-        return {
-            {std::string("tb.same2/SameStruct1Interface/set/prop1"), [service](const std::string& args, const std::string&, const std::string&){ service->onSetProp1(args); } },
-            {std::string("tb.same2/SameStruct1Interface/rpc/func1"), [service](const std::string& args, const std::string& responseTopic, const std::string& correlationData) { service->onInvokeFunc1(args, responseTopic, correlationData); } },
-        };
-    };
-}
-
 SameStruct1InterfaceService::SameStruct1InterfaceService(std::shared_ptr<ISameStruct1Interface> impl, std::shared_ptr<ApiGear::MQTT::Service> service)
     : m_impl(impl)
     , m_service(service)
-    , m_topics(createTopicMap(this))
+    , m_topics(createTopicMap())
 {
     m_impl->_getPublisher().subscribeToAllChanges(*this);
 
@@ -40,6 +30,14 @@ SameStruct1InterfaceService::~SameStruct1InterfaceService()
     {
         m_service->unsubscribeTopic(topic. first);
     }
+}
+
+std::map<std::string, ApiGear::MQTT::CallbackFunction> SameStruct1InterfaceService::createTopicMap()
+{
+    return {
+        {std::string("tb.same2/SameStruct1Interface/set/prop1"), [this](const std::string& args, const std::string&, const std::string&){ this->onSetProp1(args); } },
+        {std::string("tb.same2/SameStruct1Interface/rpc/func1"), [this](const std::string& args, const std::string& responseTopic, const std::string& correlationData) { this->onInvokeFunc1(args, responseTopic, correlationData); } },
+    };
 }
 
 void SameStruct1InterfaceService::onConnectionStatusChanged(bool connectionStatus)

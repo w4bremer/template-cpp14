@@ -8,26 +8,10 @@
 using namespace {{ Camel .System.Name }}::{{ Camel .Module.Name }};
 using namespace {{ Camel .System.Name }}::{{ Camel .Module.Name }}::MQTT;
 
-namespace {
-    std::map<std::string, ApiGear::MQTT::CallbackFunction> createTopicMap({{$class}}* service)
-    {
-        return {
-        {{- range .Interface.Properties}}
-        {{- $property := . }}
-            {std::string("{{$.Module.Name}}/{{$interface}}/set/{{$property}}"), [service](const std::string& args, const std::string&, const std::string&){ service->onSet{{Camel $property.Name}}(args); } },
-        {{- end }}
-        {{- range .Interface.Operations}}
-        {{- $operation := . }}
-            {std::string("{{$.Module.Name}}/{{$interface}}/rpc/{{$operation}}"), [service](const std::string& args, const std::string& responseTopic, const std::string& correlationData) { service->onInvoke{{ Camel $operation.Name }}(args, responseTopic, correlationData); } },
-        {{- end }}
-        };
-    };
-}
-
 {{$class}}::{{$class}}(std::shared_ptr<I{{$interface}}> impl, std::shared_ptr<ApiGear::MQTT::Service> service)
     : m_impl(impl)
     , m_service(service)
-    , m_topics(createTopicMap(this))
+    , m_topics(createTopicMap())
 {
     m_impl->_getPublisher().subscribeToAllChanges(*this);
 
@@ -49,6 +33,20 @@ namespace {
     {
         m_service->unsubscribeTopic(topic. first);
     }
+}
+
+std::map<std::string, ApiGear::MQTT::CallbackFunction> {{$class}}::createTopicMap()
+{
+    return {
+    {{- range .Interface.Properties}}
+    {{- $property := . }}
+        {std::string("{{$.Module.Name}}/{{$interface}}/set/{{$property}}"), [this](const std::string& args, const std::string&, const std::string&){ this->onSet{{Camel $property.Name}}(args); } },
+    {{- end }}
+    {{- range .Interface.Operations}}
+    {{- $operation := . }}
+        {std::string("{{$.Module.Name}}/{{$interface}}/rpc/{{$operation}}"), [this](const std::string& args, const std::string& responseTopic, const std::string& correlationData) { this->onInvoke{{ Camel $operation.Name }}(args, responseTopic, correlationData); } },
+    {{- end }}
+    };
 }
 
 void {{$class}}::onConnectionStatusChanged(bool connectionStatus)

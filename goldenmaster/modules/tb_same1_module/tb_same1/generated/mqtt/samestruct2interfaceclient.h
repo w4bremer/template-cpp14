@@ -27,6 +27,11 @@ public:
     bool isReady() const;
 
     void onInvokeReply(const std::string& args, const std::string& correlationData);
+
+private:
+    /// @brief factory to create the topic map which is used for bindings
+    /// @return map with all topics and corresponding function callbacks
+    std::map<std::string, ApiGear::MQTT::CallbackFunction> createTopicMap(const std::string&clientId);
     /// @brief sets the value for the property Prop1 coming from the service
     /// @param args contains the param of the type Struct2
     void setProp1Local(const std::string& args);
@@ -40,7 +45,6 @@ public:
     /// @param args contains the param(s) of the type(s) const Struct1& param1, const Struct2& param2
     void onSig2(const std::string& args) const;
 
-private:
     bool m_isReady;
     /** Local storage for properties values. */
     SameStruct2InterfaceData m_data;

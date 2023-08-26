@@ -14,14 +14,6 @@ public:
     virtual ~SimpleInterfaceService() override;
 
     void onConnectionStatusChanged(bool connectionStatus);
-    void onInvokeFuncBool(const std::string& args, const std::string& responseTopic, const std::string& correlationData) const;
-    void onInvokeFuncInt(const std::string& args, const std::string& responseTopic, const std::string& correlationData) const;
-    void onInvokeFuncInt32(const std::string& args, const std::string& responseTopic, const std::string& correlationData) const;
-    void onInvokeFuncInt64(const std::string& args, const std::string& responseTopic, const std::string& correlationData) const;
-    void onInvokeFuncFloat(const std::string& args, const std::string& responseTopic, const std::string& correlationData) const;
-    void onInvokeFuncFloat32(const std::string& args, const std::string& responseTopic, const std::string& correlationData) const;
-    void onInvokeFuncFloat64(const std::string& args, const std::string& responseTopic, const std::string& correlationData) const;
-    void onInvokeFuncString(const std::string& args, const std::string& responseTopic, const std::string& correlationData) const;
 
     // ISimpleInterfaceSubscriber interface
     void onSigBool(bool paramBool) override;
@@ -32,6 +24,19 @@ public:
     void onSigFloat32(float paramFloa32) override;
     void onSigFloat64(double paramFloat64) override;
     void onSigString(const std::string& paramString) override;
+
+private:
+    /// @brief factory to create the topic map which is used for bindings
+    /// @return map with all topics and corresponding function callbacks
+    std::map<std::string, ApiGear::MQTT::CallbackFunction> createTopicMap();
+    void onInvokeFuncBool(const std::string& args, const std::string& responseTopic, const std::string& correlationData) const;
+    void onInvokeFuncInt(const std::string& args, const std::string& responseTopic, const std::string& correlationData) const;
+    void onInvokeFuncInt32(const std::string& args, const std::string& responseTopic, const std::string& correlationData) const;
+    void onInvokeFuncInt64(const std::string& args, const std::string& responseTopic, const std::string& correlationData) const;
+    void onInvokeFuncFloat(const std::string& args, const std::string& responseTopic, const std::string& correlationData) const;
+    void onInvokeFuncFloat32(const std::string& args, const std::string& responseTopic, const std::string& correlationData) const;
+    void onInvokeFuncFloat64(const std::string& args, const std::string& responseTopic, const std::string& correlationData) const;
+    void onInvokeFuncString(const std::string& args, const std::string& responseTopic, const std::string& correlationData) const;
     void onPropBoolChanged(bool propBool) override;
     /// @brief requests to set the value for the property PropBool coming from the client
     /// @param fields contains the param of the type bool
@@ -65,7 +70,6 @@ public:
     /// @param fields contains the param of the type std::string
     void onSetPropString(const std::string& args) const;
 
-private:
     std::shared_ptr<ISimpleInterface> m_impl;
     std::shared_ptr<ApiGear::MQTT::Service> m_service;
     // id for connection status registration

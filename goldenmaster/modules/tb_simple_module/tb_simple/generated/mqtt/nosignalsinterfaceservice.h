@@ -14,10 +14,13 @@ public:
     virtual ~NoSignalsInterfaceService() override;
 
     void onConnectionStatusChanged(bool connectionStatus);
+
+private:
+    /// @brief factory to create the topic map which is used for bindings
+    /// @return map with all topics and corresponding function callbacks
+    std::map<std::string, ApiGear::MQTT::CallbackFunction> createTopicMap();
     void onInvokeFuncVoid(const std::string& args, const std::string& responseTopic, const std::string& correlationData) const;
     void onInvokeFuncBool(const std::string& args, const std::string& responseTopic, const std::string& correlationData) const;
-
-    // INoSignalsInterfaceSubscriber interface
     void onPropBoolChanged(bool propBool) override;
     /// @brief requests to set the value for the property PropBool coming from the client
     /// @param fields contains the param of the type bool
@@ -27,7 +30,6 @@ public:
     /// @param fields contains the param of the type int
     void onSetPropInt(const std::string& args) const;
 
-private:
     std::shared_ptr<INoSignalsInterface> m_impl;
     std::shared_ptr<ApiGear::MQTT::Service> m_service;
     // id for connection status registration

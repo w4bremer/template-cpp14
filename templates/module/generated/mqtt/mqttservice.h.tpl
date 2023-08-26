@@ -18,15 +18,22 @@ public:
 
     void onConnectionStatusChanged(bool connectionStatus);
 
-{{- range .Interface.Operations}}
-{{- $operation := . }}
-    void onInvoke{{ Camel $operation.Name }}(const std::string& args, const std::string& responseTopic, const std::string& correlationData) const;
-{{- end }}
-
+{{- if len .Interface.Signals}}{{nl}}
     // I{{$interface}}Subscriber interface
+{{- end}}
 {{- range .Interface.Signals}}
 {{- $signal := . }}
     void on{{Camel $signal.Name}}({{cppParams "" $signal.Params}}) override;
+{{- end }}
+
+private:
+    /// @brief factory to create the topic map which is used for bindings
+    /// @return map with all topics and corresponding function callbacks
+    std::map<std::string, ApiGear::MQTT::CallbackFunction> createTopicMap();
+
+{{- range .Interface.Operations}}
+{{- $operation := . }}
+    void onInvoke{{ Camel $operation.Name }}(const std::string& args, const std::string& responseTopic, const std::string& correlationData) const;
 {{- end }}
 
 {{- range .Interface.Properties}}
@@ -37,7 +44,6 @@ public:
     void onSet{{Camel $property.Name}}(const std::string& args) const;
 {{- end }}
 
-private:
     std::shared_ptr<I{{$interface}}> m_impl;
     std::shared_ptr<ApiGear::MQTT::Service> m_service;
     // id for connection status registration
