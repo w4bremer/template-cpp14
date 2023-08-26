@@ -14,12 +14,17 @@ public:
     virtual ~SameStruct2InterfaceService() override;
 
     void onConnectionStatusChanged(bool connectionStatus);
-    void onInvokeFunc1(const std::string& args, const std::string& responseTopic, const std::string& correlationData) const;
-    void onInvokeFunc2(const std::string& args, const std::string& responseTopic, const std::string& correlationData) const;
 
     // ISameStruct2InterfaceSubscriber interface
     void onSig1(const Struct1& param1) override;
     void onSig2(const Struct1& param1, const Struct2& param2) override;
+
+private:
+    /// @brief factory to create the topic map which is used for bindings
+    /// @return map with all topics and corresponding function callbacks
+    std::map<std::string, ApiGear::MQTT::CallbackFunction> createTopicMap();
+    void onInvokeFunc1(const std::string& args, const std::string& responseTopic, const std::string& correlationData) const;
+    void onInvokeFunc2(const std::string& args, const std::string& responseTopic, const std::string& correlationData) const;
     void onProp1Changed(const Struct2& prop1) override;
     /// @brief requests to set the value for the property Prop1 coming from the client
     /// @param fields contains the param of the type Struct2
@@ -29,7 +34,6 @@ public:
     /// @param fields contains the param of the type Struct2
     void onSetProp2(const std::string& args) const;
 
-private:
     std::shared_ptr<ISameStruct2Interface> m_impl;
     std::shared_ptr<ApiGear::MQTT::Service> m_service;
     // id for connection status registration

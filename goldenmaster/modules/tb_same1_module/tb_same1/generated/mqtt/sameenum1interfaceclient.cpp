@@ -8,22 +8,13 @@ using namespace Test::TbSame1::MQTT;
 
 namespace {
     std::mt19937 randomNumberGenerator (std::random_device{}());
-
-    std::map<std::string, ApiGear::MQTT::CallbackFunction> createTopicMap(const std::string&clientId, SameEnum1InterfaceClient* client)
-    {
-        return {
-            { std::string("tb.same1/SameEnum1Interface/prop/prop1"), [client](const std::string& args, const std::string&, const std::string&){ client->setProp1Local(args); } },
-            { std::string("tb.same1/SameEnum1Interface/sig/sig1"), [client](const std::string& args, const std::string&, const std::string&){ client->onSig1(args); } },
-            { std::string("tb.same1/SameEnum1Interface/rpc/func1/"+clientId+"/result"), [client](const std::string& args, const std::string&, const std::string& correlationData){ client->onInvokeReply(args, correlationData); } },
-        };
-    };
 }
 
 SameEnum1InterfaceClient::SameEnum1InterfaceClient(std::shared_ptr<ApiGear::MQTT::Client> client)
     : m_isReady(false)
     , m_client(client)
     , m_publisher(std::make_unique<SameEnum1InterfacePublisher>())
-    , m_topics(createTopicMap(m_client->getClientId(), this))
+    , m_topics(createTopicMap(m_client->getClientId()))
 {
     for (const auto& topic: m_topics)
     {
@@ -38,6 +29,15 @@ SameEnum1InterfaceClient::~SameEnum1InterfaceClient()
         m_client->unsubscribeTopic(topic. first);
     }
 }
+
+std::map<std::string, ApiGear::MQTT::CallbackFunction> SameEnum1InterfaceClient::createTopicMap(const std::string& clientId)
+{
+    return {
+        { std::string("tb.same1/SameEnum1Interface/prop/prop1"), [this](const std::string& args, const std::string&, const std::string&){ this->setProp1Local(args); } },
+        { std::string("tb.same1/SameEnum1Interface/sig/sig1"), [this](const std::string& args, const std::string&, const std::string&){ this->onSig1(args); } },
+        { std::string("tb.same1/SameEnum1Interface/rpc/func1/"+clientId+"/result"), [this](const std::string& args, const std::string&, const std::string& correlationData){ this->onInvokeReply(args, correlationData); } },
+    };
+};
 
 void SameEnum1InterfaceClient::setProp1(Enum1Enum prop1)
 {

@@ -39,6 +39,12 @@ public:
 
     void onInvokeReply(const std::string& args, const std::string& correlationData);
 
+private:
+    /// @brief factory to create the topic map which is used for bindings
+    /// @return map with all topics and corresponding function callbacks
+    std::map<std::string, ApiGear::MQTT::CallbackFunction> createTopicMap(const std::string& 
+    {{- if len .Interface.Operations}}clientId{{end}});
+
 {{- range .Interface.Properties}}
 {{- $property := . }}
     /// @brief sets the value for the property {{Camel $property.Name}} coming from the service
@@ -53,7 +59,6 @@ public:
     void on{{Camel $signal.Name }}(const std::string& args) const;
 {{- end }}
 
-private:
     bool m_isReady;
 {{- if len .Interface.Properties}}
     /** Local storage for properties values. */

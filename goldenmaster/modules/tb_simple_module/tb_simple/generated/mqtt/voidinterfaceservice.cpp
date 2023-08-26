@@ -5,19 +5,10 @@
 using namespace Test::TbSimple;
 using namespace Test::TbSimple::MQTT;
 
-namespace {
-    std::map<std::string, ApiGear::MQTT::CallbackFunction> createTopicMap(VoidInterfaceService* service)
-    {
-        return {
-            {std::string("tb.simple/VoidInterface/rpc/funcVoid"), [service](const std::string& args, const std::string& responseTopic, const std::string& correlationData) { service->onInvokeFuncVoid(args, responseTopic, correlationData); } },
-        };
-    };
-}
-
 VoidInterfaceService::VoidInterfaceService(std::shared_ptr<IVoidInterface> impl, std::shared_ptr<ApiGear::MQTT::Service> service)
     : m_impl(impl)
     , m_service(service)
-    , m_topics(createTopicMap(this))
+    , m_topics(createTopicMap())
 {
     m_impl->_getPublisher().subscribeToAllChanges(*this);
 
@@ -39,6 +30,13 @@ VoidInterfaceService::~VoidInterfaceService()
     {
         m_service->unsubscribeTopic(topic. first);
     }
+}
+
+std::map<std::string, ApiGear::MQTT::CallbackFunction> VoidInterfaceService::createTopicMap()
+{
+    return {
+        {std::string("tb.simple/VoidInterface/rpc/funcVoid"), [this](const std::string& args, const std::string& responseTopic, const std::string& correlationData) { this->onInvokeFuncVoid(args, responseTopic, correlationData); } },
+    };
 }
 
 void VoidInterfaceService::onConnectionStatusChanged(bool connectionStatus)

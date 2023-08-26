@@ -23,6 +23,11 @@ public:
     bool isReady() const;
 
     void onInvokeReply(const std::string& args, const std::string& correlationData);
+
+private:
+    /// @brief factory to create the topic map which is used for bindings
+    /// @return map with all topics and corresponding function callbacks
+    std::map<std::string, ApiGear::MQTT::CallbackFunction> createTopicMap(const std::string&clientId);
     /// @brief publishes the value for the signal SigVoid coming from the service
     /// @param args contains the param(s) of the type(s) 
     void onSigVoid(const std::string& args) const;
@@ -30,7 +35,6 @@ public:
     /// @param args contains the param(s) of the type(s) bool paramBool
     void onSigBool(const std::string& args) const;
 
-private:
     bool m_isReady;
     std::shared_ptr<ApiGear::MQTT::Client> m_client;
 

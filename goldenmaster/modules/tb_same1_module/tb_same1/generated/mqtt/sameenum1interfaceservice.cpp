@@ -5,20 +5,10 @@
 using namespace Test::TbSame1;
 using namespace Test::TbSame1::MQTT;
 
-namespace {
-    std::map<std::string, ApiGear::MQTT::CallbackFunction> createTopicMap(SameEnum1InterfaceService* service)
-    {
-        return {
-            {std::string("tb.same1/SameEnum1Interface/set/prop1"), [service](const std::string& args, const std::string&, const std::string&){ service->onSetProp1(args); } },
-            {std::string("tb.same1/SameEnum1Interface/rpc/func1"), [service](const std::string& args, const std::string& responseTopic, const std::string& correlationData) { service->onInvokeFunc1(args, responseTopic, correlationData); } },
-        };
-    };
-}
-
 SameEnum1InterfaceService::SameEnum1InterfaceService(std::shared_ptr<ISameEnum1Interface> impl, std::shared_ptr<ApiGear::MQTT::Service> service)
     : m_impl(impl)
     , m_service(service)
-    , m_topics(createTopicMap(this))
+    , m_topics(createTopicMap())
 {
     m_impl->_getPublisher().subscribeToAllChanges(*this);
 
@@ -40,6 +30,14 @@ SameEnum1InterfaceService::~SameEnum1InterfaceService()
     {
         m_service->unsubscribeTopic(topic. first);
     }
+}
+
+std::map<std::string, ApiGear::MQTT::CallbackFunction> SameEnum1InterfaceService::createTopicMap()
+{
+    return {
+        {std::string("tb.same1/SameEnum1Interface/set/prop1"), [this](const std::string& args, const std::string&, const std::string&){ this->onSetProp1(args); } },
+        {std::string("tb.same1/SameEnum1Interface/rpc/func1"), [this](const std::string& args, const std::string& responseTopic, const std::string& correlationData) { this->onInvokeFunc1(args, responseTopic, correlationData); } },
+    };
 }
 
 void SameEnum1InterfaceService::onConnectionStatusChanged(bool connectionStatus)

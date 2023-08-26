@@ -13,32 +13,13 @@ using namespace {{ Camel .System.Name }}::{{ Camel .Module.Name }}::MQTT;
 
 namespace {
     std::mt19937 randomNumberGenerator (std::random_device{}());
-
-    std::map<std::string, ApiGear::MQTT::CallbackFunction> createTopicMap(const std::string& 
-        {{- if len .Interface.Operations}}clientId{{end}}, {{$class}}* client)
-    {
-        return {
-        {{- range .Interface.Properties}}
-        {{- $property := . }}
-            { std::string("{{$.Module.Name}}/{{$interfaceName}}/prop/{{$property}}"), [client](const std::string& args, const std::string&, const std::string&){ client->set{{Camel $property.Name}}Local(args); } },
-        {{- end }}
-        {{- range .Interface.Signals}}
-        {{- $signal := . }}
-            { std::string("{{$.Module.Name}}/{{$interfaceName}}/sig/{{$signal}}"), [client](const std::string& args, const std::string&, const std::string&){ client->on{{Camel $signal.Name }}(args); } },
-        {{- end }}
-        {{- range .Interface.Operations}}
-        {{- $operation := . }}
-            { std::string("{{$.Module.Name}}/{{$interfaceName}}/rpc/{{$operation}}/"+clientId+"/result"), [client](const std::string& args, const std::string&, const std::string& correlationData){ client->onInvokeReply(args, correlationData); } },
-        {{- end }}
-        };
-    };
 }
 
 {{$class}}::{{$class}}(std::shared_ptr<ApiGear::MQTT::Client> client)
     : m_isReady(false)
     , m_client(client)
     , m_publisher(std::make_unique<{{$pub_class}}>())
-    , m_topics(createTopicMap(m_client->getClientId(), this))
+    , m_topics(createTopicMap(m_client->getClientId()))
 {
     for (const auto& topic: m_topics)
     {
@@ -53,6 +34,25 @@ namespace {
         m_client->unsubscribeTopic(topic. first);
     }
 }
+
+std::map<std::string, ApiGear::MQTT::CallbackFunction> {{$class}}::createTopicMap(const std::string& 
+    {{- if len .Interface.Operations}} clientId{{end}})
+{
+    return {
+    {{- range .Interface.Properties}}
+    {{- $property := . }}
+        { std::string("{{$.Module.Name}}/{{$interfaceName}}/prop/{{$property}}"), [this](const std::string& args, const std::string&, const std::string&){ this->set{{Camel $property.Name}}Local(args); } },
+    {{- end }}
+    {{- range .Interface.Signals}}
+    {{- $signal := . }}
+        { std::string("{{$.Module.Name}}/{{$interfaceName}}/sig/{{$signal}}"), [this](const std::string& args, const std::string&, const std::string&){ this->on{{Camel $signal.Name }}(args); } },
+    {{- end }}
+    {{- range .Interface.Operations}}
+    {{- $operation := . }}
+        { std::string("{{$.Module.Name}}/{{$interfaceName}}/rpc/{{$operation}}/"+clientId+"/result"), [this](const std::string& args, const std::string&, const std::string& correlationData){ this->onInvokeReply(args, correlationData); } },
+    {{- end }}
+    };
+};
 
 {{- range .Interface.Properties}}
 {{- $property := . }}

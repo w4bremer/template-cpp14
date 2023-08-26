@@ -8,23 +8,13 @@ using namespace Test::TbSimple::MQTT;
 
 namespace {
     std::mt19937 randomNumberGenerator (std::random_device{}());
-
-    std::map<std::string, ApiGear::MQTT::CallbackFunction> createTopicMap(const std::string&, NoOperationsInterfaceClient* client)
-    {
-        return {
-            { std::string("tb.simple/NoOperationsInterface/prop/propBool"), [client](const std::string& args, const std::string&, const std::string&){ client->setPropBoolLocal(args); } },
-            { std::string("tb.simple/NoOperationsInterface/prop/propInt"), [client](const std::string& args, const std::string&, const std::string&){ client->setPropIntLocal(args); } },
-            { std::string("tb.simple/NoOperationsInterface/sig/sigVoid"), [client](const std::string& args, const std::string&, const std::string&){ client->onSigVoid(args); } },
-            { std::string("tb.simple/NoOperationsInterface/sig/sigBool"), [client](const std::string& args, const std::string&, const std::string&){ client->onSigBool(args); } },
-        };
-    };
 }
 
 NoOperationsInterfaceClient::NoOperationsInterfaceClient(std::shared_ptr<ApiGear::MQTT::Client> client)
     : m_isReady(false)
     , m_client(client)
     , m_publisher(std::make_unique<NoOperationsInterfacePublisher>())
-    , m_topics(createTopicMap(m_client->getClientId(), this))
+    , m_topics(createTopicMap(m_client->getClientId()))
 {
     for (const auto& topic: m_topics)
     {
@@ -39,6 +29,16 @@ NoOperationsInterfaceClient::~NoOperationsInterfaceClient()
         m_client->unsubscribeTopic(topic. first);
     }
 }
+
+std::map<std::string, ApiGear::MQTT::CallbackFunction> NoOperationsInterfaceClient::createTopicMap(const std::string&)
+{
+    return {
+        { std::string("tb.simple/NoOperationsInterface/prop/propBool"), [this](const std::string& args, const std::string&, const std::string&){ this->setPropBoolLocal(args); } },
+        { std::string("tb.simple/NoOperationsInterface/prop/propInt"), [this](const std::string& args, const std::string&, const std::string&){ this->setPropIntLocal(args); } },
+        { std::string("tb.simple/NoOperationsInterface/sig/sigVoid"), [this](const std::string& args, const std::string&, const std::string&){ this->onSigVoid(args); } },
+        { std::string("tb.simple/NoOperationsInterface/sig/sigBool"), [this](const std::string& args, const std::string&, const std::string&){ this->onSigBool(args); } },
+    };
+};
 
 void NoOperationsInterfaceClient::setPropBool(bool propBool)
 {

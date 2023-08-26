@@ -8,31 +8,13 @@ using namespace Test::Testbed1::MQTT;
 
 namespace {
     std::mt19937 randomNumberGenerator (std::random_device{}());
-
-    std::map<std::string, ApiGear::MQTT::CallbackFunction> createTopicMap(const std::string&clientId, StructInterfaceClient* client)
-    {
-        return {
-            { std::string("testbed1/StructInterface/prop/propBool"), [client](const std::string& args, const std::string&, const std::string&){ client->setPropBoolLocal(args); } },
-            { std::string("testbed1/StructInterface/prop/propInt"), [client](const std::string& args, const std::string&, const std::string&){ client->setPropIntLocal(args); } },
-            { std::string("testbed1/StructInterface/prop/propFloat"), [client](const std::string& args, const std::string&, const std::string&){ client->setPropFloatLocal(args); } },
-            { std::string("testbed1/StructInterface/prop/propString"), [client](const std::string& args, const std::string&, const std::string&){ client->setPropStringLocal(args); } },
-            { std::string("testbed1/StructInterface/sig/sigBool"), [client](const std::string& args, const std::string&, const std::string&){ client->onSigBool(args); } },
-            { std::string("testbed1/StructInterface/sig/sigInt"), [client](const std::string& args, const std::string&, const std::string&){ client->onSigInt(args); } },
-            { std::string("testbed1/StructInterface/sig/sigFloat"), [client](const std::string& args, const std::string&, const std::string&){ client->onSigFloat(args); } },
-            { std::string("testbed1/StructInterface/sig/sigString"), [client](const std::string& args, const std::string&, const std::string&){ client->onSigString(args); } },
-            { std::string("testbed1/StructInterface/rpc/funcBool/"+clientId+"/result"), [client](const std::string& args, const std::string&, const std::string& correlationData){ client->onInvokeReply(args, correlationData); } },
-            { std::string("testbed1/StructInterface/rpc/funcInt/"+clientId+"/result"), [client](const std::string& args, const std::string&, const std::string& correlationData){ client->onInvokeReply(args, correlationData); } },
-            { std::string("testbed1/StructInterface/rpc/funcFloat/"+clientId+"/result"), [client](const std::string& args, const std::string&, const std::string& correlationData){ client->onInvokeReply(args, correlationData); } },
-            { std::string("testbed1/StructInterface/rpc/funcString/"+clientId+"/result"), [client](const std::string& args, const std::string&, const std::string& correlationData){ client->onInvokeReply(args, correlationData); } },
-        };
-    };
 }
 
 StructInterfaceClient::StructInterfaceClient(std::shared_ptr<ApiGear::MQTT::Client> client)
     : m_isReady(false)
     , m_client(client)
     , m_publisher(std::make_unique<StructInterfacePublisher>())
-    , m_topics(createTopicMap(m_client->getClientId(), this))
+    , m_topics(createTopicMap(m_client->getClientId()))
 {
     for (const auto& topic: m_topics)
     {
@@ -47,6 +29,24 @@ StructInterfaceClient::~StructInterfaceClient()
         m_client->unsubscribeTopic(topic. first);
     }
 }
+
+std::map<std::string, ApiGear::MQTT::CallbackFunction> StructInterfaceClient::createTopicMap(const std::string& clientId)
+{
+    return {
+        { std::string("testbed1/StructInterface/prop/propBool"), [this](const std::string& args, const std::string&, const std::string&){ this->setPropBoolLocal(args); } },
+        { std::string("testbed1/StructInterface/prop/propInt"), [this](const std::string& args, const std::string&, const std::string&){ this->setPropIntLocal(args); } },
+        { std::string("testbed1/StructInterface/prop/propFloat"), [this](const std::string& args, const std::string&, const std::string&){ this->setPropFloatLocal(args); } },
+        { std::string("testbed1/StructInterface/prop/propString"), [this](const std::string& args, const std::string&, const std::string&){ this->setPropStringLocal(args); } },
+        { std::string("testbed1/StructInterface/sig/sigBool"), [this](const std::string& args, const std::string&, const std::string&){ this->onSigBool(args); } },
+        { std::string("testbed1/StructInterface/sig/sigInt"), [this](const std::string& args, const std::string&, const std::string&){ this->onSigInt(args); } },
+        { std::string("testbed1/StructInterface/sig/sigFloat"), [this](const std::string& args, const std::string&, const std::string&){ this->onSigFloat(args); } },
+        { std::string("testbed1/StructInterface/sig/sigString"), [this](const std::string& args, const std::string&, const std::string&){ this->onSigString(args); } },
+        { std::string("testbed1/StructInterface/rpc/funcBool/"+clientId+"/result"), [this](const std::string& args, const std::string&, const std::string& correlationData){ this->onInvokeReply(args, correlationData); } },
+        { std::string("testbed1/StructInterface/rpc/funcInt/"+clientId+"/result"), [this](const std::string& args, const std::string&, const std::string& correlationData){ this->onInvokeReply(args, correlationData); } },
+        { std::string("testbed1/StructInterface/rpc/funcFloat/"+clientId+"/result"), [this](const std::string& args, const std::string&, const std::string& correlationData){ this->onInvokeReply(args, correlationData); } },
+        { std::string("testbed1/StructInterface/rpc/funcString/"+clientId+"/result"), [this](const std::string& args, const std::string&, const std::string& correlationData){ this->onInvokeReply(args, correlationData); } },
+    };
+};
 
 void StructInterfaceClient::setPropBool(const StructBool& propBool)
 {

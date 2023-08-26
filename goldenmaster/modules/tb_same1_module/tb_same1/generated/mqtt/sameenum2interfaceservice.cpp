@@ -5,22 +5,10 @@
 using namespace Test::TbSame1;
 using namespace Test::TbSame1::MQTT;
 
-namespace {
-    std::map<std::string, ApiGear::MQTT::CallbackFunction> createTopicMap(SameEnum2InterfaceService* service)
-    {
-        return {
-            {std::string("tb.same1/SameEnum2Interface/set/prop1"), [service](const std::string& args, const std::string&, const std::string&){ service->onSetProp1(args); } },
-            {std::string("tb.same1/SameEnum2Interface/set/prop2"), [service](const std::string& args, const std::string&, const std::string&){ service->onSetProp2(args); } },
-            {std::string("tb.same1/SameEnum2Interface/rpc/func1"), [service](const std::string& args, const std::string& responseTopic, const std::string& correlationData) { service->onInvokeFunc1(args, responseTopic, correlationData); } },
-            {std::string("tb.same1/SameEnum2Interface/rpc/func2"), [service](const std::string& args, const std::string& responseTopic, const std::string& correlationData) { service->onInvokeFunc2(args, responseTopic, correlationData); } },
-        };
-    };
-}
-
 SameEnum2InterfaceService::SameEnum2InterfaceService(std::shared_ptr<ISameEnum2Interface> impl, std::shared_ptr<ApiGear::MQTT::Service> service)
     : m_impl(impl)
     , m_service(service)
-    , m_topics(createTopicMap(this))
+    , m_topics(createTopicMap())
 {
     m_impl->_getPublisher().subscribeToAllChanges(*this);
 
@@ -42,6 +30,16 @@ SameEnum2InterfaceService::~SameEnum2InterfaceService()
     {
         m_service->unsubscribeTopic(topic. first);
     }
+}
+
+std::map<std::string, ApiGear::MQTT::CallbackFunction> SameEnum2InterfaceService::createTopicMap()
+{
+    return {
+        {std::string("tb.same1/SameEnum2Interface/set/prop1"), [this](const std::string& args, const std::string&, const std::string&){ this->onSetProp1(args); } },
+        {std::string("tb.same1/SameEnum2Interface/set/prop2"), [this](const std::string& args, const std::string&, const std::string&){ this->onSetProp2(args); } },
+        {std::string("tb.same1/SameEnum2Interface/rpc/func1"), [this](const std::string& args, const std::string& responseTopic, const std::string& correlationData) { this->onInvokeFunc1(args, responseTopic, correlationData); } },
+        {std::string("tb.same1/SameEnum2Interface/rpc/func2"), [this](const std::string& args, const std::string& responseTopic, const std::string& correlationData) { this->onInvokeFunc2(args, responseTopic, correlationData); } },
+    };
 }
 
 void SameEnum2InterfaceService::onConnectionStatusChanged(bool connectionStatus)

@@ -5,20 +5,10 @@
 using namespace Test::TbSimple;
 using namespace Test::TbSimple::MQTT;
 
-namespace {
-    std::map<std::string, ApiGear::MQTT::CallbackFunction> createTopicMap(NoOperationsInterfaceService* service)
-    {
-        return {
-            {std::string("tb.simple/NoOperationsInterface/set/propBool"), [service](const std::string& args, const std::string&, const std::string&){ service->onSetPropBool(args); } },
-            {std::string("tb.simple/NoOperationsInterface/set/propInt"), [service](const std::string& args, const std::string&, const std::string&){ service->onSetPropInt(args); } },
-        };
-    };
-}
-
 NoOperationsInterfaceService::NoOperationsInterfaceService(std::shared_ptr<INoOperationsInterface> impl, std::shared_ptr<ApiGear::MQTT::Service> service)
     : m_impl(impl)
     , m_service(service)
-    , m_topics(createTopicMap(this))
+    , m_topics(createTopicMap())
 {
     m_impl->_getPublisher().subscribeToAllChanges(*this);
 
@@ -40,6 +30,14 @@ NoOperationsInterfaceService::~NoOperationsInterfaceService()
     {
         m_service->unsubscribeTopic(topic. first);
     }
+}
+
+std::map<std::string, ApiGear::MQTT::CallbackFunction> NoOperationsInterfaceService::createTopicMap()
+{
+    return {
+        {std::string("tb.simple/NoOperationsInterface/set/propBool"), [this](const std::string& args, const std::string&, const std::string&){ this->onSetPropBool(args); } },
+        {std::string("tb.simple/NoOperationsInterface/set/propInt"), [this](const std::string& args, const std::string&, const std::string&){ this->onSetPropInt(args); } },
+    };
 }
 
 void NoOperationsInterfaceService::onConnectionStatusChanged(bool connectionStatus)

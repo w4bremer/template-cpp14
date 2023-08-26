@@ -5,20 +5,10 @@
 using namespace Test::TbSimple;
 using namespace Test::TbSimple::MQTT;
 
-namespace {
-    std::map<std::string, ApiGear::MQTT::CallbackFunction> createTopicMap(NoPropertiesInterfaceService* service)
-    {
-        return {
-            {std::string("tb.simple/NoPropertiesInterface/rpc/funcVoid"), [service](const std::string& args, const std::string& responseTopic, const std::string& correlationData) { service->onInvokeFuncVoid(args, responseTopic, correlationData); } },
-            {std::string("tb.simple/NoPropertiesInterface/rpc/funcBool"), [service](const std::string& args, const std::string& responseTopic, const std::string& correlationData) { service->onInvokeFuncBool(args, responseTopic, correlationData); } },
-        };
-    };
-}
-
 NoPropertiesInterfaceService::NoPropertiesInterfaceService(std::shared_ptr<INoPropertiesInterface> impl, std::shared_ptr<ApiGear::MQTT::Service> service)
     : m_impl(impl)
     , m_service(service)
-    , m_topics(createTopicMap(this))
+    , m_topics(createTopicMap())
 {
     m_impl->_getPublisher().subscribeToAllChanges(*this);
 
@@ -40,6 +30,14 @@ NoPropertiesInterfaceService::~NoPropertiesInterfaceService()
     {
         m_service->unsubscribeTopic(topic. first);
     }
+}
+
+std::map<std::string, ApiGear::MQTT::CallbackFunction> NoPropertiesInterfaceService::createTopicMap()
+{
+    return {
+        {std::string("tb.simple/NoPropertiesInterface/rpc/funcVoid"), [this](const std::string& args, const std::string& responseTopic, const std::string& correlationData) { this->onInvokeFuncVoid(args, responseTopic, correlationData); } },
+        {std::string("tb.simple/NoPropertiesInterface/rpc/funcBool"), [this](const std::string& args, const std::string& responseTopic, const std::string& correlationData) { this->onInvokeFuncBool(args, responseTopic, correlationData); } },
+    };
 }
 
 void NoPropertiesInterfaceService::onConnectionStatusChanged(bool connectionStatus)

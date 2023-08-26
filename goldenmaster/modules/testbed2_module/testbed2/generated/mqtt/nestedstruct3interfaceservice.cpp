@@ -5,24 +5,10 @@
 using namespace Test::Testbed2;
 using namespace Test::Testbed2::MQTT;
 
-namespace {
-    std::map<std::string, ApiGear::MQTT::CallbackFunction> createTopicMap(NestedStruct3InterfaceService* service)
-    {
-        return {
-            {std::string("testbed2/NestedStruct3Interface/set/prop1"), [service](const std::string& args, const std::string&, const std::string&){ service->onSetProp1(args); } },
-            {std::string("testbed2/NestedStruct3Interface/set/prop2"), [service](const std::string& args, const std::string&, const std::string&){ service->onSetProp2(args); } },
-            {std::string("testbed2/NestedStruct3Interface/set/prop3"), [service](const std::string& args, const std::string&, const std::string&){ service->onSetProp3(args); } },
-            {std::string("testbed2/NestedStruct3Interface/rpc/func1"), [service](const std::string& args, const std::string& responseTopic, const std::string& correlationData) { service->onInvokeFunc1(args, responseTopic, correlationData); } },
-            {std::string("testbed2/NestedStruct3Interface/rpc/func2"), [service](const std::string& args, const std::string& responseTopic, const std::string& correlationData) { service->onInvokeFunc2(args, responseTopic, correlationData); } },
-            {std::string("testbed2/NestedStruct3Interface/rpc/func3"), [service](const std::string& args, const std::string& responseTopic, const std::string& correlationData) { service->onInvokeFunc3(args, responseTopic, correlationData); } },
-        };
-    };
-}
-
 NestedStruct3InterfaceService::NestedStruct3InterfaceService(std::shared_ptr<INestedStruct3Interface> impl, std::shared_ptr<ApiGear::MQTT::Service> service)
     : m_impl(impl)
     , m_service(service)
-    , m_topics(createTopicMap(this))
+    , m_topics(createTopicMap())
 {
     m_impl->_getPublisher().subscribeToAllChanges(*this);
 
@@ -44,6 +30,18 @@ NestedStruct3InterfaceService::~NestedStruct3InterfaceService()
     {
         m_service->unsubscribeTopic(topic. first);
     }
+}
+
+std::map<std::string, ApiGear::MQTT::CallbackFunction> NestedStruct3InterfaceService::createTopicMap()
+{
+    return {
+        {std::string("testbed2/NestedStruct3Interface/set/prop1"), [this](const std::string& args, const std::string&, const std::string&){ this->onSetProp1(args); } },
+        {std::string("testbed2/NestedStruct3Interface/set/prop2"), [this](const std::string& args, const std::string&, const std::string&){ this->onSetProp2(args); } },
+        {std::string("testbed2/NestedStruct3Interface/set/prop3"), [this](const std::string& args, const std::string&, const std::string&){ this->onSetProp3(args); } },
+        {std::string("testbed2/NestedStruct3Interface/rpc/func1"), [this](const std::string& args, const std::string& responseTopic, const std::string& correlationData) { this->onInvokeFunc1(args, responseTopic, correlationData); } },
+        {std::string("testbed2/NestedStruct3Interface/rpc/func2"), [this](const std::string& args, const std::string& responseTopic, const std::string& correlationData) { this->onInvokeFunc2(args, responseTopic, correlationData); } },
+        {std::string("testbed2/NestedStruct3Interface/rpc/func3"), [this](const std::string& args, const std::string& responseTopic, const std::string& correlationData) { this->onInvokeFunc3(args, responseTopic, correlationData); } },
+    };
 }
 
 void NestedStruct3InterfaceService::onConnectionStatusChanged(bool connectionStatus)

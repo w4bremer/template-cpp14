@@ -8,25 +8,13 @@ using namespace Test::TbSame1::MQTT;
 
 namespace {
     std::mt19937 randomNumberGenerator (std::random_device{}());
-
-    std::map<std::string, ApiGear::MQTT::CallbackFunction> createTopicMap(const std::string&clientId, SameStruct2InterfaceClient* client)
-    {
-        return {
-            { std::string("tb.same1/SameStruct2Interface/prop/prop1"), [client](const std::string& args, const std::string&, const std::string&){ client->setProp1Local(args); } },
-            { std::string("tb.same1/SameStruct2Interface/prop/prop2"), [client](const std::string& args, const std::string&, const std::string&){ client->setProp2Local(args); } },
-            { std::string("tb.same1/SameStruct2Interface/sig/sig1"), [client](const std::string& args, const std::string&, const std::string&){ client->onSig1(args); } },
-            { std::string("tb.same1/SameStruct2Interface/sig/sig2"), [client](const std::string& args, const std::string&, const std::string&){ client->onSig2(args); } },
-            { std::string("tb.same1/SameStruct2Interface/rpc/func1/"+clientId+"/result"), [client](const std::string& args, const std::string&, const std::string& correlationData){ client->onInvokeReply(args, correlationData); } },
-            { std::string("tb.same1/SameStruct2Interface/rpc/func2/"+clientId+"/result"), [client](const std::string& args, const std::string&, const std::string& correlationData){ client->onInvokeReply(args, correlationData); } },
-        };
-    };
 }
 
 SameStruct2InterfaceClient::SameStruct2InterfaceClient(std::shared_ptr<ApiGear::MQTT::Client> client)
     : m_isReady(false)
     , m_client(client)
     , m_publisher(std::make_unique<SameStruct2InterfacePublisher>())
-    , m_topics(createTopicMap(m_client->getClientId(), this))
+    , m_topics(createTopicMap(m_client->getClientId()))
 {
     for (const auto& topic: m_topics)
     {
@@ -41,6 +29,18 @@ SameStruct2InterfaceClient::~SameStruct2InterfaceClient()
         m_client->unsubscribeTopic(topic. first);
     }
 }
+
+std::map<std::string, ApiGear::MQTT::CallbackFunction> SameStruct2InterfaceClient::createTopicMap(const std::string& clientId)
+{
+    return {
+        { std::string("tb.same1/SameStruct2Interface/prop/prop1"), [this](const std::string& args, const std::string&, const std::string&){ this->setProp1Local(args); } },
+        { std::string("tb.same1/SameStruct2Interface/prop/prop2"), [this](const std::string& args, const std::string&, const std::string&){ this->setProp2Local(args); } },
+        { std::string("tb.same1/SameStruct2Interface/sig/sig1"), [this](const std::string& args, const std::string&, const std::string&){ this->onSig1(args); } },
+        { std::string("tb.same1/SameStruct2Interface/sig/sig2"), [this](const std::string& args, const std::string&, const std::string&){ this->onSig2(args); } },
+        { std::string("tb.same1/SameStruct2Interface/rpc/func1/"+clientId+"/result"), [this](const std::string& args, const std::string&, const std::string& correlationData){ this->onInvokeReply(args, correlationData); } },
+        { std::string("tb.same1/SameStruct2Interface/rpc/func2/"+clientId+"/result"), [this](const std::string& args, const std::string&, const std::string& correlationData){ this->onInvokeReply(args, correlationData); } },
+    };
+};
 
 void SameStruct2InterfaceClient::setProp1(const Struct2& prop1)
 {

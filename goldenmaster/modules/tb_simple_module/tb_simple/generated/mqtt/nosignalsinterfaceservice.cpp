@@ -5,22 +5,10 @@
 using namespace Test::TbSimple;
 using namespace Test::TbSimple::MQTT;
 
-namespace {
-    std::map<std::string, ApiGear::MQTT::CallbackFunction> createTopicMap(NoSignalsInterfaceService* service)
-    {
-        return {
-            {std::string("tb.simple/NoSignalsInterface/set/propBool"), [service](const std::string& args, const std::string&, const std::string&){ service->onSetPropBool(args); } },
-            {std::string("tb.simple/NoSignalsInterface/set/propInt"), [service](const std::string& args, const std::string&, const std::string&){ service->onSetPropInt(args); } },
-            {std::string("tb.simple/NoSignalsInterface/rpc/funcVoid"), [service](const std::string& args, const std::string& responseTopic, const std::string& correlationData) { service->onInvokeFuncVoid(args, responseTopic, correlationData); } },
-            {std::string("tb.simple/NoSignalsInterface/rpc/funcBool"), [service](const std::string& args, const std::string& responseTopic, const std::string& correlationData) { service->onInvokeFuncBool(args, responseTopic, correlationData); } },
-        };
-    };
-}
-
 NoSignalsInterfaceService::NoSignalsInterfaceService(std::shared_ptr<INoSignalsInterface> impl, std::shared_ptr<ApiGear::MQTT::Service> service)
     : m_impl(impl)
     , m_service(service)
-    , m_topics(createTopicMap(this))
+    , m_topics(createTopicMap())
 {
     m_impl->_getPublisher().subscribeToAllChanges(*this);
 
@@ -42,6 +30,16 @@ NoSignalsInterfaceService::~NoSignalsInterfaceService()
     {
         m_service->unsubscribeTopic(topic. first);
     }
+}
+
+std::map<std::string, ApiGear::MQTT::CallbackFunction> NoSignalsInterfaceService::createTopicMap()
+{
+    return {
+        {std::string("tb.simple/NoSignalsInterface/set/propBool"), [this](const std::string& args, const std::string&, const std::string&){ this->onSetPropBool(args); } },
+        {std::string("tb.simple/NoSignalsInterface/set/propInt"), [this](const std::string& args, const std::string&, const std::string&){ this->onSetPropInt(args); } },
+        {std::string("tb.simple/NoSignalsInterface/rpc/funcVoid"), [this](const std::string& args, const std::string& responseTopic, const std::string& correlationData) { this->onInvokeFuncVoid(args, responseTopic, correlationData); } },
+        {std::string("tb.simple/NoSignalsInterface/rpc/funcBool"), [this](const std::string& args, const std::string& responseTopic, const std::string& correlationData) { this->onInvokeFuncBool(args, responseTopic, correlationData); } },
+    };
 }
 
 void NoSignalsInterfaceService::onConnectionStatusChanged(bool connectionStatus)

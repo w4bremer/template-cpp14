@@ -14,16 +14,21 @@ public:
     virtual ~StructArrayInterfaceService() override;
 
     void onConnectionStatusChanged(bool connectionStatus);
-    void onInvokeFuncBool(const std::string& args, const std::string& responseTopic, const std::string& correlationData) const;
-    void onInvokeFuncInt(const std::string& args, const std::string& responseTopic, const std::string& correlationData) const;
-    void onInvokeFuncFloat(const std::string& args, const std::string& responseTopic, const std::string& correlationData) const;
-    void onInvokeFuncString(const std::string& args, const std::string& responseTopic, const std::string& correlationData) const;
 
     // IStructArrayInterfaceSubscriber interface
     void onSigBool(const std::list<StructBool>& paramBool) override;
     void onSigInt(const std::list<StructInt>& paramInt) override;
     void onSigFloat(const std::list<StructFloat>& paramFloat) override;
     void onSigString(const std::list<StructString>& paramString) override;
+
+private:
+    /// @brief factory to create the topic map which is used for bindings
+    /// @return map with all topics and corresponding function callbacks
+    std::map<std::string, ApiGear::MQTT::CallbackFunction> createTopicMap();
+    void onInvokeFuncBool(const std::string& args, const std::string& responseTopic, const std::string& correlationData) const;
+    void onInvokeFuncInt(const std::string& args, const std::string& responseTopic, const std::string& correlationData) const;
+    void onInvokeFuncFloat(const std::string& args, const std::string& responseTopic, const std::string& correlationData) const;
+    void onInvokeFuncString(const std::string& args, const std::string& responseTopic, const std::string& correlationData) const;
     void onPropBoolChanged(const std::list<StructBool>& propBool) override;
     /// @brief requests to set the value for the property PropBool coming from the client
     /// @param fields contains the param of the type std::list<StructBool>
@@ -41,7 +46,6 @@ public:
     /// @param fields contains the param of the type std::list<StructString>
     void onSetPropString(const std::string& args) const;
 
-private:
     std::shared_ptr<IStructArrayInterface> m_impl;
     std::shared_ptr<ApiGear::MQTT::Service> m_service;
     // id for connection status registration
