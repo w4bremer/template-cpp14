@@ -1,7 +1,6 @@
 #include "tb_simple/generated/mqtt/voidinterfaceclient.h"
 #include "tb_simple/generated/core/voidinterface.publisher.h"
 #include "tb_simple/generated/core/tb_simple.json.adapter.h"
-#include "apigear/mqtt/mqtttopic.h"
 #include <random>
 
 using namespace Test::TbSimple;
@@ -13,7 +12,7 @@ namespace {
     std::map<std::string, ApiGear::MQTT::CallbackFunction> createTopicMap(const std::string&clientId, VoidInterfaceClient* client)
     {
         return {
-            { std::string("tb.simple/VoidInterface/sig/sigVoid"), [client](const std::string& topic, const std::string& args, const std::string&, const std::string&){ client->onSignal(topic, args); } },
+            { std::string("tb.simple/VoidInterface/sig/sigVoid"), [client](const std::string&, const std::string& args, const std::string&, const std::string&){ client->onSigVoid(args); } },
             { std::string("tb.simple/VoidInterface/rpc/funcVoid/"+clientId+"/result"), [client](const std::string&, const std::string& args, const std::string&, const std::string& correlationData){ client->onInvokeReply(args, correlationData); } },
         };
     };
@@ -67,15 +66,10 @@ std::future<void> VoidInterfaceClient::funcVoidAsync()
         }
     );
 }
-
-void VoidInterfaceClient::onSignal(const std::string& topic, const std::string& args)
+void VoidInterfaceClient::onSigVoid(const std::string& args) const
 {
     nlohmann::json json_args = nlohmann::json::parse(args);
-    const std::string entityName = ApiGear::MQTT::Topic(topic).getEntityName();
-    if(entityName == "sigVoid") {
-        m_publisher->publishSigVoid();
-        return;
-    }
+    m_publisher->publishSigVoid();
 }
 
 int VoidInterfaceClient::registerResponseHandler(ApiGear::MQTT::InvokeReplyFunc handler)
