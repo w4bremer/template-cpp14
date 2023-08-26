@@ -9,8 +9,8 @@ namespace {
     std::map<std::string, ApiGear::MQTT::CallbackFunction> createTopicMap(NoPropertiesInterfaceService* service)
     {
         return {
-            {std::string("tb.simple/NoPropertiesInterface/rpc/funcVoid"), [service](const std::string&, const std::string& args, const std::string& responseTopic, const std::string& correlationData) { service->onInvokeFuncVoid(args, responseTopic, correlationData); } },
-            {std::string("tb.simple/NoPropertiesInterface/rpc/funcBool"), [service](const std::string&, const std::string& args, const std::string& responseTopic, const std::string& correlationData) { service->onInvokeFuncBool(args, responseTopic, correlationData); } },
+            {std::string("tb.simple/NoPropertiesInterface/rpc/funcVoid"), [service](const std::string& args, const std::string& responseTopic, const std::string& correlationData) { service->onInvokeFuncVoid(args, responseTopic, correlationData); } },
+            {std::string("tb.simple/NoPropertiesInterface/rpc/funcBool"), [service](const std::string& args, const std::string& responseTopic, const std::string& correlationData) { service->onInvokeFuncBool(args, responseTopic, correlationData); } },
         };
     };
 }

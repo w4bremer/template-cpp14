@@ -9,12 +9,12 @@ namespace {
     std::map<std::string, ApiGear::MQTT::CallbackFunction> createTopicMap(NestedStruct3InterfaceService* service)
     {
         return {
-            {std::string("testbed2/NestedStruct3Interface/set/prop1"), [service](const std::string&, const std::string& args, const std::string&, const std::string&){ service->onSetProp1(args); } },
-            {std::string("testbed2/NestedStruct3Interface/set/prop2"), [service](const std::string&, const std::string& args, const std::string&, const std::string&){ service->onSetProp2(args); } },
-            {std::string("testbed2/NestedStruct3Interface/set/prop3"), [service](const std::string&, const std::string& args, const std::string&, const std::string&){ service->onSetProp3(args); } },
-            {std::string("testbed2/NestedStruct3Interface/rpc/func1"), [service](const std::string&, const std::string& args, const std::string& responseTopic, const std::string& correlationData) { service->onInvokeFunc1(args, responseTopic, correlationData); } },
-            {std::string("testbed2/NestedStruct3Interface/rpc/func2"), [service](const std::string&, const std::string& args, const std::string& responseTopic, const std::string& correlationData) { service->onInvokeFunc2(args, responseTopic, correlationData); } },
-            {std::string("testbed2/NestedStruct3Interface/rpc/func3"), [service](const std::string&, const std::string& args, const std::string& responseTopic, const std::string& correlationData) { service->onInvokeFunc3(args, responseTopic, correlationData); } },
+            {std::string("testbed2/NestedStruct3Interface/set/prop1"), [service](const std::string& args, const std::string&, const std::string&){ service->onSetProp1(args); } },
+            {std::string("testbed2/NestedStruct3Interface/set/prop2"), [service](const std::string& args, const std::string&, const std::string&){ service->onSetProp2(args); } },
+            {std::string("testbed2/NestedStruct3Interface/set/prop3"), [service](const std::string& args, const std::string&, const std::string&){ service->onSetProp3(args); } },
+            {std::string("testbed2/NestedStruct3Interface/rpc/func1"), [service](const std::string& args, const std::string& responseTopic, const std::string& correlationData) { service->onInvokeFunc1(args, responseTopic, correlationData); } },
+            {std::string("testbed2/NestedStruct3Interface/rpc/func2"), [service](const std::string& args, const std::string& responseTopic, const std::string& correlationData) { service->onInvokeFunc2(args, responseTopic, correlationData); } },
+            {std::string("testbed2/NestedStruct3Interface/rpc/func3"), [service](const std::string& args, const std::string& responseTopic, const std::string& correlationData) { service->onInvokeFunc3(args, responseTopic, correlationData); } },
         };
     };
 }

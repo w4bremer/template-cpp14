@@ -12,8 +12,8 @@ namespace {
     std::map<std::string, ApiGear::MQTT::CallbackFunction> createTopicMap(const std::string&clientId, VoidInterfaceClient* client)
     {
         return {
-            { std::string("tb.simple/VoidInterface/sig/sigVoid"), [client](const std::string&, const std::string& args, const std::string&, const std::string&){ client->onSigVoid(args); } },
-            { std::string("tb.simple/VoidInterface/rpc/funcVoid/"+clientId+"/result"), [client](const std::string&, const std::string& args, const std::string&, const std::string& correlationData){ client->onInvokeReply(args, correlationData); } },
+            { std::string("tb.simple/VoidInterface/sig/sigVoid"), [client](const std::string& args, const std::string&, const std::string&){ client->onSigVoid(args); } },
+            { std::string("tb.simple/VoidInterface/rpc/funcVoid/"+clientId+"/result"), [client](const std::string& args, const std::string&, const std::string& correlationData){ client->onInvokeReply(args, correlationData); } },
         };
     };
 }

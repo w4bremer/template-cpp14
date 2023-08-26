@@ -12,12 +12,12 @@ namespace {
     std::map<std::string, ApiGear::MQTT::CallbackFunction> createTopicMap(const std::string&clientId, NestedStruct2InterfaceClient* client)
     {
         return {
-            { std::string("testbed2/NestedStruct2Interface/prop/prop1"), [client](const std::string&, const std::string& args, const std::string&, const std::string&){ client->setProp1Local(args); } },
-            { std::string("testbed2/NestedStruct2Interface/prop/prop2"), [client](const std::string&, const std::string& args, const std::string&, const std::string&){ client->setProp2Local(args); } },
-            { std::string("testbed2/NestedStruct2Interface/sig/sig1"), [client](const std::string&, const std::string& args, const std::string&, const std::string&){ client->onSig1(args); } },
-            { std::string("testbed2/NestedStruct2Interface/sig/sig2"), [client](const std::string&, const std::string& args, const std::string&, const std::string&){ client->onSig2(args); } },
-            { std::string("testbed2/NestedStruct2Interface/rpc/func1/"+clientId+"/result"), [client](const std::string&, const std::string& args, const std::string&, const std::string& correlationData){ client->onInvokeReply(args, correlationData); } },
-            { std::string("testbed2/NestedStruct2Interface/rpc/func2/"+clientId+"/result"), [client](const std::string&, const std::string& args, const std::string&, const std::string& correlationData){ client->onInvokeReply(args, correlationData); } },
+            { std::string("testbed2/NestedStruct2Interface/prop/prop1"), [client](const std::string& args, const std::string&, const std::string&){ client->setProp1Local(args); } },
+            { std::string("testbed2/NestedStruct2Interface/prop/prop2"), [client](const std::string& args, const std::string&, const std::string&){ client->setProp2Local(args); } },
+            { std::string("testbed2/NestedStruct2Interface/sig/sig1"), [client](const std::string& args, const std::string&, const std::string&){ client->onSig1(args); } },
+            { std::string("testbed2/NestedStruct2Interface/sig/sig2"), [client](const std::string& args, const std::string&, const std::string&){ client->onSig2(args); } },
+            { std::string("testbed2/NestedStruct2Interface/rpc/func1/"+clientId+"/result"), [client](const std::string& args, const std::string&, const std::string& correlationData){ client->onInvokeReply(args, correlationData); } },
+            { std::string("testbed2/NestedStruct2Interface/rpc/func2/"+clientId+"/result"), [client](const std::string& args, const std::string&, const std::string& correlationData){ client->onInvokeReply(args, correlationData); } },
         };
     };
 }

@@ -9,7 +9,7 @@ namespace {
     std::map<std::string, ApiGear::MQTT::CallbackFunction> createTopicMap(VoidInterfaceService* service)
     {
         return {
-            {std::string("tb.simple/VoidInterface/rpc/funcVoid"), [service](const std::string&, const std::string& args, const std::string& responseTopic, const std::string& correlationData) { service->onInvokeFuncVoid(args, responseTopic, correlationData); } },
+            {std::string("tb.simple/VoidInterface/rpc/funcVoid"), [service](const std::string& args, const std::string& responseTopic, const std::string& correlationData) { service->onInvokeFuncVoid(args, responseTopic, correlationData); } },
         };
     };
 }

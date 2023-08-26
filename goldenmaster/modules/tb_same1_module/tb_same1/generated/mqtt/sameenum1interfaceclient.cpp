@@ -12,9 +12,9 @@ namespace {
     std::map<std::string, ApiGear::MQTT::CallbackFunction> createTopicMap(const std::string&clientId, SameEnum1InterfaceClient* client)
     {
         return {
-            { std::string("tb.same1/SameEnum1Interface/prop/prop1"), [client](const std::string&, const std::string& args, const std::string&, const std::string&){ client->setProp1Local(args); } },
-            { std::string("tb.same1/SameEnum1Interface/sig/sig1"), [client](const std::string&, const std::string& args, const std::string&, const std::string&){ client->onSig1(args); } },
-            { std::string("tb.same1/SameEnum1Interface/rpc/func1/"+clientId+"/result"), [client](const std::string&, const std::string& args, const std::string&, const std::string& correlationData){ client->onInvokeReply(args, correlationData); } },
+            { std::string("tb.same1/SameEnum1Interface/prop/prop1"), [client](const std::string& args, const std::string&, const std::string&){ client->setProp1Local(args); } },
+            { std::string("tb.same1/SameEnum1Interface/sig/sig1"), [client](const std::string& args, const std::string&, const std::string&){ client->onSig1(args); } },
+            { std::string("tb.same1/SameEnum1Interface/rpc/func1/"+clientId+"/result"), [client](const std::string& args, const std::string&, const std::string& correlationData){ client->onInvokeReply(args, correlationData); } },
         };
     };
 }

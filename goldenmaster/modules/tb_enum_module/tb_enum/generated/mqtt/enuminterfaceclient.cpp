@@ -12,18 +12,18 @@ namespace {
     std::map<std::string, ApiGear::MQTT::CallbackFunction> createTopicMap(const std::string&clientId, EnumInterfaceClient* client)
     {
         return {
-            { std::string("tb.enum/EnumInterface/prop/prop0"), [client](const std::string&, const std::string& args, const std::string&, const std::string&){ client->setProp0Local(args); } },
-            { std::string("tb.enum/EnumInterface/prop/prop1"), [client](const std::string&, const std::string& args, const std::string&, const std::string&){ client->setProp1Local(args); } },
-            { std::string("tb.enum/EnumInterface/prop/prop2"), [client](const std::string&, const std::string& args, const std::string&, const std::string&){ client->setProp2Local(args); } },
-            { std::string("tb.enum/EnumInterface/prop/prop3"), [client](const std::string&, const std::string& args, const std::string&, const std::string&){ client->setProp3Local(args); } },
-            { std::string("tb.enum/EnumInterface/sig/sig0"), [client](const std::string&, const std::string& args, const std::string&, const std::string&){ client->onSig0(args); } },
-            { std::string("tb.enum/EnumInterface/sig/sig1"), [client](const std::string&, const std::string& args, const std::string&, const std::string&){ client->onSig1(args); } },
-            { std::string("tb.enum/EnumInterface/sig/sig2"), [client](const std::string&, const std::string& args, const std::string&, const std::string&){ client->onSig2(args); } },
-            { std::string("tb.enum/EnumInterface/sig/sig3"), [client](const std::string&, const std::string& args, const std::string&, const std::string&){ client->onSig3(args); } },
-            { std::string("tb.enum/EnumInterface/rpc/func0/"+clientId+"/result"), [client](const std::string&, const std::string& args, const std::string&, const std::string& correlationData){ client->onInvokeReply(args, correlationData); } },
-            { std::string("tb.enum/EnumInterface/rpc/func1/"+clientId+"/result"), [client](const std::string&, const std::string& args, const std::string&, const std::string& correlationData){ client->onInvokeReply(args, correlationData); } },
-            { std::string("tb.enum/EnumInterface/rpc/func2/"+clientId+"/result"), [client](const std::string&, const std::string& args, const std::string&, const std::string& correlationData){ client->onInvokeReply(args, correlationData); } },
-            { std::string("tb.enum/EnumInterface/rpc/func3/"+clientId+"/result"), [client](const std::string&, const std::string& args, const std::string&, const std::string& correlationData){ client->onInvokeReply(args, correlationData); } },
+            { std::string("tb.enum/EnumInterface/prop/prop0"), [client](const std::string& args, const std::string&, const std::string&){ client->setProp0Local(args); } },
+            { std::string("tb.enum/EnumInterface/prop/prop1"), [client](const std::string& args, const std::string&, const std::string&){ client->setProp1Local(args); } },
+            { std::string("tb.enum/EnumInterface/prop/prop2"), [client](const std::string& args, const std::string&, const std::string&){ client->setProp2Local(args); } },
+            { std::string("tb.enum/EnumInterface/prop/prop3"), [client](const std::string& args, const std::string&, const std::string&){ client->setProp3Local(args); } },
+            { std::string("tb.enum/EnumInterface/sig/sig0"), [client](const std::string& args, const std::string&, const std::string&){ client->onSig0(args); } },
+            { std::string("tb.enum/EnumInterface/sig/sig1"), [client](const std::string& args, const std::string&, const std::string&){ client->onSig1(args); } },
+            { std::string("tb.enum/EnumInterface/sig/sig2"), [client](const std::string& args, const std::string&, const std::string&){ client->onSig2(args); } },
+            { std::string("tb.enum/EnumInterface/sig/sig3"), [client](const std::string& args, const std::string&, const std::string&){ client->onSig3(args); } },
+            { std::string("tb.enum/EnumInterface/rpc/func0/"+clientId+"/result"), [client](const std::string& args, const std::string&, const std::string& correlationData){ client->onInvokeReply(args, correlationData); } },
+            { std::string("tb.enum/EnumInterface/rpc/func1/"+clientId+"/result"), [client](const std::string& args, const std::string&, const std::string& correlationData){ client->onInvokeReply(args, correlationData); } },
+            { std::string("tb.enum/EnumInterface/rpc/func2/"+clientId+"/result"), [client](const std::string& args, const std::string&, const std::string& correlationData){ client->onInvokeReply(args, correlationData); } },
+            { std::string("tb.enum/EnumInterface/rpc/func3/"+clientId+"/result"), [client](const std::string& args, const std::string&, const std::string& correlationData){ client->onInvokeReply(args, correlationData); } },
         };
     };
 }
