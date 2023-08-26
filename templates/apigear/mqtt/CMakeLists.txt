@@ -15,7 +15,6 @@ set (SOURCES
   private/mqttcwrapper.cpp
   mqttclient.cpp
   mqttservice.cpp
-  mqtttopic.cpp
 )
 add_library(paho-mqtt SHARED ${SOURCES})
 add_library(apigear::paho-mqtt ALIAS paho-mqtt)
@@ -40,7 +39,6 @@ find_package(Catch2 REQUIRED)
 
 set (SOURCES_TEST
     ../apigear.test.cpp
-    mqtttopic.test.cpp
 )
 add_executable(test_mqtt ${SOURCES_TEST})
 target_include_directories(test_mqtt PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
