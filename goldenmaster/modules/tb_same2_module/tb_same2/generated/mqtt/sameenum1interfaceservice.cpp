@@ -9,8 +9,8 @@ namespace {
     std::map<std::string, ApiGear::MQTT::CallbackFunction> createTopicMap(SameEnum1InterfaceService* service)
     {
         return {
-            {std::string("tb.same2/SameEnum1Interface/set/prop1"), [service](const std::string&, const std::string& args, const std::string&, const std::string&){ service->onSetProp1(args); } },
-            {std::string("tb.same2/SameEnum1Interface/rpc/func1"), [service](const std::string&, const std::string& args, const std::string& responseTopic, const std::string& correlationData) { service->onInvokeFunc1(args, responseTopic, correlationData); } },
+            {std::string("tb.same2/SameEnum1Interface/set/prop1"), [service](const std::string& args, const std::string&, const std::string&){ service->onSetProp1(args); } },
+            {std::string("tb.same2/SameEnum1Interface/rpc/func1"), [service](const std::string& args, const std::string& responseTopic, const std::string& correlationData) { service->onInvokeFunc1(args, responseTopic, correlationData); } },
         };
     };
 }

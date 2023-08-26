@@ -14,11 +14,11 @@ namespace {
         return {
         {{- range .Interface.Properties}}
         {{- $property := . }}
-            {std::string("{{$.Module.Name}}/{{$interface}}/set/{{$property}}"), [service](const std::string&, const std::string& args, const std::string&, const std::string&){ service->onSet{{Camel $property.Name}}(args); } },
+            {std::string("{{$.Module.Name}}/{{$interface}}/set/{{$property}}"), [service](const std::string& args, const std::string&, const std::string&){ service->onSet{{Camel $property.Name}}(args); } },
         {{- end }}
         {{- range .Interface.Operations}}
         {{- $operation := . }}
-            {std::string("{{$.Module.Name}}/{{$interface}}/rpc/{{$operation}}"), [service](const std::string&, const std::string& args, const std::string& responseTopic, const std::string& correlationData) { service->onInvoke{{ Camel $operation.Name }}(args, responseTopic, correlationData); } },
+            {std::string("{{$.Module.Name}}/{{$interface}}/rpc/{{$operation}}"), [service](const std::string& args, const std::string& responseTopic, const std::string& correlationData) { service->onInvoke{{ Camel $operation.Name }}(args, responseTopic, correlationData); } },
         {{- end }}
         };
     };

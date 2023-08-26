@@ -12,10 +12,10 @@ namespace {
     std::map<std::string, ApiGear::MQTT::CallbackFunction> createTopicMap(const std::string&clientId, NoSignalsInterfaceClient* client)
     {
         return {
-            { std::string("tb.simple/NoSignalsInterface/prop/propBool"), [client](const std::string&, const std::string& args, const std::string&, const std::string&){ client->setPropBoolLocal(args); } },
-            { std::string("tb.simple/NoSignalsInterface/prop/propInt"), [client](const std::string&, const std::string& args, const std::string&, const std::string&){ client->setPropIntLocal(args); } },
-            { std::string("tb.simple/NoSignalsInterface/rpc/funcVoid/"+clientId+"/result"), [client](const std::string&, const std::string& args, const std::string&, const std::string& correlationData){ client->onInvokeReply(args, correlationData); } },
-            { std::string("tb.simple/NoSignalsInterface/rpc/funcBool/"+clientId+"/result"), [client](const std::string&, const std::string& args, const std::string&, const std::string& correlationData){ client->onInvokeReply(args, correlationData); } },
+            { std::string("tb.simple/NoSignalsInterface/prop/propBool"), [client](const std::string& args, const std::string&, const std::string&){ client->setPropBoolLocal(args); } },
+            { std::string("tb.simple/NoSignalsInterface/prop/propInt"), [client](const std::string& args, const std::string&, const std::string&){ client->setPropIntLocal(args); } },
+            { std::string("tb.simple/NoSignalsInterface/rpc/funcVoid/"+clientId+"/result"), [client](const std::string& args, const std::string&, const std::string& correlationData){ client->onInvokeReply(args, correlationData); } },
+            { std::string("tb.simple/NoSignalsInterface/rpc/funcBool/"+clientId+"/result"), [client](const std::string& args, const std::string&, const std::string& correlationData){ client->onInvokeReply(args, correlationData); } },
         };
     };
 }

@@ -20,15 +20,15 @@ namespace {
         return {
         {{- range .Interface.Properties}}
         {{- $property := . }}
-            { std::string("{{$.Module.Name}}/{{$interfaceName}}/prop/{{$property}}"), [client](const std::string&, const std::string& args, const std::string&, const std::string&){ client->set{{Camel $property.Name}}Local(args); } },
+            { std::string("{{$.Module.Name}}/{{$interfaceName}}/prop/{{$property}}"), [client](const std::string& args, const std::string&, const std::string&){ client->set{{Camel $property.Name}}Local(args); } },
         {{- end }}
         {{- range .Interface.Signals}}
         {{- $signal := . }}
-            { std::string("{{$.Module.Name}}/{{$interfaceName}}/sig/{{$signal}}"), [client](const std::string&, const std::string& args, const std::string&, const std::string&){ client->on{{Camel $signal.Name }}(args); } },
+            { std::string("{{$.Module.Name}}/{{$interfaceName}}/sig/{{$signal}}"), [client](const std::string& args, const std::string&, const std::string&){ client->on{{Camel $signal.Name }}(args); } },
         {{- end }}
         {{- range .Interface.Operations}}
         {{- $operation := . }}
-            { std::string("{{$.Module.Name}}/{{$interfaceName}}/rpc/{{$operation}}/"+clientId+"/result"), [client](const std::string&, const std::string& args, const std::string&, const std::string& correlationData){ client->onInvokeReply(args, correlationData); } },
+            { std::string("{{$.Module.Name}}/{{$interfaceName}}/rpc/{{$operation}}/"+clientId+"/result"), [client](const std::string& args, const std::string&, const std::string& correlationData){ client->onInvokeReply(args, correlationData); } },
         {{- end }}
         };
     };

@@ -9,10 +9,10 @@ namespace {
     std::map<std::string, ApiGear::MQTT::CallbackFunction> createTopicMap(NoSignalsInterfaceService* service)
     {
         return {
-            {std::string("tb.simple/NoSignalsInterface/set/propBool"), [service](const std::string&, const std::string& args, const std::string&, const std::string&){ service->onSetPropBool(args); } },
-            {std::string("tb.simple/NoSignalsInterface/set/propInt"), [service](const std::string&, const std::string& args, const std::string&, const std::string&){ service->onSetPropInt(args); } },
-            {std::string("tb.simple/NoSignalsInterface/rpc/funcVoid"), [service](const std::string&, const std::string& args, const std::string& responseTopic, const std::string& correlationData) { service->onInvokeFuncVoid(args, responseTopic, correlationData); } },
-            {std::string("tb.simple/NoSignalsInterface/rpc/funcBool"), [service](const std::string&, const std::string& args, const std::string& responseTopic, const std::string& correlationData) { service->onInvokeFuncBool(args, responseTopic, correlationData); } },
+            {std::string("tb.simple/NoSignalsInterface/set/propBool"), [service](const std::string& args, const std::string&, const std::string&){ service->onSetPropBool(args); } },
+            {std::string("tb.simple/NoSignalsInterface/set/propInt"), [service](const std::string& args, const std::string&, const std::string&){ service->onSetPropInt(args); } },
+            {std::string("tb.simple/NoSignalsInterface/rpc/funcVoid"), [service](const std::string& args, const std::string& responseTopic, const std::string& correlationData) { service->onInvokeFuncVoid(args, responseTopic, correlationData); } },
+            {std::string("tb.simple/NoSignalsInterface/rpc/funcBool"), [service](const std::string& args, const std::string& responseTopic, const std::string& correlationData) { service->onInvokeFuncBool(args, responseTopic, correlationData); } },
         };
     };
 }

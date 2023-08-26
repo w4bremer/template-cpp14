@@ -412,7 +412,7 @@ void CWrapper::handleTextMessage(const Message& message)
     {
         if(iter->second != nullptr)
         {
-            iter->second(message.topic, message.content, message.responseTopic, message.correlationData);
+            iter->second(message.content, message.responseTopic, message.correlationData);
         }
     }
 }

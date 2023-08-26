@@ -12,18 +12,18 @@ namespace {
     std::map<std::string, ApiGear::MQTT::CallbackFunction> createTopicMap(const std::string&clientId, StructInterfaceClient* client)
     {
         return {
-            { std::string("testbed1/StructInterface/prop/propBool"), [client](const std::string&, const std::string& args, const std::string&, const std::string&){ client->setPropBoolLocal(args); } },
-            { std::string("testbed1/StructInterface/prop/propInt"), [client](const std::string&, const std::string& args, const std::string&, const std::string&){ client->setPropIntLocal(args); } },
-            { std::string("testbed1/StructInterface/prop/propFloat"), [client](const std::string&, const std::string& args, const std::string&, const std::string&){ client->setPropFloatLocal(args); } },
-            { std::string("testbed1/StructInterface/prop/propString"), [client](const std::string&, const std::string& args, const std::string&, const std::string&){ client->setPropStringLocal(args); } },
-            { std::string("testbed1/StructInterface/sig/sigBool"), [client](const std::string&, const std::string& args, const std::string&, const std::string&){ client->onSigBool(args); } },
-            { std::string("testbed1/StructInterface/sig/sigInt"), [client](const std::string&, const std::string& args, const std::string&, const std::string&){ client->onSigInt(args); } },
-            { std::string("testbed1/StructInterface/sig/sigFloat"), [client](const std::string&, const std::string& args, const std::string&, const std::string&){ client->onSigFloat(args); } },
-            { std::string("testbed1/StructInterface/sig/sigString"), [client](const std::string&, const std::string& args, const std::string&, const std::string&){ client->onSigString(args); } },
-            { std::string("testbed1/StructInterface/rpc/funcBool/"+clientId+"/result"), [client](const std::string&, const std::string& args, const std::string&, const std::string& correlationData){ client->onInvokeReply(args, correlationData); } },
-            { std::string("testbed1/StructInterface/rpc/funcInt/"+clientId+"/result"), [client](const std::string&, const std::string& args, const std::string&, const std::string& correlationData){ client->onInvokeReply(args, correlationData); } },
-            { std::string("testbed1/StructInterface/rpc/funcFloat/"+clientId+"/result"), [client](const std::string&, const std::string& args, const std::string&, const std::string& correlationData){ client->onInvokeReply(args, correlationData); } },
-            { std::string("testbed1/StructInterface/rpc/funcString/"+clientId+"/result"), [client](const std::string&, const std::string& args, const std::string&, const std::string& correlationData){ client->onInvokeReply(args, correlationData); } },
+            { std::string("testbed1/StructInterface/prop/propBool"), [client](const std::string& args, const std::string&, const std::string&){ client->setPropBoolLocal(args); } },
+            { std::string("testbed1/StructInterface/prop/propInt"), [client](const std::string& args, const std::string&, const std::string&){ client->setPropIntLocal(args); } },
+            { std::string("testbed1/StructInterface/prop/propFloat"), [client](const std::string& args, const std::string&, const std::string&){ client->setPropFloatLocal(args); } },
+            { std::string("testbed1/StructInterface/prop/propString"), [client](const std::string& args, const std::string&, const std::string&){ client->setPropStringLocal(args); } },
+            { std::string("testbed1/StructInterface/sig/sigBool"), [client](const std::string& args, const std::string&, const std::string&){ client->onSigBool(args); } },
+            { std::string("testbed1/StructInterface/sig/sigInt"), [client](const std::string& args, const std::string&, const std::string&){ client->onSigInt(args); } },
+            { std::string("testbed1/StructInterface/sig/sigFloat"), [client](const std::string& args, const std::string&, const std::string&){ client->onSigFloat(args); } },
+            { std::string("testbed1/StructInterface/sig/sigString"), [client](const std::string& args, const std::string&, const std::string&){ client->onSigString(args); } },
+            { std::string("testbed1/StructInterface/rpc/funcBool/"+clientId+"/result"), [client](const std::string& args, const std::string&, const std::string& correlationData){ client->onInvokeReply(args, correlationData); } },
+            { std::string("testbed1/StructInterface/rpc/funcInt/"+clientId+"/result"), [client](const std::string& args, const std::string&, const std::string& correlationData){ client->onInvokeReply(args, correlationData); } },
+            { std::string("testbed1/StructInterface/rpc/funcFloat/"+clientId+"/result"), [client](const std::string& args, const std::string&, const std::string& correlationData){ client->onInvokeReply(args, correlationData); } },
+            { std::string("testbed1/StructInterface/rpc/funcString/"+clientId+"/result"), [client](const std::string& args, const std::string&, const std::string& correlationData){ client->onInvokeReply(args, correlationData); } },
         };
     };
 }

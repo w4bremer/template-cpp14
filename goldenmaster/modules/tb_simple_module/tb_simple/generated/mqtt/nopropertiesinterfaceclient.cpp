@@ -12,10 +12,10 @@ namespace {
     std::map<std::string, ApiGear::MQTT::CallbackFunction> createTopicMap(const std::string&clientId, NoPropertiesInterfaceClient* client)
     {
         return {
-            { std::string("tb.simple/NoPropertiesInterface/sig/sigVoid"), [client](const std::string&, const std::string& args, const std::string&, const std::string&){ client->onSigVoid(args); } },
-            { std::string("tb.simple/NoPropertiesInterface/sig/sigBool"), [client](const std::string&, const std::string& args, const std::string&, const std::string&){ client->onSigBool(args); } },
-            { std::string("tb.simple/NoPropertiesInterface/rpc/funcVoid/"+clientId+"/result"), [client](const std::string&, const std::string& args, const std::string&, const std::string& correlationData){ client->onInvokeReply(args, correlationData); } },
-            { std::string("tb.simple/NoPropertiesInterface/rpc/funcBool/"+clientId+"/result"), [client](const std::string&, const std::string& args, const std::string&, const std::string& correlationData){ client->onInvokeReply(args, correlationData); } },
+            { std::string("tb.simple/NoPropertiesInterface/sig/sigVoid"), [client](const std::string& args, const std::string&, const std::string&){ client->onSigVoid(args); } },
+            { std::string("tb.simple/NoPropertiesInterface/sig/sigBool"), [client](const std::string& args, const std::string&, const std::string&){ client->onSigBool(args); } },
+            { std::string("tb.simple/NoPropertiesInterface/rpc/funcVoid/"+clientId+"/result"), [client](const std::string& args, const std::string&, const std::string& correlationData){ client->onInvokeReply(args, correlationData); } },
+            { std::string("tb.simple/NoPropertiesInterface/rpc/funcBool/"+clientId+"/result"), [client](const std::string& args, const std::string&, const std::string& correlationData){ client->onInvokeReply(args, correlationData); } },
         };
     };
 }

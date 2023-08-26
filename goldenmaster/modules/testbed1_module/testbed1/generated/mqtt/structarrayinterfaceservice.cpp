@@ -9,14 +9,14 @@ namespace {
     std::map<std::string, ApiGear::MQTT::CallbackFunction> createTopicMap(StructArrayInterfaceService* service)
     {
         return {
-            {std::string("testbed1/StructArrayInterface/set/propBool"), [service](const std::string&, const std::string& args, const std::string&, const std::string&){ service->onSetPropBool(args); } },
-            {std::string("testbed1/StructArrayInterface/set/propInt"), [service](const std::string&, const std::string& args, const std::string&, const std::string&){ service->onSetPropInt(args); } },
-            {std::string("testbed1/StructArrayInterface/set/propFloat"), [service](const std::string&, const std::string& args, const std::string&, const std::string&){ service->onSetPropFloat(args); } },
-            {std::string("testbed1/StructArrayInterface/set/propString"), [service](const std::string&, const std::string& args, const std::string&, const std::string&){ service->onSetPropString(args); } },
-            {std::string("testbed1/StructArrayInterface/rpc/funcBool"), [service](const std::string&, const std::string& args, const std::string& responseTopic, const std::string& correlationData) { service->onInvokeFuncBool(args, responseTopic, correlationData); } },
-            {std::string("testbed1/StructArrayInterface/rpc/funcInt"), [service](const std::string&, const std::string& args, const std::string& responseTopic, const std::string& correlationData) { service->onInvokeFuncInt(args, responseTopic, correlationData); } },
-            {std::string("testbed1/StructArrayInterface/rpc/funcFloat"), [service](const std::string&, const std::string& args, const std::string& responseTopic, const std::string& correlationData) { service->onInvokeFuncFloat(args, responseTopic, correlationData); } },
-            {std::string("testbed1/StructArrayInterface/rpc/funcString"), [service](const std::string&, const std::string& args, const std::string& responseTopic, const std::string& correlationData) { service->onInvokeFuncString(args, responseTopic, correlationData); } },
+            {std::string("testbed1/StructArrayInterface/set/propBool"), [service](const std::string& args, const std::string&, const std::string&){ service->onSetPropBool(args); } },
+            {std::string("testbed1/StructArrayInterface/set/propInt"), [service](const std::string& args, const std::string&, const std::string&){ service->onSetPropInt(args); } },
+            {std::string("testbed1/StructArrayInterface/set/propFloat"), [service](const std::string& args, const std::string&, const std::string&){ service->onSetPropFloat(args); } },
+            {std::string("testbed1/StructArrayInterface/set/propString"), [service](const std::string& args, const std::string&, const std::string&){ service->onSetPropString(args); } },
+            {std::string("testbed1/StructArrayInterface/rpc/funcBool"), [service](const std::string& args, const std::string& responseTopic, const std::string& correlationData) { service->onInvokeFuncBool(args, responseTopic, correlationData); } },
+            {std::string("testbed1/StructArrayInterface/rpc/funcInt"), [service](const std::string& args, const std::string& responseTopic, const std::string& correlationData) { service->onInvokeFuncInt(args, responseTopic, correlationData); } },
+            {std::string("testbed1/StructArrayInterface/rpc/funcFloat"), [service](const std::string& args, const std::string& responseTopic, const std::string& correlationData) { service->onInvokeFuncFloat(args, responseTopic, correlationData); } },
+            {std::string("testbed1/StructArrayInterface/rpc/funcString"), [service](const std::string& args, const std::string& responseTopic, const std::string& correlationData) { service->onInvokeFuncString(args, responseTopic, correlationData); } },
         };
     };
 }

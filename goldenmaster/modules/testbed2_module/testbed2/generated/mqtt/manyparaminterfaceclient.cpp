@@ -12,18 +12,18 @@ namespace {
     std::map<std::string, ApiGear::MQTT::CallbackFunction> createTopicMap(const std::string&clientId, ManyParamInterfaceClient* client)
     {
         return {
-            { std::string("testbed2/ManyParamInterface/prop/prop1"), [client](const std::string&, const std::string& args, const std::string&, const std::string&){ client->setProp1Local(args); } },
-            { std::string("testbed2/ManyParamInterface/prop/prop2"), [client](const std::string&, const std::string& args, const std::string&, const std::string&){ client->setProp2Local(args); } },
-            { std::string("testbed2/ManyParamInterface/prop/prop3"), [client](const std::string&, const std::string& args, const std::string&, const std::string&){ client->setProp3Local(args); } },
-            { std::string("testbed2/ManyParamInterface/prop/prop4"), [client](const std::string&, const std::string& args, const std::string&, const std::string&){ client->setProp4Local(args); } },
-            { std::string("testbed2/ManyParamInterface/sig/sig1"), [client](const std::string&, const std::string& args, const std::string&, const std::string&){ client->onSig1(args); } },
-            { std::string("testbed2/ManyParamInterface/sig/sig2"), [client](const std::string&, const std::string& args, const std::string&, const std::string&){ client->onSig2(args); } },
-            { std::string("testbed2/ManyParamInterface/sig/sig3"), [client](const std::string&, const std::string& args, const std::string&, const std::string&){ client->onSig3(args); } },
-            { std::string("testbed2/ManyParamInterface/sig/sig4"), [client](const std::string&, const std::string& args, const std::string&, const std::string&){ client->onSig4(args); } },
-            { std::string("testbed2/ManyParamInterface/rpc/func1/"+clientId+"/result"), [client](const std::string&, const std::string& args, const std::string&, const std::string& correlationData){ client->onInvokeReply(args, correlationData); } },
-            { std::string("testbed2/ManyParamInterface/rpc/func2/"+clientId+"/result"), [client](const std::string&, const std::string& args, const std::string&, const std::string& correlationData){ client->onInvokeReply(args, correlationData); } },
-            { std::string("testbed2/ManyParamInterface/rpc/func3/"+clientId+"/result"), [client](const std::string&, const std::string& args, const std::string&, const std::string& correlationData){ client->onInvokeReply(args, correlationData); } },
-            { std::string("testbed2/ManyParamInterface/rpc/func4/"+clientId+"/result"), [client](const std::string&, const std::string& args, const std::string&, const std::string& correlationData){ client->onInvokeReply(args, correlationData); } },
+            { std::string("testbed2/ManyParamInterface/prop/prop1"), [client](const std::string& args, const std::string&, const std::string&){ client->setProp1Local(args); } },
+            { std::string("testbed2/ManyParamInterface/prop/prop2"), [client](const std::string& args, const std::string&, const std::string&){ client->setProp2Local(args); } },
+            { std::string("testbed2/ManyParamInterface/prop/prop3"), [client](const std::string& args, const std::string&, const std::string&){ client->setProp3Local(args); } },
+            { std::string("testbed2/ManyParamInterface/prop/prop4"), [client](const std::string& args, const std::string&, const std::string&){ client->setProp4Local(args); } },
+            { std::string("testbed2/ManyParamInterface/sig/sig1"), [client](const std::string& args, const std::string&, const std::string&){ client->onSig1(args); } },
+            { std::string("testbed2/ManyParamInterface/sig/sig2"), [client](const std::string& args, const std::string&, const std::string&){ client->onSig2(args); } },
+            { std::string("testbed2/ManyParamInterface/sig/sig3"), [client](const std::string& args, const std::string&, const std::string&){ client->onSig3(args); } },
+            { std::string("testbed2/ManyParamInterface/sig/sig4"), [client](const std::string& args, const std::string&, const std::string&){ client->onSig4(args); } },
+            { std::string("testbed2/ManyParamInterface/rpc/func1/"+clientId+"/result"), [client](const std::string& args, const std::string&, const std::string& correlationData){ client->onInvokeReply(args, correlationData); } },
+            { std::string("testbed2/ManyParamInterface/rpc/func2/"+clientId+"/result"), [client](const std::string& args, const std::string&, const std::string& correlationData){ client->onInvokeReply(args, correlationData); } },
+            { std::string("testbed2/ManyParamInterface/rpc/func3/"+clientId+"/result"), [client](const std::string& args, const std::string&, const std::string& correlationData){ client->onInvokeReply(args, correlationData); } },
+            { std::string("testbed2/ManyParamInterface/rpc/func4/"+clientId+"/result"), [client](const std::string& args, const std::string&, const std::string& correlationData){ client->onInvokeReply(args, correlationData); } },
         };
     };
 }
