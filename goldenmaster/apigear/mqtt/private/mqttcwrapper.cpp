@@ -162,7 +162,7 @@ int CWrapper::createUniqueConnectionStatusId()
 int CWrapper::subscribeToConnectionStatus(OnConnectionStatusChangedCallBackFunction callBack)
 {
     auto subscriptionId = createUniqueConnectionStatusId();
-    m_onConnectionStatusChangedCallbacks.insert(std::pair<int, OnConnectionStatusChangedCallBackFunction>(subscriptionId, callBack));
+    m_onConnectionStatusChangedCallbacks.insert({subscriptionId, callBack});
     m_onConnectionStatusChangedCallbacksMutex.unlock();
 
     return subscriptionId;
@@ -414,8 +414,7 @@ void CWrapper::onDisconnected()
 void CWrapper::handleTextMessage(const Message& message)
 {
     auto subscribedTopicsRange = m_subscribedTopics.equal_range(message.topic);
-    std::pair<std::multimap<std::string, CallbackFunction>::iterator, std::multimap<std::string, CallbackFunction>::iterator> topics = subscribedTopicsRange;
-    for (auto iter = topics.first; iter != topics.second; ++iter)
+    for (auto iter = subscribedTopicsRange.first; iter != subscribedTopicsRange.second; ++iter)
     {
         if(iter->second != nullptr)
         {
