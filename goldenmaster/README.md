@@ -15,6 +15,9 @@ The following list presents a set of features which can be individually enabled 
     Create support libraries for monitoring API traffic
 * **olink**<br/>
     Create IPC [ObjectLink](https://objectlinkprotocol.net/) adapters for your interface classes.
+* **mqtt**<br/>
+    Create IPC implementation for [MQTT v5](https://mqtt.org/). Provides ready to use client and server for your Interfaces
+    Please note this feature is still experimental.
 * **examples**<br/>
     Create simple examples for "How to use" the generated code for stubs
 * **example-olink**<br/>

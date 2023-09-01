@@ -18,6 +18,10 @@ The following list presents a set of features which can be individually enabled 
 * **olink**<br/>
     Create IPC implementation for [ObjectLink](https://objectlinkprotocol.net/). Provides ready to use client and server for your Interfaces
     Requires: api, core, apigear. For detailed information about information see also "Lifecycle for olink client-server implementation.md"
+* **mqtt**<br/>
+    Create IPC implementation for [MQTT v5](https://mqtt.org/). Provides ready to use client and server for your Interfaces
+    Requires: api, core, apigear. For detailed information about information see also the [MQTT specification](https://docs.oasis-open.org/mqtt/mqtt/v5.0/mqtt-v5.0.html)
+    Please note this feature is still experimental.
 * **apigear**<br/>
     Create necessary ApiGear support library for extended features like monitoring, olink IPC - needs to be generated for monitor or olink
 * **examples**<br/>
