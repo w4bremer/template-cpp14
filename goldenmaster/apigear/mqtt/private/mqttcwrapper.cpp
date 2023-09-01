@@ -4,6 +4,7 @@
 #include <chrono>
 #include <random>
 #include <memory>
+#include <vector>
 
 using namespace ApiGear::MQTT;
 #define QOS         2
@@ -16,8 +17,7 @@ namespace
 std::mt19937 randomNumberGenerator (std::random_device{}());
 
 struct subscribeTopicContext {
-    std::string topic;
-    CallbackFunction func;
+    std::vector<std::string> topics;
     std::weak_ptr<CWrapper> client;
 };
 
@@ -35,7 +35,7 @@ void onSubscribeSuccess(void* context, MQTTAsync_successData5* /*response*/)
     subscribeTopicContext* ctx = static_cast<subscribeTopicContext*>(context);
     if (auto client = ctx->client.lock())
     {
-        client->onSubscribed(ctx->topic, ctx->func);
+        client->onSubscribed(ctx->topics);
     }
     delete ctx;
 }
@@ -52,7 +52,7 @@ void onUnsubscribeSuccess(void* context, MQTTAsync_successData5* /*response*/)
     subscribeTopicContext* ctx = static_cast<subscribeTopicContext*>(context);
     if (auto client = ctx->client.lock())
     {
-        client->onUnsubscribed(ctx->topic);
+        client->onUnsubscribed(ctx->topics);
     }
     delete ctx;
 }
@@ -188,7 +188,7 @@ void CWrapper::run()
         lock.unlock();
 
         addNewSubscriptions();
-        removeOldSubscriptions();
+        // removeOldSubscriptions();
 
     }
     while (m_connected && !m_disconnectRequested);
@@ -199,42 +199,79 @@ void CWrapper::run()
 
 void CWrapper::addNewSubscriptions()
 {
-    m_toBeSubscribedTopicsMutex.lock();
-    const auto toBeSubscribedTopics(std::move(m_toBeSubscribedTopics));
-    m_toBeSubscribedTopics.clear();
-    m_toBeSubscribedTopicsMutex.unlock();
-    for (const auto& topic : toBeSubscribedTopics) {
+    if (!m_connected || m_disconnectRequested)
+    {
+        return;
+    }
 
-        MQTTAsync_responseOptions opts = MQTTAsync_responseOptions_initializer;
-        opts.onSuccess5 = onSubscribeSuccess;
-        opts.onFailure5 = onSubscribeFailure;
-        opts.context = new subscribeTopicContext{topic.first, topic.second, getPtr()};
-        int responseCode = MQTTAsync_subscribe(*m_client.get(), topic.first.c_str(), QOS, &opts);
-        if (responseCode != MQTTASYNC_SUCCESS)
-        {
-            AG_LOG_ERROR("Failed to start subscribe, return code " + std::to_string(responseCode));
-        }
+    m_toBeSubscribedTopicsMutex.lock();
+    m_pendingSubscribedTopicsMutex.lock();
+    // there could be already pending topic subscriptions, so only add new ones
+    m_pendingSubscribedTopics.insert(m_toBeSubscribedTopics.begin(), m_toBeSubscribedTopics.end());
+    const auto pendingSubscribedTopics(std::move(m_toBeSubscribedTopics));
+    m_pendingSubscribedTopicsMutex.unlock();
+    m_toBeSubscribedTopicsMutex.unlock();
+
+    std::vector<int> listQOS;
+    std::vector<std::string> topics;
+    std::vector<char*> charTopics;
+    for (const auto& topic : pendingSubscribedTopics) {
+        listQOS.push_back(QOS);
+        topics.push_back(topic.first);
+        // TODO
+        charTopics.push_back(const_cast<char*>(topic.first.c_str()));
+    }
+    const std::vector<char*> copyTopics {charTopics};
+
+    MQTTAsync_responseOptions opts = MQTTAsync_responseOptions_initializer;
+    opts.onSuccess5 = onSubscribeSuccess;
+    opts.onFailure5 = onSubscribeFailure;
+    opts.context = new subscribeTopicContext{topics, getPtr()};
+    int responseCode = MQTTAsync_subscribeMany(*m_client.get(), static_cast<int>(charTopics.size()) , &copyTopics[0], &listQOS[0], &opts);
+    if (responseCode != MQTTASYNC_SUCCESS)
+    {
+        AG_LOG_ERROR("Failed to start subscribe, return code " + std::to_string(responseCode));
     }
 }
 
 void CWrapper::removeOldSubscriptions()
 {
-    m_toBeUnsubscribedTopicsMutex.lock();
-    const auto toBeUnsubscribedTopics(std::move(m_toBeUnsubscribedTopics));
-    m_toBeUnsubscribedTopics.clear();
-    m_toBeUnsubscribedTopicsMutex.unlock();
-    for (const auto& topic : toBeUnsubscribedTopics) {
-        AG_LOG_INFO("Unsubscribing from " + topic);
+    if(!m_connected)
+    {
+        return;
+    }
 
-        MQTTAsync_responseOptions opts = MQTTAsync_responseOptions_initializer;
-        opts.onSuccess5 = onUnsubscribeSuccess;
-        opts.onFailure5 = onUnsubscribeFailure;
-        opts.context = new subscribeTopicContext{topic, nullptr, getPtr()};
-        int responseCode = MQTTAsync_unsubscribe(*m_client.get(), topic.c_str(), &opts);
-        if (responseCode != MQTTASYNC_SUCCESS)
-        {
-            AG_LOG_WARNING("Failed to start unsubscribe, return code " + std::to_string(responseCode));
-        }
+    m_toBeUnsubscribedTopicsMutex.lock();
+    if (m_toBeUnsubscribedTopics.empty())
+    {
+        return;
+    }
+    m_pendingUnsubscribedTopicsMutex.lock();
+    // there could be already pending topic subscriptions, so only add new ones
+    m_pendingUnsubscribedTopics.insert(m_toBeUnsubscribedTopics.begin(), m_toBeUnsubscribedTopics.end());
+    m_toBeUnsubscribedTopics.clear();
+    const auto pendingUnsubscribedTopics(m_pendingUnsubscribedTopics);
+    m_pendingUnsubscribedTopicsMutex.unlock();
+    m_toBeUnsubscribedTopicsMutex.unlock();
+    
+    std::vector<std::string> topics;
+    std::vector<char*> charTopics;
+    for (const auto& topic : pendingUnsubscribedTopics) {
+        topics.push_back(topic.first);
+        // TODO
+        charTopics.push_back(const_cast<char*>(topic.first.c_str()));
+    }
+    const std::vector<char*> copyTopics {charTopics};
+
+    MQTTAsync_responseOptions opts = MQTTAsync_responseOptions_initializer;
+    opts.onSuccess5 = onUnsubscribeSuccess;
+    opts.onFailure5 = onUnsubscribeFailure;
+    // TODO
+    opts.context = new subscribeTopicContext{topics, getPtr()};
+    int responseCode = MQTTAsync_unsubscribeMany(*m_client.get(), static_cast<int>(charTopics.size()) , &copyTopics[0], &opts);
+    if (responseCode != MQTTASYNC_SUCCESS)
+    {
+        AG_LOG_WARNING("Failed to start unsubscribe, return code " + std::to_string(responseCode));
     }
 }
 
@@ -247,21 +284,12 @@ void CWrapper::unsubscribeAllTopics()
 
     // unsubscribe from all topics
     m_subscribedTopicsMutex.lock();
-    const auto subscribedTopics { m_subscribedTopics };
+    m_toBeUnsubscribedTopicsMutex.lock();
+    m_toBeUnsubscribedTopics.insert(m_subscribedTopics.begin(), m_subscribedTopics.end());
+    m_toBeUnsubscribedTopicsMutex.unlock();
     m_subscribedTopicsMutex.unlock();
-    for (const auto& topic : subscribedTopics) {
-        AG_LOG_INFO("Unsubscribing from " + topic.first);
 
-        MQTTAsync_responseOptions opts = MQTTAsync_responseOptions_initializer;
-        opts.onSuccess5 = onUnsubscribeSuccess;
-        opts.onFailure5 = onUnsubscribeFailure;
-        opts.context = new subscribeTopicContext{topic.first, topic.second, getPtr()};
-        int responseCode = MQTTAsync_unsubscribe(*m_client.get(), topic.first.c_str(), &opts);
-        if (responseCode != MQTTASYNC_SUCCESS)
-        {
-            AG_LOG_WARNING("Failed to start unsubscribe, return code " + std::to_string(responseCode));
-        }
-    }
+    removeOldSubscriptions();
 }
 
 void CWrapper::waitForPendingMessages()
@@ -414,8 +442,7 @@ void CWrapper::onDisconnected()
 void CWrapper::handleTextMessage(const Message& message)
 {
     auto subscribedTopicsRange = m_subscribedTopics.equal_range(message.topic);
-    std::pair<std::multimap<std::string, CallbackFunction>::iterator, std::multimap<std::string, CallbackFunction>::iterator> topics = subscribedTopicsRange;
-    for (auto iter = topics.first; iter != topics.second; ++iter)
+    for (auto iter = subscribedTopicsRange.first; iter != subscribedTopicsRange.second; ++iter)
     {
         if(iter->second != nullptr)
         {
@@ -542,6 +569,7 @@ void CWrapper::setRemoteProperty(const std::string& topic, const std::string& va
 
 void CWrapper::subscribeTopic(const std::string& topic, CallbackFunction func)
 {
+    // TODO add case if already subscribed
     {
         std::lock_guard<std::mutex> guard(m_toBeSubscribedTopicsMutex);
         m_toBeSubscribedTopics.insert({topic, func});
@@ -554,23 +582,68 @@ void CWrapper::subscribeTopic(const std::string& topic, CallbackFunction func)
     m_synchronizeSubscriptionChanges.notify_one();
 }
 
-void CWrapper::onSubscribed(const std::string& topic, CallbackFunction func)
+void CWrapper::onSubscribed(const std::vector<std::string>& topics)
 {
     std::lock_guard<std::mutex> guard(m_subscribedTopicsMutex);
-    m_subscribedTopics.insert({topic, func});
+    std::lock_guard<std::mutex> pendingGuard(m_pendingSubscribedTopicsMutex);
+
+    for (const auto& topic: topics)
+    {
+        AG_LOG_INFO("Subscribed to " + topic);
+        auto pendingSubscribedTopicsRange = m_pendingSubscribedTopics.equal_range(topic);
+        for (auto iter = pendingSubscribedTopicsRange.first; iter != pendingSubscribedTopicsRange.second; ++iter)
+        {
+            m_subscribedTopics.insert({iter->first, iter->second});
+        }
+        m_pendingSubscribedTopics.erase(pendingSubscribedTopicsRange.first, pendingSubscribedTopicsRange.second);
+    }
 }
 
-void CWrapper::onUnsubscribed(const std::string& topic)
+void CWrapper::onUnsubscribed(const std::vector<std::string>& topics)
 {
     std::lock_guard<std::mutex> guard(m_subscribedTopicsMutex);
-    m_subscribedTopics.erase(topic);
+    std::lock_guard<std::mutex> pendingGuard(m_pendingUnsubscribedTopicsMutex);
+
+    for (const auto& topic: topics)
+    {
+        AG_LOG_INFO("Unsubscribed from " + topic);
+        auto pendingUnsubscribedTopicsRange = m_pendingUnsubscribedTopics.equal_range(topic);
+        auto subscribedTopicsRange = m_subscribedTopics.equal_range(topic);
+        m_pendingUnsubscribedTopics.erase(pendingUnsubscribedTopicsRange.first, pendingUnsubscribedTopicsRange.second);
+        m_subscribedTopics.erase(subscribedTopicsRange.first, subscribedTopicsRange.second);
+    }
 }
 
-void CWrapper::unsubscribeTopic(const std::string& topic)
+void CWrapper::unsubscribeTopic(const std::string& topic, CallbackFunction func)
 {
     {
+        std::lock_guard<std::mutex> guard(m_subscribedTopicsMutex);
+
+        if (m_subscribedTopics.count(topic) > 1)
+        {
+            auto alreadySubscribedRange = m_subscribedTopics.equal_range(topic);
+
+            for (auto iter = alreadySubscribedRange.first; iter != alreadySubscribedRange.second; ++iter)
+            {
+                if (iter->second.second == func)
+                {
+                    iter = m_subscribedTopics.erase(iter);
+                }
+            }
+
+            // we do not want to unsubscribe from the topic other wise no other instances can be notified
+            return;
+        }
+        else if (m_subscribedTopics.count(topic) <1)
+        {
+            // topic not found nothing to do
+            return;
+        }
+    }
+
+    {
         std::lock_guard<std::mutex> guard(m_toBeUnsubscribedTopicsMutex);
-        m_toBeUnsubscribedTopics.insert(topic);
+        m_toBeUnsubscribedTopics.insert({topic, func});
     }
 
     {

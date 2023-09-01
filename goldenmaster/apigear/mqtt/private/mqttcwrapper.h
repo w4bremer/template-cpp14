@@ -68,10 +68,10 @@ public:
     void setRemoteProperty(const std::string& name, const std::string& value);
 
     void subscribeTopic(const std::string& name, CallbackFunction func);
-    void unsubscribeTopic(const std::string& name);
+    void unsubscribeTopic(const std::string& name, CallbackFunction func);
 
-    void onSubscribed(const std::string& name, CallbackFunction func);
-    void onUnsubscribed(const std::string& name);
+    void onSubscribed(const std::vector<std::string>& topics);
+    void onUnsubscribed(const std::vector<std::string>& topics);
 
     void run();
 
@@ -107,12 +107,26 @@ private:
     std::atomic<bool> m_connected { false };
     std::mutex m_onConnectionStatusChangedCallbacksMutex;
     std::map<int, OnConnectionStatusChangedCallBackFunction> m_onConnectionStatusChangedCallbacks;
+
     std::mutex m_subscribedTopicsMutex;
-    std::multimap<std::string, CallbackFunction> m_subscribedTopics;
+    /// @brief actually subscribed topics by this instance
+    std::multimap<std::string, CallbackFunction> m_subscribedTopics {};
+
     std::mutex m_toBeSubscribedTopicsMutex;
-    std::multimap<std::string, CallbackFunction> m_toBeSubscribedTopics;
+    /// @brief request subscriptions from "source/sink" objects
+    std::multimap<std::string, CallbackFunction> m_toBeSubscribedTopics {};
+
+    std::mutex m_pendingSubscribedTopicsMutex;
+    /// @brief topics currently pending subscription, not yet subscribed but already requested
+    std::multimap<std::string, CallbackFunction> m_pendingSubscribedTopics {};
+
     std::mutex m_toBeUnsubscribedTopicsMutex;
-    std::set<std::string> m_toBeUnsubscribedTopics;
+    /// @brief request subscription removals from "source/sink" objects 
+    std::multimap<std::string, CallbackFunction> m_toBeUnsubscribedTopics {};
+
+    std::mutex m_pendingUnsubscribedTopicsMutex;
+    /// @brief topics currently pending subscription removal, not yet unsubscribed but already requested
+    std::multimap<std::string, CallbackFunction> m_pendingUnsubscribedTopics {};
 };
 } // namespace MQTT
 } // namespace ApiGear

@@ -35,7 +35,7 @@ public:
     void setRemoteProperty(const std::string& name, const std::string& value);
 
     void subscribeTopic(const std::string& name, CallbackFunction func);
-    void unsubscribeTopic(const std::string& name);
+    void unsubscribeTopic(const std::string& name, CallbackFunction func);
 
     const std::string& getClientId() const;
 

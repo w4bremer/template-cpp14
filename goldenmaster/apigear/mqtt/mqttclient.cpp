@@ -49,7 +49,7 @@ void Client::subscribeTopic(const std::string& topic, CallbackFunction func)
     m_cwrapper->subscribeTopic(topic, func);
 }
 
-void Client::unsubscribeTopic(const std::string& topic)
+void Client::unsubscribeTopic(const std::string& topic, CallbackFunction func)
 {
-    m_cwrapper->unsubscribeTopic(topic);
+    m_cwrapper->unsubscribeTopic(topic, func);
 }

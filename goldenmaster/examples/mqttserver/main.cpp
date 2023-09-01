@@ -46,6 +46,8 @@
 #include <iostream>
 #include <sstream>
 #include <cstdlib>
+#include <chrono>
+#include <thread>
 #include <random>
 
 using namespace Test;
@@ -137,13 +139,13 @@ int main(){
     std::string cmd;
     do {
         std::cout << "Enter command:" << std::endl;
-        getline (std::cin, cmd);
-
-        if(cmd == "quit"){
+        // getline (std::cin, cmd);
+    std::this_thread::sleep_for(std::chrono::seconds(3));
+        // if(cmd == "quit"){
             mqttservice->disconnect();
             keepRunning = false;
-        } else {
-        }
+        // } else {
+        // }
     } while(keepRunning);
 
     return 0;
