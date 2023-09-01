@@ -103,14 +103,12 @@ int OnMessageArrived(void *context, char *topicName, int topicLen, MQTTAsync_mes
 
     if(MQTTProperties_hasProperty(&(message->properties), MQTTPROPERTY_CODE_RESPONSE_TOPIC))
     {
-        AG_LOG_INFO("response topic found");
         MQTTProperty* responseTopicProperty = MQTTProperties_getProperty(&(message->properties), MQTTPROPERTY_CODE_RESPONSE_TOPIC);
         mqtt_message.responseTopic = std::string(responseTopicProperty->value.data.data, responseTopicProperty->value.data.len);
     }
 
     if(MQTTProperties_hasProperty(&(message->properties), MQTTPROPERTY_CODE_CORRELATION_DATA))
     {
-        AG_LOG_INFO("correlation data found");
         MQTTProperty* correlationDataProperty = MQTTProperties_getProperty(&(message->properties), MQTTPROPERTY_CODE_CORRELATION_DATA);
         mqtt_message.correlationData.assign(correlationDataProperty->value.data.data, correlationDataProperty->value.data.len);
     }
@@ -204,7 +202,6 @@ void CWrapper::addNewSubscriptions()
     m_toBeSubscribedTopics.clear();
     m_toBeSubscribedTopicsMutex.unlock();
     for (const auto& topic : toBeSubscribedTopics) {
-
         MQTTAsync_responseOptions opts = MQTTAsync_responseOptions_initializer;
         opts.onSuccess5 = onSubscribeSuccess;
         opts.onFailure5 = onSubscribeFailure;
@@ -224,8 +221,6 @@ void CWrapper::removeOldSubscriptions()
     m_toBeUnsubscribedTopics.clear();
     m_toBeUnsubscribedTopicsMutex.unlock();
     for (const auto& topic : toBeUnsubscribedTopics) {
-        AG_LOG_INFO("Unsubscribing from " + topic);
-
         MQTTAsync_responseOptions opts = MQTTAsync_responseOptions_initializer;
         opts.onSuccess5 = onUnsubscribeSuccess;
         opts.onFailure5 = onUnsubscribeFailure;
@@ -245,23 +240,16 @@ void CWrapper::unsubscribeAllTopics()
         return;
     }
 
-    // unsubscribe from all topics
     m_subscribedTopicsMutex.lock();
-    const auto subscribedTopics { m_subscribedTopics };
-    m_subscribedTopicsMutex.unlock();
-    for (const auto& topic : subscribedTopics) {
-        AG_LOG_INFO("Unsubscribing from " + topic.first);
-
-        MQTTAsync_responseOptions opts = MQTTAsync_responseOptions_initializer;
-        opts.onSuccess5 = onUnsubscribeSuccess;
-        opts.onFailure5 = onUnsubscribeFailure;
-        opts.context = new subscribeTopicContext{topic.first, topic.second, getPtr()};
-        int responseCode = MQTTAsync_unsubscribe(*m_client.get(), topic.first.c_str(), &opts);
-        if (responseCode != MQTTASYNC_SUCCESS)
-        {
-            AG_LOG_WARNING("Failed to start unsubscribe, return code " + std::to_string(responseCode));
-        }
+    m_toBeUnsubscribedTopicsMutex.lock();
+    for (const auto& entry : m_subscribedTopics)
+    {
+        m_toBeUnsubscribedTopics.insert(entry.first);
     }
+    m_toBeUnsubscribedTopicsMutex.unlock();
+    m_subscribedTopicsMutex.unlock();
+
+    removeOldSubscriptions();
 }
 
 void CWrapper::waitForPendingMessages()
@@ -555,12 +543,14 @@ void CWrapper::subscribeTopic(const std::string& topic, CallbackFunction func)
 
 void CWrapper::onSubscribed(const std::string& topic, CallbackFunction func)
 {
+    AG_LOG_INFO("Subscribed to " + topic);
     std::lock_guard<std::mutex> guard(m_subscribedTopicsMutex);
     m_subscribedTopics.insert({topic, func});
 }
 
 void CWrapper::onUnsubscribed(const std::string& topic)
 {
+    AG_LOG_INFO("Unsubscribed from " + topic);
     std::lock_guard<std::mutex> guard(m_subscribedTopicsMutex);
     m_subscribedTopics.erase(topic);
 }
