@@ -23,6 +23,13 @@ void SimpleInterfaceTracer::capture_state(ISimpleInterface* obj)
     m_tracer.state("tb.simple.SimpleInterface#_state", fields_);
 }
 
+void SimpleInterfaceTracer::trace_funcNoReturnValue(bool paramBool)
+{
+    nlohmann::json fields_;
+    fields_["paramBool"] = paramBool;
+    m_tracer.call("tb.simple.SimpleInterface#funcNoReturnValue", fields_);
+}
+
 void SimpleInterfaceTracer::trace_funcBool(bool paramBool)
 {
     nlohmann::json fields_;

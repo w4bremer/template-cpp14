@@ -38,6 +38,11 @@ std::string SimpleInterfaceService::olinkObjectName() {
 nlohmann::json SimpleInterfaceService::olinkInvoke(const std::string& methodId, const nlohmann::json& fcnArgs) {
     AG_LOG_DEBUG("SimpleInterfaceService invoke " + methodId);
     const auto& memberMethod = ApiGear::ObjectLink::Name::getMemberName(methodId);
+    if(memberMethod == "funcNoReturnValue") {
+        const bool& paramBool = fcnArgs.at(0);
+        m_SimpleInterface->funcNoReturnValue(paramBool);
+        return nlohmann::json{};
+    }
     if(memberMethod == "funcBool") {
         const bool& paramBool = fcnArgs.at(0);
         bool result = m_SimpleInterface->funcBool(paramBool);

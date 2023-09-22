@@ -29,6 +29,7 @@ private:
     /// @brief factory to create the topic map which is used for bindings
     /// @return map with all topics and corresponding function callbacks
     std::map<std::string, ApiGear::MQTT::CallbackFunction> createTopicMap();
+    void onInvokeFuncNoReturnValue(const std::string& args, const std::string& responseTopic, const std::string& correlationData) const;
     void onInvokeFuncBool(const std::string& args, const std::string& responseTopic, const std::string& correlationData) const;
     void onInvokeFuncInt(const std::string& args, const std::string& responseTopic, const std::string& correlationData) const;
     void onInvokeFuncInt32(const std::string& args, const std::string& responseTopic, const std::string& correlationData) const;

@@ -27,6 +27,14 @@ public:
     virtual ~ISimpleInterface() = default;
 
 
+    virtual void funcNoReturnValue(bool paramBool) = 0;
+    /**
+    * Asynchronous version of funcNoReturnValue(bool paramBool)
+    * @return Promise of type void which is set once the function has completed
+    */
+    virtual std::future<void> funcNoReturnValueAsync(bool paramBool) = 0;
+
+
     virtual bool funcBool(bool paramBool) = 0;
     /**
     * Asynchronous version of funcBool(bool paramBool)

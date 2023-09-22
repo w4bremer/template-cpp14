@@ -28,6 +28,10 @@ interfaces:
       - { name: propFloat64, type: float64 }
       - { name: propString, type: string }
     operations:
+      - name: funcNoReturnValue
+        params:
+          - name: paramBool
+            type: bool
       - name: funcBool
         params:
           - { name: paramBool, type: bool }

@@ -34,6 +34,11 @@ public:
     */
     virtual ~SimpleInterfaceTraceDecorator();
 
+    /** Traces funcNoReturnValue and forwards call to SimpleInterface implementation. */
+    void funcNoReturnValue(bool paramBool) override;
+    /** Traces funcNoReturnValue and forwards call to SimpleInterface implementation. */
+    std::future<void> funcNoReturnValueAsync(bool paramBool) override;
+    
     /** Traces funcBool and forwards call to SimpleInterface implementation. */
     bool funcBool(bool paramBool) override;
     /** Traces funcBool and forwards call to SimpleInterface implementation. */

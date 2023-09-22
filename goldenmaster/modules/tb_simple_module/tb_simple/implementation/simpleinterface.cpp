@@ -118,6 +118,22 @@ const std::string& SimpleInterface::getPropString() const
     return m_data.m_propString;
 }
 
+void SimpleInterface::funcNoReturnValue(bool paramBool)
+{
+    (void) paramBool; // suppress the 'Unreferenced Formal Parameter' warning.
+    // do business logic here
+}
+
+std::future<void> SimpleInterface::funcNoReturnValueAsync(bool paramBool)
+{
+    return std::async(std::launch::async, [this,
+                    paramBool]()
+        {
+            return funcNoReturnValue(paramBool);
+        }
+    );
+}
+
 bool SimpleInterface::funcBool(bool paramBool)
 {
     (void) paramBool; // suppress the 'Unreferenced Formal Parameter' warning.
