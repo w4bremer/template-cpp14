@@ -103,6 +103,7 @@ void NoSignalsInterfaceClient::funcVoid()
     if(m_client == nullptr) {
         return;
     }
+    funcVoidAsync();
 }
 
 std::future<void> NoSignalsInterfaceClient::funcVoidAsync()

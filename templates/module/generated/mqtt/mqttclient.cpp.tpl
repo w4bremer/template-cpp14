@@ -103,6 +103,7 @@ void {{$class}}::set{{Camel $name}}Local(const std::string& args)
         {{- end }}
     }
     {{- if ( eq (cppReturn "" $operation.Return) "void") }}
+    {{lower1 $operation.Name}}Async({{ cppVars $operation.Params }});
     {{- else }}
     {{$returnType}} value({{lower1 $operation.Name}}Async({{ cppVars $operation.Params }}).get());
     return value;
