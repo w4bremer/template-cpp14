@@ -16,10 +16,6 @@ EnumInterfaceClient::EnumInterfaceClient(std::shared_ptr<ApiGear::MQTT::Client> 
     , m_publisher(std::make_unique<EnumInterfacePublisher>())
     , m_topics(createTopicMap(m_client->getClientId()))
 {
-    for (const auto& topic: m_topics)
-    {
-        m_client->subscribeTopic(topic. first, topic.second);
-    }
 }
 
 EnumInterfaceClient::~EnumInterfaceClient()
@@ -47,6 +43,20 @@ std::map<std::string, ApiGear::MQTT::CallbackFunction> EnumInterfaceClient::crea
         { std::string("tb.enum/EnumInterface/rpc/func3/"+clientId+"/result"), [this](const std::string& args, const std::string&, const std::string& correlationData){ this->onInvokeReply(args, correlationData); } },
     };
 };
+
+void EnumInterfaceClient::onConnectionStatusChanged(bool connectionStatus)
+{
+    m_isReady = connectionStatus;
+    if(!connectionStatus)
+    {
+        return;
+    }
+
+    for (const auto& topic: m_topics)
+    {
+        m_client->subscribeTopic(topic. first, topic.second);
+    }
+}
 
 void EnumInterfaceClient::setProp0(Enum0Enum prop0)
 {

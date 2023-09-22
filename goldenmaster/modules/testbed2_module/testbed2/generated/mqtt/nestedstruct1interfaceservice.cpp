@@ -13,11 +13,6 @@ NestedStruct1InterfaceService::NestedStruct1InterfaceService(std::shared_ptr<INe
     m_impl->_getPublisher().subscribeToAllChanges(*this);
 
     m_connectionStatusRegistrationID = m_service->subscribeToConnectionStatus([this](bool connectionStatus){ onConnectionStatusChanged(connectionStatus); });
-
-    for (const auto& topic: m_topics)
-    {
-        m_service->subscribeTopic(topic. first, topic.second);
-    }
 }
 
 NestedStruct1InterfaceService::~NestedStruct1InterfaceService()
@@ -45,6 +40,11 @@ void NestedStruct1InterfaceService::onConnectionStatusChanged(bool connectionSta
     if(!connectionStatus)
     {
         return;
+    }
+
+    for (const auto& topic: m_topics)
+    {
+        m_service->subscribeTopic(topic. first, topic.second);
     }
 
     // send current values

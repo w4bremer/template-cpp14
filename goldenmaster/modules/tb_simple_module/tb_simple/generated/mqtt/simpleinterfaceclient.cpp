@@ -16,10 +16,6 @@ SimpleInterfaceClient::SimpleInterfaceClient(std::shared_ptr<ApiGear::MQTT::Clie
     , m_publisher(std::make_unique<SimpleInterfacePublisher>())
     , m_topics(createTopicMap(m_client->getClientId()))
 {
-    for (const auto& topic: m_topics)
-    {
-        m_client->subscribeTopic(topic. first, topic.second);
-    }
 }
 
 SimpleInterfaceClient::~SimpleInterfaceClient()
@@ -60,6 +56,20 @@ std::map<std::string, ApiGear::MQTT::CallbackFunction> SimpleInterfaceClient::cr
         { std::string("tb.simple/SimpleInterface/rpc/funcString/"+clientId+"/result"), [this](const std::string& args, const std::string&, const std::string& correlationData){ this->onInvokeReply(args, correlationData); } },
     };
 };
+
+void SimpleInterfaceClient::onConnectionStatusChanged(bool connectionStatus)
+{
+    m_isReady = connectionStatus;
+    if(!connectionStatus)
+    {
+        return;
+    }
+
+    for (const auto& topic: m_topics)
+    {
+        m_client->subscribeTopic(topic. first, topic.second);
+    }
+}
 
 void SimpleInterfaceClient::setPropBool(bool propBool)
 {

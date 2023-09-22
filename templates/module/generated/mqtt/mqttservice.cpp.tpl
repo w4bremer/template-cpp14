@@ -16,11 +16,6 @@ using namespace {{ Camel .System.Name }}::{{ Camel .Module.Name }}::MQTT;
     m_impl->_getPublisher().subscribeToAllChanges(*this);
 
     m_connectionStatusRegistrationID = m_service->subscribeToConnectionStatus([this](bool connectionStatus){ onConnectionStatusChanged(connectionStatus); });
-
-    for (const auto& topic: m_topics)
-    {
-        m_service->subscribeTopic(topic. first, topic.second);
-    }
 }
 
 {{$class}}::~{{$class}}()
@@ -54,6 +49,11 @@ void {{$class}}::onConnectionStatusChanged(bool connectionStatus)
     if(!connectionStatus)
     {
         return;
+    }
+
+    for (const auto& topic: m_topics)
+    {
+        m_service->subscribeTopic(topic. first, topic.second);
     }
 
     // send current values

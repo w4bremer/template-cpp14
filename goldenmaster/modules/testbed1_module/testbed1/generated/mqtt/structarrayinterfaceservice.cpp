@@ -13,11 +13,6 @@ StructArrayInterfaceService::StructArrayInterfaceService(std::shared_ptr<IStruct
     m_impl->_getPublisher().subscribeToAllChanges(*this);
 
     m_connectionStatusRegistrationID = m_service->subscribeToConnectionStatus([this](bool connectionStatus){ onConnectionStatusChanged(connectionStatus); });
-
-    for (const auto& topic: m_topics)
-    {
-        m_service->subscribeTopic(topic. first, topic.second);
-    }
 }
 
 StructArrayInterfaceService::~StructArrayInterfaceService()
@@ -51,6 +46,11 @@ void StructArrayInterfaceService::onConnectionStatusChanged(bool connectionStatu
     if(!connectionStatus)
     {
         return;
+    }
+
+    for (const auto& topic: m_topics)
+    {
+        m_service->subscribeTopic(topic. first, topic.second);
     }
 
     // send current values

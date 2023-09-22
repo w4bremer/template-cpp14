@@ -16,10 +16,6 @@ SameStruct2InterfaceClient::SameStruct2InterfaceClient(std::shared_ptr<ApiGear::
     , m_publisher(std::make_unique<SameStruct2InterfacePublisher>())
     , m_topics(createTopicMap(m_client->getClientId()))
 {
-    for (const auto& topic: m_topics)
-    {
-        m_client->subscribeTopic(topic. first, topic.second);
-    }
 }
 
 SameStruct2InterfaceClient::~SameStruct2InterfaceClient()
@@ -41,6 +37,20 @@ std::map<std::string, ApiGear::MQTT::CallbackFunction> SameStruct2InterfaceClien
         { std::string("tb.same1/SameStruct2Interface/rpc/func2/"+clientId+"/result"), [this](const std::string& args, const std::string&, const std::string& correlationData){ this->onInvokeReply(args, correlationData); } },
     };
 };
+
+void SameStruct2InterfaceClient::onConnectionStatusChanged(bool connectionStatus)
+{
+    m_isReady = connectionStatus;
+    if(!connectionStatus)
+    {
+        return;
+    }
+
+    for (const auto& topic: m_topics)
+    {
+        m_client->subscribeTopic(topic. first, topic.second);
+    }
+}
 
 void SameStruct2InterfaceClient::setProp1(const Struct2& prop1)
 {

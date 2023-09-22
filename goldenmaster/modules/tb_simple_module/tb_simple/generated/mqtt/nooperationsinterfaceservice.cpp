@@ -13,11 +13,6 @@ NoOperationsInterfaceService::NoOperationsInterfaceService(std::shared_ptr<INoOp
     m_impl->_getPublisher().subscribeToAllChanges(*this);
 
     m_connectionStatusRegistrationID = m_service->subscribeToConnectionStatus([this](bool connectionStatus){ onConnectionStatusChanged(connectionStatus); });
-
-    for (const auto& topic: m_topics)
-    {
-        m_service->subscribeTopic(topic. first, topic.second);
-    }
 }
 
 NoOperationsInterfaceService::~NoOperationsInterfaceService()
@@ -45,6 +40,11 @@ void NoOperationsInterfaceService::onConnectionStatusChanged(bool connectionStat
     if(!connectionStatus)
     {
         return;
+    }
+
+    for (const auto& topic: m_topics)
+    {
+        m_service->subscribeTopic(topic. first, topic.second);
     }
 
     // send current values

@@ -13,11 +13,6 @@ VoidInterfaceService::VoidInterfaceService(std::shared_ptr<IVoidInterface> impl,
     m_impl->_getPublisher().subscribeToAllChanges(*this);
 
     m_connectionStatusRegistrationID = m_service->subscribeToConnectionStatus([this](bool connectionStatus){ onConnectionStatusChanged(connectionStatus); });
-
-    for (const auto& topic: m_topics)
-    {
-        m_service->subscribeTopic(topic. first, topic.second);
-    }
 }
 
 VoidInterfaceService::~VoidInterfaceService()
@@ -44,6 +39,11 @@ void VoidInterfaceService::onConnectionStatusChanged(bool connectionStatus)
     if(!connectionStatus)
     {
         return;
+    }
+
+    for (const auto& topic: m_topics)
+    {
+        m_service->subscribeTopic(topic. first, topic.second);
     }
 
     // send current values

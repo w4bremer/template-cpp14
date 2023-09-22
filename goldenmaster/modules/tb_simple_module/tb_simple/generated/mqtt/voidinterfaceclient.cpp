@@ -16,10 +16,6 @@ VoidInterfaceClient::VoidInterfaceClient(std::shared_ptr<ApiGear::MQTT::Client> 
     , m_publisher(std::make_unique<VoidInterfacePublisher>())
     , m_topics(createTopicMap(m_client->getClientId()))
 {
-    for (const auto& topic: m_topics)
-    {
-        m_client->subscribeTopic(topic. first, topic.second);
-    }
 }
 
 VoidInterfaceClient::~VoidInterfaceClient()
@@ -37,6 +33,20 @@ std::map<std::string, ApiGear::MQTT::CallbackFunction> VoidInterfaceClient::crea
         { std::string("tb.simple/VoidInterface/rpc/funcVoid/"+clientId+"/result"), [this](const std::string& args, const std::string&, const std::string& correlationData){ this->onInvokeReply(args, correlationData); } },
     };
 };
+
+void VoidInterfaceClient::onConnectionStatusChanged(bool connectionStatus)
+{
+    m_isReady = connectionStatus;
+    if(!connectionStatus)
+    {
+        return;
+    }
+
+    for (const auto& topic: m_topics)
+    {
+        m_client->subscribeTopic(topic. first, topic.second);
+    }
+}
 
 void VoidInterfaceClient::funcVoid()
 {

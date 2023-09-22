@@ -16,10 +16,6 @@ NestedStruct1InterfaceClient::NestedStruct1InterfaceClient(std::shared_ptr<ApiGe
     , m_publisher(std::make_unique<NestedStruct1InterfacePublisher>())
     , m_topics(createTopicMap(m_client->getClientId()))
 {
-    for (const auto& topic: m_topics)
-    {
-        m_client->subscribeTopic(topic. first, topic.second);
-    }
 }
 
 NestedStruct1InterfaceClient::~NestedStruct1InterfaceClient()
@@ -38,6 +34,20 @@ std::map<std::string, ApiGear::MQTT::CallbackFunction> NestedStruct1InterfaceCli
         { std::string("testbed2/NestedStruct1Interface/rpc/func1/"+clientId+"/result"), [this](const std::string& args, const std::string&, const std::string& correlationData){ this->onInvokeReply(args, correlationData); } },
     };
 };
+
+void NestedStruct1InterfaceClient::onConnectionStatusChanged(bool connectionStatus)
+{
+    m_isReady = connectionStatus;
+    if(!connectionStatus)
+    {
+        return;
+    }
+
+    for (const auto& topic: m_topics)
+    {
+        m_client->subscribeTopic(topic. first, topic.second);
+    }
+}
 
 void NestedStruct1InterfaceClient::setProp1(const NestedStruct1& prop1)
 {

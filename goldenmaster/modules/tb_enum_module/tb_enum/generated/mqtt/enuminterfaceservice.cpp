@@ -13,11 +13,6 @@ EnumInterfaceService::EnumInterfaceService(std::shared_ptr<IEnumInterface> impl,
     m_impl->_getPublisher().subscribeToAllChanges(*this);
 
     m_connectionStatusRegistrationID = m_service->subscribeToConnectionStatus([this](bool connectionStatus){ onConnectionStatusChanged(connectionStatus); });
-
-    for (const auto& topic: m_topics)
-    {
-        m_service->subscribeTopic(topic. first, topic.second);
-    }
 }
 
 EnumInterfaceService::~EnumInterfaceService()
@@ -51,6 +46,11 @@ void EnumInterfaceService::onConnectionStatusChanged(bool connectionStatus)
     if(!connectionStatus)
     {
         return;
+    }
+
+    for (const auto& topic: m_topics)
+    {
+        m_service->subscribeTopic(topic. first, topic.second);
     }
 
     // send current values

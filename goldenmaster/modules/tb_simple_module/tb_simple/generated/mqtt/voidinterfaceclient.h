@@ -22,6 +22,7 @@ public:
 
     void onInvokeReply(const std::string& args, const std::string& correlationData);
 
+    void onConnectionStatusChanged(bool connectionStatus);
 private:
     /// @brief factory to create the topic map which is used for bindings
     /// @return map with all topics and corresponding function callbacks

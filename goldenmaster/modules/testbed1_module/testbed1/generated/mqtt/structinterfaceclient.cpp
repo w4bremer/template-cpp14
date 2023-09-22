@@ -16,10 +16,6 @@ StructInterfaceClient::StructInterfaceClient(std::shared_ptr<ApiGear::MQTT::Clie
     , m_publisher(std::make_unique<StructInterfacePublisher>())
     , m_topics(createTopicMap(m_client->getClientId()))
 {
-    for (const auto& topic: m_topics)
-    {
-        m_client->subscribeTopic(topic. first, topic.second);
-    }
 }
 
 StructInterfaceClient::~StructInterfaceClient()
@@ -47,6 +43,20 @@ std::map<std::string, ApiGear::MQTT::CallbackFunction> StructInterfaceClient::cr
         { std::string("testbed1/StructInterface/rpc/funcString/"+clientId+"/result"), [this](const std::string& args, const std::string&, const std::string& correlationData){ this->onInvokeReply(args, correlationData); } },
     };
 };
+
+void StructInterfaceClient::onConnectionStatusChanged(bool connectionStatus)
+{
+    m_isReady = connectionStatus;
+    if(!connectionStatus)
+    {
+        return;
+    }
+
+    for (const auto& topic: m_topics)
+    {
+        m_client->subscribeTopic(topic. first, topic.second);
+    }
+}
 
 void StructInterfaceClient::setPropBool(const StructBool& propBool)
 {
