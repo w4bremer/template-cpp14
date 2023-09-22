@@ -13,11 +13,6 @@ SameEnum2InterfaceService::SameEnum2InterfaceService(std::shared_ptr<ISameEnum2I
     m_impl->_getPublisher().subscribeToAllChanges(*this);
 
     m_connectionStatusRegistrationID = m_service->subscribeToConnectionStatus([this](bool connectionStatus){ onConnectionStatusChanged(connectionStatus); });
-
-    for (const auto& topic: m_topics)
-    {
-        m_service->subscribeTopic(topic. first, topic.second);
-    }
 }
 
 SameEnum2InterfaceService::~SameEnum2InterfaceService()
@@ -47,6 +42,11 @@ void SameEnum2InterfaceService::onConnectionStatusChanged(bool connectionStatus)
     if(!connectionStatus)
     {
         return;
+    }
+
+    for (const auto& topic: m_topics)
+    {
+        m_service->subscribeTopic(topic. first, topic.second);
     }
 
     // send current values

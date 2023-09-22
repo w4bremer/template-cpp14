@@ -16,10 +16,6 @@ NoOperationsInterfaceClient::NoOperationsInterfaceClient(std::shared_ptr<ApiGear
     , m_publisher(std::make_unique<NoOperationsInterfacePublisher>())
     , m_topics(createTopicMap(m_client->getClientId()))
 {
-    for (const auto& topic: m_topics)
-    {
-        m_client->subscribeTopic(topic. first, topic.second);
-    }
 }
 
 NoOperationsInterfaceClient::~NoOperationsInterfaceClient()
@@ -39,6 +35,20 @@ std::map<std::string, ApiGear::MQTT::CallbackFunction> NoOperationsInterfaceClie
         { std::string("tb.simple/NoOperationsInterface/sig/sigBool"), [this](const std::string& args, const std::string&, const std::string&){ this->onSigBool(args); } },
     };
 };
+
+void NoOperationsInterfaceClient::onConnectionStatusChanged(bool connectionStatus)
+{
+    m_isReady = connectionStatus;
+    if(!connectionStatus)
+    {
+        return;
+    }
+
+    for (const auto& topic: m_topics)
+    {
+        m_client->subscribeTopic(topic. first, topic.second);
+    }
+}
 
 void NoOperationsInterfaceClient::setPropBool(bool propBool)
 {

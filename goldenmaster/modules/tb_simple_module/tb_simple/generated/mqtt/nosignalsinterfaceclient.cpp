@@ -16,10 +16,6 @@ NoSignalsInterfaceClient::NoSignalsInterfaceClient(std::shared_ptr<ApiGear::MQTT
     , m_publisher(std::make_unique<NoSignalsInterfacePublisher>())
     , m_topics(createTopicMap(m_client->getClientId()))
 {
-    for (const auto& topic: m_topics)
-    {
-        m_client->subscribeTopic(topic. first, topic.second);
-    }
 }
 
 NoSignalsInterfaceClient::~NoSignalsInterfaceClient()
@@ -39,6 +35,20 @@ std::map<std::string, ApiGear::MQTT::CallbackFunction> NoSignalsInterfaceClient:
         { std::string("tb.simple/NoSignalsInterface/rpc/funcBool/"+clientId+"/result"), [this](const std::string& args, const std::string&, const std::string& correlationData){ this->onInvokeReply(args, correlationData); } },
     };
 };
+
+void NoSignalsInterfaceClient::onConnectionStatusChanged(bool connectionStatus)
+{
+    m_isReady = connectionStatus;
+    if(!connectionStatus)
+    {
+        return;
+    }
+
+    for (const auto& topic: m_topics)
+    {
+        m_client->subscribeTopic(topic. first, topic.second);
+    }
+}
 
 void NoSignalsInterfaceClient::setPropBool(bool propBool)
 {

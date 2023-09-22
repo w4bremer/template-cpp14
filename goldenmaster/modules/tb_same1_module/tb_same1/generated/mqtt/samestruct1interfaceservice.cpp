@@ -13,11 +13,6 @@ SameStruct1InterfaceService::SameStruct1InterfaceService(std::shared_ptr<ISameSt
     m_impl->_getPublisher().subscribeToAllChanges(*this);
 
     m_connectionStatusRegistrationID = m_service->subscribeToConnectionStatus([this](bool connectionStatus){ onConnectionStatusChanged(connectionStatus); });
-
-    for (const auto& topic: m_topics)
-    {
-        m_service->subscribeTopic(topic. first, topic.second);
-    }
 }
 
 SameStruct1InterfaceService::~SameStruct1InterfaceService()
@@ -45,6 +40,11 @@ void SameStruct1InterfaceService::onConnectionStatusChanged(bool connectionStatu
     if(!connectionStatus)
     {
         return;
+    }
+
+    for (const auto& topic: m_topics)
+    {
+        m_service->subscribeTopic(topic. first, topic.second);
     }
 
     // send current values

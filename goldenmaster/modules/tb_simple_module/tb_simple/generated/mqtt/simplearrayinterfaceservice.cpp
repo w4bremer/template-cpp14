@@ -13,11 +13,6 @@ SimpleArrayInterfaceService::SimpleArrayInterfaceService(std::shared_ptr<ISimple
     m_impl->_getPublisher().subscribeToAllChanges(*this);
 
     m_connectionStatusRegistrationID = m_service->subscribeToConnectionStatus([this](bool connectionStatus){ onConnectionStatusChanged(connectionStatus); });
-
-    for (const auto& topic: m_topics)
-    {
-        m_service->subscribeTopic(topic. first, topic.second);
-    }
 }
 
 SimpleArrayInterfaceService::~SimpleArrayInterfaceService()
@@ -59,6 +54,11 @@ void SimpleArrayInterfaceService::onConnectionStatusChanged(bool connectionStatu
     if(!connectionStatus)
     {
         return;
+    }
+
+    for (const auto& topic: m_topics)
+    {
+        m_service->subscribeTopic(topic. first, topic.second);
     }
 
     // send current values

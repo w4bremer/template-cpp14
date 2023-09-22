@@ -32,6 +32,7 @@ public:
 
     void onInvokeReply(const std::string& args, const std::string& correlationData);
 
+    void onConnectionStatusChanged(bool connectionStatus);
 private:
     /// @brief factory to create the topic map which is used for bindings
     /// @return map with all topics and corresponding function callbacks
@@ -72,6 +73,9 @@ private:
     int registerResponseHandler(ApiGear::MQTT::InvokeReplyFunc handler);
     std::mutex m_responseHandlerMutex;
     std::map<int, ApiGear::MQTT::InvokeReplyFunc> m_responseHandlerMap;
+
+    // id for connection status registration
+    int m_connectionStatusRegistrationID;
 
     /// @brief has all the topics of this client and the corresponding function callbacks
     const std::map<std::string, ApiGear::MQTT::CallbackFunction> m_topics;

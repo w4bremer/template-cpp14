@@ -21,10 +21,6 @@ namespace {
     , m_publisher(std::make_unique<{{$pub_class}}>())
     , m_topics(createTopicMap(m_client->getClientId()))
 {
-    for (const auto& topic: m_topics)
-    {
-        m_client->subscribeTopic(topic. first, topic.second);
-    }
 }
 
 {{$class}}::~{{$class}}()
@@ -53,6 +49,20 @@ std::map<std::string, ApiGear::MQTT::CallbackFunction> {{$class}}::createTopicMa
     {{- end }}
     };
 };
+
+void {{$class}}::onConnectionStatusChanged(bool connectionStatus)
+{
+    m_isReady = connectionStatus;
+    if(!connectionStatus)
+    {
+        return;
+    }
+
+    for (const auto& topic: m_topics)
+    {
+        m_client->subscribeTopic(topic. first, topic.second);
+    }
+}
 
 {{- range .Interface.Properties}}
 {{- $property := . }}

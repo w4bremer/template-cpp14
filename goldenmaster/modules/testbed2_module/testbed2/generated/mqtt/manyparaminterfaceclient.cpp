@@ -16,10 +16,6 @@ ManyParamInterfaceClient::ManyParamInterfaceClient(std::shared_ptr<ApiGear::MQTT
     , m_publisher(std::make_unique<ManyParamInterfacePublisher>())
     , m_topics(createTopicMap(m_client->getClientId()))
 {
-    for (const auto& topic: m_topics)
-    {
-        m_client->subscribeTopic(topic. first, topic.second);
-    }
 }
 
 ManyParamInterfaceClient::~ManyParamInterfaceClient()
@@ -47,6 +43,20 @@ std::map<std::string, ApiGear::MQTT::CallbackFunction> ManyParamInterfaceClient:
         { std::string("testbed2/ManyParamInterface/rpc/func4/"+clientId+"/result"), [this](const std::string& args, const std::string&, const std::string& correlationData){ this->onInvokeReply(args, correlationData); } },
     };
 };
+
+void ManyParamInterfaceClient::onConnectionStatusChanged(bool connectionStatus)
+{
+    m_isReady = connectionStatus;
+    if(!connectionStatus)
+    {
+        return;
+    }
+
+    for (const auto& topic: m_topics)
+    {
+        m_client->subscribeTopic(topic. first, topic.second);
+    }
+}
 
 void ManyParamInterfaceClient::setProp1(int prop1)
 {
