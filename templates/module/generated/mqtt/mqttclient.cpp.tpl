@@ -96,13 +96,13 @@ void {{$class}}::set{{Camel $name}}Local(const std::string& args)
 {{$returnType}} {{$class}}::{{lower1 $operation.Name}}({{cppParams "" $operation.Params}})
 {
     if(m_client == nullptr) {
-        {{- if not ( eq (cppReturn "" $operation.Return) "void") }}
+        {{- if not .Return.IsVoid }}
         return {{cppDefault "" $operation.Return}};
         {{- else }}
         return;
         {{- end }}
     }
-    {{- if ( eq (cppReturn "" $operation.Return) "void") }}
+    {{- if .Return.IsVoid }}
     {{lower1 $operation.Name}}Async({{ cppVars $operation.Params }});
     {{- else }}
     {{$returnType}} value({{lower1 $operation.Name}}Async({{ cppVars $operation.Params }}).get());
@@ -123,7 +123,7 @@ std::future<{{$returnType}}> {{$class}}::{{lower1 $operation.Name}}Async({{cppPa
             static const auto topic = std::string("{{$.Module.Name}}/{{$interfaceName}}/rpc/{{$operation}}");
             static const auto responseTopic = std::string(topic + "/" + m_client->getClientId() + "/result");
             ApiGear::MQTT::InvokeReplyFunc responseHandler = [&resultPromise](ApiGear::MQTT::InvokeReplyArg arg) {
-                {{- if ( eq (cppReturn "" $operation.Return) "void") }}
+                {{- if .Return.IsVoid }}
                 (void) arg;
                 resultPromise.set_value();
                 {{- else }}
