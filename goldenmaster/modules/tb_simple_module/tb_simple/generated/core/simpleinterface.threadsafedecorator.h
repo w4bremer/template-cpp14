@@ -56,6 +56,17 @@ public:
     * Forwards call to SimpleInterface implementation.
     * @warning This forward call is not made thread safe by this class.
     */
+    void funcNoReturnValue(bool paramBool) override;
+    /** 
+    * Forwards call to SimpleInterface implementation.
+    * @warning This forward call is not made thread safe by this class.
+    */
+    std::future<void> funcNoReturnValueAsync(bool paramBool) override;
+
+    /** 
+    * Forwards call to SimpleInterface implementation.
+    * @warning This forward call is not made thread safe by this class.
+    */
     bool funcBool(bool paramBool) override;
     /** 
     * Forwards call to SimpleInterface implementation.

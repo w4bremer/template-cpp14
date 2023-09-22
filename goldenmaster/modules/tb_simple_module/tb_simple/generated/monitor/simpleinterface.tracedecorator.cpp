@@ -19,6 +19,16 @@ std::unique_ptr<SimpleInterfaceTraceDecorator> SimpleInterfaceTraceDecorator::co
 {
     return std::unique_ptr<SimpleInterfaceTraceDecorator>(new SimpleInterfaceTraceDecorator(impl, tracer));
 }
+void SimpleInterfaceTraceDecorator::funcNoReturnValue(bool paramBool)
+{
+    m_tracer->trace_funcNoReturnValue(paramBool);
+    return m_impl.funcNoReturnValue(paramBool);
+}
+std::future<void> SimpleInterfaceTraceDecorator::funcNoReturnValueAsync(bool paramBool)
+{
+    m_tracer->trace_funcNoReturnValue(paramBool);
+    return m_impl.funcNoReturnValueAsync(paramBool);
+}
 bool SimpleInterfaceTraceDecorator::funcBool(bool paramBool)
 {
     m_tracer->trace_funcBool(paramBool);

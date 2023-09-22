@@ -49,6 +49,7 @@ std::map<std::string, ApiGear::MQTT::CallbackFunction> SimpleInterfaceClient::cr
         { std::string("tb.simple/SimpleInterface/sig/sigFloat32"), [this](const std::string& args, const std::string&, const std::string&){ this->onSigFloat32(args); } },
         { std::string("tb.simple/SimpleInterface/sig/sigFloat64"), [this](const std::string& args, const std::string&, const std::string&){ this->onSigFloat64(args); } },
         { std::string("tb.simple/SimpleInterface/sig/sigString"), [this](const std::string& args, const std::string&, const std::string&){ this->onSigString(args); } },
+        { std::string("tb.simple/SimpleInterface/rpc/funcNoReturnValue/"+clientId+"/result"), [this](const std::string& args, const std::string&, const std::string& correlationData){ this->onInvokeReply(args, correlationData); } },
         { std::string("tb.simple/SimpleInterface/rpc/funcBool/"+clientId+"/result"), [this](const std::string& args, const std::string&, const std::string& correlationData){ this->onInvokeReply(args, correlationData); } },
         { std::string("tb.simple/SimpleInterface/rpc/funcInt/"+clientId+"/result"), [this](const std::string& args, const std::string&, const std::string& correlationData){ this->onInvokeReply(args, correlationData); } },
         { std::string("tb.simple/SimpleInterface/rpc/funcInt32/"+clientId+"/result"), [this](const std::string& args, const std::string&, const std::string& correlationData){ this->onInvokeReply(args, correlationData); } },
@@ -290,6 +291,36 @@ void SimpleInterfaceClient::setPropStringLocal(const std::string& args)
 const std::string& SimpleInterfaceClient::getPropString() const
 {
     return m_data.m_propString;
+}
+
+void SimpleInterfaceClient::funcNoReturnValue(bool paramBool)
+{
+    if(m_client == nullptr) {
+        return;
+    }
+}
+
+std::future<void> SimpleInterfaceClient::funcNoReturnValueAsync(bool paramBool)
+{
+    if(m_client == nullptr) {
+        throw std::runtime_error("Client is not initialized");
+    }
+    return std::async(std::launch::async, [this,
+                    paramBool]()
+        {
+            std::promise<void> resultPromise;
+            static const auto topic = std::string("tb.simple/SimpleInterface/rpc/funcNoReturnValue");
+            static const auto responseTopic = std::string(topic + "/" + m_client->getClientId() + "/result");
+            ApiGear::MQTT::InvokeReplyFunc responseHandler = [&resultPromise](ApiGear::MQTT::InvokeReplyArg arg) {
+                (void) arg;
+                resultPromise.set_value();
+            };
+            auto responseId = registerResponseHandler(responseHandler);
+            m_client->invokeRemote(topic, responseTopic,
+                nlohmann::json::array({paramBool}).dump(), responseId);
+            return resultPromise.get_future().get();
+        }
+    );
 }
 
 bool SimpleInterfaceClient::funcBool(bool paramBool)

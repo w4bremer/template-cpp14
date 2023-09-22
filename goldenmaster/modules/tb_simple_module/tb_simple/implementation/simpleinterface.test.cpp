@@ -6,6 +6,10 @@ using namespace Test::TbSimple;
 TEST_CASE("Testing SimpleInterface", "[SimpleInterface]"){
     std::unique_ptr<ISimpleInterface> testSimpleInterface = std::make_unique<SimpleInterface>();
     // setup your test
+    SECTION("Test operation funcNoReturnValue") {
+        // Do implement test here
+        testSimpleInterface->funcNoReturnValue(false);
+    }
     SECTION("Test operation funcBool") {
         // Do implement test here
         testSimpleInterface->funcBool(false);

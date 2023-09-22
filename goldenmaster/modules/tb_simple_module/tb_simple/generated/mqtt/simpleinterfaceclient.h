@@ -30,6 +30,8 @@ public:
     void setPropFloat64(double propFloat64) override;
     const std::string& getPropString() const override;
     void setPropString(const std::string& propString) override;
+    void funcNoReturnValue(bool paramBool) override;
+    std::future<void> funcNoReturnValueAsync(bool paramBool) override;
     bool funcBool(bool paramBool) override;
     std::future<bool> funcBoolAsync(bool paramBool) override;
     int funcInt(int paramInt) override;

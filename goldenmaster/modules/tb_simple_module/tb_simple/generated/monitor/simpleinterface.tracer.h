@@ -27,6 +27,11 @@ public:
   */
   void capture_state(ISimpleInterface* obj);
   /**
+  * Prepares information about the funcNoReturnValue call in a nlohmann::json format and puts to a tracer.
+  * @param The SimpleInterface object to trace.
+  */
+  void trace_funcNoReturnValue(bool paramBool);
+  /**
   * Prepares information about the funcBool call in a nlohmann::json format and puts to a tracer.
   * @param The SimpleInterface object to trace.
   */

@@ -120,6 +120,15 @@ public:
     */
     void setPropString(const std::string& propString) override;
     /**
+    * Remote call of ISimpleInterface::funcNoReturnValue on the SimpleInterface service.
+    * Uses funcNoReturnValueAsync
+    */
+    void funcNoReturnValue(bool paramBool) override;
+    /**
+    * Remote call of ISimpleInterface::funcNoReturnValue on the SimpleInterface service.
+    */
+    std::future<void> funcNoReturnValueAsync(bool paramBool) override;
+    /**
     * Remote call of ISimpleInterface::funcBool on the SimpleInterface service.
     * Uses funcBoolAsync
     */
