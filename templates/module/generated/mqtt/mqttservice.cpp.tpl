@@ -93,7 +93,7 @@ void {{$class}}::onInvoke{{ Camel $operation.Name }}(const std::string& args, co
 {{- $param := . }}
     const {{cppType "" $param}}& {{$param}} = json_args.at({{$idx}}).get<{{cppType "" $param}}>();
 {{- end }}
-{{- if ( eq (cppReturn "" $operation.Return) "void") }}
+{{- if .Return.IsVoid }}
     m_impl->{{lower1 $operation.Name}}({{ cppVars $operation.Params }});
 {{- else }}
     auto result = m_impl->{{lower1 $operation.Name}}({{ cppVars $operation.Params }});

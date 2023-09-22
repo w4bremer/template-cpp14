@@ -97,7 +97,7 @@ void {{$class}}::set{{Camel $name}}Local({{cppParam "" $property }})
         return;
         {{- end }}
     }
-    {{- if ( eq (cppReturn "" $operation.Return) "void") }}
+    {{- if .Return.IsVoid }}
     ApiGear::ObjectLink::InvokeReplyFunc func = [this](ApiGear::ObjectLink::InvokeReplyArg arg)
         {
             (void) this;
@@ -126,7 +126,7 @@ std::future<{{$returnType}}> {{$class}}::{{$operation.Name| lower1}}Async({{cppP
             static const auto operationId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "{{$operation.Name}}");
             m_node->invokeRemote(operationId,
                 nlohmann::json::array({ {{- cppVars $operation.Params -}} }), [&resultPromise](ApiGear::ObjectLink::InvokeReplyArg arg) {        
-                    {{- if ( eq (cppReturn "" $operation.Return) "void") }}
+                    {{- if .Return.IsVoid }}
                     (void) arg;
                     resultPromise.set_value();
                     {{- else }}
