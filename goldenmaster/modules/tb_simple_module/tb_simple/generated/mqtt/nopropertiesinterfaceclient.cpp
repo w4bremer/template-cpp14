@@ -45,6 +45,7 @@ void NoPropertiesInterfaceClient::funcVoid()
     if(m_client == nullptr) {
         return;
     }
+    funcVoidAsync();
 }
 
 std::future<void> NoPropertiesInterfaceClient::funcVoidAsync()

@@ -298,6 +298,7 @@ void SimpleInterfaceClient::funcNoReturnValue(bool paramBool)
     if(m_client == nullptr) {
         return;
     }
+    funcNoReturnValueAsync(paramBool);
 }
 
 std::future<void> SimpleInterfaceClient::funcNoReturnValueAsync(bool paramBool)

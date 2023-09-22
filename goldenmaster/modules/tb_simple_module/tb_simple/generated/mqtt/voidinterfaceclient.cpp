@@ -43,6 +43,7 @@ void VoidInterfaceClient::funcVoid()
     if(m_client == nullptr) {
         return;
     }
+    funcVoidAsync();
 }
 
 std::future<void> VoidInterfaceClient::funcVoidAsync()
