@@ -19,11 +19,12 @@ namespace{
 
     long tryReconnectDelay = 500; //Milliseconds
     long repeatTaskInterval = 10000; //Milliseconds
+    bool sendPing = false;
 }
 
 OlinkConnection::OlinkConnection(ApiGear::ObjectLink::ClientRegistry& registry)
     : m_node(ApiGear::ObjectLink::ClientNode::create(registry)),
-    m_socket(*this, true),
+    m_socket(*this, sendPing),
     m_isConnecting(false)
 {
     auto writeFunction = [this](const auto& msg) {
