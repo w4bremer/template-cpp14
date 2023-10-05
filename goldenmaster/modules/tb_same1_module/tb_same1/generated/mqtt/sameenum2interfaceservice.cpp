@@ -78,17 +78,47 @@ void SameEnum2InterfaceService::onSetProp2(const std::string& args) const
 void SameEnum2InterfaceService::onInvokeFunc1(const std::string& args, const std::string& responseTopic, const std::string& correlationData) const
 {
     nlohmann::json json_args = nlohmann::json::parse(args);
-    const Enum1Enum& param1 = json_args.at(0).get<Enum1Enum>();
+    std::string responseTopicReturn = responseTopic;
+    if (responseTopicReturn.empty())
+    {
+        responseTopicReturn = std::string("tb.same1/SameEnum2Interface/rpc/func1/" + json_args.at(1).get<std::string>() + "/result");
+    }
+    int responseId = 0;
+    if (correlationData.empty())
+    {
+        responseId = json_args.at(0).get<int>();
+    }
+    else
+    {
+        responseId = std::stoi(correlationData);
+    }
+    nlohmann::json payload = json_args.at(2);
+    const Enum1Enum& param1 = payload.at(0).get<Enum1Enum>();
     auto result = m_impl->func1(param1);
-    m_service->notifyInvokeResponse(responseTopic, nlohmann::json(result).dump(), correlationData);
+    m_service->notifyInvokeResponse(responseTopicReturn, nlohmann::json::array({responseId, result}).dump(), std::to_string(responseId));
 }
 void SameEnum2InterfaceService::onInvokeFunc2(const std::string& args, const std::string& responseTopic, const std::string& correlationData) const
 {
     nlohmann::json json_args = nlohmann::json::parse(args);
-    const Enum1Enum& param1 = json_args.at(0).get<Enum1Enum>();
-    const Enum2Enum& param2 = json_args.at(1).get<Enum2Enum>();
+    std::string responseTopicReturn = responseTopic;
+    if (responseTopicReturn.empty())
+    {
+        responseTopicReturn = std::string("tb.same1/SameEnum2Interface/rpc/func2/" + json_args.at(1).get<std::string>() + "/result");
+    }
+    int responseId = 0;
+    if (correlationData.empty())
+    {
+        responseId = json_args.at(0).get<int>();
+    }
+    else
+    {
+        responseId = std::stoi(correlationData);
+    }
+    nlohmann::json payload = json_args.at(2);
+    const Enum1Enum& param1 = payload.at(0).get<Enum1Enum>();
+    const Enum2Enum& param2 = payload.at(1).get<Enum2Enum>();
     auto result = m_impl->func2(param1, param2);
-    m_service->notifyInvokeResponse(responseTopic, nlohmann::json(result).dump(), correlationData);
+    m_service->notifyInvokeResponse(responseTopicReturn, nlohmann::json::array({responseId, result}).dump(), std::to_string(responseId));
 }
 void SameEnum2InterfaceService::onSig1(Enum1Enum param1)
 {

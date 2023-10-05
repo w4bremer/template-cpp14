@@ -106,36 +106,96 @@ void ManyParamInterfaceService::onSetProp4(const std::string& args) const
 void ManyParamInterfaceService::onInvokeFunc1(const std::string& args, const std::string& responseTopic, const std::string& correlationData) const
 {
     nlohmann::json json_args = nlohmann::json::parse(args);
-    const int& param1 = json_args.at(0).get<int>();
+    std::string responseTopicReturn = responseTopic;
+    if (responseTopicReturn.empty())
+    {
+        responseTopicReturn = std::string("testbed2/ManyParamInterface/rpc/func1/" + json_args.at(1).get<std::string>() + "/result");
+    }
+    int responseId = 0;
+    if (correlationData.empty())
+    {
+        responseId = json_args.at(0).get<int>();
+    }
+    else
+    {
+        responseId = std::stoi(correlationData);
+    }
+    nlohmann::json payload = json_args.at(2);
+    const int& param1 = payload.at(0).get<int>();
     auto result = m_impl->func1(param1);
-    m_service->notifyInvokeResponse(responseTopic, nlohmann::json(result).dump(), correlationData);
+    m_service->notifyInvokeResponse(responseTopicReturn, nlohmann::json::array({responseId, result}).dump(), std::to_string(responseId));
 }
 void ManyParamInterfaceService::onInvokeFunc2(const std::string& args, const std::string& responseTopic, const std::string& correlationData) const
 {
     nlohmann::json json_args = nlohmann::json::parse(args);
-    const int& param1 = json_args.at(0).get<int>();
-    const int& param2 = json_args.at(1).get<int>();
+    std::string responseTopicReturn = responseTopic;
+    if (responseTopicReturn.empty())
+    {
+        responseTopicReturn = std::string("testbed2/ManyParamInterface/rpc/func2/" + json_args.at(1).get<std::string>() + "/result");
+    }
+    int responseId = 0;
+    if (correlationData.empty())
+    {
+        responseId = json_args.at(0).get<int>();
+    }
+    else
+    {
+        responseId = std::stoi(correlationData);
+    }
+    nlohmann::json payload = json_args.at(2);
+    const int& param1 = payload.at(0).get<int>();
+    const int& param2 = payload.at(1).get<int>();
     auto result = m_impl->func2(param1, param2);
-    m_service->notifyInvokeResponse(responseTopic, nlohmann::json(result).dump(), correlationData);
+    m_service->notifyInvokeResponse(responseTopicReturn, nlohmann::json::array({responseId, result}).dump(), std::to_string(responseId));
 }
 void ManyParamInterfaceService::onInvokeFunc3(const std::string& args, const std::string& responseTopic, const std::string& correlationData) const
 {
     nlohmann::json json_args = nlohmann::json::parse(args);
-    const int& param1 = json_args.at(0).get<int>();
-    const int& param2 = json_args.at(1).get<int>();
-    const int& param3 = json_args.at(2).get<int>();
+    std::string responseTopicReturn = responseTopic;
+    if (responseTopicReturn.empty())
+    {
+        responseTopicReturn = std::string("testbed2/ManyParamInterface/rpc/func3/" + json_args.at(1).get<std::string>() + "/result");
+    }
+    int responseId = 0;
+    if (correlationData.empty())
+    {
+        responseId = json_args.at(0).get<int>();
+    }
+    else
+    {
+        responseId = std::stoi(correlationData);
+    }
+    nlohmann::json payload = json_args.at(2);
+    const int& param1 = payload.at(0).get<int>();
+    const int& param2 = payload.at(1).get<int>();
+    const int& param3 = payload.at(2).get<int>();
     auto result = m_impl->func3(param1, param2, param3);
-    m_service->notifyInvokeResponse(responseTopic, nlohmann::json(result).dump(), correlationData);
+    m_service->notifyInvokeResponse(responseTopicReturn, nlohmann::json::array({responseId, result}).dump(), std::to_string(responseId));
 }
 void ManyParamInterfaceService::onInvokeFunc4(const std::string& args, const std::string& responseTopic, const std::string& correlationData) const
 {
     nlohmann::json json_args = nlohmann::json::parse(args);
-    const int& param1 = json_args.at(0).get<int>();
-    const int& param2 = json_args.at(1).get<int>();
-    const int& param3 = json_args.at(2).get<int>();
-    const int& param4 = json_args.at(3).get<int>();
+    std::string responseTopicReturn = responseTopic;
+    if (responseTopicReturn.empty())
+    {
+        responseTopicReturn = std::string("testbed2/ManyParamInterface/rpc/func4/" + json_args.at(1).get<std::string>() + "/result");
+    }
+    int responseId = 0;
+    if (correlationData.empty())
+    {
+        responseId = json_args.at(0).get<int>();
+    }
+    else
+    {
+        responseId = std::stoi(correlationData);
+    }
+    nlohmann::json payload = json_args.at(2);
+    const int& param1 = payload.at(0).get<int>();
+    const int& param2 = payload.at(1).get<int>();
+    const int& param3 = payload.at(2).get<int>();
+    const int& param4 = payload.at(3).get<int>();
     auto result = m_impl->func4(param1, param2, param3, param4);
-    m_service->notifyInvokeResponse(responseTopic, nlohmann::json(result).dump(), correlationData);
+    m_service->notifyInvokeResponse(responseTopicReturn, nlohmann::json::array({responseId, result}).dump(), std::to_string(responseId));
 }
 void ManyParamInterfaceService::onSig1(int param1)
 {

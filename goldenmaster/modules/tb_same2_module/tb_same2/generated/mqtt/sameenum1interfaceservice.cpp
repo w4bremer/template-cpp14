@@ -64,9 +64,24 @@ void SameEnum1InterfaceService::onSetProp1(const std::string& args) const
 void SameEnum1InterfaceService::onInvokeFunc1(const std::string& args, const std::string& responseTopic, const std::string& correlationData) const
 {
     nlohmann::json json_args = nlohmann::json::parse(args);
-    const Enum1Enum& param1 = json_args.at(0).get<Enum1Enum>();
+    std::string responseTopicReturn = responseTopic;
+    if (responseTopicReturn.empty())
+    {
+        responseTopicReturn = std::string("tb.same2/SameEnum1Interface/rpc/func1/" + json_args.at(1).get<std::string>() + "/result");
+    }
+    int responseId = 0;
+    if (correlationData.empty())
+    {
+        responseId = json_args.at(0).get<int>();
+    }
+    else
+    {
+        responseId = std::stoi(correlationData);
+    }
+    nlohmann::json payload = json_args.at(2);
+    const Enum1Enum& param1 = payload.at(0).get<Enum1Enum>();
     auto result = m_impl->func1(param1);
-    m_service->notifyInvokeResponse(responseTopic, nlohmann::json(result).dump(), correlationData);
+    m_service->notifyInvokeResponse(responseTopicReturn, nlohmann::json::array({responseId, result}).dump(), std::to_string(responseId));
 }
 void SameEnum1InterfaceService::onSig1(Enum1Enum param1)
 {

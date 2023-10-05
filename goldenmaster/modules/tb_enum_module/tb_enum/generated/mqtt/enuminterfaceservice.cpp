@@ -106,30 +106,90 @@ void EnumInterfaceService::onSetProp3(const std::string& args) const
 void EnumInterfaceService::onInvokeFunc0(const std::string& args, const std::string& responseTopic, const std::string& correlationData) const
 {
     nlohmann::json json_args = nlohmann::json::parse(args);
-    const Enum0Enum& param0 = json_args.at(0).get<Enum0Enum>();
+    std::string responseTopicReturn = responseTopic;
+    if (responseTopicReturn.empty())
+    {
+        responseTopicReturn = std::string("tb.enum/EnumInterface/rpc/func0/" + json_args.at(1).get<std::string>() + "/result");
+    }
+    int responseId = 0;
+    if (correlationData.empty())
+    {
+        responseId = json_args.at(0).get<int>();
+    }
+    else
+    {
+        responseId = std::stoi(correlationData);
+    }
+    nlohmann::json payload = json_args.at(2);
+    const Enum0Enum& param0 = payload.at(0).get<Enum0Enum>();
     auto result = m_impl->func0(param0);
-    m_service->notifyInvokeResponse(responseTopic, nlohmann::json(result).dump(), correlationData);
+    m_service->notifyInvokeResponse(responseTopicReturn, nlohmann::json::array({responseId, result}).dump(), std::to_string(responseId));
 }
 void EnumInterfaceService::onInvokeFunc1(const std::string& args, const std::string& responseTopic, const std::string& correlationData) const
 {
     nlohmann::json json_args = nlohmann::json::parse(args);
-    const Enum1Enum& param1 = json_args.at(0).get<Enum1Enum>();
+    std::string responseTopicReturn = responseTopic;
+    if (responseTopicReturn.empty())
+    {
+        responseTopicReturn = std::string("tb.enum/EnumInterface/rpc/func1/" + json_args.at(1).get<std::string>() + "/result");
+    }
+    int responseId = 0;
+    if (correlationData.empty())
+    {
+        responseId = json_args.at(0).get<int>();
+    }
+    else
+    {
+        responseId = std::stoi(correlationData);
+    }
+    nlohmann::json payload = json_args.at(2);
+    const Enum1Enum& param1 = payload.at(0).get<Enum1Enum>();
     auto result = m_impl->func1(param1);
-    m_service->notifyInvokeResponse(responseTopic, nlohmann::json(result).dump(), correlationData);
+    m_service->notifyInvokeResponse(responseTopicReturn, nlohmann::json::array({responseId, result}).dump(), std::to_string(responseId));
 }
 void EnumInterfaceService::onInvokeFunc2(const std::string& args, const std::string& responseTopic, const std::string& correlationData) const
 {
     nlohmann::json json_args = nlohmann::json::parse(args);
-    const Enum2Enum& param2 = json_args.at(0).get<Enum2Enum>();
+    std::string responseTopicReturn = responseTopic;
+    if (responseTopicReturn.empty())
+    {
+        responseTopicReturn = std::string("tb.enum/EnumInterface/rpc/func2/" + json_args.at(1).get<std::string>() + "/result");
+    }
+    int responseId = 0;
+    if (correlationData.empty())
+    {
+        responseId = json_args.at(0).get<int>();
+    }
+    else
+    {
+        responseId = std::stoi(correlationData);
+    }
+    nlohmann::json payload = json_args.at(2);
+    const Enum2Enum& param2 = payload.at(0).get<Enum2Enum>();
     auto result = m_impl->func2(param2);
-    m_service->notifyInvokeResponse(responseTopic, nlohmann::json(result).dump(), correlationData);
+    m_service->notifyInvokeResponse(responseTopicReturn, nlohmann::json::array({responseId, result}).dump(), std::to_string(responseId));
 }
 void EnumInterfaceService::onInvokeFunc3(const std::string& args, const std::string& responseTopic, const std::string& correlationData) const
 {
     nlohmann::json json_args = nlohmann::json::parse(args);
-    const Enum3Enum& param3 = json_args.at(0).get<Enum3Enum>();
+    std::string responseTopicReturn = responseTopic;
+    if (responseTopicReturn.empty())
+    {
+        responseTopicReturn = std::string("tb.enum/EnumInterface/rpc/func3/" + json_args.at(1).get<std::string>() + "/result");
+    }
+    int responseId = 0;
+    if (correlationData.empty())
+    {
+        responseId = json_args.at(0).get<int>();
+    }
+    else
+    {
+        responseId = std::stoi(correlationData);
+    }
+    nlohmann::json payload = json_args.at(2);
+    const Enum3Enum& param3 = payload.at(0).get<Enum3Enum>();
     auto result = m_impl->func3(param3);
-    m_service->notifyInvokeResponse(responseTopic, nlohmann::json(result).dump(), correlationData);
+    m_service->notifyInvokeResponse(responseTopicReturn, nlohmann::json::array({responseId, result}).dump(), std::to_string(responseId));
 }
 void EnumInterfaceService::onSig0(Enum0Enum param0)
 {

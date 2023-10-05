@@ -165,64 +165,185 @@ void SimpleInterfaceService::onInvokeFuncNoReturnValue(const std::string& args, 
     nlohmann::json json_args = nlohmann::json::parse(args);
     (void) responseTopic;
     (void) correlationData;
-    const bool& paramBool = json_args.at(0).get<bool>();
+    nlohmann::json payload = json_args.at(2);
+    const bool& paramBool = payload.at(0).get<bool>();
     m_impl->funcNoReturnValue(paramBool);
 }
 void SimpleInterfaceService::onInvokeFuncBool(const std::string& args, const std::string& responseTopic, const std::string& correlationData) const
 {
     nlohmann::json json_args = nlohmann::json::parse(args);
-    const bool& paramBool = json_args.at(0).get<bool>();
+    std::string responseTopicReturn = responseTopic;
+    if (responseTopicReturn.empty())
+    {
+        responseTopicReturn = std::string("tb.simple/SimpleInterface/rpc/funcBool/" + json_args.at(1).get<std::string>() + "/result");
+    }
+    int responseId = 0;
+    if (correlationData.empty())
+    {
+        responseId = json_args.at(0).get<int>();
+    }
+    else
+    {
+        responseId = std::stoi(correlationData);
+    }
+    nlohmann::json payload = json_args.at(2);
+    const bool& paramBool = payload.at(0).get<bool>();
     auto result = m_impl->funcBool(paramBool);
-    m_service->notifyInvokeResponse(responseTopic, nlohmann::json(result).dump(), correlationData);
+    m_service->notifyInvokeResponse(responseTopicReturn, nlohmann::json::array({responseId, result}).dump(), std::to_string(responseId));
 }
 void SimpleInterfaceService::onInvokeFuncInt(const std::string& args, const std::string& responseTopic, const std::string& correlationData) const
 {
     nlohmann::json json_args = nlohmann::json::parse(args);
-    const int& paramInt = json_args.at(0).get<int>();
+    std::string responseTopicReturn = responseTopic;
+    if (responseTopicReturn.empty())
+    {
+        responseTopicReturn = std::string("tb.simple/SimpleInterface/rpc/funcInt/" + json_args.at(1).get<std::string>() + "/result");
+    }
+    int responseId = 0;
+    if (correlationData.empty())
+    {
+        responseId = json_args.at(0).get<int>();
+    }
+    else
+    {
+        responseId = std::stoi(correlationData);
+    }
+    nlohmann::json payload = json_args.at(2);
+    const int& paramInt = payload.at(0).get<int>();
     auto result = m_impl->funcInt(paramInt);
-    m_service->notifyInvokeResponse(responseTopic, nlohmann::json(result).dump(), correlationData);
+    m_service->notifyInvokeResponse(responseTopicReturn, nlohmann::json::array({responseId, result}).dump(), std::to_string(responseId));
 }
 void SimpleInterfaceService::onInvokeFuncInt32(const std::string& args, const std::string& responseTopic, const std::string& correlationData) const
 {
     nlohmann::json json_args = nlohmann::json::parse(args);
-    const int32_t& paramInt32 = json_args.at(0).get<int32_t>();
+    std::string responseTopicReturn = responseTopic;
+    if (responseTopicReturn.empty())
+    {
+        responseTopicReturn = std::string("tb.simple/SimpleInterface/rpc/funcInt32/" + json_args.at(1).get<std::string>() + "/result");
+    }
+    int responseId = 0;
+    if (correlationData.empty())
+    {
+        responseId = json_args.at(0).get<int>();
+    }
+    else
+    {
+        responseId = std::stoi(correlationData);
+    }
+    nlohmann::json payload = json_args.at(2);
+    const int32_t& paramInt32 = payload.at(0).get<int32_t>();
     auto result = m_impl->funcInt32(paramInt32);
-    m_service->notifyInvokeResponse(responseTopic, nlohmann::json(result).dump(), correlationData);
+    m_service->notifyInvokeResponse(responseTopicReturn, nlohmann::json::array({responseId, result}).dump(), std::to_string(responseId));
 }
 void SimpleInterfaceService::onInvokeFuncInt64(const std::string& args, const std::string& responseTopic, const std::string& correlationData) const
 {
     nlohmann::json json_args = nlohmann::json::parse(args);
-    const int64_t& paramInt64 = json_args.at(0).get<int64_t>();
+    std::string responseTopicReturn = responseTopic;
+    if (responseTopicReturn.empty())
+    {
+        responseTopicReturn = std::string("tb.simple/SimpleInterface/rpc/funcInt64/" + json_args.at(1).get<std::string>() + "/result");
+    }
+    int responseId = 0;
+    if (correlationData.empty())
+    {
+        responseId = json_args.at(0).get<int>();
+    }
+    else
+    {
+        responseId = std::stoi(correlationData);
+    }
+    nlohmann::json payload = json_args.at(2);
+    const int64_t& paramInt64 = payload.at(0).get<int64_t>();
     auto result = m_impl->funcInt64(paramInt64);
-    m_service->notifyInvokeResponse(responseTopic, nlohmann::json(result).dump(), correlationData);
+    m_service->notifyInvokeResponse(responseTopicReturn, nlohmann::json::array({responseId, result}).dump(), std::to_string(responseId));
 }
 void SimpleInterfaceService::onInvokeFuncFloat(const std::string& args, const std::string& responseTopic, const std::string& correlationData) const
 {
     nlohmann::json json_args = nlohmann::json::parse(args);
-    const float& paramFloat = json_args.at(0).get<float>();
+    std::string responseTopicReturn = responseTopic;
+    if (responseTopicReturn.empty())
+    {
+        responseTopicReturn = std::string("tb.simple/SimpleInterface/rpc/funcFloat/" + json_args.at(1).get<std::string>() + "/result");
+    }
+    int responseId = 0;
+    if (correlationData.empty())
+    {
+        responseId = json_args.at(0).get<int>();
+    }
+    else
+    {
+        responseId = std::stoi(correlationData);
+    }
+    nlohmann::json payload = json_args.at(2);
+    const float& paramFloat = payload.at(0).get<float>();
     auto result = m_impl->funcFloat(paramFloat);
-    m_service->notifyInvokeResponse(responseTopic, nlohmann::json(result).dump(), correlationData);
+    m_service->notifyInvokeResponse(responseTopicReturn, nlohmann::json::array({responseId, result}).dump(), std::to_string(responseId));
 }
 void SimpleInterfaceService::onInvokeFuncFloat32(const std::string& args, const std::string& responseTopic, const std::string& correlationData) const
 {
     nlohmann::json json_args = nlohmann::json::parse(args);
-    const float& paramFloat32 = json_args.at(0).get<float>();
+    std::string responseTopicReturn = responseTopic;
+    if (responseTopicReturn.empty())
+    {
+        responseTopicReturn = std::string("tb.simple/SimpleInterface/rpc/funcFloat32/" + json_args.at(1).get<std::string>() + "/result");
+    }
+    int responseId = 0;
+    if (correlationData.empty())
+    {
+        responseId = json_args.at(0).get<int>();
+    }
+    else
+    {
+        responseId = std::stoi(correlationData);
+    }
+    nlohmann::json payload = json_args.at(2);
+    const float& paramFloat32 = payload.at(0).get<float>();
     auto result = m_impl->funcFloat32(paramFloat32);
-    m_service->notifyInvokeResponse(responseTopic, nlohmann::json(result).dump(), correlationData);
+    m_service->notifyInvokeResponse(responseTopicReturn, nlohmann::json::array({responseId, result}).dump(), std::to_string(responseId));
 }
 void SimpleInterfaceService::onInvokeFuncFloat64(const std::string& args, const std::string& responseTopic, const std::string& correlationData) const
 {
     nlohmann::json json_args = nlohmann::json::parse(args);
-    const double& paramFloat = json_args.at(0).get<double>();
+    std::string responseTopicReturn = responseTopic;
+    if (responseTopicReturn.empty())
+    {
+        responseTopicReturn = std::string("tb.simple/SimpleInterface/rpc/funcFloat64/" + json_args.at(1).get<std::string>() + "/result");
+    }
+    int responseId = 0;
+    if (correlationData.empty())
+    {
+        responseId = json_args.at(0).get<int>();
+    }
+    else
+    {
+        responseId = std::stoi(correlationData);
+    }
+    nlohmann::json payload = json_args.at(2);
+    const double& paramFloat = payload.at(0).get<double>();
     auto result = m_impl->funcFloat64(paramFloat);
-    m_service->notifyInvokeResponse(responseTopic, nlohmann::json(result).dump(), correlationData);
+    m_service->notifyInvokeResponse(responseTopicReturn, nlohmann::json::array({responseId, result}).dump(), std::to_string(responseId));
 }
 void SimpleInterfaceService::onInvokeFuncString(const std::string& args, const std::string& responseTopic, const std::string& correlationData) const
 {
     nlohmann::json json_args = nlohmann::json::parse(args);
-    const std::string& paramString = json_args.at(0).get<std::string>();
+    std::string responseTopicReturn = responseTopic;
+    if (responseTopicReturn.empty())
+    {
+        responseTopicReturn = std::string("tb.simple/SimpleInterface/rpc/funcString/" + json_args.at(1).get<std::string>() + "/result");
+    }
+    int responseId = 0;
+    if (correlationData.empty())
+    {
+        responseId = json_args.at(0).get<int>();
+    }
+    else
+    {
+        responseId = std::stoi(correlationData);
+    }
+    nlohmann::json payload = json_args.at(2);
+    const std::string& paramString = payload.at(0).get<std::string>();
     auto result = m_impl->funcString(paramString);
-    m_service->notifyInvokeResponse(responseTopic, nlohmann::json(result).dump(), correlationData);
+    m_service->notifyInvokeResponse(responseTopicReturn, nlohmann::json::array({responseId, result}).dump(), std::to_string(responseId));
 }
 void SimpleInterfaceService::onSigBool(bool paramBool)
 {

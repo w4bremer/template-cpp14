@@ -87,17 +87,35 @@ void {{$class}}::onInvoke{{ Camel $operation.Name }}(const std::string& args, co
 {{- if .Return.IsVoid }}
     (void) responseTopic;
     (void) correlationData;
+{{- else }}
+    std::string responseTopicReturn = responseTopic;
+    if (responseTopicReturn.empty())
+    {
+        responseTopicReturn = std::string("{{$.Module.Name}}/{{$interface}}/rpc/{{$operation}}/" + json_args.at(1).get<std::string>() + "/result");
+    }
+    int responseId = 0;
+    if (correlationData.empty())
+    {
+        responseId = json_args.at(0).get<int>();
+    }
+    else
+    {
+        responseId = std::stoi(correlationData);
+    }
 {{- end }}
 
+{{- if len $operation.Params }}
+    nlohmann::json payload = json_args.at(2);
+{{- end }}
 {{- range $idx, $elem := $operation.Params }}
 {{- $param := . }}
-    const {{cppType "" $param}}& {{$param}} = json_args.at({{$idx}}).get<{{cppType "" $param}}>();
+    const {{cppType "" $param}}& {{$param}} = payload.at({{$idx}}).get<{{cppType "" $param}}>();
 {{- end }}
 {{- if .Return.IsVoid }}
     m_impl->{{lower1 $operation.Name}}({{ cppVars $operation.Params }});
 {{- else }}
     auto result = m_impl->{{lower1 $operation.Name}}({{ cppVars $operation.Params }});
-    m_service->notifyInvokeResponse(responseTopic, nlohmann::json(result).dump(), correlationData);
+    m_service->notifyInvokeResponse(responseTopicReturn, nlohmann::json::array({responseId, result}).dump(), std::to_string(responseId));
 {{- end }}
 }
 {{- end }}
