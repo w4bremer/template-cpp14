@@ -11,6 +11,7 @@ using namespace ApiGear::MQTT;
 namespace
 {
     int timeoutWhileWaitingForUnsubscribe = 7; //Milliseconds
+    int  maxBufferedMessages = 10000;
 }
 
 std::mt19937 randomNumberGenerator (std::random_device{}());
@@ -282,6 +283,7 @@ void CWrapper::connectToHost(const std::string& brokerURL)
 
             m_client = std::make_unique<MQTTAsync>();
             MQTTAsync_createOptions create_opts = MQTTAsync_createOptions_initializer5;
+            create_opts.maxBufferedMessages = maxBufferedMessages;
             MQTTAsync_createWithOptions(m_client.get(), m_serverUrl.c_str(), m_clientID.c_str(), MQTTCLIENT_PERSISTENCE_NONE, NULL, &create_opts);
 
             MQTTAsync_connectOptions conn_opts = MQTTAsync_connectOptions_initializer5;
