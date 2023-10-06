@@ -16,6 +16,7 @@ VoidInterfaceClient::VoidInterfaceClient(std::shared_ptr<ApiGear::MQTT::Client> 
     , m_publisher(std::make_unique<VoidInterfacePublisher>())
     , m_topics(createTopicMap(m_client->getClientId()))
 {
+    m_connectionStatusRegistrationID = m_client->subscribeToConnectionStatus([this](bool connectionStatus){ onConnectionStatusChanged(connectionStatus); });
 }
 
 VoidInterfaceClient::~VoidInterfaceClient()
@@ -24,6 +25,7 @@ VoidInterfaceClient::~VoidInterfaceClient()
     {
         m_client->unsubscribeTopic(topic. first);
     }
+    m_client->unsubscribeToConnectionStatus(m_connectionStatusRegistrationID);
 }
 
 std::map<std::string, ApiGear::MQTT::CallbackFunction> VoidInterfaceClient::createTopicMap(const std::string& clientId)

@@ -16,6 +16,7 @@ SimpleArrayInterfaceClient::SimpleArrayInterfaceClient(std::shared_ptr<ApiGear::
     , m_publisher(std::make_unique<SimpleArrayInterfacePublisher>())
     , m_topics(createTopicMap(m_client->getClientId()))
 {
+    m_connectionStatusRegistrationID = m_client->subscribeToConnectionStatus([this](bool connectionStatus){ onConnectionStatusChanged(connectionStatus); });
 }
 
 SimpleArrayInterfaceClient::~SimpleArrayInterfaceClient()
@@ -24,6 +25,7 @@ SimpleArrayInterfaceClient::~SimpleArrayInterfaceClient()
     {
         m_client->unsubscribeTopic(topic. first);
     }
+    m_client->unsubscribeToConnectionStatus(m_connectionStatusRegistrationID);
 }
 
 std::map<std::string, ApiGear::MQTT::CallbackFunction> SimpleArrayInterfaceClient::createTopicMap(const std::string& clientId)

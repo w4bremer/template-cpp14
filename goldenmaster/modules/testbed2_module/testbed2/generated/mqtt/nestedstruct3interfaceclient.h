@@ -76,6 +76,8 @@ private:
 
     /// @brief has all the topics of this client and the corresponding function callbacks
     const std::map<std::string, ApiGear::MQTT::CallbackFunction> m_topics;
+    // id for connection status registration
+    int m_connectionStatusRegistrationID;
 };
 } // namespace MQTT
 } // namespace Testbed2

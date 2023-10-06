@@ -16,6 +16,7 @@ SameEnum2InterfaceClient::SameEnum2InterfaceClient(std::shared_ptr<ApiGear::MQTT
     , m_publisher(std::make_unique<SameEnum2InterfacePublisher>())
     , m_topics(createTopicMap(m_client->getClientId()))
 {
+    m_connectionStatusRegistrationID = m_client->subscribeToConnectionStatus([this](bool connectionStatus){ onConnectionStatusChanged(connectionStatus); });
 }
 
 SameEnum2InterfaceClient::~SameEnum2InterfaceClient()
@@ -24,6 +25,7 @@ SameEnum2InterfaceClient::~SameEnum2InterfaceClient()
     {
         m_client->unsubscribeTopic(topic. first);
     }
+    m_client->unsubscribeToConnectionStatus(m_connectionStatusRegistrationID);
 }
 
 std::map<std::string, ApiGear::MQTT::CallbackFunction> SameEnum2InterfaceClient::createTopicMap(const std::string& clientId)

@@ -16,6 +16,7 @@ NestedStruct3InterfaceClient::NestedStruct3InterfaceClient(std::shared_ptr<ApiGe
     , m_publisher(std::make_unique<NestedStruct3InterfacePublisher>())
     , m_topics(createTopicMap(m_client->getClientId()))
 {
+    m_connectionStatusRegistrationID = m_client->subscribeToConnectionStatus([this](bool connectionStatus){ onConnectionStatusChanged(connectionStatus); });
 }
 
 NestedStruct3InterfaceClient::~NestedStruct3InterfaceClient()
@@ -24,6 +25,7 @@ NestedStruct3InterfaceClient::~NestedStruct3InterfaceClient()
     {
         m_client->unsubscribeTopic(topic. first);
     }
+    m_client->unsubscribeToConnectionStatus(m_connectionStatusRegistrationID);
 }
 
 std::map<std::string, ApiGear::MQTT::CallbackFunction> NestedStruct3InterfaceClient::createTopicMap(const std::string& clientId)

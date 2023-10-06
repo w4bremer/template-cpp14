@@ -16,6 +16,7 @@ SameStruct1InterfaceClient::SameStruct1InterfaceClient(std::shared_ptr<ApiGear::
     , m_publisher(std::make_unique<SameStruct1InterfacePublisher>())
     , m_topics(createTopicMap(m_client->getClientId()))
 {
+    m_connectionStatusRegistrationID = m_client->subscribeToConnectionStatus([this](bool connectionStatus){ onConnectionStatusChanged(connectionStatus); });
 }
 
 SameStruct1InterfaceClient::~SameStruct1InterfaceClient()
@@ -24,6 +25,7 @@ SameStruct1InterfaceClient::~SameStruct1InterfaceClient()
     {
         m_client->unsubscribeTopic(topic. first);
     }
+    m_client->unsubscribeToConnectionStatus(m_connectionStatusRegistrationID);
 }
 
 std::map<std::string, ApiGear::MQTT::CallbackFunction> SameStruct1InterfaceClient::createTopicMap(const std::string& clientId)

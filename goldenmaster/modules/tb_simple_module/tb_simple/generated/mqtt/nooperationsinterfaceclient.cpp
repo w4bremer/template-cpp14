@@ -16,6 +16,7 @@ NoOperationsInterfaceClient::NoOperationsInterfaceClient(std::shared_ptr<ApiGear
     , m_publisher(std::make_unique<NoOperationsInterfacePublisher>())
     , m_topics(createTopicMap(m_client->getClientId()))
 {
+    m_connectionStatusRegistrationID = m_client->subscribeToConnectionStatus([this](bool connectionStatus){ onConnectionStatusChanged(connectionStatus); });
 }
 
 NoOperationsInterfaceClient::~NoOperationsInterfaceClient()
@@ -24,6 +25,7 @@ NoOperationsInterfaceClient::~NoOperationsInterfaceClient()
     {
         m_client->unsubscribeTopic(topic. first);
     }
+    m_client->unsubscribeToConnectionStatus(m_connectionStatusRegistrationID);
 }
 
 std::map<std::string, ApiGear::MQTT::CallbackFunction> NoOperationsInterfaceClient::createTopicMap(const std::string&)

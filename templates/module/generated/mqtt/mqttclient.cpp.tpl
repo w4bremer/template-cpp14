@@ -21,6 +21,7 @@ namespace {
     , m_publisher(std::make_unique<{{$pub_class}}>())
     , m_topics(createTopicMap(m_client->getClientId()))
 {
+    m_connectionStatusRegistrationID = m_client->subscribeToConnectionStatus([this](bool connectionStatus){ onConnectionStatusChanged(connectionStatus); });
 }
 
 {{$class}}::~{{$class}}()
@@ -29,6 +30,7 @@ namespace {
     {
         m_client->unsubscribeTopic(topic. first);
     }
+    m_client->unsubscribeToConnectionStatus(m_connectionStatusRegistrationID);
 }
 
 std::map<std::string, ApiGear::MQTT::CallbackFunction> {{$class}}::createTopicMap(const std::string& 
