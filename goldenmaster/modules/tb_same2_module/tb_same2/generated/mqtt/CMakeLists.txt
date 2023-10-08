@@ -11,7 +11,12 @@ set (SOURCES_MQTT
 )
 add_library(tb_same2-mqtt SHARED ${SOURCES_MQTT})
 add_library(tb_same2::tb_same2-mqtt ALIAS tb_same2-mqtt)
-target_include_directories(tb_same2-mqtt PUBLIC ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/../)
+target_include_directories(tb_same2-mqtt
+    PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../../../>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../../../../modules>
+    $<INSTALL_INTERFACE:include/tb_same2>
+)
 target_link_libraries(tb_same2-mqtt
     tb_same2::tb_same2-core
     apigear::paho-mqtt
@@ -22,3 +27,21 @@ if(NOT MSVC)
 else()
   target_compile_options(tb_same2-mqtt PRIVATE /W4 /WX /wd4251)
 endif()
+
+install(TARGETS tb_same2-mqtt
+        EXPORT Tb_same2MqttTargets
+        RUNTIME DESTINATION bin                 COMPONENT Runtime
+        LIBRARY DESTINATION lib                 COMPONENT Runtime
+        ARCHIVE DESTINATION lib/tb_same2   COMPONENT Development)
+# install includes
+install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} DESTINATION include/tb_same2/generated FILES_MATCHING PATTERN "*.h")
+
+export(EXPORT Tb_same2MqttTargets
+  NAMESPACE tb_same2::
+)
+
+install(EXPORT Tb_same2MqttTargets
+  FILE Tb_same2MqttTargets.cmake
+  DESTINATION ${InstallDir}
+  NAMESPACE tb_same2::
+)

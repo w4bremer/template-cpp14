@@ -12,7 +12,12 @@ set (SOURCES_MQTT
 )
 add_library({{$module_id}}-mqtt SHARED ${SOURCES_MQTT})
 add_library({{$module_id}}::{{$module_id}}-mqtt ALIAS {{$module_id}}-mqtt)
-target_include_directories({{$module_id}}-mqtt PUBLIC ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/../)
+target_include_directories({{$module_id}}-mqtt
+    PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../../../>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../../../../modules>
+    $<INSTALL_INTERFACE:include/{{$module_id}}>
+)
 target_link_libraries({{$module_id}}-mqtt
     {{$module_id}}::{{$module_id}}-core
     apigear::paho-mqtt
@@ -23,3 +28,21 @@ if(NOT MSVC)
 else()
   target_compile_options({{$module_id}}-mqtt PRIVATE /W4 /WX /wd4251)
 endif()
+
+install(TARGETS {{$module_id}}-mqtt
+        EXPORT {{$module_idFirstUpper}}MqttTargets
+        RUNTIME DESTINATION bin                 COMPONENT Runtime
+        LIBRARY DESTINATION lib                 COMPONENT Runtime
+        ARCHIVE DESTINATION lib/{{$module_id}}   COMPONENT Development)
+# install includes
+install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} DESTINATION include/{{$module_id}}/generated FILES_MATCHING PATTERN "*.h")
+
+export(EXPORT {{$module_idFirstUpper}}MqttTargets
+  NAMESPACE {{$module_id}}::
+)
+
+install(EXPORT {{$module_idFirstUpper}}MqttTargets
+  FILE {{$module_idFirstUpper}}MqttTargets.cmake
+  DESTINATION ${InstallDir}
+  NAMESPACE {{$module_id }}::
+)

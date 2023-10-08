@@ -7,7 +7,12 @@ set (SOURCES_MQTT
 )
 add_library(testbed1-mqtt SHARED ${SOURCES_MQTT})
 add_library(testbed1::testbed1-mqtt ALIAS testbed1-mqtt)
-target_include_directories(testbed1-mqtt PUBLIC ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/../)
+target_include_directories(testbed1-mqtt
+    PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../../../>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../../../../modules>
+    $<INSTALL_INTERFACE:include/testbed1>
+)
 target_link_libraries(testbed1-mqtt
     testbed1::testbed1-core
     apigear::paho-mqtt
@@ -18,3 +23,21 @@ if(NOT MSVC)
 else()
   target_compile_options(testbed1-mqtt PRIVATE /W4 /WX /wd4251)
 endif()
+
+install(TARGETS testbed1-mqtt
+        EXPORT Testbed1MqttTargets
+        RUNTIME DESTINATION bin                 COMPONENT Runtime
+        LIBRARY DESTINATION lib                 COMPONENT Runtime
+        ARCHIVE DESTINATION lib/testbed1   COMPONENT Development)
+# install includes
+install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} DESTINATION include/testbed1/generated FILES_MATCHING PATTERN "*.h")
+
+export(EXPORT Testbed1MqttTargets
+  NAMESPACE testbed1::
+)
+
+install(EXPORT Testbed1MqttTargets
+  FILE Testbed1MqttTargets.cmake
+  DESTINATION ${InstallDir}
+  NAMESPACE testbed1::
+)

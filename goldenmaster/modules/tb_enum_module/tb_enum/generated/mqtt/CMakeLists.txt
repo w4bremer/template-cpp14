@@ -5,7 +5,12 @@ set (SOURCES_MQTT
 )
 add_library(tb_enum-mqtt SHARED ${SOURCES_MQTT})
 add_library(tb_enum::tb_enum-mqtt ALIAS tb_enum-mqtt)
-target_include_directories(tb_enum-mqtt PUBLIC ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/../)
+target_include_directories(tb_enum-mqtt
+    PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../../../>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../../../../modules>
+    $<INSTALL_INTERFACE:include/tb_enum>
+)
 target_link_libraries(tb_enum-mqtt
     tb_enum::tb_enum-core
     apigear::paho-mqtt
@@ -16,3 +21,21 @@ if(NOT MSVC)
 else()
   target_compile_options(tb_enum-mqtt PRIVATE /W4 /WX /wd4251)
 endif()
+
+install(TARGETS tb_enum-mqtt
+        EXPORT Tb_enumMqttTargets
+        RUNTIME DESTINATION bin                 COMPONENT Runtime
+        LIBRARY DESTINATION lib                 COMPONENT Runtime
+        ARCHIVE DESTINATION lib/tb_enum   COMPONENT Development)
+# install includes
+install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} DESTINATION include/tb_enum/generated FILES_MATCHING PATTERN "*.h")
+
+export(EXPORT Tb_enumMqttTargets
+  NAMESPACE tb_enum::
+)
+
+install(EXPORT Tb_enumMqttTargets
+  FILE Tb_enumMqttTargets.cmake
+  DESTINATION ${InstallDir}
+  NAMESPACE tb_enum::
+)
