@@ -41,6 +41,8 @@
 #include "testbed1/generated/olink/structinterfaceservice.h"
 #include "testbed1/implementation/structarrayinterface.h"
 #include "testbed1/generated/olink/structarrayinterfaceservice.h"
+#include "tb_names/implementation/names.h"
+#include "tb_names/generated/olink/namesservice.h"
 
 #include "apigear/olink/olinklogadapter.h"
 #include "olink/remoteregistry.h"
@@ -146,6 +148,9 @@ int main(){
     auto testbed1StructArrayInterface = std::make_shared<Testbed1::StructArrayInterface>();
     auto testbed1OlinkStructArrayInterfaceService = std::make_shared<Testbed1::olink::StructArrayInterfaceService>(testbed1StructArrayInterface, registry);
     registry.addSource(testbed1OlinkStructArrayInterfaceService);
+    auto tbNamesNames = std::make_shared<TbNames::Names>();
+    auto tbNamesOlinkNamesService = std::make_shared<TbNames::olink::NamesService>(tbNamesNames, registry);
+    registry.addSource(tbNamesOlinkNamesService);
 
     testserver.listen(8000);
 
@@ -181,6 +186,7 @@ int main(){
     registry.removeSource(tbSimpleOlinkNoSignalsInterfaceService->olinkObjectName());
     registry.removeSource(testbed1OlinkStructInterfaceService->olinkObjectName());
     registry.removeSource(testbed1OlinkStructArrayInterfaceService->olinkObjectName());
+    registry.removeSource(tbNamesOlinkNamesService->olinkObjectName());
     
     return 0;
 }

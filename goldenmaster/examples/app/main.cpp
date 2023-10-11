@@ -41,6 +41,8 @@
 #include "testbed1/generated/monitor/structinterface.tracedecorator.h"
 #include "testbed1/implementation/structarrayinterface.h"
 #include "testbed1/generated/monitor/structarrayinterface.tracedecorator.h"
+#include "tb_names/implementation/names.h"
+#include "tb_names/generated/monitor/names.tracedecorator.h"
 #include "apigear/tracer/tracer.h"
 
 using namespace Test;
@@ -90,6 +92,8 @@ int main(){
     std::unique_ptr<Testbed1::IStructInterface> testTestbed1StructInterfaceTraceDecorator = Testbed1::StructInterfaceTraceDecorator::connect(*testTestbed1StructInterface, tracer);
     std::unique_ptr<Testbed1::IStructArrayInterface> testTestbed1StructArrayInterface = std::make_unique<Testbed1::StructArrayInterface>();
     std::unique_ptr<Testbed1::IStructArrayInterface> testTestbed1StructArrayInterfaceTraceDecorator = Testbed1::StructArrayInterfaceTraceDecorator::connect(*testTestbed1StructArrayInterface, tracer);
+    std::unique_ptr<TbNames::INames> testTbNamesNames = std::make_unique<TbNames::Names>();
+    std::unique_ptr<TbNames::INames> testTbNamesNamesTraceDecorator = TbNames::NamesTraceDecorator::connect(*testTbNamesNames, tracer);
 
     return 0;
 }

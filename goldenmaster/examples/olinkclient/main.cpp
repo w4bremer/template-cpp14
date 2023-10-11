@@ -41,6 +41,8 @@
 #include "testbed1/generated/monitor/structinterface.tracedecorator.h"
 #include "testbed1/generated/olink/structarrayinterfaceclient.h"
 #include "testbed1/generated/monitor/structarrayinterface.tracedecorator.h"
+#include "tb_names/generated/olink/namesclient.h"
+#include "tb_names/generated/monitor/names.tracedecorator.h"
 
 #include "apigear/olink/olinkconnection.h"
 #include "apigear/tracer/tracer.h"
@@ -147,6 +149,9 @@ int main(){
     auto testbed1StructArrayInterface = std::make_shared<Testbed1::olink::StructArrayInterfaceClient>();
     clientNetworkEndpoint.connectAndLinkObject(testbed1StructArrayInterface);
     std::unique_ptr<Testbed1::IStructArrayInterface> testbed1StructArrayInterfaceTraced = Testbed1::StructArrayInterfaceTraceDecorator::connect(*testbed1StructArrayInterface, tracer);
+    auto tbNamesNames = std::make_shared<TbNames::olink::NamesClient>();
+    clientNetworkEndpoint.connectAndLinkObject(tbNamesNames);
+    std::unique_ptr<TbNames::INames> tbNamesNamesTraced = TbNames::NamesTraceDecorator::connect(*tbNamesNames, tracer);
     
     clientNetworkEndpoint.connectToHost(Poco::URI("ws://localhost:8000"));
 
@@ -182,6 +187,7 @@ int main(){
     clientNetworkEndpoint.disconnectAndUnlink(tbSimpleNoSignalsInterface->olinkObjectName());
     clientNetworkEndpoint.disconnectAndUnlink(testbed1StructInterface->olinkObjectName());
     clientNetworkEndpoint.disconnectAndUnlink(testbed1StructArrayInterface->olinkObjectName());
+    clientNetworkEndpoint.disconnectAndUnlink(tbNamesNames->olinkObjectName());
 
     return 0;
 }

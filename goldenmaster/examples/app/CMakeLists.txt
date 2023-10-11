@@ -27,6 +27,7 @@ find_package(tb_same1 QUIET COMPONENTS tb_same1-core tb_same1-implementation tb_
 find_package(tb_same2 QUIET COMPONENTS tb_same2-core tb_same2-implementation tb_same2-monitor)
 find_package(tb_simple QUIET COMPONENTS tb_simple-core tb_simple-implementation tb_simple-monitor)
 find_package(testbed1 QUIET COMPONENTS testbed1-core testbed1-implementation testbed1-monitor)
+find_package(tb_names QUIET COMPONENTS tb_names-core tb_names-implementation tb_names-monitor)
 target_link_libraries(app
     testbed2::testbed2-core
     testbed2::testbed2-implementation
@@ -46,6 +47,9 @@ target_link_libraries(app
     testbed1::testbed1-core
     testbed1::testbed1-implementation
     testbed1::testbed1-monitor
+    tb_names::tb_names-core
+    tb_names::tb_names-implementation
+    tb_names::tb_names-monitor
 )
 
 install(TARGETS app

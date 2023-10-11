@@ -22,9 +22,9 @@ void test{{ Camel $module.Name }}{{$class}}()
     // Thread safe access
 {{- range $interface.Properties}}
 {{- $property := . }}
-    auto {{lower1 (Camel $property.Name)}} = {{cppDefault "" $property}};
-    {{lower1 (Camel $property.Name)}} = test{{$class}}->get{{Camel $property.Name}}();
-    test{{$class}}->set{{Camel $property.Name}}({{lower1 (Camel $property.Name)}});
+    auto l_{{lower1 (Camel $property.Name)}} = {{cppDefault "" $property}};
+    l_{{lower1 (Camel $property.Name)}} = test{{$class}}->get{{Camel $property.Name}}();
+    test{{$class}}->set{{Camel $property.Name}}(l_{{lower1 (Camel $property.Name)}});
 {{- end }}
 }{{nl}}
 {{- end }}

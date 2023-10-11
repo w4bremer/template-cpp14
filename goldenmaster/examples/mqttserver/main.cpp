@@ -41,6 +41,8 @@
 #include "testbed1/generated/mqtt/structinterfaceservice.h"
 #include "testbed1/implementation/structarrayinterface.h"
 #include "testbed1/generated/mqtt/structarrayinterfaceservice.h"
+#include "tb_names/implementation/names.h"
+#include "tb_names/generated/mqtt/namesservice.h"
 #include "apigear/mqtt/mqttservice.h"
 #include "apigear/utilities/logger.h"
 #include <iostream>
@@ -129,6 +131,8 @@ int main(){
     Testbed1::MQTT::StructInterfaceService testTestbed1StructInterfaceService(testTestbed1StructInterface, mqttservice);
     std::shared_ptr<Testbed1::IStructArrayInterface> testTestbed1StructArrayInterface = std::make_shared<Testbed1::StructArrayInterface>();
     Testbed1::MQTT::StructArrayInterfaceService testTestbed1StructArrayInterfaceService(testTestbed1StructArrayInterface, mqttservice);
+    std::shared_ptr<TbNames::INames> testTbNamesNames = std::make_shared<TbNames::Names>();
+    TbNames::MQTT::NamesService testTbNamesNamesService(testTbNamesNames, mqttservice);
 
     // start mqtt connection
     mqttservice->connectToHost("");

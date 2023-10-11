@@ -90,6 +90,16 @@ if(NOT testbed1_FOUND)
   )
   FetchContent_MakeAvailable(testbed1)
 endif()
+find_package(tb_names QUIET)
+if(NOT tb_names_FOUND)
+  # pull tb_names as dependency
+  message(STATUS "tb_names NOT FOUND, building from source folder")
+  include(FetchContent)
+  FetchContent_Declare(tb_names
+    SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/modules/tb_names_module/tb_names"
+  )
+  FetchContent_MakeAvailable(tb_names)
+endif()
 add_subdirectory(examples/app)
 add_subdirectory(examples/appthreadsafe)
 add_subdirectory(examples/olinkserver)

@@ -1,0 +1,13 @@
+schema: apigear.module/1.0
+name: tb.names
+version: "1.0.0"
+
+# test properties with simple types
+# test properties with arrays of simple types
+# test functions with simple types
+# test different names
+
+interfaces:
+  - name: Names
+    properties:
+      - { name: Switch, type: bool }

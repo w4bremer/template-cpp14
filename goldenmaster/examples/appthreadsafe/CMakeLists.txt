@@ -27,6 +27,7 @@ find_package(tb_same1 QUIET COMPONENTS tb_same1-core tb_same1-implementation)
 find_package(tb_same2 QUIET COMPONENTS tb_same2-core tb_same2-implementation)
 find_package(tb_simple QUIET COMPONENTS tb_simple-core tb_simple-implementation)
 find_package(testbed1 QUIET COMPONENTS testbed1-core testbed1-implementation)
+find_package(tb_names QUIET COMPONENTS tb_names-core tb_names-implementation)
 target_link_libraries(appthreadsafe
     testbed2::testbed2-core
     testbed2::testbed2-implementation
@@ -40,6 +41,8 @@ target_link_libraries(appthreadsafe
     tb_simple::tb_simple-implementation
     testbed1::testbed1-core
     testbed1::testbed1-implementation
+    tb_names::tb_names-core
+    tb_names::tb_names-implementation
 )
 
 install(TARGETS appthreadsafe

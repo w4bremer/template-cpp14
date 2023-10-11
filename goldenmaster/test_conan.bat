@@ -118,6 +118,22 @@ if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
 conan create ../../../modules/testbed1_module
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
 popd
+@REM Building and testing tb_names module
+conan remove "tb_names" -b -f
+if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
+if not exist modules\tb_names_module mkdir modules\tb_names_module
+if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
+pushd modules\tb_names_module
+if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
+conan source ../../../modules/tb_names_module
+if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
+conan install --build missing ../../../modules/tb_names_module -g=virtualenv
+if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
+conan build ../../../modules/tb_names_module
+if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
+conan create ../../../modules/tb_names_module
+if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
+popd
 @REM Leave build folder
 cd ..
 @REM Building examples app

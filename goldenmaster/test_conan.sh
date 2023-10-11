@@ -100,6 +100,21 @@ conan install --build missing ../../../modules/testbed1_module &&\
 conan create ../../../modules/testbed1_module
 if [ $? -ne 0 ]; then exit 1; fi;
 popd
+conan remove "tb_names" -b -f
+mkdir -p modules/tb_names_module;
+pushd modules/tb_names_module;
+conan source ../../../modules/tb_names_module &&\
+conan install --build missing ../../../modules/tb_names_module -g=virtualenv &&\
+conan build ../../../modules/tb_names_module &&\
+cmake -DBUILD_TESTING=ON ../../../modules/tb_names_module/tb_names &&\
+cmake --build . &&\
+source activate.sh &&\
+cmake --build . --target test &&\
+source deactivate.sh &&\
+conan install --build missing ../../../modules/tb_names_module &&\
+conan create ../../../modules/tb_names_module
+if [ $? -ne 0 ]; then exit 1; fi;
+popd
 # leave build directory
 cd ..
 # examples app
