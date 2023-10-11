@@ -149,9 +149,9 @@ int main(){
     auto testbed1StructArrayInterface = std::make_shared<Testbed1::olink::StructArrayInterfaceClient>();
     clientNetworkEndpoint.connectAndLinkObject(testbed1StructArrayInterface);
     std::unique_ptr<Testbed1::IStructArrayInterface> testbed1StructArrayInterfaceTraced = Testbed1::StructArrayInterfaceTraceDecorator::connect(*testbed1StructArrayInterface, tracer);
-    auto tbNamesNames = std::make_shared<TbNames::olink::NamesClient>();
-    clientNetworkEndpoint.connectAndLinkObject(tbNamesNames);
-    std::unique_ptr<TbNames::INames> tbNamesNamesTraced = TbNames::NamesTraceDecorator::connect(*tbNamesNames, tracer);
+    auto tbNamesNamEs = std::make_shared<TbNames::olink::Nam_EsClient>();
+    clientNetworkEndpoint.connectAndLinkObject(tbNamesNamEs);
+    std::unique_ptr<TbNames::INamEs> tbNamesNamEsTraced = TbNames::NamEsTraceDecorator::connect(*tbNamesNamEs, tracer);
     
     clientNetworkEndpoint.connectToHost(Poco::URI("ws://localhost:8000"));
 
@@ -187,7 +187,7 @@ int main(){
     clientNetworkEndpoint.disconnectAndUnlink(tbSimpleNoSignalsInterface->olinkObjectName());
     clientNetworkEndpoint.disconnectAndUnlink(testbed1StructInterface->olinkObjectName());
     clientNetworkEndpoint.disconnectAndUnlink(testbed1StructArrayInterface->olinkObjectName());
-    clientNetworkEndpoint.disconnectAndUnlink(tbNamesNames->olinkObjectName());
+    clientNetworkEndpoint.disconnectAndUnlink(tbNamesNamEs->olinkObjectName());
 
     return 0;
 }

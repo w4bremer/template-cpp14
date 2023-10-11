@@ -1,6 +1,8 @@
 {{- /* Copyright (c) ApiGear UG 2020 */ -}}
 {{- $class := printf "%sService" .Interface.Name }}
 {{- $interface := .Interface.Name -}}
+{{- $interfaceName := Camel .Interface.Name  -}}
+{{- $interfaceClass := printf "I%s" $interfaceName -}}
 #include "{{snake .Module.Name}}/generated/mqtt/{{lower (camel .Interface.Name)}}service.h"
 #include "{{snake .Module.Name}}/generated/core/{{snake .Module.Name}}.json.adapter.h"
 #include <iostream>
@@ -8,7 +10,7 @@
 using namespace {{ Camel .System.Name }}::{{ Camel .Module.Name }};
 using namespace {{ Camel .System.Name }}::{{ Camel .Module.Name }}::MQTT;
 
-{{$class}}::{{$class}}(std::shared_ptr<I{{$interface}}> impl, std::shared_ptr<ApiGear::MQTT::Service> service)
+{{$class}}::{{$class}}(std::shared_ptr<{{$interfaceClass}}> impl, std::shared_ptr<ApiGear::MQTT::Service> service)
     : m_impl(impl)
     , m_service(service)
     , m_topics(createTopicMap())

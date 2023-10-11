@@ -395,16 +395,22 @@ void testTestbed1StructArrayInterface()
     testStructArrayInterface->setPropString(l_propString);
 }
 
-void testTbNamesNames()
+void testTbNamesNamEs()
 {
     using namespace Test::TbNames;
 
-    std::unique_ptr<INames> testNames = std::make_unique<NamesThreadSafeDecorator>(std::make_shared<Names>());
+    std::unique_ptr<INamEs> testNamEs = std::make_unique<NamEsThreadSafeDecorator>(std::make_shared<NamEs>());
 
     // Thread safe access
     auto l_switch = false;
-    l_switch = testNames->getSwitch();
-    testNames->setSwitch(l_switch);
+    l_switch = testNamEs->getSwitch();
+    testNamEs->setSwitch(l_switch);
+    auto l_someProperty = 0;
+    l_someProperty = testNamEs->getSomeProperty();
+    testNamEs->setSomeProperty(l_someProperty);
+    auto l_somePoperty2 = 0;
+    l_somePoperty2 = testNamEs->getSomePoperty2();
+    testNamEs->setSomePoperty2(l_somePoperty2);
 }
 
 
@@ -430,7 +436,7 @@ int main(){
     testTbSimpleNoSignalsInterface();
     testTestbed1StructInterface();
     testTestbed1StructArrayInterface();
-    testTbNamesNames();
+    testTbNamesNamEs();
 
     return 0;
 }

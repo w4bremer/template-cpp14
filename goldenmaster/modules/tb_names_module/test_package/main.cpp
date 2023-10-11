@@ -4,7 +4,7 @@
 using namespace Test::TbNames;
 
 int main(){
-    std::unique_ptr<INames> testNames = std::make_unique<Names>();
+    std::unique_ptr<INamEs> testNamEs = std::make_unique<NamEs>();
 
     return 0;
 }

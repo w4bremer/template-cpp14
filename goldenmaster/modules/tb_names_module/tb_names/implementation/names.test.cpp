@@ -3,12 +3,30 @@
 #include "tb_names/implementation/names.h"
 
 using namespace Test::TbNames;
-TEST_CASE("Testing Names", "[Names]"){
-    std::unique_ptr<INames> testNames = std::make_unique<Names>();
+TEST_CASE("Testing NamEs", "[NamEs]"){
+    std::unique_ptr<INamEs> testNamEs = std::make_unique<NamEs>();
     // setup your test
+    SECTION("Test operation SOME_FUNCTION") {
+        // Do implement test here
+        testNamEs->sOME_FUNCTION(false);
+    }
+    SECTION("Test operation Some_Function2") {
+        // Do implement test here
+        testNamEs->some_Function2(false);
+    }
     SECTION("Test property Switch") {
         // Do implement test here
-        testNames->setSwitch(false);
-        REQUIRE( testNames->getSwitch() == false );
+        testNamEs->setSwitch(false);
+        REQUIRE( testNamEs->getSwitch() == false );
+    }
+    SECTION("Test property SOME_PROPERTY") {
+        // Do implement test here
+        testNamEs->setSomeProperty(0);
+        REQUIRE( testNamEs->getSomeProperty() == 0 );
+    }
+    SECTION("Test property Some_Poperty2") {
+        // Do implement test here
+        testNamEs->setSomePoperty2(0);
+        REQUIRE( testNamEs->getSomePoperty2() == 0 );
     }
 }

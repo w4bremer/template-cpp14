@@ -9,27 +9,39 @@ namespace Test {
 namespace TbNames {
 
 /**
-* The Names implementation.
+* The Nam_Es implementation.
 */
-class TEST_TB_NAMES_EXPORT Names : public INames
+class TEST_TB_NAMES_EXPORT NamEs : public INamEs
 {
 public:
-    explicit Names();
-    ~Names();
+    explicit NamEs();
+    ~NamEs();
 public:
     void setSwitch(bool Switch) override;
     bool getSwitch() const override;
     
+    void setSomeProperty(int SOME_PROPERTY) override;
+    int getSomeProperty() const override;
+    
+    void setSomePoperty2(int Some_Poperty2) override;
+    int getSomePoperty2() const override;
+    
+    void sOME_FUNCTION(bool SOME_PARAM) override;
+    std::future<void> sOME_FUNCTIONAsync(bool SOME_PARAM) override;
+        
+    void some_Function2(bool Some_Param) override;
+    std::future<void> some_Function2Async(bool Some_Param) override;
+        
     /**
-    * Access to a publisher, use it to subscribe for Names changes and signal emission.
-    * @return The publisher for Names.
+    * Access to a publisher, use it to subscribe for Nam_Es changes and signal emission.
+    * @return The publisher for Nam_Es.
     */
-    INamesPublisher& _getPublisher() const override;
+    INamEsPublisher& _getPublisher() const override;
 private:
-    /** The publisher for the Names. */
-    std::unique_ptr<INamesPublisher> m_publisher;
-    /** The helper structure to store all the properties for Names. */
-    NamesData m_data;
+    /** The publisher for the Nam_Es. */
+    std::unique_ptr<INamEsPublisher> m_publisher;
+    /** The helper structure to store all the properties for Nam_Es. */
+    NamEsData m_data;
 };
 } // namespace TbNames
 } // namespace Test

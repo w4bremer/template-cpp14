@@ -131,8 +131,8 @@ int main(){
     Testbed1::MQTT::StructInterfaceService testTestbed1StructInterfaceService(testTestbed1StructInterface, mqttservice);
     std::shared_ptr<Testbed1::IStructArrayInterface> testTestbed1StructArrayInterface = std::make_shared<Testbed1::StructArrayInterface>();
     Testbed1::MQTT::StructArrayInterfaceService testTestbed1StructArrayInterfaceService(testTestbed1StructArrayInterface, mqttservice);
-    std::shared_ptr<TbNames::INames> testTbNamesNames = std::make_shared<TbNames::Names>();
-    TbNames::MQTT::NamesService testTbNamesNamesService(testTbNamesNames, mqttservice);
+    std::shared_ptr<TbNames::INamEs> testTbNamesNamEs = std::make_shared<TbNames::NamEs>();
+    TbNames::MQTT::Nam_EsService testTbNamesNamEsService(testTbNamesNamEs, mqttservice);
 
     // start mqtt connection
     mqttservice->connectToHost("");

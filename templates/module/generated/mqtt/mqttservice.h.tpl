@@ -1,6 +1,8 @@
 {{- /* Copyright (c) ApiGear UG 2020 */}}
 {{- $class := printf "%sService" .Interface.Name  }}
 {{- $interface := .Interface.Name  -}}
+{{- $interfaceName := Camel .Interface.Name  -}}
+{{- $interfaceClass := printf "I%s" $interfaceName -}}
 #pragma once
 
 #include "{{snake .Module.Name}}/generated/api/{{snake .Module.Name}}.h"
@@ -10,16 +12,16 @@
 namespace {{ Camel .System.Name }} {
 namespace {{ Camel .Module.Name }} {
 namespace MQTT {
-class {{ SNAKE .System.Name  }}_{{ SNAKE .Module.Name  }}_EXPORT {{$class}} : public I{{$interface}}Subscriber
+class {{ SNAKE .System.Name  }}_{{ SNAKE .Module.Name  }}_EXPORT {{$class}} : public {{$interfaceClass}}Subscriber
 {
 public:
-    explicit {{$class}}(std::shared_ptr<I{{$interface}}> impl, std::shared_ptr<ApiGear::MQTT::Service> service);
+    explicit {{$class}}(std::shared_ptr<{{$interfaceClass}}> impl, std::shared_ptr<ApiGear::MQTT::Service> service);
     virtual ~{{$class}}() override;
 
     void onConnectionStatusChanged(bool connectionStatus);
 
 {{- if len .Interface.Signals}}{{nl}}
-    // I{{$interface}}Subscriber interface
+    // {{$interfaceClass}}Subscriber interface
 {{- end}}
 {{- range .Interface.Signals}}
 {{- $signal := . }}
@@ -44,7 +46,7 @@ private:
     void onSet{{Camel $property.Name}}(const std::string& args) const;
 {{- end }}
 
-    std::shared_ptr<I{{$interface}}> m_impl;
+    std::shared_ptr<{{$interfaceClass}}> m_impl;
     std::shared_ptr<ApiGear::MQTT::Service> m_service;
     // id for connection status registration
     int m_connectionStatusRegistrationID;

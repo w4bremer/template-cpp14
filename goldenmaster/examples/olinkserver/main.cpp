@@ -148,9 +148,9 @@ int main(){
     auto testbed1StructArrayInterface = std::make_shared<Testbed1::StructArrayInterface>();
     auto testbed1OlinkStructArrayInterfaceService = std::make_shared<Testbed1::olink::StructArrayInterfaceService>(testbed1StructArrayInterface, registry);
     registry.addSource(testbed1OlinkStructArrayInterfaceService);
-    auto tbNamesNames = std::make_shared<TbNames::Names>();
-    auto tbNamesOlinkNamesService = std::make_shared<TbNames::olink::NamesService>(tbNamesNames, registry);
-    registry.addSource(tbNamesOlinkNamesService);
+    auto tbNamesNamEs = std::make_shared<TbNames::NamEs>();
+    auto tbNamesOlinkNamEsService = std::make_shared<TbNames::olink::Nam_EsService>(tbNamesNamEs, registry);
+    registry.addSource(tbNamesOlinkNamEsService);
 
     testserver.listen(8000);
 
@@ -186,7 +186,7 @@ int main(){
     registry.removeSource(tbSimpleOlinkNoSignalsInterfaceService->olinkObjectName());
     registry.removeSource(testbed1OlinkStructInterfaceService->olinkObjectName());
     registry.removeSource(testbed1OlinkStructArrayInterfaceService->olinkObjectName());
-    registry.removeSource(tbNamesOlinkNamesService->olinkObjectName());
+    registry.removeSource(tbNamesOlinkNamEsService->olinkObjectName());
     
     return 0;
 }

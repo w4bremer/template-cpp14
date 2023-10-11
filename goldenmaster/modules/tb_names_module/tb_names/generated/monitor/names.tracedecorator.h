@@ -9,51 +9,87 @@ namespace ApiGear { namespace PocoImpl { class Tracer; } }
 namespace Test {
 namespace TbNames {
 
-class NamesTracer;
+class Nam_EsTracer;
 
-class TEST_TB_NAMES_EXPORT NamesTraceDecorator : public INames, public INamesSubscriber
+class TEST_TB_NAMES_EXPORT NamEsTraceDecorator : public INamEs, public INamEsSubscriber
 {
 protected:
     /** 
     * ctor
     * Subscribes for signal emission.
-    * @param impl The Names object to trace.
+    * @param impl The Nam_Es object to trace.
     * @param tracer A Poco tracer to which traces are put, wrapped with relevant object info.
     */
-    explicit NamesTraceDecorator(INames& impl, ApiGear::PocoImpl::Tracer& tracer);
+    explicit NamEsTraceDecorator(INamEs& impl, ApiGear::PocoImpl::Tracer& tracer);
 public:
     /** 
-    * Use this function to get the NamesTraceDecorator object.
-    * @param impl The Names object to trace.
+    * Use this function to get the NamEsTraceDecorator object.
+    * @param impl The Nam_Es object to trace.
     * @param tracer A Poco tracer to which traces are put, wrapped with relevant object info.
     */
-    static std::unique_ptr<NamesTraceDecorator> connect(INames& impl, ApiGear::PocoImpl::Tracer& tracer);
+    static std::unique_ptr<NamEsTraceDecorator> connect(INamEs& impl, ApiGear::PocoImpl::Tracer& tracer);
     /**
     * dtor
     * Unsubscribes from signal emission.
     */
-    virtual ~NamesTraceDecorator();
+    virtual ~NamEsTraceDecorator();
 
-    /** Forwards call to Names implementation. */
+    /** Traces SOME_FUNCTION and forwards call to Nam_Es implementation. */
+    void sOME_FUNCTION(bool SOME_PARAM) override;
+    /** Traces SOME_FUNCTION and forwards call to Nam_Es implementation. */
+    std::future<void> sOME_FUNCTIONAsync(bool SOME_PARAM) override;
+    
+    /** Traces Some_Function2 and forwards call to Nam_Es implementation. */
+    void some_Function2(bool Some_Param) override;
+    /** Traces Some_Function2 and forwards call to Nam_Es implementation. */
+    std::future<void> some_Function2Async(bool Some_Param) override;
+    
+    /** Forwards call to Nam_Es implementation. */
     void setSwitch(bool Switch) override;
-    /** Forwards call to Names implementation. */
+    /** Forwards call to Nam_Es implementation. */
     bool getSwitch() const override;
     
+    /** Forwards call to Nam_Es implementation. */
+    void setSomeProperty(int SOME_PROPERTY) override;
+    /** Forwards call to Nam_Es implementation. */
+    int getSomeProperty() const override;
+    
+    /** Forwards call to Nam_Es implementation. */
+    void setSomePoperty2(int Some_Poperty2) override;
+    /** Forwards call to Nam_Es implementation. */
+    int getSomePoperty2() const override;
+    
+    /**
+    Traces SOME_SIGNAL emission.
+    */
+    void onSomeSignal(bool SOME_PARAM) override;
+    /**
+    Traces Some_Signal2 emission.
+    */
+    void onSomeSignal2(bool Some_Param) override;
     /**
     Traces Switch changed.
     */
     void onSwitchChanged(bool Switch) override;
+    /**
+    Traces SOME_PROPERTY changed.
+    */
+    void onSomePropertyChanged(int SOME_PROPERTY) override;
+    /**
+    Traces Some_Poperty2 changed.
+    */
+    void onSomePoperty2Changed(int Some_Poperty2) override;
 
     /**
-    * Access to a publisher, use it to subscribe for Names changes and signal emission.
-    * @return The publisher for Names.
+    * Access to a publisher, use it to subscribe for Nam_Es changes and signal emission.
+    * @return The publisher for Nam_Es.
     */
-    INamesPublisher& _getPublisher() const override;
+    INamEsPublisher& _getPublisher() const override;
 private:
-    /** A tracer that provides the traces for given Names object. */
-    std::unique_ptr<NamesTracer> m_tracer;
-    /** The Names object which is traced */
-    INames& m_impl;
+    /** A tracer that provides the traces for given Nam_Es object. */
+    std::unique_ptr<Nam_EsTracer> m_tracer;
+    /** The Nam_Es object which is traced */
+    INamEs& m_impl;
 };
 } // namespace TbNames
 } // namespace Test

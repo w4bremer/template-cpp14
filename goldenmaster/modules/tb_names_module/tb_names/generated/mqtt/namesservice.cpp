@@ -5,7 +5,7 @@
 using namespace Test::TbNames;
 using namespace Test::TbNames::MQTT;
 
-NamesService::NamesService(std::shared_ptr<INames> impl, std::shared_ptr<ApiGear::MQTT::Service> service)
+Nam_EsService::Nam_EsService(std::shared_ptr<INamEs> impl, std::shared_ptr<ApiGear::MQTT::Service> service)
     : m_impl(impl)
     , m_service(service)
     , m_topics(createTopicMap())
@@ -15,7 +15,7 @@ NamesService::NamesService(std::shared_ptr<INames> impl, std::shared_ptr<ApiGear
     m_connectionStatusRegistrationID = m_service->subscribeToConnectionStatus([this](bool connectionStatus){ onConnectionStatusChanged(connectionStatus); });
 }
 
-NamesService::~NamesService()
+Nam_EsService::~Nam_EsService()
 {
     m_impl->_getPublisher().unsubscribeFromAllChanges(*this);
 
@@ -27,14 +27,18 @@ NamesService::~NamesService()
     }
 }
 
-std::map<std::string, ApiGear::MQTT::CallbackFunction> NamesService::createTopicMap()
+std::map<std::string, ApiGear::MQTT::CallbackFunction> Nam_EsService::createTopicMap()
 {
     return {
-        {std::string("tb.names/Names/set/Switch"), [this](const std::string& args, const std::string&, const std::string&){ this->onSetSwitch(args); } },
+        {std::string("tb.names/Nam_Es/set/Switch"), [this](const std::string& args, const std::string&, const std::string&){ this->onSetSwitch(args); } },
+        {std::string("tb.names/Nam_Es/set/SOME_PROPERTY"), [this](const std::string& args, const std::string&, const std::string&){ this->onSetSomeProperty(args); } },
+        {std::string("tb.names/Nam_Es/set/Some_Poperty2"), [this](const std::string& args, const std::string&, const std::string&){ this->onSetSomePoperty2(args); } },
+        {std::string("tb.names/Nam_Es/rpc/SOME_FUNCTION"), [this](const std::string& args, const std::string& responseTopic, const std::string& correlationData) { this->onInvokeSomeFunction(args, responseTopic, correlationData); } },
+        {std::string("tb.names/Nam_Es/rpc/Some_Function2"), [this](const std::string& args, const std::string& responseTopic, const std::string& correlationData) { this->onInvokeSomeFunction2(args, responseTopic, correlationData); } },
     };
 }
 
-void NamesService::onConnectionStatusChanged(bool connectionStatus)
+void Nam_EsService::onConnectionStatusChanged(bool connectionStatus)
 {
     if(!connectionStatus)
     {
@@ -48,8 +52,10 @@ void NamesService::onConnectionStatusChanged(bool connectionStatus)
 
     // send current values
     onSwitchChanged(m_impl->getSwitch());
+    onSomePropertyChanged(m_impl->getSomeProperty());
+    onSomePoperty2Changed(m_impl->getSomePoperty2());
 }
-void NamesService::onSetSwitch(const std::string& args) const
+void Nam_EsService::onSetSwitch(const std::string& args) const
 {
     nlohmann::json json_args = nlohmann::json::parse(args);
     if (json_args.empty())
@@ -60,10 +66,78 @@ void NamesService::onSetSwitch(const std::string& args) const
     auto Switch = json_args.get<bool>();
     m_impl->setSwitch(Switch);
 }
-void NamesService::onSwitchChanged(bool Switch)
+void Nam_EsService::onSetSomeProperty(const std::string& args) const
+{
+    nlohmann::json json_args = nlohmann::json::parse(args);
+    if (json_args.empty())
+    {
+        return;
+    }
+
+    auto SOME_PROPERTY = json_args.get<int>();
+    m_impl->setSomeProperty(SOME_PROPERTY);
+}
+void Nam_EsService::onSetSomePoperty2(const std::string& args) const
+{
+    nlohmann::json json_args = nlohmann::json::parse(args);
+    if (json_args.empty())
+    {
+        return;
+    }
+
+    auto Some_Poperty2 = json_args.get<int>();
+    m_impl->setSomePoperty2(Some_Poperty2);
+}
+void Nam_EsService::onInvokeSomeFunction(const std::string& args, const std::string& responseTopic, const std::string& correlationData) const
+{
+    nlohmann::json json_args = nlohmann::json::parse(args);
+    (void) responseTopic;
+    (void) correlationData;
+    const bool& SOME_PARAM = json_args.at(0).get<bool>();
+    m_impl->sOME_FUNCTION(SOME_PARAM);
+}
+void Nam_EsService::onInvokeSomeFunction2(const std::string& args, const std::string& responseTopic, const std::string& correlationData) const
+{
+    nlohmann::json json_args = nlohmann::json::parse(args);
+    (void) responseTopic;
+    (void) correlationData;
+    const bool& Some_Param = json_args.at(0).get<bool>();
+    m_impl->some_Function2(Some_Param);
+}
+void Nam_EsService::onSomeSignal(bool SOME_PARAM)
 {
     if(m_service != nullptr) {
-        static const auto topic = std::string("tb.names/Names/prop/Switch");
+        const nlohmann::json& args = { SOME_PARAM };
+        static const auto topic = std::string("tb.names/Nam_Es/sig/SOME_SIGNAL");
+        m_service->notifySignal(topic, nlohmann::json(args).dump());
+    }
+}
+void Nam_EsService::onSomeSignal2(bool Some_Param)
+{
+    if(m_service != nullptr) {
+        const nlohmann::json& args = { Some_Param };
+        static const auto topic = std::string("tb.names/Nam_Es/sig/Some_Signal2");
+        m_service->notifySignal(topic, nlohmann::json(args).dump());
+    }
+}
+void Nam_EsService::onSwitchChanged(bool Switch)
+{
+    if(m_service != nullptr) {
+        static const auto topic = std::string("tb.names/Nam_Es/prop/Switch");
         m_service->notifyPropertyChange(topic, nlohmann::json(Switch).dump());
+    }
+}
+void Nam_EsService::onSomePropertyChanged(int SOME_PROPERTY)
+{
+    if(m_service != nullptr) {
+        static const auto topic = std::string("tb.names/Nam_Es/prop/SOME_PROPERTY");
+        m_service->notifyPropertyChange(topic, nlohmann::json(SOME_PROPERTY).dump());
+    }
+}
+void Nam_EsService::onSomePoperty2Changed(int Some_Poperty2)
+{
+    if(m_service != nullptr) {
+        static const auto topic = std::string("tb.names/Nam_Es/prop/Some_Poperty2");
+        m_service->notifyPropertyChange(topic, nlohmann::json(Some_Poperty2).dump());
     }
 }

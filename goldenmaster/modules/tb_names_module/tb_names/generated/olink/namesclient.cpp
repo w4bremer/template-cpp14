@@ -12,28 +12,40 @@ using namespace Test::TbNames::olink;
 
 namespace 
 {
-const std::string interfaceId = "tb.names.Names";
+const std::string interfaceId = "tb.names.Nam_Es";
 }
 
-NamesClient::NamesClient()
-    : m_publisher(std::make_unique<NamesPublisher>())
+Nam_EsClient::Nam_EsClient()
+    : m_publisher(std::make_unique<NamEsPublisher>())
 {}
 
-void NamesClient::applyState(const nlohmann::json& fields) 
+void Nam_EsClient::applyState(const nlohmann::json& fields) 
 {
     if(fields.contains("Switch")) {
         setSwitchLocal(fields["Switch"].get<bool>());
     }
+    if(fields.contains("SOME_PROPERTY")) {
+        setSomePropertyLocal(fields["SOME_PROPERTY"].get<int>());
+    }
+    if(fields.contains("Some_Poperty2")) {
+        setSomePoperty2Local(fields["Some_Poperty2"].get<int>());
+    }
 }
 
-void NamesClient::applyProperty(const std::string& propertyName, const nlohmann::json& value)
+void Nam_EsClient::applyProperty(const std::string& propertyName, const nlohmann::json& value)
 {
     if ( propertyName == "Switch") {
         setSwitchLocal(value.get<bool>());
     }
+    else if ( propertyName == "SOME_PROPERTY") {
+        setSomePropertyLocal(value.get<int>());
+    }
+    else if ( propertyName == "Some_Poperty2") {
+        setSomePoperty2Local(value.get<int>());
+    }
 }
 
-void NamesClient::setSwitch(bool Switch)
+void Nam_EsClient::setSwitch(bool Switch)
 {
     if(!m_node) {
         AG_LOG_WARNING("Attempt to set property but " + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
@@ -43,7 +55,7 @@ void NamesClient::setSwitch(bool Switch)
     m_node->setRemoteProperty(propertyId, Switch);
 }
 
-void NamesClient::setSwitchLocal(bool Switch)
+void Nam_EsClient::setSwitchLocal(bool Switch)
 {
     if (m_data.m_Switch != Switch) {
         m_data.m_Switch = Switch;
@@ -51,44 +63,170 @@ void NamesClient::setSwitchLocal(bool Switch)
     }
 }
 
-bool NamesClient::getSwitch() const
+bool Nam_EsClient::getSwitch() const
 {
     return m_data.m_Switch;
 }
 
-std::string NamesClient::olinkObjectName()
+void Nam_EsClient::setSomeProperty(int SOME_PROPERTY)
+{
+    if(!m_node) {
+        AG_LOG_WARNING("Attempt to set property but " + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
+        return;
+    }
+    static const auto propertyId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "SOME_PROPERTY");
+    m_node->setRemoteProperty(propertyId, SOME_PROPERTY);
+}
+
+void Nam_EsClient::setSomePropertyLocal(int SOME_PROPERTY)
+{
+    if (m_data.m_SOME_PROPERTY != SOME_PROPERTY) {
+        m_data.m_SOME_PROPERTY = SOME_PROPERTY;
+        m_publisher->publishSomePropertyChanged(SOME_PROPERTY);
+    }
+}
+
+int Nam_EsClient::getSomeProperty() const
+{
+    return m_data.m_SOME_PROPERTY;
+}
+
+void Nam_EsClient::setSomePoperty2(int Some_Poperty2)
+{
+    if(!m_node) {
+        AG_LOG_WARNING("Attempt to set property but " + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
+        return;
+    }
+    static const auto propertyId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "Some_Poperty2");
+    m_node->setRemoteProperty(propertyId, Some_Poperty2);
+}
+
+void Nam_EsClient::setSomePoperty2Local(int Some_Poperty2)
+{
+    if (m_data.m_Some_Poperty2 != Some_Poperty2) {
+        m_data.m_Some_Poperty2 = Some_Poperty2;
+        m_publisher->publishSomePoperty2Changed(Some_Poperty2);
+    }
+}
+
+int Nam_EsClient::getSomePoperty2() const
+{
+    return m_data.m_Some_Poperty2;
+}
+
+void Nam_EsClient::sOME_FUNCTION(bool SOME_PARAM)
+{
+     if(!m_node) {
+        AG_LOG_WARNING("Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
+        return;
+    }
+    ApiGear::ObjectLink::InvokeReplyFunc func = [this](ApiGear::ObjectLink::InvokeReplyArg arg)
+        {
+            (void) this;
+            (void) arg;
+        };
+    const nlohmann::json &args = nlohmann::json::array({ SOME_PARAM });
+    static const auto operationId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "SOME_FUNCTION");
+    m_node->invokeRemote(operationId, args, func);
+}
+
+std::future<void> Nam_EsClient::sOME_FUNCTIONAsync(bool SOME_PARAM)
+{
+    if(!m_node) {
+        AG_LOG_WARNING("Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
+        return std::future<void>{};
+    }
+    return std::async(std::launch::async, [this,
+                    SOME_PARAM]()
+        {
+            std::promise<void> resultPromise;
+            static const auto operationId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "SOME_FUNCTION");
+            m_node->invokeRemote(operationId,
+                nlohmann::json::array({SOME_PARAM}), [&resultPromise](ApiGear::ObjectLink::InvokeReplyArg arg) {
+                    (void) arg;
+                    resultPromise.set_value();
+                });
+            return resultPromise.get_future().get();
+        }
+    );
+}
+
+void Nam_EsClient::some_Function2(bool Some_Param)
+{
+     if(!m_node) {
+        AG_LOG_WARNING("Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
+        return;
+    }
+    ApiGear::ObjectLink::InvokeReplyFunc func = [this](ApiGear::ObjectLink::InvokeReplyArg arg)
+        {
+            (void) this;
+            (void) arg;
+        };
+    const nlohmann::json &args = nlohmann::json::array({ Some_Param });
+    static const auto operationId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "Some_Function2");
+    m_node->invokeRemote(operationId, args, func);
+}
+
+std::future<void> Nam_EsClient::some_Function2Async(bool Some_Param)
+{
+    if(!m_node) {
+        AG_LOG_WARNING("Attempt to invoke method but" + olinkObjectName() +" is not linked to source . Make sure your object is linked. Check your connection to service");
+        return std::future<void>{};
+    }
+    return std::async(std::launch::async, [this,
+                    Some_Param]()
+        {
+            std::promise<void> resultPromise;
+            static const auto operationId = ApiGear::ObjectLink::Name::createMemberId(olinkObjectName(), "Some_Function2");
+            m_node->invokeRemote(operationId,
+                nlohmann::json::array({Some_Param}), [&resultPromise](ApiGear::ObjectLink::InvokeReplyArg arg) {
+                    (void) arg;
+                    resultPromise.set_value();
+                });
+            return resultPromise.get_future().get();
+        }
+    );
+}
+
+std::string Nam_EsClient::olinkObjectName()
 {
     return interfaceId;
 }
 
-void NamesClient::olinkOnSignal(const std::string& signalId, const nlohmann::json& args)
+void Nam_EsClient::olinkOnSignal(const std::string& signalId, const nlohmann::json& args)
 {
     const auto& signalName = ApiGear::ObjectLink::Name::getMemberName(signalId);
-    (void) args;
-    (void) signalName;
+    if(signalName == "SOME_SIGNAL") {
+        m_publisher->publishSomeSignal(args[0].get<bool>());   
+        return;
+    }
+    if(signalName == "Some_Signal2") {
+        m_publisher->publishSomeSignal2(args[0].get<bool>());   
+        return;
+    }
 }
 
-void NamesClient::olinkOnPropertyChanged(const std::string& propertyId, const nlohmann::json& value)
+void Nam_EsClient::olinkOnPropertyChanged(const std::string& propertyId, const nlohmann::json& value)
 {
     applyProperty(ApiGear::ObjectLink::Name::getMemberName(propertyId), value);
 }
-void NamesClient::olinkOnInit(const std::string& /*name*/, const nlohmann::json& props, ApiGear::ObjectLink::IClientNode *node)
+void Nam_EsClient::olinkOnInit(const std::string& /*name*/, const nlohmann::json& props, ApiGear::ObjectLink::IClientNode *node)
 {
     m_node = node;
     applyState(props);
 }
 
-void NamesClient::olinkOnRelease()
+void Nam_EsClient::olinkOnRelease()
 {
     m_node = nullptr;
 }
 
-bool NamesClient::isReady() const
+bool Nam_EsClient::isReady() const
 {
     return m_node != nullptr;
 }
 
-INamesPublisher& NamesClient::_getPublisher() const
+INamEsPublisher& Nam_EsClient::_getPublisher() const
 {
     return *m_publisher;
 }

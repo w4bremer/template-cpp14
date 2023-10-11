@@ -92,8 +92,8 @@ int main(){
     std::unique_ptr<Testbed1::IStructInterface> testTestbed1StructInterfaceTraceDecorator = Testbed1::StructInterfaceTraceDecorator::connect(*testTestbed1StructInterface, tracer);
     std::unique_ptr<Testbed1::IStructArrayInterface> testTestbed1StructArrayInterface = std::make_unique<Testbed1::StructArrayInterface>();
     std::unique_ptr<Testbed1::IStructArrayInterface> testTestbed1StructArrayInterfaceTraceDecorator = Testbed1::StructArrayInterfaceTraceDecorator::connect(*testTestbed1StructArrayInterface, tracer);
-    std::unique_ptr<TbNames::INames> testTbNamesNames = std::make_unique<TbNames::Names>();
-    std::unique_ptr<TbNames::INames> testTbNamesNamesTraceDecorator = TbNames::NamesTraceDecorator::connect(*testTbNamesNames, tracer);
+    std::unique_ptr<TbNames::INamEs> testTbNamesNamEs = std::make_unique<TbNames::NamEs>();
+    std::unique_ptr<TbNames::INamEs> testTbNamesNamEsTraceDecorator = TbNames::NamEsTraceDecorator::connect(*testTbNamesNamEs, tracer);
 
     return 0;
 }
