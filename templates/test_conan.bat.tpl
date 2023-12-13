@@ -112,8 +112,7 @@ CALL ../../build/examples/olinkclient/deactivate.bat
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
 popd
 {{- end}}
-{{- if $features.examples }}
-{{- if $features.mqtt }}
+{{- if $features.examples_mqtt }}
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
 if not exist build\examples\mqttserver mkdir build\examples\mqttserver
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
@@ -146,5 +145,4 @@ CALL ../../build/examples/mqttclient/deactivate.bat
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
 popd
 cd ..
-{{- end}}
 {{- end}}

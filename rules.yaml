@@ -305,6 +305,13 @@ features:
           target: examples/olinkclient/conanfile.txt
         - source: examples/olinkclient/main.cpp.tpl
           target: examples/olinkclient/main.cpp
+  - name: examples_mqtt
+    requires:
+      - stubs
+      - mqtt
+    scopes:
+    - match: system
+      documents:
         - source: examples/mqttserver/CMakeLists.txt.tpl
           target: examples/mqttserver/CMakeLists.txt
         - source: examples/mqttserver/conanfile.txt.tpl
