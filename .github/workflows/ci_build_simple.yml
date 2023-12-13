@@ -1,0 +1,52 @@
+# This workflow will ensure that a simple set of features builds on linux
+# simple means no ipc or tracer, just local app
+
+name: Build Simple Configuration
+
+on:
+  pull_request:
+    branches: [main]
+
+env:
+  go_version: "1.21.x"
+
+jobs:
+  cmake_build:
+    name: ${{ matrix.config.name }}
+    runs-on: ${{ matrix.config.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        config:
+          - { name: "CMake Ubuntu Latest GCC", os: ubuntu-latest }
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: recursive
+      - uses: actions/setup-go@v3
+        with:
+          go-version: ${{env.go_version}}
+
+      - uses: actions/cache@v3
+        with:
+          path: |
+            ~/go/pkg/mod
+            ~/.cache/go-build
+          key: ${{ runner.os }}-go-${{ matrix.go-version }}-${{ hashFiles('**/go.sum') }}
+          restore-keys: ${{ runner.os }}-go-${{ matrix.go-version }}-
+
+      - name: Install catch2
+        if: ${{ matrix.config.os == 'ubuntu-latest'}}
+        run: git clone --branch v2.13.8 --depth 1 https://github.com/catchorg/Catch2.git && cd Catch2 && cmake -Bbuild -H. -DBUILD_TESTING=OFF && sudo cmake --build build/ --target install
+
+      - name: Install dependencies using apt-get
+        if: ${{ matrix.config.os == 'ubuntu-latest'}}
+        run: sudo apt-get install -y cmake nlohmann-json3-dev
+
+      - run: go run main.go install
+      - name: generate simple feature set
+        run: bin/apigear g x -f "api,core,stubs,examples" -t . -o test_simple -i apigear/testbed.advanced.module.yaml,apigear/testbed.enum.module.yaml,apigear/testbed.names.module.yaml,apigear/testbed.same1.module.yaml,apigear/testbed.same2.module.yaml,apigear/testbed.simple.module.yaml,apigear/testbed.struct.module.yaml
+      - name: Run cmake on Linux/Mac
+        if: ${{ matrix.config.os != 'windows-latest'}}
+        working-directory: test_simple
+        run: cmake -Bbuild -DCMAKE_INSTALL_PREFIX=tmp -DCMAKE_MODULE_PATH=$GITHUB_WORKSPACE/deps -DBUILD_TESTING=ON && cmake --build build/ && cmake --build build/ --target test && cmake --build build/ --target install
