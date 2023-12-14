@@ -12,7 +12,12 @@ class tb_same2Conan(ConanFile):
     generators = "cmake_find_package"
     exports_sources = "*"
     options = {"build_testing": [True, False]}
-    default_options = {"build_testing": True}
+    default_options = {
+        "build_testing": True,
+        "apigear:enable_monitor": True,
+        "apigear:enable_olink": True,
+        "apigear:enable_mqtt": True,
+    }
 
     def build(self):
         cmake = CMake(self)

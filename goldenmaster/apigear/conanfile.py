@@ -8,9 +8,17 @@ class apigearConan(ConanFile):
     author = "ApiGear UG"
     #url = "<Package recipe repository url here, for issues about the package>"
     settings = "os", "compiler", "build_type", "arch"
-    requires = "catch2/2.13.7", "poco/1.11.3@#2f5e663a2d744e2d86962bfff2b2345e", "openssl/1.1.1s", "paho-mqtt-c/1.3.12", "nlohmann_json/3.9.1"
     generators = "cmake_find_package", "virtualenv"
-    default_options = {"poco:shared": False,
+    options = {
+        "enable_monitor": [True, False],
+        "enable_olink": [True, False],
+        "enable_mqtt": [True, False],
+    }
+    default_options = {
+                       "enable_monitor": False,
+                       "enable_olink": False,
+                       "enable_mqtt": False,
+                       "poco:shared": False,
                        "poco:enable_data_mysql": False,
                        "openssl:shared": False,
                        "poco:enable_activerecord": False,
@@ -41,6 +49,18 @@ class apigearConan(ConanFile):
                        }
     exports_sources = "*"
 
+    def requirements(self):
+        self.requires("catch2/2.13.7")
+        if self.options.enable_monitor or self.options.enable_olink or self.options.enable_mqtt:
+              self.requires("nlohmann_json/3.9.1")
+              self.requires("openssl/1.1.1s")
+        if self.options.enable_monitor:
+              self.requires("poco/1.11.3@#2f5e663a2d744e2d86962bfff2b2345e")
+        if self.options.enable_olink:
+              self.requires("poco/1.11.3@#2f5e663a2d744e2d86962bfff2b2345e")
+        if self.options.enable_mqtt:
+              self.requires("paho-mqtt-c/1.3.12")
+
     def configure(self):
         if self.settings.os == "Windows":
             self.options["openssl"].shared = True
@@ -48,6 +68,9 @@ class apigearConan(ConanFile):
 
     def build(self):
         cmake = CMake(self)
+        cmake.definitions['APIGEAR_BUILD_WITH_MONITOR'] = self.options.enable_monitor
+        cmake.definitions['APIGEAR_BUILD_WITH_OLINK'] = self.options.enable_olink
+        cmake.definitions['APIGEAR_BUILD_WITH_MQTT'] = self.options.enable_mqtt
         cmake.configure(source_folder=".")
         cmake.build()
 
@@ -71,11 +94,14 @@ class apigearConan(ConanFile):
         self.env_info.path.append(os.path.join(self.package_folder, "bin"))
         self.cpp_info.components["utilities"].libs = ["utilities"]
         self.cpp_info.components["utilities"].includedirs.append(os.path.join(self.package_folder, "include"))
-        self.cpp_info.components["poco-tracer"].libs = ["poco-tracer"]
-        self.cpp_info.components["poco-tracer"].includedirs.append(os.path.join(self.package_folder, "include"))
-        self.cpp_info.components["poco-tracer"].requires = ["catch2::catch2", "poco::poco", "nlohmann_json::nlohmann_json", "utilities"]
-        self.cpp_info.components["poco-olink"].libs = ["poco-olink"]
-        self.cpp_info.components["poco-olink"].includedirs.append(os.path.join(self.package_folder, "include"))
-        self.cpp_info.components["poco-olink"].requires = ["poco::poco", "nlohmann_json::nlohmann_json", "utilities"]
-        self.cpp_info.components["paho-mqtt"].libs = ["paho-mqtt"]
-        self.cpp_info.components["paho-mqtt"].requires = ["nlohmann_json::nlohmann_json", "utilities"]
+        if self.options.enable_monitor:
+            self.cpp_info.components["poco-tracer"].libs = ["poco-tracer"]
+            self.cpp_info.components["poco-tracer"].includedirs.append(os.path.join(self.package_folder, "include"))
+            self.cpp_info.components["poco-tracer"].requires = ["catch2::catch2", "poco::poco", "nlohmann_json::nlohmann_json", "utilities"]
+        if self.options.enable_olink:
+            self.cpp_info.components["poco-olink"].libs = ["poco-olink"]
+            self.cpp_info.components["poco-olink"].includedirs.append(os.path.join(self.package_folder, "include"))
+            self.cpp_info.components["poco-olink"].requires = ["poco::poco", "nlohmann_json::nlohmann_json", "utilities"]
+        if self.options.enable_mqtt:
+            self.cpp_info.components["paho-mqtt"].libs = ["paho-mqtt"]
+            self.cpp_info.components["paho-mqtt"].requires = ["nlohmann_json::nlohmann_json", "utilities"]

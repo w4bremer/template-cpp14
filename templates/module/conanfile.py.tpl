@@ -16,7 +16,18 @@ class {{$module_id}}Conan(ConanFile):
     generators = "cmake_find_package"
     exports_sources = "*"
     options = {"build_testing": [True, False]}
-    default_options = {"build_testing": True}
+    default_options = {
+        "build_testing": True,
+        {{- if $features.monitor }}
+        "apigear:enable_monitor": True,
+        {{- end}}
+        {{- if $features.olink }}
+        "apigear:enable_olink": True,
+        {{- end}}
+        {{- if $features.mqtt }}
+        "apigear:enable_mqtt": True,
+        {{- end}}
+    }
 
     def build(self):
         cmake = CMake(self)
