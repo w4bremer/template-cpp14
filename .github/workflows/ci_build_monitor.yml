@@ -50,3 +50,62 @@ jobs:
         if: ${{ matrix.config.os != 'windows-latest'}}
         working-directory: test_monitor
         run: cmake -Bbuild -DCMAKE_INSTALL_PREFIX=tmp -DCMAKE_MODULE_PATH=$GITHUB_WORKSPACE/deps -DBUILD_TESTING=ON && cmake --build build/ && cmake --build build/ --target test && cmake --build build/ --target install
+
+  conan_build:
+    name: ${{ matrix.config.name }}
+    runs-on: ${{ matrix.config.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        config:
+          - { name: "Conan Ubuntu Latest GCC", os: ubuntu-latest }
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: recursive
+      - uses: actions/setup-go@v3
+        with:
+          go-version: ${{env.go_version}}
+
+      - uses: actions/cache@v3
+        with:
+          path: |
+            ~/go/pkg/mod
+            ~/.cache/go-build
+          key: ${{ runner.os }}-go-${{ matrix.go-version }}-${{ hashFiles('**/go.sum') }}
+          restore-keys: ${{ runner.os }}-go-${{ matrix.go-version }}-
+
+      - name: Cache conan on Linux/macOS
+        uses: actions/cache@v3
+        if: ${{ matrix.config.os != 'windows-latest'}}
+        with:
+          path: |
+            ~/.conan/data
+          key: ${{ matrix.config.os }}-conan-cache-${{ hashFiles('goldenmaster/**/conanfile.py', 'goldenmaster/**/conanfile.txt') }}
+          restore-keys: |
+            ${{ matrix.config.os }}-conan-cache
+      - name: Set up Python
+        uses: actions/setup-python@v3
+        with:
+          python-version: 3.9
+          cache: "pip"
+          cache-dependency-path: ".github/workflows/conan-requirements.txt"
+      - name: Install Conan
+        run: pip install -r .github/workflows/conan-requirements.txt
+      - name: Create default profile
+        run: conan profile new default --detect
+      - name: Set C++11 on Linux
+        if: ${{ matrix.config.os == 'ubuntu-latest'}}
+        run: conan profile update settings.compiler.libcxx=libstdc++11 default
+
+
+      - name: Install CMake
+        run: conan install cmake/3.24.2@ -g=virtualrunenv --build=missing
+
+      - run: go run main.go install
+      - name: generate simple feature set
+        run: bin/apigear g x -f "api,core,stubs,monitor,examples,conan" -t . -o test_monitor -i apigear/testbed.advanced.module.yaml,apigear/testbed.enum.module.yaml,apigear/testbed.names.module.yaml,apigear/testbed.same1.module.yaml,apigear/testbed.same2.module.yaml,apigear/testbed.simple.module.yaml,apigear/testbed.struct.module.yaml
+      - name: Run conan build Linux/macOS
+        if: ${{ matrix.config.os != 'windows-latest'}}
+        working-directory: test_monitor
+        run: chmod +x ./test_conan.sh && ./test_conan.sh
