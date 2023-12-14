@@ -138,6 +138,10 @@ features:
         - source: "module/generated/olink/interfaceclient.cpp.tpl"
           target: "{{lower (camel .Interface.Name)}}client.cpp"
   - name: mqtt
+    requires:
+      - api
+      - core
+      - apigear
     scopes:
     - match: module
       documents:
