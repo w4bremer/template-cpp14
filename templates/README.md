@@ -178,15 +178,15 @@ For ease of use and package distribution we generate all files necessary files t
     conan profile update settings.compiler.libcxx=libstdc++11 default
     ```
 2. Execute the test script depending on the host platform. This will build all dependencies and module files, including examples.
-   * Or on **Linux, Mac** execute the shell script `test_conan.sh`.
+   * Or on **Linux, Mac** execute the shell script `scripts/test_conan.sh`.
 
         ```
-        $ bash test_conan.sh
+        $ bash scripts/test_conan.sh
         ```
-    * On **Windows** execute the batch script `test_conan.bat`. 
+    * On **Windows** execute the batch script `scripts/test_conan.bat`.
 
         ```
-        >test_conan.bat
+        >scripts/test_conan.bat
         ```
 
 ## Build for distribution

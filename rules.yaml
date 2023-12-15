@@ -334,11 +334,11 @@ features:
     scopes:
       - match: system
         documents:
-        - source: test_conan.sh.tpl
-          target: test_conan.sh
+        - source: scripts/test_conan.sh.tpl
+          target: scripts/test_conan.sh
           force: false
-        - source: test_conan.bat.tpl
-          target: test_conan.bat
+        - source: scripts/test_conan.bat.tpl
+          target: scripts/test_conan.bat
           force: false
       - match: module
         prefix: "modules//{{snake .Module.Name}}_module/"

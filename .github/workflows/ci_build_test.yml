@@ -64,11 +64,11 @@ jobs:
       - name: Run conan build Linux/macOS
         if: ${{ matrix.config.os != 'windows-latest'}}
         working-directory: goldenmaster
-        run: chmod +x ./test_conan.sh && ./test_conan.sh
+        run: chmod +x ./scripts/test_conan.sh && ./scripts/test_conan.sh
       - name: Run conan build Windows
         if: ${{ matrix.config.os == 'windows-latest'}}
         working-directory: goldenmaster
-        run: cmd.exe /c 'test_conan.bat'
+        run: cmd.exe /c  "scripts\test_conan.bat"
 
   cmake_build:
     name: ${{ matrix.config.name }}

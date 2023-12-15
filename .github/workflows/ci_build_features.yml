@@ -116,4 +116,4 @@ jobs:
         run: bin/apigear g x -f "${{ matrix.config.features }}" -t . -o test -i apigear/testbed.simple.module.yaml
       - name: Run conan build Linux
         working-directory: test
-        run: chmod +x ./test_conan.sh && ./test_conan.sh
+        run: chmod +x ./scripts/test_conan.sh && ./scripts/test_conan.sh
