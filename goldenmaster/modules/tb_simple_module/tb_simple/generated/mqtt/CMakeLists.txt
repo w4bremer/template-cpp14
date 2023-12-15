@@ -33,10 +33,7 @@ else()
 endif()
 
 install(TARGETS tb_simple-mqtt
-        EXPORT Tb_simpleMqttTargets
-        RUNTIME DESTINATION bin                 COMPONENT Runtime
-        LIBRARY DESTINATION lib                 COMPONENT Runtime
-        ARCHIVE DESTINATION lib/tb_simple   COMPONENT Development)
+        EXPORT Tb_simpleMqttTargets)
 # install includes
 install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} DESTINATION include/tb_simple/generated FILES_MATCHING PATTERN "*.h")
 

@@ -65,10 +65,7 @@ add_test(NAME test_tb_same2 COMMAND $<TARGET_FILE:test_tb_same2>)
 endif(BUILD_TESTING)
 
 install(TARGETS tb_same2-implementation
-        EXPORT Tb_same2ImplementationTargets
-        RUNTIME DESTINATION bin                 COMPONENT Runtime
-        LIBRARY DESTINATION lib                 COMPONENT Runtime
-        ARCHIVE DESTINATION lib/tb_same2   COMPONENT Development)
+        EXPORT Tb_same2ImplementationTargets)
 # install includes
 FILE(GLOB Tb_same2_INCLUDES *.h)
 install(FILES ${Tb_same2_INCLUDES}

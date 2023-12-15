@@ -39,10 +39,7 @@ else()
 endif()
 
 install(TARGETS testbed1-core
-        EXPORT Testbed1CoreTargets
-        RUNTIME DESTINATION bin                 COMPONENT Runtime
-        LIBRARY DESTINATION lib                 COMPONENT Runtime
-        ARCHIVE DESTINATION lib/testbed1   COMPONENT Development)
+        EXPORT Testbed1CoreTargets)
 # install includes
 install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} DESTINATION include/testbed1/generated FILES_MATCHING PATTERN "*.h")
 

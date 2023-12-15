@@ -19,10 +19,7 @@ target_include_directories(utilities
 
 # install binary files
 install(TARGETS utilities
-        EXPORT ApiGearUtilitiesTargets
-        RUNTIME DESTINATION bin           COMPONENT Runtime
-        LIBRARY DESTINATION lib           COMPONENT Runtime
-        ARCHIVE DESTINATION lib           COMPONENT Development)
+        EXPORT ApiGearUtilitiesTargets)
 # install includes
 FILE(GLOB_RECURSE APIGEAR_INCLUDES *.h)
 install(FILES ${APIGEAR_INCLUDES}

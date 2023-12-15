@@ -33,10 +33,7 @@ else()
 endif()
 
 install(TARGETS tb_same1-olink
-        EXPORT Tb_same1OLinkTargets
-        RUNTIME DESTINATION bin                 COMPONENT Runtime
-        LIBRARY DESTINATION lib                 COMPONENT Runtime
-        ARCHIVE DESTINATION lib/tb_same1   COMPONENT Development)
+        EXPORT Tb_same1OLinkTargets)
 # install includes
 install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} DESTINATION include/tb_same1/generated FILES_MATCHING PATTERN "*.h")
 

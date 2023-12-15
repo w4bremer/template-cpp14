@@ -27,10 +27,7 @@ else()
 endif()
 
 install(TARGETS tb_enum-olink
-        EXPORT Tb_enumOLinkTargets
-        RUNTIME DESTINATION bin                 COMPONENT Runtime
-        LIBRARY DESTINATION lib                 COMPONENT Runtime
-        ARCHIVE DESTINATION lib/tb_enum   COMPONENT Development)
+        EXPORT Tb_enumOLinkTargets)
 # install includes
 install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} DESTINATION include/tb_enum/generated FILES_MATCHING PATTERN "*.h")
 

@@ -65,10 +65,7 @@ add_test(NAME test_testbed2 COMMAND $<TARGET_FILE:test_testbed2>)
 endif(BUILD_TESTING)
 
 install(TARGETS testbed2-implementation
-        EXPORT Testbed2ImplementationTargets
-        RUNTIME DESTINATION bin                 COMPONENT Runtime
-        LIBRARY DESTINATION lib                 COMPONENT Runtime
-        ARCHIVE DESTINATION lib/testbed2   COMPONENT Development)
+        EXPORT Testbed2ImplementationTargets)
 # install includes
 FILE(GLOB Testbed2_INCLUDES *.h)
 install(FILES ${Testbed2_INCLUDES}

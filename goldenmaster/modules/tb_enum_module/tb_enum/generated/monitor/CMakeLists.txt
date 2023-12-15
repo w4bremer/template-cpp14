@@ -26,10 +26,7 @@ else()
 endif()
 
 install(TARGETS tb_enum-monitor
-        EXPORT Tb_enumMonitorTargets
-        RUNTIME DESTINATION bin                 COMPONENT Runtime
-        LIBRARY DESTINATION lib                 COMPONENT Runtime
-        ARCHIVE DESTINATION lib/tb_enum   COMPONENT Development)
+        EXPORT Tb_enumMonitorTargets)
 # install includes
 install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} DESTINATION include/tb_enum/generated FILES_MATCHING PATTERN "*.h")
 

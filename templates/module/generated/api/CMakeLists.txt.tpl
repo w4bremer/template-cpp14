@@ -37,10 +37,7 @@ target_include_directories({{$module_id}}-api
 
 # install binary files
 install(TARGETS {{$module_id}}-api
-        EXPORT {{$module_idFirstUpper}}ApiTargets
-        RUNTIME DESTINATION bin                 COMPONENT Runtime
-        LIBRARY DESTINATION lib                 COMPONENT Runtime
-        ARCHIVE DESTINATION lib/{{$module_id}}   COMPONENT Development)
+        EXPORT {{$module_idFirstUpper}}ApiTargets)
 # install includes
 install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} DESTINATION include/{{$module_id}}/generated FILES_MATCHING PATTERN "*.h")
 

@@ -23,10 +23,7 @@ endif()
 
 # install binary files
 install(TARGETS tb_enum-api
-        EXPORT Tb_enumApiTargets
-        RUNTIME DESTINATION bin                 COMPONENT Runtime
-        LIBRARY DESTINATION lib                 COMPONENT Runtime
-        ARCHIVE DESTINATION lib/tb_enum   COMPONENT Development)
+        EXPORT Tb_enumApiTargets)
 # install includes
 install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} DESTINATION include/tb_enum/generated FILES_MATCHING PATTERN "*.h")
 

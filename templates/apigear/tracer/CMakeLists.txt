@@ -52,10 +52,7 @@ endif(BUILD_TESTING)
 
 # install binary files
 install(TARGETS poco-tracer
-        EXPORT ApiGearPocoTracerTargets
-        RUNTIME DESTINATION bin           COMPONENT Runtime
-        LIBRARY DESTINATION lib           COMPONENT Runtime
-        ARCHIVE DESTINATION lib           COMPONENT Development)
+        EXPORT ApiGearPocoTracerTargets)
 # install includes
 FILE(GLOB APIGEAR_INCLUDES *.h)
 install(FILES ${APIGEAR_INCLUDES}

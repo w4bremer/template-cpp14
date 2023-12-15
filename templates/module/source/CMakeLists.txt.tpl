@@ -68,10 +68,7 @@ add_test(NAME test_{{$module_id}} COMMAND $<TARGET_FILE:test_{{$module_id}}>)
 endif(BUILD_TESTING)
 
 install(TARGETS {{$module_id}}-implementation
-        EXPORT {{$module_idFirstUpper}}ImplementationTargets
-        RUNTIME DESTINATION bin                 COMPONENT Runtime
-        LIBRARY DESTINATION lib                 COMPONENT Runtime
-        ARCHIVE DESTINATION lib/{{$module_id}}   COMPONENT Development)
+        EXPORT {{$module_idFirstUpper}}ImplementationTargets)
 # install includes
 FILE(GLOB {{$module_idFirstUpper}}_INCLUDES *.h)
 install(FILES ${ {{- $module_idFirstUpper}}_INCLUDES}

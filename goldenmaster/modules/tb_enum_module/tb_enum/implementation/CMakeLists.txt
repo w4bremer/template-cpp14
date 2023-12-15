@@ -59,10 +59,7 @@ add_test(NAME test_tb_enum COMMAND $<TARGET_FILE:test_tb_enum>)
 endif(BUILD_TESTING)
 
 install(TARGETS tb_enum-implementation
-        EXPORT Tb_enumImplementationTargets
-        RUNTIME DESTINATION bin                 COMPONENT Runtime
-        LIBRARY DESTINATION lib                 COMPONENT Runtime
-        ARCHIVE DESTINATION lib/tb_enum   COMPONENT Development)
+        EXPORT Tb_enumImplementationTargets)
 # install includes
 FILE(GLOB Tb_enum_INCLUDES *.h)
 install(FILES ${Tb_enum_INCLUDES}

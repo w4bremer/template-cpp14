@@ -13,10 +13,7 @@ target_include_directories(tb_simple-api
 
 # install binary files
 install(TARGETS tb_simple-api
-        EXPORT Tb_simpleApiTargets
-        RUNTIME DESTINATION bin                 COMPONENT Runtime
-        LIBRARY DESTINATION lib                 COMPONENT Runtime
-        ARCHIVE DESTINATION lib/tb_simple   COMPONENT Development)
+        EXPORT Tb_simpleApiTargets)
 # install includes
 install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} DESTINATION include/tb_simple/generated FILES_MATCHING PATTERN "*.h")
 

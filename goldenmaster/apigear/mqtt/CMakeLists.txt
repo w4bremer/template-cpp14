@@ -49,10 +49,7 @@ endif(BUILD_TESTING)
 
 # install binary files
 install(TARGETS paho-mqtt
-        EXPORT ApiGearPahoMQTTTargets
-        RUNTIME DESTINATION bin           COMPONENT Runtime
-        LIBRARY DESTINATION lib           COMPONENT Runtime
-        ARCHIVE DESTINATION lib/apigear   COMPONENT Development)
+        EXPORT ApiGearPahoMQTTTargets)
 # install includes
 FILE(GLOB APIGEAR_INCLUDES *.h)
 install(FILES ${APIGEAR_INCLUDES}

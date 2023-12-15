@@ -1,12 +1,14 @@
 cmake_minimum_required(VERSION 3.20)
 project(tb_enum)
 
+# needed to access CMAKE_INSTALL_LIBDIR
+include(GNUInstallDirs)
+
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set(INCLUDE_INSTALL_DIR include/tb_enum/ CACHE FILEPATH "")
-set(LIB_INSTALL_DIR lib/ CACHE FILEPATH "")
-set(InstallDir ${LIB_INSTALL_DIR}/cmake/tb_enum)
+set(InstallDir ${CMAKE_INSTALL_LIBDIR}/cmake/tb_enum)
 
 # enable testing
 if(BUILD_TESTING)
@@ -25,7 +27,7 @@ include(CMakePackageConfigHelpers)
 configure_package_config_file(Tb_enumConfig.cmake.in
   ${CMAKE_CURRENT_BINARY_DIR}/tb_enumConfig.cmake
   INSTALL_DESTINATION ${InstallDir}
-  PATH_VARS INCLUDE_INSTALL_DIR LIB_INSTALL_DIR)
+  PATH_VARS INCLUDE_INSTALL_DIR)
 write_basic_package_version_file(
   ${CMAKE_CURRENT_BINARY_DIR}/tb_enumConfigVersion.cmake
   VERSION 1.0.0

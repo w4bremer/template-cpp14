@@ -23,10 +23,7 @@ endif()
 
 # install binary files
 install(TARGETS tb_same1-api
-        EXPORT Tb_same1ApiTargets
-        RUNTIME DESTINATION bin                 COMPONENT Runtime
-        LIBRARY DESTINATION lib                 COMPONENT Runtime
-        ARCHIVE DESTINATION lib/tb_same1   COMPONENT Development)
+        EXPORT Tb_same1ApiTargets)
 # install includes
 install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} DESTINATION include/tb_same1/generated FILES_MATCHING PATTERN "*.h")
 

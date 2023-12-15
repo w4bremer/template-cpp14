@@ -33,10 +33,7 @@ else()
 endif()
 
 install(TARGETS {{$module_id}}-monitor
-        EXPORT {{$module_idFirstUpper}}MonitorTargets
-        RUNTIME DESTINATION bin                 COMPONENT Runtime
-        LIBRARY DESTINATION lib                 COMPONENT Runtime
-        ARCHIVE DESTINATION lib/{{$module_id}}   COMPONENT Development)
+        EXPORT {{$module_idFirstUpper}}MonitorTargets)
 # install includes
 install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} DESTINATION include/{{$module_id}}/generated FILES_MATCHING PATTERN "*.h")
 

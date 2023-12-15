@@ -23,10 +23,7 @@ else()
 endif()
 
 install(TARGETS tb_enum-mqtt
-        EXPORT Tb_enumMqttTargets
-        RUNTIME DESTINATION bin                 COMPONENT Runtime
-        LIBRARY DESTINATION lib                 COMPONENT Runtime
-        ARCHIVE DESTINATION lib/tb_enum   COMPONENT Development)
+        EXPORT Tb_enumMqttTargets)
 # install includes
 install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} DESTINATION include/tb_enum/generated FILES_MATCHING PATTERN "*.h")
 

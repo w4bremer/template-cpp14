@@ -69,10 +69,7 @@ add_test(NAME test_tb_simple COMMAND $<TARGET_FILE:test_tb_simple>)
 endif(BUILD_TESTING)
 
 install(TARGETS tb_simple-implementation
-        EXPORT Tb_simpleImplementationTargets
-        RUNTIME DESTINATION bin                 COMPONENT Runtime
-        LIBRARY DESTINATION lib                 COMPONENT Runtime
-        ARCHIVE DESTINATION lib/tb_simple   COMPONENT Development)
+        EXPORT Tb_simpleImplementationTargets)
 # install includes
 FILE(GLOB Tb_simple_INCLUDES *.h)
 install(FILES ${Tb_simple_INCLUDES}

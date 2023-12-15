@@ -43,10 +43,7 @@ else()
 endif()
 
 install(TARGETS tb_same2-core
-        EXPORT Tb_same2CoreTargets
-        RUNTIME DESTINATION bin                 COMPONENT Runtime
-        LIBRARY DESTINATION lib                 COMPONENT Runtime
-        ARCHIVE DESTINATION lib/tb_same2   COMPONENT Development)
+        EXPORT Tb_same2CoreTargets)
 # install includes
 install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} DESTINATION include/tb_same2/generated FILES_MATCHING PATTERN "*.h")
 

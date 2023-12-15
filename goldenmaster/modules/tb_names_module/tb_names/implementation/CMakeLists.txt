@@ -59,10 +59,7 @@ add_test(NAME test_tb_names COMMAND $<TARGET_FILE:test_tb_names>)
 endif(BUILD_TESTING)
 
 install(TARGETS tb_names-implementation
-        EXPORT Tb_namesImplementationTargets
-        RUNTIME DESTINATION bin                 COMPONENT Runtime
-        LIBRARY DESTINATION lib                 COMPONENT Runtime
-        ARCHIVE DESTINATION lib/tb_names   COMPONENT Development)
+        EXPORT Tb_namesImplementationTargets)
 # install includes
 FILE(GLOB Tb_names_INCLUDES *.h)
 install(FILES ${Tb_names_INCLUDES}

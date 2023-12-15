@@ -56,10 +56,7 @@ target_link_libraries(poco-olink PUBLIC Poco::Net Poco::Util olink_core apigear:
 
 # install binary files
 install(TARGETS poco-olink
-        EXPORT ApiGearPocoOlinkTargets
-        RUNTIME DESTINATION bin           COMPONENT Runtime
-        LIBRARY DESTINATION lib           COMPONENT Runtime
-        ARCHIVE DESTINATION lib           COMPONENT Development)
+        EXPORT ApiGearPocoOlinkTargets)
 # install includes
 FILE(GLOB_RECURSE APIGEAR_INCLUDES *.h)
 install(FILES ${APIGEAR_INCLUDES}
