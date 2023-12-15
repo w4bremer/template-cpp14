@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.1)
+cmake_minimum_required(VERSION 3.20)
 project(AppThreadSafe)
 
 # append local binary directory for conan packages to be found

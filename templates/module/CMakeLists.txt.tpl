@@ -1,7 +1,7 @@
 {{- $module_id := snake .Module.Name -}}
 {{- $module_idFirstUpper := upper1 $module_id -}}
 {{- $features := .Features -}}
-cmake_minimum_required(VERSION 3.1)
+cmake_minimum_required(VERSION 3.20)
 project({{$module_id}})
 
 set(CMAKE_CXX_STANDARD 14)

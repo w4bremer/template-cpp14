@@ -1,5 +1,5 @@
 project(Testtb_names)
-cmake_minimum_required(VERSION 3.1)
+cmake_minimum_required(VERSION 3.20)
 include(CTest)
 find_package(tb_names REQUIRED)
 
