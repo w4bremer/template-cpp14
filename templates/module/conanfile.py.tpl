@@ -12,7 +12,7 @@ class {{$module_id}}Conan(ConanFile):
     author = "ApiGear UG"
     #url = "<Package recipe repository url here, for issues about the package>"
     settings = "os", "compiler", "build_type", "arch"
-    requires = "catch2/2.13.7", "nlohmann_json/3.9.1"{{ if $features.apigear }}, "apigear/0.1.0"{{- end}}
+    requires = "catch2/2.13.7", "nlohmann_json/3.9.1"{{ if $features.apigear }}, "apigear/3.5.1"{{- end}}
     generators = "cmake_find_package"
     exports_sources = "*"
     options = {"build_testing": [True, False]}

@@ -50,7 +50,7 @@ configure_package_config_file(ApigearConfig.cmake.in
   PATH_VARS INCLUDE_INSTALL_DIR APIGEAR_BUILD_WITH_MONITOR APIGEAR_BUILD_WITH_OLINK APIGEAR_BUILD_WITH_MQTT)
 write_basic_package_version_file(
   ${CMAKE_CURRENT_BINARY_DIR}/apigearConfigVersion.cmake
-  VERSION 0.1.0
+  VERSION 3.5.1
   COMPATIBILITY SameMinorVersion )
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/apigearConfig.cmake
               ${CMAKE_CURRENT_BINARY_DIR}/apigearConfigVersion.cmake
