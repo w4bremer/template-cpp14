@@ -1,5 +1,4 @@
 [requires]
-apigear/0.1.0
 testbed2/1.0.0
 tb_enum/1.0.0
 tb_same1/1.0.0
@@ -7,6 +6,7 @@ tb_same2/1.0.0
 tb_simple/1.0.0
 testbed1/1.0.0
 tb_names/1.0.0
+apigear/0.1.0
 
 [generators]
 cmake_find_package

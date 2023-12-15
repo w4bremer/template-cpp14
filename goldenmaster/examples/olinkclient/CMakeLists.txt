@@ -23,6 +23,7 @@ else()
   target_compile_definitions(OLinkClient PRIVATE -D_CRT_SECURE_NO_WARNINGS)
 endif()
 
+find_package(apigear QUIET COMPONENTS utilities)
 find_package(testbed2 QUIET COMPONENTS testbed2-core testbed2-implementation testbed2-monitor testbed2-olink)
 find_package(tb_enum QUIET COMPONENTS tb_enum-core tb_enum-implementation tb_enum-monitor tb_enum-olink)
 find_package(tb_same1 QUIET COMPONENTS tb_same1-core tb_same1-implementation tb_same1-monitor tb_same1-olink)

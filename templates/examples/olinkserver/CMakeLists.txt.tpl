@@ -22,8 +22,8 @@ else()
   # disable the warning for getenv - needs better cross platform solution
   target_compile_definitions(OLinkServer PRIVATE -D_CRT_SECURE_NO_WARNINGS)
 endif()
-{{- nl }}
 
+find_package(apigear QUIET COMPONENTS utilities)
 {{- range .System.Modules }}
 {{- $module_id := snake .Name }}
 find_package({{$module_id}} QUIET COMPONENTS {{$module_id}}-core {{$module_id}}-implementation {{$module_id}}-olink)
