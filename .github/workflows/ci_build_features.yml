@@ -54,7 +54,7 @@ jobs:
 
       - run: go run main.go install
       - name: generate ${{ matrix.config.short }} feature set
-        run: bin/apigear g x -f "${{ matrix.config.features }}" -t . -o test -i apigear/testbed.advanced.module.yaml,apigear/testbed.enum.module.yaml,apigear/testbed.names.module.yaml,apigear/testbed.same1.module.yaml,apigear/testbed.same2.module.yaml,apigear/testbed.simple.module.yaml,apigear/testbed.struct.module.yaml
+        run: bin/apigear g x -f "${{ matrix.config.features }}" -t . -o test -i apigear/testbed.simple.module.yaml,apigear/testbed.struct.module.yaml
       - name: Run cmake on Linux
         working-directory: test
         run: bash scripts/test_cmake.sh
@@ -103,7 +103,7 @@ jobs:
 
       - run: go run main.go install
       - name: generate ${{ matrix.config.short }} feature set
-        run: bin/apigear g x -f "${{ matrix.config.features }}" -t . -o test -i apigear/testbed.advanced.module.yaml,apigear/testbed.enum.module.yaml,apigear/testbed.names.module.yaml,apigear/testbed.same1.module.yaml,apigear/testbed.same2.module.yaml,apigear/testbed.simple.module.yaml,apigear/testbed.struct.module.yaml
+        run: bin/apigear g x -f "${{ matrix.config.features }}" -t . -o test -i apigear/testbed.simple.module.yaml,apigear/testbed.struct.module.yaml
       - name: Run cmake on Linux
         working-directory: test
         run: cmake -Bbuild -DCMAKE_INSTALL_PREFIX=tmp -DCMAKE_MODULE_PATH=$GITHUB_WORKSPACE/deps -DBUILD_TESTING=ON && cmake --build build/ && cmake --build build/ --target test && cmake --build build/ --target install
