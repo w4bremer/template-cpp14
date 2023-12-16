@@ -10,17 +10,66 @@ env:
   go_version: "1.21.x"
 
 jobs:
-  cmake_build:
+  cmake_script:
     name: ${{ matrix.config.name }}
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
         config:
-          - { name: "Simple Conf CMake", short: "simple", features: "api,core,stubs,examples" }
-          - { name: "Monitor Conf CMake", short: "monitor", features: "api,core,stubs,monitor,examples" }
-          - { name: "OLink Conf CMake", short: "olink", features: "api,core,stubs,olink,examples_olink" }
-          - { name: "MQTT Conf CMake", short: "mqtt", features: "api,core,stubs,mqtt,examples_mqtt" }
+          - { name: "Simple Conf CMake script", short: "simple", features: "api,core,stubs,examples" }
+          - { name: "Monitor Conf CMake script", short: "monitor", features: "api,core,stubs,monitor,examples" }
+          - { name: "OLink Conf CMake script", short: "olink", features: "api,core,stubs,olink,examples_olink" }
+          - { name: "MQTT Conf CMake script", short: "mqtt", features: "api,core,stubs,mqtt,examples_mqtt" }
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: recursive
+      - uses: actions/setup-go@v3
+        with:
+          go-version: ${{env.go_version}}
+
+      - uses: actions/cache@v3
+        with:
+          path: |
+            ~/go/pkg/mod
+            ~/.cache/go-build
+          key: ${{ runner.os }}-go-${{ env.go_version }}-${{ hashFiles('**/go.sum') }}
+          restore-keys: ${{ runner.os }}-go-${{ env.go_version }}-
+
+      - name: Install catch2
+        run: git clone --branch v2.13.8 --depth 1 https://github.com/catchorg/Catch2.git && cd Catch2 && cmake -Bbuild -H. -DBUILD_TESTING=OFF && sudo cmake --build build/ --target install
+
+      - name: Install cmake, nlohmann using apt-get
+        if: ${{ matrix.config.short == 'simple'}}
+        run: sudo apt-get install -y cmake nlohmann-json3-dev
+
+      - name: Install poco using apt-get
+        if: ${{ matrix.config.short == 'monitor' || matrix.config.short == 'olink' }}
+        run: sudo apt-get install -y libpoco-dev
+
+      - name: Install paho.mqtt.c
+        if: ${{ matrix.config.short == 'mqtt'}}
+        run: git clone --branch v1.3.12 --depth 1 https://github.com/eclipse/paho.mqtt.c.git && cd paho.mqtt.c && cmake -Bbuild -H. -DPAHO_BUILD_SHARED=OFF -DPAHO_BUILD_STATIC=ON -DPAHO_WITH_SSL=ON -DBUILD_TESTING=OFF && sudo cmake --build build/ --target install
+
+      - run: go run main.go install
+      - name: generate ${{ matrix.config.short }} feature set
+        run: bin/apigear g x -f "${{ matrix.config.features }}" -t . -o test -i apigear/testbed.advanced.module.yaml,apigear/testbed.enum.module.yaml,apigear/testbed.names.module.yaml,apigear/testbed.same1.module.yaml,apigear/testbed.same2.module.yaml,apigear/testbed.simple.module.yaml,apigear/testbed.struct.module.yaml
+      - name: Run cmake on Linux
+        working-directory: test
+        run: bash scripts/test_cmake.sh
+
+  cmake_list:
+    name: ${{ matrix.config.name }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        config:
+          - { name: "Simple Conf CMake Lists file", short: "simple", features: "api,core,stubs,examples" }
+          - { name: "Monitor Conf CMake Lists file", short: "monitor", features: "api,core,stubs,monitor,examples" }
+          - { name: "OLink Conf CMake Lists file", short: "olink", features: "api,core,stubs,olink,examples_olink" }
+          - { name: "MQTT Conf CMake Lists file", short: "mqtt", features: "api,core,stubs,mqtt,examples_mqtt" }
     steps:
       - uses: actions/checkout@v3
         with:

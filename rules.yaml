@@ -8,6 +8,9 @@ features:
             force: false
           - source: "README.md"
             raw: true
+          - source: scripts/test_cmake.sh.tpl
+            target: scripts/test_cmake.sh
+            force: true
       - match: module
         prefix: "modules/{{snake .Module.Name}}_module/{{snake .Module.Name}}/"
         documents:
