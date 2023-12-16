@@ -7,12 +7,12 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 include(FetchContent)
 
-find_package(objectlink-core-cpp QUIET)
-if(NOT objectlink-core-cpp_FOUND)
+find_package(olink_core QUIET)
+if(NOT olink_core_FOUND)
   # disable olink core tests
   set(BUILD_TESTING OFF)
-  # pull objectlink-core-cpp as dependency
-  message(STATUS "objectlink-core-cpp NOT FOUND, fetching the git repository")
+  # pull olink_core as dependency
+  message(STATUS "olink_core NOT FOUND, fetching the git repository")
   FetchContent_Declare(olink-core
       GIT_REPOSITORY https://github.com/apigear-io/objectlink-core-cpp.git
       GIT_TAG v0.2.6
@@ -58,9 +58,7 @@ target_link_libraries(poco-olink PUBLIC Poco::Net Poco::Util olink_core apigear:
 install(TARGETS poco-olink
         EXPORT ApiGearPocoOlinkTargets)
 # install includes
-FILE(GLOB_RECURSE APIGEAR_INCLUDES *.h)
-install(FILES ${APIGEAR_INCLUDES}
-        DESTINATION include/apigear/olink)
+install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} DESTINATION include/apigear FILES_MATCHING PATTERN "*.h")
 
 export(EXPORT ApiGearPocoOlinkTargets
   NAMESPACE apigear::

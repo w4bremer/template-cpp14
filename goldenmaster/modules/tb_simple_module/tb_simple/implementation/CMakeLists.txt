@@ -73,7 +73,7 @@ install(TARGETS tb_simple-implementation
 # install includes
 FILE(GLOB Tb_simple_INCLUDES *.h)
 install(FILES ${Tb_simple_INCLUDES}
-        DESTINATION include/tb_simple)
+        DESTINATION include/tb_simple/implementation)
 
 export(EXPORT Tb_simpleImplementationTargets
   NAMESPACE tb_simple::

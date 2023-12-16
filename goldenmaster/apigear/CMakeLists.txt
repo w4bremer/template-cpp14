@@ -10,7 +10,6 @@ set(apigear_COMPONENTS "")
 include(GNUInstallDirs)
 
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_BINARY_DIR})
-set(CMAKE_INSTALL_PREFIX ${CMAKE_CURRENT_BINARY_DIR}/package)
 set(INCLUDE_INSTALL_DIR include/apigear/ CACHE FILEPATH "")
 set(InstallDir ${CMAKE_INSTALL_LIBDIR}/cmake/apigear)
 

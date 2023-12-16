@@ -69,7 +69,7 @@ install(TARGETS tb_same2-implementation
 # install includes
 FILE(GLOB Tb_same2_INCLUDES *.h)
 install(FILES ${Tb_same2_INCLUDES}
-        DESTINATION include/tb_same2)
+        DESTINATION include/tb_same2/implementation)
 
 export(EXPORT Tb_same2ImplementationTargets
   NAMESPACE tb_same2::

@@ -26,6 +26,9 @@ set_and_check({{$module_id_up}}_INCLUDE_DIR "@PACKAGE_INCLUDE_INSTALL_DIR@")
 # make sure we have all needed dependencies
 include(CMakeFindDependencyMacro)
 find_dependency(Threads REQUIRED)
+{{- if $features.core }}
+find_dependency(nlohmann_json REQUIRED)
+{{- end}}
 {{- if $features.monitor }}
 find_dependency(apigear COMPONENTS poco-tracer REQUIRED)
 {{- end}}

@@ -63,7 +63,7 @@ install(TARGETS tb_names-implementation
 # install includes
 FILE(GLOB Tb_names_INCLUDES *.h)
 install(FILES ${Tb_names_INCLUDES}
-        DESTINATION include/tb_names)
+        DESTINATION include/tb_names/implementation)
 
 export(EXPORT Tb_namesImplementationTargets
   NAMESPACE tb_names::

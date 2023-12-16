@@ -11,6 +11,7 @@ set_and_check(TB_SAME2_INCLUDE_DIR "@PACKAGE_INCLUDE_INSTALL_DIR@")
 # make sure we have all needed dependencies
 include(CMakeFindDependencyMacro)
 find_dependency(Threads REQUIRED)
+find_dependency(nlohmann_json REQUIRED)
 find_dependency(apigear COMPONENTS poco-tracer REQUIRED)
 find_dependency(apigear COMPONENTS poco-olink REQUIRED)
 find_dependency(apigear COMPONENTS paho-mqtt REQUIRED)

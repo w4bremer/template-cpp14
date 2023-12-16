@@ -72,7 +72,7 @@ install(TARGETS {{$module_id}}-implementation
 # install includes
 FILE(GLOB {{$module_idFirstUpper}}_INCLUDES *.h)
 install(FILES ${ {{- $module_idFirstUpper}}_INCLUDES}
-        DESTINATION include/{{$module_id}})
+        DESTINATION include/{{$module_id}}/implementation)
 
 export(EXPORT {{$module_idFirstUpper}}ImplementationTargets
   NAMESPACE {{$module_id}}::

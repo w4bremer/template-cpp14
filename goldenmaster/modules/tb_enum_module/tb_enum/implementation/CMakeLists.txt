@@ -63,7 +63,7 @@ install(TARGETS tb_enum-implementation
 # install includes
 FILE(GLOB Tb_enum_INCLUDES *.h)
 install(FILES ${Tb_enum_INCLUDES}
-        DESTINATION include/tb_enum)
+        DESTINATION include/tb_enum/implementation)
 
 export(EXPORT Tb_enumImplementationTargets
   NAMESPACE tb_enum::

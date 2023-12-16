@@ -65,7 +65,7 @@ install(TARGETS testbed1-implementation
 # install includes
 FILE(GLOB Testbed1_INCLUDES *.h)
 install(FILES ${Testbed1_INCLUDES}
-        DESTINATION include/testbed1)
+        DESTINATION include/testbed1/implementation)
 
 export(EXPORT Testbed1ImplementationTargets
   NAMESPACE testbed1::
