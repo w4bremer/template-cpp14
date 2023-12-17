@@ -7,7 +7,6 @@ include(GNUInstallDirs)
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-set(INCLUDE_INSTALL_DIR include/tb_same1/ CACHE FILEPATH "")
 set(InstallDir ${CMAKE_INSTALL_LIBDIR}/cmake/tb_same1)
 
 # enable testing
@@ -26,8 +25,7 @@ add_subdirectory(generated/mqtt)
 include(CMakePackageConfigHelpers)
 configure_package_config_file(Tb_same1Config.cmake.in
   ${CMAKE_CURRENT_BINARY_DIR}/tb_same1Config.cmake
-  INSTALL_DESTINATION ${InstallDir}
-  PATH_VARS INCLUDE_INSTALL_DIR)
+  INSTALL_DESTINATION ${InstallDir})
 write_basic_package_version_file(
   ${CMAKE_CURRENT_BINARY_DIR}/tb_same1ConfigVersion.cmake
   VERSION 1.0.0

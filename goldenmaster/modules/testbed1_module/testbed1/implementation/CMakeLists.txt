@@ -16,7 +16,7 @@ target_include_directories(testbed1-implementation
     PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../../>
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../../../modules>
-    $<INSTALL_INTERFACE:include/testbed1>
+    $<INSTALL_INTERFACE:include>
 )
 target_link_libraries(testbed1-implementation PUBLIC testbed1::testbed1-api testbed1::testbed1-core Threads::Threads)
 # ensure maximum compiler support

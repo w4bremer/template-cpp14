@@ -28,7 +28,7 @@ target_include_directories(testbed1-core
     PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../../../>
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../../../../modules>
-    $<INSTALL_INTERFACE:include/testbed1>
+    $<INSTALL_INTERFACE:include>
 )
 target_link_libraries(testbed1-core PUBLIC testbed1::testbed1-api nlohmann_json::nlohmann_json)
 # ensure maximum compiler support

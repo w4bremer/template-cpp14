@@ -6,7 +6,6 @@ INCLUDE("${CMAKE_CURRENT_LIST_DIR}/Testbed1MonitorTargets.cmake")
 INCLUDE("${CMAKE_CURRENT_LIST_DIR}/Testbed1OLinkTargets.cmake")
 INCLUDE("${CMAKE_CURRENT_LIST_DIR}/Testbed1MqttTargets.cmake")
 INCLUDE("${CMAKE_CURRENT_LIST_DIR}/Testbed1ImplementationTargets.cmake")
-set_and_check(TESTBED1_INCLUDE_DIR "@PACKAGE_INCLUDE_INSTALL_DIR@")
 
 # make sure we have all needed dependencies
 include(CMakeFindDependencyMacro)

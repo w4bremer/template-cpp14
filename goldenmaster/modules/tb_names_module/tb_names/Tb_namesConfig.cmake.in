@@ -6,7 +6,6 @@ INCLUDE("${CMAKE_CURRENT_LIST_DIR}/Tb_namesMonitorTargets.cmake")
 INCLUDE("${CMAKE_CURRENT_LIST_DIR}/Tb_namesOLinkTargets.cmake")
 INCLUDE("${CMAKE_CURRENT_LIST_DIR}/Tb_namesMqttTargets.cmake")
 INCLUDE("${CMAKE_CURRENT_LIST_DIR}/Tb_namesImplementationTargets.cmake")
-set_and_check(TB_NAMES_INCLUDE_DIR "@PACKAGE_INCLUDE_INSTALL_DIR@")
 
 # make sure we have all needed dependencies
 include(CMakeFindDependencyMacro)

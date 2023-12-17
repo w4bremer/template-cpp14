@@ -15,7 +15,6 @@ endif()
 if(APIGEAR_BUILD_WITH_MQTT)
 INCLUDE("${CMAKE_CURRENT_LIST_DIR}/ApiGearPahoMQTTTargets.cmake")
 endif()
-set_and_check(APIGEAR_INCLUDE_DIR "@PACKAGE_INCLUDE_INSTALL_DIR@")
 
 # make sure we have all needed dependencies
 include(CMakeFindDependencyMacro)

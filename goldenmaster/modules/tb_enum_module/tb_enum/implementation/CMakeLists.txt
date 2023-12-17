@@ -15,7 +15,7 @@ target_include_directories(tb_enum-implementation
     PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../../>
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../../../modules>
-    $<INSTALL_INTERFACE:include/tb_enum>
+    $<INSTALL_INTERFACE:include>
 )
 target_link_libraries(tb_enum-implementation PUBLIC tb_enum::tb_enum-api tb_enum::tb_enum-core Threads::Threads)
 # ensure maximum compiler support

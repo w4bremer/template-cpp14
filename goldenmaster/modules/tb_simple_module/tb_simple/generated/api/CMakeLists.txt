@@ -8,7 +8,7 @@ target_include_directories(tb_simple-api
     INTERFACE
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../../../>
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../../../../modules>
-    $<INSTALL_INTERFACE:include/tb_simple>
+    $<INSTALL_INTERFACE:include>
 )
 
 # install binary files

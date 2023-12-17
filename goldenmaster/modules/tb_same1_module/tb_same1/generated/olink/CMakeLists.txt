@@ -18,7 +18,7 @@ target_include_directories(tb_same1-olink
     PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../../../>
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../../../../modules>
-    $<INSTALL_INTERFACE:include/tb_same1>
+    $<INSTALL_INTERFACE:include>
 )
 target_link_libraries(tb_same1-olink 
     tb_same1::tb_same1-core

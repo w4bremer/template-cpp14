@@ -10,7 +10,6 @@ set(apigear_COMPONENTS "")
 include(GNUInstallDirs)
 
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_BINARY_DIR})
-set(INCLUDE_INSTALL_DIR include/apigear/ CACHE FILEPATH "")
 set(InstallDir ${CMAKE_INSTALL_LIBDIR}/cmake/apigear)
 
 option(BUILD_TESTING "Enable this option to build the test targets" OFF)
@@ -46,7 +45,7 @@ include(CMakePackageConfigHelpers)
 configure_package_config_file(ApigearConfig.cmake.in
   ${CMAKE_CURRENT_BINARY_DIR}/apigearConfig.cmake
   INSTALL_DESTINATION ${InstallDir}
-  PATH_VARS INCLUDE_INSTALL_DIR APIGEAR_BUILD_WITH_MONITOR APIGEAR_BUILD_WITH_OLINK APIGEAR_BUILD_WITH_MQTT)
+  PATH_VARS APIGEAR_BUILD_WITH_MONITOR APIGEAR_BUILD_WITH_OLINK APIGEAR_BUILD_WITH_MQTT)
 write_basic_package_version_file(
   ${CMAKE_CURRENT_BINARY_DIR}/apigearConfigVersion.cmake
   VERSION 3.5.1

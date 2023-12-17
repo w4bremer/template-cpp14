@@ -18,7 +18,7 @@ target_include_directories(tb_same2-monitor
     PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../../../>
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../../../../modules>
-    $<INSTALL_INTERFACE:include/tb_same2>
+    $<INSTALL_INTERFACE:include>
 )
 target_link_libraries(tb_same2-monitor PUBLIC
     tb_same2::tb_same2-core

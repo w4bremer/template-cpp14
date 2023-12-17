@@ -14,7 +14,7 @@ target_include_directories(testbed1-monitor
     PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../../../>
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../../../../modules>
-    $<INSTALL_INTERFACE:include/testbed1>
+    $<INSTALL_INTERFACE:include>
 )
 target_link_libraries(testbed1-monitor PUBLIC
     testbed1::testbed1-core

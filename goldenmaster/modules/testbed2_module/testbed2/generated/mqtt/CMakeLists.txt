@@ -15,7 +15,7 @@ target_include_directories(testbed2-mqtt
     PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../../../>
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../../../../modules>
-    $<INSTALL_INTERFACE:include/testbed2>
+    $<INSTALL_INTERFACE:include>
 )
 target_link_libraries(testbed2-mqtt
     testbed2::testbed2-core

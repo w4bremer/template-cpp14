@@ -20,7 +20,7 @@ target_include_directories(tb_simple-implementation
     PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../../>
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../../../modules>
-    $<INSTALL_INTERFACE:include/tb_simple>
+    $<INSTALL_INTERFACE:include>
 )
 target_link_libraries(tb_simple-implementation PUBLIC tb_simple::tb_simple-api tb_simple::tb_simple-core Threads::Threads)
 # ensure maximum compiler support

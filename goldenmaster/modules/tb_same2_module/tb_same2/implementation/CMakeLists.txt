@@ -18,7 +18,7 @@ target_include_directories(tb_same2-implementation
     PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../../>
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../../../modules>
-    $<INSTALL_INTERFACE:include/tb_same2>
+    $<INSTALL_INTERFACE:include>
 )
 target_link_libraries(tb_same2-implementation PUBLIC tb_same2::tb_same2-api tb_same2::tb_same2-core Threads::Threads)
 # ensure maximum compiler support

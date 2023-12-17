@@ -21,7 +21,6 @@ INCLUDE("${CMAKE_CURRENT_LIST_DIR}/{{$module_idFirstUpper}}MqttTargets.cmake")
 {{- if $features.stubs }}
 INCLUDE("${CMAKE_CURRENT_LIST_DIR}/{{$module_idFirstUpper}}ImplementationTargets.cmake")
 {{- end}}
-set_and_check({{$module_id_up}}_INCLUDE_DIR "@PACKAGE_INCLUDE_INSTALL_DIR@")
 
 # make sure we have all needed dependencies
 include(CMakeFindDependencyMacro)

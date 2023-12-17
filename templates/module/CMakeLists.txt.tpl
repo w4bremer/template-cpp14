@@ -10,7 +10,6 @@ include(GNUInstallDirs)
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-set(INCLUDE_INSTALL_DIR include/{{$module_id}}/ CACHE FILEPATH "")
 set(InstallDir ${CMAKE_INSTALL_LIBDIR}/cmake/{{$module_id}})
 
 # enable testing
@@ -39,8 +38,7 @@ add_subdirectory(generated/mqtt)
 include(CMakePackageConfigHelpers)
 configure_package_config_file({{$module_idFirstUpper}}Config.cmake.in
   ${CMAKE_CURRENT_BINARY_DIR}/{{$module_id}}Config.cmake
-  INSTALL_DESTINATION ${InstallDir}
-  PATH_VARS INCLUDE_INSTALL_DIR)
+  INSTALL_DESTINATION ${InstallDir})
 write_basic_package_version_file(
   ${CMAKE_CURRENT_BINARY_DIR}/{{snake .Module.Name}}ConfigVersion.cmake
   VERSION {{.Module.Version}}

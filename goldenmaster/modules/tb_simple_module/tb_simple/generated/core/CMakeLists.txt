@@ -36,7 +36,7 @@ target_include_directories(tb_simple-core
     PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../../../>
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../../../../modules>
-    $<INSTALL_INTERFACE:include/tb_simple>
+    $<INSTALL_INTERFACE:include>
 )
 target_link_libraries(tb_simple-core PUBLIC tb_simple::tb_simple-api nlohmann_json::nlohmann_json)
 # ensure maximum compiler support

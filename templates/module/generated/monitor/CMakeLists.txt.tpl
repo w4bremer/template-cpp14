@@ -19,7 +19,7 @@ target_include_directories({{$module_id}}-monitor
     PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../../../>
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../../../../modules>
-    $<INSTALL_INTERFACE:include/{{$module_id}}>
+    $<INSTALL_INTERFACE:include>
 )
 target_link_libraries({{$module_id}}-monitor PUBLIC
     {{$module_id}}::{{$module_id}}-core
