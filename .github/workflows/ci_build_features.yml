@@ -40,9 +40,8 @@ jobs:
       - name: Install catch2
         run: git clone --branch v2.13.8 --depth 1 https://github.com/catchorg/Catch2.git && cd Catch2 && cmake -Bbuild -H. -DBUILD_TESTING=OFF && sudo cmake --build build/ --target install
 
-      - name: Install cmake, nlohmann using apt-get
-        if: ${{ matrix.config.short == 'simple'}}
-        run: sudo apt-get install -y cmake nlohmann-json3-dev
+      - name: Install nlohmann using apt-get
+        run: sudo apt-get install -y nlohmann-json3-dev
 
       - name: Install poco using apt-get
         if: ${{ matrix.config.short == 'monitor' || matrix.config.short == 'olink' }}
@@ -89,9 +88,8 @@ jobs:
       - name: Install catch2
         run: git clone --branch v2.13.8 --depth 1 https://github.com/catchorg/Catch2.git && cd Catch2 && cmake -Bbuild -H. -DBUILD_TESTING=OFF && sudo cmake --build build/ --target install
 
-      - name: Install cmake, nlohmann using apt-get
-        if: ${{ matrix.config.short == 'simple'}}
-        run: sudo apt-get install -y cmake nlohmann-json3-dev
+      - name: Install nlohmann using apt-get
+        run: sudo apt-get install -y nlohmann-json3-dev
 
       - name: Install poco using apt-get
         if: ${{ matrix.config.short == 'monitor' || matrix.config.short == 'olink' }}
