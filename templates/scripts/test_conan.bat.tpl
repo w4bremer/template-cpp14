@@ -10,7 +10,7 @@ cd build
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
 {{- if $features.apigear }}
 @REM Building and testing apigear module
-conan remove "apigear" -b -f
+conan remove "apigear/*" -b -f --packages
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
 if not exist apigear mkdir apigear
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
@@ -28,7 +28,7 @@ popd
 {{- end }}
 {{- range .System.Modules }}
 @REM Building and testing {{snake .Name}} module
-conan remove "{{snake .Name}}" -b -f
+conan remove "{{snake .Name}}/*" -b -f --packages
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
 if not exist modules\{{snake .Name}}_module mkdir modules\{{snake .Name}}_module
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%

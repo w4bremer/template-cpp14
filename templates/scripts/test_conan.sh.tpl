@@ -5,7 +5,7 @@ export DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )/..
 cd $DIR;
 rm -rf build/ && mkdir -p build && cd build;
 {{- if $features.apigear }}
-conan remove "apigear" -b -f
+conan remove "apigear/*" -b -f --packages
 mkdir -p apigear;
 pushd apigear;
 conan source ../../apigear && conan install --build missing ../../apigear -g=virtualenv && conan build ../../apigear && cmake -DBUILD_TESTING=ON ../../apigear && cmake --build . && source activate.sh && cmake --build . --target test && \
@@ -14,7 +14,7 @@ if [ $? -ne 0 ]; then exit 1; fi;
 popd
 {{- end}}
 {{- range .System.Modules }}
-conan remove "{{ snake .Name }}" -b -f
+conan remove "{{ snake .Name }}/*" -b -f --packages
 mkdir -p modules/{{ snake .Name }}_module;
 pushd modules/{{ snake .Name }}_module;
 conan source ../../../modules/{{ snake .Name }}_module &&\

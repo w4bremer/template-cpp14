@@ -3,14 +3,14 @@ set -x;
 export DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )/..";
 cd $DIR;
 rm -rf build/ && mkdir -p build && cd build;
-conan remove "apigear" -b -f
+conan remove "apigear/*" -b -f --packages
 mkdir -p apigear;
 pushd apigear;
 conan source ../../apigear && conan install --build missing ../../apigear -g=virtualenv && conan build ../../apigear && cmake -DBUILD_TESTING=ON ../../apigear && cmake --build . && source activate.sh && cmake --build . --target test && \
 conan install --build missing ../../apigear && conan create ../../apigear
 if [ $? -ne 0 ]; then exit 1; fi;
 popd
-conan remove "testbed2" -b -f
+conan remove "testbed2/*" -b -f --packages
 mkdir -p modules/testbed2_module;
 pushd modules/testbed2_module;
 conan source ../../../modules/testbed2_module &&\
@@ -25,7 +25,7 @@ conan install --build missing ../../../modules/testbed2_module &&\
 conan create ../../../modules/testbed2_module
 if [ $? -ne 0 ]; then exit 1; fi;
 popd
-conan remove "tb_enum" -b -f
+conan remove "tb_enum/*" -b -f --packages
 mkdir -p modules/tb_enum_module;
 pushd modules/tb_enum_module;
 conan source ../../../modules/tb_enum_module &&\
@@ -40,7 +40,7 @@ conan install --build missing ../../../modules/tb_enum_module &&\
 conan create ../../../modules/tb_enum_module
 if [ $? -ne 0 ]; then exit 1; fi;
 popd
-conan remove "tb_same1" -b -f
+conan remove "tb_same1/*" -b -f --packages
 mkdir -p modules/tb_same1_module;
 pushd modules/tb_same1_module;
 conan source ../../../modules/tb_same1_module &&\
@@ -55,7 +55,7 @@ conan install --build missing ../../../modules/tb_same1_module &&\
 conan create ../../../modules/tb_same1_module
 if [ $? -ne 0 ]; then exit 1; fi;
 popd
-conan remove "tb_same2" -b -f
+conan remove "tb_same2/*" -b -f --packages
 mkdir -p modules/tb_same2_module;
 pushd modules/tb_same2_module;
 conan source ../../../modules/tb_same2_module &&\
@@ -70,7 +70,7 @@ conan install --build missing ../../../modules/tb_same2_module &&\
 conan create ../../../modules/tb_same2_module
 if [ $? -ne 0 ]; then exit 1; fi;
 popd
-conan remove "tb_simple" -b -f
+conan remove "tb_simple/*" -b -f --packages
 mkdir -p modules/tb_simple_module;
 pushd modules/tb_simple_module;
 conan source ../../../modules/tb_simple_module &&\
@@ -85,7 +85,7 @@ conan install --build missing ../../../modules/tb_simple_module &&\
 conan create ../../../modules/tb_simple_module
 if [ $? -ne 0 ]; then exit 1; fi;
 popd
-conan remove "testbed1" -b -f
+conan remove "testbed1/*" -b -f --packages
 mkdir -p modules/testbed1_module;
 pushd modules/testbed1_module;
 conan source ../../../modules/testbed1_module &&\
@@ -100,7 +100,7 @@ conan install --build missing ../../../modules/testbed1_module &&\
 conan create ../../../modules/testbed1_module
 if [ $? -ne 0 ]; then exit 1; fi;
 popd
-conan remove "tb_names" -b -f
+conan remove "tb_names/*" -b -f --packages
 mkdir -p modules/tb_names_module;
 pushd modules/tb_names_module;
 conan source ../../../modules/tb_names_module &&\

@@ -8,7 +8,7 @@ if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
 cd build
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
 @REM Building and testing apigear module
-conan remove "apigear" -b -f
+conan remove "apigear/*" -b -f --packages
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
 if not exist apigear mkdir apigear
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
@@ -24,7 +24,7 @@ conan create ../../../apigear
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
 popd
 @REM Building and testing testbed2 module
-conan remove "testbed2" -b -f
+conan remove "testbed2/*" -b -f --packages
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
 if not exist modules\testbed2_module mkdir modules\testbed2_module
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
@@ -40,7 +40,7 @@ conan create ../../../../modules/testbed2_module
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
 popd
 @REM Building and testing tb_enum module
-conan remove "tb_enum" -b -f
+conan remove "tb_enum/*" -b -f --packages
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
 if not exist modules\tb_enum_module mkdir modules\tb_enum_module
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
@@ -56,7 +56,7 @@ conan create ../../../../modules/tb_enum_module
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
 popd
 @REM Building and testing tb_same1 module
-conan remove "tb_same1" -b -f
+conan remove "tb_same1/*" -b -f --packages
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
 if not exist modules\tb_same1_module mkdir modules\tb_same1_module
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
@@ -72,7 +72,7 @@ conan create ../../../../modules/tb_same1_module
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
 popd
 @REM Building and testing tb_same2 module
-conan remove "tb_same2" -b -f
+conan remove "tb_same2/*" -b -f --packages
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
 if not exist modules\tb_same2_module mkdir modules\tb_same2_module
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
@@ -88,7 +88,7 @@ conan create ../../../../modules/tb_same2_module
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
 popd
 @REM Building and testing tb_simple module
-conan remove "tb_simple" -b -f
+conan remove "tb_simple/*" -b -f --packages
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
 if not exist modules\tb_simple_module mkdir modules\tb_simple_module
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
@@ -104,7 +104,7 @@ conan create ../../../../modules/tb_simple_module
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
 popd
 @REM Building and testing testbed1 module
-conan remove "testbed1" -b -f
+conan remove "testbed1/*" -b -f --packages
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
 if not exist modules\testbed1_module mkdir modules\testbed1_module
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
@@ -120,7 +120,7 @@ conan create ../../../../modules/testbed1_module
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
 popd
 @REM Building and testing tb_names module
-conan remove "tb_names" -b -f
+conan remove "tb_names/*" -b -f --packages
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
 if not exist modules\tb_names_module mkdir modules\tb_names_module
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
