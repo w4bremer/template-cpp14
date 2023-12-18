@@ -1,7 +1,7 @@
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(apigear QUIET COMPONENTS poco-olink)
+find_package(apigear REQUIRED COMPONENTS poco-olink)
 set (SOURCES_OLINK
     samestruct1interfaceservice.cpp
     samestruct1interfaceclient.cpp

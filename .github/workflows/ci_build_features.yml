@@ -40,12 +40,20 @@ jobs:
       - name: Install catch2
         run: git clone --branch v2.13.8 --depth 1 https://github.com/catchorg/Catch2.git && cd Catch2 && cmake -Bbuild -H. -DBUILD_TESTING=OFF && sudo cmake --build build/ --target install
 
+      - name: Install trompeloeil
+        if: ${{ matrix.config.short == 'olink'}}
+        run: git clone --branch v46 --depth 1 https://github.com/rollbear/trompeloeil.git && cd trompeloeil && cmake -Bbuild -H. -DPAHO_BUILD_SHARED=OFF -DPAHO_BUILD_STATIC=ON -DPAHO_WITH_SSL=ON -DBUILD_TESTING=OFF && sudo cmake --build build/ --target install
+
       - name: Install nlohmann using apt-get
         run: sudo apt-get install -y nlohmann-json3-dev
 
       - name: Install poco using apt-get
         if: ${{ matrix.config.short == 'monitor' || matrix.config.short == 'olink' }}
         run: sudo apt-get install -y libpoco-dev
+
+      - name: Install objectlink-core-cpp
+        if: ${{ matrix.config.short == 'olink'}}
+        run: git clone --branch v0.2.7 --depth 1 https://github.com/apigear-io/objectlink-core-cpp.git && cd objectlink-core-cpp && cmake -Bbuild -H. -DPAHO_BUILD_SHARED=OFF -DPAHO_BUILD_STATIC=ON -DPAHO_WITH_SSL=ON -DBUILD_TESTING=OFF && sudo cmake --build build/ --target install
 
       - name: Install paho.mqtt.c
         if: ${{ matrix.config.short == 'mqtt'}}
@@ -88,12 +96,20 @@ jobs:
       - name: Install catch2
         run: git clone --branch v2.13.8 --depth 1 https://github.com/catchorg/Catch2.git && cd Catch2 && cmake -Bbuild -H. -DBUILD_TESTING=OFF && sudo cmake --build build/ --target install
 
+      - name: Install trompeloeil
+        if: ${{ matrix.config.short == 'olink'}}
+        run: git clone --branch v46 --depth 1 https://github.com/rollbear/trompeloeil.git && cd trompeloeil && cmake -Bbuild -H. -DPAHO_BUILD_SHARED=OFF -DPAHO_BUILD_STATIC=ON -DPAHO_WITH_SSL=ON -DBUILD_TESTING=OFF && sudo cmake --build build/ --target install
+
       - name: Install nlohmann using apt-get
         run: sudo apt-get install -y nlohmann-json3-dev
 
       - name: Install poco using apt-get
         if: ${{ matrix.config.short == 'monitor' || matrix.config.short == 'olink' }}
         run: sudo apt-get install -y libpoco-dev
+
+      - name: Install objectlink-core-cpp
+        if: ${{ matrix.config.short == 'olink'}}
+        run: git clone --branch v0.2.7 --depth 1 https://github.com/apigear-io/objectlink-core-cpp.git && cd objectlink-core-cpp && cmake -Bbuild -H. -DPAHO_BUILD_SHARED=OFF -DPAHO_BUILD_STATIC=ON -DPAHO_WITH_SSL=ON -DBUILD_TESTING=OFF && sudo cmake --build build/ --target install
 
       - name: Install paho.mqtt.c
         if: ${{ matrix.config.short == 'mqtt'}}

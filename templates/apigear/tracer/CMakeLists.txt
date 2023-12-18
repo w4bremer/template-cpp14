@@ -1,15 +1,6 @@
 include(CTest)
 
-find_package(nlohmann_json QUIET)
-if(NOT nlohmann_json_FOUND)
-  # pull nlohmann json as dependency
-  message(STATUS "nlohmann_json NOT FOUND, fetching the release package")
-  include(FetchContent)
-  set(JSON_Install ON)
-  FetchContent_Declare(json URL https://github.com/nlohmann/json/releases/download/v3.10.5/json.tar.xz)
-  FetchContent_MakeAvailable(json)
-endif()
-
+find_package(nlohmann_json REQUIRED)
 find_package(Poco REQUIRED Foundation Net Util)
 
 set (SOURCES
@@ -26,16 +17,7 @@ target_link_libraries(poco-tracer PUBLIC Poco::Net Poco::Util apigear::utilities
 
 # add test cases
 if(BUILD_TESTING)
-include(FetchContent)
-if (NOT Catch2_Found)
-FetchContent_Declare(
-    Catch2
-    GIT_REPOSITORY https://github.com/catchorg/Catch2.git
-    GIT_TAG        v2.13.8
-    GIT_SHALLOW    TRUE
-    FIND_PACKAGE_ARGS)
-FetchContent_MakeAvailable(Catch2)
-endif()
+find_package(Catch2 REQUIRED)
 
 set (SOURCES_TEST
     ../apigear.test.cpp

@@ -25,7 +25,7 @@ endif()
 {{- $features := .Features}}
 {{- range .System.Modules }}
 {{- $module_id := snake .Name }}
-find_package({{$module_id}} QUIET COMPONENTS {{$module_id}}-core {{$module_id}}-implementation {{ if $features.monitor }}{{$module_id}}-monitor {{- end}})
+find_package({{$module_id}} REQUIRED COMPONENTS {{$module_id}}-core {{$module_id}}-implementation {{ if $features.monitor }}{{$module_id}}-monitor {{- end}})
 {{- end }}
 target_link_libraries(app
 {{- range .System.Modules }}

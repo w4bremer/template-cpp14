@@ -7,17 +7,7 @@ include(CTest)
 
 if(BUILD_TESTING)
 enable_testing()
-
-Include(FetchContent)
-
-FetchContent_Declare(
-    Catch2
-    GIT_REPOSITORY https://github.com/catchorg/Catch2.git
-    GIT_TAG        v2.13.8
-    GIT_SHALLOW    TRUE
-    FIND_PACKAGE_ARGS)
-
-FetchContent_MakeAvailable(Catch2)
+find_package(Catch2 REQUIRED)
 
 set(TEST_APIGEAR_UTILITIES_SOURCES
     test_main.cpp

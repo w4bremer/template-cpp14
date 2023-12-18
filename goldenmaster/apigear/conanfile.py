@@ -13,11 +13,13 @@ class apigearConan(ConanFile):
         "enable_monitor": [True, False],
         "enable_olink": [True, False],
         "enable_mqtt": [True, False],
+        "enable_fetch_olinkcore": [True, False],
     }
     default_options = {
                        "enable_monitor": False,
                        "enable_olink": False,
                        "enable_mqtt": False,
+                       "enable_fetch_olinkcore": True,
                        "poco:shared": False,
                        "poco:enable_data_mysql": False,
                        "openssl:shared": False,
@@ -58,6 +60,7 @@ class apigearConan(ConanFile):
               self.requires("poco/1.11.3@#2f5e663a2d744e2d86962bfff2b2345e")
         if self.options.enable_olink:
               self.requires("poco/1.11.3@#2f5e663a2d744e2d86962bfff2b2345e")
+              self.requires("trompeloeil/46")
         if self.options.enable_mqtt:
               self.requires("paho-mqtt-c/1.3.12")
 
@@ -71,6 +74,7 @@ class apigearConan(ConanFile):
         cmake.definitions['APIGEAR_BUILD_WITH_MONITOR'] = self.options.enable_monitor
         cmake.definitions['APIGEAR_BUILD_WITH_OLINK'] = self.options.enable_olink
         cmake.definitions['APIGEAR_BUILD_WITH_MQTT'] = self.options.enable_mqtt
+        cmake.definitions['APIGEAR_FETCH_OLINKCORE'] = self.options.enable_olink and self.options.enable_fetch_olinkcore
         cmake.configure(source_folder=".")
         cmake.build()
 
@@ -81,14 +85,15 @@ class apigearConan(ConanFile):
 
     def package(self):
         packages = ["utilities", "tracer", "olink", "mqtt"]
-        self.copy("**/*.h", dst="include/apigear", src=".")
+        self.copy("**/*.h", dst="include/apigear", src=".", excludes="_deps/*")
         self.copy("*.lib", dst="lib", src=".", keep_path=False)
         self.copy("*.dll", dst="bin", src=".", keep_path=False)
         self.copy("*.dylib*", dst="lib", src=".", keep_path=False)
         self.copy("*.so*", dst="lib", src=".", keep_path=False, symlinks=True)
         self.copy("*.a", dst="lib", src=".", keep_path=False)
-        # manually copy objectlink-core-cpp include files, to have headers for module/generated/olink instead of linking whole library
-        self.copy(pattern="*.h", dst="include/olink", src="_deps/olink-core-src/src/olink", keep_path=True)
+        if self.options.enable_olink and self.options.enable_fetch_olinkcore:
+            # manually copy objectlink-core-cpp include files, to have headers for module/generated/olink instead of linking whole library
+            self.copy("**/*.h", dst="include", src="_deps/olink_core-src/src", keep_path=True)
 
     def package_info(self):
         self.env_info.path.append(os.path.join(self.package_folder, "bin"))

@@ -3,18 +3,7 @@ set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(nlohmann_json QUIET)
-if(NOT nlohmann_json_FOUND)
-  # pull nlohmann json as dependency
-  message(STATUS "nlohmann_json NOT FOUND, fetching the release package")
-  include(FetchContent)
-  set(JSON_Install ON)
-  FetchContent_Declare(json
-  GIT_REPOSITORY https://github.com/nlohmann/json
-  GIT_TAG v3.7.3)
-  FetchContent_MakeAvailable(json)
-endif()
-
+find_package(nlohmann_json REQUIRED)
 set (SOURCES_CORE_SUPPORT
     tb_names.json.adapter.cpp
     names.publisher.cpp

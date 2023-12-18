@@ -23,10 +23,10 @@ else()
   target_compile_definitions(OLinkServer PRIVATE -D_CRT_SECURE_NO_WARNINGS)
 endif()
 
-find_package(apigear QUIET COMPONENTS utilities)
+find_package(apigear REQUIRED COMPONENTS utilities)
 {{- range .System.Modules }}
 {{- $module_id := snake .Name }}
-find_package({{$module_id}} QUIET COMPONENTS {{$module_id}}-core {{$module_id}}-implementation {{$module_id}}-olink)
+find_package({{$module_id}} REQUIRED COMPONENTS {{$module_id}}-core {{$module_id}}-implementation {{$module_id}}-olink)
 {{- end }}
 target_link_libraries(OLinkServer
 {{- range .System.Modules }}

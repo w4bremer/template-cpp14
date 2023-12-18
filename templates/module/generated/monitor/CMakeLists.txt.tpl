@@ -5,7 +5,7 @@
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(apigear QUIET COMPONENTS poco-tracer)
+find_package(apigear REQUIRED COMPONENTS poco-tracer)
 set (SOURCES_MONITOR
 {{- range .Module.Interfaces }}
 {{- $interface:= . }}

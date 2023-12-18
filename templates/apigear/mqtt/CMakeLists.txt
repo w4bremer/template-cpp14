@@ -1,13 +1,4 @@
-find_package(nlohmann_json QUIET)
-if(NOT nlohmann_json_FOUND)
-  # pull nlohmann json as dependency
-  message(STATUS "nlohmann_json NOT FOUND, fetching the release package")
-  include(FetchContent)
-  set(JSON_Install ON)
-  FetchContent_Declare(json URL https://github.com/nlohmann/json/releases/download/v3.10.5/json.tar.xz)
-  FetchContent_MakeAvailable(json)
-endif()
-
+find_package(nlohmann_json REQUIRED)
 find_package(eclipse-paho-mqtt-c REQUIRED paho-mqtt3as-static)
 find_package(OpenSSL REQUIRED SSL Crypto)
 

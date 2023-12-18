@@ -14,14 +14,14 @@ add_executable(MQTTClient
     ${SOURCES}
 )
 
-find_package(apigear QUIET COMPONENTS utilities)
-find_package(testbed2 QUIET COMPONENTS testbed2-core testbed2-mqtt)
-find_package(tb_enum QUIET COMPONENTS tb_enum-core tb_enum-mqtt)
-find_package(tb_same1 QUIET COMPONENTS tb_same1-core tb_same1-mqtt)
-find_package(tb_same2 QUIET COMPONENTS tb_same2-core tb_same2-mqtt)
-find_package(tb_simple QUIET COMPONENTS tb_simple-core tb_simple-mqtt)
-find_package(testbed1 QUIET COMPONENTS testbed1-core testbed1-mqtt)
-find_package(tb_names QUIET COMPONENTS tb_names-core tb_names-mqtt)
+find_package(apigear REQUIRED COMPONENTS utilities)
+find_package(testbed2 REQUIRED COMPONENTS testbed2-core testbed2-mqtt)
+find_package(tb_enum REQUIRED COMPONENTS tb_enum-core tb_enum-mqtt)
+find_package(tb_same1 REQUIRED COMPONENTS tb_same1-core tb_same1-mqtt)
+find_package(tb_same2 REQUIRED COMPONENTS tb_same2-core tb_same2-mqtt)
+find_package(tb_simple REQUIRED COMPONENTS tb_simple-core tb_simple-mqtt)
+find_package(testbed1 REQUIRED COMPONENTS testbed1-core testbed1-mqtt)
+find_package(tb_names REQUIRED COMPONENTS tb_names-core tb_names-mqtt)
 target_link_libraries(MQTTClient
     apigear::utilities
     testbed2::testbed2-core

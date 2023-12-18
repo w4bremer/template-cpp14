@@ -8,31 +8,8 @@ include(CTest)
 if(BUILD_TESTING)
 enable_testing()
 
-Include(FetchContent)
-
-find_package(Catch2 QUIET)
-find_package(trompeloeil QUIET)
-
-Include(FetchContent)
-if (NOT Catch2_Found)
-FetchContent_Declare(
-    Catch2
-    GIT_REPOSITORY https://github.com/catchorg/Catch2.git
-    GIT_TAG        v2.13.8
-    GIT_SHALLOW    TRUE
-    FIND_PACKAGE_ARGS)
-FetchContent_MakeAvailable(Catch2)
-endif()
-
-if(NOT trompeloeil_Found)
-FetchContent_Declare(
-    trompeloeil
-    GIT_REPOSITORY https://github.com/rollbear/trompeloeil.git
-    GIT_TAG        8480eda8bcda5ac85ef18866047f485d7d2392f5
-    )
-FetchContent_MakeAvailable(trompeloeil)
-endif()
-
+find_package(Catch2 REQUIRED)
+find_package(trompeloeil REQUIRED)
 
 set(TEST_POCO_OLINK_SOURCES
     test_main.cpp

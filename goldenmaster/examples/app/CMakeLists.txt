@@ -21,13 +21,13 @@ else()
   target_compile_options(app PRIVATE /W4 /WX /wd4251)
 endif()
 
-find_package(testbed2 QUIET COMPONENTS testbed2-core testbed2-implementation testbed2-monitor)
-find_package(tb_enum QUIET COMPONENTS tb_enum-core tb_enum-implementation tb_enum-monitor)
-find_package(tb_same1 QUIET COMPONENTS tb_same1-core tb_same1-implementation tb_same1-monitor)
-find_package(tb_same2 QUIET COMPONENTS tb_same2-core tb_same2-implementation tb_same2-monitor)
-find_package(tb_simple QUIET COMPONENTS tb_simple-core tb_simple-implementation tb_simple-monitor)
-find_package(testbed1 QUIET COMPONENTS testbed1-core testbed1-implementation testbed1-monitor)
-find_package(tb_names QUIET COMPONENTS tb_names-core tb_names-implementation tb_names-monitor)
+find_package(testbed2 REQUIRED COMPONENTS testbed2-core testbed2-implementation testbed2-monitor)
+find_package(tb_enum REQUIRED COMPONENTS tb_enum-core tb_enum-implementation tb_enum-monitor)
+find_package(tb_same1 REQUIRED COMPONENTS tb_same1-core tb_same1-implementation tb_same1-monitor)
+find_package(tb_same2 REQUIRED COMPONENTS tb_same2-core tb_same2-implementation tb_same2-monitor)
+find_package(tb_simple REQUIRED COMPONENTS tb_simple-core tb_simple-implementation tb_simple-monitor)
+find_package(testbed1 REQUIRED COMPONENTS testbed1-core testbed1-implementation testbed1-monitor)
+find_package(tb_names REQUIRED COMPONENTS tb_names-core tb_names-implementation tb_names-monitor)
 target_link_libraries(app
     testbed2::testbed2-core
     testbed2::testbed2-implementation

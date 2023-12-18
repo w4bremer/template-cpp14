@@ -16,6 +16,25 @@ option(BUILD_TESTING "Enable this option to build the test targets" OFF)
 option(APIGEAR_BUILD_WITH_OLINK "Enables the build of the OLINK backend" OFF)
 option(APIGEAR_BUILD_WITH_MONITOR "Enables the build of the monitoring support library" OFF)
 option(APIGEAR_BUILD_WITH_MQTT "Enables the build of the MQTT backend" OFF)
+# this options is only here for the conan build until there is a conan based solution for objectlink-core
+option(APIGEAR_FETCH_OLINKCORE "Fetch and build objectlink-core, if not pre-installed" OFF)
+
+if(APIGEAR_FETCH_OLINKCORE)
+find_package(olink_core QUIET)
+if(NOT olink_core_FOUND)
+  # pull olink_core as dependency
+  message(STATUS "olink_core NOT FOUND, fetching the git repository")
+  include(FetchContent)
+  FetchContent_Declare(olink_core
+      GIT_REPOSITORY https://github.com/apigear-io/objectlink-core-cpp.git
+      GIT_TAG v0.2.7
+      GIT_SHALLOW TRUE
+      EXCLUDE_FROM_ALL FALSE
+      OVERRIDE_FIND_PACKAGE
+  )
+  FetchContent_MakeAvailable(olink_core)
+endif()
+endif() # APIGEAR_FETCH_OLINKCORE
 
 # enable testing
 if(BUILD_TESTING)

@@ -5,32 +5,8 @@ set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
-include(FetchContent)
-
-find_package(olink_core QUIET)
-if(NOT olink_core_FOUND)
-  # disable olink core tests
-  set(BUILD_TESTING OFF)
-  # pull olink_core as dependency
-  message(STATUS "olink_core NOT FOUND, fetching the git repository")
-  FetchContent_Declare(olink-core
-      GIT_REPOSITORY https://github.com/apigear-io/objectlink-core-cpp.git
-      GIT_TAG v0.2.6
-      GIT_SHALLOW TRUE
-      EXCLUDE_FROM_ALL FALSE
-  )
-  FetchContent_MakeAvailable(olink-core)
-endif()
-
-find_package(nlohmann_json QUIET)
-if(NOT nlohmann_json_FOUND)
-  # pull nlohmann json as dependency
-  message(STATUS "nlohmann_json NOT FOUND, fetching the release package")
-  set(JSON_Install ON)
-  FetchContent_Declare(json URL https://github.com/nlohmann/json/releases/download/v3.10.5/json.tar.xz)
-  FetchContent_MakeAvailable(json)
-endif()
-
+find_package(olink_core REQUIRED)
+find_package(nlohmann_json REQUIRED)
 find_package(Poco REQUIRED Foundation Net Util)
 
 set (SOURCES

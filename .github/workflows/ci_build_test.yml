@@ -140,7 +140,7 @@ jobs:
       - name: Run cmake on Linux/Mac
         if: ${{ matrix.config.os != 'windows-latest'}}
         working-directory: goldenmaster
-        run: cmake -Bbuild -DCMAKE_INSTALL_PREFIX=tmp -DCMAKE_MODULE_PATH=$GITHUB_WORKSPACE/deps -DBUILD_TESTING=ON && cmake --build build/ && cmake --build build/ --target test && cmake --build build/ --target install
+        run: cmake -Bbuild -DCMAKE_INSTALL_PREFIX=tmp -DCMAKE_MODULE_PATH=$GITHUB_WORKSPACE/deps -DTEST_FETCH_DEPS=ON -DBUILD_TESTING=ON && cmake --build build/ && cmake --build build/ --target test && cmake --build build/ --target install
       - name: Update path env on Windows for testing
         if: ${{ matrix.config.os == 'windows-latest'}}
         run: echo "$GITHUB_WORKSPACE/goldenmaster/build/bin/Debug/" >> $GITHUB_PATH
@@ -149,7 +149,7 @@ jobs:
         working-directory: goldenmaster
         run: |
           $Env:GITHUB_WORKSPACE_UNIX = "${{ github.workspace }}" -replace "\\","/"
-          cmake -Bbuild -DCMAKE_INSTALL_PREFIX=tmp -DCMAKE_MODULE_PATH="$Env:GITHUB_WORKSPACE_UNIX/deps" -DBUILD_TESTING=ON && cmake --build build/ && cmake --build build/ --target RUN_TESTS && cmake --build build/ --target install
+          cmake -Bbuild -DCMAKE_INSTALL_PREFIX=tmp -DCMAKE_MODULE_PATH="$Env:GITHUB_WORKSPACE_UNIX/deps" -DTEST_FETCH_DEPS=ON -DBUILD_TESTING=ON && cmake --build build/ && cmake --build build/ --target RUN_TESTS && cmake --build build/ --target install
 
   cmake_release_build:
     name: ${{ matrix.config.name }}
@@ -213,7 +213,7 @@ jobs:
       - name: Run cmake on Linux/Mac
         if: ${{ matrix.config.os != 'windows-latest'}}
         working-directory: goldenmaster
-        run: cmake -Bbuild -DCMAKE_INSTALL_PREFIX=tmp -DCMAKE_MODULE_PATH=$GITHUB_WORKSPACE/deps -DCMAKE_BUILD_TYPE=Release && cmake --build build/ --config Release && cmake --build build/ --target install --config Release
+        run: cmake -Bbuild -DCMAKE_INSTALL_PREFIX=tmp -DCMAKE_MODULE_PATH=$GITHUB_WORKSPACE/deps -DCMAKE_BUILD_TYPE=Release -DTEST_FETCH_DEPS=ON && cmake --build build/ --config Release && cmake --build build/ --target install --config Release
       - name: Update path env on Windows for testing
         if: ${{ matrix.config.os == 'windows-latest'}}
         run: echo "$GITHUB_WORKSPACE/goldenmaster/build/bin/Debug/" >> $GITHUB_PATH
@@ -222,7 +222,7 @@ jobs:
         working-directory: goldenmaster
         run: |
           $Env:GITHUB_WORKSPACE_UNIX = "${{ github.workspace }}" -replace "\\","/"
-          cmake -Bbuild -DCMAKE_INSTALL_PREFIX=tmp -DCMAKE_MODULE_PATH="$Env:GITHUB_WORKSPACE_UNIX/deps" -DCMAKE_BUILD_TYPE=Release && cmake --build build/ --config Release && cmake --build build/ --target install --config Release
+          cmake -Bbuild -DCMAKE_INSTALL_PREFIX=tmp -DCMAKE_MODULE_PATH="$Env:GITHUB_WORKSPACE_UNIX/deps" -DCMAKE_BUILD_TYPE=Release -DTEST_FETCH_DEPS=ON && cmake --build build/ --config Release && cmake --build build/ --target install --config Release
       - name: Archive goldenmaster release artifacts
         uses: actions/upload-artifact@v3
         with:
