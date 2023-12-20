@@ -64,10 +64,14 @@ jobs:
       - name: Run conan build Linux/macOS
         if: ${{ matrix.config.os != 'windows-latest'}}
         working-directory: goldenmaster
+        env:
+            CTEST_OUTPUT_ON_FAILURE: 1
         run: chmod +x ./scripts/test_conan.sh && ./scripts/test_conan.sh
       - name: Run conan build Windows
         if: ${{ matrix.config.os == 'windows-latest'}}
         working-directory: goldenmaster
+        env:
+            CTEST_OUTPUT_ON_FAILURE: 1
         run: cmd.exe /c  "scripts\test_conan.bat"
 
   cmake_build:
@@ -140,6 +144,8 @@ jobs:
       - name: Run cmake on Linux/Mac
         if: ${{ matrix.config.os != 'windows-latest'}}
         working-directory: goldenmaster
+        env:
+            CTEST_OUTPUT_ON_FAILURE: 1
         run: cmake -Bbuild -DCMAKE_INSTALL_PREFIX=tmp -DCMAKE_MODULE_PATH=$GITHUB_WORKSPACE/deps -DTEST_FETCH_DEPS=ON -DBUILD_TESTING=ON && cmake --build build/ && cmake --build build/ --target test && cmake --build build/ --target install
       - name: Update path env on Windows for testing
         if: ${{ matrix.config.os == 'windows-latest'}}
@@ -147,6 +153,8 @@ jobs:
       - name: Run cmake on Windows
         if: ${{ matrix.config.os == 'windows-latest'}}
         working-directory: goldenmaster
+        env:
+            CTEST_OUTPUT_ON_FAILURE: 1
         run: |
           $Env:GITHUB_WORKSPACE_UNIX = "${{ github.workspace }}" -replace "\\","/"
           cmake -Bbuild -DCMAKE_INSTALL_PREFIX=tmp -DCMAKE_MODULE_PATH="$Env:GITHUB_WORKSPACE_UNIX/deps" -DTEST_FETCH_DEPS=ON -DBUILD_TESTING=ON && cmake --build build/ && cmake --build build/ --target RUN_TESTS && cmake --build build/ --target install
