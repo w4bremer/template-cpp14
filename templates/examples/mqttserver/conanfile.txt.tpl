@@ -3,7 +3,7 @@
 {{- $module := . }}
 {{snake $module.Name}}/{{$module.Version}}
 {{- end }}
-apigear/3.5.1
+apigear/3.5.2
 
 [generators]
 cmake_find_package
