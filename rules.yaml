@@ -1,3 +1,5 @@
+engines:
+  cli: ">= v0.35.0"
 features:
   - name: api
     scopes:
@@ -5,36 +7,28 @@ features:
         documents:
           - source: CMakeLists.txt.tpl
             target: CMakeLists.txt
-            force: false
+            preserve: true
           - source: "README.md"
             raw: true
           - source: scripts/test_cmake.sh.tpl
             target: scripts/test_cmake.sh
-            force: true
       - match: module
         prefix: "modules/{{snake .Module.Name}}_module/{{snake .Module.Name}}/"
         documents:
           - source: "module/CMakeLists.txt.tpl"
             target: "CMakeLists.txt"
-            force: true
           - source: "module/ModuleConfig.cmake.in.tpl"
             target: "{{upper1 (snake .Module.Name)}}Config.cmake.in"
-            force: true
           - source: "module/generated/api/CMakeLists.txt.tpl"
             target: "generated/api/CMakeLists.txt"
-            force: true
           - source: "module/generated/api/module.h.tpl"
             target: "generated/api/{{snake .Module.Name}}.h"
-            force: true
           - source: "module/generated/api/module_common.h.tpl"
             target: "generated/api/common.h"
-            force: true
           - source: "module/generated/api/datastructs.api.h.tpl"
             target: "generated/api/datastructs.api.h"
-            force: true
           - source: "module/generated/api/datastructs.api.cpp.tpl"
             target: "generated/api/datastructs.api.cpp"
-            force: true
       - match: interface
         prefix: "modules/{{snake .Module.Name}}_module/{{snake .Module.Name}}/"
         documents:
@@ -49,16 +43,12 @@ features:
         documents:
           - source: "module/generated/core/CMakeLists.txt.tpl"
             target: "CMakeLists.txt"
-            force: true
           - source: "module/generated/core/main_test.cpp.tpl"
             target: "{{snake .Module.Name}}.test.cpp"
-            force: true
           - source: "module/generated/core/json.adapter.h.tpl"
             target: "{{snake .Module.Name}}.json.adapter.h"
-            force: true
           - source: "module/generated/core/json.adapter.cpp.tpl"
             target: "{{snake .Module.Name}}.json.adapter.cpp"
-            force: true
       - match: interface
         prefix: "modules/{{snake .Module.Name}}_module/{{snake .Module.Name}}/generated/core/"
         documents:
@@ -81,19 +71,19 @@ features:
         documents:
           - source: "module/source/CMakeLists.txt.tpl"
             target: "modules/{{snake .Module.Name}}_module/{{snake .Module.Name}}/implementation/CMakeLists.txt"
-            force: false
+            preserve: true
       - match: interface
         prefix: "modules/{{snake .Module.Name}}_module/{{snake .Module.Name}}/implementation/"
         documents:
           - source: "module/source/implementation.h.tpl"
             target: "{{lower (camel .Interface.Name)}}.h"
-            force: false
+            preserve: true
           - source: "module/source/implementation.cpp.tpl"
             target: "{{lower (camel .Interface.Name)}}.cpp"
-            force: false
+            preserve: true
           - source: "module/source/implementation_test.cpp.tpl"
             target: "{{lower (camel .Interface.Name)}}.test.cpp"
-            force: false
+            preserve: true
   - name: monitor
     requires:
       - api
@@ -339,22 +329,22 @@ features:
         documents:
         - source: scripts/test_conan.sh.tpl
           target: scripts/test_conan.sh
-          force: false
+          preserve: true
         - source: scripts/test_conan.bat.tpl
           target: scripts/test_conan.bat
-          force: false
+          preserve: true
       - match: module
         prefix: "modules//{{snake .Module.Name}}_module/"
         documents:
         - source: module/conanfile.py.tpl
           target: "conanfile.py"
-          force: false
+          preserve: true
         - source: module/test_package/CMakeLists.txt.tpl
           target: "test_package/CMakeLists.txt"
-          force: false
+          preserve: true
         - source: module/test_package/conanfile.py.tpl
           target: "test_package/conanfile.py"
-          force: false
+          preserve: true
         - source: module/test_package/main.cpp.tpl
           target: "test_package/main.cpp"
-          force: false
+          preserve: true
