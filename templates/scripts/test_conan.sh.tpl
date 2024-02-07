@@ -1,72 +1,84 @@
 {{- $features := .Features -}}
 #!/bin/bash
 set -x;
+
+#
+# function implementations
+#
+build_apigear()
+{
+    conan remove "apigear/*" -b -f --packages
+    mkdir -p apigear;
+    pushd apigear;
+    conan source ../../apigear && conan install --build missing ../../apigear -g=virtualenv && conan build ../../apigear && cmake -DBUILD_TESTING=ON ../../apigear && cmake --build . && source activate.sh && cmake --build . --target test && \
+    conan install --build missing ../../apigear && conan create ../../apigear
+    if [ $? -ne 0 ]; then exit 1; fi;
+    popd
+}
+
+build_module()
+{
+    conan remove "$1/*" -b -f --packages
+    mkdir -p modules/$1_module;
+    pushd modules/$1_module;
+    conan source ../../../modules/$1_module &&\
+    conan install --build missing ../../../modules/$1_module -g=virtualenv &&\
+    conan build ../../../modules/$1_module &&\
+    cmake -DBUILD_TESTING=ON ../../../modules/$1_module/$1 &&\
+    cmake --build . &&\
+    source activate.sh &&\
+    cmake --build . --target test &&\
+    source deactivate.sh &&\
+    conan install --build missing ../../../modules/$1_module &&\
+    conan create ../../../modules/$1_module
+    buildresult=$?
+    popd
+    if [ $buildresult -ne 0 ]; then exit 1; fi;
+}
+
+build_example()
+{
+    mkdir -p $1 &&\
+    pushd $1 &&\
+    cp -a ../../../$1/* . &&\
+    conan install --build missing . -g=virtualenv &&\
+    cmake -S . --preset release &&\
+    cmake --build .
+    buildresult=$?
+    popd
+    if [ $buildresult -ne 0 ]; then exit 1; fi;
+}
+
+#
+# main
+#
 export DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )/..";
 cd $DIR;
 rm -rf build/ && mkdir -p build && cd build;
+if [ $? -ne 0 ]; then exit 1; fi;
+
 {{- if $features.apigear }}
-conan remove "apigear/*" -b -f --packages
-mkdir -p apigear;
-pushd apigear;
-conan source ../../apigear && conan install --build missing ../../apigear -g=virtualenv && conan build ../../apigear && cmake -DBUILD_TESTING=ON ../../apigear && cmake --build . && source activate.sh && cmake --build . --target test && \
-conan install --build missing ../../apigear && conan create ../../apigear
-if [ $? -ne 0 ]; then exit 1; fi;
-popd
+build_apigear
 {{- end}}
+
 {{- range .System.Modules }}
-conan remove "{{ snake .Name }}/*" -b -f --packages
-mkdir -p modules/{{ snake .Name }}_module;
-pushd modules/{{ snake .Name }}_module;
-conan source ../../../modules/{{ snake .Name }}_module &&\
-conan install --build missing ../../../modules/{{ snake .Name }}_module -g=virtualenv &&\
-conan build ../../../modules/{{ snake .Name }}_module &&\
-cmake -DBUILD_TESTING=ON ../../../modules/{{ snake .Name }}_module/{{ snake .Name }} &&\
-cmake --build . &&\
-source activate.sh &&\
-cmake --build . --target test &&\
-source deactivate.sh &&\
-conan install --build missing ../../../modules/{{ snake .Name }}_module &&\
-conan create ../../../modules/{{ snake .Name }}_module
-if [ $? -ne 0 ]; then exit 1; fi;
-popd
+# Building and testing {{Camel .Name}} module
+build_module "{{ snake .Name }}"
 {{- end }}
+
+{{- if $features.examples }}
+build_example "examples/app"
+build_example "examples/appthreadsafe"
+{{- end}}
+
+{{- if $features.examples_olink }}
+build_example "examples/olinkserver"
+build_example "examples/olinkclient"
+{{- end}}
+
+{{- if $features.examples_mqtt }}
+build_example "examples/mqttserver"
+build_example "examples/mqttclient"
+{{- end}}
 # leave build directory
 cd ..
-{{- if $features.examples }}
-# examples app
-mkdir -p build/examples/app;
-pushd examples/app;
-conan install --build missing . --install-folder ../../build/examples/app -g=virtualenv && cmake -S . -B ../../build/examples/app --preset release && cmake --build ../../build/examples/app
-if [ $? -ne 0 ]; then exit 1; fi;
-popd
-# examples appthreadsafe
-mkdir -p build/examples/appthreadsafe;
-pushd examples/appthreadsafe;
-conan install --build missing . --install-folder ../../build/examples/appthreadsafe -g=virtualenv && cmake  -S . -B ../../build/examples/appthreadsafe --preset release && cmake --build ../../build/examples/appthreadsafe
-if [ $? -ne 0 ]; then exit 1; fi;
-popd
-{{- end}}
-{{- if $features.examples_olink }}
-mkdir -p build/examples/olinkserver;
-pushd examples/olinkserver;
-conan install --build missing . --install-folder ../../build/examples/olinkserver -g=virtualenv && cmake -S . -B ../../build/examples/olinkserver --preset release && cmake --build ../../build/examples/olinkserver
-if [ $? -ne 0 ]; then exit 1; fi;
-popd
-mkdir -p build/examples/olinkclient;
-pushd examples/olinkclient;
-conan install --build missing . --install-folder ../../build/examples/olinkclient -g=virtualenv && cmake -S . -B ../../build/examples/olinkclient --preset release && cmake --build ../../build/examples/olinkclient
-if [ $? -ne 0 ]; then exit 1; fi;
-popd
-{{- end}}
-{{- if $features.examples_mqtt }}
-mkdir -p build/examples/mqttserver;
-pushd examples/mqttserver;
-conan install --build missing . --install-folder ../../build/examples/mqttserver -g=virtualenv && cmake -S . -B ../../build/examples/mqttserver --preset release && cmake --build ../../build/examples/mqttserver
-if [ $? -ne 0 ]; then exit 1; fi;
-popd
-mkdir -p build/examples/mqttclient;
-pushd examples/mqttclient;
-conan install --build missing . --install-folder ../../build/examples/mqttclient -g=virtualenv && cmake -S . -B ../../build/examples/mqttclient --preset release && cmake --build ../../build/examples/mqttclient
-if [ $? -ne 0 ]; then exit 1; fi;
-popd
-{{- end}}
