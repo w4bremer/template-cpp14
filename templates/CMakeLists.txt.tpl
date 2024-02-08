@@ -108,7 +108,7 @@ if(NOT {{$module_id}}_FOUND)
   message(STATUS "{{$module_id}} NOT FOUND, building from source folder")
   include(FetchContent)
   FetchContent_Declare({{$module_id}}
-    SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/modules/{{$module_id}}_module/{{$module_id}}"
+    SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/modules/{{$module_id}}"
     OVERRIDE_FIND_PACKAGE
   )
   FetchContent_MakeAvailable({{$module_id}})

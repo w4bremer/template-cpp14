@@ -19,18 +19,25 @@ build_apigear()
 build_module()
 {
     conan remove "$1/*" -b -f --packages
-    mkdir -p modules/$1_module;
-    pushd modules/$1_module;
-    conan source ../../../modules/$1_module &&\
-    conan install --build missing ../../../modules/$1_module -g=virtualenv &&\
-    conan build ../../../modules/$1_module &&\
-    cmake -DBUILD_TESTING=ON ../../../modules/$1_module/$1 &&\
+    mkdir -p modules/$1;
+    pushd modules;
+    conan source ../../modules/$1/conan &&\
+    # intall FindXXX.cmake files for dependencies
+    pwd && cd $1 && pwd && conan install --build missing conan -g=virtualenv &&\
+    ## build with cmake
+    mkdir cmake_build && pushd cmake_build &&
+    pwd &&\
+    cmake -DBUILD_TESTING=ON ../../../../modules/$1 -DCMAKE_MODULE_PATH="`pwd`/.." &&\
     cmake --build . &&\
-    source activate.sh &&\
+    source ../activate.sh &&\
     cmake --build . --target test &&\
-    source deactivate.sh &&\
-    conan install --build missing ../../../modules/$1_module &&\
-    conan create ../../../modules/$1_module
+    source ../deactivate.sh &&\
+    popd &&\
+    pwd &&\
+    # build with conan
+    conan build conan/conanfile.py &&\
+    # test package creation in one step
+    conan create ../../../modules/$1/conan --build missing
     buildresult=$?
     popd
     if [ $buildresult -ne 0 ]; then exit 1; fi;

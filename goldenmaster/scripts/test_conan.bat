@@ -26,113 +26,134 @@ popd
 @REM Building and testing testbed2 module
 conan remove "testbed2/*" -b -f --packages
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
-if not exist modules\testbed2_module mkdir modules\testbed2_module
+if not exist modules\testbed2 mkdir modules\testbed2
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
-pushd modules\testbed2_module
+pushd modules
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
-conan source ../../../../modules/testbed2_module
+conan source ../../../modules/testbed2/conan
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
-conan install --build missing ../../../../modules/testbed2_module -g=virtualenv
+pushd testbed2
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
-conan build ../../../../modules/testbed2_module
+conan install --build missing conan -g=virtualenv
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
-conan create ../../../../modules/testbed2_module
+conan build conan
+if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
+popd
+conan create ../../../modules/testbed2/conan --build missing
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
 popd
 @REM Building and testing tb_enum module
 conan remove "tb_enum/*" -b -f --packages
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
-if not exist modules\tb_enum_module mkdir modules\tb_enum_module
+if not exist modules\tb_enum mkdir modules\tb_enum
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
-pushd modules\tb_enum_module
+pushd modules
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
-conan source ../../../../modules/tb_enum_module
+conan source ../../../modules/tb_enum/conan
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
-conan install --build missing ../../../../modules/tb_enum_module -g=virtualenv
+pushd tb_enum
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
-conan build ../../../../modules/tb_enum_module
+conan install --build missing conan -g=virtualenv
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
-conan create ../../../../modules/tb_enum_module
+conan build conan
+if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
+popd
+conan create ../../../modules/tb_enum/conan --build missing
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
 popd
 @REM Building and testing tb_same1 module
 conan remove "tb_same1/*" -b -f --packages
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
-if not exist modules\tb_same1_module mkdir modules\tb_same1_module
+if not exist modules\tb_same1 mkdir modules\tb_same1
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
-pushd modules\tb_same1_module
+pushd modules
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
-conan source ../../../../modules/tb_same1_module
+conan source ../../../modules/tb_same1/conan
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
-conan install --build missing ../../../../modules/tb_same1_module -g=virtualenv
+pushd tb_same1
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
-conan build ../../../../modules/tb_same1_module
+conan install --build missing conan -g=virtualenv
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
-conan create ../../../../modules/tb_same1_module
+conan build conan
+if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
+popd
+conan create ../../../modules/tb_same1/conan --build missing
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
 popd
 @REM Building and testing tb_same2 module
 conan remove "tb_same2/*" -b -f --packages
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
-if not exist modules\tb_same2_module mkdir modules\tb_same2_module
+if not exist modules\tb_same2 mkdir modules\tb_same2
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
-pushd modules\tb_same2_module
+pushd modules
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
-conan source ../../../../modules/tb_same2_module
+conan source ../../../modules/tb_same2/conan
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
-conan install --build missing ../../../../modules/tb_same2_module -g=virtualenv
+pushd tb_same2
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
-conan build ../../../../modules/tb_same2_module
+conan install --build missing conan -g=virtualenv
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
-conan create ../../../../modules/tb_same2_module
+conan build conan
+if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
+popd
+conan create ../../../modules/tb_same2/conan --build missing
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
 popd
 @REM Building and testing tb_simple module
 conan remove "tb_simple/*" -b -f --packages
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
-if not exist modules\tb_simple_module mkdir modules\tb_simple_module
+if not exist modules\tb_simple mkdir modules\tb_simple
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
-pushd modules\tb_simple_module
+pushd modules
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
-conan source ../../../../modules/tb_simple_module
+conan source ../../../modules/tb_simple/conan
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
-conan install --build missing ../../../../modules/tb_simple_module -g=virtualenv
+pushd tb_simple
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
-conan build ../../../../modules/tb_simple_module
+conan install --build missing conan -g=virtualenv
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
-conan create ../../../../modules/tb_simple_module
+conan build conan
+if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
+popd
+conan create ../../../modules/tb_simple/conan --build missing
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
 popd
 @REM Building and testing testbed1 module
 conan remove "testbed1/*" -b -f --packages
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
-if not exist modules\testbed1_module mkdir modules\testbed1_module
+if not exist modules\testbed1 mkdir modules\testbed1
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
-pushd modules\testbed1_module
+pushd modules
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
-conan source ../../../../modules/testbed1_module
+conan source ../../../modules/testbed1/conan
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
-conan install --build missing ../../../../modules/testbed1_module -g=virtualenv
+pushd testbed1
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
-conan build ../../../../modules/testbed1_module
+conan install --build missing conan -g=virtualenv
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
-conan create ../../../../modules/testbed1_module
+conan build conan
+if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
+popd
+conan create ../../../modules/testbed1/conan --build missing
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
 popd
 @REM Building and testing tb_names module
 conan remove "tb_names/*" -b -f --packages
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
-if not exist modules\tb_names_module mkdir modules\tb_names_module
+if not exist modules\tb_names mkdir modules\tb_names
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
-pushd modules\tb_names_module
+pushd modules
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
-conan source ../../../../modules/tb_names_module
+conan source ../../../modules/tb_names/conan
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
-conan install --build missing ../../../../modules/tb_names_module -g=virtualenv
+pushd tb_names
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
-conan build ../../../../modules/tb_names_module
+conan install --build missing conan -g=virtualenv
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
-conan create ../../../../modules/tb_names_module
+conan build conan
+if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
+popd
+conan create ../../../modules/tb_names/conan --build missing
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
 popd
 @REM Leave build folder

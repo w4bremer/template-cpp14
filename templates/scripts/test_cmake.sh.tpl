@@ -30,7 +30,7 @@ buildCMakeModule "apigear" $source_root "{{ if $features.olink }}-DAPIGEAR_BUILD
 if [ $buildresult -ne 0 ]; then exit 1; fi;
 {{- end}}
 {{- range .System.Modules }}
-buildCMakeModule "modules/{{ snake .Name }}_module/{{ snake .Name }}" $source_root
+buildCMakeModule "modules/{{ snake .Name }}" $source_root
 if [ $buildresult -ne 0 ]; then exit 1; fi;
 {{- end }}
 {{- if $features.examples }}

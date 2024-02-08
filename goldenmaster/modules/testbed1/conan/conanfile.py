@@ -1,4 +1,6 @@
 from conans import ConanFile, CMake, tools
+from conan.tools.cmake import cmake_layout
+from conan.tools.files import copy
 from pathlib import os
 
 class testbed1Conan(ConanFile):
@@ -10,7 +12,6 @@ class testbed1Conan(ConanFile):
     settings = "os", "compiler", "build_type", "arch"
     requires = "catch2/2.13.7", "nlohmann_json/3.9.1", "apigear/3.5.2"
     generators = "cmake_find_package"
-    exports_sources = "*"
     options = {"build_testing": [True, False]}
     default_options = {
         "build_testing": True,
@@ -19,11 +20,30 @@ class testbed1Conan(ConanFile):
         "apigear:enable_mqtt": True,
     }
 
+    def layout(self):
+        self.folders.root = ".."
+        self.folders.source = "testbed1"
+        # cmake_layout(self)
+
+    def export_sources(self):
+        # move one level up from the recipe folder
+        source_folder = os.path.join(self.recipe_folder, "..")
+        # wrap sources into modules name
+        dst_folder = os.path.join(self.export_sources_folder, "testbed1")
+        copy(self, "*", source_folder, dst_folder)
+
     def build(self):
         cmake = CMake(self)
         if not tools.cross_building(self):
             cmake.definitions['BUILD_TESTING'] = self.options.build_testing
-        cmake.configure(source_folder="./testbed1")
+
+        # workaround wrong layout setup if not using "conan create"
+        if self.folders.source_folder != self.export_sources_folder:
+            # we are building outside of the conan cache
+            cmake.configure("..")
+        else:
+            cmake.configure()
+
         cmake.build()
         if not tools.cross_building(self):
             build_type = self.settings.get_safe("build_type", default="Release")

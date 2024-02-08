@@ -30,17 +30,20 @@ popd
 @REM Building and testing {{snake .Name}} module
 conan remove "{{snake .Name}}/*" -b -f --packages
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
-if not exist modules\{{snake .Name}}_module mkdir modules\{{snake .Name}}_module
+if not exist modules\{{snake .Name}} mkdir modules\{{snake .Name}}
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
-pushd modules\{{snake .Name}}_module
+pushd modules
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
-conan source ../../../../modules/{{snake .Name}}_module
+conan source ../../../modules/{{snake .Name}}/conan
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
-conan install --build missing ../../../../modules/{{snake .Name}}_module -g=virtualenv
+pushd {{snake .Name}}
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
-conan build ../../../../modules/{{snake .Name}}_module
+conan install --build missing conan -g=virtualenv
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
-conan create ../../../../modules/{{snake .Name}}_module
+conan build conan
+if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
+popd
+conan create ../../../modules/{{snake .Name}}/conan --build missing
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
 popd
 {{- end }}

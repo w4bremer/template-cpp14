@@ -26,19 +26,19 @@ rm -rf build_cmake/ && mkdir -p build_cmake;
 if [ $? -ne 0 ]; then exit 1; fi;
 buildCMakeModule "apigear" $source_root "-DAPIGEAR_BUILD_WITH_OLINK=ON -DAPIGEAR_BUILD_WITH_MONITOR=ON -DAPIGEAR_BUILD_WITH_MQTT=ON"
 if [ $buildresult -ne 0 ]; then exit 1; fi;
-buildCMakeModule "modules/testbed2_module/testbed2" $source_root
+buildCMakeModule "modules/testbed2" $source_root
 if [ $buildresult -ne 0 ]; then exit 1; fi;
-buildCMakeModule "modules/tb_enum_module/tb_enum" $source_root
+buildCMakeModule "modules/tb_enum" $source_root
 if [ $buildresult -ne 0 ]; then exit 1; fi;
-buildCMakeModule "modules/tb_same1_module/tb_same1" $source_root
+buildCMakeModule "modules/tb_same1" $source_root
 if [ $buildresult -ne 0 ]; then exit 1; fi;
-buildCMakeModule "modules/tb_same2_module/tb_same2" $source_root
+buildCMakeModule "modules/tb_same2" $source_root
 if [ $buildresult -ne 0 ]; then exit 1; fi;
-buildCMakeModule "modules/tb_simple_module/tb_simple" $source_root
+buildCMakeModule "modules/tb_simple" $source_root
 if [ $buildresult -ne 0 ]; then exit 1; fi;
-buildCMakeModule "modules/testbed1_module/testbed1" $source_root
+buildCMakeModule "modules/testbed1" $source_root
 if [ $buildresult -ne 0 ]; then exit 1; fi;
-buildCMakeModule "modules/tb_names_module/tb_names" $source_root
+buildCMakeModule "modules/tb_names" $source_root
 if [ $buildresult -ne 0 ]; then exit 1; fi;
 # examples app
 buildCMakeBinary "examples/app" $source_root

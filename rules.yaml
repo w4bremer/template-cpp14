@@ -13,7 +13,7 @@ features:
           - source: scripts/test_cmake.sh.tpl
             target: scripts/test_cmake.sh
       - match: module
-        prefix: "modules/{{snake .Module.Name}}_module/{{snake .Module.Name}}/"
+        prefix: "modules/{{snake .Module.Name}}/"
         documents:
           - source: "module/CMakeLists.txt.tpl"
             target: "CMakeLists.txt"
@@ -30,7 +30,7 @@ features:
           - source: "module/generated/api/datastructs.api.cpp.tpl"
             target: "generated/api/datastructs.api.cpp"
       - match: interface
-        prefix: "modules/{{snake .Module.Name}}_module/{{snake .Module.Name}}/"
+        prefix: "modules/{{snake .Module.Name}}/"
         documents:
         - source: "module/generated/api/interface.api.h.tpl"
           target: "generated/api/{{lower (camel .Interface.Name)}}.api.h"
@@ -39,7 +39,7 @@ features:
       - api
     scopes:
       - match: module
-        prefix: "modules/{{snake .Module.Name}}_module/{{snake .Module.Name}}/generated/core/"
+        prefix: "modules/{{snake .Module.Name}}/generated/core/"
         documents:
           - source: "module/generated/core/CMakeLists.txt.tpl"
             target: "CMakeLists.txt"
@@ -50,7 +50,7 @@ features:
           - source: "module/generated/core/json.adapter.cpp.tpl"
             target: "{{snake .Module.Name}}.json.adapter.cpp"
       - match: interface
-        prefix: "modules/{{snake .Module.Name}}_module/{{snake .Module.Name}}/generated/core/"
+        prefix: "modules/{{snake .Module.Name}}/generated/core/"
         documents:
           - source: "module/generated/core/interface.data.h.tpl"
             target: "{{lower (camel .Interface.Name)}}.data.h"
@@ -70,10 +70,10 @@ features:
       - match: module
         documents:
           - source: "module/source/CMakeLists.txt.tpl"
-            target: "modules/{{snake .Module.Name}}_module/{{snake .Module.Name}}/implementation/CMakeLists.txt"
+            target: "modules/{{snake .Module.Name}}/implementation/CMakeLists.txt"
             preserve: true
       - match: interface
-        prefix: "modules/{{snake .Module.Name}}_module/{{snake .Module.Name}}/implementation/"
+        prefix: "modules/{{snake .Module.Name}}/implementation/"
         documents:
           - source: "module/source/implementation.h.tpl"
             target: "{{lower (camel .Interface.Name)}}.h"
@@ -93,9 +93,9 @@ features:
     - match: module
       documents:
           - source: "module/generated/monitor/CMakeLists.txt.tpl"
-            target: "modules/{{snake .Module.Name}}_module/{{snake .Module.Name}}/generated/monitor/CMakeLists.txt"
+            target: "modules/{{snake .Module.Name}}/generated/monitor/CMakeLists.txt"
     - match: interface
-      prefix: "modules/{{snake .Module.Name}}_module/{{snake .Module.Name}}/generated/monitor/"
+      prefix: "modules/{{snake .Module.Name}}/generated/monitor/"
       documents:
           - source: "module/generated/monitor/interface.tracedecorator.h.tpl"
             target: "{{lower (camel .Interface.Name)}}.tracedecorator.h"
@@ -118,9 +118,9 @@ features:
     - match: module
       documents:
           - source: "module/generated/olink/CMakeLists.txt.tpl"
-            target: "modules/{{snake .Module.Name}}_module/{{snake .Module.Name}}/generated/olink/CMakeLists.txt"
+            target: "modules/{{snake .Module.Name}}/generated/olink/CMakeLists.txt"
     - match: interface
-      prefix: "modules/{{snake .Module.Name}}_module/{{snake .Module.Name}}/generated/olink/"
+      prefix: "modules/{{snake .Module.Name}}/generated/olink/"
       documents:
         - source: "module/generated/olink/interfaceservice.h.tpl"
           target: "{{lower (camel .Interface.Name)}}service.h"
@@ -139,9 +139,9 @@ features:
     - match: module
       documents:
         - source: "module/generated/mqtt/CMakeLists.txt.tpl"
-          target: "modules/{{snake .Module.Name}}_module/{{snake .Module.Name}}/generated/mqtt/CMakeLists.txt"
+          target: "modules/{{snake .Module.Name}}/generated/mqtt/CMakeLists.txt"
     - match: interface
-      prefix: "modules/{{snake .Module.Name}}_module/{{snake .Module.Name}}/generated/mqtt/"
+      prefix: "modules/{{snake .Module.Name}}/generated/mqtt/"
       documents:
         - source: "module/generated/mqtt/mqttservice.h.tpl"
           target: "{{lower (camel .Interface.Name)}}service.h"
@@ -334,17 +334,17 @@ features:
           target: scripts/test_conan.bat
           preserve: true
       - match: module
-        prefix: "modules//{{snake .Module.Name}}_module/"
+        prefix: "modules/{{snake .Module.Name}}/conan/"
         documents:
-        - source: module/conanfile.py.tpl
+        - source: module/conan/conanfile.py.tpl
           target: "conanfile.py"
           preserve: true
-        - source: module/test_package/CMakeLists.txt.tpl
+        - source: module/conan/test_package/CMakeLists.txt.tpl
           target: "test_package/CMakeLists.txt"
           preserve: true
-        - source: module/test_package/conanfile.py.tpl
+        - source: module/conan/test_package/conanfile.py.tpl
           target: "test_package/conanfile.py"
           preserve: true
-        - source: module/test_package/main.cpp.tpl
+        - source: module/conan/test_package/main.cpp.tpl
           target: "test_package/main.cpp"
           preserve: true

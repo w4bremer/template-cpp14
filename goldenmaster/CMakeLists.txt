@@ -97,7 +97,7 @@ if(NOT testbed2_FOUND)
   message(STATUS "testbed2 NOT FOUND, building from source folder")
   include(FetchContent)
   FetchContent_Declare(testbed2
-    SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/modules/testbed2_module/testbed2"
+    SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/modules/testbed2"
     OVERRIDE_FIND_PACKAGE
   )
   FetchContent_MakeAvailable(testbed2)
@@ -108,7 +108,7 @@ if(NOT tb_enum_FOUND)
   message(STATUS "tb_enum NOT FOUND, building from source folder")
   include(FetchContent)
   FetchContent_Declare(tb_enum
-    SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/modules/tb_enum_module/tb_enum"
+    SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/modules/tb_enum"
     OVERRIDE_FIND_PACKAGE
   )
   FetchContent_MakeAvailable(tb_enum)
@@ -119,7 +119,7 @@ if(NOT tb_same1_FOUND)
   message(STATUS "tb_same1 NOT FOUND, building from source folder")
   include(FetchContent)
   FetchContent_Declare(tb_same1
-    SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/modules/tb_same1_module/tb_same1"
+    SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/modules/tb_same1"
     OVERRIDE_FIND_PACKAGE
   )
   FetchContent_MakeAvailable(tb_same1)
@@ -130,7 +130,7 @@ if(NOT tb_same2_FOUND)
   message(STATUS "tb_same2 NOT FOUND, building from source folder")
   include(FetchContent)
   FetchContent_Declare(tb_same2
-    SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/modules/tb_same2_module/tb_same2"
+    SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/modules/tb_same2"
     OVERRIDE_FIND_PACKAGE
   )
   FetchContent_MakeAvailable(tb_same2)
@@ -141,7 +141,7 @@ if(NOT tb_simple_FOUND)
   message(STATUS "tb_simple NOT FOUND, building from source folder")
   include(FetchContent)
   FetchContent_Declare(tb_simple
-    SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/modules/tb_simple_module/tb_simple"
+    SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/modules/tb_simple"
     OVERRIDE_FIND_PACKAGE
   )
   FetchContent_MakeAvailable(tb_simple)
@@ -152,7 +152,7 @@ if(NOT testbed1_FOUND)
   message(STATUS "testbed1 NOT FOUND, building from source folder")
   include(FetchContent)
   FetchContent_Declare(testbed1
-    SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/modules/testbed1_module/testbed1"
+    SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/modules/testbed1"
     OVERRIDE_FIND_PACKAGE
   )
   FetchContent_MakeAvailable(testbed1)
@@ -163,7 +163,7 @@ if(NOT tb_names_FOUND)
   message(STATUS "tb_names NOT FOUND, building from source folder")
   include(FetchContent)
   FetchContent_Declare(tb_names
-    SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/modules/tb_names_module/tb_names"
+    SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/modules/tb_names"
     OVERRIDE_FIND_PACKAGE
   )
   FetchContent_MakeAvailable(tb_names)
