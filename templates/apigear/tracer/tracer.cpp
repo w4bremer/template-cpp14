@@ -3,7 +3,7 @@ Tracer
 Copyright (C) 2020 ApiGear UG
 */
 #include "tracer.h"
-#include "../utilities/logger.h"
+#include "utilities/logger.h"
 #include <Poco/Dynamic/Var.h>
 #include <Poco/Util/TimerTaskAdapter.h>
 #include <Poco/Net/HTTPClientSession.h>

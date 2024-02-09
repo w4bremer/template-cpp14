@@ -26,7 +26,7 @@
 
 #include "private/apigear_olink.h"
 #include "olink/core/types.h"
-#include "../utilities/logger.h"
+#include "apigear/utilities/logger.h"
 
 namespace ApiGear {
 namespace Utilities {

@@ -4,7 +4,7 @@
 #include "private/olinkwebsockethandler.h"
 #include "private/requesthandlerfactory.h"
 #include "private/iconnectionstorage.h"
-#include "../utilities/logger.h"
+#include "utilities/logger.h"
 
 #include <iostream>
 

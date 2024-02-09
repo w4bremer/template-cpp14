@@ -1,6 +1,6 @@
 #include "private/socketwrapper.h"
 #include "private/isocketuser.h"
-#include "../utilities/logger.h"
+#include "utilities/logger.h"
 
 #include <Poco/Util/TimerTaskAdapter.h>
 #include <Poco/Net/WebSocket.h>

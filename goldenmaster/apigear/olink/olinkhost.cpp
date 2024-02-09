@@ -26,7 +26,7 @@
 #include "olink/remoteregistry.h"
 #include <iostream>
 #include "private/requesthandlerfactory.h"
-#include "../utilities/logger.h"
+#include "utilities/logger.h"
 
 using namespace ApiGear::PocoImpl;
 

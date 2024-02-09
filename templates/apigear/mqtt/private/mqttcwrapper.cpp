@@ -1,6 +1,6 @@
 #include <iostream>
 #include "mqttcwrapper.h"
-#include "../utilities/logger.h"
+#include "utilities/logger.h"
 #include <chrono>
 #include <random>
 #include <memory>

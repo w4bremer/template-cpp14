@@ -7,7 +7,7 @@
 #include "olinkconnection.h"
 #include "olink/clientregistry.h"
 #include "olink/iobjectsink.h"
-#include "../utilities/logger.h"
+#include "utilities/logger.h"
 
 #include <memory>
 

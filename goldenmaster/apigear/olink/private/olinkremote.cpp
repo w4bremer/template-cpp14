@@ -7,7 +7,7 @@
 
 #include "olink/remotenode.h"
 #include "olink/remoteregistry.h"
-#include "../utilities/logger.h"
+#include "utilities/logger.h"
 
 #include <iostream>
 
