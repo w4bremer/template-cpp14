@@ -66,18 +66,14 @@ the following file structure will be generated. The purpose and content of each 
  ┃ ┃ ...
  ┃ ┣ 📂examples
  ┃ ┣ 📂modules
- ┃ ┃   ┗ 📂io_world_module
- ┃ ┃      ┗ 📂io_world
- ┃ ┃         ┣ 📂generated
- ┃ ┃         ┃  ┣ 📂api
- ┃ ┃         ┃  ┣ 📂core
- ┃ ┃         ┃  ┣ 📂mqtt
- ┃ ┃         ┃  ┣ 📂olink
- ┃ ┃         ┃  ┃ ┣ 📜CMakeLists.txt
- ┃ ┃         ┃  ┃ ┣ 📜helloclient.cpp
- ┃ ┃         ┃  ┃ ┣ 📜helloclient.h
- ┃ ┃         ┃  ┃ ┣ 📜helloservice.cpp
- ┃ ┃         ┃  ┃ ┗ 📜helloservice.h
+ ┃ ┃ ┗ 📂io_world
+ ┃ ┃ ┃ ┣ 📂generated
+ ┃ ┃ ┃ ┃ ┗ 📂olink
+ ┃ ┃ ┃ ┃ ┃ ┣ 📜CMakeLists.txt
+ ┃ ┃ ┃ ┃ ┃ ┣ 📜helloclient.cpp
+ ┃ ┃ ┃ ┃ ┃ ┣ 📜helloclient.h
+ ┃ ┃ ┃ ┃ ┃ ┣ 📜helloservice.cpp
+ ┃ ┃ ┃ ┃ ┃ ┗ 📜helloservice.h
  ┃ ┣ 📜 Lifecycle for olink client-server implementation.md
  ...
 ```

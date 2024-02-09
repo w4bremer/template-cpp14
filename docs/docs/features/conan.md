@@ -32,13 +32,14 @@ The files for conan will be generated for project:
  ┃ ┃ ┃ ┗ 📜conanfile.txt
  ┃ ┃ ... 
  ┃ ┣ 📂modules
- ┃ ┃   ┗ 📂io_world_module
- ┃ ┃      ┣ 📂io_world (no changes)
- ┃ ┃      ┣ 📂test_package
- ┃ ┃      ┃  ┣ 📜CMakeLists.txt
- ┃ ┃      ┃  ┣ 📜conanfile.py
- ┃ ┃      ┃  ┗ 📜main.cpp
- ┃ ┃      ┗ 📜conanfile.py
+ ┃ ┃ ┗ 📂io_world
+ ┃ ┃ ┃ ┣ 📂conan
+ ┃ ┃ ┃ ┃ ┣ 📂test_package
+ ┃ ┃ ┃ ┃ ┃ ┣ 📜CMakeLists.txt
+ ┃ ┃ ┃ ┃ ┃ ┣ 📜conanfile.py
+ ┃ ┃ ┃ ┃ ┃ ┗ 📜main.cpp
+ ┃ ┃ ┃ ┃ ┗ 📜conanfile.py
+ ┣ 📂scripts
  ┃ ┣ 📜test_conan.bat
  ┃ ┣ 📜test_conan.sh
  ```
@@ -57,10 +58,10 @@ Modify the script to suit your needs. You can choose one of the building methods
 
 
 Some of the above files, the `📂cpp_hello_world/apigear/conanfile.py` or `conanfiles.txt` generated for each example were present even without conan feature - for simplicity of generation rules. <br />
-The `📂cpp_hello_world/apigear/conanfile.py` contains recipe for building additonal library - netork layer for cpp-template,  independent from your API, and necessary for [ObjectLink core](https://github.com/apigear-io/objectlink-core-cpp), for aligning to MQTT protocol or for tracing. <br />
-The  `📂cpp_hello_world📂modules/io_world_module/conanfile.py` is the main recipe for your API module, which contains all the info necessary for packaging.
+The `📂cpp_hello_world/apigear/conanfile.py` contains recipe for building additional library - network layer for cpp-template,  independent from your API, and necessary for [ObjectLink core](https://github.com/apigear-io/objectlink-core-cpp), for aligning to MQTT protocol or for tracing. <br />
+The  `📂cpp_hello_world📂modules/io_world/conan/conanfile.py` is the main recipe for your API module, which contains all the info necessary for packaging.
 Dependencies for the examples are stored in conanfile.txt files in each of the examples ( conanfile.txt is a simplification of conanfile.py, that can be used exclusively to consume dependencies, but not to create packages).
 
 The test package
-Files inside the `📂cpp_hello_world/modules/io_world_module/test_package contain a test package`. It instantiates `Hello` implementation from a `stub` feature. It is a check that package for `io_module` was created in proper way, can be found and used.
+Files inside the `📂cpp_hello_world/modules/io_world/conan/test_package contain a test package`. It instantiates `Hello` implementation from a `stub` feature. It is a check that package for `io_world` was created in proper way, can be found and used.
  

@@ -35,16 +35,15 @@ the following file structure will be generated inside the target folder. The pur
  ┃ ┣ 📂apigear
  ┃ ┣ 📂examples
  ┃ ┣ 📂modules
- ┃ ┃   ┗ 📂io_world_module
- ┃ ┃      ┗ 📂io_world
- ┃ ┃         ┣ 📂generated
- ┃ ┃         ┃  ┣ 📂api
- ┃ ┃         ┃  ┃  ┣ 📜CMakeLists.txt
- ┃ ┃         ┃  ┃  ┣ 📜common.h
- ┃ ┃         ┃  ┃  ┣ 📜datastructs.api.cpp
- ┃ ┃         ┃  ┃  ┣ 📜datastructs.api.h
- ┃ ┃         ┃  ┃  ┣ 📜hello.api.h
- ┃ ┃         ┃  ┃  ┗ 📜io_world.h
+ ┃ ┃ ┗ 📂io_world
+ ┃ ┃ ┃ ┣ 📂generated
+ ┃ ┃ ┃ ┃ ┣ 📂api
+ ┃ ┃ ┃ ┃ ┃ ┣ 📜CMakeLists.txt
+ ┃ ┃ ┃ ┃ ┃ ┣ 📜common.h
+ ┃ ┃ ┃ ┃ ┃ ┣ 📜datastructs.api.cpp
+ ┃ ┃ ┃ ┃ ┃ ┣ 📜datastructs.api.h
+ ┃ ┃ ┃ ┃ ┃ ┣ 📜hello.api.h
+ ┃ ┃ ┃ ┃ ┃ ┗ 📜io_world.h
  .. .
 ```
 

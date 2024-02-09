@@ -34,16 +34,14 @@ the following file structure will be generated. The purpose and content of each 
  ┃ ┃ ┃ ┗ 📜tracer.test.cpp
  ┃ ┣ 📂examples
  ┃ ┣ 📂modules
- ┃ ┃   ┗ 📂io_world_module
- ┃ ┃      ┗ 📂io_world
- ┃ ┃         ┣ 📂generated
- ┃ ┃         ┃  ...
- ┃ ┃         ┃  ┣ 📂monitor
- ┃ ┃         ┃  ┃ ┣ 📜CMakeLists.txt
- ┃ ┃         ┃  ┃ ┣ 📜hello.tracedecorator.cpp
- ┃ ┃         ┃  ┃ ┣ 📜hello.tracedecorator.h
- ┃ ┃         ┃  ┃ ┣ 📜hello.tracer.cpp
- ┃ ┃         ┃  ┃ ┗ 📜hello.tracer.h
+ ┃ ┃ ┗ 📂io_world
+ ┃ ┃ ┃ ┣ 📂generated
+ ┃ ┃ ┃ ┃ ┣ 📂monitor
+ ┃ ┃ ┃ ┃ ┃ ┣ 📜CMakeLists.txt
+ ┃ ┃ ┃ ┃ ┃ ┣ 📜hello.tracedecorator.cpp
+ ┃ ┃ ┃ ┃ ┃ ┣ 📜hello.tracedecorator.h
+ ┃ ┃ ┃ ┃ ┃ ┣ 📜hello.tracer.cpp
+ ┃ ┃ ┃ ┃ ┃ ┗ 📜hello.tracer.h
  ...
 ```
 

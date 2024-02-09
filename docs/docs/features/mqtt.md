@@ -20,7 +20,7 @@ If you need to use MQTT in high load application consider using our qt template 
 :::
 
 This feature does not only introduce MQTT protocol into your project, but also show that an existing protocol can be adapted for sharing your data in your ecosystem. When going through this document you may notice this implementation contains general client/server adapters in `📂hello-world/apigear/mqtt`
-and an interface specific part generated from templates for each interface in `📂hello-world/cpp_hello_world/modules/io_world_module/generated/mqtt`.
+and an interface specific part generated from templates for each interface in `📂hello-world/cpp_hello_world/modules/io_world/generated/mqtt`.
 
 This feature provides a _client_ and _service_ adapter for your interfaces for the MQTT protocol. It allows you to connect different applications in the same or different technologies (check all of our [templates](https://docs.apigear.io/docs/category/sdk-templates)).
 
@@ -63,17 +63,14 @@ the following file structure is generated. The purpose and content of each file 
  ┃ ┃ ...
  ┃ ┣ 📂examples
  ┃ ┣ 📂modules
- ┃ ┃   ┗ 📂io_world_module
- ┃ ┃      ┗ 📂io_world
- ┃ ┃         ┣ 📂generated
- ┃ ┃         ┃  ┣ 📂api
- ┃ ┃         ┃  ┣ 📂core
- ┃ ┃         ┃  ┣ 📂mqtt
- ┃ ┃         ┃  ┃ ┣ 📜CMakeLists.txt
- ┃ ┃         ┃  ┃ ┣ 📜helloclient.cpp
- ┃ ┃         ┃  ┃ ┣ 📜helloclient.h
- ┃ ┃         ┃  ┃ ┣ 📜helloservice.cpp
- ┃ ┃         ┃  ┃ ┗ 📜helloservice.h
+ ┃ ┃ ┗ 📂io_world
+ ┃ ┃ ┃ ┣ 📂generated
+ ┃ ┃ ┃ ┃ ┣ 📂mqtt
+ ┃ ┃ ┃ ┃ ┃ ┣ 📜CMakeLists.txt
+ ┃ ┃ ┃ ┃ ┃ ┣ 📜helloclient.cpp
+ ┃ ┃ ┃ ┃ ┃ ┣ 📜helloclient.h
+ ┃ ┃ ┃ ┃ ┃ ┣ 📜helloservice.cpp
+ ┃ ┃ ┃ ┃ ┃ ┗ 📜helloservice.h
  ...
 ```
 

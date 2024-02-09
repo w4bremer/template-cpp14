@@ -18,7 +18,7 @@ With the stub feature you'll get an additional `core` folder generated, it conta
 Its content will be explained below.
 
 :::note
-For the basic skeleton implementation you'll find in `📂hello-world\cpp_hello_world\modules\io_world_module\implementation`
+For the basic skeleton implementation you'll find in `📂hello-world\cpp_hello_world\modules\io_world\implementation`
 the bear minimum classes are the [publisher](stubs#publisher) and [data](stubs#data) from `core` features. For the start focus on them and then explore more functionality.
 :::
 
@@ -39,26 +39,24 @@ the following file structure will be generated. The purpose and content of each 
  ┃ ┣ 📂apigear
  ┃ ┣ 📂examples
  ┃ ┣ 📂modules
- ┃ ┃   ┗ 📂io_world_module
- ┃ ┃      ┗ 📂io_world
- ┃ ┃         ┣ 📂generated
- ┃ ┃         ┃  ┣ 📂api
- ┃ ┃         ┃  ┣ 📂core
- ┃ ┃         ┃  ┃  ┣ 📜CMakeLists.txt
- ┃ ┃         ┃  ┃  ┣ 📜hello.data.h
- ┃ ┃         ┃  ┃  ┣ 📜hello.publisher.cpp
- ┃ ┃         ┃  ┃  ┣ 📜hello.publisher.h
- ┃ ┃         ┃  ┃  ┣ 📜hello.threadsafedecorator.cpp
- ┃ ┃         ┃  ┃  ┣ 📜hello.threadsafedecorator.h
- ┃ ┃         ┃  ┃  ┣ 📜io_world.json.adapter.cpp
- ┃ ┃         ┃  ┃  ┣ 📜io_world.json.adapter.h
- ┃ ┃         ┃  ┃  ┗ 📜io_world.test.h
- ┃ ┃         ┃  ...
- ┃ ┃         ┣ 📂implementation
- ┃ ┃         ┃  ┣ 📜CMakeLists.txt
- ┃ ┃         ┃  ┣ 📜hello.cpp
- ┃ ┃         ┃  ┣ 📜hello.h
- ┃ ┃         ┃  ┗ 📜hello.test.cpp
+ ┃ ┃ ┗ 📂io_world
+ ┃ ┃ ┃ ┣ 📂generated
+ ┃ ┃ ┃ ┃ ┣ 📂api
+ ┃ ┃ ┃ ┃ ┣ 📂core
+ ┃ ┃ ┃ ┃ ┃ ┣ 📜CMakeLists.txt
+ ┃ ┃ ┃ ┃ ┃ ┣ 📜hello.data.h
+ ┃ ┃ ┃ ┃ ┃ ┣ 📜hello.publisher.cpp
+ ┃ ┃ ┃ ┃ ┃ ┣ 📜hello.publisher.h
+ ┃ ┃ ┃ ┃ ┃ ┣ 📜hello.threadsafedecorator.cpp
+ ┃ ┃ ┃ ┃ ┃ ┣ 📜hello.threadsafedecorator.h
+ ┃ ┃ ┃ ┃ ┃ ┣ 📜io_world.json.adapter.cpp
+ ┃ ┃ ┃ ┃ ┃ ┣ 📜io_world.json.adapter.h
+ ┃ ┃ ┃ ┃ ┃ ┗ 📜io_world.test.cpp
+ ┃ ┃ ┃ ┣ 📂implementation
+ ┃ ┃ ┃ ┃ ┣ 📜CMakeLists.txt
+ ┃ ┃ ┃ ┃ ┣ 📜hello.cpp
+ ┃ ┃ ┃ ┃ ┣ 📜hello.h
+ ┃ ┃ ┃ ┃ ┗ 📜hello.test.cpp
  ...
 ```
 

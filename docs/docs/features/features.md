@@ -99,14 +99,16 @@ This graph shows the full folder structure which is generated for `all` features
  ┃ ┣ 📂apigear
  ┃ ┣ 📂examples
  ┃ ┣ 📂modules
- ┃ ┃   ┗ 📂io_world_module
- ┃ ┃      ┗ 📂io_world
- ┃ ┃         ┣ 📂generated
- ┃ ┃         ┃  ┣ 📂api
- ┃ ┃         ┃  ┣ 📂core
- ┃ ┃         ┃  ┣ 📂mqtt
- ┃ ┃         ┃  ┗ 📂olink
- ┃ ┃         ┃ 📂implementation
- ┃           ┗ 📜CMakeLists.txt
+ ┃ ┃ ┗ 📂io_world
+ ┃ ┃ ┃ ┣ 📂conan
+ ┃ ┃ ┃ ┣ 📂generated
+ ┃ ┃ ┃ ┃ ┣ 📂api
+ ┃ ┃ ┃ ┃ ┣ 📂core
+ ┃ ┃ ┃ ┃ ┣ 📂monitor
+ ┃ ┃ ┃ ┃ ┣ 📂mqtt
+ ┃ ┃ ┃ ┃ ┗ 📂olink
+ ┃ ┃ ┃ ┣ 📂implementation
+ ┃ ┃ ┃ ┣ 📜CMakeLists.txt
+ ┃ ┃ ┃ ┗ 📜Io_worldConfig.cmake.in
  ┃ ┗ 📜CMakeLists.txt
 ```

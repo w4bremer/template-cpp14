@@ -147,11 +147,13 @@ In this case the folder structure should look similar to this
  ┣ 📂cpp_hello_world
  # highlight-next-line
  ┃ ┣ 📂modules
- ┃ ┃   ┗ 📂io_world_module
- ┃ ┃      ┗ 📂io_world
- ┃ ┃         ┣ 📂generated
- ┃ ┃         ┣ 📂implementation
- ┃ ┃         ┗ 📜CMakeLists.txt
+ ┃ ┃ ┗ 📂io_world
+ ┃ ┃ ┃ ┣ 📂generated
+ ┃ ┃ ┃ ┣ 📂implementation
+ ┃ ┃ ┃ ┃ ┣ 📜CMakeLists.txt
+ ┃ ┃ ┃ ┃ ┣ 📜hello.cpp
+ ┃ ┃ ┃ ┃ ┣ 📜hello.h
+ ┃ ┃ ┃ ┃ ┗ 📜hello.test.cpp
  ┃ ┗ 📜CMakeLists.txt
 ```
 
@@ -182,7 +184,7 @@ $ apigear generate solution apigear/helloworld.solution.yaml
 The generated code provides cpp _C++_ implementations. The following paragraphs show how you can use it.
 You can start your project loading the top level CMakeLists.txt in `cpp_hello_world` folder.
 
-The 'io_world_module/io_world/generated/api/' folder contains all definitions of the enums and structs for your module, as well as the interface classes for your Interfaces.
+The 'io_world/io_world/generated/api/' folder contains all definitions of the enums and structs for your module, as well as the interface classes for your Interfaces.
 From now on you can simply include the header files for the api interface or the stub implementation and use it.
 For more details on generated features please check [api](features/api.md), [stubs](features/stubs.md).
 
