@@ -9,11 +9,14 @@ set (SOURCES
 add_library(poco-tracer SHARED ${SOURCES})
 add_library(apigear::poco-tracer ALIAS poco-tracer)
 target_include_directories(poco-tracer
-    PUBLIC
+    PRIVATE
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../>
+    PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../../>
-    $<INSTALL_INTERFACE:include>)
-target_link_libraries(poco-tracer PUBLIC Poco::Net Poco::Util apigear::utilities nlohmann_json::nlohmann_json)
+    $<INSTALL_INTERFACE:include>
+)
+target_link_libraries(poco-tracer PUBLIC Poco::Net Poco::Util nlohmann_json::nlohmann_json PRIVATE apigear::utilities)
 
 # add test cases
 if(BUILD_TESTING)

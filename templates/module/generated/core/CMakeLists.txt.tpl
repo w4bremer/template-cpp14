@@ -18,8 +18,7 @@ add_library({{$module_id}}-core SHARED ${SOURCES_CORE_SUPPORT})
 add_library({{$module_id}}::{{$module_id}}-core ALIAS {{$module_id}}-core)
 target_include_directories({{$module_id}}-core
     PUBLIC
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../../../>
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../../../../modules>
+    $<BUILD_INTERFACE:${MODULES_DIR}>
     $<INSTALL_INTERFACE:include>
 )
 target_link_libraries({{$module_id}}-core PUBLIC {{$module_id}}::{{$module_id}}-api nlohmann_json::nlohmann_json)

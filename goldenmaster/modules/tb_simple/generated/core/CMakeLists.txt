@@ -23,8 +23,7 @@ add_library(tb_simple-core SHARED ${SOURCES_CORE_SUPPORT})
 add_library(tb_simple::tb_simple-core ALIAS tb_simple-core)
 target_include_directories(tb_simple-core
     PUBLIC
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../../../>
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../../../../modules>
+    $<BUILD_INTERFACE:${MODULES_DIR}>
     $<INSTALL_INTERFACE:include>
 )
 target_link_libraries(tb_simple-core PUBLIC tb_simple::tb_simple-api nlohmann_json::nlohmann_json)

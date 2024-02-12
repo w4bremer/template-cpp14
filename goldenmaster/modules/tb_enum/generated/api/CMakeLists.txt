@@ -10,8 +10,7 @@ add_library(tb_enum-api SHARED ${SOURCES})
 add_library(tb_enum::tb_enum-api ALIAS tb_enum-api)
 target_include_directories(tb_enum-api
     PUBLIC
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../../../>
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../../../../modules>
+    $<BUILD_INTERFACE:${MODULES_DIR}>
     $<INSTALL_INTERFACE:include>
 )
 # ensure maximum compiler support

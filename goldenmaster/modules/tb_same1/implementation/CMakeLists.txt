@@ -16,11 +16,10 @@ add_library(tb_same1-implementation SHARED ${SOURCES_CORE_IMPL})
 add_library(tb_same1::tb_same1-implementation ALIAS tb_same1-implementation)
 target_include_directories(tb_same1-implementation
     PUBLIC
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../../>
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../../../modules>
+    $<BUILD_INTERFACE:${MODULES_DIR}>
     $<INSTALL_INTERFACE:include>
 )
-target_link_libraries(tb_same1-implementation PUBLIC tb_same1::tb_same1-api tb_same1::tb_same1-core Threads::Threads)
+target_link_libraries(tb_same1-implementation PUBLIC tb_same1::tb_same1-api PRIVATE tb_same1::tb_same1-core Threads::Threads)
 # ensure maximum compiler support
 if(NOT MSVC)
   target_compile_options(tb_same1-implementation PRIVATE -Wall -Wextra -Wpedantic -Werror -fvisibility=hidden)

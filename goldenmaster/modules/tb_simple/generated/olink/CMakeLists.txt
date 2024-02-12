@@ -20,12 +20,13 @@ add_library(tb_simple-olink SHARED ${SOURCES_OLINK})
 add_library(tb_simple::tb_simple-olink ALIAS tb_simple-olink)
 target_include_directories(tb_simple-olink
     PUBLIC
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../../../>
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../../../../modules>
+    $<BUILD_INTERFACE:${MODULES_DIR}>
     $<INSTALL_INTERFACE:include>
 )
-target_link_libraries(tb_simple-olink 
+target_link_libraries(tb_simple-olink
+    PRIVATE
     tb_simple::tb_simple-core
+    PUBLIC
     apigear::poco-olink
 )
 

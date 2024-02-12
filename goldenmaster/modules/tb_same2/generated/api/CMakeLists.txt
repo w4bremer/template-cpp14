@@ -10,8 +10,7 @@ add_library(tb_same2-api SHARED ${SOURCES})
 add_library(tb_same2::tb_same2-api ALIAS tb_same2-api)
 target_include_directories(tb_same2-api
     PUBLIC
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../../../>
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../../../../modules>
+    $<BUILD_INTERFACE:${MODULES_DIR}>
     $<INSTALL_INTERFACE:include>
 )
 # ensure maximum compiler support

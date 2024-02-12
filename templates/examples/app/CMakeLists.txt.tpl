@@ -1,3 +1,4 @@
+{{- $features := .Features -}}
 cmake_minimum_required(VERSION 3.20)
 project(App)
 
@@ -22,12 +23,17 @@ else()
 endif()
 {{- nl }}
 
-{{- $features := .Features}}
 {{- range .System.Modules }}
 {{- $module_id := snake .Name }}
 find_package({{$module_id}} REQUIRED COMPONENTS {{$module_id}}-core {{$module_id}}-implementation {{ if $features.monitor }}{{$module_id}}-monitor {{- end}})
 {{- end }}
+{{- if $features.monitor }}
+find_package(apigear REQUIRED COMPONENTS poco-tracer)
+{{- end }}
 target_link_libraries(app
+{{- if $features.monitor }}
+    apigear::poco-tracer
+{{- end }}
 {{- range .System.Modules }}
 {{- $module_id := snake .Name }}
     {{$module_id}}::{{$module_id}}-core

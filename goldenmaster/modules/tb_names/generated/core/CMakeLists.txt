@@ -13,8 +13,7 @@ add_library(tb_names-core SHARED ${SOURCES_CORE_SUPPORT})
 add_library(tb_names::tb_names-core ALIAS tb_names-core)
 target_include_directories(tb_names-core
     PUBLIC
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../../../>
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../../../../modules>
+    $<BUILD_INTERFACE:${MODULES_DIR}>
     $<INSTALL_INTERFACE:include>
 )
 target_link_libraries(tb_names-core PUBLIC tb_names::tb_names-api nlohmann_json::nlohmann_json)

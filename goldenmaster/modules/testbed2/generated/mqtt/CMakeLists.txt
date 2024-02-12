@@ -13,12 +13,13 @@ add_library(testbed2-mqtt SHARED ${SOURCES_MQTT})
 add_library(testbed2::testbed2-mqtt ALIAS testbed2-mqtt)
 target_include_directories(testbed2-mqtt
     PUBLIC
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../../../>
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../../../../modules>
+    $<BUILD_INTERFACE:${MODULES_DIR}>
     $<INSTALL_INTERFACE:include>
 )
 target_link_libraries(testbed2-mqtt
+    PRIVATE
     testbed2::testbed2-core
+    PUBLIC
     apigear::paho-mqtt
 )
 # ensure maximum compiler support

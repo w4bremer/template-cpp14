@@ -17,12 +17,13 @@ add_library({{$module_id}}-olink SHARED ${SOURCES_OLINK})
 add_library({{$module_id}}::{{$module_id}}-olink ALIAS {{$module_id}}-olink)
 target_include_directories({{$module_id}}-olink
     PUBLIC
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../../../>
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../../../../modules>
+    $<BUILD_INTERFACE:${MODULES_DIR}>
     $<INSTALL_INTERFACE:include>
 )
-target_link_libraries({{$module_id}}-olink 
+target_link_libraries({{$module_id}}-olink
+    PRIVATE
     {{$module_id}}::{{$module_id}}-core
+    PUBLIC
     apigear::poco-olink
 )
 

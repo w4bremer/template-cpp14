@@ -6,8 +6,7 @@ add_library(tb_names-api INTERFACE)
 add_library(tb_names::tb_names-api ALIAS tb_names-api)
 target_include_directories(tb_names-api
     INTERFACE
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../../../>
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../../../../modules>
+    $<BUILD_INTERFACE:${MODULES_DIR}>
     $<INSTALL_INTERFACE:include>
 )
 

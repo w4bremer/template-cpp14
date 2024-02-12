@@ -16,12 +16,13 @@ add_library(testbed2-olink SHARED ${SOURCES_OLINK})
 add_library(testbed2::testbed2-olink ALIAS testbed2-olink)
 target_include_directories(testbed2-olink
     PUBLIC
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../../../>
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../../../../modules>
+    $<BUILD_INTERFACE:${MODULES_DIR}>
     $<INSTALL_INTERFACE:include>
 )
-target_link_libraries(testbed2-olink 
+target_link_libraries(testbed2-olink
+    PRIVATE
     testbed2::testbed2-core
+    PUBLIC
     apigear::poco-olink
 )
 

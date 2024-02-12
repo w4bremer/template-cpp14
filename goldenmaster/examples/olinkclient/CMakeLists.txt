@@ -23,7 +23,7 @@ else()
   target_compile_definitions(OLinkClient PRIVATE -D_CRT_SECURE_NO_WARNINGS)
 endif()
 
-find_package(apigear REQUIRED COMPONENTS utilities)
+find_package(apigear REQUIRED COMPONENTS poco-tracer)
 find_package(testbed2 REQUIRED COMPONENTS testbed2-core testbed2-implementation testbed2-monitor testbed2-olink)
 find_package(tb_enum REQUIRED COMPONENTS tb_enum-core tb_enum-implementation tb_enum-monitor tb_enum-olink)
 find_package(tb_same1 REQUIRED COMPONENTS tb_same1-core tb_same1-implementation tb_same1-monitor tb_same1-olink)
@@ -32,6 +32,7 @@ find_package(tb_simple REQUIRED COMPONENTS tb_simple-core tb_simple-implementati
 find_package(testbed1 REQUIRED COMPONENTS testbed1-core testbed1-implementation testbed1-monitor testbed1-olink)
 find_package(tb_names REQUIRED COMPONENTS tb_names-core tb_names-implementation tb_names-monitor tb_names-olink)
 target_link_libraries(OLinkClient
+    apigear::poco-tracer
     testbed2::testbed2-core
     testbed2::testbed2-implementation
     testbed2::testbed2-monitor

@@ -14,12 +14,13 @@ add_library({{$module_id}}-mqtt SHARED ${SOURCES_MQTT})
 add_library({{$module_id}}::{{$module_id}}-mqtt ALIAS {{$module_id}}-mqtt)
 target_include_directories({{$module_id}}-mqtt
     PUBLIC
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../../../>
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../../../../modules>
+    $<BUILD_INTERFACE:${MODULES_DIR}>
     $<INSTALL_INTERFACE:include>
 )
 target_link_libraries({{$module_id}}-mqtt
+    PRIVATE
     {{$module_id}}::{{$module_id}}-core
+    PUBLIC
     apigear::paho-mqtt
 )
 # ensure maximum compiler support

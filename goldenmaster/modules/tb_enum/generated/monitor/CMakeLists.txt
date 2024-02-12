@@ -9,12 +9,11 @@ set (SOURCES_MONITOR
 add_library(tb_enum-monitor SHARED ${SOURCES_MONITOR})
 add_library(tb_enum::tb_enum-monitor ALIAS tb_enum-monitor)
 target_include_directories(tb_enum-monitor
-    PUBLIC
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../../../>
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../../../../modules>
+    INTERFACE
+    $<BUILD_INTERFACE:${MODULES_DIR}>
     $<INSTALL_INTERFACE:include>
 )
-target_link_libraries(tb_enum-monitor PUBLIC
+target_link_libraries(tb_enum-monitor PRIVATE
     tb_enum::tb_enum-core
     apigear::poco-tracer
 )

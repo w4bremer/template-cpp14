@@ -10,8 +10,7 @@ add_library(testbed1-api SHARED ${SOURCES})
 add_library(testbed1::testbed1-api ALIAS testbed1-api)
 target_include_directories(testbed1-api
     PUBLIC
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../../../>
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../../../../modules>
+    $<BUILD_INTERFACE:${MODULES_DIR}>
     $<INSTALL_INTERFACE:include>
 )
 # ensure maximum compiler support

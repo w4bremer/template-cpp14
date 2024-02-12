@@ -19,8 +19,7 @@ add_library(tb_same2-core SHARED ${SOURCES_CORE_SUPPORT})
 add_library(tb_same2::tb_same2-core ALIAS tb_same2-core)
 target_include_directories(tb_same2-core
     PUBLIC
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../../../>
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../../../../modules>
+    $<BUILD_INTERFACE:${MODULES_DIR}>
     $<INSTALL_INTERFACE:include>
 )
 target_link_libraries(tb_same2-core PUBLIC tb_same2::tb_same2-api nlohmann_json::nlohmann_json)

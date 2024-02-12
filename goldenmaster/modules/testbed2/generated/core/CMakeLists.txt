@@ -19,8 +19,7 @@ add_library(testbed2-core SHARED ${SOURCES_CORE_SUPPORT})
 add_library(testbed2::testbed2-core ALIAS testbed2-core)
 target_include_directories(testbed2-core
     PUBLIC
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../../../>
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../../../../modules>
+    $<BUILD_INTERFACE:${MODULES_DIR}>
     $<INSTALL_INTERFACE:include>
 )
 target_link_libraries(testbed2-core PUBLIC testbed2::testbed2-api nlohmann_json::nlohmann_json)

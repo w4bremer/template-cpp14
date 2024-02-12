@@ -16,11 +16,10 @@ add_library(testbed2-implementation SHARED ${SOURCES_CORE_IMPL})
 add_library(testbed2::testbed2-implementation ALIAS testbed2-implementation)
 target_include_directories(testbed2-implementation
     PUBLIC
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../../>
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../../../modules>
+    $<BUILD_INTERFACE:${MODULES_DIR}>
     $<INSTALL_INTERFACE:include>
 )
-target_link_libraries(testbed2-implementation PUBLIC testbed2::testbed2-api testbed2::testbed2-core Threads::Threads)
+target_link_libraries(testbed2-implementation PUBLIC testbed2::testbed2-api PRIVATE testbed2::testbed2-core Threads::Threads)
 # ensure maximum compiler support
 if(NOT MSVC)
   target_compile_options(testbed2-implementation PRIVATE -Wall -Wextra -Wpedantic -Werror -fvisibility=hidden)

@@ -31,5 +31,6 @@ add_executable(test_poco_olink ${TEST_POCO_OLINK_SOURCES})
 add_test(NAME test_poco_olink COMMAND $<TARGET_FILE:test_poco_olink>)
 
 target_link_libraries(test_poco_olink PRIVATE poco-olink Catch2::Catch2 trompeloeil::trompeloeil)
+target_include_directories(test_poco_olink PRIVATE $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>/../)
 
 endif() # BUILD_TESTING

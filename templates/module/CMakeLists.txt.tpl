@@ -18,6 +18,9 @@ include(CTest)
 enable_testing()
 endif(BUILD_TESTING)
 
+# define variable for library include paths
+get_filename_component(MODULES_DIR "${CMAKE_CURRENT_SOURCE_DIR}/.." ABSOLUTE)
+
 add_subdirectory(generated/api)
 {{- if $features.core }}
 add_subdirectory(generated/core)

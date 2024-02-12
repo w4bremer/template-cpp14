@@ -15,12 +15,11 @@ set (SOURCES_MONITOR
 add_library(testbed2-monitor SHARED ${SOURCES_MONITOR})
 add_library(testbed2::testbed2-monitor ALIAS testbed2-monitor)
 target_include_directories(testbed2-monitor
-    PUBLIC
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../../../>
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../../../../modules>
+    INTERFACE
+    $<BUILD_INTERFACE:${MODULES_DIR}>
     $<INSTALL_INTERFACE:include>
 )
-target_link_libraries(testbed2-monitor PUBLIC
+target_link_libraries(testbed2-monitor PRIVATE
     testbed2::testbed2-core
     apigear::poco-tracer
 )

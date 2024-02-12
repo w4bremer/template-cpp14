@@ -19,12 +19,11 @@ set (SOURCES_MONITOR
 add_library(tb_simple-monitor SHARED ${SOURCES_MONITOR})
 add_library(tb_simple::tb_simple-monitor ALIAS tb_simple-monitor)
 target_include_directories(tb_simple-monitor
-    PUBLIC
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../../../>
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../../../../modules>
+    INTERFACE
+    $<BUILD_INTERFACE:${MODULES_DIR}>
     $<INSTALL_INTERFACE:include>
 )
-target_link_libraries(tb_simple-monitor PUBLIC
+target_link_libraries(tb_simple-monitor PRIVATE
     tb_simple::tb_simple-core
     apigear::poco-tracer
 )

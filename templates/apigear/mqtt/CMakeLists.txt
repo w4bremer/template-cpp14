@@ -9,13 +9,15 @@ set (SOURCES
 )
 add_library(paho-mqtt SHARED ${SOURCES})
 add_library(apigear::paho-mqtt ALIAS paho-mqtt)
-target_include_directories(paho-mqtt PUBLIC 
-    PUBLIC
+target_include_directories(paho-mqtt
+    PRIVATE
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../>
+    PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../../>
     $<INSTALL_INTERFACE:include>
 )
-target_link_libraries(paho-mqtt PRIVATE eclipse-paho-mqtt-c::paho-mqtt3as-static PUBLIC nlohmann_json::nlohmann_json utilities)
+target_link_libraries(paho-mqtt PRIVATE eclipse-paho-mqtt-c::paho-mqtt3as-static utilities PUBLIC nlohmann_json::nlohmann_json)
 
 if(NOT MSVC)
   target_compile_options(paho-mqtt PRIVATE -Wall -Wextra -Wpedantic -Werror -fvisibility=hidden -Wno-unknown-pragmas)

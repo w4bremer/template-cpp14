@@ -1,3 +1,4 @@
+{{- $features := .Features -}}
 cmake_minimum_required(VERSION 3.20)
 project(OLinkClient)
 
@@ -23,7 +24,10 @@ else()
   target_compile_definitions(OLinkClient PRIVATE -D_CRT_SECURE_NO_WARNINGS)
 endif()
 
-find_package(apigear REQUIRED COMPONENTS utilities)
+{{- if $features.monitor }}
+
+find_package(apigear REQUIRED COMPONENTS poco-tracer)
+{{- end }}
 {{- $features := .Features}}
 {{- range .System.Modules }}
 {{- $module_id := snake .Name }}
@@ -31,6 +35,9 @@ find_package({{$module_id}} REQUIRED COMPONENTS {{$module_id}}-core {{$module_id
 {{- if $features.monitor }} {{$module_id}}-monitor {{- end }} {{$module_id}}-olink)
 {{- end }}
 target_link_libraries(OLinkClient
+{{- if $features.monitor }}
+    apigear::poco-tracer
+{{- end }}
 {{- range .System.Modules }}
 {{- $module_id := snake .Name }}
     {{$module_id}}::{{$module_id}}-core

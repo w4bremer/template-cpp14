@@ -7,12 +7,13 @@ add_library(tb_enum-mqtt SHARED ${SOURCES_MQTT})
 add_library(tb_enum::tb_enum-mqtt ALIAS tb_enum-mqtt)
 target_include_directories(tb_enum-mqtt
     PUBLIC
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../../../>
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../../../../modules>
+    $<BUILD_INTERFACE:${MODULES_DIR}>
     $<INSTALL_INTERFACE:include>
 )
 target_link_libraries(tb_enum-mqtt
+    PRIVATE
     tb_enum::tb_enum-core
+    PUBLIC
     apigear::paho-mqtt
 )
 # ensure maximum compiler support

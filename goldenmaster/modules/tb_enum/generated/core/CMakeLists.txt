@@ -13,8 +13,7 @@ add_library(tb_enum-core SHARED ${SOURCES_CORE_SUPPORT})
 add_library(tb_enum::tb_enum-core ALIAS tb_enum-core)
 target_include_directories(tb_enum-core
     PUBLIC
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../../../>
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../../../../modules>
+    $<BUILD_INTERFACE:${MODULES_DIR}>
     $<INSTALL_INTERFACE:include>
 )
 target_link_libraries(tb_enum-core PUBLIC tb_enum::tb_enum-api nlohmann_json::nlohmann_json)

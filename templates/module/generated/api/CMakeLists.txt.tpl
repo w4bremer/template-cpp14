@@ -14,8 +14,7 @@ add_library({{$module_id}}-api SHARED ${SOURCES})
 add_library({{$module_id}}::{{$module_id}}-api ALIAS {{$module_id}}-api)
 target_include_directories({{$module_id}}-api
     PUBLIC
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../../../>
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../../../../modules>
+    $<BUILD_INTERFACE:${MODULES_DIR}>
     $<INSTALL_INTERFACE:include>
 )
 # ensure maximum compiler support
@@ -29,8 +28,7 @@ add_library({{$module_id}}-api INTERFACE)
 add_library({{$module_id}}::{{$module_id}}-api ALIAS {{$module_id}}-api)
 target_include_directories({{$module_id}}-api
     INTERFACE
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../../../>
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../../../../modules>
+    $<BUILD_INTERFACE:${MODULES_DIR}>
     $<INSTALL_INTERFACE:include>
 )
 {{- end}}

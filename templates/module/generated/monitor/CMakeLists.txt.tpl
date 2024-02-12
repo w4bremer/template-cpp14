@@ -16,12 +16,11 @@ set (SOURCES_MONITOR
 add_library({{$module_id}}-monitor SHARED ${SOURCES_MONITOR})
 add_library({{$module_id}}::{{$module_id}}-monitor ALIAS {{$module_id}}-monitor)
 target_include_directories({{$module_id}}-monitor
-    PUBLIC
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../../../>
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../../../../modules>
+    INTERFACE
+    $<BUILD_INTERFACE:${MODULES_DIR}>
     $<INSTALL_INTERFACE:include>
 )
-target_link_libraries({{$module_id}}-monitor PUBLIC
+target_link_libraries({{$module_id}}-monitor PRIVATE
     {{$module_id}}::{{$module_id}}-core
     apigear::poco-tracer
 )

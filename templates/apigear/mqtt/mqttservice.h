@@ -1,7 +1,6 @@
 #pragma once
 
 #include <memory>
-#include "nlohmann/json.hpp"
 #include "mqttcommon.h"
 #include "mqtttypes.h"
 

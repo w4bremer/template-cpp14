@@ -10,12 +10,13 @@ add_library(tb_names-olink SHARED ${SOURCES_OLINK})
 add_library(tb_names::tb_names-olink ALIAS tb_names-olink)
 target_include_directories(tb_names-olink
     PUBLIC
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../../../>
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../../../../modules>
+    $<BUILD_INTERFACE:${MODULES_DIR}>
     $<INSTALL_INTERFACE:include>
 )
-target_link_libraries(tb_names-olink 
+target_link_libraries(tb_names-olink
+    PRIVATE
     tb_names::tb_names-core
+    PUBLIC
     apigear::poco-olink
 )
 

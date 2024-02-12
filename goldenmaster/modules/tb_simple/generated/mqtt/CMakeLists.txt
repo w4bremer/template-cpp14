@@ -17,12 +17,13 @@ add_library(tb_simple-mqtt SHARED ${SOURCES_MQTT})
 add_library(tb_simple::tb_simple-mqtt ALIAS tb_simple-mqtt)
 target_include_directories(tb_simple-mqtt
     PUBLIC
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../../../>
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../../../../modules>
+    $<BUILD_INTERFACE:${MODULES_DIR}>
     $<INSTALL_INTERFACE:include>
 )
 target_link_libraries(tb_simple-mqtt
+    PRIVATE
     tb_simple::tb_simple-core
+    PUBLIC
     apigear::paho-mqtt
 )
 # ensure maximum compiler support

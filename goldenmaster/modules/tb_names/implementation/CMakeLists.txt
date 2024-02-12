@@ -13,11 +13,10 @@ add_library(tb_names-implementation SHARED ${SOURCES_CORE_IMPL})
 add_library(tb_names::tb_names-implementation ALIAS tb_names-implementation)
 target_include_directories(tb_names-implementation
     PUBLIC
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../../>
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../../../modules>
+    $<BUILD_INTERFACE:${MODULES_DIR}>
     $<INSTALL_INTERFACE:include>
 )
-target_link_libraries(tb_names-implementation PUBLIC tb_names::tb_names-api tb_names::tb_names-core Threads::Threads)
+target_link_libraries(tb_names-implementation PUBLIC tb_names::tb_names-api PRIVATE tb_names::tb_names-core Threads::Threads)
 # ensure maximum compiler support
 if(NOT MSVC)
   target_compile_options(tb_names-implementation PRIVATE -Wall -Wextra -Wpedantic -Werror -fvisibility=hidden)

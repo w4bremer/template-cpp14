@@ -1,7 +1,8 @@
 #pragma once
 
-#include "nlohmann/json.hpp"
 #include "mqttcommon.h"
+#include "nlohmann/json.hpp"
+#include <functional>
 
 namespace ApiGear {
 namespace MQTT {

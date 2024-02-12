@@ -19,11 +19,10 @@ add_library({{$module_id}}-implementation SHARED ${SOURCES_CORE_IMPL})
 add_library({{$module_id}}::{{$module_id}}-implementation ALIAS {{$module_id}}-implementation)
 target_include_directories({{$module_id}}-implementation
     PUBLIC
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../../>
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../../../modules>
+    $<BUILD_INTERFACE:${MODULES_DIR}>
     $<INSTALL_INTERFACE:include>
 )
-target_link_libraries({{$module_id}}-implementation PUBLIC {{$module_id}}::{{$module_id}}-api {{$module_id}}::{{$module_id}}-core Threads::Threads)
+target_link_libraries({{$module_id}}-implementation PUBLIC {{$module_id}}::{{$module_id}}-api PRIVATE {{$module_id}}::{{$module_id}}-core Threads::Threads)
 # ensure maximum compiler support
 if(NOT MSVC)
   target_compile_options({{$module_id}}-implementation PRIVATE -Wall -Wextra -Wpedantic -Werror -fvisibility=hidden)
