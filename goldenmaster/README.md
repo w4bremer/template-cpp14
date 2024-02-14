@@ -91,7 +91,7 @@ If you do not want or can not use conan, the poco libraries must installed separ
 1. If you have not done before, install conan 1.x and then set up your profile. The default configuration is usually in your home folder at `.conan/profiles/default`. More details on the conan profile can be found [here](https://docs.conan.io/en/latest/reference/profiles.html).
    This can be set like:
     ```
-    PS C:\project_source> conan profile new default --detect
+    PS C:\project_source> conan profile detect
     PS C:\project_source> conan profile update settings.compiler.runtime=MDd default
     PS C:\project_source> conan profile update settings.build_type=Debug default
     ```
@@ -101,7 +101,7 @@ If you do not want or can not use conan, the poco libraries must installed separ
     ```
     PS C:\project_source> mkdir deps
     PS C:\project_source> cd deps
-    PS C:\project_source\deps> conan install poco/1.11.3@ --build missing -o poco:shared=False -o poco:enable_data_mysql=False -o openssl:shared=False -o poco:enable_activerecord=False -o poco:enable_apacheconnector=False -o poco:enable_cppparser=False -o poco:enable_crypto=True -o poco:enable_data=False -o poco:enable_data_odbc=False -o poco:enable_data_postgresql=False -o poco:enable_data_sqlite=False -o poco:enable_encodings=False -o poco:enable_json=False -o poco:enable_jwt=False -o poco:enable_mongodb=False -o poco:enable_net=True -o poco:enable_netssl=True -o poco:enable_pagecompiler=False -o poco:enable_pagecompiler_file2page=False -o poco:enable_pdf=False -o poco:enable_pocodoc=False -o poco:enable_redis=False -o poco:enable_sevenzip=False -o poco:enable_util=True -o poco:enable_xml=False -o poco:enable_zip=False --generator cmake_find_package --generator virtualenv
+    PS C:\project_source\deps> conan install poco/1.11.3@ --build missing -o poco/*:shared=False -o poco/*:enable_data_mysql=False -o poco/*:enable_activerecord=False -o poco/*:enable_apacheconnector=False -o poco/*:enable_cppparser=False -o poco/*:enable_crypto=True -o poco/*:enable_data=False -o poco/*:enable_data_odbc=False -o poco/*:enable_data_postgresql=False -o poco/*:enable_data_sqlite=False -o poco/*:enable_encodings=False -o poco/*:enable_json=False -o poco/*:enable_jwt=False -o poco/*:enable_mongodb=False -o poco/*:enable_net=True -o poco/*:enable_netssl=True -o poco/*:enable_pagecompiler=False -o poco/*:enable_pagecompiler_file2page=False -o poco/*:enable_pdf=False -o poco/*:enable_pocodoc=False -o poco/*:enable_redis=False -o poco/*:enable_sevenzip=False -o poco/*:enable_util=True -o poco/*:enable_xml=False -o poco/*:enable_zip=False --generator cmake_find_package --generator virtualenv
     PS C:\project_source\deps> cd ..
     ```
 3. Build the project
@@ -109,7 +109,7 @@ If you do not want or can not use conan, the poco libraries must installed separ
    For CMake to find the dependencies we need to point the `CMAKE_MODULE_PATH` variable to the path used in the previous step.
    If the files shall be re-used, they can be installed in a location specified by `CMAKE_INSTALL_PREFIX`
    ```
-   PS C:\project_source> cmake -Bbuild -DCMAKE_INSTALL_PREFIX=tmp -DCMAKE_MODULE_PATH=C:/project_source/deps
+   PS C:\project_source> cmake -Bbuild -DCMAKE_INSTALL_PREFIX=tmp -DCMAKE_PREFIX_PATH=C:/project_source/deps
    PS C:\project_source> cmake --build build/
    ```
 4. Install binaries
@@ -200,7 +200,7 @@ The procedure is almost identical for Windows and Linux, but it is important to 
    
     A new profile can be created like this:
     ```
-    $ conan profile new release --detect
+    $ conan profile detect --name release
     ```
 
     And additionally we need to make platform specific changes to the conan configuration:
@@ -223,17 +223,17 @@ The procedure is almost identical for Windows and Linux, but it is important to 
     ```
     $ mkdir deps
     $ cd deps
-    $ conan install --profile release poco/1.11.3@ --build missing -o poco:shared=False -o poco:enable_data_mysql=False -o openssl:shared=False -o poco:enable_activerecord=False -o poco:enable_apacheconnector=False -o poco:enable_cppparser=False -o poco:enable_crypto=True -o poco:enable_data=False -o poco:enable_data_odbc=False -o poco:enable_data_postgresql=False -o poco:enable_data_sqlite=False -o poco:enable_encodings=False -o poco:enable_json=False -o poco:enable_jwt=False -o poco:enable_mongodb=False -o poco:enable_net=True -o poco:enable_netssl=True -o poco:enable_pagecompiler=False -o poco:enable_pagecompiler_file2page=False -o poco:enable_pdf=False -o poco:enable_pocodoc=False -o poco:enable_redis=False -o poco:enable_sevenzip=False -o poco:enable_util=True -o poco:enable_xml=False -o poco:enable_zip=False --generator cmake_find_package --generator virtualenv
+    $ conan install --profile=release poco/1.11.3@ --build missing -o poco/*:shared=False -o poco/*:enable_data_mysql=False -o poco/*:enable_activerecord=False -o poco/*:enable_apacheconnector=False -o poco/*:enable_cppparser=False -o poco/*:enable_crypto=True -o poco/*:enable_data=False -o poco/*:enable_data_odbc=False -o poco/*:enable_data_postgresql=False -o poco/*:enable_data_sqlite=False -o poco/*:enable_encodings=False -o poco/*:enable_json=False -o poco/*:enable_jwt=False -o poco/*:enable_mongodb=False -o poco/*:enable_net=True -o poco/*:enable_netssl=True -o poco/*:enable_pagecompiler=False -o poco/*:enable_pagecompiler_file2page=False -o poco/*:enable_pdf=False -o poco/*:enable_pocodoc=False -o poco/*:enable_redis=False -o poco/*:enable_sevenzip=False -o poco/*:enable_util=True -o poco/*:enable_xml=False -o poco/*:enable_zip=False --generator cmake_find_package --generator virtualenv
     $ cd ..
     ```
     The `conan install` step downloads the poco source package, configures it to a minium version and builds it, including its dependencies.
-    Also make sure to use the previously created release profile with `--profile release`.
+    Also make sure to use the previously created release profile with `--profile=release`.
 3. With poco available in the `deps` folder we can configure our project and build it.
 
     The `CMAKE_INSTALL_PREFIX` defines the where built files shall be installed. In this example we use `tmp`.
     The `CMAKE_MODULE_PATH` tells CMake where it can find the necessary dependencies like poco. In the previous step we used `deps` - so we specify the full path to the deps folder here, e.g. "/home/user/project/deps" or "C:/workspace/project/deps".
     ```
-    $ cmake -Bbuild -DCMAKE_INSTALL_PREFIX=tmp -DCMAKE_MODULE_PATH="/home/user/project/deps" -DCMAKE_BUILD_TYPE=Release
+    $ cmake -Bbuild -DCMAKE_INSTALL_PREFIX=tmp -DCMAKE_PREFIX_PATH="/home/user/project/deps" -DCMAKE_BUILD_TYPE=Release
     ```
 
     After the configuration step finished successfully we can build the project

@@ -1,7 +1,7 @@
-project(Testtestbed2)
 cmake_minimum_required(VERSION 3.20)
+project(Testtestbed2)
 include(CTest)
-find_package(testbed2 REQUIRED)
+find_package(testbed2 CONFIG REQUIRED)
 
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)

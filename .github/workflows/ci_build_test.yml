@@ -29,7 +29,7 @@ jobs:
         if: ${{ matrix.config.os == 'windows-latest'}}
         with:
           path: |
-            ~\.conan\data
+            ~\.conan2\p
           key: ${{ matrix.config.os }}-conan-cache-${{ hashFiles('goldenmaster/**/conanfile.py', 'goldenmaster/**/conanfile.txt') }}
           restore-keys: |
             ${{ matrix.config.os }}-conan-cache
@@ -38,7 +38,7 @@ jobs:
         if: ${{ matrix.config.os != 'windows-latest'}}
         with:
           path: |
-            ~/.conan/data
+            ~/.conan2/p
           key: ${{ matrix.config.os }}-conan-cache-${{ hashFiles('goldenmaster/**/conanfile.py', 'goldenmaster/**/conanfile.txt') }}
           restore-keys: |
             ${{ matrix.config.os }}-conan-cache
@@ -51,17 +51,8 @@ jobs:
       - name: Install Conan
         run: pip install -r .github/workflows/conan-requirements.txt
       - name: Create default profile
-        run: conan profile new default --detect
-      - name: Set C++11 on Linux
-        if: ${{ matrix.config.os == 'ubuntu-latest'}}
-        run: conan profile update settings.compiler.libcxx=libstdc++11 default
-      - name: Set Debug and runtime on Windows
-        if: ${{ matrix.config.os == 'windows-latest'}}
-        run: |
-          conan profile update settings.compiler.runtime=MDd default
-          conan profile update settings.build_type=Debug default
-      - name: Install CMake
-        run: conan install cmake/3.24.2@ -g=virtualrunenv --build=missing
+        run: conan profile detect
+      - run: cmake --version
       - name: Run conan build Linux/macOS
         if: ${{ matrix.config.os != 'windows-latest'}}
         working-directory: goldenmaster
@@ -94,7 +85,7 @@ jobs:
         if: ${{ matrix.config.os == 'windows-latest'}}
         with:
           path: |
-            ~\.conan\data
+            ~\.conan2\p
           key: ${{ matrix.config.os }}-conan4cmake-cache-${{ hashFiles('.github/workflows/ci_build_test.yml') }}
           restore-keys: |
             ${{ matrix.config.os }}-conan4cmake-cache
@@ -103,7 +94,7 @@ jobs:
         if: ${{ matrix.config.os == 'macos-latest'}}
         with:
           path: |
-            ~/.conan/data
+            ~/.conan2/p
           key: ${{ matrix.config.os }}-conan4cmake-cache-${{ hashFiles('.github/workflows/ci_build_test.yml') }}
           restore-keys: |
             ${{ matrix.config.os }}-conan4cmake-cache
@@ -116,23 +107,33 @@ jobs:
       - name: Install Conan
         run: pip3 install -r .github/workflows/conan-requirements.txt
       - name: Create default profile
-        run: conan profile new default --detect
-      - name: Set Debug and runtime on Windows
-        if: ${{ matrix.config.os == 'windows-latest'}}
-        run: |
-          conan profile update settings.compiler.runtime=MDd default
-          conan profile update settings.build_type=Debug default
+        run: conan profile detect
       - name: create dependencies folder
         if: ${{ matrix.config.os != 'ubuntu-latest'}}
         run: mkdir -p deps
       - name: Install poco using conan
         if: ${{ matrix.config.os != 'ubuntu-latest'}}
         run: |
-          cd deps && conan install poco/1.11.3@ --build missing -o poco:shared=False -o poco:enable_data_mysql=False -o openssl:shared=False -o poco:enable_activerecord=False -o poco:enable_apacheconnector=False -o poco:enable_cppparser=False -o poco:enable_crypto=True -o poco:enable_data=False -o poco:enable_data_odbc=False -o poco:enable_data_postgresql=False -o poco:enable_data_sqlite=False -o poco:enable_encodings=False -o poco:enable_json=False -o poco:enable_jwt=False -o poco:enable_mongodb=False -o poco:enable_net=True -o poco:enable_netssl=True -o poco:enable_pagecompiler=False -o poco:enable_pagecompiler_file2page=False -o poco:enable_pdf=False -o poco:enable_pocodoc=False -o poco:enable_redis=False -o poco:enable_sevenzip=False -o poco:enable_util=True -o poco:enable_xml=False -o poco:enable_zip=False --generator cmake_find_package --generator virtualenv
+          cd deps && conan install --requires=poco/1.12.4 --build missing -o poco/*:shared=False -o poco/*:enable_data_mysql=False -o poco/*:enable_activerecord=False -o poco/*:enable_apacheconnector=False -o poco/*:enable_cppparser=False -o poco/*:enable_crypto=True -o poco/*:enable_data=False -o poco/*:enable_data_odbc=False -o poco/*:enable_data_postgresql=False -o poco/*:enable_data_sqlite=False -o poco/*:enable_encodings=False -o poco/*:enable_json=False -o poco/*:enable_jwt=False -o poco/*:enable_mongodb=False -o poco/*:enable_net=True -o poco/*:enable_netssl=True -o poco/*:enable_pagecompiler=False -o poco/*:enable_pagecompiler_file2page=False -o poco/*:enable_pdf=False -o poco/*:enable_pocodoc=False -o poco/*:enable_redis=False -o poco/*:enable_sevenzip=False -o poco/*:enable_util=True -o poco/*:enable_xml=False -o poco/*:enable_zip=False --generator CMakeDeps --generator VirtualBuildEnv
       - name: Install paho.mqtt.c using conan
         if: ${{ matrix.config.os != 'ubuntu-latest'}}
         run: |
-          cd deps && conan install paho-mqtt-c/1.3.12@ --build missing -o paho-mqtt-c:shared=False --generator cmake_find_package --generator virtualenv
+          cd deps && conan install --requires=paho-mqtt-c/1.3.12@ --build missing -o paho-mqtt-c/*:shared=False --generator CMakeDeps --generator VirtualBuildEnv
+      - name: Save cache conan on Windows
+        uses: actions/cache/save@v3
+        if: ${{ matrix.config.os == 'windows-latest'}}
+        with:
+          path: |
+            ~\.conan2\p
+          key: ${{ matrix.config.os }}-conan4cmake-cache-${{ hashFiles('.github/workflows/ci_build_test.yml') }}
+      - name: Save cache conan on macOS
+        uses: actions/cache/save@v3
+        if: ${{ matrix.config.os == 'macos-latest'}}
+        with:
+          path: |
+            ~/.conan2/p
+          key: ${{ matrix.config.os }}-conan4cmake-cache-${{ hashFiles('.github/workflows/ci_build_test.yml') }}
+      - run: cmake --version
       - name: Install poco using apt-get
         if: ${{ matrix.config.os == 'ubuntu-latest'}}
         run: sudo apt-get install -y cmake libpoco-dev nlohmann-json3-dev
@@ -147,7 +148,7 @@ jobs:
         working-directory: goldenmaster
         env:
             CTEST_OUTPUT_ON_FAILURE: 1
-        run: cmake -Bbuild -DCMAKE_INSTALL_PREFIX=tmp -DCMAKE_MODULE_PATH=$GITHUB_WORKSPACE/deps -DTEST_FETCH_DEPS=ON -DBUILD_TESTING=ON && cmake --build build/ && cmake --build build/ --target test && cmake --build build/ --target install
+        run: cmake -DCMAKE_BUILD_TYPE=Release -Bbuild -DCMAKE_INSTALL_PREFIX=tmp -DCMAKE_PREFIX_PATH=$GITHUB_WORKSPACE/deps -DTEST_FETCH_DEPS=ON -DBUILD_TESTING=ON && cmake --build build/ && cmake --build build/ --target test && cmake --build build/ --target install
       - name: Update path env on Windows for testing
         if: ${{ matrix.config.os == 'windows-latest'}}
         run: echo "$GITHUB_WORKSPACE/goldenmaster/build/bin/Debug/" >> $GITHUB_PATH
@@ -158,7 +159,8 @@ jobs:
             CTEST_OUTPUT_ON_FAILURE: 1
         run: |
           $Env:GITHUB_WORKSPACE_UNIX = "${{ github.workspace }}" -replace "\\","/"
-          cmake -Bbuild -DCMAKE_INSTALL_PREFIX=tmp -DCMAKE_MODULE_PATH="$Env:GITHUB_WORKSPACE_UNIX/deps" -DTEST_FETCH_DEPS=ON -DBUILD_TESTING=ON && cmake --build build/ && cmake --build build/ --target RUN_TESTS && cmake --build build/ --target install
+          cmake -DCMAKE_BUILD_TYPE=Release -Bbuild -DCMAKE_INSTALL_PREFIX=tmp -DCMAKE_PREFIX_PATH="$Env:GITHUB_WORKSPACE_UNIX/deps" -DTEST_FETCH_DEPS=ON -DBUILD_TESTING=ON && cmake --build build/ --config Release && cmake --build build/ --target install --config Release  
+        # cmake -DCMAKE_BUILD_TYPE=Release -Bbuild -DCMAKE_INSTALL_PREFIX=tmp -DCMAKE_PREFIX_PATH="$Env:GITHUB_WORKSPACE_UNIX/deps" -DTEST_FETCH_DEPS=ON -DBUILD_TESTING=ON && cmake --build build/ --config Release && cmake --build build/ --target RUN_TESTS --config Release && cmake --build build/ --target install --config Release
 
   cmake_release_build:
     name: ${{ matrix.config.name }}
@@ -179,7 +181,7 @@ jobs:
         if: ${{ matrix.config.os == 'windows-latest'}}
         with:
           path: |
-            ~\.conan\data
+            ~\.conan2\p
           key: ${{ matrix.config.os }}-conan4cmake-release-cache-${{ hashFiles('.github/workflows/ci_build_test.yml') }}
           restore-keys: |
             ${{ matrix.config.os }}-conan4cmake-release-cache
@@ -188,7 +190,7 @@ jobs:
         if: ${{ matrix.config.os != 'windows-latest'}}
         with:
           path: |
-            ~/.conan/data
+            ~/.conan2/p
           key: ${{ matrix.config.os }}-conan4cmake-release-cache-${{ hashFiles('.github/workflows/ci_build_test.yml') }}
           restore-keys: |
             ${{ matrix.config.os }}-conan4cmake-release-cache
@@ -201,28 +203,33 @@ jobs:
       - name: Install Conan
         run: pip3 install -r .github/workflows/conan-requirements.txt
       - name: Create release profile
-        run: conan profile new release --detect
-      - name: Set Release and C++11 on Linux
-        if: ${{ matrix.config.os == 'ubuntu-latest'}}
-        run: |
-            conan profile update settings.compiler.libcxx=libstdc++11 release
-            conan profile update settings.build_type=Release release
-      - name: Set Release and runtime on Windows
-        if: ${{ matrix.config.os == 'windows-latest'}}
-        run: |
-          conan profile update settings.compiler.runtime=MD release
-          conan profile update settings.build_type=Release release
+        run: conan profile detect --name release
+      - run: cmake --version
       - run: mkdir -p deps
       - name: Install poco using conan
         run: |
-          cd deps && conan install --profile release poco/1.11.3@ --build missing -o poco:shared=False -o poco:enable_data_mysql=False -o openssl:shared=False -o poco:enable_activerecord=False -o poco:enable_apacheconnector=False -o poco:enable_cppparser=False -o poco:enable_crypto=True -o poco:enable_data=False -o poco:enable_data_odbc=False -o poco:enable_data_postgresql=False -o poco:enable_data_sqlite=False -o poco:enable_encodings=False -o poco:enable_json=False -o poco:enable_jwt=False -o poco:enable_mongodb=False -o poco:enable_net=True -o poco:enable_netssl=True -o poco:enable_pagecompiler=False -o poco:enable_pagecompiler_file2page=False -o poco:enable_pdf=False -o poco:enable_pocodoc=False -o poco:enable_redis=False -o poco:enable_sevenzip=False -o poco:enable_util=True -o poco:enable_xml=False -o poco:enable_zip=False --generator cmake_find_package --generator virtualenv
+          cd deps && conan install --profile=release --profile:build=release --requires=poco/1.12.4 --build missing -o poco/*:shared=False -o poco/*:enable_data_mysql=False -o poco/*:enable_activerecord=False -o poco/*:enable_apacheconnector=False -o poco/*:enable_cppparser=False -o poco/*:enable_crypto=True -o poco/*:enable_data=False -o poco/*:enable_data_odbc=False -o poco/*:enable_data_postgresql=False -o poco/*:enable_data_sqlite=False -o poco/*:enable_encodings=False -o poco/*:enable_json=False -o poco/*:enable_jwt=False -o poco/*:enable_mongodb=False -o poco/*:enable_net=True -o poco/*:enable_netssl=True -o poco/*:enable_pagecompiler=False -o poco/*:enable_pagecompiler_file2page=False -o poco/*:enable_pdf=False -o poco/*:enable_pocodoc=False -o poco/*:enable_redis=False -o poco/*:enable_sevenzip=False -o poco/*:enable_util=True -o poco/*:enable_xml=False -o poco/*:enable_zip=False --generator CMakeDeps --generator VirtualBuildEnv
       - name: Install paho.mqtt.c using conan
         run: |
-          cd deps && conan install --profile release paho-mqtt-c/1.3.12@ --build missing -o paho-mqtt-c:shared=False --generator cmake_find_package --generator virtualenv
+          cd deps && conan install --profile=release --profile:build=release --requires=paho-mqtt-c/1.3.12 --build missing -o paho-mqtt-c/*:shared=False --generator CMakeDeps --generator VirtualBuildEnv
+      - name: Save cache conan on Windows
+        uses: actions/cache/save@v3
+        if: ${{ matrix.config.os == 'windows-latest'}}
+        with:
+          path: |
+            ~\.conan2\p
+          key: ${{ matrix.config.os }}-conan4cmake-cache-${{ hashFiles('.github/workflows/ci_build_test.yml') }}
+      - name: Save cache conan on Linux/macOS
+        uses: actions/cache/save@v3
+        if: ${{ matrix.config.os != 'windows-latest'}}
+        with:
+          path: |
+            ~/.conan2/p
+          key: ${{ matrix.config.os }}-conan4cmake-cache-${{ hashFiles('.github/workflows/ci_build_test.yml') }}
       - name: Run cmake on Linux/Mac
         if: ${{ matrix.config.os != 'windows-latest'}}
         working-directory: goldenmaster
-        run: cmake -Bbuild -DCMAKE_INSTALL_PREFIX=tmp -DCMAKE_MODULE_PATH=$GITHUB_WORKSPACE/deps -DCMAKE_BUILD_TYPE=Release -DTEST_FETCH_DEPS=ON && cmake --build build/ --config Release && cmake --build build/ --target install --config Release
+        run: cmake -DCMAKE_BUILD_TYPE=Release -Bbuild -DCMAKE_INSTALL_PREFIX=tmp -DCMAKE_PREFIX_PATH=$GITHUB_WORKSPACE/deps -DCMAKE_BUILD_TYPE=Release -DTEST_FETCH_DEPS=ON && cmake --build build/ --config Release && cmake --build build/ --target install --config Release
       - name: Update path env on Windows for testing
         if: ${{ matrix.config.os == 'windows-latest'}}
         run: echo "$GITHUB_WORKSPACE/goldenmaster/build/bin/Debug/" >> $GITHUB_PATH
@@ -231,7 +238,7 @@ jobs:
         working-directory: goldenmaster
         run: |
           $Env:GITHUB_WORKSPACE_UNIX = "${{ github.workspace }}" -replace "\\","/"
-          cmake -Bbuild -DCMAKE_INSTALL_PREFIX=tmp -DCMAKE_MODULE_PATH="$Env:GITHUB_WORKSPACE_UNIX/deps" -DCMAKE_BUILD_TYPE=Release -DTEST_FETCH_DEPS=ON && cmake --build build/ --config Release && cmake --build build/ --target install --config Release
+          cmake -Bbuild -DCMAKE_INSTALL_PREFIX=tmp -DCMAKE_PREFIX_PATH="$Env:GITHUB_WORKSPACE_UNIX/deps" -DCMAKE_BUILD_TYPE=Release -DTEST_FETCH_DEPS=ON && cmake --build build/ --config Release && cmake --build build/ --target install --config Release
       - name: Archive goldenmaster release artifacts
         uses: actions/upload-artifact@v3
         with:

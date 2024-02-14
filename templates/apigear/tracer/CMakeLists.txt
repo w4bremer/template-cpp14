@@ -16,7 +16,7 @@ target_include_directories(poco-tracer
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../../>
     $<INSTALL_INTERFACE:include>
 )
-target_link_libraries(poco-tracer PUBLIC Poco::Net Poco::Util nlohmann_json::nlohmann_json PRIVATE apigear::utilities)
+target_link_libraries(poco-tracer PUBLIC Poco::Net Poco::Util Poco::Foundation nlohmann_json::nlohmann_json PRIVATE apigear::utilities)
 
 # add test cases
 if(BUILD_TESTING)

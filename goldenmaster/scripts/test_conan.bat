@@ -9,28 +9,28 @@ cd build
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
 
 @REM Building and testing apigear module
-call :build_and_test_apigear "apigear" "../../../apigear"
+call :build_and_test_apigear "apigear" "../../apigear"
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
 @REM Building and testing testbed2 module
-call :build_and_test_module "testbed2" "../../../modules/testbed2/conan"
+call :build_and_test_module "testbed2" "../../modules/testbed2/conan"
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
 @REM Building and testing tb_enum module
-call :build_and_test_module "tb_enum" "../../../modules/tb_enum/conan"
+call :build_and_test_module "tb_enum" "../../modules/tb_enum/conan"
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
 @REM Building and testing tb_same1 module
-call :build_and_test_module "tb_same1" "../../../modules/tb_same1/conan"
+call :build_and_test_module "tb_same1" "../../modules/tb_same1/conan"
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
 @REM Building and testing tb_same2 module
-call :build_and_test_module "tb_same2" "../../../modules/tb_same2/conan"
+call :build_and_test_module "tb_same2" "../../modules/tb_same2/conan"
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
 @REM Building and testing tb_simple module
-call :build_and_test_module "tb_simple" "../../../modules/tb_simple/conan"
+call :build_and_test_module "tb_simple" "../../modules/tb_simple/conan"
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
 @REM Building and testing testbed1 module
-call :build_and_test_module "testbed1" "../../../modules/testbed1/conan"
+call :build_and_test_module "testbed1" "../../modules/testbed1/conan"
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
 @REM Building and testing tb_names module
-call :build_and_test_module "tb_names" "../../../modules/tb_names/conan"
+call :build_and_test_module "tb_names" "../../modules/tb_names/conan"
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
 
 @REM Leave build folder
@@ -52,58 +52,27 @@ if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
 exit /b
 
 :build_and_test_apigear
-conan remove "%~1/*" -b -f --packages
-if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
-if not exist %~1 mkdir %~1
-if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
-pushd %~1
-if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
-conan source %~2
-if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
-conan install --build missing . -g=virtualenv
-if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
-conan build .
+conan remove "%~1/*" -c
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
 conan create %~2 --build missing
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
-popd
 exit /b
 
 :build_and_test_module
-conan remove "%~1/*" -b -f --packages
+conan remove "%~1/*" -c
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
-if not exist modules\%~1 mkdir modules\%~1
-if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
-pushd modules
-if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
-conan source %~2
-if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
-pushd %~1
-if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
-conan install --build missing conan -g=virtualenv
-if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
-conan build conan
-if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
-popd
 conan create %~2 --build missing
-if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
-popd
 exit /b
 
 :build_example_app
 if not exist build\examples\%~1 mkdir build\examples\%~1
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
-pushd ..\examples\%~1
+pushd build\examples\%~1
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
-conan install --build missing . --install-folder ../../build/examples/%~1 -g=virtualenv
+conan install -g=VirtualBuildEnv --build missing --output-folder . ../../../../examples/%~1
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
-cmake -S . -B ../../build/examples/%~1 --preset default
+cmake -B . -S ../../../../examples/%~1 --preset conan-default
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
-CALL ../../build/examples/%~1/activate.bat
-if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
-cmake --build ../../build/examples/%~1
-if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
-CALL ../../build/examples/%~1/deactivate.bat
-if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
+cmake --build . --preset conan-release
 popd
 exit /b

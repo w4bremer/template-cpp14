@@ -8,6 +8,6 @@ testbed1/1.0.0
 tb_names/1.0.0
 
 [generators]
-cmake_find_package
+CMakeDeps
 CMakeToolchain
-virtualenv
+VirtualRunEnv

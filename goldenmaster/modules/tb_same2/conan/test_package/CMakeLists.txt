@@ -1,7 +1,7 @@
-project(Testtb_same2)
 cmake_minimum_required(VERSION 3.20)
+project(Testtb_same2)
 include(CTest)
-find_package(tb_same2 REQUIRED)
+find_package(tb_same2 CONFIG REQUIRED)
 
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)

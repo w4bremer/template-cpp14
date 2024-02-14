@@ -37,6 +37,8 @@ jobs:
           key: ${{ runner.os }}-go-${{ env.go_version }}-${{ hashFiles('**/go.sum') }}
           restore-keys: ${{ runner.os }}-go-${{ env.go_version }}-
 
+      - run: cmake --version
+
       - name: Install catch2
         run: git clone --branch v2.13.8 --depth 1 https://github.com/catchorg/Catch2.git && cd Catch2 && cmake -Bbuild -H. -DBUILD_TESTING=OFF && sudo cmake --build build/ --target install
 
@@ -53,7 +55,7 @@ jobs:
 
       - name: Install objectlink-core-cpp
         if: ${{ matrix.config.short == 'olink'}}
-        run: git clone --branch v0.2.7 --depth 1 https://github.com/apigear-io/objectlink-core-cpp.git && cd objectlink-core-cpp && cmake -Bbuild -H. -DBUILD_TESTING=OFF && sudo cmake --build build/ --target install
+        run: git clone --branch v0.2.9 --depth 1 https://github.com/apigear-io/objectlink-core-cpp.git && cd objectlink-core-cpp && cmake -Bbuild -H. -DBUILD_TESTING=OFF && sudo cmake --build build/ --target install
 
       - name: Install paho.mqtt.c
         if: ${{ matrix.config.short == 'mqtt'}}
@@ -95,6 +97,8 @@ jobs:
           key: ${{ runner.os }}-go-${{ env.go_version }}-${{ hashFiles('**/go.sum') }}
           restore-keys: ${{ runner.os }}-go-${{ env.go_version }}-
 
+      - run: cmake --version
+
       - name: Install catch2
         run: git clone --branch v2.13.8 --depth 1 https://github.com/catchorg/Catch2.git && cd Catch2 && cmake -Bbuild -H. -DBUILD_TESTING=OFF && sudo cmake --build build/ --target install
 
@@ -111,7 +115,7 @@ jobs:
 
       - name: Install objectlink-core-cpp
         if: ${{ matrix.config.short == 'olink'}}
-        run: git clone --branch v0.2.7 --depth 1 https://github.com/apigear-io/objectlink-core-cpp.git && cd objectlink-core-cpp && cmake -Bbuild -H. -DPAHO_BUILD_SHARED=OFF -DPAHO_BUILD_STATIC=ON -DPAHO_WITH_SSL=ON -DBUILD_TESTING=OFF && sudo cmake --build build/ --target install
+        run: git clone --branch v0.2.9 --depth 1 https://github.com/apigear-io/objectlink-core-cpp.git && cd objectlink-core-cpp && cmake -Bbuild -H. -DBUILD_TESTING=OFF && sudo cmake --build build/ --target install
 
       - name: Install paho.mqtt.c
         if: ${{ matrix.config.short == 'mqtt'}}
@@ -124,7 +128,7 @@ jobs:
         working-directory: test
         env:
             CTEST_OUTPUT_ON_FAILURE: 1
-        run: cmake -Bbuild -DCMAKE_INSTALL_PREFIX=tmp -DCMAKE_MODULE_PATH=$GITHUB_WORKSPACE/deps -DBUILD_TESTING=ON && cmake --build build/ && cmake --build build/ --target test && cmake --build build/ --target install
+        run: cmake -DCMAKE_BUILD_TYPE=Release -Bbuild -DCMAKE_INSTALL_PREFIX=tmp -DCMAKE_PREFIX_PATH=$GITHUB_WORKSPACE/deps -DBUILD_TESTING=ON && cmake --build build/ && cmake --build build/ --target test && cmake --build build/ --target install
 
   conan_build:
     name: ${{ matrix.config.name }}
@@ -157,7 +161,7 @@ jobs:
         uses: actions/cache@v3
         with:
           path: |
-            ~/.conan/data
+            ~/.conan2/p
           key: ubuntu-latest-conan-cache-${{ hashFiles('goldenmaster/**/conanfile.py', 'goldenmaster/**/conanfile.txt') }}
           restore-keys: |
             ubuntu-latest-conan-cache
@@ -170,14 +174,9 @@ jobs:
       - name: Install Conan
         run: pip install -r .github/workflows/conan-requirements.txt
       - name: Create default profile
-        run: conan profile new default --detect
-      - name: Set C++11 on Linux
-        run: conan profile update settings.compiler.libcxx=libstdc++11 default
+        run: conan profile detect
 
-
-      - name: Install CMake
-        run: conan install cmake/3.24.2@ -g=virtualrunenv --build=missing
-
+      - run: cmake --version
       - run: go run main.go install
       - name: generate ${{ matrix.config.short }} feature set
         run: bin/apigear g x -f "${{ matrix.config.features }}" -t . -o test -i apigear/testbed.simple.module.yaml
@@ -186,3 +185,12 @@ jobs:
         env:
             CTEST_OUTPUT_ON_FAILURE: 1
         run: chmod +x ./scripts/test_conan.sh && ./scripts/test_conan.sh
+      - name: Archive workspace artifacts for debugging
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: ${{ matrix.config.short }}-workspace
+          path: |
+            *
+            ~/.conan2/p
+          retention-days: 1

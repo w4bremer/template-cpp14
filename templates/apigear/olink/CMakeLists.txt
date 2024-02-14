@@ -29,7 +29,7 @@ target_include_directories(poco-olink
     $<INSTALL_INTERFACE:include>
 )
 
-target_link_libraries(poco-olink PUBLIC olink_core apigear::utilities Poco::Net PRIVATE Poco::Util)
+target_link_libraries(poco-olink PUBLIC olink_core::olink_core apigear::utilities Poco::Net PRIVATE Poco::Util)
 
 
 # install binary files
