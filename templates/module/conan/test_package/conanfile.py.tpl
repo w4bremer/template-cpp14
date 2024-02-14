@@ -1,13 +1,20 @@
 {{- $module_id := snake .Module.Name -}}
 import os
-
-from conans import ConanFile, CMake, tools
+from conan import ConanFile
+from conan.tools.cmake import CMake, CMakeDeps, CMakeToolchain
+# from conan.tools.build import cross_building
+from conan.tools.build import can_run
 
 
 class {{$module_id}}TestConan(ConanFile):
     settings = "os", "compiler", "build_type", "arch"
-    generators = "cmake_find_package"
     requires = "{{$module_id}}/{{.Module.Version}}"
+
+    def generate(self):
+        tc = CMakeToolchain(self)
+        tc.generate()
+        deps = CMakeDeps(self)
+        deps.generate()
 
     def build(self):
         cmake = CMake(self)
@@ -17,14 +24,17 @@ class {{$module_id}}TestConan(ConanFile):
         cmake.build()
 
     def imports(self):
-        self.copy("*", src="@bindirs", dst="bin")
-        self.copy("*", src="@libdirs", dst="lib")
+        copy(self, "*", src="@bindirs", dst="bin")
+        copy(self, "*", src="@libdirs", dst="lib")
 
     def test(self):
-        if not tools.cross_building(self):
-            # Visual Studio uses Release/Debug subfolders to generate binaries
-            if self.settings.compiler == "Visual Studio":
-                build_type = self.settings.get_safe("build_type", default="Release")
-                self.run(os.path.sep.join([".", build_type, "test_{{$module_id}}"]), run_environment=True)
-            else:
-                self.run(os.path.sep.join([".", "test_{{$module_id}}"]), run_environment=True)
+        if can_run(self):
+            cmd = os.path.join(self.cpp.build.bindir, "test_{{$module_id}}")
+            self.run(cmd, env="conanrun")
+        # if not cross_building(self):
+        #     # Visual Studio uses Release/Debug subfolders to generate binaries
+        #     if self.settings.compiler == "msvc":
+        #         build_type = self.settings.get_safe("build_type", default="Release")
+        #         self.run(os.path.sep.join([".", build_type, "test_{{$module_id}}"]))
+        #     else:
+        #         self.run(os.path.sep.join([".", "test_{{$module_id}}"]))

@@ -5,6 +5,6 @@
 {{- end }}
 
 [generators]
-cmake_find_package
+CMakeDeps
 CMakeToolchain
-virtualenv
+VirtualRunEnv

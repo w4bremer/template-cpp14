@@ -269,6 +269,6 @@ If generating all features, you'll need Poco library (websockets library used by
 You then may want to use [conan](features/conan.md) feature, which will get all necessary dependencies.
 
 Otherwise you might want to add
-`set(CMAKE_MODULE_PATH "path/to/your/poco_or_paho_build")` to your `CMakeLists` or use option `-DCMAKE_MODULE_PATH=$GITHUB_WORKSPACE/path/to/poco_or_paho_build` .
+`set(CMAKE_MODULE_PATH "path/to/your/poco_or_paho_build")` to your `CMakeLists` or use option `-DCMAKE_PREFIX_PATH=$GITHUB_WORKSPACE/path/to/poco_or_paho_build` .
 You might want also use conan for first time - to get you all those dependencies and then use paths provided by conan.
 :::

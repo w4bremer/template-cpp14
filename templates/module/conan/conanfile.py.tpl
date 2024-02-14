@@ -2,9 +2,10 @@
 {{- $isApiHeaderOnly := and (eq (len .Module.Enums) 0) (eq (len .Module.Structs) 0) -}}
 {{- $module_id := snake .Module.Name -}}
 {{- $features := .Features -}}
-from conans import ConanFile, CMake, tools
-from conan.tools.cmake import cmake_layout
-from conan.tools.files import copy
+from conan import ConanFile
+from conan.tools.cmake import CMake, CMakeDeps, CMakeToolchain, cmake_layout
+from conan.tools.build import check_max_cppstd, check_min_cppstd, cross_building
+from conan.tools.files import load, copy
 from pathlib import os
 
 class {{$module_id}}Conan(ConanFile):
@@ -14,26 +15,28 @@ class {{$module_id}}Conan(ConanFile):
     author = "ApiGear UG"
     #url = "<Package recipe repository url here, for issues about the package>"
     settings = "os", "compiler", "build_type", "arch"
-    requires = "catch2/2.13.7", "nlohmann_json/3.9.1"{{ if $features.apigear }}, "apigear/3.5.2"{{- end}}
-    generators = "cmake_find_package"
+    requires = {{ if or $features.stubs $features.core }}"catch2/2.13.7", {{ end }}"nlohmann_json/3.9.1"{{ if $features.apigear }}, "apigear/3.5.2"{{- end}}
     options = {"build_testing": [True, False]}
     default_options = {
         "build_testing": True,
         {{- if $features.monitor }}
-        "apigear:enable_monitor": True,
+        "apigear/*:enable_monitor": True,
         {{- end}}
         {{- if $features.olink }}
-        "apigear:enable_olink": True,
+        "apigear/*:enable_olink": True,
         {{- end}}
         {{- if $features.mqtt }}
-        "apigear:enable_mqtt": True,
+        "apigear/*:enable_mqtt": True,
         {{- end}}
     }
 
+    def validate(self):
+        check_min_cppstd(self, "14")
+
     def layout(self):
+        cmake_layout(self)
         self.folders.root = ".."
         self.folders.source = "{{$module_id}}"
-        # cmake_layout(self)
 
     def export_sources(self):
         # move one level up from the recipe folder
@@ -42,43 +45,46 @@ class {{$module_id}}Conan(ConanFile):
         dst_folder = os.path.join(self.export_sources_folder, "{{$module_id}}")
         copy(self, "*", source_folder, dst_folder)
 
+    def source(self):
+        cmake_file = load(self, "CMakeLists.txt")
+
+    def generate(self):
+        tc = CMakeToolchain(self)
+        if not cross_building(self):
+            tc.cache_variables['BUILD_TESTING'] = self.options.build_testing
+        tc.generate()
+        deps = CMakeDeps(self)
+        deps.generate()
+
     def build(self):
         cmake = CMake(self)
-        if not tools.cross_building(self):
-            cmake.definitions['BUILD_TESTING'] = self.options.build_testing
 
         # workaround wrong layout setup if not using "conan create"
-        if self.folders.source_folder != self.export_sources_folder:
+        if self.folders.base_source.endswith("{{$module_id}}"):
+            print("Building outside of the conan cache")
             # we are building outside of the conan cache
-            cmake.configure("..")
+            cmake.configure(build_script_folder="..")
         else:
             cmake.configure()
 
         cmake.build()
-        if not tools.cross_building(self):
-            build_type = self.settings.get_safe("build_type", default="Release")
-            # workaround - we need to add the api.dll and the core.dll to the windows PATH to be found for the test
-            local_libs = { "PATH" : []}
-            local_libs["PATH"].append(os.path.sep.join([self.build_folder, "generated", "api", build_type]))
-            {{ if $features.core -}} local_libs["PATH"].append(os.path.sep.join([self.build_folder, "generated", "core", build_type])) {{- end}}
-            with tools.environment_append(local_libs):
-                cmake.test()
+        if not cross_building(self):
+            cmake.test()
+            # build_type = self.settings.get_safe("build_type", default="Release")
+            # # workaround - we need to add the api.dll and the core.dll to the windows PATH to be found for the test
+            # local_libs = { "PATH" : []}
+            # local_libs["PATH"].append(os.path.sep.join([self.build_folder, "generated", "api", build_type]))
+            # {{ if $features.core -}} local_libs["PATH"].append(os.path.sep.join([self.build_folder, "generated", "core", build_type])) {{- end}}
+            # with tools.environment_append(local_libs):
+            #     cmake.test()
 
     def package(self):
-        packages = ["api"
-        {{- if $features.core }}, "core"{{ end -}}
-        {{- if $features.monitor }}, "monitor"{{ end -}}
-        {{- if $features.olink }}, "olink"{{ end -}}
-        ]
-        self.copy("**/*.h", dst="include/{{$module_id}}/generated", src="{{$module_id}}/generated")
-        {{ if $features.stubs -}} self.copy("*.h", dst="include/{{$module_id}}/implementation", src="{{$module_id}}/implementation") {{- end}}
-        self.copy("*.lib", dst="lib", keep_path=False)
-        self.copy("*.dll", dst="bin", keep_path=False)
-        self.copy("*.dylib*", dst="lib", keep_path=False)
-        self.copy("*.so", dst="lib", keep_path=False)
-        self.copy("*.a", dst="lib", keep_path=False)
+        cmake = CMake(self)
+        cmake.install()
 
     def package_info(self):
+        # generates a Find{{$module_id}}.cmake file in addition to the {{$module_id}}-config.cmake
+        self.cpp_info.set_property("cmake_find_mode", "both")
         self.env_info.path.append(os.path.join(self.package_folder, "bin"))
         self.cpp_info.components["{{$module_id}}-api"].includedirs.append(os.path.join(self.package_folder, "include"))
         {{- if (eq $isApiHeaderOnly false) }}
