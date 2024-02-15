@@ -57,7 +57,8 @@ class apigearConan(ConanFile):
         copy(self, "*", self.recipe_folder, self.export_sources_folder)
 
     def requirements(self):
-        self.requires("catch2/2.13.7")
+        if self.options.enable_monitor:
+            self.requires("catch2/2.13.7")
         if self.options.enable_monitor or self.options.enable_olink or self.options.enable_mqtt:
               self.requires("nlohmann_json/3.9.1")
         if self.options.enable_monitor or self.options.enable_olink:
