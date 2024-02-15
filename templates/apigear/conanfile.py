@@ -57,16 +57,17 @@ class apigearConan(ConanFile):
         copy(self, "*", self.recipe_folder, self.export_sources_folder)
 
     def requirements(self):
-        if self.options.enable_monitor:
-            self.requires("catch2/2.13.7")
         if self.options.enable_monitor or self.options.enable_olink or self.options.enable_mqtt:
               self.requires("nlohmann_json/3.9.1")
         if self.options.enable_monitor or self.options.enable_olink:
               self.requires("poco/1.12.4")
-        if self.options.enable_olink:
-              self.test_requires("trompeloeil/46")
         if self.options.enable_mqtt:
               self.requires("paho-mqtt-c/1.3.12")
+
+    def build_requirements(self):
+        self.test_requires("catch2/2.13.7")
+        if self.options.enable_olink:
+              self.test_requires("trompeloeil/46")
 
     def validate(self):
         check_min_cppstd(self, "14")
@@ -114,7 +115,7 @@ class apigearConan(ConanFile):
         if self.options.enable_monitor:
             self.cpp_info.components["poco-tracer"].libs = ["poco-tracer"]
             self.cpp_info.components["poco-tracer"].includedirs.append(os.path.join(self.package_folder, "include"))
-            self.cpp_info.components["poco-tracer"].requires = ["catch2::catch2", "poco::poco", "nlohmann_json::nlohmann_json", "utilities"]
+            self.cpp_info.components["poco-tracer"].requires = ["poco::poco", "nlohmann_json::nlohmann_json", "utilities"]
         if self.options.enable_olink:
             self.cpp_info.components["poco-olink"].libs = ["poco-olink"]
             self.cpp_info.components["poco-olink"].includedirs.append(os.path.join(self.package_folder, "include"))
