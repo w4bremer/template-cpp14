@@ -1,6 +1,7 @@
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+find_package(olink_core REQUIRED)
 find_package(apigear REQUIRED COMPONENTS poco-olink)
 set (SOURCES_OLINK
     samestruct1interfaceservice.cpp
@@ -23,6 +24,7 @@ target_link_libraries(tb_same2-olink
     PRIVATE
     tb_same2::tb_same2-core
     PUBLIC
+    olink_core
     apigear::poco-olink
 )
 
