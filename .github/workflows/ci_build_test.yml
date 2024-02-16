@@ -215,10 +215,10 @@ jobs:
       - run: mkdir -p deps
       - name: Install poco using conan
         run: |
-          cd deps && conan install --profile:host=release --requires=poco/1.12.4 --build missing -o poco/*:shared=False -o poco/*:enable_data_mysql=False -o openssl:shared=False -o poco/*:enable_activerecord=False -o poco/*:enable_apacheconnector=False -o poco/*:enable_cppparser=False -o poco/*:enable_crypto=True -o poco/*:enable_data=False -o poco/*:enable_data_odbc=False -o poco/*:enable_data_postgresql=False -o poco/*:enable_data_sqlite=False -o poco/*:enable_encodings=False -o poco/*:enable_json=False -o poco/*:enable_jwt=False -o poco/*:enable_mongodb=False -o poco/*:enable_net=True -o poco/*:enable_netssl=True -o poco/*:enable_pagecompiler=False -o poco/*:enable_pagecompiler_file2page=False -o poco/*:enable_pdf=False -o poco/*:enable_pocodoc=False -o poco/*:enable_redis=False -o poco/*:enable_sevenzip=False -o poco/*:enable_util=True -o poco/*:enable_xml=False -o poco/*:enable_zip=False --generator CMakeDeps --generator VirtualBuildEnv
+          cd deps && conan install --profile:build=release --requires=poco/1.12.4 --build missing -o poco/*:shared=False -o poco/*:enable_data_mysql=False -o openssl:shared=False -o poco/*:enable_activerecord=False -o poco/*:enable_apacheconnector=False -o poco/*:enable_cppparser=False -o poco/*:enable_crypto=True -o poco/*:enable_data=False -o poco/*:enable_data_odbc=False -o poco/*:enable_data_postgresql=False -o poco/*:enable_data_sqlite=False -o poco/*:enable_encodings=False -o poco/*:enable_json=False -o poco/*:enable_jwt=False -o poco/*:enable_mongodb=False -o poco/*:enable_net=True -o poco/*:enable_netssl=True -o poco/*:enable_pagecompiler=False -o poco/*:enable_pagecompiler_file2page=False -o poco/*:enable_pdf=False -o poco/*:enable_pocodoc=False -o poco/*:enable_redis=False -o poco/*:enable_sevenzip=False -o poco/*:enable_util=True -o poco/*:enable_xml=False -o poco/*:enable_zip=False --generator CMakeDeps --generator VirtualBuildEnv
       - name: Install paho.mqtt.c using conan
         run: |
-          cd deps && conan install --profile:host=release --requires=paho-mqtt-c/1.3.12 --build missing -o paho-mqtt-c/*:shared=False --generator CMakeDeps --generator VirtualBuildEnv
+          cd deps && conan install --profile:build=release --requires=paho-mqtt-c/1.3.12 --build missing -o paho-mqtt-c/*:shared=False --generator CMakeDeps --generator VirtualBuildEnv
       - name: Run cmake on Linux/Mac
         if: ${{ matrix.config.os != 'windows-latest'}}
         working-directory: goldenmaster
