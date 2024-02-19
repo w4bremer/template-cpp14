@@ -5,22 +5,6 @@
 {{- $features := .Features -}}
 set({{$module_id_up}}_VERSION {{$.Module.Version}})
 @PACKAGE_INIT@
-INCLUDE("${CMAKE_CURRENT_LIST_DIR}/{{$module_idFirstUpper}}ApiTargets.cmake")
-{{- if $features.core }}
-INCLUDE("${CMAKE_CURRENT_LIST_DIR}/{{$module_idFirstUpper}}CoreTargets.cmake")
-{{- end}}
-{{- if $features.monitor }}
-INCLUDE("${CMAKE_CURRENT_LIST_DIR}/{{$module_idFirstUpper}}MonitorTargets.cmake")
-{{- end}}
-{{- if $features.olink }}
-INCLUDE("${CMAKE_CURRENT_LIST_DIR}/{{$module_idFirstUpper}}OLinkTargets.cmake")
-{{- end}}
-{{- if $features.mqtt }}
-INCLUDE("${CMAKE_CURRENT_LIST_DIR}/{{$module_idFirstUpper}}MqttTargets.cmake")
-{{- end}}
-{{- if $features.stubs }}
-INCLUDE("${CMAKE_CURRENT_LIST_DIR}/{{$module_idFirstUpper}}ImplementationTargets.cmake")
-{{- end}}
 
 # make sure we have all needed dependencies
 include(CMakeFindDependencyMacro)
@@ -36,6 +20,23 @@ find_dependency(apigear COMPONENTS poco-olink REQUIRED)
 {{- end}}
 {{- if $features.mqtt }}
 find_dependency(apigear COMPONENTS paho-mqtt REQUIRED)
+{{- end}}
+
+INCLUDE("${CMAKE_CURRENT_LIST_DIR}/{{$module_idFirstUpper}}ApiTargets.cmake")
+{{- if $features.core }}
+INCLUDE("${CMAKE_CURRENT_LIST_DIR}/{{$module_idFirstUpper}}CoreTargets.cmake")
+{{- end}}
+{{- if $features.monitor }}
+INCLUDE("${CMAKE_CURRENT_LIST_DIR}/{{$module_idFirstUpper}}MonitorTargets.cmake")
+{{- end}}
+{{- if $features.olink }}
+INCLUDE("${CMAKE_CURRENT_LIST_DIR}/{{$module_idFirstUpper}}OLinkTargets.cmake")
+{{- end}}
+{{- if $features.mqtt }}
+INCLUDE("${CMAKE_CURRENT_LIST_DIR}/{{$module_idFirstUpper}}MqttTargets.cmake")
+{{- end}}
+{{- if $features.stubs }}
+INCLUDE("${CMAKE_CURRENT_LIST_DIR}/{{$module_idFirstUpper}}ImplementationTargets.cmake")
 {{- end}}
 
 check_required_components(
