@@ -1,5 +1,6 @@
 find_package(nlohmann_json REQUIRED)
 find_package(eclipse-paho-mqtt-c REQUIRED paho-mqtt3as-static)
+find_package(OpenSSL REQUIRED SSL Crypto)
 
 set (SOURCES
   private/mqttcwrapper.cpp
