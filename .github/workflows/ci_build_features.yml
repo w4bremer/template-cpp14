@@ -44,8 +44,8 @@ jobs:
         if: ${{ matrix.config.short == 'olink'}}
         run: git clone --branch v46 --depth 1 https://github.com/rollbear/trompeloeil.git && cd trompeloeil && cmake -Bbuild -H. -DBUILD_TESTING=OFF && sudo cmake --build build/ --target install
 
-      - name: Install nlohmann using apt-get
-        run: sudo apt-get install -y nlohmann-json3-dev
+      - name: Install nlohmann and OpenSSL using apt-get
+        run: sudo apt-get install -y nlohmann-json3-dev openssl libssl-dev
 
       - name: Install poco using apt-get
         if: ${{ matrix.config.short == 'monitor' || matrix.config.short == 'olink' }}
@@ -102,8 +102,8 @@ jobs:
         if: ${{ matrix.config.short == 'olink'}}
         run: git clone --branch v46 --depth 1 https://github.com/rollbear/trompeloeil.git && cd trompeloeil && cmake -Bbuild -H. -DPAHO_BUILD_SHARED=OFF -DPAHO_BUILD_STATIC=ON -DPAHO_WITH_SSL=ON -DBUILD_TESTING=OFF && sudo cmake --build build/ --target install
 
-      - name: Install nlohmann using apt-get
-        run: sudo apt-get install -y nlohmann-json3-dev
+      - name: Install nlohmann and OpenSSL using apt-get
+        run: sudo apt-get install -y nlohmann-json3-dev openssl  libssl-dev
 
       - name: Install poco using apt-get
         if: ${{ matrix.config.short == 'monitor' || matrix.config.short == 'olink' }}
