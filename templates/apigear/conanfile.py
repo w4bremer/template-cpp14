@@ -25,7 +25,6 @@ class apigearConan(ConanFile):
                        "enable_fetch_olinkcore": True,
                        "poco/*:shared": False,
                        "poco/*:enable_data_mysql": False,
-                       "openssl/*:shared": False,
                        "poco/*:enable_activerecord": False,
                        "poco/*:enable_apacheconnector": False,
                        "poco/*:enable_cppparser": False,
@@ -86,11 +85,6 @@ class apigearConan(ConanFile):
         deps.set_property("poco", "cmake_find_mode", "module", build_context=True)
         deps.generate()
 
-    def configure(self):
-        if self.settings.os == "Windows":
-            self.options["openssl"].shared = True
-            self.options["poco"].shared = False
-
     def build(self):
         cmake = CMake(self)
         cmake.configure()
@@ -98,7 +92,6 @@ class apigearConan(ConanFile):
 
     def configure(self):
         if self.settings.os == "Windows":
-            self.options["openssl"].shared = True
             self.options["poco"].shared = False
 
 
