@@ -1,13 +1,17 @@
 import os
 from conan import ConanFile
-from conan.tools.cmake import CMake, CMakeDeps, CMakeToolchain
-# from conan.tools.build import cross_building
+from conan.tools.cmake import CMake, CMakeDeps, CMakeToolchain, cmake_layout
 from conan.tools.build import can_run
 
 
 class tb_enumTestConan(ConanFile):
     settings = "os", "compiler", "build_type", "arch"
-    requires = "tb_enum/1.0.0"
+
+    def requirements(self):
+        self.requires(self.tested_reference_str)
+
+    def layout(self):
+        cmake_layout(self)
 
     def generate(self):
         tc = CMakeToolchain(self)
@@ -30,10 +34,3 @@ class tb_enumTestConan(ConanFile):
         if can_run(self):
             cmd = os.path.join(self.cpp.build.bindir, "test_tb_enum")
             self.run(cmd, env="conanrun")
-        # if not cross_building(self):
-        #     # Visual Studio uses Release/Debug subfolders to generate binaries
-        #     if self.settings.compiler == "msvc":
-        #         build_type = self.settings.get_safe("build_type", default="Release")
-        #         self.run(os.path.sep.join([".", build_type, "test_tb_enum"]))
-        #     else:
-        #         self.run(os.path.sep.join([".", "test_tb_enum"]))

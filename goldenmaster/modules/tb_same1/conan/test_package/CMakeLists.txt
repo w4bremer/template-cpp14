@@ -1,5 +1,5 @@
-project(Testtb_same1)
 cmake_minimum_required(VERSION 3.20)
+project(Testtb_same1)
 include(CTest)
 find_package(tb_same1 CONFIG REQUIRED)
 

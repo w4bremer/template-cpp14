@@ -1,6 +1,6 @@
 {{- $module_id := snake .Module.Name -}}
-project(Test{{$module_id}})
 cmake_minimum_required(VERSION 3.20)
+project(Test{{$module_id}})
 include(CTest)
 find_package({{$module_id}} CONFIG REQUIRED)
 

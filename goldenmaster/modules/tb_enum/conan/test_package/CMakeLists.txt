@@ -1,5 +1,5 @@
-project(Testtb_enum)
 cmake_minimum_required(VERSION 3.20)
+project(Testtb_enum)
 include(CTest)
 find_package(tb_enum CONFIG REQUIRED)
 
