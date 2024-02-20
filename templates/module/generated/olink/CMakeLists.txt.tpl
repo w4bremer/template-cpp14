@@ -25,7 +25,7 @@ target_link_libraries({{$module_id}}-olink
     PRIVATE
     {{$module_id}}::{{$module_id}}-core
     PUBLIC
-    olink_core
+    olink_core::olink_core
     apigear::poco-olink
 )
 

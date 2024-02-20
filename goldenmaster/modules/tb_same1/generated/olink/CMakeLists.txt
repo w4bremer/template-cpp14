@@ -24,7 +24,7 @@ target_link_libraries(tb_same1-olink
     PRIVATE
     tb_same1::tb_same1-core
     PUBLIC
-    olink_core
+    olink_core::olink_core
     apigear::poco-olink
 )
 

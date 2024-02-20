@@ -24,7 +24,7 @@ target_link_libraries(testbed2-olink
     PRIVATE
     testbed2::testbed2-core
     PUBLIC
-    olink_core
+    olink_core::olink_core
     apigear::poco-olink
 )
 

@@ -18,7 +18,7 @@ target_link_libraries(tb_enum-olink
     PRIVATE
     tb_enum::tb_enum-core
     PUBLIC
-    olink_core
+    olink_core::olink_core
     apigear::poco-olink
 )
 
