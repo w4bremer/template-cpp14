@@ -53,7 +53,7 @@ jobs:
 
       - name: Install objectlink-core-cpp
         if: ${{ matrix.config.short == 'olink'}}
-        run: git clone --branch v0.2.8 --depth 1 https://github.com/apigear-io/objectlink-core-cpp.git && cd objectlink-core-cpp && cmake -Bbuild -H. -DBUILD_TESTING=OFF && sudo cmake --build build/ --target install
+        run: git clone --branch bugfix/ExportCMakeTargets --depth 1 https://github.com/w4bremer/objectlink-core-cpp.git && cd objectlink-core-cpp && cmake -Bbuild -H. -DBUILD_TESTING=OFF && sudo cmake --build build/ --target install
 
       - name: Install paho.mqtt.c
         if: ${{ matrix.config.short == 'mqtt'}}
@@ -111,7 +111,7 @@ jobs:
 
       - name: Install objectlink-core-cpp
         if: ${{ matrix.config.short == 'olink'}}
-        run: git clone --branch v0.2.8 --depth 1 https://github.com/apigear-io/objectlink-core-cpp.git && cd objectlink-core-cpp && cmake -Bbuild -H. -DBUILD_TESTING=OFF && sudo cmake --build build/ --target install
+        run: git clone --branch bugfix/ExportCMakeTargets --depth 1 https://github.com/w4bremer/objectlink-core-cpp.git && cd objectlink-core-cpp && cmake -Bbuild -H. -DBUILD_TESTING=OFF && sudo cmake --build build/ --target install
 
       - name: Install paho.mqtt.c
         if: ${{ matrix.config.short == 'mqtt'}}
