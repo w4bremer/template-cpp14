@@ -111,6 +111,9 @@ class apigearConan(ConanFile):
     def package(self):
         cmake = CMake(self)
         cmake.install()
+        if self.options.enable_olink and self.options.enable_fetch_olinkcore:
+            # manually copy objectlink-core-cpp include files, to have headers for module/generated/olink instead of linking whole library
+            copy(self, "**/*.h", dst="include", src="_deps/olink_core-src/src", keep_path=True)
 
     def package_info(self):
         # generates a Findapigear.cmake file in addition to the apigear-config.cmake
