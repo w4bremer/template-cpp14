@@ -37,6 +37,8 @@ jobs:
           key: ${{ runner.os }}-go-${{ env.go_version }}-${{ hashFiles('**/go.sum') }}
           restore-keys: ${{ runner.os }}-go-${{ env.go_version }}-
 
+      - run: cmake --version
+
       - name: Install catch2
         run: git clone --branch v2.13.8 --depth 1 https://github.com/catchorg/Catch2.git && cd Catch2 && cmake -Bbuild -H. -DBUILD_TESTING=OFF && sudo cmake --build build/ --target install
 
@@ -94,6 +96,8 @@ jobs:
             ~/.cache/go-build
           key: ${{ runner.os }}-go-${{ env.go_version }}-${{ hashFiles('**/go.sum') }}
           restore-keys: ${{ runner.os }}-go-${{ env.go_version }}-
+
+      - run: cmake --version
 
       - name: Install catch2
         run: git clone --branch v2.13.8 --depth 1 https://github.com/catchorg/Catch2.git && cd Catch2 && cmake -Bbuild -H. -DBUILD_TESTING=OFF && sudo cmake --build build/ --target install

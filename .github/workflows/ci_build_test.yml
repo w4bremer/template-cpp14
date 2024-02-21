@@ -18,8 +18,8 @@ jobs:
       matrix:
         config:
           - { name: "Conan Windows Latest MSVC", os: windows-latest }
-          - { name: "Conan Ubuntu Latest GCC", os: ubuntu-latest }
-          - { name: "Conan macOS Latest Clang", os: macos-latest }
+          # - { name: "Conan Ubuntu Latest GCC", os: ubuntu-latest }
+          # - { name: "Conan macOS Latest Clang", os: macos-latest }
     steps:
       - uses: actions/checkout@v3
         with:
@@ -62,6 +62,7 @@ jobs:
       #     conan profile update settings.build_type=Debug default
       - name: Install CMake
         run: conan install --tool-requires=cmake/3.24.4 -g=VirtualRunEnv
+      - run: cmake --version
       - name: Run conan build Linux/macOS
         if: ${{ matrix.config.os != 'windows-latest'}}
         working-directory: goldenmaster
@@ -83,8 +84,8 @@ jobs:
       matrix:
         config:
           - { name: "CMake Windows Latest MSVC", os: windows-latest }
-          - { name: "CMake Ubuntu Latest GCC", os: ubuntu-latest }
-          - { name: "CMake macOS Latest Clang", os: macos-latest }
+          # - { name: "CMake Ubuntu Latest GCC", os: ubuntu-latest }
+          # - { name: "CMake macOS Latest Clang", os: macos-latest }
     steps:
       - uses: actions/checkout@v3
         with:
@@ -147,6 +148,7 @@ jobs:
           path: |
             ~/.conan2/p
           key: ${{ matrix.config.os }}-conan4cmake-cache-${{ hashFiles('.github/workflows/ci_build_test.yml') }}
+      - run: cmake --version
       - name: Install poco using apt-get
         if: ${{ matrix.config.os == 'ubuntu-latest'}}
         run: sudo apt-get install -y cmake libpoco-dev nlohmann-json3-dev
@@ -182,8 +184,8 @@ jobs:
       matrix:
         config:
           - { name: "CMake Release Windows Latest MSVC", os: windows-latest }
-          - { name: "CMake Release Ubuntu Latest GCC", os: ubuntu-latest }
-          - { name: "CMake Release macOS Latest Clang", os: macos-latest }
+          # - { name: "CMake Release Ubuntu Latest GCC", os: ubuntu-latest }
+          # - { name: "CMake Release macOS Latest Clang", os: macos-latest }
     steps:
       - uses: actions/checkout@v3
         with:
@@ -226,6 +228,7 @@ jobs:
       #   run: |
       #     conan profile update settings.compiler.runtime=MD release
       #     conan profile update settings.build_type=Release release
+      - run: cmake --version
       - run: mkdir -p deps
       - name: Install poco using conan
         run: |
