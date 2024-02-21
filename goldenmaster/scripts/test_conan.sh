@@ -7,50 +7,17 @@ set -x;
 build_apigear()
 {
     conan remove "apigear/*" -c
-    mkdir -p apigear;
-    pushd apigear;
-    conan install --build missing ../../apigear -of . -g=VirtualBuildEnv &&\
-    conan build ../../apigear -of . &&\
-    conan build -b test ../../apigear -of . &&\
-    ## build with cmake
-    mkdir cmake_build && pushd cmake_build &&
-    pwd &&\
-    cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=ON -DCMAKE_PREFIX_PATH="`pwd`/../build/Release/generators/" -B. -S../../../apigear &&\
-    cmake --build . &&\
-    source ../build/Release/generators/conanbuild.sh &&\
-    cmake --build . --target test &&\
-    source ../build/Release/generators/deactivate_conanbuild.sh &&\
-    popd &&\
     ## create conan package in cache
-    conan create ../../apigear
+    conan create ../apigear --build missing
     if [ $? -ne 0 ]; then exit 1; fi;
-    popd
 }
 
 build_module()
 {
     conan remove "$1/*" -c
-    mkdir -p modules/$1;
-    pushd modules;
-    # install FindXXX.cmake files for dependencies
-    pwd && mkdir -p $1 && cd $1 && pwd &&\
-    conan install --build missing ../../../modules/$1/conan -of . &&\
-    conan build ../../../modules/$1/conan -of . &&\
-    conan build -b test ../../../modules/$1/conan -of . &&\
-    ## build with cmake
-    mkdir cmake_build && pushd cmake_build &&
-    pwd &&\
-    cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=ON -DCMAKE_PREFIX_PATH="`pwd`/../build/Release/generators/" -B. -S../../../../modules/$1 &&\
-    cmake --build . &&\
-    source ../build/Release/generators/conanbuild.sh &&\
-    cmake --build . --target test &&\
-    source ../build/Release/generators/deactivate_conanbuild.sh &&\
-    popd &&\
-    pwd &&\
     ## create conan package in cache
-    conan create ../../../modules/$1/conan --build missing
+    conan create ../modules/$1/conan --build missing
     buildresult=$?
-    popd
     if [ $buildresult -ne 0 ]; then exit 1; fi;
 }
 
