@@ -7,19 +7,34 @@ from pathlib import os
 class tb_same1Conan(ConanFile):
     name = "tb_same1"
     version = "1.0.0"
+    package_type = "library"
     license = "GPL v3"
     author = "ApiGear UG"
     #url = "<Package recipe repository url here, for issues about the package>"
     settings = "os", "compiler", "build_type", "arch"
     requires = "catch2/2.13.7", "nlohmann_json/3.9.1", "apigear/3.5.2"
-    options = {"build_testing": [True, False], "enable_fetch_olinkcore": [True, False]}
+    options = {
+        "build_testing": [True, False],
+        "shared": [True, False],
+        "fPIC": [True, False], "enable_fetch_olinkcore": [True, False]
+    }
     default_options = {
         "build_testing": True,
+        "shared": True,
+        "fPIC": False,
         "apigear/*:enable_monitor": True,
         "enable_fetch_olinkcore": True,
         "apigear/*:enable_olink": True,
         "apigear/*:enable_mqtt": True,
     }
+
+    def config_options(self):
+        if self.settings.os == "Windows":
+            self.options.rm_safe("fPIC")
+
+    def configure(self):
+        if self.options.shared:
+            self.options.rm_safe("fPIC")
 
     def validate(self):
         check_min_cppstd(self, "14")
@@ -77,7 +92,6 @@ class tb_same1Conan(ConanFile):
     def package_info(self):
         # generates a Findtb_same1.cmake file in addition to the tb_same1-config.cmake
         self.cpp_info.set_property("cmake_find_mode", "both")
-        self.env_info.path.append(os.path.join(self.package_folder, "bin"))
         self.cpp_info.components["tb_same1-api"].includedirs.append(os.path.join(self.package_folder, "include"))
         self.cpp_info.components["tb_same1-api"].libs = ["tb_same1-api"]
         self.cpp_info.components["tb_same1-core"].includedirs.append(os.path.join(self.package_folder, "include"))

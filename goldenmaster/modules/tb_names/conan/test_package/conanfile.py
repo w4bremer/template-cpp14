@@ -24,7 +24,5 @@ class tb_namesTestConan(ConanFile):
 
     def test(self):
         if can_run(self):
-            self.run("env | sort")
-            self.run("env | sort", env="conanrun")
             cmd = os.path.join(self.cpp.build.bindirs[0], "test_tb_names")
             self.run(cmd, env="conanrun")

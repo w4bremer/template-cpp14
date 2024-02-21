@@ -11,15 +11,22 @@ from pathlib import os
 class {{$module_id}}Conan(ConanFile):
     name = "{{$module_id}}"
     version = "{{.Module.Version}}"
+    package_type = "library"
     license = "GPL v3"
     author = "ApiGear UG"
     #url = "<Package recipe repository url here, for issues about the package>"
     settings = "os", "compiler", "build_type", "arch"
     requires = {{ if or $features.stubs $features.core }}"catch2/2.13.7", {{ end }}"nlohmann_json/3.9.1"{{ if $features.apigear }}, "apigear/3.5.2"{{- end}}
-    options = {"build_testing": [True, False]
-        {{- if $features.olink }}, "enable_fetch_olinkcore": [True, False]{{ end }}}
+    options = {
+        "build_testing": [True, False],
+        "shared": [True, False],
+        "fPIC": [True, False]
+        {{- if $features.olink }}, "enable_fetch_olinkcore": [True, False]{{ end }}
+    }
     default_options = {
         "build_testing": True,
+        "shared": True,
+        "fPIC": False,
         {{- if $features.monitor }}
         "apigear/*:enable_monitor": True,
         {{- end}}
@@ -31,6 +38,14 @@ class {{$module_id}}Conan(ConanFile):
         "apigear/*:enable_mqtt": True,
         {{- end}}
     }
+
+    def config_options(self):
+        if self.settings.os == "Windows":
+            self.options.rm_safe("fPIC")
+
+    def configure(self):
+        if self.options.shared:
+            self.options.rm_safe("fPIC")
 
     def validate(self):
         check_min_cppstd(self, "14")
@@ -90,7 +105,6 @@ class {{$module_id}}Conan(ConanFile):
     def package_info(self):
         # generates a Find{{$module_id}}.cmake file in addition to the {{$module_id}}-config.cmake
         self.cpp_info.set_property("cmake_find_mode", "both")
-        self.env_info.path.append(os.path.join(self.package_folder, "bin"))
         self.cpp_info.components["{{$module_id}}-api"].includedirs.append(os.path.join(self.package_folder, "include"))
         {{- if (eq $isApiHeaderOnly false) }}
         self.cpp_info.components["{{$module_id}}-api"].libs = ["{{$module_id}}-api"]

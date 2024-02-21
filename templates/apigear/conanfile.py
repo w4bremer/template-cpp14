@@ -8,17 +8,22 @@ from pathlib import os
 class apigearConan(ConanFile):
     name = "apigear"
     version = "3.5.2"
+    package_type = "library"
     license = "Apache-2.0"
     author = "ApiGear UG"
     #url = "<Package recipe repository url here, for issues about the package>"
     settings = "os", "compiler", "build_type", "arch"
     options = {
+        "shared": [True, False],
+        "fPIC": [True, False],
         "enable_monitor": [True, False],
         "enable_olink": [True, False],
         "enable_mqtt": [True, False],
         "enable_fetch_olinkcore": [True, False],
     }
     default_options = {
+                       "shared": True,
+                       "fPIC": False,
                        "enable_monitor": False,
                        "enable_olink": False,
                        "enable_mqtt": False,
@@ -51,6 +56,14 @@ class apigearConan(ConanFile):
                        "paho-mqtt-c/*:shared": False,
                        "paho-mqtt-c/*:asynchronous": True
                        }
+
+    def config_options(self):
+        if self.settings.os == "Windows":
+            self.options.rm_safe("fPIC")
+
+    def configure(self):
+        if self.options.shared:
+            self.options.rm_safe("fPIC")
 
     def export_sources(self):
         copy(self, "*", self.recipe_folder, self.export_sources_folder)
@@ -102,7 +115,6 @@ class apigearConan(ConanFile):
     def package_info(self):
         # generates a Findapigear.cmake file in addition to the apigear-config.cmake
         self.cpp_info.set_property("cmake_find_mode", "both")
-        self.env_info.path.append(os.path.join(self.package_folder, "bin"))
         self.cpp_info.components["utilities"].libs = ["utilities"]
         self.cpp_info.components["utilities"].includedirs.append(os.path.join(self.package_folder, "include"))
         if self.options.enable_monitor:
