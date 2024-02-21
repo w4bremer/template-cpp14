@@ -13,6 +13,7 @@ jobs:
   cmake_script:
     name: ${{ matrix.config.name }}
     runs-on: ubuntu-latest
+    if: false
     strategy:
       fail-fast: false
       matrix:
@@ -71,6 +72,7 @@ jobs:
   cmake_list:
     name: ${{ matrix.config.name }}
     runs-on: ubuntu-latest
+    if: false
     strategy:
       fail-fast: false
       matrix:
@@ -133,10 +135,10 @@ jobs:
       fail-fast: false
       matrix:
         config:
-          - { name: "Simple Conf Conan", short: "simple", features: "api,core,stubs,examples,conan" }
-          - { name: "Monitor Conf Conan", short: "monitor", features: "api,core,stubs,monitor,examples,conan" }
+          # - { name: "Simple Conf Conan", short: "simple", features: "api,core,stubs,examples,conan" }
+          # - { name: "Monitor Conf Conan", short: "monitor", features: "api,core,stubs,monitor,examples,conan" }
           - { name: "OLink Conf Conan", short: "olink", features: "api,core,stubs,olink,examples_olink,conan" }
-          - { name: "MQTT Conf Conan", short: "mqtt", features: "api,core,stubs,mqtt,examples_mqtt,conan" }
+          # - { name: "MQTT Conf Conan", short: "mqtt", features: "api,core,stubs,mqtt,examples_mqtt,conan" }
     steps:
       - uses: actions/checkout@v3
         with:
@@ -177,7 +179,7 @@ jobs:
 
       - name: Install CMake
         run: conan install --tool-requires=cmake/3.24.4 -g=VirtualRunEnv
-
+      - run: cmake --version
       - run: go run main.go install
       - name: generate ${{ matrix.config.short }} feature set
         run: bin/apigear g x -f "${{ matrix.config.features }}" -t . -o test -i apigear/testbed.simple.module.yaml

@@ -2,7 +2,6 @@ from conan import ConanFile
 from conan.tools.cmake import CMake, CMakeDeps, CMakeToolchain, cmake_layout
 from conan.tools.build import check_max_cppstd, check_min_cppstd
 from conan.tools.files import copy
-
 from pathlib import os
 
 class apigearConan(ConanFile):
@@ -113,7 +112,9 @@ class apigearConan(ConanFile):
         cmake.install()
         if self.options.enable_olink and self.options.enable_fetch_olinkcore:
             # manually copy objectlink-core-cpp include files, to have headers for module/generated/olink instead of linking whole library
-            copy(self, "**/*.h", dst="include", src="_deps/olink_core-src/src", keep_path=True)
+            # needed since cmake version 3.28. - before all files were automatically copied, see CMP0154
+            # until olink_core has a proper conan package
+            copy(self, "**/*.h", os.path.join(self.source_folder, "build", str(self.settings.build_type) ,"_deps","olink_core-src","src"), os.path.join(self.package_folder, "include"))
 
     def package_info(self):
         # generates a Findapigear.cmake file in addition to the apigear-config.cmake
