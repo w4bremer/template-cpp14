@@ -12,7 +12,6 @@ class testbed1Conan(ConanFile):
     author = "ApiGear UG"
     #url = "<Package recipe repository url here, for issues about the package>"
     settings = "os", "compiler", "build_type", "arch"
-    requires = "catch2/2.13.7", "nlohmann_json/3.9.1", "apigear/3.5.2"
     options = {
         "build_testing": [True, False],
         "shared": [True, False],
@@ -35,6 +34,14 @@ class testbed1Conan(ConanFile):
     def configure(self):
         if self.options.shared:
             self.options.rm_safe("fPIC")
+
+    def requirements(self):
+        self.requires("nlohmann_json/3.9.1", transitive_headers=True)
+        
+        self.requires("apigear/3.5.2", transitive_headers=True)
+
+    def build_requirements(self):
+        self.test_requires("catch2/2.13.7")
 
     def validate(self):
         check_min_cppstd(self, "14")
@@ -96,10 +103,10 @@ class testbed1Conan(ConanFile):
         self.cpp_info.components["testbed1-api"].libs = ["testbed1-api"]
         self.cpp_info.components["testbed1-core"].includedirs.append(os.path.join(self.package_folder, "include"))
         self.cpp_info.components["testbed1-core"].libs = ["testbed1-core"]
-        self.cpp_info.components["testbed1-core"].requires = ["testbed1-api", "catch2::catch2", "nlohmann_json::nlohmann_json"]
+        self.cpp_info.components["testbed1-core"].requires = ["testbed1-api", "nlohmann_json::nlohmann_json"]
         self.cpp_info.components["testbed1-implementation"].includedirs.append(os.path.join(self.package_folder, "include"))
         self.cpp_info.components["testbed1-implementation"].libs = ["testbed1-implementation"]
-        self.cpp_info.components["testbed1-implementation"].requires = ["testbed1-core", "catch2::catch2", "nlohmann_json::nlohmann_json"]
+        self.cpp_info.components["testbed1-implementation"].requires = ["testbed1-core", "nlohmann_json::nlohmann_json"]
         self.cpp_info.components["testbed1-monitor"].includedirs.append(os.path.join(self.package_folder, "include"))
         self.cpp_info.components["testbed1-monitor"].libs = ["testbed1-monitor"]
         self.cpp_info.components["testbed1-monitor"].requires = ["testbed1-core", "nlohmann_json::nlohmann_json", "apigear::poco-tracer"]

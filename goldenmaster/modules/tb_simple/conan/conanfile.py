@@ -12,7 +12,6 @@ class tb_simpleConan(ConanFile):
     author = "ApiGear UG"
     #url = "<Package recipe repository url here, for issues about the package>"
     settings = "os", "compiler", "build_type", "arch"
-    requires = "catch2/2.13.7", "nlohmann_json/3.9.1", "apigear/3.5.2"
     options = {
         "build_testing": [True, False],
         "shared": [True, False],
@@ -35,6 +34,14 @@ class tb_simpleConan(ConanFile):
     def configure(self):
         if self.options.shared:
             self.options.rm_safe("fPIC")
+
+    def requirements(self):
+        self.requires("nlohmann_json/3.9.1", transitive_headers=True)
+        
+        self.requires("apigear/3.5.2", transitive_headers=True)
+
+    def build_requirements(self):
+        self.test_requires("catch2/2.13.7")
 
     def validate(self):
         check_min_cppstd(self, "14")
@@ -95,10 +102,10 @@ class tb_simpleConan(ConanFile):
         self.cpp_info.components["tb_simple-api"].includedirs.append(os.path.join(self.package_folder, "include"))
         self.cpp_info.components["tb_simple-core"].includedirs.append(os.path.join(self.package_folder, "include"))
         self.cpp_info.components["tb_simple-core"].libs = ["tb_simple-core"]
-        self.cpp_info.components["tb_simple-core"].requires = ["catch2::catch2", "nlohmann_json::nlohmann_json"]
+        self.cpp_info.components["tb_simple-core"].requires = ["nlohmann_json::nlohmann_json"]
         self.cpp_info.components["tb_simple-implementation"].includedirs.append(os.path.join(self.package_folder, "include"))
         self.cpp_info.components["tb_simple-implementation"].libs = ["tb_simple-implementation"]
-        self.cpp_info.components["tb_simple-implementation"].requires = ["tb_simple-core", "catch2::catch2", "nlohmann_json::nlohmann_json"]
+        self.cpp_info.components["tb_simple-implementation"].requires = ["tb_simple-core", "nlohmann_json::nlohmann_json"]
         self.cpp_info.components["tb_simple-monitor"].includedirs.append(os.path.join(self.package_folder, "include"))
         self.cpp_info.components["tb_simple-monitor"].libs = ["tb_simple-monitor"]
         self.cpp_info.components["tb_simple-monitor"].requires = ["tb_simple-core", "nlohmann_json::nlohmann_json", "apigear::poco-tracer"]

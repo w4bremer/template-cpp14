@@ -16,7 +16,6 @@ class {{$module_id}}Conan(ConanFile):
     author = "ApiGear UG"
     #url = "<Package recipe repository url here, for issues about the package>"
     settings = "os", "compiler", "build_type", "arch"
-    requires = {{ if or $features.stubs $features.core }}"catch2/2.13.7", {{ end }}"nlohmann_json/3.9.1"{{ if $features.apigear }}, "apigear/3.5.2"{{- end}}
     options = {
         "build_testing": [True, False],
         "shared": [True, False],
@@ -46,6 +45,17 @@ class {{$module_id}}Conan(ConanFile):
     def configure(self):
         if self.options.shared:
             self.options.rm_safe("fPIC")
+
+    def requirements(self):
+        self.requires("nlohmann_json/3.9.1", transitive_headers=True)
+        {{ if $features.apigear }}
+        self.requires("apigear/3.5.2", transitive_headers=True)
+        {{- end}}
+
+    def build_requirements(self):
+        {{- if or $features.stubs $features.core }}
+        self.test_requires("catch2/2.13.7")
+        {{- end }}
 
     def validate(self):
         check_min_cppstd(self, "14")
@@ -113,15 +123,15 @@ class {{$module_id}}Conan(ConanFile):
         self.cpp_info.components["{{$module_id}}-core"].includedirs.append(os.path.join(self.package_folder, "include"))
         self.cpp_info.components["{{$module_id}}-core"].libs = ["{{$module_id}}-core"]
         {{- if (eq $isApiHeaderOnly false) }}
-        self.cpp_info.components["{{$module_id}}-core"].requires = ["{{$module_id}}-api", "catch2::catch2", "nlohmann_json::nlohmann_json"]
+        self.cpp_info.components["{{$module_id}}-core"].requires = ["{{$module_id}}-api", "nlohmann_json::nlohmann_json"]
         {{- else }}
-        self.cpp_info.components["{{$module_id}}-core"].requires = ["catch2::catch2", "nlohmann_json::nlohmann_json"]
+        self.cpp_info.components["{{$module_id}}-core"].requires = ["nlohmann_json::nlohmann_json"]
         {{- end }}
         {{- end}}
         {{- if $features.stubs }}
         self.cpp_info.components["{{$module_id}}-implementation"].includedirs.append(os.path.join(self.package_folder, "include"))
         self.cpp_info.components["{{$module_id}}-implementation"].libs = ["{{$module_id}}-implementation"]
-        self.cpp_info.components["{{$module_id}}-implementation"].requires = ["{{$module_id}}-core", "catch2::catch2", "nlohmann_json::nlohmann_json"]
+        self.cpp_info.components["{{$module_id}}-implementation"].requires = ["{{$module_id}}-core", "nlohmann_json::nlohmann_json"]
         {{- end}}
         {{- if .Features.monitor }}
         self.cpp_info.components["{{$module_id}}-monitor"].includedirs.append(os.path.join(self.package_folder, "include"))
