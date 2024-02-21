@@ -1,27 +1,20 @@
 {{- $module_id := snake .Module.Name -}}
 import os
 from conan import ConanFile
-from conan.tools.cmake import CMake, CMakeDeps, CMakeToolchain, cmake_layout
+from conan.tools.cmake import CMake, cmake_layout
 from conan.tools.build import can_run
-from conan.tools.env import VirtualRunEnv
 
 
 class {{$module_id}}TestConan(ConanFile):
     settings = "os", "compiler", "build_type", "arch"
+    generators = "CMakeDeps", "CMakeToolchain", "VirtualRunEnv"
+    test_type = "explicit"
 
     def requirements(self):
         self.requires(self.tested_reference_str)
 
     def layout(self):
         cmake_layout(self)
-
-    def generate(self):
-        tc = CMakeToolchain(self)
-        tc.generate()
-        deps = CMakeDeps(self)
-        deps.generate()
-        vrenv = VirtualRunEnv(self)
-        vrenv.generate()
 
     def build(self):
         cmake = CMake(self)
@@ -30,11 +23,9 @@ class {{$module_id}}TestConan(ConanFile):
         cmake.configure()
         cmake.build()
 
-    def imports(self):
-        copy(self, "*", src="@bindirs", dst="bin")
-        copy(self, "*", src="@libdirs", dst="lib")
-
     def test(self):
         if can_run(self):
-            cmd = os.path.join(self.cpp.build.bindir, "test_{{$module_id}}")
+            self.run("env | sort")
+            self.run("env | sort", env="conanrun")
+            cmd = os.path.join(self.cpp.build.bindirs[0], "test_{{$module_id}}")
             self.run(cmd, env="conanrun")
