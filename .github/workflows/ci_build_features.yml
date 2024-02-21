@@ -186,3 +186,12 @@ jobs:
         env:
             CTEST_OUTPUT_ON_FAILURE: 1
         run: chmod +x ./scripts/test_conan.sh && ./scripts/test_conan.sh
+      - name: Archive workspace artifacts for debugging
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: ${{ matrix.config.short }}-workspace
+          path: |
+            *
+            ~/.conan2/p
+          retention-days: 1
