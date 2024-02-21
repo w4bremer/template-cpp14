@@ -16,13 +16,15 @@ class {{$module_id}}Conan(ConanFile):
     #url = "<Package recipe repository url here, for issues about the package>"
     settings = "os", "compiler", "build_type", "arch"
     requires = {{ if or $features.stubs $features.core }}"catch2/2.13.7", {{ end }}"nlohmann_json/3.9.1"{{ if $features.apigear }}, "apigear/3.5.2"{{- end}}
-    options = {"build_testing": [True, False]}
+    options = {"build_testing": [True, False]
+        {{- if $features.olink }}, "enable_fetch_olinkcore": [True, False]{{ end }}}
     default_options = {
         "build_testing": True,
         {{- if $features.monitor }}
         "apigear/*:enable_monitor": True,
         {{- end}}
         {{- if $features.olink }}
+        "enable_fetch_olinkcore": True,
         "apigear/*:enable_olink": True,
         {{- end}}
         {{- if $features.mqtt }}
@@ -50,6 +52,9 @@ class {{$module_id}}Conan(ConanFile):
 
     def generate(self):
         tc = CMakeToolchain(self)
+        {{- if $features.olink }}
+        tc.cache_variables['{{upper (snake .Module.Name)}}_FETCH_OLINKCORE'] = self.options.enable_fetch_olinkcore
+        {{- end }}
         if not cross_building(self):
             tc.cache_variables['BUILD_TESTING'] = self.options.build_testing
         tc.generate()

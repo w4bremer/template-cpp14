@@ -1,5 +1,24 @@
 cmake_minimum_required(VERSION 3.20)
 project(tb_same1)
+# this options is only here for the conan build until there is a conan based solution for objectlink-core
+option(TB_SAME1_FETCH_OLINKCORE "Fetch and build objectlink-core, if not pre-installed" OFF)
+
+if(TB_SAME1_FETCH_OLINKCORE)
+find_package(olink_core QUIET)
+if(NOT olink_core_FOUND)
+  # pull olink_core as dependency
+  message(STATUS "olink_core NOT FOUND, fetching the git repository")
+  include(FetchContent)
+  FetchContent_Declare(olink_core
+      GIT_REPOSITORY https://github.com/w4bremer/objectlink-core-cpp.git
+      GIT_TAG bugfix/ExportCMakeTargets
+      GIT_SHALLOW TRUE
+      EXCLUDE_FROM_ALL FALSE
+      OVERRIDE_FIND_PACKAGE
+  )
+  FetchContent_MakeAvailable(olink_core)
+endif()
+endif() # TB_SAME1_FETCH_OLINKCORE
 
 # needed to access CMAKE_INSTALL_LIBDIR
 include(GNUInstallDirs)

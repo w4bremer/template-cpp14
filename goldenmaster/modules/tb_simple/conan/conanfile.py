@@ -12,10 +12,11 @@ class tb_simpleConan(ConanFile):
     #url = "<Package recipe repository url here, for issues about the package>"
     settings = "os", "compiler", "build_type", "arch"
     requires = "catch2/2.13.7", "nlohmann_json/3.9.1", "apigear/3.5.2"
-    options = {"build_testing": [True, False]}
+    options = {"build_testing": [True, False], "enable_fetch_olinkcore": [True, False]}
     default_options = {
         "build_testing": True,
         "apigear/*:enable_monitor": True,
+        "enable_fetch_olinkcore": True,
         "apigear/*:enable_olink": True,
         "apigear/*:enable_mqtt": True,
     }
@@ -40,6 +41,7 @@ class tb_simpleConan(ConanFile):
 
     def generate(self):
         tc = CMakeToolchain(self)
+        tc.cache_variables['TB_SIMPLE_FETCH_OLINKCORE'] = self.options.enable_fetch_olinkcore
         if not cross_building(self):
             tc.cache_variables['BUILD_TESTING'] = self.options.build_testing
         tc.generate()
