@@ -70,11 +70,11 @@ class apigearConan(ConanFile):
 
     def requirements(self):
         if self.options.enable_monitor or self.options.enable_olink or self.options.enable_mqtt:
-              self.requires("nlohmann_json/3.9.1")
+              self.requires("nlohmann_json/3.9.1", transitive_headers=True)
         if self.options.enable_monitor or self.options.enable_olink:
-              self.requires("poco/1.12.4")
+              self.requires("poco/1.12.4", transitive_headers=True)
         if self.options.enable_mqtt:
-              self.requires("paho-mqtt-c/1.3.12")
+              self.requires("paho-mqtt-c/1.3.12", transitive_headers=True)
 
     def build_requirements(self):
         self.test_requires("catch2/2.13.7")
