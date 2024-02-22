@@ -2,6 +2,7 @@ from conan import ConanFile
 from conan.tools.cmake import CMake, CMakeDeps, CMakeToolchain, cmake_layout
 from conan.tools.build import check_max_cppstd, check_min_cppstd, cross_building
 from conan.tools.files import load, copy
+from conan.tools.build import can_run
 from pathlib import os
 
 class tb_same2Conan(ConanFile):
@@ -82,15 +83,10 @@ class tb_same2Conan(ConanFile):
             cmake.configure()
 
         cmake.build()
-        if not cross_building(self):
+
+        # we skip tests on windows since the conanrun env does not include locally built libraries
+        if can_run(self) and self.settings.os != "Windows":
             cmake.test()
-            # build_type = self.settings.get_safe("build_type", default="Release")
-            # # workaround - we need to add the api.dll and the core.dll to the windows PATH to be found for the test
-            # local_libs = { "PATH" : []}
-            # local_libs["PATH"].append(os.path.sep.join([self.build_folder, "generated", "api", build_type]))
-            # local_libs["PATH"].append(os.path.sep.join([self.build_folder, "generated", "core", build_type]))
-            # with tools.environment_append(local_libs):
-            #     cmake.test()
 
     def package(self):
         cmake = CMake(self)

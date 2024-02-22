@@ -71,7 +71,7 @@ class apigearConan(ConanFile):
         if self.options.enable_monitor or self.options.enable_olink or self.options.enable_mqtt:
               self.requires("nlohmann_json/3.9.1", transitive_headers=True)
         if self.options.enable_monitor or self.options.enable_olink:
-              self.requires("poco/1.12.4", transitive_headers=True)
+              self.requires("poco/1.12.4", transitive_headers=True, transitive_libs=True)
         if self.options.enable_mqtt:
               self.requires("paho-mqtt-c/1.3.12", transitive_headers=True)
 
@@ -114,7 +114,13 @@ class apigearConan(ConanFile):
             # manually copy objectlink-core-cpp include files, to have headers for module/generated/olink instead of linking whole library
             # needed since cmake version 3.28. - before all files were automatically copied, see CMP0154
             # until olink_core has a proper conan package
-            copy(self, "**/*.h", os.path.join(self.source_folder, "build", str(self.settings.build_type) ,"_deps","olink_core-src","src"), os.path.join(self.package_folder, "include"))
+            list_copied_files = []
+            if self.settings.os == "Windows":
+                list_copied_files = copy(self, "**/*.h", os.path.join(self.source_folder, "build", "_deps","olink_core-src","src"), os.path.join(self.package_folder, "include"))
+            else:
+                list_copied_files = copy(self, "**/*.h", os.path.join(self.source_folder, "build", str(self.settings.build_type) , "_deps","olink_core-src","src"), os.path.join(self.package_folder, "include"))
+            if len(list_copied_files) == 0:
+                raise Exception("Failed to copy objectlink-core-cpp include files.")
 
     def package_info(self):
         # generates a Findapigear.cmake file in addition to the apigear-config.cmake

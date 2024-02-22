@@ -18,8 +18,8 @@ jobs:
       matrix:
         config:
           - { name: "Conan Windows Latest MSVC", os: windows-latest }
-          # - { name: "Conan Ubuntu Latest GCC", os: ubuntu-latest }
-          # - { name: "Conan macOS Latest Clang", os: macos-latest }
+          - { name: "Conan Ubuntu Latest GCC", os: ubuntu-latest }
+          - { name: "Conan macOS Latest Clang", os: macos-latest }
     steps:
       - uses: actions/checkout@v3
         with:
@@ -29,7 +29,7 @@ jobs:
         if: ${{ matrix.config.os == 'windows-latest'}}
         with:
           path: |
-            ~\.conan\data
+            ~\.conan2\p
           key: ${{ matrix.config.os }}-conan-cache-${{ hashFiles('goldenmaster/**/conanfile.py', 'goldenmaster/**/conanfile.txt') }}
           restore-keys: |
             ${{ matrix.config.os }}-conan-cache
@@ -52,14 +52,6 @@ jobs:
         run: pip install -r .github/workflows/conan-requirements.txt
       - name: Create default profile
         run: conan profile detect
-      # - name: Set C++11 on Linux
-      #   if: ${{ matrix.config.os == 'ubuntu-latest'}}
-      #   run: conan profile update settings.compiler.libcxx=libstdc++11 default
-      # - name: Set Debug and runtime on Windows
-      #   if: ${{ matrix.config.os == 'windows-latest'}}
-      #   run: |
-      #     conan profile update settings.compiler.runtime=MDd default
-      #     conan profile update settings.build_type=Debug default
       - name: Install CMake
         run: conan install --tool-requires=cmake/3.24.4 -g=VirtualRunEnv
       - run: cmake --version
@@ -84,8 +76,8 @@ jobs:
       matrix:
         config:
           - { name: "CMake Windows Latest MSVC", os: windows-latest }
-          # - { name: "CMake Ubuntu Latest GCC", os: ubuntu-latest }
-          # - { name: "CMake macOS Latest Clang", os: macos-latest }
+          - { name: "CMake Ubuntu Latest GCC", os: ubuntu-latest }
+          - { name: "CMake macOS Latest Clang", os: macos-latest }
     steps:
       - uses: actions/checkout@v3
         with:
@@ -95,7 +87,7 @@ jobs:
         if: ${{ matrix.config.os == 'windows-latest'}}
         with:
           path: |
-            ~\.conan\data
+            ~\.conan2\p
           key: ${{ matrix.config.os }}-conan4cmake-cache-${{ hashFiles('.github/workflows/ci_build_test.yml') }}
           restore-keys: |
             ${{ matrix.config.os }}-conan4cmake-cache
@@ -118,11 +110,6 @@ jobs:
         run: pip3 install -r .github/workflows/conan-requirements.txt
       - name: Create default profile
         run: conan profile detect
-      # - name: Set Debug and runtime on Windows
-      #   if: ${{ matrix.config.os == 'windows-latest'}}
-      #   run: |
-      #     conan profile update settings.compiler.runtime=MDd default
-      #     conan profile update settings.build_type=Debug default
       - name: create dependencies folder
         if: ${{ matrix.config.os != 'ubuntu-latest'}}
         run: mkdir -p deps
@@ -139,7 +126,7 @@ jobs:
         if: ${{ matrix.config.os == 'windows-latest'}}
         with:
           path: |
-            ~\.conan\data
+            ~\.conan2\p
           key: ${{ matrix.config.os }}-conan4cmake-cache-${{ hashFiles('.github/workflows/ci_build_test.yml') }}
       - name: Save cache conan on macOS
         uses: actions/cache/save@v3
@@ -174,7 +161,8 @@ jobs:
             CTEST_OUTPUT_ON_FAILURE: 1
         run: |
           $Env:GITHUB_WORKSPACE_UNIX = "${{ github.workspace }}" -replace "\\","/"
-          cmake -DCMAKE_BUILD_TYPE=Release -Bbuild -DCMAKE_INSTALL_PREFIX=tmp -DCMAKE_PREFIX_PATH="$Env:GITHUB_WORKSPACE_UNIX/deps" -DTEST_FETCH_DEPS=ON -DBUILD_TESTING=ON && cmake --build build/ && cmake --build build/ --target RUN_TESTS && cmake --build build/ --target install
+          cmake -DCMAKE_BUILD_TYPE=Release -Bbuild -DCMAKE_INSTALL_PREFIX=tmp -DCMAKE_PREFIX_PATH="$Env:GITHUB_WORKSPACE_UNIX/deps" -DTEST_FETCH_DEPS=ON -DBUILD_TESTING=ON && cmake --build build/ --config Release && cmake --build build/ --target install --config Release  
+        # cmake -DCMAKE_BUILD_TYPE=Release -Bbuild -DCMAKE_INSTALL_PREFIX=tmp -DCMAKE_PREFIX_PATH="$Env:GITHUB_WORKSPACE_UNIX/deps" -DTEST_FETCH_DEPS=ON -DBUILD_TESTING=ON && cmake --build build/ --config Release && cmake --build build/ --target RUN_TESTS --config Release && cmake --build build/ --target install --config Release
 
   cmake_release_build:
     name: ${{ matrix.config.name }}
@@ -195,7 +183,7 @@ jobs:
         if: ${{ matrix.config.os == 'windows-latest'}}
         with:
           path: |
-            ~\.conan\data
+            ~\.conan2\p
           key: ${{ matrix.config.os }}-conan4cmake-release-cache-${{ hashFiles('.github/workflows/ci_build_test.yml') }}
           restore-keys: |
             ${{ matrix.config.os }}-conan4cmake-release-cache
@@ -241,7 +229,7 @@ jobs:
         if: ${{ matrix.config.os == 'windows-latest'}}
         with:
           path: |
-            ~\.conan\data
+            ~\.conan2\p
           key: ${{ matrix.config.os }}-conan4cmake-cache-${{ hashFiles('.github/workflows/ci_build_test.yml') }}
       - name: Save cache conan on Linux/macOS
         uses: actions/cache/save@v3

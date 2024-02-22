@@ -67,13 +67,12 @@ exit /b
 :build_example_app
 if not exist build\examples\%~1 mkdir build\examples\%~1
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
-pushd ..\examples\%~1
+pushd build\examples\%~1
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
-conan install --build missing . --install-folder ../../build/examples/%~1 -g=VirtualRunEnv
+conan install -g=VirtualBuildEnv --build missing --output-folder . ../../../../examples/%~1
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
-cmake -S . -B ../../build/examples/%~1 --preset conan-release
+cmake -B . -S ../../../../examples/%~1 --preset conan-default
 if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
-cmake --build ../../build/examples/%~1
-if %ERRORLEVEL% GEQ 1 exit /b %ERRORLEVEL%
+cmake --build . --preset conan-release
 popd
 exit /b
