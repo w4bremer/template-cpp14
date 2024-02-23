@@ -59,7 +59,7 @@ jobs:
 
       - name: Install paho.mqtt.c
         if: ${{ matrix.config.short == 'mqtt'}}
-        run: git clone --branch v1.3.12 --depth 1 https://github.com/eclipse/paho.mqtt.c.git && cd paho.mqtt.c && cmake -Bbuild -H. -DPAHO_BUILD_SHARED=OFF -DPAHO_BUILD_STATIC=ON -DPAHO_WITH_SSL=ON -DBUILD_TESTING=OFF && sudo cmake --build build/ --target install
+        run: git clone --branch v1.3.13 --depth 1 https://github.com/eclipse/paho.mqtt.c.git && cd paho.mqtt.c && cmake -Bbuild -H. -DPAHO_BUILD_SHARED=OFF -DPAHO_BUILD_STATIC=ON -DPAHO_WITH_SSL=ON -DBUILD_TESTING=OFF && sudo cmake --build build/ --target install
 
       - run: go run main.go install
       - name: generate ${{ matrix.config.short }} feature set
@@ -119,7 +119,7 @@ jobs:
 
       - name: Install paho.mqtt.c
         if: ${{ matrix.config.short == 'mqtt'}}
-        run: git clone --branch v1.3.12 --depth 1 https://github.com/eclipse/paho.mqtt.c.git && cd paho.mqtt.c && cmake -Bbuild -H. -DPAHO_BUILD_SHARED=OFF -DPAHO_BUILD_STATIC=ON -DPAHO_WITH_SSL=ON -DBUILD_TESTING=OFF && sudo cmake --build build/ --target install
+        run: git clone --branch v1.3.13 --depth 1 https://github.com/eclipse/paho.mqtt.c.git && cd paho.mqtt.c && cmake -Bbuild -H. -DPAHO_BUILD_SHARED=OFF -DPAHO_BUILD_STATIC=ON -DPAHO_WITH_SSL=ON -DBUILD_TESTING=OFF && sudo cmake --build build/ --target install
 
       - run: go run main.go install
       - name: generate ${{ matrix.config.short }} feature set
