@@ -22,14 +22,14 @@ jobs:
           - { name: "OLink Conf CMake script", short: "olink", features: "api,core,stubs,olink,examples_olink" }
           - { name: "MQTT Conf CMake script", short: "mqtt", features: "api,core,stubs,mqtt,examples_mqtt" }
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           submodules: recursive
-      - uses: actions/setup-go@v3
+      - uses: actions/setup-go@v5
         with:
           go-version: ${{env.go_version}}
 
-      - uses: actions/cache@v3
+      - uses: actions/cache@v4
         with:
           path: |
             ~/go/pkg/mod
@@ -82,14 +82,14 @@ jobs:
           - { name: "OLink Conf CMake Lists file", short: "olink", features: "api,core,stubs,olink,examples_olink" }
           - { name: "MQTT Conf CMake Lists file", short: "mqtt", features: "api,core,stubs,mqtt,examples_mqtt" }
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           submodules: recursive
-      - uses: actions/setup-go@v3
+      - uses: actions/setup-go@v5
         with:
           go-version: ${{env.go_version}}
 
-      - uses: actions/cache@v3
+      - uses: actions/cache@v4
         with:
           path: |
             ~/go/pkg/mod
@@ -142,14 +142,14 @@ jobs:
           - { name: "OLink Conf Conan", short: "olink", features: "api,core,stubs,olink,examples_olink,conan" }
           - { name: "MQTT Conf Conan", short: "mqtt", features: "api,core,stubs,mqtt,examples_mqtt,conan" }
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           submodules: recursive
-      - uses: actions/setup-go@v3
+      - uses: actions/setup-go@v5
         with:
           go-version: ${{env.go_version}}
 
-      - uses: actions/cache@v3
+      - uses: actions/cache@v4
         with:
           path: |
             ~/go/pkg/mod
@@ -158,7 +158,7 @@ jobs:
           restore-keys: ${{ runner.os }}-go-${{ env.go_version }}-
 
       - name: Cache conan on Linux
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: |
             ~/.conan2/p
@@ -166,7 +166,7 @@ jobs:
           restore-keys: |
             ubuntu-latest-conan-cache
       - name: Set up Python
-        uses: actions/setup-python@v3
+        uses: actions/setup-python@v4
         with:
           python-version: 3.9
           cache: "pip"
